@@ -16,7 +16,7 @@
               我的选购单
             </a>
           </router-link>
-          <router-link tag="li" to="#"><a>商家中心</a></router-link>
+          <router-link tag="li" to="/merchant"><a>商家中心</a></router-link>
           <router-link tag="li" to="#">
             <a>
               <i></i>
