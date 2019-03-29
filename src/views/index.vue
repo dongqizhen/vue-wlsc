@@ -84,17 +84,73 @@
       </ul>
     </div>
     <div class="banner">
-      <div class="commonWidth"></div>
+      <div class="commonWidth">
+        <swiper ref="mySwiper" :options="swiperOption">
+          <!-- slides -->
+          <swiper-slide><img src="../assets/images/banner.png"/></swiper-slide>
+          <swiper-slide><img src="../assets/images/banner.png"/></swiper-slide>
+          <swiper-slide><img src="../assets/images/banner.png"/></swiper-slide>
+          <swiper-slide><img src="../assets/images/banner.png"/></swiper-slide>
+          <swiper-slide><img src="../assets/images/banner.png"/></swiper-slide>
+          <!-- Optional controls -->
+          <ul class="swiper-pagination" slot="pagination"></ul>
+        </swiper>
+        <div class="login">
+          <h2>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconweidenglutouxiang"></use>
+            </svg>
+          </h2>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import { swiper, swiperSlide } from "vue-awesome-swiper";
+
+  // require styles
+  import "swiper/dist/css/swiper.css";
+
   export default {
-    data: () => {
-      return {};
+    data() {
+      return {
+        swiperOption: {
+          //是一个组件自有属性，如果notNextTick设置为true，组件则不会通过NextTick来实例化swiper，也就意味着你可以在第一时间获取到swiper对象，假如你需要刚加载遍使用获取swiper对象来做什么事，那么这个属性一定要是true
+
+          notNextTick: true,
+
+          //循环
+
+          loop: true,
+
+          //设定初始化时slide的索引
+
+          initialSlide: 0,
+
+          //自动播放
+
+          autoplay: {
+            delay: 4000,
+
+            stopOnLastSlide: false,
+
+            disableOnInteraction: false
+          },
+          pagination: {
+            el: ".swiper-pagination",
+            bulletElement: "li",
+            // type: "custom",
+            clickable: true
+          }
+        }
+      };
     },
-    components: {}
+    components: {
+      swiper,
+      swiperSlide
+    }
   };
 </script>
 
@@ -269,6 +325,69 @@
           &.active {
             background: $theme-color;
             color: #ffffff;
+          }
+        }
+      }
+    }
+    .banner {
+      padding-top: 30px;
+      .commonWidth {
+        height: 300px;
+        //background: $theme-color;
+        position: relative;
+        /deep/ .swiper-container {
+          height: 100%;
+          cursor: pointer;
+          .swiper-pagination {
+            height: 8px;
+            width: 100%;
+            bottom: 16px;
+            display: flex;
+            justify-content: center;
+            li {
+              background: #fff;
+              border-radius: 5px;
+              border-radius: 5px;
+              height: 8px;
+              width: 8px;
+              margin: 0;
+              opacity: 0.65;
+              margin-right: 8px;
+              transition: opacity 0.5s, background-color 0.5s, width 0.5s;
+              transition-delay: 0.5s, 0.5s, 0s;
+              &.swiper-pagination-bullet-active {
+                width: 24px;
+                transition-delay: 0s;
+              }
+            }
+          }
+        }
+        .login {
+          height: 100%;
+          width: 218px;
+          position: absolute;
+          right: 0;
+          background: rgba(51, 51, 51, 0.64);
+          top: 0;
+          z-index: 100;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          h2 {
+            height: 50px;
+            width: 50px;
+            border-radius: 26px;
+            background: #cbcbcb;
+            border: 1px solid #979797;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 16px;
+            .icon {
+              height: 32px;
+              width: 28px;
+            }
           }
         }
       }

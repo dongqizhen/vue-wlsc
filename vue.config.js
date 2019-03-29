@@ -81,10 +81,18 @@ module.exports = {
                     appendTsSuffixTo: [/\.vue$/],
                 }
             }]
-        }
+        },
+
+
     },
 
-
+    css: {
+        loaderOptions: {
+            less: {
+                javascriptEnabled: true,
+            }
+        }
+    },
     devServer: {
         port: 8085, // 端口号
         host: 'localhost',
