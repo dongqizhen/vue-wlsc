@@ -3,8 +3,6 @@
 
 const path = require('path')
 
-console.log(__dirname)
-
 const resolve = (dir) => {
     console.log(path.join(__dirname, dir))
     return path.join(__dirname, dir)
@@ -21,7 +19,7 @@ module.exports = {
     publicPath: process.env.NODE_ENV === 'production' ? '/online/' : '/',
 
 
-    assetsDir: '/assets/',
+    //assetsDir: '../assets/',
 
     // outputDir: 在npm run build时 生成文件的目录 type:string, default:'dist'
 
