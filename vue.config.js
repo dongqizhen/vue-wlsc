@@ -1,5 +1,16 @@
 // vue.config.js 配置说明
-// 这里只列一部分，具体配置惨考文档啊
+// 这里只列一部分，具体配置惨考文档 https://cli.vuejs.org/zh/config/#publicpath
+
+const path = require('path')
+
+console.log(__dirname)
+
+const resolve = (dir) => {
+    console.log(path.join(__dirname, dir))
+    return path.join(__dirname, dir)
+}
+
+
 module.exports = {
     // baseUrl  type:{string} default:'/' 
     // 将部署应用程序的基本URL
@@ -8,6 +19,9 @@ module.exports = {
     // https://www.my-app.com/。如果应用程序部署在子路径上，则需要使用此选项指定子路径。例如，如果您的应用程序部署在https://www.foobar.com/my-app/，集baseUrl到'/my-app/'.
 
     publicPath: process.env.NODE_ENV === 'production' ? '/online/' : '/',
+
+
+    assetsDir: '/assets/',
 
     // outputDir: 在npm run build时 生成文件的目录 type:string, default:'dist'
 
@@ -53,11 +67,11 @@ module.exports = {
             alias: {
                 // 定义全局引入路径标识符
                 'vue$': 'vue/dist/vue.esm.js',
-                /* '@': resolve('src'),
+                '@': resolve('src'),
                 '#': resolve('src/components'),
                 '^': resolve('src/module'),
                 '%': resolve('src/common'),
-                'static': path.resolve(__dirname, '../static') */
+                'static': path.resolve(__dirname, '../static')
             }
         },
         module: {
