@@ -22,6 +22,22 @@
     color: #b2b2b2;
   }
 
+  p {
+    margin-bottom: 0;
+  }
+  ol,
+  ul,
+  li {
+    margin-bottom: 0;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-bottom: 0;
+  }
   .icon {
     width: 1em;
     height: 1em;
