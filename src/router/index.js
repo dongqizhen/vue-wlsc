@@ -13,8 +13,23 @@ export default new Router({
             import ( /* webpackChunkName: "index" */ "../views/index")
     }, {
         path: "/merchant",
-        name: "merchant",
         component: () =>
-            import ( /* webpackChunkName: "index" */ "../views/merchant")
+            import ("../views/page/merchant/merchant"),
+        children: [{
+                path: "/",
+                name: '店铺首页',
+                component: () =>
+                    import ("../views/page/merchant/merchantChildren/shopIndex")
+            }, {
+                path: "shopIndex",
+                component: () =>
+                    import ("../views/page/merchant/merchantChildren/shopIndex")
+            },
+            {
+                path: "shopInfo",
+                component: () =>
+                    import ("../views/page/merchant/merchantChildren/shopInfo")
+            }
+        ]
     }]
 });
