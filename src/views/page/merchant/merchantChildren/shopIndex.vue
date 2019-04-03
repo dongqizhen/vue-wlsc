@@ -1,5 +1,10 @@
 <template>
-  <div class="shopInfo">
+  <Tabs @change="callback" type="card">
+    <a-tab-pane tab="Tab 1" key="1">Content of Tab Pane 1</a-tab-pane>
+    <a-tab-pane tab="Tab 2" key="2">Content of Tab Pane 2</a-tab-pane>
+    <a-tab-pane tab="Tab 3" key="3">Content of Tab Pane 3</a-tab-pane>
+  </Tabs>
+  <!-- <div class="shopInfo">
     <div class="container-box">
       <div class="header">
         <ul>
@@ -13,17 +18,25 @@
           <li></li>
         </ul>
       </div>
-      <div class="nav-box"></div>
+      <div class="nav-box">
+        
+      </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
+  import { Tabs } from "ant-design-vue";
   export default {
-    data: () => {
+    data() {
       return {};
     },
-    components: {}
+    methods: {
+      callback(key) {
+        console.log(key);
+      }
+    },
+    components: { Tabs }
   };
 </script>
 
