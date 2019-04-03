@@ -16,11 +16,23 @@
           <div class="left-box">店铺类型</div>
           <div class="right-box">
             <a-select
+              defaultValue="lucy"
+              style="width: 120px"
+              @change="handleChange"
+            >
+              <a-select-option value="jack">Jack</a-select-option>
+              <a-select-option value="lucy">Lucy</a-select-option>
+              <a-select-option value="disabled" disabled
+                >Disabled</a-select-option
+              >
+              <a-select-option value="Yiminghe">yiminghe</a-select-option>
+            </a-select>
+            <!-- <a-select
               defaultValue="请选择经营模式"
               style="width: 222px"
               @change="handleShopTypeChange"
               :options="options"
-            />
+            /> -->
           </div>
         </div>
         <div class="common shopIndexPicture">
@@ -95,7 +107,7 @@
 </template>
 
 <script>
-  import { Input, Select, Upload, Icon, Button } from "ant-design-vue";
+  import { Upload, Icon } from "ant-design-vue";
 
   const selectArr = [{ key: 1, value: "beijing" }, { key: 2, value: "tianjin" }];
   function getBase64(img, callback) {
@@ -191,12 +203,8 @@
       }
     },
     components: {
-      AInput: Input,
-      ASelect: Select,
       AUpload: Upload,
-      AIcon: Icon,
-      ATextarea: Input,
-      AButton: Button
+      AIcon: Icon
     }
   };
 </script>

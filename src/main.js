@@ -2,10 +2,13 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router/index";
 import store from './store/index'
-//import { Tabs } from 'ant-design-vue'
 import {
     BackTop,
-    Modal
+    Modal,
+    Tabs,
+    Select,
+    Input,
+    Button
 } from "ant-design-vue";
 import "swiper/dist/css/swiper.css";
 
@@ -16,9 +19,8 @@ import {
 
 Vue.config.productionTip = false;
 
-// Vue.use(Tabs)
-Vue.use(BackTop).use(Modal)
-    //console.log(Swiper)
+Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button)
+
 new Vue({
     el: '#app',
     router,

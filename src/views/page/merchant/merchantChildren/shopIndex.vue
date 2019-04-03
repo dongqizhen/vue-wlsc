@@ -1,10 +1,5 @@
 <template>
-  <Tabs @change="callback" type="card">
-    <a-tab-pane tab="Tab 1" key="1">Content of Tab Pane 1</a-tab-pane>
-    <a-tab-pane tab="Tab 2" key="2">Content of Tab Pane 2</a-tab-pane>
-    <a-tab-pane tab="Tab 3" key="3">Content of Tab Pane 3</a-tab-pane>
-  </Tabs>
-  <!-- <div class="shopInfo">
+  <div class="shopInfo">
     <div class="container-box">
       <div class="header">
         <ul>
@@ -19,14 +14,27 @@
         </ul>
       </div>
       <div class="nav-box">
-        
+        <a-tabs defaultActiveKey="1" @change="callback">
+          <a-tab-pane tab="全部" key="1">Content of Tab Pane 1</a-tab-pane>
+          <a-tab-pane tab="新增访问店铺数" key="2"
+            >Content of Tab Pane 2</a-tab-pane
+          >
+          <a-tab-pane tab="新增收藏店铺数" key="3"
+            >Content of Tab Pane 3</a-tab-pane
+          >
+          <a-tab-pane tab="新增询价单数" key="4"
+            >Content of Tab Pane 3</a-tab-pane
+          >
+          <a-tab-pane tab="新增订单数" key="5"
+            >Content of Tab Pane 3</a-tab-pane
+          >
+        </a-tabs>
       </div>
     </div>
-  </div> -->
+  </div>
 </template>
 
 <script>
-  import { Tabs } from "ant-design-vue";
   export default {
     data() {
       return {};
@@ -36,7 +44,7 @@
         console.log(key);
       }
     },
-    components: { Tabs }
+    components: {}
   };
 </script>
 
@@ -56,6 +64,30 @@
             background-color: #fff;
             &:last-child {
               margin-right: 0;
+            }
+          }
+        }
+      }
+      .nav-box {
+        /deep/.ant-tabs-bar {
+          height: 53px;
+          line-height: 53px;
+          background-color: #fff;
+          border-bottom: none;
+          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
+          .ant-tabs-nav-container {
+            height: 100%;
+            .ant-tabs-nav-wrap {
+              height: 100%;
+              .ant-tabs-nav-scroll {
+                height: 100%;
+                .ant-tabs-nav {
+                  height: 100%;
+                  .ant-tabs-ink-bar {
+                    background-color: $theme-color;
+                  }
+                }
+              }
             }
           }
         }
