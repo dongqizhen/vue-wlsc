@@ -15,11 +15,11 @@
         }
       "
       :footer="options.footer || null"
+      :centered="options.centered || false"
     >
-      <div slot="ofooter">
-        footer
-      </div>
       <slot name="content"></slot>
+
+      <div slot="footer"></div>
     </a-modal>
   </div>
 </template>
@@ -73,7 +73,7 @@
   };
 </script>
 
-<style  lang="scss">
+<style lang="scss">
   @import "../../assets/scss/_commonScss";
   body .ant-modal-mask {
     background: rgba(0, 0, 0, 0.17);
@@ -113,6 +113,9 @@
           padding-left: 20px;
         }
       }
+      .ant-modal-footer {
+        border-top: 0;
+      }
     }
   }
   .commonBrand {
@@ -142,54 +145,61 @@
             margin-top: 2px;
           }
         }
-        .common_brand {
-          margin-bottom: 24px;
-          ul {
-            background: #f5f5f5;
-            border-radius: 4px;
-            padding: 0 20px;
-            padding-top: 21.5px;
+        .common {
+          background: #f5f5f5;
+          border-radius: 4px;
+          padding: 0 20px;
+          padding-top: 21.5px;
+          display: flex;
+          justify-content: flex-start;
+          flex-wrap: wrap;
+          margin-right: -16px;
+          min-height: 138px;
+          li {
+            width: 97px;
             display: flex;
-            justify-content: flex-start;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 16px;
+            font-family: PingFangSC-Semibold;
+            font-size: 13px;
+            color: #333333;
+            margin-bottom: 21.5px;
+            position: relative;
+            cursor: move;
 
-            li {
-              width: 97px;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              margin-right: 10px;
-              font-family: PingFangSC-Semibold;
-              font-size: 13px;
-              color: #333333;
-              margin-bottom: 21.5px;
-              position: relative;
+            .img_box {
+              background: #fff;
+              width: 100%;
+              height: 70px;
+              margin-bottom: 6px;
+              box-shadow: $base-box-shadow;
+            }
+            i {
+              position: absolute;
+              right: -7px;
+              top: -7px;
               cursor: pointer;
-              .img_box {
-                background: #fff;
-                width: 100%;
-                height: 70px;
-                margin-bottom: 6px;
-              }
-              i {
-                position: absolute;
-                right: -7px;
-                top: -7px;
-                cursor: pointer;
-                .icon {
-                  height: 14px;
-                  width: 14px;
-                }
+              .icon {
+                height: 14px;
+                width: 14px;
               }
             }
           }
         }
+        .common_brand {
+          margin-bottom: 24px;
+        }
         .all_brand {
+          overflow: hidden;
+          margin-bottom: 40px;
           .word_nav {
             display: flex;
             align-items: center;
             justify-content: space-between;
             line-height: 28.5px;
             height: 28.5px;
+            margin-bottom: 13px;
             > span {
               display: flex;
               justify-content: center;
@@ -255,9 +265,84 @@
                 font-family: PingFangSC-Medium;
                 font-size: 13px;
                 color: #ffffff;
+                &:hover {
+                  opacity: 0.8;
+                }
               }
             }
           }
+          .common {
+            li {
+              .img_box {
+                &::before {
+                  content: "添加至\A常用品牌";
+                  display: flex;
+                  align-items: center;
+                  white-space: pre;
+                  height: 100%;
+                  width: 100%;
+                  background: #fdefd9;
+                  text-align: center;
+                  display: none;
+                  font-family: PingFangSC-Semibold;
+                  font-size: 12px;
+                  color: #f5a623;
+                  justify-content: center;
+                }
+                &:hover {
+                  &::before {
+                    display: flex;
+                  }
+                }
+              }
+            }
+          }
+        }
+        .ant-btn-primary {
+          background: #f5a623;
+          border-radius: 3px;
+          width: 96.5px;
+          height: 31px;
+          border: 0;
+          margin-bottom: 52px;
+          font-family: PingFangSC-Medium;
+          font-size: 12px;
+          color: #ffffff;
+          &:hover {
+            opacity: 0.7;
+          }
+        }
+        .flip-list-move {
+          transition: transform 0.5s;
+        }
+        .no-move {
+          transition: transform 0s;
+        }
+        .ghost {
+          opacity: 0.5;
+          // background: #c8ebfb;
+          cursor: pointer;
+          .img_box {
+            &::before {
+              display: none;
+            }
+          }
+        }
+        .sortable-chosen {
+          .img_box {
+            &::before {
+              display: none;
+            }
+          }
+        }
+        .list-group {
+          min-height: 20px;
+        }
+        .list-group-item {
+          cursor: move;
+        }
+        .list-group-item i {
+          cursor: pointer;
         }
       }
     }

@@ -217,7 +217,9 @@
                           销量: <span>99</span>
                         </span>
                       </div>
-                      <p>超声探头这里最多可以显示两行字，多余的用…展示</p>
+                      <p>
+                        超声探头这里最多可以显示两行字，多余的用…展示
+                      </p>
                       <div class="brand_small">
                         <span>品牌：GE</span>
                         <span>型号：DR UPGRADE…</span>
@@ -240,7 +242,9 @@
                           销量: <span>99</span>
                         </span>
                       </div>
-                      <p>超声探头这里最多可以显示两行字，多余的用…展示</p>
+                      <p>
+                        超声探头这里最多可以显示两行字，多余的用…展示
+                      </p>
                       <div class="brand_small">
                         <span>品牌：GE</span>
                         <span>型号：DR UPGRADE…</span>
@@ -263,98 +267,9 @@
                           销量: <span>99</span>
                         </span>
                       </div>
-                      <p>超声探头这里最多可以显示两行字，多余的用…展示</p>
-                      <div class="brand_small">
-                        <span>品牌：GE</span>
-                        <span>型号：DR UPGRADE…</span>
-                      </div>
-                      <div class="address">
-                        <svg class="icon" aria-hidden="true">
-                          <use xlink:href="#icondianpu"></use>
-                        </svg>
-                        北京华脉诚信科技有限公司
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li>
-                <h2>
-                  <p>1F 电子超声</p>
-                  <ul>
-                    <li>心电图机</li>
-                    <li>心电图工作站</li>
-                    <li>心电工作站</li>
-                    <li>心电工作站</li>
-                  </ul>
-                  <span>
-                    更多
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#iconhuangsegengduo"></use>
-                    </svg>
-                  </span>
-                </h2>
-                <div class="content">
-                  <div class="left"></div>
-                  <ul class="right">
-                    <li>
-                      <a href="#" class="img"></a>
-                      <div class="price">
-                        ¥799
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use xlink:href="#iconxiaoliang"></use>
-                          </svg>
-                          销量: <span>99</span>
-                        </span>
-                      </div>
-                      <p>超声探头这里最多可以显示两行字，多余的用…展示</p>
-                      <div class="brand_small">
-                        <span>品牌：GE</span>
-                        <span>型号：DR UPGRADE…</span>
-                      </div>
-                      <div class="address">
-                        <svg class="icon" aria-hidden="true">
-                          <use xlink:href="#icondianpu"></use>
-                        </svg>
-                        北京华脉诚信科技有限公司
-                      </div>
-                    </li>
-                    <li>
-                      <a href="#" class="img"></a>
-                      <div class="price">
-                        ¥799
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use xlink:href="#iconxiaoliang"></use>
-                          </svg>
-                          销量: <span>99</span>
-                        </span>
-                      </div>
-                      <p>超声探头这里最多可以显示两行字，多余的用…展示</p>
-                      <div class="brand_small">
-                        <span>品牌：GE</span>
-                        <span>型号：DR UPGRADE…</span>
-                      </div>
-                      <div class="address">
-                        <svg class="icon" aria-hidden="true">
-                          <use xlink:href="#icondianpu"></use>
-                        </svg>
-                        北京华脉诚信科技有限公司
-                      </div>
-                    </li>
-                    <li>
-                      <a href="#" class="img"></a>
-                      <div class="price">
-                        ¥799
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use xlink:href="#iconxiaoliang"></use>
-                          </svg>
-                          销量: <span>99</span>
-                        </span>
-                      </div>
-                      <p>超声探头这里最多可以显示两行字，多余的用…展示</p>
+                      <p>
+                        超声探头这里最多可以显示两行字，多余的用…展示
+                      </p>
                       <div class="brand_small">
                         <span>品牌：GE</span>
                         <span>型号：DR UPGRADE…</span>
@@ -399,7 +314,9 @@
                           销量: <span>99</span>
                         </span>
                       </div>
-                      <p>超声探头这里最多可以显示两行字，多余的用…展示</p>
+                      <p>
+                        超声探头这里最多可以显示两行字，多余的用…展示
+                      </p>
                       <div class="brand_small">
                         <span>品牌：GE</span>
                         <span>型号：DR UPGRADE…</span>
@@ -422,7 +339,9 @@
                           销量: <span>99</span>
                         </span>
                       </div>
-                      <p>超声探头这里最多可以显示两行字，多余的用…展示</p>
+                      <p>
+                        超声探头这里最多可以显示两行字，多余的用…展示
+                      </p>
                       <div class="brand_small">
                         <span>品牌：GE</span>
                         <span>型号：DR UPGRADE…</span>
@@ -445,7 +364,9 @@
                           销量: <span>99</span>
                         </span>
                       </div>
-                      <p>超声探头这里最多可以显示两行字，多余的用…展示</p>
+                      <p>
+                        超声探头这里最多可以显示两行字，多余的用…展示
+                      </p>
                       <div class="brand_small">
                         <span>品牌：GE</span>
                         <span>型号：DR UPGRADE…</span>
@@ -490,7 +411,9 @@
                           销量: <span>99</span>
                         </span>
                       </div>
-                      <p>超声探头这里最多可以显示两行字，多余的用…展示</p>
+                      <p>
+                        超声探头这里最多可以显示两行字，多余的用…展示
+                      </p>
                       <div class="brand_small">
                         <span>品牌：GE</span>
                         <span>型号：DR UPGRADE…</span>
@@ -513,7 +436,9 @@
                           销量: <span>99</span>
                         </span>
                       </div>
-                      <p>超声探头这里最多可以显示两行字，多余的用…展示</p>
+                      <p>
+                        超声探头这里最多可以显示两行字，多余的用…展示
+                      </p>
                       <div class="brand_small">
                         <span>品牌：GE</span>
                         <span>型号：DR UPGRADE…</span>
@@ -536,7 +461,106 @@
                           销量: <span>99</span>
                         </span>
                       </div>
-                      <p>超声探头这里最多可以显示两行字，多余的用…展示</p>
+                      <p>
+                        超声探头这里最多可以显示两行字，多余的用…展示
+                      </p>
+                      <div class="brand_small">
+                        <span>品牌：GE</span>
+                        <span>型号：DR UPGRADE…</span>
+                      </div>
+                      <div class="address">
+                        <svg class="icon" aria-hidden="true">
+                          <use xlink:href="#icondianpu"></use>
+                        </svg>
+                        北京华脉诚信科技有限公司
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <h2>
+                  <p>1F 电子超声</p>
+                  <ul>
+                    <li>心电图机</li>
+                    <li>心电图工作站</li>
+                    <li>心电工作站</li>
+                    <li>心电工作站</li>
+                  </ul>
+                  <span>
+                    更多
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#iconhuangsegengduo"></use>
+                    </svg>
+                  </span>
+                </h2>
+                <div class="content">
+                  <div class="left"></div>
+                  <ul class="right">
+                    <li>
+                      <a href="#" class="img"></a>
+                      <div class="price">
+                        ¥799
+                        <span>
+                          <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#iconxiaoliang"></use>
+                          </svg>
+                          销量: <span>99</span>
+                        </span>
+                      </div>
+                      <p>
+                        超声探头这里最多可以显示两行字，多余的用…展示
+                      </p>
+                      <div class="brand_small">
+                        <span>品牌：GE</span>
+                        <span>型号：DR UPGRADE…</span>
+                      </div>
+                      <div class="address">
+                        <svg class="icon" aria-hidden="true">
+                          <use xlink:href="#icondianpu"></use>
+                        </svg>
+                        北京华脉诚信科技有限公司
+                      </div>
+                    </li>
+                    <li>
+                      <a href="#" class="img"></a>
+                      <div class="price">
+                        ¥799
+                        <span>
+                          <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#iconxiaoliang"></use>
+                          </svg>
+                          销量: <span>99</span>
+                        </span>
+                      </div>
+                      <p>
+                        超声探头这里最多可以显示两行字，多余的用…展示
+                      </p>
+                      <div class="brand_small">
+                        <span>品牌：GE</span>
+                        <span>型号：DR UPGRADE…</span>
+                      </div>
+                      <div class="address">
+                        <svg class="icon" aria-hidden="true">
+                          <use xlink:href="#icondianpu"></use>
+                        </svg>
+                        北京华脉诚信科技有限公司
+                      </div>
+                    </li>
+                    <li>
+                      <a href="#" class="img"></a>
+                      <div class="price">
+                        ¥799
+                        <span>
+                          <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#iconxiaoliang"></use>
+                          </svg>
+                          销量: <span>99</span>
+                        </span>
+                      </div>
+                      <p>
+                        超声探头这里最多可以显示两行字，多余的用…展示
+                      </p>
                       <div class="brand_small">
                         <span>品牌：GE</span>
                         <span>型号：DR UPGRADE…</span>
@@ -552,6 +576,67 @@
                 </div>
               </li>
             </ul>
+            <div class="recommend_article_box">
+              <div class="left">
+                <ul class="recommend_article">
+                  <li>
+                    <div class="img_box"></div>
+                    <div class="content">
+                      <h2>
+                        这里显示文章名称，只显示一行这里显示文章名称，只显示一行
+                      </h2>
+                      <p>
+                        这不仅仅是一篇简单的文章，这个文章是前辈日积月累的新的，重要的地方读三遍，写三遍。这里展示两行，多余的用…来表示。
+                      </p>
+                      <ul>
+                        <li>标签字数</li>
+                        <li>标签字数</li>
+                        <li>最长显示多少再定</li>
+                      </ul>
+                      <div class="toolMenu">
+                        <span>
+                          <i>
+                            <svg class="icon" aria-hidden="true">
+                              <use xlink:href="#iconpinglun"></use>
+                            </svg>
+                          </i>
+                          167
+                        </span>
+                        <span>
+                          <i>
+                            <svg class="icon" aria-hidden="true">
+                              <use xlink:href="#iconshoucang"></use>
+                            </svg>
+                          </i>
+                          999
+                        </span>
+                        <span>
+                          <i>
+                            <svg class="icon" aria-hidden="true">
+                              <use xlink:href="#iconzan"></use>
+                            </svg>
+                          </i>
+                          89
+                        </span>
+                        <span>
+                          <i>
+                            <svg class="icon" aria-hidden="true">
+                              <use xlink:href="#iconfenxiang"></use>
+                            </svg>
+                          </i>
+                          89
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <a-button>
+                  查看全部
+                  <a-icon type="right" />
+                </a-button>
+              </div>
+              <div class="right"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -565,41 +650,32 @@
       <div slot="content">
         <div class="common_brand">
           <h2>常用品牌<span>鼠标拖拽可排序，点击“x”取消</span></h2>
-          <ul>
-            <li>
-              <div class="img_box"></div>
-              松下
-              <i>
-                <svg class="icon" aria-hidden="true">
-                  <use
-                    xlink:href="#iconguanlichangyongpinpaiquxiaochahao"
-                  ></use>
-                </svg>
-              </i>
-            </li>
-            <li>
-              <div class="img_box"></div>
-              西门子
-              <i>
-                <svg class="icon" aria-hidden="true">
-                  <use
-                    xlink:href="#iconguanlichangyongpinpaiquxiaochahao"
-                  ></use>
-                </svg>
-              </i>
-            </li>
-            <li>
-              <div class="img_box"></div>
-              迈瑞
-              <i>
-                <svg class="icon" aria-hidden="true">
-                  <use
-                    xlink:href="#iconguanlichangyongpinpaiquxiaochahao"
-                  ></use>
-                </svg>
-              </i>
-            </li>
-          </ul>
+          <draggable
+            class="list-group"
+            v-model="myArray2"
+            v-bind="dragOptions"
+            @start="drag = true"
+            @end="drag = false"
+          >
+            <transition-group
+              tag="ul"
+              class="common"
+              type="transition"
+              :name="!drag ? 'flip-list' : null"
+            >
+              <li v-for="(item, i) in myArray2" :key="`key-${i}`">
+                <div class="img_box"></div>
+                {{ item }}
+                <i>
+                  <svg class="icon" aria-hidden="true">
+                    <use
+                      xlink:href="#iconguanlichangyongpinpaiquxiaochahao"
+                    ></use>
+                  </svg>
+                </i>
+              </li>
+            </transition-group>
+          </draggable>
         </div>
         <div class="all_brand">
           <h2>全部分类<span>点击即可设为常用分类</span></h2>
@@ -635,7 +711,39 @@
               <span>搜索</span>
             </div>
           </div>
+
+          <draggable
+            v-model="myArray"
+            v-bind="dragOptions"
+            @start="drag = true"
+            @end="drag = false"
+          >
+            <transition-group
+              tag="ul"
+              class="common"
+              type="transition"
+              :name="!drag ? 'flip-list' : null"
+            >
+              <li v-for="(item, i) in myArray" :key="i">
+                <div class="img_box"></div>
+                {{ item }}
+                <i>
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#iconguanlichangyongpinpaitianjia"></use>
+                  </svg>
+                </i>
+              </li>
+            </transition-group>
+          </draggable>
         </div>
+        <a-button
+          key="submit"
+          type="primary"
+          @click="handleOk"
+          :loading="false"
+        >
+          完成
+        </a-button>
       </div>
     </modal>
   </div>
@@ -648,6 +756,22 @@
   import sideBar from "../components/sideBar/sideBar.vue";
   import banner from "../components/common/banner.vue";
   import modal from "../components/common/modal.vue";
+  import draggable from "vuedraggable";
+
+  let myArray = [
+    "迈瑞",
+    "飞利浦",
+    "飞利浦",
+    "飞利浦",
+    "飞利浦",
+    "飞利浦",
+    "飞利浦",
+    "飞利浦",
+    "飞利浦",
+    "飞利浦"
+  ];
+
+  let myArray2 = ["西门子", "奔腾"];
 
   export default {
     data() {
@@ -657,8 +781,12 @@
           title: "管理常用品牌",
           closable: true,
           maskClosable: true,
-          wrapClassName: "commonBrand"
-        }
+          wrapClassName: "commonBrand",
+          centered: true
+        },
+        myArray,
+        myArray2,
+        drag: false
       };
     },
     components: {
@@ -666,11 +794,15 @@
       Footer,
       sideBar,
       banner,
-      modal
+      modal,
+      draggable
     },
     methods: {
       handleClick() {
         this.visible = true;
+      },
+      handleOk() {
+        this.visible = false;
       }
     },
     mounted() {
@@ -689,16 +821,16 @@
             this.navSlideWidth = this.slides[0].clientWidth; //导航字数需要统一,每个导航宽度一致
             console.log(this.navSlideWidth);
             /*  bar = this.$el.find('.bar')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 bar.css('width', this.navSlideWidth)
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 bar.transition(tSpeed) */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   bar.css('width', this.navSlideWidth)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   bar.transition(tSpeed) */
             this.navSum = this.slides[this.slides.length - 1].offsetLeft; //最后一个slide的位置
 
             this.clientWidth = parseInt(this.$wrapperEl.clientWidth); //Nav的可视宽度
 
             this.navWidth = this.navSlideWidth * this.slides.length;
             /*  for (i = 0; i < this.slides.length; i++) {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          this.navWidth += parseInt($(this.slides.eq(i)).outerWidth(true));
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            this.navWidth += parseInt($(this.slides.eq(i)).outerWidth(true));
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          } */
             //topBar = this.$el.parents('body').find('#top') //页头
           },
           touchStart: function() {
@@ -710,9 +842,9 @@
             // mySwiper.slideTo(this.clickIndex, 0);
 
             /* $(this.slides[this.clickedIndex])
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      .addClass("active")
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      .siblings()
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      .removeClass("active"); */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .addClass("active")
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .siblings()
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .removeClass("active"); */
             //导航居中
             let navActiveSlideLeft = this.slides[this.clickedIndex].offsetLeft; //activeSlide距左边的距离
             this.setTransition(300);
@@ -743,7 +875,16 @@
         }
       });
     },
-    computed: {}
+    computed: {
+      dragOptions() {
+        return {
+          animation: 200,
+          group: "description",
+          disabled: false,
+          ghostClass: "ghost"
+        };
+      }
+    }
   };
 </script>
 
@@ -1052,6 +1193,7 @@
             height: 35px;
             margin-bottom: 24px;
             margin-top: 40px;
+
             .swiper-wrapper {
               position: relative;
             }
@@ -1085,6 +1227,7 @@
           }
           .recommend_page {
             .floor {
+              display: none;
               > li {
                 margin-bottom: 30px;
                 h2 {
@@ -1228,6 +1371,116 @@
                       }
                     }
                   }
+                }
+              }
+            }
+            .recommend_article_box {
+              display: flex;
+              justify-content: flex-start;
+              .left {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+              }
+              .recommend_article {
+                margin-bottom: 30px;
+                > li {
+                  width: 768px;
+                  height: 192px;
+                  margin-bottom: 12px;
+                  background: #ffffff;
+                  padding: 16px;
+                  display: flex;
+                  cursor: pointer;
+                  justify-content: flex-start;
+                  .img_box {
+                    height: 160px;
+                    width: 160px;
+                    background: #f7f9fa;
+                    margin-right: 20px;
+                  }
+                  .content {
+                    display: flex;
+                    flex-direction: column;
+                    flex: 1;
+                    h2 {
+                      font-family: PingFangSC-Medium;
+                      font-size: 18px;
+                      color: #333333;
+                      height: 40px;
+                      display: flex;
+                      align-items: center;
+                      font-weight: 500;
+                    }
+                    p {
+                      font-family: PingFangSC-Regular;
+                      font-size: 14px;
+                      color: #999999;
+                    }
+                    > ul {
+                      display: flex;
+                      justify-content: flex-start;
+                      margin-top: 12px;
+                      margin-bottom: 18px;
+                      li {
+                        margin-right: 4px;
+                        height: 25px;
+                        padding: 0 10px;
+                        background: #f7f7f7;
+                        border-radius: 15px;
+                        font-family: PingFangSC-Regular;
+                        font-size: 12px;
+                        color: #fb6441;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        line-height: 25px;
+                      }
+                    }
+                    .toolMenu {
+                      display: flex;
+                      justify-content: flex-start;
+                      span {
+                        font-family: PingFangSC-Medium;
+                        font-size: 14px;
+                        color: #999999;
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-start;
+                        margin-right: 20px;
+                        height: 21px;
+                        line-height: 21px;
+                        i {
+                          margin-right: 4px;
+                          .icon {
+                            width: 16px;
+                            height: 16px;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              .ant-btn {
+                width: 127px;
+                height: 39px;
+                background: #ffffff;
+                border-radius: 32px;
+                font-family: PingFangSC-Regular;
+                //font-size: 16px;
+                color: #333333;
+                margin: 0 auto;
+                &:hover {
+                  color: $theme-color;
+                  border-color: $theme-color;
+                }
+                &:active {
+                  border-color: $theme-color;
+                }
+                &:focus {
+                  border-color: $theme-color;
                 }
               }
             }
