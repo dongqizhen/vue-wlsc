@@ -11,5 +11,10 @@ export default new Router({
         name: "home",
         component: () =>
             import ( /* webpackChunkName: "index" */ "../views/index")
+    }, {
+        path: "/merchant",
+        name: "merchant",
+        component: () =>
+            import ( /* webpackChunkName: "index" */ "../views/merchant")
     }]
 });

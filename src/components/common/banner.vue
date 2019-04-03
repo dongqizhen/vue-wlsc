@@ -1,0 +1,246 @@
+<template>
+  <div class="banner">
+    <div class="commonWidth">
+      <swiper ref="mySwiper" :options="swiperOption">
+        <!-- slides -->
+        <swiper-slide><img src="../../assets/images/banner.png"/></swiper-slide>
+        <swiper-slide><img src="../../assets/images/banner.png"/></swiper-slide>
+        <swiper-slide><img src="../../assets/images/banner.png"/></swiper-slide>
+        <swiper-slide><img src="../../assets/images/banner.png"/></swiper-slide>
+        <swiper-slide><img src="../../assets/images/banner.png"/></swiper-slide>
+        <!-- Optional controls -->
+        <ul class="swiper-pagination" slot="pagination"></ul>
+      </swiper>
+      <div class="login">
+        <div class="avatar">
+          <h2>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconweidenglutouxiang"></use>
+            </svg>
+          </h2>
+          <p>Hi,下午好</p>
+          <div class="btn">
+            <span class="login_in">登录</span>
+            <span class="sign_in">注册</span>
+          </div>
+        </div>
+        <div class="notice">
+          <h2>
+            <i>
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconxingzhuang"></use>
+              </svg>
+            </i>
+            系统公告
+          </h2>
+          <ul>
+            <li>
+              <span>【公告】</span>
+              <p>2017十一假期暂停什么十一假期暂停什么…</p>
+            </li>
+            <li>
+              <span>【公告】</span>
+              <p>2017十一假期暂停什么…</p>
+            </li>
+            <li>
+              <span>【公告】</span>
+              <p>2017十一假期暂停什么…</p>
+            </li>
+            <li>
+              <span>【公告】</span>
+              <p>2017十一假期暂停什么…</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import { swiper, swiperSlide } from "vue-awesome-swiper";
+  export default {
+    data() {
+      return {
+        swiperOption: {
+          //是一个组件自有属性，如果notNextTick设置为true，组件则不会通过NextTick来实例化swiper，也就意味着你可以在第一时间获取到swiper对象，假如你需要刚加载遍使用获取swiper对象来做什么事，那么这个属性一定要是true
+
+          notNextTick: true,
+
+          //循环
+
+          loop: true,
+
+          //设定初始化时slide的索引
+
+          initialSlide: 0,
+
+          //自动播放
+
+          autoplay: {
+            delay: 4000,
+
+            stopOnLastSlide: false,
+
+            disableOnInteraction: false
+          },
+          pagination: {
+            el: ".swiper-pagination",
+            bulletElement: "li",
+            // type: "custom",
+            clickable: true
+          }
+        }
+      };
+    },
+    components: { swiper, swiperSlide }
+  };
+</script>
+
+<style scoped lang="scss">
+  @import "../../assets/scss/_commonScss";
+  .banner {
+    padding-top: 30px;
+    margin-bottom: 14px;
+    .commonWidth {
+      height: 300px;
+      //background: $theme-color;
+      position: relative;
+      /deep/ .swiper-container {
+        height: 100%;
+        cursor: pointer;
+        .swiper-pagination {
+          height: 8px;
+          width: 100%;
+          bottom: 16px;
+          display: flex;
+          justify-content: center;
+          li {
+            background: #fff;
+            border-radius: 5px;
+            border-radius: 5px;
+            height: 8px;
+            width: 8px;
+            margin: 0;
+            opacity: 0.65;
+            margin-right: 8px;
+            transition: opacity 0.5s, background-color 0.5s, width 0.5s;
+            transition-delay: 0.5s, 0.5s, 0s;
+            transition-timing-function: linear;
+            &.swiper-pagination-bullet-active {
+              width: 24px;
+              transition-delay: 0s;
+            }
+          }
+        }
+      }
+      .login {
+        height: 100%;
+        width: 218px;
+        position: absolute;
+        right: 0;
+        background: rgba(51, 51, 51, 0.64);
+        top: 0;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        .avatar {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          h2 {
+            height: 50px;
+            width: 50px;
+            border-radius: 26px;
+            background: #cbcbcb;
+            border: 1px solid #979797;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 16px;
+            margin-bottom: 10px;
+            .icon {
+              height: 32px;
+              width: 28px;
+            }
+          }
+          p {
+            font-size: 14px;
+            font-family: $base-font-family;
+            color: #ffffff;
+            margin-bottom: 9px;
+          }
+          .btn {
+            width: 100%;
+            padding: 0 34px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            span {
+              background: rgba(255, 255, 255, 0.36);
+              border: 0.5px solid #ffffff;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 59px;
+              height: 27px;
+              font-family: PingFangSC-Regular;
+              font-size: 14px;
+              color: #ffffff;
+              cursor: pointer;
+            }
+          }
+        }
+        .notice {
+          padding: 0 13px;
+          width: 100%;
+          h2 {
+            border-bottom: #d8d8d8 1px solid;
+            height: 25px;
+            font-size: 12px;
+            color: #ffffff;
+            font-family: $base-font-family;
+            display: flex;
+            align-items: center;
+            line-height: 25px;
+            i {
+              margin-top: 1px;
+              margin-right: 2.5px;
+              .icon {
+                height: 13px;
+                width: 12px;
+              }
+            }
+          }
+          ul {
+            width: 100%;
+            li {
+              height: 30px;
+              font-family: PingFangSC-Regular;
+              font-size: 12px;
+              color: #ffffff;
+              line-height: 30px;
+              border-bottom: 0.5px dotted rgba(255, 255, 255, 0.52);
+              display: flex;
+              justify-content: flex-start;
+              cursor: pointer;
+              &:hover {
+                color: $theme-color;
+              }
+              p {
+                flex: 1;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
