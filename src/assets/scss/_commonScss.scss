@@ -7,3 +7,24 @@ $base-font-family:"Helvetica Neue",
 Helvetica,
 Arial,
 sans-serif;
+@mixin placeholderColor($color) {
+    //chrome谷歌浏览器，Safari苹果浏览器
+    input::-webkit-input-placeholder {
+        /* WebKit browsers */
+        color: $color;
+    }
+    //firefox火狐浏览器
+    input:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        color: $color;
+    }
+    input::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        color: $color;
+    }
+    //IE浏览器
+    input:-ms-input-placeholder {
+        /* Internet Explorer 10+ */
+        color: $color;
+    }
+}

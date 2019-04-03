@@ -14,8 +14,6 @@ import {
     TreeSelect
 } from 'vant';
 
-// Vue.use(Menu);
-Vue.use(TreeSelect);
 Vue.config.productionTip = false;
 
 // Vue.use(Tabs)
