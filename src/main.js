@@ -1,14 +1,15 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router/index";
-import store from './store/index'
+import store from './store/index';
 import {
     BackTop,
     Modal,
     Tabs,
     Select,
     Input,
-    Button
+    Button,
+    Icon
 } from "ant-design-vue";
 import "swiper/dist/css/swiper.css";
 
@@ -16,10 +17,9 @@ import "swiper/dist/css/swiper.css";
 import {
     TreeSelect
 } from 'vant';
-
 Vue.config.productionTip = false;
 
-Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button)
+Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon)
 
 new Vue({
     el: '#app',

@@ -107,7 +107,7 @@
 </template>
 
 <script>
-  import { Upload, Icon } from "ant-design-vue";
+  import { Upload } from "ant-design-vue";
 
   const selectArr = [{ key: 1, value: "beijing" }, { key: 2, value: "tianjin" }];
   function getBase64(img, callback) {
@@ -203,8 +203,7 @@
       }
     },
     components: {
-      AUpload: Upload,
-      AIcon: Icon
+      AUpload: Upload
     }
   };
 </script>
