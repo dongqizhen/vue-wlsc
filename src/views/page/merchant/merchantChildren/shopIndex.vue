@@ -14,26 +14,56 @@
         </ul>
       </div>
       <div class="nav-box">
-        <a-tabs defaultActiveKey="1" @change="callback">
-          <a-tab-pane tab="全部" key="1"
-            ><div class="trend">
-              <!-- <div id="trend-all"></div> -->
-              <v-chart :options="polar"></v-chart>
+        <a-tabs :defaultActiveKey="defaultActiveKey" @change="callback">
+          <a-tab-pane v-for="tab in tabs" :key="tab.id" :tab="tab.name">
+            <div class="trend">
+              <div class="time">
+                <ul>
+                  <li
+                    v-for="time in timesTab"
+                    :key="time.id"
+                    :class="currentTab == time.id ? 'active' : ''"
+                    @click="triggleTab(time.id)"
+                  >
+                    {{ time.name }}
+                  </li>
+                </ul>
+                <div class="calendar">
+                  <div class="block">
+                    <el-date-picker
+                      v-model="value7"
+                      type="daterange"
+                      align="right"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
+                    >
+                    </el-date-picker>
+                  </div>
+                </div>
+              </div>
+              <v-chart :options="polar" :init-options="initOptions"></v-chart>
             </div>
           </a-tab-pane>
-          <a-tab-pane tab="新增访问店铺数" key="2"
-            ><div class="trend">趋势图</div>
-          </a-tab-pane>
-          <a-tab-pane tab="新增收藏店铺数" key="3"
-            >Content of Tab Pane 3</a-tab-pane
-          >
-          <a-tab-pane tab="新增询价单数" key="4"
-            >Content of Tab Pane 3</a-tab-pane
-          >
-          <a-tab-pane tab="新增订单数" key="5"
-            >Content of Tab Pane 3</a-tab-pane
-          >
         </a-tabs>
+        <div class="statisticalTable">
+          <ul>
+            <li>
+              <span>时间</span>
+              <span>新增访问店铺数</span>
+              <span>新增收藏店铺数</span>
+              <span>新增询价单数</span>
+              <span>新增订单数</span>
+            </li>
+            <li v-for="item in items" :key="item.id">
+              <span>{{ item.time }}</span>
+              <span>{{ item.newVisit }}</span>
+              <span>{{ item.newStore }}</span>
+              <span>{{ item.newInquiry }}</span>
+              <span>{{ item.newOrder }}</span>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -51,21 +81,87 @@
   import "echarts/lib/component/title";
   import "echarts/lib/component/visualMap";
   import "echarts/lib/component/legend";
+
   export default {
     data() {
       return {
+        defaultActiveKey: 1,
+        tabs: [
+          { id: 1, name: "全部" },
+          { id: 2, name: "新增访问店铺数" },
+          { id: 3, name: "新增收藏店铺数" },
+          { id: 4, name: "新增询价单数" },
+          { id: 5, name: "新增订单数" }
+        ],
+        currentTab: 1,
+        timesTab: [
+          { id: 1, name: "最近一周" },
+          { id: 2, name: "最近半个月" },
+          { id: 3, name: "最近一个月" }
+        ],
+        items: [
+          {
+            id: 1,
+            time: "2019-03-01",
+            newVisit: 2,
+            newStore: 2,
+            newInquiry: 2,
+            newOrder: 56
+          },
+          {
+            id: 2,
+            time: "2019-03-02",
+            newVisit: 3,
+            newStore: 3,
+            newInquiry: 2,
+            newOrder: 76
+          },
+          {
+            id: 3,
+            time: "2019-03-03",
+            newVisit: 2,
+            newStore: 23,
+            newInquiry: 12,
+            newOrder: 45
+          },
+          {
+            id: 4,
+            time: "2019-03-04",
+            newVisit: 13,
+            newStore: 2,
+            newInquiry: 1,
+            newOrder: 2
+          },
+          {
+            id: 5,
+            time: "2019-03-05",
+            newVisit: 2,
+            newStore: 9,
+            newInquiry: 2,
+            newOrder: 23
+          },
+          {
+            id: 6,
+            time: "2019-03-06",
+            newVisit: 15,
+            newStore: 4,
+            newInquiry: 2,
+            newOrder: 98
+          }
+        ],
+        value: "",
+        initOptions: {
+          renderer: "svg"
+        },
         polar: {
-          renderer: "svg",
           title: {
-            text: "趋势图"
+            text: "趋势图",
+            padding: [5, 0, 0, 15]
           },
-          tooltip: {
-            // trigger: "item",
-            // formatter: "{a} <br/>{b} : {c} ({d}%)"
-          },
+          tooltip: {},
           legend: {
             icon: "square",
-            left: "13%",
+            left: "16%",
             selectedMode: false,
             itemGap: 40,
             itemWidth: 16,
@@ -83,18 +179,58 @@
           xAxis: {
             type: "category",
             boundaryGap: false,
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: "#ddd"
+              }
+            },
+            axisLine: {
+              // 坐标轴
+              lineStyle: {
+                width: "2",
+                color: "#ddd"
+              }
+            },
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: "#666",
+                fontSize: "12"
+              }
+            },
             data: [
-              "2019.03.01",
-              "2019.03.02",
-              "2019.03.03",
-              "2019.03.04",
-              "2019.03.05",
-              "2019.03.06",
-              "2019.03.07"
+              "2019-03-01",
+              "2019-03-02",
+              "2019-03-03",
+              "2019-03-04",
+              "2019-03-05",
+              "2019-03-06",
+              "2019-03-07"
             ]
           },
           yAxis: {
-            type: "value"
+            type: "value",
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: "#ddd"
+              }
+            },
+            axisLine: {
+              // 坐标轴
+              lineStyle: {
+                width: "2",
+                color: "#ddd"
+              }
+            },
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: "#666",
+                fontSize: "12"
+              }
+            }
           },
           series: [
             {
@@ -131,14 +267,31 @@
             }
           ]
           // animationDuration: 1000
-        }
+        },
+        value7: ""
       };
     },
     mounted() {},
     methods: {
+      triggleTab(currentTabId) {
+        this.currentTab = currentTabId;
+      },
       callback(key) {
         console.log(key);
+      },
+      onPanelChange(date, dateString) {
+        console.log(date, dateString);
+      },
+      onChange(value, dateString) {
+        console.log("Selected Time: ", value);
+        console.log("Formatted Selected Time: ", dateString);
+      },
+      onOk(value) {
+        console.log("onOk: ", value);
       }
+      // onSelect(value) {
+      //   console.log(value);
+      // }
     },
     components: { "v-chart": ECharts }
   };
@@ -201,15 +354,78 @@
             }
           }
           .ant-tabs-content {
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
             .ant-tabs-tabpane {
               background-color: #fff;
               padding-left: 27px;
               .trend {
                 height: 484px;
-                .echarts {
-                  width: 800px;
-                  height: 315px;
+                .time {
+                  margin-top: 21px;
+                  margin-bottom: 30px;
+                  display: flex;
+                  ul {
+                    display: flex;
+                    align-items: center;
+                    li {
+                      padding: 0 18px;
+                      height: 31px;
+                      line-height: 31px;
+                      text-align: center;
+                      color: #999;
+                      font-size: 14px;
+                      margin-right: 20px;
+                      cursor: pointer;
+                      &.active {
+                        background: rgba(241, 2, 21, 0.03);
+                        border-radius: 15.5px;
+                        color: $theme-color;
+                        font-weight: 600;
+                      }
+                    }
+                  }
+                  .calendar {
+                    width: 174px;
+                    margin-left: 22px;
+                    /deep/.el-range-separator {
+                      width: 8%;
+                    }
+                  }
                 }
+                .echarts {
+                  width: 900px;
+                  height: 397px;
+                }
+              }
+            }
+          }
+        }
+        .statisticalTable {
+          padding: 34px 20px;
+          background-color: #fff;
+          margin-top: 10px;
+          ul {
+            border: 1px solid #ddd;
+            li {
+              display: flex;
+              height: 48px;
+              align-items: center;
+              border-bottom: 0.5px solid #ddd;
+              font-family: PingFangSC-Regular;
+              font-size: 14px;
+              color: #666666;
+              span {
+                flex: 1;
+                text-align: center;
+              }
+              &:first-child {
+                background: #f8f8f8;
+                font-family: PingFangSC-Medium;
+                color: #333333;
+                font-weight: 600;
+              }
+              &:last-child {
+                border-bottom: none;
               }
             }
           }
@@ -218,3 +434,5 @@
     }
   }
 </style>
+
+

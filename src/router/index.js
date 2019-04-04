@@ -29,6 +29,11 @@ export default new Router({
                 path: "shopInfo",
                 component: () =>
                     import ("../views/page/merchant/merchantChildren/shopInfo")
+            },
+            {
+                path: "shopCertification",
+                component: () =>
+                    import ("../views/page/merchant/merchantChildren/shopCertification")
             }
         ]
     }]

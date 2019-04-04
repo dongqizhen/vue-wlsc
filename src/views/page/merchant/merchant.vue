@@ -148,6 +148,7 @@
         width: 170px;
         background-color: #fff;
         margin-right: 20px;
+        height: 693px;
         .title {
           width: 100%;
           height: 69px;

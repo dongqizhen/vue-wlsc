@@ -9,17 +9,24 @@ import {
     Select,
     Input,
     Button,
-    Icon
+    Icon,
+    Cascader
 } from "ant-design-vue";
 import "swiper/dist/css/swiper.css";
+// import {
+//     DatePicker
+// } from 'element-ui';
+
 
 // import { Menu } from 'ant-design-vue';
 import {
     TreeSelect
 } from 'vant';
 Vue.config.productionTip = false;
-
-Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon)
+import {
+    DatePicker
+} from "element-ui";
+Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Cascader).use(DatePicker)
 
 new Vue({
     el: '#app',
