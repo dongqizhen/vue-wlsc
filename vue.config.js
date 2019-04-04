@@ -58,7 +58,10 @@ module.exports = {
     // devServer:{type:Object} 3个属性host,port,https
     // 它支持webPack-dev-server的所有选项
 
-
+    transpileDependencies: [
+        'vue-echarts',
+        'resize-detector'
+    ],
     configureWebpack: {
         resolve: {
             extensions: ['.js', '.vue', '.json', '.ts'],
