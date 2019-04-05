@@ -30,6 +30,26 @@ export default new Router({
                     path: "shopInfo",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/shopInfo")
+                },
+                {
+                    path: "shopCertification",
+                    component: () =>
+                        import ("../views/page/merchant/merchantChildren/shopCertification")
+                },
+                {
+                    path: "publishGoods",
+                    component: () =>
+                        import ("../views/page/merchant/merchantChildren/publishGoods")
+                },
+                {
+                    path: "personalCenter",
+                    component: () =>
+                        import ("../views/page/merchant/merchantChildren/personalCenter")
+                },
+                {
+                    path: "accountSecurity",
+                    component: () =>
+                        import ("../views/page/merchant/merchantChildren/accountSecurity")
                 }
             ]
         },
@@ -43,6 +63,11 @@ export default new Router({
             path: "/search",
             component: () =>
                 import ('../views/page/shop/search.vue')
+        }, {
+            name: "商家中心",
+            path: "/merchantPlugin",
+            component: () =>
+                import ('../views/page/merchant/merchantPlugin.vue')
         }
 
     ]
