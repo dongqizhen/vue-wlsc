@@ -1,7 +1,7 @@
 <template>
   <div class="shopInfo">
     <div class="container-box">
-      <div class="header">
+      <div class="common-title">
         <div class="verticalBar"></div>
         店铺信息
       </div>
@@ -17,7 +17,7 @@
           <div class="right-box">
             <a-select
               defaultValue="lucy"
-              style="width: 120px"
+              style="width: 222px"
               @change="handleChange"
             >
               <a-select-option value="jack">Jack</a-select-option>
@@ -64,23 +64,12 @@
         <div class="common shopSaleArea">
           <div class="left-box"><span class="red">*</span>销售地区</div>
           <div class="right-box saleArea">
-            <a-select
-              defaultValue="省"
-              style="width: 120px"
-              @change="handleProvinceChange"
+            <a-cascader
               :options="options"
-            />
-            <a-select
-              defaultValue="市"
-              style="width: 120px"
-              @change="handleCityChange"
-              :options="options"
-            />
-            <a-select
-              defaultValue="区"
-              style="width: 120px"
-              @change="handleAreaChange"
-              :options="options"
+              @change="onChange"
+              placeholder="请选择省/市/区"
+              :defaultValue="defaultCascaderValue"
+              style="width: 390px"
             />
           </div>
         </div>
@@ -132,6 +121,7 @@
   export default {
     data() {
       return {
+        defaultCascaderValue: [],
         provinceData,
         cityData,
         cities: cityData[provinceData[0]],
@@ -163,6 +153,7 @@
       };
     },
     methods: {
+      onChange() {},
       handleShopTypeChange(value) {
         console.log(`selected ${value}`);
       },
@@ -214,7 +205,7 @@
     background-color: #fff;
     height: 693px;
     padding: 4px 20px;
-    .header {
+    .common-title {
       display: flex;
       align-items: center;
       height: 49px;

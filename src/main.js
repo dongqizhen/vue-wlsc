@@ -10,17 +10,26 @@ import {
     Input,
     Button,
     Icon,
-    breadcrumb
+    breadcrumb,
+    Cascader
 } from "ant-design-vue";
 import "swiper/dist/css/swiper.css";
+import {
+    DatePicker
+} from 'element-ui';
+
 
 // import { Menu } from 'ant-design-vue';
-import {
+/* import {
     TreeSelect
-} from 'vant';
+} from 'vant'; */
 Vue.config.productionTip = false;
 
-Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(breadcrumb)
+
+
+
+Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Cascader).use(DatePicker).use(breadcrumb)
+
 new Vue({
     el: '#app',
     router,

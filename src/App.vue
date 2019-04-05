@@ -50,4 +50,19 @@
     margin: 0 auto;
     height: 100%;
   }
+  .el-picker-panel {
+    .el-date-table {
+      td.today {
+        span {
+          color: #f10215;
+        }
+      }
+      td.start-date,
+      td.end-date {
+        span {
+          background-color: #f10215;
+        }
+      }
+    }
+  }
 </style>
