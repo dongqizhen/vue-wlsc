@@ -3,14 +3,20 @@
     <div class="container-box">
       <div class="header">
         <ul>
-          <li>
-            <div class="textName">新增访问店铺数</div>
-            <div class="number">238</div>
-            <div class="increase"><img />同比增长18.4%</div>
+          <li v-for="data in amountData" :key="data.id">
+            <div class="textName">{{ data.name }}</div>
+            <div class="number">{{ data.amount }}</div>
+            <div class="increase">
+              <svg class="icon" aria-hidden="true">
+                <use
+                  xlink:href="#icontongbizengchang"
+                  v-if="data.increase"
+                ></use>
+                <use xlink:href="#icontongbixiajiang" v-else></use>
+              </svg>
+              同比{{ data.increase ? "增长" : "下降" }}{{ data.rate }}
+            </div>
           </li>
-          <li></li>
-          <li></li>
-          <li></li>
         </ul>
       </div>
       <div class="nav-box">
@@ -37,6 +43,7 @@
                       range-separator="至"
                       start-placeholder="开始日期"
                       end-placeholder="结束日期"
+                      @change="changeDate"
                     >
                     </el-date-picker>
                   </div>
@@ -81,10 +88,57 @@
   import "echarts/lib/component/title";
   import "echarts/lib/component/visualMap";
   import "echarts/lib/component/legend";
-
+  const xAxisData = [
+      "2019-03-01",
+      "2019-03-02",
+      "2019-03-03",
+      "2019-03-04",
+      "2019-03-05",
+      "2019-03-06",
+      "2019-03-07"
+    ],
+    newVisitNumber = [2, 3, 2, 13, 2, 15, 17],
+    newStoreNumber = [2, 3, 23, 2, 9, 4, 9],
+    newInquiryNumber = [2, 2, 12, 1, 2, 2, 6],
+    newOrderNumber = [56, 76, 45, 2, 23, 98, 68];
   export default {
     data() {
       return {
+        xAxisData,
+        newVisitNumber,
+        newStoreNumber,
+        newInquiryNumber,
+        newOrderNumber,
+        amountData: [
+          {
+            id: 1,
+            name: "新增访问店铺数",
+            amount: 238,
+            rate: "18.4%",
+            increase: true
+          },
+          {
+            id: 2,
+            name: "新增收藏店铺数",
+            amount: 29,
+            rate: "36.1%",
+            increase: true
+          },
+          {
+            id: 3,
+            name: "新增询价单数",
+            amount: 1,
+            rate: "50.7%",
+            increase: false
+          },
+          {
+            id: 4,
+            name: "新增订单数",
+            amount: 3,
+            rate: "11.2%",
+            increase: true
+          }
+        ],
         defaultActiveKey: 1,
         tabs: [
           { id: 1, name: "全部" },
@@ -199,15 +253,7 @@
                 fontSize: "12"
               }
             },
-            data: [
-              "2019-03-01",
-              "2019-03-02",
-              "2019-03-03",
-              "2019-03-04",
-              "2019-03-05",
-              "2019-03-06",
-              "2019-03-07"
-            ]
+            data: xAxisData
           },
           yAxis: {
             type: "value",
@@ -236,7 +282,7 @@
             {
               name: "新增访问店铺数",
               type: "line",
-              data: [2, 3, 2, 13, 2, 15, 17],
+              data: newVisitNumber,
               itemStyle: {
                 color: "#0283FF"
               }
@@ -244,7 +290,7 @@
             {
               name: "新增收藏店铺数",
               type: "line",
-              data: [2, 3, 23, 2, 9, 4, 9],
+              data: newStoreNumber,
               itemStyle: {
                 color: "#37B2AC"
               }
@@ -252,7 +298,7 @@
             {
               name: "新增询价单数",
               type: "line",
-              data: [2, 2, 12, 1, 2, 2, 6],
+              data: newInquiryNumber,
               itemStyle: {
                 color: "#FD94A7"
               }
@@ -260,7 +306,7 @@
             {
               name: "新增订单数",
               type: "line",
-              data: [56, 76, 45, 2, 23, 98, 68],
+              data: newOrderNumber,
               itemStyle: {
                 color: "#F5A623"
               }
@@ -277,7 +323,14 @@
         this.currentTab = currentTabId;
       },
       callback(key) {
-        console.log(key);
+        console.log("nav", key);
+        if (key == 2) {
+          this.xAxisData = [];
+          this.newVisitNumber = [];
+          this.newStoreNumber = [2, 3, 23, 2, 9, 4, 9];
+          this.newInquiryNumber = [];
+          this.newOrderNumber = [];
+        }
       },
       onPanelChange(date, dateString) {
         console.log(date, dateString);
@@ -288,10 +341,11 @@
       },
       onOk(value) {
         console.log("onOk: ", value);
+      },
+      changeDate(value) {
+        console.log(value);
+        this.currentTab = -1;
       }
-      // onSelect(value) {
-      //   console.log(value);
-      // }
     },
     components: { "v-chart": ECharts }
   };
@@ -311,8 +365,36 @@
             height: 130px;
             margin-right: 20px;
             background-color: #fff;
+            text-align: center;
             &:last-child {
               margin-right: 0;
+            }
+            .textName {
+              margin-top: 15px;
+              font-size: 14px;
+              color: #666;
+            }
+            .number {
+              font-family: PingFangSC-Semibold;
+              font-weight: 600;
+              font-size: 30px;
+              color: #000;
+              height: 42px;
+              margin: 10px 0;
+            }
+            .increase {
+              height: 22px;
+              line-height: 22px;
+              vertical-align: middle;
+              font-size: 14px;
+              color: #999;
+              font-weight: 600;
+              .icon {
+                width: 22px;
+                height: 22px;
+                margin-right: 8px;
+                vertical-align: middle;
+              }
             }
           }
         }
@@ -340,6 +422,9 @@
                     .ant-tabs-tab {
                       padding: 12px 0;
                       margin-right: 67px;
+                      &:hover {
+                        color: $theme-color;
+                      }
                     }
                     .ant-tabs-ink-bar {
                       background-color: $theme-color;

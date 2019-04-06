@@ -16,10 +16,15 @@
           <div class="left-box">店铺类型</div>
           <div class="right-box">
             <a-select
-              defaultValue="lucy"
+              placeholder="请选择经营模式"
               style="width: 222px"
               @change="handleChange"
             >
+              <a-icon slot="suffixIcon">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+                </svg>
+              </a-icon>
               <a-select-option value="jack">Jack</a-select-option>
               <a-select-option value="lucy">Lucy</a-select-option>
               <a-select-option value="disabled" disabled
@@ -27,12 +32,6 @@
               >
               <a-select-option value="Yiminghe">yiminghe</a-select-option>
             </a-select>
-            <!-- <a-select
-              defaultValue="请选择经营模式"
-              style="width: 222px"
-              @change="handleShopTypeChange"
-              :options="options"
-            /> -->
           </div>
         </div>
         <div class="common shopIndexPicture">
@@ -205,6 +204,29 @@
     background-color: #fff;
     height: 693px;
     padding: 4px 20px;
+    /deep/.ant-input:hover {
+      border-color: $theme-color;
+    }
+    /deep/.ant-input:focus {
+      box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
+    }
+    /deep/.ant-select-selection:hover {
+      border-color: $theme-color;
+    }
+    /deep/.ant-select-open .ant-select-selection {
+      border-color: $theme-color;
+      box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
+    }
+    /deep/ .ant-select-selection:focus,
+    .ant-select-selection:active {
+      border-color: $theme-color;
+      box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
+    }
+    /deep/.ant-cascader-picker:focus .ant-cascader-input {
+      border-color: $theme-color;
+      box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
+    }
+
     .common-title {
       display: flex;
       align-items: center;
@@ -260,15 +282,24 @@
             resize: none;
             line-height: 22px;
           }
+          /deep/.ant-select {
+            .ant-select-arrow {
+              right: 20px;
+            }
+          }
           /deep/.avatar-uploader {
             .ant-upload.ant-upload-select-picture-card {
               width: 118px;
               height: 118px;
               border: none;
+              background-color: #f5f5f5;
               .ant-upload-text {
                 font-family: PingFangSC-Regular;
                 font-size: 12px;
                 color: #ccc;
+              }
+              img {
+                width: 100%;
               }
             }
           }
