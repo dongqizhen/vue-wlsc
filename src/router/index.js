@@ -35,9 +35,25 @@ export default new Router({
         },
         {
             name: '详情',
-            path: '/detaile',
+            path: '/details',
             component: () =>
-                import ('../views/page/shop/detaile')
+                import ('../views/page/shop/details'),
+            children: [{
+                path: 'videoDetails',
+                name: '视频详情',
+                component: () =>
+                    import ('../views/page/shop/detaileChirldren/videoDetails')
+            }, {
+                path: 'caseDetails',
+                name: '案例详情',
+                component: () =>
+                    import ('../views/page/shop/detaileChirldren/caseDetails')
+            }, {
+                path: 'articleDetails',
+                name: '文章详情',
+                component: () =>
+                    import ('../views/page/shop/detaileChirldren/articleDetails')
+            }]
         }, {
             name: "搜索",
             path: "/search",

@@ -1,78 +1,80 @@
 <template>
-  <li class="case-item">
-    <div class="photo">
-      <div class="img_box"></div>
+  <router-link tag="li" class="case-item" to="/details/caseDetails">
+    <a target="_blank">
+      <div class="photo">
+        <div class="img_box"></div>
+        <p>
+          张峰
+          <a
+            >2019-02-18
+            <span>
+              <i>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
+                </svg>
+              </i>
+              178
+            </span>
+          </a>
+        </p>
+        <span>
+          <i>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconzuanshi"></use>
+            </svg>
+          </i>
+          100
+        </span>
+      </div>
+      <h2>
+        扫描床体边盖插头、座变形导通不良，保护边盖电路故障，造成主机正常扫描中经常突然…
+      </h2>
       <p>
-        张峰
-        <a
-          >2019-02-18
+        这不仅仅是一篇简单的文章，这个文章是前辈日积月累的新的，重要的地方读三遍，写三遍。这里展示两行，多余的用…来表示。
+      </p>
+      <div class="tip">
+        <ul>
+          <li>标签字数</li>
+          <li>标签字数</li>
+          <li>最长显示多少再定</li>
+        </ul>
+        <div class="toolMenu">
           <span>
             <i>
               <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
+                <use xlink:href="#iconpinglun"></use>
               </svg>
             </i>
-            178
+            167
           </span>
-        </a>
-      </p>
-      <span>
-        <i>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#iconzuanshi"></use>
-          </svg>
-        </i>
-        100
-      </span>
-    </div>
-    <h2>
-      扫描床体边盖插头、座变形导通不良，保护边盖电路故障，造成主机正常扫描中经常突然…
-    </h2>
-    <p>
-      这不仅仅是一篇简单的文章，这个文章是前辈日积月累的新的，重要的地方读三遍，写三遍。这里展示两行，多余的用…来表示。
-    </p>
-    <div class="tip">
-      <ul>
-        <li>标签字数</li>
-        <li>标签字数</li>
-        <li>最长显示多少再定</li>
-      </ul>
-      <div class="toolMenu">
-        <span>
-          <i>
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#iconpinglun"></use>
-            </svg>
-          </i>
-          167
-        </span>
-        <span>
-          <i>
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#iconshoucang"></use>
-            </svg>
-          </i>
-          999
-        </span>
-        <span>
-          <i>
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#iconzan"></use>
-            </svg>
-          </i>
-          89
-        </span>
-        <span>
-          <i>
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#iconfenxiang"></use>
-            </svg>
-          </i>
-          89
-        </span>
+          <span>
+            <i>
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconshoucang"></use>
+              </svg>
+            </i>
+            999
+          </span>
+          <span>
+            <i>
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconzan"></use>
+              </svg>
+            </i>
+            89
+          </span>
+          <span>
+            <i>
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconfenxiang"></use>
+              </svg>
+            </i>
+            89
+          </span>
+        </div>
       </div>
-    </div>
-  </li>
+    </a>
+  </router-link>
 </template>
 
 <script>
@@ -93,6 +95,14 @@
     padding: 10px 20px;
     padding-bottom: 0;
     cursor: pointer;
+    &:hover {
+      > a > h2 {
+        color: $theme-color;
+      }
+    }
+    a {
+      text-decoration: none;
+    }
     .photo {
       display: flex;
       justify-content: space-between;

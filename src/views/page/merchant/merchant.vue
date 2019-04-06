@@ -80,7 +80,7 @@
   @import "../../../assets/scss/_commonScss";
 
   .merchant {
-    background-color: $base-backgroud;
+    background-color: $base-background;
     .header {
       width: 100%;
       height: $header-height;
