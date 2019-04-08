@@ -285,7 +285,7 @@
         }
       }
       .right-box {
-        @include placeholderColor(#ccc);
+        @include placeholderStyle;
         .ant-input {
           width: 390px;
           height: 34px;

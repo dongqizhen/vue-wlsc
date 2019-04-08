@@ -15,7 +15,8 @@ import {
     Checkbox,
     Radio,
     Layout,
-    menu
+    Menu,
+    Table
 } from "ant-design-vue";
 import "swiper/dist/css/swiper.css";
 import {
@@ -24,7 +25,7 @@ import {
 
 Vue.config.productionTip = false;
 
-Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(menu)
+Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table)
 
 new Vue({
     el: '#app',

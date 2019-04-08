@@ -42,7 +42,7 @@
                 <router-link to="/merchant/publishGoods">发布产品</router-link>
               </a-menu-item>
               <a-menu-item key="5">
-                <router-link to="/merchant/publishGoods">产品管理</router-link>
+                <router-link to="/merchant/productManage">产品管理</router-link>
               </a-menu-item>
               <a-menu-item key="6">
                 <router-link to="/merchant/publishGoods">询价管理</router-link>
@@ -112,9 +112,9 @@
         case "publishGoods":
           this.defaultSelectedKeys = ["4"];
           break;
-        // case "publishGoods":
-        //   this.defaultSelectedKeys = ["5"];
-        //   break;
+        case "productManage":
+          this.defaultSelectedKeys = ["5"];
+          break;
         // case "publishGoods":
         //   this.defaultSelectedKeys = ["6"];
         //   break;

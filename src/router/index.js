@@ -42,6 +42,11 @@ export default new Router({
                         import ("../views/page/merchant/merchantChildren/publishGoods")
                 },
                 {
+                    path: "productManage",
+                    component: () =>
+                        import ("../views/page/merchant/merchantChildren/productManage")
+                },
+                {
                     path: "personalCenter",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/personalCenter")

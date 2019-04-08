@@ -5,7 +5,11 @@
       <div class="informationContent">
         <div class="common">
           <div class="left-box">
-            <span></span>
+            <span>
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconzhanghaoanquanduigou"></use>
+              </svg>
+            </span>
             <span class="title">登录密码</span>
             <span class="description"
               >安全性高的密码可以使账户更安全，建议您定期更换密码。</span
@@ -15,7 +19,11 @@
         </div>
         <div class="common">
           <div class="left-box">
-            <span></span>
+            <span>
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconzhanghaoanquancuowu"></use>
+              </svg>
+            </span>
             <span class="title">绑定邮箱</span>
             <span class="description"
               >验证后可用于邮箱找回密码、接受订单提醒等，保障您的账户更安全。</span
@@ -25,7 +33,11 @@
         </div>
         <div class="common">
           <div class="left-box">
-            <span></span>
+            <span>
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconzhanghaoanquanduigou"></use>
+              </svg>
+            </span>
             <span class="title">绑定手机</span>
             <span class="description"
               >绑定后可用于手机找回密码、接受手机动态验证码等，使您的账户更加安全。</span
@@ -71,6 +83,11 @@
           justify-content: space-between;
           border-bottom: 0.5px dashed #ddd;
           .left-box {
+            display: flex;
+            align-items: center;
+            span {
+              height: 25px;
+            }
             .title {
               font-weight: 600;
               font-size: 16px;
@@ -78,8 +95,13 @@
               margin: 0 20px 0 10px;
             }
             .description {
+              line-height: 25px;
               font-size: 14px;
               color: #666;
+            }
+            .icon {
+              width: 25px;
+              height: 25px;
             }
           }
         }

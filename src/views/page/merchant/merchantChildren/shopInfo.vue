@@ -48,7 +48,12 @@
             >
               <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
               <div v-else>
-                <a-icon :type="loading ? 'loading' : 'plus'" />
+                <a-icon v-if="loading" type="loading"></a-icon>
+                <a-icon v-else>
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icontianjiatupian1"></use>
+                  </svg>
+                </a-icon>
                 <div class="ant-upload-text">点击添加图片</div>
               </div>
             </a-upload>
@@ -268,7 +273,7 @@
           }
         }
         .right-box {
-          @include placeholderColor(#ccc);
+          @include placeholderStyle;
           .ant-input {
             width: 390px;
             height: 34px;
@@ -297,6 +302,14 @@
                 font-family: PingFangSC-Regular;
                 font-size: 12px;
                 color: #ccc;
+              }
+              .anticon {
+                width: 18px;
+                height: 18px;
+                svg {
+                  width: 100%;
+                  height: 100%;
+                }
               }
               img {
                 width: 100%;
