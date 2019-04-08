@@ -409,7 +409,7 @@
             width: 352px;
             top: 0;
             right: -362px;
-            z-index: 0;
+            z-index: 100;
             pointer-events: none;
           }
         }

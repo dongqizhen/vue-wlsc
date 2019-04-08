@@ -84,11 +84,6 @@ export default new Router({
             path: "/search",
             component: () =>
                 import ('../views/page/shop/search.vue')
-        }, {
-            name: "商家中心",
-            path: "/merchantPlugin",
-            component: () =>
-                import ('../views/page/merchant/merchantPlugin.vue')
         }
 
     ]

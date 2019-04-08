@@ -1,197 +1,253 @@
 <template>
   <div class="merchant">
-    <div class="header">
-      <div class="content">
-        <div class="left">
-          <p>返回网来商城首页</p>
-          <router-link to="#">请登录</router-link>
-          <router-link to="#" tag="span"><a>免费注册</a></router-link>
-        </div>
-        <ul class="right">
-          <router-link tag="li" to="#">
-            <a>
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icongouwuche"></use>
-              </svg>
-              我的选购单
-            </a>
-          </router-link>
-          <router-link tag="li" to="/"><a>个人中心</a></router-link>
-          <router-link tag="li" to="#">
-            <a>
-              <i></i>
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconwanglaishangchengapp"></use>
-              </svg>
-              网来商城App
-            </a>
-          </router-link>
-        </ul>
-      </div>
-    </div>
-    <div class="container">
-      <div class="left-side">
-        <div class="title">商家中心</div>
-        <div class="container-box">
-          <div class="storeManagement">
-            <h2>店铺管理</h2>
-            <ul>
-              <li>店铺首页</li>
-              <li class="active">店铺信息</li>
-              <li>店铺认证</li>
-            </ul>
+    <a-layout>
+      <a-layout-header><Header></Header></a-layout-header>
+      <a-layout>
+        <a-layout-sider>
+          <div class="title">商家中心</div>
+          <a-menu
+            mode="inline"
+            :openKeys="openKeys"
+            style="width: 170px"
+            :defaultSelectedKeys="defaultSelectedKeys"
+            @click="handleClick"
+          >
+            <a-sub-menu key="sub1">
+              <span slot="title">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icondianpuguanli"></use>
+                </svg>
+                <span>店铺管理</span>
+              </span>
+              <a-menu-item key="1">
+                <router-link to="/merchant/shopIndex">店铺首页</router-link>
+              </a-menu-item>
+              <a-menu-item key="2">
+                <router-link to="/merchant/shopInfo">店铺信息</router-link>
+              </a-menu-item>
+              <a-menu-item key="3">
+                <router-link to="/merchant/shopCertification">
+                  店铺认证
+                </router-link>
+              </a-menu-item>
+            </a-sub-menu>
+            <a-sub-menu key="sub2">
+              <span slot="title">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icondianpuyunying"></use>
+                </svg>
+                <span>店铺运营</span>
+              </span>
+              <a-menu-item key="4">
+                <router-link to="/merchant/publishGoods">发布产品</router-link>
+              </a-menu-item>
+              <a-menu-item key="5">
+                <router-link to="/merchant/publishGoods">产品管理</router-link>
+              </a-menu-item>
+              <a-menu-item key="6">
+                <router-link to="/merchant/publishGoods">询价管理</router-link>
+              </a-menu-item>
+              <a-menu-item key="7">
+                <router-link to="/merchant/publishGoods">订单管理</router-link>
+              </a-menu-item>
+            </a-sub-menu>
+            <a-sub-menu key="sub3">
+              <span slot="title">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconqita"></use>
+                </svg>
+                <span>其他</span>
+              </span>
+              <a-menu-item key="8">
+                <router-link to="/merchant/accountSecurity">
+                  账号安全
+                </router-link>
+              </a-menu-item>
+              <a-menu-item key="9">
+                <router-link to="/merchant/personalCenter">
+                  个人中心
+                </router-link>
+              </a-menu-item>
+              <a-menu-item key="10">消息中心</a-menu-item>
+            </a-sub-menu>
+          </a-menu>
+        </a-layout-sider>
+        <a-layout-content>
+          <div class="right-content">
+            <router-view></router-view>
           </div>
-          <div class="storeOperation">
-            <h2>店铺运营</h2>
-            <ul>
-              <li>发布产品</li>
-              <li>产品管理</li>
-              <li>询价管理</li>
-              <li>订单管理</li>
-            </ul>
-          </div>
-          <div class="other">
-            <h2>其他</h2>
-            <ul>
-              <li>账号安全</li>
-              <li>个人中心</li>
-              <li>消息中心</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="right-content">
-        <router-view></router-view>
-      </div>
-    </div>
+        </a-layout-content>
+      </a-layout>
+      <a-layout-footer><Footer></Footer></a-layout-footer>
+    </a-layout>
   </div>
 </template>
-
 <script>
+  import Header from "../../../components/header/header";
+  import Footer from "../../../components/footer/footer";
   export default {
-    data: () => {
-      return {};
+    data() {
+      return {
+        openKeys: ["sub1", "sub2", "sub3"],
+        defaultSelectedKeys: ["1"]
+      };
     },
-    components: {}
+    methods: {
+      handleClick(e) {
+        console.log("click", e);
+        // this.defaultSelectedKeys[0] = e.key;
+      }
+    },
+    beforeMount() {
+      switch (this.$route.path.split("/")[2]) {
+        case "shopIndex":
+          this.defaultSelectedKeys = ["1"];
+          break;
+        case "shopInfo":
+          this.defaultSelectedKeys = ["2"];
+          break;
+        case "shopCertification":
+          this.defaultSelectedKeys = ["3"];
+          break;
+        case "publishGoods":
+          this.defaultSelectedKeys = ["4"];
+          break;
+        // case "publishGoods":
+        //   this.defaultSelectedKeys = ["5"];
+        //   break;
+        // case "publishGoods":
+        //   this.defaultSelectedKeys = ["6"];
+        //   break;
+        // case "publishGoods":
+        //   this.defaultSelectedKeys = ["7"];
+        //   break;
+        case "accountSecurity":
+          this.defaultSelectedKeys = ["8"];
+          break;
+        case "personalCenter":
+          this.defaultSelectedKeys = ["9"];
+          break;
+        // case "personalCenter":
+        //   this.defaultSelectedKeys = ["10"];
+        //   break;
+      }
+    },
+    components: {
+      Header,
+      Footer
+    }
   };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   @import "../../../assets/scss/_commonScss";
-
   .merchant {
-    background-color: $base-background;
-    .header {
-      width: 100%;
-      height: $header-height;
-      background: $theme-color;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      line-height: 14px;
-      .content {
-        width: 1200px;
-        height: 100%;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        .left {
-          color: #fff;
-          display: flex;
-          justify-content: flex-start;
-          p {
-            display: flex;
-          }
-          a {
-            padding: 0 20px 0 10px;
-            color: #fff;
-            text-decoration: none;
-          }
-          span {
-            > a {
+    /deep/.ant-layout {
+      background: $base-background;
+      .ant-layout-header {
+        padding: 0;
+        height: $header-height;
+        background: $theme-color;
+        .header {
+          background: $theme-color;
+          .content {
+            .left {
               color: #fff;
-              padding: 0;
-              &:hover {
-                color: $theme-color;
+              a {
+                color: #fff;
+              }
+            }
+            .right {
+              li {
+                a {
+                  color: #fff;
+                }
               }
             }
           }
         }
-        .right {
-          display: flex;
-          justify-content: flex-start;
-          li {
-            a {
-              color: #fff;
-              text-decoration: none;
-              line-height: 14px;
-              &:hover {
-                color: $theme-color;
+      }
+      .ant-layout-sider {
+        background: $base-background;
+        width: 170px !important;
+        min-width: 170px !important;
+        flex: 0 !important;
+        margin-right: 20px;
+        .ant-layout-sider-children {
+          height: 693px;
+          background-color: #fff;
+          .title {
+            width: 100%;
+            height: 69px;
+            line-height: 69px;
+            padding-left: 16px;
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+            font-family: PingFangSC-Semibold;
+            border-bottom: 0.2px solid #ddd;
+          }
+          .ant-menu-inline {
+            border-right: none;
+            .ant-menu-submenu {
+              .ant-menu-submenu-title {
+                padding-left: 20px !important;
+                margin: 0;
+                color: #333;
+                font-size: 16px;
+                font-weight: 600;
+                .ant-menu-submenu-arrow {
+                  display: none;
+                }
+                .icon {
+                  margin-right: 7px;
+                }
               }
-              svg {
-                margin-right: 5px;
+              .ant-menu-sub {
+                .ant-menu-item {
+                  color: #333;
+                  margin: 0;
+                  height: 48px;
+                  line-height: 48px;
+                  padding-left: 43px !important;
+                  -webkit-transition: color 0.3s
+                      cubic-bezier(0.645, 0.045, 0.355, 1),
+                    border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
+                    background 0s cubic-bezier(0.645, 0.045, 0.355, 1),
+                    padding 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
+                  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
+                    border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
+                    background 0s cubic-bezier(0.645, 0.045, 0.355, 1),
+                    padding 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
+                  &:hover {
+                    background: #fafafa;
+                    a {
+                      color: $theme-color;
+                    }
+                  }
+                  &.ant-menu-item-selected {
+                    padding-right: 20px;
+                    background: rgba(241, 2, 21, 0.03)
+                      url("../../../assets/images/redRightArrow.svg") no-repeat
+                      140px center / 14px 26px;
+                    a {
+                      color: $theme-color;
+                    }
+                  }
+                  &::after {
+                    border-right: none;
+                  }
+                }
               }
-            }
-            &:nth-child(2) {
-              margin: 0 30px;
             }
           }
         }
       }
     }
-    .container {
-      display: flex;
+    .ant-layout-has-sider {
       width: 1200px;
       margin: 0 auto;
       margin-top: 24px;
-      .left-side {
-        width: 170px;
-        background-color: #fff;
-        margin-right: 20px;
-        height: 693px;
-        .title {
-          width: 100%;
-          height: 69px;
-          line-height: 69px;
-          padding-left: 16px;
-          color: #333;
-          font-size: 20px;
-          font-weight: 600;
-          font-family: PingFangSC-Semibold;
-          border-bottom: 0.2px solid #ddd;
-        }
-        .container-box {
-          color: #333;
-          %common {
-            padding-left: 20px;
-            height: 48px;
-            line-height: 48px;
-          }
-          h2 {
-            font-family: PingFangSC-Medium;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 0;
-            @extend %common;
-          }
-          ul {
-            margin-bottom: 0;
-            li {
-              font-family: PingFangSC-Regular;
-              font-size: 14px;
-              @extend %common;
-              &.active {
-                color: $theme-color;
-                background: rgba(241, 2, 21, 0.03);
-              }
-            }
-          }
-        }
-      }
-      .right-content {
-        width: 1006px;
-        // background-color: #fff;
-      }
     }
   }
 </style>
