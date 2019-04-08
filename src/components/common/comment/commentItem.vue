@@ -64,7 +64,8 @@
 
     font-size: 14px;
     border: 1px solid #dddddd;
-    padding: 4px 20px;
+    padding: 10px 20px;
+    color: #333;
     &:focus {
       border-color: $theme-color;
       outline: 0;

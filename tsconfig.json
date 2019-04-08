@@ -1,6 +1,6 @@
 {
   "include": [
-    "src/**/*"
+    "src/**/*", "public/assets/js/Event.js", "public/assets/js/Magnifier.js"
   ],
   "exclude": [
     "node_modules"

@@ -2,37 +2,49 @@
   <div class="share-menu share">
     分享到：
     <ul>
-      <li>
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconweixinfenxiang"></use>
-        </svg>
-      </li>
-      <li>
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconweibofenxiang"></use>
-        </svg>
-      </li>
-      <li>
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconweixinpengyouquanfenxiang"></use>
-        </svg>
-      </li>
-      <li>
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconqqkongjianfenxiang"></use>
-        </svg>
-      </li>
-      <li>
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconqqfenxiang"></use>
-        </svg>
+      <li v-for="item in shareArr" :key="item.icon">
+        <a-tooltip placement="bottom">
+          <template slot="title">
+            <span>{{ item.title }}</span>
+          </template>
+          <svg class="icon" aria-hidden="true">
+            <use v-bind:xlink:href="`#${item.icon}`"></use>
+          </svg>
+        </a-tooltip>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-  export default {};
+  export default {
+    data() {
+      return {
+        shareArr: [
+          {
+            icon: "iconweixinfenxiang",
+            title: "分享到微信"
+          },
+          {
+            icon: "iconweibofenxiang",
+            title: "分享到微博"
+          },
+          {
+            icon: "iconweixinpengyouquanfenxiang",
+            title: "分享到朋友圈"
+          },
+          {
+            icon: "iconqqkongjianfenxiang",
+            title: "分享到QQ空间"
+          },
+          {
+            icon: "iconqqfenxiang",
+            title: "分享到QQ"
+          }
+        ]
+      };
+    }
+  };
 </script>
 
 <style scoped lang="scss">

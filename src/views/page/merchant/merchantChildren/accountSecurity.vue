@@ -1,0 +1,102 @@
+<template>
+  <div class="accountSecurity">
+    <div class="commonBoxStyle">
+      <commonTitle><div slot="text">账号安全</div></commonTitle>
+      <div class="informationContent">
+        <div class="common">
+          <div class="left-box">
+            <span></span>
+            <span class="title">登录密码</span>
+            <span class="description"
+              >安全性高的密码可以使账户更安全，建议您定期更换密码。</span
+            >
+          </div>
+          <div class="right-box"><a-button>修改</a-button></div>
+        </div>
+        <div class="common">
+          <div class="left-box">
+            <span></span>
+            <span class="title">绑定邮箱</span>
+            <span class="description"
+              >验证后可用于邮箱找回密码、接受订单提醒等，保障您的账户更安全。</span
+            >
+          </div>
+          <div class="right-box"><a-button>修改</a-button></div>
+        </div>
+        <div class="common">
+          <div class="left-box">
+            <span></span>
+            <span class="title">绑定手机</span>
+            <span class="description"
+              >绑定后可用于手机找回密码、接受手机动态验证码等，使您的账户更加安全。</span
+            >
+          </div>
+          <div class="right-box"><a-button>修改</a-button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import commonTitle from "../../../../components/common/merchantRightCommonTitle";
+
+  export default {
+    data() {
+      return {};
+    },
+    methods: {},
+    components: {
+      commonTitle
+    }
+  };
+</script>
+
+<style scoped lang="scss">
+  @import "../../../../assets/scss/_commonScss";
+  .accountSecurity {
+    height: 609px;
+    .commonBoxStyle {
+      height: 100%;
+      padding: 4px 20px;
+      background: #ffffff;
+      box-shadow: $base-box-shadow;
+      margin-bottom: 10px;
+      .informationContent {
+        margin-top: 44px;
+        .common {
+          height: 69px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-bottom: 0.5px dashed #ddd;
+          .left-box {
+            .title {
+              font-weight: 600;
+              font-size: 16px;
+              color: #333;
+              margin: 0 20px 0 10px;
+            }
+            .description {
+              font-size: 14px;
+              color: #666;
+            }
+          }
+        }
+      }
+    }
+    .ant-btn {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid #f5a623;
+      border-radius: 4px;
+      height: 29px;
+      box-shadow: none;
+      font-family: PingFangSC-Medium;
+      font-size: 12px;
+      color: #f5a623;
+      margin-right: 60px;
+      padding: 0 24px;
+      letter-spacing: 0;
+    }
+  }
+</style>

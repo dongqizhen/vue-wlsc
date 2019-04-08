@@ -1,101 +1,103 @@
 <template>
-  <li class="product-item">
-    <h2>
-      <p>1F 电子超声</p>
-      <ul>
-        <li>心电图机</li>
-        <li>心电图工作站</li>
-        <li>心电工作站</li>
-        <li>心电工作站</li>
-      </ul>
-      <span>
-        更多
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconhuangsegengduo"></use>
-        </svg>
-      </span>
-    </h2>
-    <div class="content">
-      <div class="left"></div>
-      <ul class="right">
-        <li>
-          <a href="#" class="img"></a>
-          <div class="price">
-            ¥799
-            <span>
+  <router-link class="product-item" tag="li" to="/details/productDetails">
+    <a target="_blank">
+      <h2>
+        <p>1F 电子超声</p>
+        <ul>
+          <li>心电图机</li>
+          <li>心电图工作站</li>
+          <li>心电工作站</li>
+          <li>心电工作站</li>
+        </ul>
+        <span>
+          更多
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconhuangsegengduo"></use>
+          </svg>
+        </span>
+      </h2>
+      <div class="content">
+        <div class="left"></div>
+        <ul class="right">
+          <li>
+            <div class="img"></div>
+            <div class="price">
+              ¥799
+              <span>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconxiaoliang"></use>
+                </svg>
+                销量: <span>99</span>
+              </span>
+            </div>
+            <p>
+              超声探头这里最多可以显示两行字，多余的用…展示
+            </p>
+            <div class="brand_small">
+              <span>品牌：GE</span>
+              <span>型号：DR UPGRADE…</span>
+            </div>
+            <div class="address">
               <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconxiaoliang"></use>
+                <use xlink:href="#icondianpu"></use>
               </svg>
-              销量: <span>99</span>
-            </span>
-          </div>
-          <p>
-            超声探头这里最多可以显示两行字，多余的用…展示
-          </p>
-          <div class="brand_small">
-            <span>品牌：GE</span>
-            <span>型号：DR UPGRADE…</span>
-          </div>
-          <div class="address">
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icondianpu"></use>
-            </svg>
-            北京华脉诚信科技有限公司
-          </div>
-        </li>
-        <li>
-          <a href="#" class="img"></a>
-          <div class="price">
-            ¥799
-            <span>
+              北京华脉诚信科技有限公司
+            </div>
+          </li>
+          <li>
+            <a href="#" class="img"></a>
+            <div class="price">
+              ¥799
+              <span>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconxiaoliang"></use>
+                </svg>
+                销量: <span>99</span>
+              </span>
+            </div>
+            <p>
+              超声探头这里最多可以显示两行字，多余的用…展示
+            </p>
+            <div class="brand_small">
+              <span>品牌：GE</span>
+              <span>型号：DR UPGRADE…</span>
+            </div>
+            <div class="address">
               <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconxiaoliang"></use>
+                <use xlink:href="#icondianpu"></use>
               </svg>
-              销量: <span>99</span>
-            </span>
-          </div>
-          <p>
-            超声探头这里最多可以显示两行字，多余的用…展示
-          </p>
-          <div class="brand_small">
-            <span>品牌：GE</span>
-            <span>型号：DR UPGRADE…</span>
-          </div>
-          <div class="address">
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icondianpu"></use>
-            </svg>
-            北京华脉诚信科技有限公司
-          </div>
-        </li>
-        <li>
-          <a href="#" class="img"></a>
-          <div class="price">
-            ¥799
-            <span>
+              北京华脉诚信科技有限公司
+            </div>
+          </li>
+          <li>
+            <a href="#" class="img"></a>
+            <div class="price">
+              ¥799
+              <span>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconxiaoliang"></use>
+                </svg>
+                销量: <span>99</span>
+              </span>
+            </div>
+            <p>
+              超声探头这里最多可以显示两行字，多余的用…展示
+            </p>
+            <div class="brand_small">
+              <span>品牌：GE</span>
+              <span>型号：DR UPGRADE…</span>
+            </div>
+            <div class="address">
               <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconxiaoliang"></use>
+                <use xlink:href="#icondianpu"></use>
               </svg>
-              销量: <span>99</span>
-            </span>
-          </div>
-          <p>
-            超声探头这里最多可以显示两行字，多余的用…展示
-          </p>
-          <div class="brand_small">
-            <span>品牌：GE</span>
-            <span>型号：DR UPGRADE…</span>
-          </div>
-          <div class="address">
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icondianpu"></use>
-            </svg>
-            北京华脉诚信科技有限公司
-          </div>
-        </li>
-      </ul>
-    </div>
-  </li>
+              北京华脉诚信科技有限公司
+            </div>
+          </li>
+        </ul>
+      </div>
+    </a>
+  </router-link>
 </template>
 
 <script>
@@ -108,6 +110,19 @@
     margin-bottom: 30px;
     &:last-child {
       margin-bottom: 0;
+    }
+    > a {
+      text-decoration: none;
+
+      .content ul {
+        li {
+          &:hover {
+            > p {
+              color: $theme-color;
+            }
+          }
+        }
+      }
     }
     h2 {
       display: flex;
