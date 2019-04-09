@@ -62,9 +62,6 @@
             <button class="search">搜索</button>
             <button class="clear">清除</button>
             <button class="export">导出</button>
-            <!-- <a-button class="search">搜索</a-button>
-            <a-button class="clear">清除</a-button>
-            <a-button class="export">导出</a-button> -->
           </div>
         </div>
         <div class="listContent">
@@ -82,7 +79,10 @@
           <ul>
             <li v-for="item in data" :key="item.id" :class="addClass(item.id)">
               <span>
-                <a-checkbox @change="onChange(item.id)"></a-checkbox>
+                <a-checkbox
+                  @change="onChange(item.id)"
+                  :checked="checkedChange(item.id)"
+                ></a-checkbox>
               </span>
               <span><img :src="item.img"/></span>
               <span>{{ item.name }}</span>
@@ -100,10 +100,7 @@
           <div class="checkedAllBox">
             <div class="left-box">
               <span>
-                <a-checkbox
-                  @change="onCheckAllChange(item.id)"
-                  :checked="checkAll"
-                >
+                <a-checkbox @change="onCheckAllChange" :checked="checkAll">
                 </a-checkbox>
               </span>
               <span>全选</span>
@@ -119,6 +116,14 @@
               <button class="shelf">上架</button>
               <button class="obtained">下架</button>
             </div>
+          </div>
+          <div class="paginationBox">
+            <a-pagination
+              showQuickJumper
+              :total="totalCount"
+              @change="onPaginationChange"
+            />
+            <div class="sureBtn">确定</div>
           </div>
         </div>
       </div>
@@ -168,6 +173,7 @@
         data,
         checkAll: false,
         checkedList: defaultCheckedList,
+        totalCount: 60,
         options: [
           {
             label: "北京",
@@ -191,10 +197,15 @@
     },
     methods: {
       onChange(id) {
-        if (_.sortedIndexOf(this.checkedList, id) == -1) {
+        if (_.indexOf(this.checkedList, id) == -1) {
           this.checkedList.push(id);
         } else {
           this.checkedList = _.without(this.checkedList, id);
+        }
+        if (this.checkedList.length == data.length) {
+          this.checkAll = true;
+        } else {
+          this.checkAll = false;
         }
       },
       addClass(id) {
@@ -204,11 +215,25 @@
           }
         }
       },
-      onCheckAllChange() {},
-      onSelectChange(selectedRowKeys) {
-        console.log("selectedRowKeys changed: ", selectedRowKeys);
-        this.selectedRowKeys = selectedRowKeys;
+      checkedChange(id) {
+        for (const val of this.checkedList) {
+          if (val == id) {
+            return true;
+          }
+        }
       },
+      onCheckAllChange() {
+        if (!this.checkAll) {
+          this.checkAll = true;
+          for (const val of data) {
+            this.checkedList.push(val.id);
+          }
+        } else {
+          this.checkAll = false;
+          this.checkedList = [];
+        }
+      },
+      onPaginationChange() {},
       handleChange() {},
       handleShopTypeChange(value) {
         console.log(`selected ${value}`);
@@ -363,6 +388,7 @@
               margin-left: 50px;
               div {
                 margin-bottom: 10px;
+                cursor: pointer;
               }
             }
           }
@@ -393,7 +419,6 @@
               @extend %span;
             }
           }
-
           .checkedAllBox {
             height: 42px;
             display: flex;
@@ -429,6 +454,7 @@
                 background-color: transparent;
                 color: #fff;
                 text-align: center;
+                cursor: pointer;
                 &.shelf {
                   background-color: $theme-color;
                 }
@@ -436,6 +462,53 @@
                   background-color: #f5a623;
                 }
               }
+            }
+          }
+          .paginationBox {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 32px;
+            margin-top: 40px;
+            margin-bottom: 88px;
+            /deep/ul.ant-pagination {
+              li {
+                &:hover {
+                  border-color: $theme-color;
+                  a {
+                    color: $theme-color;
+                  }
+                }
+                &.ant-pagination-item-active {
+                  border-color: $theme-color;
+                  a {
+                    color: $theme-color;
+                  }
+                }
+                &:focus {
+                  border-color: $theme-color;
+                  color: $theme-color;
+                }
+              }
+              .ant-pagination-next:focus,
+              .ant-pagination-prev:focus,
+              .ant-pagination-next:hover,
+              .ant-pagination-prev:hover {
+                .ant-pagination-item-link {
+                  border-color: $theme-color;
+                  color: $theme-color;
+                }
+              }
+            }
+            .sureBtn {
+              width: 44px;
+              height: 21px;
+              border: 1px solid #e9e9e9;
+              font-size: 12px;
+              color: #666666;
+              text-align: center;
+              margin-left: 20px;
+              cursor: pointer;
             }
           }
         }
