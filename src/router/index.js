@@ -47,15 +47,30 @@ export default new Router({
                         import ("../views/page/merchant/merchantChildren/productManage")
                 },
                 {
-                    path: "personalCenter",
+                    path: "inquiryManage",
                     component: () =>
-                        import ("../views/page/merchant/merchantChildren/personalCenter")
+                        import ("../views/page/merchant/merchantChildren/inquiryManage")
+                },
+                {
+                    path: "orderManage",
+                    component: () =>
+                        import ("../views/page/merchant/merchantChildren/orderManage")
                 },
                 {
                     path: "accountSecurity",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/accountSecurity")
-                }
+                },
+                {
+                    path: "personalCenter",
+                    component: () =>
+                        import ("../views/page/merchant/merchantChildren/personalCenter")
+                },
+                {
+                    path: "messageCenter",
+                    component: () =>
+                        import ("../views/page/merchant/merchantChildren/messageCenter")
+                },
             ]
         },
         {

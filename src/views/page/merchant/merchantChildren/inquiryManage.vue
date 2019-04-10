@@ -1,116 +1,81 @@
 <template>
-  <div class="productManage">
-    <div class="productContainer">
+  <div class="inquiryManage">
+    <div class="inquiryContainer">
       <commonTitle>
-        <div slot="text">产品列表</div>
-        <span slot="titleRight" class="publishGood">
-          <router-link to="/merchant/publishGoods">
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icontianjiatupian1"></use>
-            </svg>
-            发布产品
-          </router-link>
-        </span>
+        <div slot="text">询价管理</div>
+        <div slot="titleRight" class="right-box">
+          <ul>
+            <li class="active">报价中(1)</li>
+            <li>已报价(2)</li>
+            <li>已关闭(1)</li>
+          </ul>
+        </div>
       </commonTitle>
       <div class="listContainer">
-        <div class="selectInfoBox">
-          <div class="selectInfo">
-            <div class="common productName">
-              <div class="left-box">产品名称</div>
-              <div class="right-box">
-                <a-input placeholder="请输入产品名称" />
-              </div>
-            </div>
-            <div class="common productStatus">
-              <div class="left-box">产品状态</div>
-              <div class="right-box">
-                <a-select
-                  placeholder="请选择状态"
-                  style="width: 112px"
-                  @change="handleChange"
-                >
-                  <a-icon slot="suffixIcon">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-                    </svg>
-                  </a-icon>
-                  <a-select-option value="jack">Jack</a-select-option>
-                  <a-select-option value="lucy">Lucy</a-select-option>
-                  <a-select-option value="Yiminghe">yiminghe</a-select-option>
-                </a-select>
-              </div>
-            </div>
-            <div class="common productType">
-              <div class="left-box">产品分类</div>
-              <div class="right-box">
-                <a-select
-                  placeholder="请选择大类"
-                  style="width: 112px"
-                  @change="handleProductBigTypeChange"
-                >
-                  <a-icon slot="suffixIcon">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-                    </svg>
-                  </a-icon>
-                  <a-select-option value="jack">Jack</a-select-option>
-                  <a-select-option value="lucy">Lucy</a-select-option>
-                  <a-select-option value="Yiminghe">yiminghe</a-select-option>
-                </a-select>
-                <a-select
-                  placeholder="请选择小类"
-                  style="width: 112px"
-                  @change="handleProductSmallTypeChange"
-                >
-                  <a-icon slot="suffixIcon">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-                    </svg>
-                  </a-icon>
-                  <a-select-option value="jack">Jack</a-select-option>
-                  <a-select-option value="lucy">Lucy</a-select-option>
-                </a-select>
-              </div>
-            </div>
-          </div>
-          <div class="selectBtn">
-            <button class="search">搜索</button>
-            <button class="clear">清除</button>
-            <button class="export">导出</button>
-          </div>
-        </div>
         <div class="listContent">
           <h2>
-            <span></span>
             <span>产品图片</span>
             <span>产品名称</span>
-            <span>产品分类</span>
-            <span>品牌/型号</span>
-            <span>产品状态</span>
-            <span>库存数量</span>
-            <span>发布时间</span>
+            <span>单价</span>
+            <span>数量</span>
+            <span>到货时间</span>
+            <span>备注</span>
             <span>操作</span>
           </h2>
+          <div class="orderTitle">
+            <div class="left-box">
+              <div class="checkedBox">
+                <a-checkbox @change="onChange"></a-checkbox>
+              </div>
+              <div class="common orderNumber">
+                <span>询价单编号：</span>
+                <span>WLTX20181203-Z01</span>
+              </div>
+              <div class="common orderSubmitTime">
+                <span class="svgBox">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icontijiaoshijian"></use>
+                  </svg>
+                </span>
+                <span>订单提交时间：</span>
+                <span>2019-09-12 18:30</span>
+              </div>
+              <div class="common userName">
+                <span>
+                  <img
+                    src="http://file.haoyigong.com/server/upload/1554429391594.jpg"
+                  />
+                </span>
+                <span>询价人周磊</span>
+              </div>
+            </div>
+            <div class="right-box">
+              <div class="common orderStatus">
+                <span class="svgBox">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#iconbaojiazhong"></use>
+                  </svg>
+                </span>
+                <span>询价单状态：</span>
+                <span>报价中</span>
+              </div>
+            </div>
+          </div>
           <ul>
-            <li v-for="item in data" :key="item.id" :class="addClass(item.id)">
-              <span>
-                <a-checkbox
-                  @change="onChange(item.id)"
-                  :checked="checkedChange(item.id)"
-                ></a-checkbox>
-              </span>
-              <span><img :src="item.img"/></span>
-              <span>{{ item.name }}</span>
-              <span>{{ item.productLine }}</span>
-              <span>{{ item.brandOrmodel }}</span>
-              <span>{{ item.status }}</span>
-              <span>{{ item.number }}</span>
-              <span>{{ item.createOn }}</span>
-              <span>
-                <div>编辑</div>
-                <div>下架</div>
-              </span>
-            </li>
+            <div class="leftInfoBox">
+              <li v-for="item in data" :key="item.id">
+                <span><img :src="item.img"/></span>
+                <span>{{ item.name }}</span>
+                <span>{{ item.price }}</span>
+                <span>{{ item.number }}</span>
+                <span>{{ item.arrivalTime }}</span>
+                <span>{{ item.remark }}</span>
+              </li>
+            </div>
+            <div class="operating">
+              <div>查看详情</div>
+              <div>删除订单</div>
+            </div>
           </ul>
           <div class="checkedAllBox">
             <div class="left-box">
@@ -127,18 +92,6 @@
               </span>
               <span>共<i>2</i>条</span>
             </div>
-            <div class="right-box">
-              <button class="shelf">上架</button>
-              <button class="obtained">下架</button>
-            </div>
-          </div>
-          <div class="paginationBox">
-            <a-pagination
-              showQuickJumper
-              :total="totalCount"
-              @change="onPaginationChange"
-            />
-            <div class="sureBtn">确定</div>
           </div>
         </div>
       </div>
@@ -152,31 +105,28 @@
       id: "1",
       name: "John Brown",
       img: "http://file.haoyigong.com/server/upload/1533522814856.jpg",
-      productLine: "配件/CT类",
-      brandOrmodel: "GE/GE-101",
-      status: "未上架",
-      number: 111,
-      createOn: "2019-03-28"
+      price: "￥1000",
+      remark: "暂无备注信息",
+      number: 12,
+      arrivalTime: "2019-03-28"
     },
     {
       id: "2",
       img: "http://file.haoyigong.com/server/upload/1554081863934.jpg",
       name: "Jim Green",
-      productLine: "配件/CT类",
-      brandOrmodel: "GE/GE-102",
-      status: "未上架",
-      number: 111,
-      createOn: "2019-03-28"
+      price: "￥1000",
+      remark: "暂无备注信息",
+      number: 12,
+      arrivalTime: "2019-03-28"
     },
     {
       id: "3",
       img: "http://file.haoyigong.com/server/upload/1553495655746.png",
       name: "Joe Black",
-      productLine: "配件/CT类",
-      brandOrmodel: "GE/GE-103",
-      status: "未上架",
-      number: 111,
-      createOn: "2019-03-28"
+      price: "￥1000",
+      remark: "暂无备注信息",
+      number: 12,
+      arrivalTime: "2019-03-28"
     }
   ];
   const defaultCheckedList = [];
@@ -270,142 +220,72 @@
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
-  .productManage {
-    .productContainer {
+  .inquiryManage {
+    .inquiryContainer {
+      min-height: 693px;
       background-color: #fff;
       padding: 4px 20px;
       box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
       margin-bottom: 10px;
-      .publishGood {
-        font-family: PingFangSC-Regular;
-        font-size: 16px;
-        height: 22px;
-        display: flex;
-        align-items: center;
-        .icon {
-          width: 20px;
-          height: 20px;
-          margin-right: 6px;
-        }
-        a {
-          color: #333333;
+      .common-title {
+        .right-box {
+          ul {
+            display: flex;
+            align-items: center;
+            li {
+              width: 76px;
+              height: 27px;
+              line-height: 27px;
+              border: 1px solid #dddddd;
+              font-size: 12px;
+              color: #333;
+              text-align: center;
+              font-weight: normal;
+              border-right: none;
+              &:last-child {
+                border-right: 1px solid #dddddd;
+              }
+              &.active {
+                background: #ffdfaa;
+                border: 1px solid #f5a623;
+              }
+            }
+          }
         }
       }
       .listContainer {
-        .selectInfoBox {
-          display: flex;
-          justify-content: space-between;
-          margin-top: 24px;
-          margin-bottom: 24px;
-          .selectInfo {
-            display: flex;
-            .common {
-              display: flex;
-              align-items: center;
-              height: 27px;
-              margin-right: 30px;
-              .left-box {
-                font-family: PingFangSC-Regular;
-                font-size: 12px;
-                color: #333333;
-                margin-right: 6px;
-              }
-              .right-box {
-                @include placeholderStyle(12px);
-                .ant-input {
-                  width: 121px;
-                  height: 27px;
-                }
-                .ant-select {
-                  margin-right: 10px;
-                  height: 27px;
-                  /deep/.ant-select-selection--single {
-                    height: 100%;
-                    .ant-select-selection__rendered {
-                      height: 100%;
-                      line-height: 27px;
-                    }
-                    .ant-select-selection__placeholder,
-                    .ant-select-search__field__placeholder {
-                      font-size: 12px;
-                    }
-                  }
-                }
-              }
-            }
-          }
-          .selectBtn {
-            button {
-              border: 0;
-              outline: none;
-              background-color: transparent;
-              color: #fff;
-              font-size: 12px;
-              margin-right: 10px;
-              padding: 0 18px;
-              height: 27px;
-              line-height: 27px;
-              cursor: pointer;
-              &:last-child {
-                margin-right: 0;
-              }
-            }
-            .search {
-              background-color: $theme-color;
-            }
-            .clear {
-              background-color: #999;
-            }
-            .export {
-              background-color: #f5a623;
-            }
-          }
-        }
+        margin-top: 24px;
         .listContent {
           %span {
-            font-family: PingFangSC-Regular;
             font-size: 12px;
             color: #666;
-            &:first-child {
-              width: 34px;
-              padding-left: 20px;
+            &:nth-child(1) {
+              width: 70px;
+              margin-left: 46px;
+              margin-right: 12px;
             }
             &:nth-child(2) {
-              width: 70px;
-              margin-left: 12px;
-              margin-right: 12px;
-              img {
-                width: 100%;
-                height: 70px;
-              }
-            }
-            &:nth-child(3) {
               width: 155px;
               margin-right: 30px;
             }
-            &:nth-child(4) {
+            &:nth-child(3) {
               width: 98px;
               margin-right: 30px;
             }
-            &:nth-child(5) {
-              width: 98px;
+            &:nth-child(4) {
+              width: 30px;
               margin-right: 18px;
             }
+            &:nth-child(5) {
+              width: 68px;
+              margin-right: 40px;
+            }
             &:nth-child(6) {
-              width: 68px;
+              flex: 1;
               margin-right: 30px;
             }
-            &:nth-last-child(3) {
-              width: 68px;
-              margin-right: 30px;
-            }
-            &:nth-last-child(2) {
-              width: 68px;
-              margin-right: 30px;
-            }
-            &:last-child {
-              width: 34px;
-              margin-left: 50px;
+            &:nth-child(7) {
+              width: 96px;
               div {
                 margin-bottom: 10px;
                 cursor: pointer;
@@ -423,17 +303,78 @@
               @extend %span;
             }
           }
-          li {
+          ul {
             display: flex;
-            height: 93px;
             border: 1px solid #ddd;
-            margin-bottom: 12px;
-            padding-top: 11px;
-            &.active {
-              background-color: rgba(245, 166, 35, 0.06);
+            border-top: none;
+            margin-bottom: 10px;
+            .leftInfoBox {
+              flex: 1;
+              li {
+                height: 90px;
+                display: flex;
+                padding-top: 10px;
+                border-bottom: 0.5px solid #dddddd;
+                &:last-child {
+                  border-bottom: none;
+                }
+                span {
+                  @extend %span;
+                  img {
+                    width: 70px;
+                    height: 70px;
+                  }
+                }
+              }
             }
-            span {
-              @extend %span;
+            .operating {
+              width: 96px;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              border-left: 1px solid #ddd;
+              div {
+                margin-bottom: 10px;
+              }
+            }
+          }
+
+          .orderTitle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(245, 166, 35, 0.05);
+            border: 1px solid #dddddd;
+            padding: 0 20px;
+            height: 40px;
+            .common {
+              font-size: 12px;
+              color: #333;
+              font-weight: 600;
+              margin-right: 30px;
+              .svgBox {
+                margin-right: 6px;
+              }
+              img {
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
+                margin-right: 4px;
+              }
+            }
+            .left-box {
+              display: flex;
+              align-items: center;
+              .checkedBox {
+                margin-right: 12px;
+              }
+            }
+            .right-box {
+              display: flex;
+              .common {
+                margin-right: 0;
+              }
             }
           }
           .checkedAllBox {
