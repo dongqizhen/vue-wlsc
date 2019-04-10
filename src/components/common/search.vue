@@ -13,6 +13,7 @@
             type="text"
             placeholder="请输入商品名或店铺"
             v-model.trim="value"
+            @keyup.enter="handClick"
           />
           <span @click="handClick">搜索</span>
         </div>
@@ -59,7 +60,6 @@
     },
     methods: {
       handClick() {
-        console.log(this.value);
         if (this.value != "") {
           const { href } = this.$router.resolve({
             path: "/search",
@@ -71,7 +71,7 @@
       }
     },
     created() {
-      this.value = this.$route.query.val;
+      if (this.$route.query.val) this.value = this.$route.query.val;
     }
   };
 </script>

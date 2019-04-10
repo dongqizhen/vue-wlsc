@@ -1,65 +1,43 @@
 <template>
-  <li class="video-item">
-    <div class="video_box"></div>
-    <div class="content">
-      <h2>
-        胎儿静脉导管缺如及脐静脉文字
-      </h2>
-      <div class="lecturer">
-        <p>
-          <i>
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#iconjiangshi"></use>
-            </svg>
-          </i>
-          讲师: 樊铮 贾樟柯…
-        </p>
-        <ul>
-          <li>标签字数</li>
-          <li>标签字数</li>
-          <li>标签字数</li>
-        </ul>
+  <router-link class="video-item" tag="li" to="/details/videoDetails">
+    <a target="_blank">
+      <div class="video_box"></div>
+      <div class="content">
+        <h2>
+          胎儿静脉导管缺如及脐静脉文字
+        </h2>
+        <div class="lecturer">
+          <p>
+            <i>
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconjiangshi"></use>
+              </svg>
+            </i>
+            讲师: 樊铮 贾樟柯…
+          </p>
+          <ul>
+            <li>标签字数</li>
+            <li>标签字数</li>
+            <li>标签字数</li>
+          </ul>
+        </div>
       </div>
-    </div>
-    <div class="toolMenu">
-      <span>
-        <i>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#iconpinglun"></use>
-          </svg>
-        </i>
-        167
-      </span>
-      <span>
-        <i>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#iconshoucang"></use>
-          </svg>
-        </i>
-        999
-      </span>
-      <span>
-        <i>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#iconzan"></use>
-          </svg>
-        </i>
-        89
-      </span>
-      <span>
-        <i>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#iconfenxiang"></use>
-          </svg>
-        </i>
-        89
-      </span>
-    </div>
-  </li>
+      <menu-vue></menu-vue>
+    </a>
+  </router-link>
 </template>
 
 <script>
-  export default {};
+  import menuVue from "../share/menu.vue";
+
+  export default {
+    data() {
+      return {};
+    },
+    components: {
+      menuVue
+    }
+  };
 </script>
 
 <style scoped lang="scss">
@@ -73,10 +51,23 @@
     box-shadow: $base-box-shadow;
     margin-bottom: 16px;
     cursor: pointer;
+    &:hover {
+      .content {
+        h2 {
+          color: $theme-color;
+        }
+      }
+    }
+    a {
+      display: flex;
+      text-decoration: none;
+      width: 100%;
+      flex-direction: column;
+      height: 100%;
+    }
     .video_box {
       height: 211px;
       background: #f7f9fa;
-      width: 100%;
     }
     .content {
       padding: 10px;
@@ -140,33 +131,6 @@
             &:last-child {
               margin-right: 0;
             }
-          }
-        }
-      }
-    }
-    .toolMenu {
-      border-top: 0.5px solid #e0e7ea;
-      display: flex;
-      padding: 0 20px;
-      justify-content: space-between;
-      align-items: center;
-      flex: 1;
-      line-height: 41px;
-      span {
-        font-family: PingFangSC-Medium;
-        font-size: 14px;
-        color: #999999;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        margin-top: 1px;
-        height: 21px;
-        line-height: 21px;
-        i {
-          margin-right: 4px;
-          .icon {
-            width: 16px;
-            height: 16px;
           }
         }
       }

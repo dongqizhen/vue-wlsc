@@ -9,6 +9,7 @@
       @ok="handleOk"
       :afterClose="afterClose"
       :wrapClassName="options.wrapClassName"
+      :maskClosable="options.maskClosable"
       :maskStyle="
         options.maskStyle || {
           'background-color': 'rgba(0, 0, 0, 0.17)'
@@ -39,9 +40,9 @@
       options: {
         type: Object,
         default: () => ({
-          title: "",
-          closable: true,
-          maskClosable: true,
+          title: "", //标题
+          closable: true, //是否显示右上角的关闭按钮 Boolean
+          maskClosable: true, //点击蒙层是否允许关闭 Boolean
           wrapClassName: "",
           maskStyle: {
             "background-color": "rgba(0, 0, 0, 0.17)"
@@ -67,6 +68,7 @@
     computed: {},
     watch: {
       isShow(newVal, oldval) {
+        console.log(newVal);
         this.visible = newVal;
       }
     }
@@ -343,6 +345,63 @@
         }
         .list-group-item i {
           cursor: pointer;
+        }
+      }
+    }
+  }
+  .success {
+    .ant-modal {
+      padding-bottom: 0;
+      .ant-modal-content {
+        .ant-modal-body {
+          height: 226px;
+          padding: 0;
+          > div {
+            display: flex;
+            height: 100%;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            p {
+              font-size: 24px;
+              color: #333333;
+              font-weight: 600;
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+              line-height: 30px;
+              margin-bottom: 40px;
+              .icon {
+                height: 34px;
+                width: 34px;
+                margin-right: 12px;
+              }
+            }
+            .btn {
+              .ant-btn {
+                height: 42px;
+                width: 115px;
+                font-size: 18px;
+                color: #666666;
+                border: 1px solid #cccccc;
+                border-radius: 3px;
+                &:hover {
+                  opacity: 0.7;
+                }
+                &:first-child {
+                  margin-right: 12px;
+                  background: #f5a623;
+                  border: 1px #f5a623 solid;
+                  color: #ffffff;
+                }
+                &:last-child {
+                  &::after {
+                    display: none;
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }

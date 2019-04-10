@@ -75,14 +75,45 @@ export default new Router({
         },
         {
             name: '详情',
-            path: '/detaile',
+            path: '/details',
             component: () =>
-                import ('../views/page/shop/detaile')
+                import ('../views/page/shop/details'),
+            children: [{
+                path: 'videoDetails',
+                name: '视频详情',
+                component: () =>
+                    import ('../views/page/shop/detaileChirldren/videoDetails')
+            }, {
+                path: 'caseDetails',
+                name: '案例详情',
+                component: () =>
+                    import ('../views/page/shop/detaileChirldren/caseDetails')
+            }, {
+                path: 'articleDetails',
+                name: '文章详情',
+                component: () =>
+                    import ('../views/page/shop/detaileChirldren/articleDetails')
+            }, {
+                path: 'productDetails',
+                name: '产品详情',
+                component: () =>
+                    import ('../views/page/shop/detaileChirldren/productDetails')
+            }]
         }, {
             name: "搜索",
             path: "/search",
             component: () =>
                 import ('../views/page/shop/search.vue')
+        }, {
+            name: '找店铺',
+            path: '/lookingShop',
+            component: () =>
+                import ('../views/page/shop/lookingShop.vue')
+        }, {
+            name: '店铺详情',
+            path: '/lookingShop/shopDetails',
+            component: () =>
+                import ('../views/page/shop/shopDetails')
         }
 
     ]

@@ -1,5 +1,10 @@
 <template>
-  <router-link tag="li" to="/detaile" class="article-item" append>
+  <router-link
+    tag="li"
+    to="/details/articleDetails"
+    class="article-item"
+    append
+  >
     <a target="_blank">
       <div class="img_box"></div>
       <div class="content">
