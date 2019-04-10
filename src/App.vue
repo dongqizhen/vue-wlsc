@@ -50,6 +50,10 @@
     margin: 0 auto;
     height: 100%;
   }
+  .container {
+    padding-bottom: 110px;
+    background: #f7f9fa;
+  }
   .el-picker-panel {
     .el-date-table {
       td.today {

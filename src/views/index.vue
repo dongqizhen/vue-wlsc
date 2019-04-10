@@ -10,74 +10,7 @@
       <!-- 轮播图 -->
       <banner />
       <!-- 产品分类 -->
-      <div class="product">
-        <div class="commonWidth">
-          <h2>
-            <span class="title">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconchanpinfenlei"></use>
-              </svg>
-              产品分类
-            </span>
-            <span class="btn">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconguanlichangyongfenlei"></use>
-              </svg>
-              管理常用分类
-            </span>
-          </h2>
-          <div class="product_container">
-            <div class="swiper-container nav_slide">
-              <div class="swiper-wrapper">
-                <div class="swiper-slide">常用分类</div>
-                <div class="swiper-slide">电子超声</div>
-                <div class="swiper-slide">临床检验</div>
-                <div class="swiper-slide">实验仪器</div>
-                <div class="swiper-slide">医学影像</div>
-                <div class="swiper-slide">实验仪器</div>
-                <div class="swiper-slide">医学影像</div>
-                <div class="bar"><i></i></div>
-              </div>
-            </div>
-            <div class="swiper-container page">
-              <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                  <ul>
-                    <li>超声手术设备</li>
-                    <li>高强度超声治疗设备</li>
-                    <li>超声手术设备附件</li>
-                    <li>X 射线高压发生器</li>
-                    <li>X射线管</li>
-                    <li>X射线管组件</li>
-                    <li>限束装置</li>
-                    <li>高强度超声治疗设备</li>
-                    <li>激光手术设备</li>
-                    <li>医用激光光纤</li>
-                    <li>主电缆</li>
-                    <li>超声手术设备</li>
-                    <li>高强度超声治疗设备</li>
-                    <li>超声手术设备附件</li>
-                    <li>X 射线高压发生器</li>
-                    <li>X射线管</li>
-                    <li>X射线管组件</li>
-                    <li>限束装置</li>
-                    <li>高强度超声治疗设备</li>
-                    <li>激光手术设备</li>
-                    <li>医用激光光纤</li>
-                    <li>主电缆</li>
-                  </ul>
-                </div>
-                <div class="swiper-slide">电子超声</div>
-                <div class="swiper-slide">临床检验</div>
-                <div class="swiper-slide">实验仪器</div>
-                <div class="swiper-slide">医学影像</div>
-                <div class="swiper-slide">实验仪器</div>
-                <div class="swiper-slide">医学影像</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <product-category-vue></product-category-vue>
       <!-- 品牌分类 -->
       <div class="brand">
         <div class="commonWidth">
@@ -135,7 +68,29 @@
           </div>
           <div class="recommend_page">
             <ul class="floor" v-if="recommend_tabs_index == 0">
-              <product-item></product-item>
+              <li>
+                <h2>
+                  <p>1F 电子超声</p>
+                  <ul>
+                    <li>心电图机</li>
+                    <li>心电图工作站</li>
+                    <li>心电工作站</li>
+                    <li>心电工作站</li>
+                  </ul>
+                  <span>
+                    更多
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#iconhuangsegengduo"></use>
+                    </svg>
+                  </span>
+                </h2>
+                <div class="content">
+                  <div class="left"></div>
+                  <ul class="right">
+                    <product-item></product-item>
+                  </ul>
+                </div>
+              </li>
             </ul>
             <div class="recommend_content_box" v-else>
               <div class="left">
@@ -282,6 +237,7 @@
   import productItem from "../components/common/item/productItem.vue";
   import search from "../components/common/search.vue";
   import Nav from "../components/common/nav.vue";
+  import productCategoryVue from "../components/common/productCategory.vue";
 
   const IconFont = Icon.createFromIconfontCN({
     scriptUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js"
@@ -331,7 +287,8 @@
       articleItem,
       videoItem,
       productItem,
-      Nav
+      Nav,
+      productCategoryVue
     },
     methods: {
       handleClick() {
@@ -357,16 +314,16 @@
             this.navSlideWidth = this.slides[0].clientWidth; //导航字数需要统一,每个导航宽度一致
             console.log(this.navSlideWidth);
             /*  bar = this.$el.find('.bar')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         bar.css('width', this.navSlideWidth)
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         bar.transition(tSpeed) */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 bar.css('width', this.navSlideWidth)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 bar.transition(tSpeed) */
             this.navSum = this.slides[this.slides.length - 1].offsetLeft; //最后一个slide的位置
 
             this.clientWidth = parseInt(this.$wrapperEl.clientWidth); //Nav的可视宽度
 
             this.navWidth = this.navSlideWidth * this.slides.length;
             /*  for (i = 0; i < this.slides.length; i++) {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  this.navWidth += parseInt($(this.slides.eq(i)).outerWidth(true));
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          this.navWidth += parseInt($(this.slides.eq(i)).outerWidth(true));
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        } */
             //topBar = this.$el.parents('body').find('#top') //页头
           },
           touchStart: function() {
@@ -378,9 +335,9 @@
             // mySwiper.slideTo(this.clickIndex, 0);
 
             /* $(this.slides[this.clickedIndex])
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              .addClass("active")
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              .siblings()
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              .removeClass("active"); */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      .addClass("active")
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      .siblings()
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      .removeClass("active"); */
             //导航居中
             let navActiveSlideLeft = this.slides[this.clickedIndex].offsetLeft; //activeSlide距左边的距离
             this.setTransition(300);
@@ -442,7 +399,7 @@
           align-items: center;
         }
         span.title {
-          font-family: PingFangSC-Medium;
+          font-weight: 600;
           font-size: 16px;
           color: #333333;
           line-height: 16px;
@@ -454,7 +411,6 @@
           }
         }
         span.btn {
-          font-family: PingFangSC-Regular;
           font-size: 14px;
           color: #999999;
           line-height: 14px;
@@ -467,78 +423,6 @@
           }
         }
       }
-
-      .product {
-        margin-bottom: 25px;
-        .commonWidth {
-          h2 {
-            @extend %h2;
-          }
-          .product_container {
-            background: #ffffff;
-            box-shadow: $base-box-shadow;
-            .swiper-container.nav_slide {
-              height: 63px;
-              border-bottom: 0.5px solid #ccc;
-              // overflow-y: auto;
-              .swiper-wrapper {
-                position: relative;
-                height: 62px;
-
-                .swiper-slide {
-                  width: 180px;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  cursor: pointer;
-                  font-family: PingFangSC-Medium;
-                  font-size: 18px;
-                  color: #999999;
-                }
-                .bar {
-                  position: absolute;
-                  height: 3px;
-                  width: 180px;
-                  background: #f5a623;
-                  bottom: -0.5px;
-                  i {
-                    display: flex;
-                    position: absolute;
-                    bottom: 1px;
-                    width: 0px;
-                    left: 50%;
-                    margin-left: -5.5px;
-                    height: 0px;
-                    border-left: 5.5px solid transparent;
-                    border-right: 5.5px solid transparent;
-
-                    border-bottom: 6px solid #f5a623;
-                  }
-                }
-              }
-            }
-            .page {
-              //min-height: 200px;
-              ul {
-                display: flex;
-                justify-content: flex-start;
-                flex-wrap: wrap;
-                padding: 20px 20px;
-                padding-bottom: 0;
-                li {
-                  font-family: PingFangSC-Regular;
-                  font-size: 13px;
-                  color: #666666;
-                  margin-bottom: 20px;
-                  margin-right: 30px;
-                  cursor: pointer;
-                }
-              }
-            }
-          }
-        }
-      }
-
       .brand {
         margin-bottom: 25px;
         .commonWidth {
@@ -650,6 +534,94 @@
           }
           .recommend_page {
             .floor {
+              > li {
+                margin-bottom: 30px;
+                &:last-child {
+                  margin-bottom: 0;
+                }
+                > a {
+                  text-decoration: none;
+
+                  .content ul {
+                    li {
+                      &:hover {
+                        > p {
+                          color: $theme-color;
+                        }
+                      }
+                    }
+                  }
+                }
+                h2 {
+                  display: flex;
+                  justify-content: space-between;
+                  height: 43px;
+                  align-items: center;
+                  p {
+                    width: 224px;
+                    background: #f5a623;
+                    height: 100%;
+                    border-radius: 20px 20px 0 0;
+                    display: flex;
+                    align-items: center;
+                    font-family: PingFangSC-Medium;
+                    font-size: 18px;
+                    color: #ffffff;
+                    padding-left: 27px;
+                  }
+                  ul {
+                    display: flex;
+                    justify-content: flex-end;
+                    flex: 1;
+                    height: 100%;
+                    align-items: flex-end;
+                    border-bottom: 1px solid #f5a623;
+                    padding-bottom: 3px;
+                    li {
+                      font-family: PingFangSC-Regular;
+                      font-size: 14px;
+                      color: #333333;
+                      margin-right: 30px;
+                      cursor: pointer;
+                      &:hover {
+                        color: $theme-color;
+                      }
+                    }
+                  }
+                  span {
+                    font-family: PingFangSC-Regular;
+                    font-size: 14px;
+                    color: #666666;
+                    display: flex;
+                    align-items: flex-end;
+                    cursor: pointer;
+                    height: 100%;
+                    border-bottom: 1px solid #f5a623;
+                    padding-bottom: 3px;
+                    .icon {
+                      margin-left: 7px;
+                      margin-bottom: 3px;
+                    }
+                  }
+                }
+                .content {
+                  height: 382px;
+                  display: flex;
+                  justify-content: flex-start;
+                  .left {
+                    width: 224px;
+                    background: #fff;
+                    box-shadow: $base-box-shadow;
+                  }
+                  .right {
+                    flex: 1;
+                    padding-left: 17px;
+                    display: flex;
+                    justify-content: space-between;
+                    padding-top: 4px;
+                  }
+                }
+              }
             }
             .recommend_content_box {
               display: flex;

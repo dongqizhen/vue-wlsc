@@ -84,6 +84,16 @@ export default new Router({
             path: "/search",
             component: () =>
                 import ('../views/page/shop/search.vue')
+        }, {
+            name: '找店铺',
+            path: '/lookingShop',
+            component: () =>
+                import ('../views/page/shop/lookingShop.vue')
+        }, {
+            name: '店铺详情',
+            path: '/lookingShop/shopDetails',
+            component: () =>
+                import ('../views/page/shop/shopDetails')
         }
 
     ]

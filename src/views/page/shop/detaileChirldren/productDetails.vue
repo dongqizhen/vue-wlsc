@@ -7,6 +7,63 @@
             <img id="thumb" src="../../../../assets/images/demo.jpg" />
           </a>
           <div class="magnifier-preview" id="preview"></div>
+          <div class="swiper-container">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <img src="../../../../assets/images/demo.jpg" alt="" />
+              </div>
+              <div class="swiper-slide">
+                <img src="../../../../assets/images/demo.jpg" alt="" />
+              </div>
+              <div class="swiper-slide">
+                <img src="../../../../assets/images/demo.jpg" alt="" />
+              </div>
+              <div class="swiper-slide">
+                <img src="../../../../assets/images/demo.jpg" alt="" />
+              </div>
+              <div class="swiper-slide">
+                <img src="../../../../assets/images/demo.jpg" alt="" />
+              </div>
+              <div class="swiper-slide">
+                <img src="../../../../assets/images/demo.jpg" alt="" />
+              </div>
+              <div class="swiper-slide">
+                <img src="../../../../assets/images/demo.jpg" alt="" />
+              </div>
+              <div class="swiper-slide">
+                <img src="../../../../assets/images/demo.jpg" alt="" />
+              </div>
+              <div class="swiper-slide">
+                <img src="../../../../assets/images/demo.jpg" alt="" />
+              </div>
+              <div class="swiper-slide">
+                <img src="../../../../assets/images/demo.jpg" alt="" />
+              </div>
+              <div class="swiper-slide">
+                <img src="../../../../assets/images/demo.jpg" alt="" />
+              </div>
+              <div class="swiper-slide">
+                <img src="../../../../assets/images/demo.jpg" alt="" />
+              </div>
+            </div>
+            <!-- 如果需要分页器 -->
+            <!-- <div class="swiper-pagination"></div> -->
+
+            <!-- 如果需要导航按钮 -->
+            <div class="swiper-button-prev">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconhoufankedianji"></use>
+              </svg>
+            </div>
+            <div class="swiper-button-next">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconxiangqianfan"></use>
+              </svg>
+            </div>
+
+            <!-- 如果需要滚动条 -->
+            <!-- <div class="swiper-scrollbar"></div> -->
+          </div>
         </div>
         <div class="main">
           <h2>超声手术设备这里要把产品的详细名称显示完整自动换行</h2>
@@ -58,7 +115,7 @@
             </li>
           </ul>
           <div class="btn">
-            <a-button>
+            <a-button @click="addCarSuccess">
               <svg class="icon" aria-hidden="true">
                 <use xlink:href="#iconbaisegouwuche"></use>
               </svg>
@@ -289,62 +346,68 @@
         </svg>
         参数对比
       </a-button>
-      <div class="shop">
-        <span class="leftTopIcon">
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#iconyirenzhengjiaobiao"></use>
-          </svg>
-        </span>
-        <div class="img_box"></div>
-        <p>北京华脉诚信科技有限公司</p>
-        <ul>
-          <li><span>店铺类型：</span><span>代理商</span></li>
-          <li><span>销售地区：</span><span>北京市；天津市</span></li>
-        </ul>
-        <div class="btn">
-          <a-button>进店看看</a-button>
-          <a-button>收藏店铺</a-button>
-        </div>
-        <div class="service">
-          <a-button>
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#iconlianxikefu"></use>
-            </svg>
-            联系客服
-          </a-button>
-        </div>
-        <div class="shop-bottom-shadow"></div>
-      </div>
+      <shop-card-vue></shop-card-vue>
     </div>
+    <modal :isShow="visible" :options="options">
+      <div slot="content">
+        <p>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconzhanghaoanquanduigou"></use>
+          </svg>
+          成功加入选购单
+        </p>
+        <div class="btn">
+          <a-button>去询价</a-button>
+          <a-button>继续选购</a-button>
+        </div>
+      </div>
+    </modal>
   </div>
 </template>
 
 <script>
   import shareMenuVue from "../../../../components/common/share/shareMenu.vue";
   import img from "../../../../assets/images/demo.jpg";
-
   import { Icon } from "ant-design-vue";
-
+  import modal from "../../../../components/common/modal.vue";
   const IconFont = Icon.createFromIconfontCN({
     scriptUrl: "//at.alicdn.com/t/font_1093268_lw1r0m4k91i.js"
   });
+  import Swiper from "swiper";
+  import shopCardVue from "../../../../components/common/shopCard.vue";
 
   export default {
     data() {
       return {
         isLogin: true, //是否登录
         imgarr: [img, img],
-        defaultIndex: 0
+        defaultIndex: 0,
+        visible: false,
+        options: {
+          title: "提示",
+          closable: true,
+          maskClosable: false,
+          wrapClassName: "success",
+          centered: true
+        }
       };
     },
     components: {
       shareMenuVue,
-      IconFont
+      IconFont,
+      modal,
+      shopCardVue
     },
     methods: {
       changeImage(i, e) {
         console.log(e);
         this.defaultIndex = i;
+      },
+      callback(val) {
+        console.log(val);
+      },
+      addCarSuccess() {
+        this.visible = true;
       }
     },
     mounted() {
@@ -356,6 +419,23 @@
         largeWrapper: "preview",
         zoom: 2,
         zoomable: true
+      });
+
+      const swiper = new Swiper(".swiper-container", {
+        slidesPerView: 5,
+        spaceBetween: 16,
+        slidesPerGroup: 5,
+        loop: false,
+        loopFillGroupWithBlank: true,
+        allowTouchMove: false,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev"
+        }
       });
     }
   };
@@ -411,6 +491,43 @@
             right: -362px;
             z-index: 100;
             pointer-events: none;
+          }
+          /deep/ .swiper-container {
+            margin-top: 16px;
+            height: 45px;
+            width: 100%;
+            padding: 0 31.5px;
+            .swiper-wrapper {
+              .swiper-slide {
+                height: 45px;
+                box-sizing: border-box;
+                cursor: pointer;
+                border: 2px solid #fff;
+                img {
+                  height: 100%;
+                  width: 100%;
+                }
+                &:hover {
+                  border: 2px solid $theme-color;
+                }
+              }
+            }
+            .swiper-button-prev,
+            .swiper-button-next {
+              background: none;
+
+              background: #fff;
+              height: 100%;
+              display: flex;
+              align-items: center;
+            }
+            .swiper-button-prev {
+              left: 0;
+            }
+            .swiper-button-next {
+              right: 0;
+              justify-content: flex-end;
+            }
           }
         }
         .main {
@@ -725,19 +842,22 @@
                         display: flex;
                         justify-content: center;
                         align-items: center;
-
+                        cursor: url("../../../../assets/images/magnifier.png"),
+                          default;
                         .img_box {
                           height: 40px;
                           width: 40px;
                           background: $base-background;
                           margin: 0 auto;
+
                           img {
                             height: 100%;
                             width: 100%;
                           }
                         }
                         &.active {
-                          cursor: auto;
+                          cursor: url("../../../../assets/images/shrink.png"),
+                            default;
                           border-width: 2px;
                           border-style: solid;
                           border-color: $theme-color;
@@ -807,128 +927,6 @@
           height: 15px;
           width: 15px;
           margin-right: 5px;
-        }
-      }
-      .shop {
-        height: 362px;
-        background: #ffffff;
-        box-shadow: $base-box-shadow;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        .leftTopIcon {
-          position: absolute;
-          top: 0;
-          left: 0;
-          .icon {
-            height: 42px;
-            width: 42px;
-          }
-        }
-        .img_box {
-          height: 104px;
-          width: 179px;
-          background: $base-background;
-          margin-top: 34px;
-          margin-bottom: 8px;
-        }
-        p {
-          font-size: 15px;
-          color: #2b3e50;
-          font-weight: 600;
-          height: 22px;
-          line-height: 22px;
-        }
-        > ul {
-          padding: 0 18px;
-          margin-top: 24px;
-          width: 100%;
-          li {
-            display: flex;
-            justify-content: flex-start;
-            height: 20px;
-            align-items: center;
-            margin-bottom: 12px;
-            span {
-              font-size: 14px;
-              color: #526c85;
-              &:first-child {
-                width: 70px;
-              }
-              &:last-child {
-                font-weight: 600;
-                flex: 1;
-              }
-            }
-          }
-        }
-        .btn {
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          margin-top: 19px;
-          /deep/ .ant-btn-default {
-            width: 87px;
-            height: 31px;
-            span {
-              display: flex;
-              height: 29px;
-              align-items: center;
-              line-height: 29px;
-            }
-            &:hover {
-              opacity: 0.7;
-            }
-            &:first-child {
-              background: rgba(241, 2, 21, 0.03);
-              border: 1px solid #f10215;
-              font-size: 14px;
-              color: #f10215;
-              font-weight: 600;
-              margin-right: 13px;
-            }
-            &:last-child {
-              background: rgba(245, 166, 35, 0.1);
-              border: 1px solid #f5a623;
-              font-size: 14px;
-              color: #f5a623;
-              font-weight: 600;
-            }
-          }
-        }
-        .service {
-          margin-top: 20px;
-          .ant-btn-default {
-            //border: none;
-            font-size: 14px;
-            color: #666666;
-            box-shadow: none;
-            border: #fff 1px solid;
-            background: #fff;
-            &:active {
-              box-shadow: none;
-            }
-            &::after {
-              display: none;
-            }
-            .icon {
-              width: 16.5px;
-              height: 14px;
-              margin-right: 5px;
-            }
-            span {
-            }
-          }
-        }
-        .shop-bottom-shadow {
-          background: url("../../../../assets/images/shopBottomShadow.png") repeat
-            center;
-          height: 18px;
-          position: absolute;
-          bottom: -18px;
-          width: 100%;
         }
       }
     }
