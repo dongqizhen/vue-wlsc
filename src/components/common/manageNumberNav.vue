@@ -1,89 +1,98 @@
 <template>
-    <div class="shop-nav">
-        <div class="nav">
-            <a-tabs :defaultActiveKey="defaultActiveKey" @change="callback">
-                <a-tab-pane
-                    :tab="`${item.name}(${item.amount})`"
-                    v-for="item in navArr"
-                    :key="item.id"
-                ></a-tab-pane>
-            </a-tabs>
-        </div>
+  <div class="manageNumberNav">
+    <div class="nav">
+      <a-tabs
+        v-if="typeof navArr[0] === 'object'"
+        :defaultActiveKey="navArr[0].id"
+        @change="callback"
+      >
+        <a-tab-pane
+          v-for="item in navArr"
+          :tab="`${item.name}(${item.amount})`"
+          :key="item.id"
+        ></a-tab-pane>
+      </a-tabs>
+      <a-tabs :defaultActiveKey="0" @change="callback" v-else>
+        <a-tab-pane
+          v-for="(item, i) in navArr"
+          :tab="item"
+          :key="i"
+        ></a-tab-pane>
+      </a-tabs>
     </div>
+  </div>
 </template>
 
 <script>
-export default {
+  export default {
     data() {
-        return {};
+      return {};
     },
     props: {
-        navArr: {
-            type: Array,
-            required: true
-        },
-        defaultActiveKey: {
-            type: Number,
-            default: 0
-        }
+      navArr: {
+        type: Array,
+        required: true
+      },
+      defaultActiveKey: {
+        type: Number,
+        default: 0
+      }
     },
     methods: {
-        callback(key) {}
+      callback(key) {}
     }
-};
+  };
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/scss/_commonScss";
-.nav {
+  @import "../../assets/scss/_commonScss";
+  .nav {
     height: 54px;
     background: #fff;
-    box-shadow: $base-box-shadow;
-    margin-bottom: 20px;
-    /deep/ .ant-tabs {
-        height: 100%;
-        .ant-tabs-bar {
-            margin-bottom: 0;
-            .ant-tabs-nav-container {
-                margin-bottom: 0;
-                height: 54px;
-                .ant-tabs-nav-wrap {
-                    .ant-tabs-nav-scroll {
-                        .ant-tabs-nav {
-                            padding-left: 40px;
-                            > div {
-                                display: flex;
-                                justify-content: flex-start;
-                                .ant-tabs-tab {
-                                    height: 54px;
-                                    padding: 0;
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: center;
-                                    margin-right: 60px;
-                                    font-size: 15px;
-                                    color: #666666;
-                                    &.ant-tabs-tab-active {
-                                        color: $theme-color;
-                                    }
-                                    &:hover {
-                                        color: $theme-color;
-                                    }
-                                }
-                            }
-                            .ant-tabs-ink-bar {
-                                bottom: 0;
-                                height: 2px;
-                                background: $theme-color;
-                            }
-                        }
+    border-bottom: $border_style;
+    /deep/.ant-tabs {
+      height: 100%;
+      .ant-tabs-bar {
+        margin-bottom: 0;
+        .ant-tabs-nav-container {
+          margin-bottom: 0;
+          height: 54px;
+          .ant-tabs-nav-wrap {
+            .ant-tabs-nav-scroll {
+              .ant-tabs-nav {
+                > div {
+                  display: flex;
+                  justify-content: flex-start;
+                  .ant-tabs-tab {
+                    height: 54px;
+                    padding: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin-right: 30px;
+                    font-size: 15px;
+                    color: #666666;
+                    &.ant-tabs-tab-active {
+                      color: $theme-color;
                     }
+                    &:hover {
+                      color: $theme-color;
+                    }
+                  }
                 }
+                .ant-tabs-ink-bar {
+                  bottom: 1px;
+                  height: 2px;
+                  background: $theme-color;
+                }
+              }
             }
+          }
         }
-        .ant-tabs-content {
-            display: none;
-        }
+      }
+      .ant-tabs-content {
+        display: none;
+      }
     }
-}
+  }
 </style>
