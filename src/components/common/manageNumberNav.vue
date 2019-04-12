@@ -4,7 +4,7 @@
       <a-tabs
         v-if="typeof navArr[0] === 'object'"
         :defaultActiveKey="navArr[0].id"
-        @change="callback"
+        @change="callBack"
       >
         <a-tab-pane
           v-for="item in navArr"
@@ -39,7 +39,10 @@
       }
     },
     methods: {
-      callback(key) {}
+      callBack(key) {
+        // console.log(key);
+        this.$emit("tab", key);
+      }
     }
   };
 </script>

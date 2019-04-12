@@ -23,54 +23,70 @@ export default new Router({
                         import ("../views/page/merchant/merchantChildren/shopIndex")
                 }, {
                     path: "shopIndex",
+                    name: "店铺首页",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/shopIndex")
                 },
                 {
                     path: "shopInfo",
+                    name: "店铺信息",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/shopInfo")
                 },
                 {
                     path: "shopCertification",
+                    name: "店铺认证",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/shopCertification")
                 },
                 {
                     path: "publishGoods",
+                    name: "发布商品",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/publishGoods")
                 },
                 {
                     path: "productManage",
+                    name: "产品管理",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/productManage")
                 },
                 {
                     path: "inquiryManage",
+                    name: "询价管理",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/inquiryManage")
                 },
                 {
                     path: "orderManage",
+                    name: "订单管理",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/orderManage")
                 },
                 {
                     path: "accountSecurity",
+                    name: "账户安全",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/accountSecurity")
                 },
                 {
                     path: "personalCenter",
+                    name: "个人中心",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/personalCenter")
                 },
                 {
                     path: "messageCenter",
+                    name: "信息中心",
                     component: () =>
-                        import ("../views/page/merchant/merchantChildren/messageCenter")
+                        import ("../views/page/merchant/merchantChildren/messageCenter"),
                 },
+                {
+                    path: "messageDetail",
+                    name: '信息详情',
+                    component: () =>
+                        import ("../views/page/merchant/merchantChildren/messageDetail")
+                }
             ]
         },
         {
@@ -114,7 +130,22 @@ export default new Router({
             path: '/lookingShop/shopDetails',
             component: () =>
                 import ('../views/page/shop/shopDetails')
-        }
+        }, {
+            path: "changePassword",
+            name: '更改密码',
+            component: () =>
+                import ("../components/accountSecurity/changePassword")
+        }, {
+            path: "changePhone",
+            name: '更改手机号',
+            component: () =>
+                import ("../components/accountSecurity/changePhone")
+        }, {
+            path: "changeEmail",
+            name: '更改邮箱',
+            component: () =>
+                import ("../components/accountSecurity/changeEmail")
+        },
 
     ]
 });

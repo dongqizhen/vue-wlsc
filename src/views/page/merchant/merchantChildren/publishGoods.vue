@@ -1,7 +1,7 @@
 <template>
   <div class="publishGoods">
     <div class="commonBoxStyle basicInformation">
-      <commonTitle><div slot="text">发布商品</div></commonTitle>
+      <commonTitle title="发布商品"></commonTitle>
       <div class="informationContent">
         <div class="title">基本信息</div>
         <div class="common productName">

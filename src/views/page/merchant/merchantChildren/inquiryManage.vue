@@ -1,8 +1,7 @@
 <template>
   <div class="inquiryManage">
     <div class="inquiryContainer">
-      <commonTitle>
-        <div slot="text">询价管理</div>
+      <commonTitle title="询价管理">
         <div slot="titleRight" class="right-box">
           <ul>
             <li class="active">报价中(1)</li>

@@ -209,11 +209,13 @@
     background-color: #fff;
     height: 693px;
     padding: 4px 20px;
+    box-shadow: $base-box-shadow;
     /deep/.ant-input:hover {
-      border-color: $theme-color;
+      border-color: $theme-color !important;
     }
     /deep/.ant-input:focus {
-      box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
+      border-color: $theme-color !important;
+      box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2) !important;
     }
     /deep/.ant-select-selection:hover {
       border-color: $theme-color;
@@ -226,6 +228,9 @@
     .ant-select-selection:active {
       border-color: $theme-color;
       box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
+    }
+    /deep/.ant-cascader-picker:hover .ant-cascader-input {
+      border-color: $theme-color;
     }
     /deep/.ant-cascader-picker:focus .ant-cascader-input {
       border-color: $theme-color;

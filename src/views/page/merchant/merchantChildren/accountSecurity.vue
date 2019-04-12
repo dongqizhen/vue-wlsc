@@ -1,7 +1,7 @@
 <template>
   <div class="accountSecurity">
     <div class="commonBoxStyle">
-      <commonTitle><div slot="text">账号安全</div></commonTitle>
+      <commonTitle title="账号安全"></commonTitle>
       <div class="informationContent">
         <div class="common">
           <div class="left-box">
@@ -29,7 +29,7 @@
               >验证后可用于邮箱找回密码、接受订单提醒等，保障您的账户更安全。</span
             >
           </div>
-          <div class="right-box"><a-button>修改</a-button></div>
+          <div class="right-box"><a-button>绑定</a-button></div>
         </div>
         <div class="common">
           <div class="left-box">

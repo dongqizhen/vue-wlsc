@@ -1,8 +1,7 @@
 <template>
   <div class="shopCertification">
     <div class="basicInformation">
-      <commonTitle>
-        <div slot="text">认证材料</div>
+      <commonTitle title="认证材料">
         <span slot="titleRight" class="certificationStatus">
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#iconbaojiazhong"></use>

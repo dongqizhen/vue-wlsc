@@ -1,44 +1,75 @@
 <template>
   <div class="messageCenter">
-    <common-title><div slot="text">消息中心</div></common-title>
+    <common-title title="消息中心"></common-title>
     <div class="tabBar">
       <div class="left-box">
-        <manage-number-nav :navArr="tabs"></manage-number-nav>
+        <manage-number-nav :navArr="tabs" v-on:tab="getTab"></manage-number-nav>
       </div>
       <div class="right-box">
-        <div class="active">系统通知(24)</div>
-        <div>私信消息(12)</div>
+        <div :class="current == 1 ? 'active' : ''" @click="system(1)">
+          系统通知(24)
+        </div>
+        <div :class="current == 2 ? 'active' : ''" @click="system(2)">
+          私信消息(12)
+        </div>
       </div>
     </div>
     <div class="listContainer">
       <div class="listContent">
-        <ul>
-          <li>
+        <ul v-if="current == 1">
+          <router-link
+            tag="li"
+            v-for="item in data"
+            :key="item.id"
+            :to="{
+              path: 'messageDetail',
+              query: { id: item.id }
+            }"
+          >
             <div class="checkBox">
-              <a-checkbox @change="onChange"> </a-checkbox>
+              <label @click.stop="stopChange">
+                <a-checkbox
+                  @change="onChange(item.id)"
+                  :checked="checkedChange(item.id)"
+                ></a-checkbox>
+              </label>
             </div>
             <div class="introduceBox">
               <div class="title">
-                <svg class="icon" aria-hidden="true">
+                <svg class="icon" aria-hidden="true" v-if="unRead">
                   <use xlink:href="#iconxingzhuang1"></use>
                 </svg>
-                <span>卖家申请店铺审核通过提示</span>
-                <span class="createOn">2018-11-18</span>
+                <span class="titleText">{{ item.title }}</span>
+                <span class="createOn">{{ item.createOn }}</span>
               </div>
               <div class="introduce">
-                您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好...
-                <a>
-                  <span>展开</span>
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icongengduoxialajiantou"></use>
-                  </svg>
-                </a>
+                {{
+                  item.introduce.length > 130
+                    ? item.introduce.substr(0, 130) + "......"
+                    : item.introduce
+                }}
               </div>
             </div>
-          </li>
-          <li class="messageBox">
+          </router-link>
+        </ul>
+        <ul v-else>
+          <router-link
+            class="messageBox"
+            tag="li"
+            v-for="item in data"
+            :key="item.id"
+            :to="{
+              path: 'messageDetail',
+              query: { id: item.id }
+            }"
+          >
             <div class="checkBox">
-              <a-checkbox @change="onChange"> </a-checkbox>
+              <label @click.stop="stopChange">
+                <a-checkbox
+                  @change="onChange(item.id)"
+                  :checked="checkedChange(item.id)"
+                ></a-checkbox>
+              </label>
             </div>
             <div class="introduceBox">
               <div class="avatar">
@@ -55,48 +86,71 @@
                   <span
                     >您好，我是山东省人民医院的张三，可以交个朋友吗？您好，我是山东省人民医院的张三，可以交个朋友吗？您好，我是山东省...</span
                   >
-                  <span class="unRead">1</span>
+                  <span class="unRead" v-if="unRead">1</span>
                 </div>
               </div>
             </div>
-          </li>
+          </router-link>
         </ul>
       </div>
       <div class="tfooter">
-        <div class="checkedAllBox">
-          <div class="left-box">
-            <span>
-              <a-checkbox @change="onCheckAllChange" :checked="checkAll">
-              </a-checkbox>
-            </span>
-            <span>全选</span>
-            <span>
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconshanchu"></use>
-              </svg>
-              删除
-            </span>
-            <span>共<i>2</i>条</span>
+        <check-all
+          :amount="checkedList.length"
+          :checkAll="checkAll"
+          v-on:isCheckAll="isCheckAllMethod"
+        >
+          <div slot="right-box">
+            <div
+              v-bind:class="['remark', checkedList.length > 0 ? 'active' : '']"
+              @click="remarkRead"
+            >
+              标记已读
+            </div>
           </div>
-        </div>
+        </check-all>
       </div>
     </div>
+    <pagination></pagination>
   </div>
 </template>
 
 <script>
-  const defaultCheckedList = [];
   import _ from "lodash";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import manageNumberNav from "../../../../components/common/manageNumberNav";
+  import checkAll from "../../../../components/common/checkAll";
+  import pagination from "../../../../components/common/pagination";
   export default {
     data() {
       return {
-        data: [],
-        totalCount: 50,
+        data: [
+          {
+            id: 1,
+            title: "卖家申请店铺审核通过提示",
+            createOn: "2018-11-18",
+            introduce:
+              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
+          },
+          {
+            id: 2,
+            title: "卖家申请店铺审核通过提示",
+            createOn: "2018-11-18",
+            introduce:
+              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好"
+          },
+          {
+            id: 3,
+            title: "卖家申请店铺审核通过提示",
+            createOn: "2018-11-18",
+            introduce:
+              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
+          }
+        ],
         tabs: [],
         checkAll: false,
-        checkedList: defaultCheckedList
+        checkedList: [],
+        current: 1,
+        unRead: true
       };
     },
     beforeMount() {
@@ -104,26 +158,25 @@
         {
           id: 2,
           name: "未读消息",
-          amount: 24,
-          createOn: "2018-11-18",
-          title: "卖家申请店铺审核通过提示",
-          introduce:
-            "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
+          amount: 24
         },
         {
           id: 3,
           name: "已读消息",
-          amount: 12,
-          createOn: "2018-11-18",
-          title: "卖家申请店铺审核通过提示",
-          introduce:
-            "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
+          amount: 12
         }
       ];
     },
     methods: {
-      callback(key) {
-        console.log(key);
+      getTab(val) {
+        if (this.tabs[0].id == val) {
+          this.unRead = true;
+        } else {
+          this.unRead = false;
+        }
+      },
+      system(val) {
+        this.current = val;
       },
       onChange(id) {
         if (_.indexOf(this.checkedList, id) == -1) {
@@ -137,13 +190,6 @@
           this.checkAll = false;
         }
       },
-      addClass(id) {
-        for (const val of this.checkedList) {
-          if (val == id) {
-            return "active";
-          }
-        }
-      },
       checkedChange(id) {
         for (const val of this.checkedList) {
           if (val == id) {
@@ -151,9 +197,10 @@
           }
         }
       },
-      onCheckAllChange() {
-        if (!this.checkAll) {
+      isCheckAllMethod(val) {
+        if (val) {
           this.checkAll = true;
+          this.checkedList = [];
           for (const val of this.data) {
             this.checkedList.push(val.id);
           }
@@ -162,11 +209,19 @@
           this.checkedList = [];
         }
       },
-      onPaginationChange() {}
+      remarkRead() {
+        if (this.checkedList.length > 0) {
+          //向后台发送请求，标记为已读，成功后将刷新数据
+        }
+      },
+      onPaginationChange() {},
+      stopChange() {}
     },
     components: {
       commonTitle,
-      manageNumberNav
+      manageNumberNav,
+      checkAll,
+      pagination
     }
   };
 </script>
@@ -204,7 +259,8 @@
           border: $border-style;
           text-align: center;
           font-size: 12px;
-          color: #333333;
+          color: #333;
+          cursor: pointer;
           &:first-child {
             border-right: none;
           }
@@ -323,49 +379,18 @@
         }
       }
       .tfooter {
-        .checkedAllBox {
+        .remark {
+          width: 104px;
           height: 42px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          border: 1px solid #dddddd;
-          .left-box {
-            span {
-              &:first-child {
-                width: 34px;
-                margin-right: 12px;
-                padding-left: 20px;
-              }
-              &:nth-child(3) {
-                margin-right: 40px;
-                padding-left: 42px;
-              }
-              i {
-                font-style: normal;
-                color: $theme-color;
-                font-size: 16px;
-                font-weight: 600;
-              }
-            }
-          }
-          .right-box {
-            button {
-              width: 76px;
-              height: 42px;
-              line-height: 42px;
-              border: 0;
-              outline: none;
-              background-color: transparent;
-              color: #fff;
-              text-align: center;
-              cursor: pointer;
-              &.shelf {
-                background-color: $theme-color;
-              }
-              &.obtained {
-                background-color: #f5a623;
-              }
-            }
+          background-color: #ccc;
+          color: #fff;
+          font-size: 14px;
+          line-height: 42px;
+          text-align: center;
+          font-weight: 600;
+          cursor: pointer;
+          &.active {
+            background-color: #f5a623;
           }
         }
       }

@@ -1,8 +1,7 @@
 <template>
   <div class="productManage">
     <div class="productContainer">
-      <commonTitle>
-        <div slot="text">产品列表</div>
+      <commonTitle title="产品列表">
         <span slot="titleRight" class="publishGood">
           <router-link to="/merchant/publishGoods">
             <svg class="icon" aria-hidden="true">
@@ -112,34 +111,13 @@
               </span>
             </li>
           </ul>
-          <div class="checkedAllBox">
-            <div class="left-box">
-              <span>
-                <a-checkbox @change="onCheckAllChange" :checked="checkAll">
-                </a-checkbox>
-              </span>
-              <span>全选</span>
-              <span>
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#iconshanchu"></use>
-                </svg>
-                删除
-              </span>
-              <span>共<i>2</i>条</span>
-            </div>
-            <div class="right-box">
+          <check-all>
+            <div slot="right-box" class="right-box">
               <button class="shelf">上架</button>
               <button class="obtained">下架</button>
             </div>
-          </div>
-          <div class="paginationBox">
-            <a-pagination
-              showQuickJumper
-              :total="totalCount"
-              @change="onPaginationChange"
-            />
-            <div class="sureBtn">确定</div>
-          </div>
+          </check-all>
+          <pagination></pagination>
         </div>
       </div>
     </div>
@@ -182,6 +160,8 @@
   const defaultCheckedList = [];
   import _ from "lodash";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
+  import pagination from "../../../../components/common/pagination";
+  import checkAll from "../../../../components/common/checkAll";
   export default {
     data() {
       return {
@@ -263,7 +243,9 @@
       }
     },
     components: {
-      commonTitle
+      commonTitle,
+      pagination,
+      checkAll
     }
   };
 </script>
@@ -479,70 +461,6 @@
                   background-color: #f5a623;
                 }
               }
-            }
-          }
-          .paginationBox {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 32px;
-            margin-top: 40px;
-            margin-bottom: 88px;
-            /deep/ul.ant-pagination {
-              li {
-                &:hover {
-                  border-color: $theme-color;
-                  a {
-                    color: $theme-color;
-                  }
-                  // border-color: $theme-color;
-                  // background-color: $theme-color;
-                  // a {
-                  //   color: #fff;
-                  // }
-                }
-                &.ant-pagination-item-active {
-                  border-color: $theme-color;
-                  background-color: $theme-color;
-                  a {
-                    color: #fff;
-                  }
-                }
-                &:focus {
-                  border-color: $theme-color;
-                  color: $theme-color;
-                }
-                .ant-pagination-options-quick-jumper input:hover {
-                  border-color: $theme-color;
-                  border-right-width: 1px !important;
-                }
-                .ant-pagination-options-quick-jumper input:focus {
-                  border-color: $theme-color;
-                  outline: 0;
-                  -webkit-box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
-                  box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
-                  border-right-width: 1px !important;
-                }
-              }
-              .ant-pagination-next:focus,
-              .ant-pagination-prev:focus,
-              .ant-pagination-next:hover,
-              .ant-pagination-prev:hover {
-                .ant-pagination-item-link {
-                  border-color: $theme-color;
-                  color: $theme-color;
-                }
-              }
-            }
-            .sureBtn {
-              width: 44px;
-              height: 21px;
-              border: 1px solid #e9e9e9;
-              font-size: 12px;
-              color: #666666;
-              text-align: center;
-              margin-left: 20px;
-              cursor: pointer;
             }
           }
         }
