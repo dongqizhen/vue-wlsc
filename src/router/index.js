@@ -144,6 +144,32 @@ export default new Router({
             path: '/lookingShop/shopDetails',
             component: () =>
                 import ('../views/page/shop/shopDetails')
+        }, {
+            name: '找产品',
+            path: '/lookingProduct',
+            component: () =>
+                import ('../views/page/shop/lookingProduct'),
+            children: [{
+                name: '产品分类',
+                path: '/',
+                component: () =>
+                    import ('../views/page/shop/lookingProductChirldren/brandClassific')
+            }, {
+                name: '产品分类主页',
+                path: 'oneOfBrandClassificne',
+                component: () =>
+                    import ('../views/page/shop/lookingProductChirldren/oneOfBrandClassific')
+            }, {
+                name: '品牌主页',
+                path: 'brand',
+                component: () =>
+                    import ('../views/page/shop/lookingProductChirldren/brand')
+            }, {
+                name: '型号主页',
+                path: 'model',
+                component: () =>
+                    import ('../views/page/shop/lookingProductChirldren/model')
+            }]
         }
 
     ]

@@ -26,7 +26,7 @@
     },
     {
       title: "找产品",
-      path: "/"
+      path: "/lookingProduct"
     },
     {
       title: "找品牌",
