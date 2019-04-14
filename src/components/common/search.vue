@@ -120,6 +120,9 @@
             font-size: 18px;
             font-family: $base-font-family;
             color: #ffffff;
+            &:hover {
+              opacity: 0.7;
+            }
           }
         }
         > div.nav {

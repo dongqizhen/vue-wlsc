@@ -388,7 +388,7 @@
           closable: true,
           maskClosable: false,
           wrapClassName: "success",
-          centered: true
+          centered: false
         }
       };
     },
