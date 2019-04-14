@@ -42,13 +42,13 @@
                 <router-link to="/merchant/publishGoods">发布产品</router-link>
               </a-menu-item>
               <a-menu-item key="5">
-                <router-link to="/merchant/publishGoods">产品管理</router-link>
+                <router-link to="/merchant/productManage">产品管理</router-link>
               </a-menu-item>
               <a-menu-item key="6">
-                <router-link to="/merchant/publishGoods">询价管理</router-link>
+                <router-link to="/merchant/inquiryManage">询价管理</router-link>
               </a-menu-item>
               <a-menu-item key="7">
-                <router-link to="/merchant/publishGoods">订单管理</router-link>
+                <router-link to="/merchant/orderManage">订单管理</router-link>
               </a-menu-item>
             </a-sub-menu>
             <a-sub-menu key="sub3">
@@ -68,7 +68,11 @@
                   个人中心
                 </router-link>
               </a-menu-item>
-              <a-menu-item key="10">消息中心</a-menu-item>
+              <a-menu-item key="10">
+                <router-link to="/merchant/messageCenter">
+                  消息中心
+                </router-link>
+              </a-menu-item>
             </a-sub-menu>
           </a-menu>
         </a-layout-sider>
@@ -112,24 +116,24 @@
         case "publishGoods":
           this.defaultSelectedKeys = ["4"];
           break;
-        // case "publishGoods":
-        //   this.defaultSelectedKeys = ["5"];
-        //   break;
-        // case "publishGoods":
-        //   this.defaultSelectedKeys = ["6"];
-        //   break;
-        // case "publishGoods":
-        //   this.defaultSelectedKeys = ["7"];
-        //   break;
+        case "productManage":
+          this.defaultSelectedKeys = ["5"];
+          break;
+        case "inquiryManage":
+          this.defaultSelectedKeys = ["6"];
+          break;
+        case "orderManage":
+          this.defaultSelectedKeys = ["7"];
+          break;
         case "accountSecurity":
           this.defaultSelectedKeys = ["8"];
           break;
         case "personalCenter":
           this.defaultSelectedKeys = ["9"];
           break;
-        // case "personalCenter":
-        //   this.defaultSelectedKeys = ["10"];
-        //   break;
+        case "messageCenter":
+          this.defaultSelectedKeys = ["10"];
+          break;
       }
     },
     components: {
@@ -173,6 +177,7 @@
         min-width: 170px !important;
         flex: 0 !important;
         margin-right: 20px;
+        margin-bottom: 111px;
         .ant-layout-sider-children {
           height: 693px;
           background-color: #fff;
@@ -196,6 +201,8 @@
                 color: #333;
                 font-size: 16px;
                 font-weight: 600;
+                height: 48px;
+                line-height: 48px;
                 .ant-menu-submenu-arrow {
                   display: none;
                 }

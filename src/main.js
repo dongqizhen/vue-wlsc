@@ -15,7 +15,10 @@ import {
     Checkbox,
     Radio,
     Layout,
-    menu,
+    Menu,
+    Table,
+    Pagination,
+    LocaleProvider,
     Tooltip,
     Rate
 } from "ant-design-vue";
@@ -26,7 +29,7 @@ import {
 
 Vue.config.productionTip = false;
 
-Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(menu).use(Tooltip).use(Rate)
+Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate)
 
 new Vue({
     el: '#app',

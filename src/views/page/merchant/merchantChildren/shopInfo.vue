@@ -48,7 +48,12 @@
             >
               <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
               <div v-else>
-                <a-icon :type="loading ? 'loading' : 'plus'" />
+                <a-icon v-if="loading" type="loading"></a-icon>
+                <a-icon v-else>
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icontianjiatupian1"></use>
+                  </svg>
+                </a-icon>
                 <div class="ant-upload-text">点击添加图片</div>
               </div>
             </a-upload>
@@ -204,11 +209,13 @@
     background-color: #fff;
     height: 693px;
     padding: 4px 20px;
+    box-shadow: $base-box-shadow;
     /deep/.ant-input:hover {
-      border-color: $theme-color;
+      border-color: $theme-color !important;
     }
     /deep/.ant-input:focus {
-      box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
+      border-color: $theme-color !important;
+      box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2) !important;
     }
     /deep/.ant-select-selection:hover {
       border-color: $theme-color;
@@ -221,6 +228,9 @@
     .ant-select-selection:active {
       border-color: $theme-color;
       box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
+    }
+    /deep/.ant-cascader-picker:hover .ant-cascader-input {
+      border-color: $theme-color;
     }
     /deep/.ant-cascader-picker:focus .ant-cascader-input {
       border-color: $theme-color;
@@ -268,7 +278,7 @@
           }
         }
         .right-box {
-          @include placeholderColor(#ccc);
+          @include placeholderStyle;
           .ant-input {
             width: 390px;
             height: 34px;
@@ -297,6 +307,14 @@
                 font-family: PingFangSC-Regular;
                 font-size: 12px;
                 color: #ccc;
+              }
+              .anticon {
+                width: 18px;
+                height: 18px;
+                svg {
+                  width: 100%;
+                  height: 100%;
+                }
               }
               img {
                 width: 100%;

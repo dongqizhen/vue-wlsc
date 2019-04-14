@@ -1,11 +1,13 @@
 <template>
   <div class="shopCertification">
     <div class="basicInformation">
-      <commonTitle>
-        <div slot="text">认证材料</div>
-        <span slot="titleRight" class="certificationStatus"
-          >认证状态：认证中</span
-        >
+      <commonTitle title="认证材料">
+        <span slot="titleRight" class="certificationStatus">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconbaojiazhong"></use>
+          </svg>
+          认证状态：认证中
+        </span>
       </commonTitle>
       <div class="informationContent">
         <div class="title">基本信息</div>
@@ -286,7 +288,7 @@
         }
       }
       .right-box {
-        @include placeholderColor(#ccc);
+        @include placeholderStyle;
         .ant-input {
           width: 390px;
           height: 34px;

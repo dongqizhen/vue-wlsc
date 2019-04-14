@@ -2,7 +2,8 @@
   <div class="common-title">
     <div class="titleText">
       <div class="verticalBar"></div>
-      <slot name="text"></slot>
+      <div class="text">{{ title }}</div>
+      <slot name="infoPath"></slot>
     </div>
     <slot name="titleRight"></slot>
   </div>
@@ -11,6 +12,12 @@
   export default {
     data() {
       return {};
+    },
+    props: {
+      title: {
+        type: String,
+        required: true
+      }
     }
   };
 </script>

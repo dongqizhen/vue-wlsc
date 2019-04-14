@@ -1,7 +1,7 @@
 <template>
   <div class="personalCenter">
     <div class="commonBoxStyle">
-      <commonTitle><div slot="text">个人中心</div></commonTitle>
+      <commonTitle title="个人中心"></commonTitle>
       <div class="informationContent">
         <div class="common productName">
           <div class="left-box"><span class="red">*</span>单位名称</div>
@@ -115,6 +115,7 @@
       background: #ffffff;
       box-shadow: $base-box-shadow;
       margin-bottom: 10px;
+      min-height: 693px;
       .informationContent {
         margin-top: 24px;
         .common {
@@ -133,7 +134,7 @@
             }
           }
           .right-box {
-            @include placeholderColor(#ccc);
+            @include placeholderStyle;
             .ant-input {
               width: 390px;
               height: 34px;
