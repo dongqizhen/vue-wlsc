@@ -23,7 +23,6 @@ export default new Router({
                         import ("../views/page/merchant/merchantChildren/shopIndex")
                 }, {
                     path: "shopIndex",
-                    name: "店铺首页",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/shopIndex")
                 },
@@ -86,7 +85,22 @@ export default new Router({
                     name: '信息详情',
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/messageDetail")
-                }
+                }, {
+                    path: "changePassword",
+                    name: '更改密码',
+                    component: () =>
+                        import ("../components/accountSecurity/changePassword")
+                }, {
+                    path: "changePhone",
+                    name: '更改手机号',
+                    component: () =>
+                        import ("../components/accountSecurity/changePhone")
+                }, {
+                    path: "changeEmail",
+                    name: '更改邮箱',
+                    component: () =>
+                        import ("../components/accountSecurity/changeEmail")
+                },
             ]
         },
         {
@@ -130,22 +144,7 @@ export default new Router({
             path: '/lookingShop/shopDetails',
             component: () =>
                 import ('../views/page/shop/shopDetails')
-        }, {
-            path: "changePassword",
-            name: '更改密码',
-            component: () =>
-                import ("../components/accountSecurity/changePassword")
-        }, {
-            path: "changePhone",
-            name: '更改手机号',
-            component: () =>
-                import ("../components/accountSecurity/changePhone")
-        }, {
-            path: "changeEmail",
-            name: '更改邮箱',
-            component: () =>
-                import ("../components/accountSecurity/changeEmail")
-        },
+        }
 
     ]
 });

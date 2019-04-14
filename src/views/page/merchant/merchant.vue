@@ -102,7 +102,7 @@
         // this.defaultSelectedKeys[0] = e.key;
       }
     },
-    beforeMount() {
+    mounted() {
       switch (this.$route.path.split("/")[2]) {
         case "shopIndex":
           this.defaultSelectedKeys = ["1"];
@@ -128,10 +128,22 @@
         case "accountSecurity":
           this.defaultSelectedKeys = ["8"];
           break;
+        case "changePassword":
+          this.defaultSelectedKeys = ["8"];
+          break;
+        case "changeEmail":
+          this.defaultSelectedKeys = ["8"];
+          break;
+        case "changePhone":
+          this.defaultSelectedKeys = ["8"];
+          break;
         case "personalCenter":
           this.defaultSelectedKeys = ["9"];
           break;
         case "messageCenter":
+          this.defaultSelectedKeys = ["10"];
+          break;
+        case "messageDetail":
           this.defaultSelectedKeys = ["10"];
           break;
       }

@@ -1,10 +1,7 @@
 <template>
   <div class="shopInfo">
     <div class="container-box">
-      <div class="common-title">
-        <div class="verticalBar"></div>
-        店铺信息
-      </div>
+      <common-title title="店铺信息"></common-title>
       <div class="content">
         <div class="common shopName">
           <div class="left-box"><span class="red">*</span>店铺名称</div>
@@ -20,16 +17,11 @@
               style="width: 222px"
               @change="handleChange"
             >
-              <a-icon slot="suffixIcon">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-                </svg>
+              <a-icon slot="suffixIcon" class="icon">
+                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
               </a-icon>
               <a-select-option value="jack">Jack</a-select-option>
               <a-select-option value="lucy">Lucy</a-select-option>
-              <a-select-option value="disabled" disabled
-                >Disabled</a-select-option
-              >
               <a-select-option value="Yiminghe">yiminghe</a-select-option>
             </a-select>
           </div>
@@ -49,10 +41,8 @@
               <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
               <div v-else>
                 <a-icon v-if="loading" type="loading"></a-icon>
-                <a-icon v-else>
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icontianjiatupian1"></use>
-                  </svg>
+                <a-icon v-else class="icon">
+                  <use xlink:href="#icontianjiatupian1"></use>
                 </a-icon>
                 <div class="ant-upload-text">点击添加图片</div>
               </div>
@@ -74,7 +64,11 @@
               placeholder="请选择省/市/区"
               :defaultValue="defaultCascaderValue"
               style="width: 390px"
-            />
+            >
+              <a-icon slot="suffixIcon" class="icon">
+                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+              </a-icon>
+            </a-cascader>
           </div>
         </div>
         <div class="common shopIntroduce">
@@ -101,6 +95,7 @@
 
 <script>
   import { Upload } from "ant-design-vue";
+  import commonTitle from "../../../../components/common/merchantRightCommonTitle";
 
   const selectArr = [{ key: 1, value: "beijing" }, { key: 2, value: "tianjin" }];
   function getBase64(img, callback) {
@@ -186,19 +181,22 @@
         }
       },
       beforeUpload(file) {
-        const isJPG = file.type === "image/jpeg";
-        if (!isJPG) {
-          this.$message.error("You can only upload JPG file!");
-        }
+        console.log(file);
+        // const isJPG = file.type === "image/jpeg";
+        // if (!isJPG) {
+        //   this.$message.error("You can only upload JPG file!");
+        // }
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
           this.$message.error("Image must smaller than 2MB!");
         }
-        return isJPG && isLt2M;
+        return isLt2M;
+        // return isJPG && isLt2M;
       }
     },
     components: {
-      AUpload: Upload
+      AUpload: Upload,
+      commonTitle
     }
   };
 </script>
@@ -237,23 +235,6 @@
       box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
     }
 
-    .common-title {
-      display: flex;
-      align-items: center;
-      height: 49px;
-      font-family: PingFangSC-Medium;
-      font-weight: 600;
-      font-size: 18px;
-      color: #333;
-      border-bottom: $border-style;
-      .verticalBar {
-        width: 4px;
-        height: 19px;
-        background: #f5a623;
-        margin-right: 6px;
-        margin-top: 1.5px;
-      }
-    }
     .content {
       margin-top: 24px;
       .common {

@@ -1,5 +1,5 @@
 <template>
-  <div class="shopInfo">
+  <div class="shopIndex">
     <div class="container-box">
       <div class="header">
         <ul>
@@ -20,39 +20,45 @@
         </ul>
       </div>
       <div class="nav-box">
-        <a-tabs :defaultActiveKey="defaultActiveKey" @change="callback">
-          <a-tab-pane v-for="tab in tabs" :key="tab.id" :tab="tab.name">
-            <div class="trend">
-              <div class="time">
-                <ul>
-                  <li
-                    v-for="time in timesTab"
-                    :key="time.id"
-                    :class="currentTab == time.id ? 'active' : ''"
-                    @click="triggleTab(time.id)"
-                  >
-                    {{ time.name }}
-                  </li>
-                </ul>
-                <div class="calendar">
-                  <div class="block">
-                    <el-date-picker
-                      v-model="value7"
-                      type="daterange"
-                      align="right"
-                      range-separator="至"
-                      start-placeholder="开始日期"
-                      end-placeholder="结束日期"
-                      @change="changeDate"
-                    >
-                    </el-date-picker>
-                  </div>
-                </div>
+        <manage-number-nav
+          :navArr="[
+            '全部',
+            '新增访问店铺数',
+            '新增收藏店铺数',
+            '新增询价单数',
+            '新增订单数'
+          ]"
+          v-on:tab="getTab"
+        ></manage-number-nav>
+        <div class="trend">
+          <div class="time">
+            <ul>
+              <li
+                v-for="time in timesTab"
+                :key="time.id"
+                :class="currentTab == time.id ? 'active' : ''"
+                @click="triggleTab(time.id)"
+              >
+                {{ time.name }}
+              </li>
+            </ul>
+            <div class="calendar">
+              <div class="block">
+                <el-date-picker
+                  v-model="value7"
+                  type="daterange"
+                  align="right"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  @change="changeDate"
+                >
+                </el-date-picker>
               </div>
-              <v-chart :options="polar" :init-options="initOptions"></v-chart>
             </div>
-          </a-tab-pane>
-        </a-tabs>
+          </div>
+          <v-chart :options="polar" :init-options="initOptions"></v-chart>
+        </div>
         <div class="statisticalTable">
           <ul>
             <li>
@@ -77,6 +83,7 @@
 </template>
 
 <script>
+  import manageNumberNav from "../../../../components/common/manageNumberNav";
   import ECharts from "vue-echarts";
   import "zrender/lib/svg/svg";
 
@@ -88,27 +95,22 @@
   import "echarts/lib/component/title";
   import "echarts/lib/component/visualMap";
   import "echarts/lib/component/legend";
-  const xAxisData = [
-      "2019-03-01",
-      "2019-03-02",
-      "2019-03-03",
-      "2019-03-04",
-      "2019-03-05",
-      "2019-03-06",
-      "2019-03-07"
-    ],
-    newVisitNumber = [2, 3, 2, 13, 2, 15, 17],
-    newStoreNumber = [2, 3, 23, 2, 9, 4, 9],
-    newInquiryNumber = [2, 2, 12, 1, 2, 2, 6],
-    newOrderNumber = [56, 76, 45, 2, 23, 98, 68];
   export default {
     data() {
       return {
-        xAxisData,
-        newVisitNumber,
-        newStoreNumber,
-        newInquiryNumber,
-        newOrderNumber,
+        xAxisData: [
+          "2019-03-01",
+          "2019-03-02",
+          "2019-03-03",
+          "2019-03-04",
+          "2019-03-05",
+          "2019-03-06",
+          "2019-03-07"
+        ],
+        newVisitNumber: [2, 3, 2, 13, 2, 15, 17],
+        newStoreNumber: [2, 3, 23, 2, 9, 4, 9],
+        newInquiryNumber: [2, 2, 12, 1, 2, 2, 6],
+        newOrderNumber: [56, 76, 45, 2, 23, 98, 68],
         amountData: [
           {
             id: 1,
@@ -219,12 +221,7 @@
             selectedMode: false,
             itemGap: 40,
             itemWidth: 16,
-            data: [
-              "新增访问店铺数",
-              "新增收藏店铺数",
-              "新增询价单数",
-              "新增订单数"
-            ],
+            data: [],
             textStyle: {
               fontSize: 14,
               color: "#666"
@@ -253,7 +250,7 @@
                 fontSize: "12"
               }
             },
-            data: xAxisData
+            data: []
           },
           yAxis: {
             type: "value",
@@ -282,7 +279,7 @@
             {
               name: "新增访问店铺数",
               type: "line",
-              data: newVisitNumber,
+              data: [],
               itemStyle: {
                 color: "#0283FF"
               }
@@ -290,7 +287,7 @@
             {
               name: "新增收藏店铺数",
               type: "line",
-              data: newStoreNumber,
+              data: [],
               itemStyle: {
                 color: "#37B2AC"
               }
@@ -298,7 +295,7 @@
             {
               name: "新增询价单数",
               type: "line",
-              data: newInquiryNumber,
+              data: [],
               itemStyle: {
                 color: "#FD94A7"
               }
@@ -306,7 +303,7 @@
             {
               name: "新增订单数",
               type: "line",
-              data: newOrderNumber,
+              data: [],
               itemStyle: {
                 color: "#F5A623"
               }
@@ -317,20 +314,69 @@
         value7: ""
       };
     },
-    mounted() {},
+    mounted() {
+      this.polar.legend.data = [
+        "新增访问店铺数",
+        "新增收藏店铺数",
+        "新增询价单数",
+        "新增订单数"
+      ];
+      this.polar.xAxis.data = [
+        "2019-03-01",
+        "2019-03-02",
+        "2019-03-03",
+        "2019-03-04",
+        "2019-03-05",
+        "2019-03-06",
+        "2019-03-07"
+      ];
+      this.polar.series[0].data = [2, 3, 2, 13, 2, 15, 17];
+      this.polar.series[1].data = [2, 3, 23, 2, 9, 4, 9];
+      this.polar.series[2].data = [2, 2, 12, 1, 2, 2, 6];
+      this.polar.series[3].data = [56, 76, 45, 2, 23, 98, 68];
+    },
     methods: {
+      getTab(val) {
+        console.log(val);
+        if (val == 0) {
+          this.polar.legend.data = [
+            "新增访问店铺数",
+            "新增收藏店铺数",
+            "新增询价单数",
+            "新增订单数"
+          ];
+          this.polar.series[0].data = [2, 3, 2, 13, 2, 15, 17];
+          this.polar.series[1].data = [2, 3, 23, 2, 9, 4, 9];
+          this.polar.series[2].data = [2, 2, 12, 1, 2, 2, 6];
+          this.polar.series[3].data = [56, 76, 45, 2, 23, 98, 68];
+        } else if (val == 1) {
+          this.polar.legend.data = ["新增访问店铺数"];
+          this.polar.series[0].data = [2, 3, 2, 13, 2, 15, 17];
+          this.polar.series[1].data = [];
+          this.polar.series[2].data = [];
+          this.polar.series[3].data = [];
+        } else if (val == 2) {
+          this.polar.legend.data = ["新增收藏店铺数"];
+          this.polar.series[0].data = [];
+          this.polar.series[1].data = [2, 3, 23, 2, 9, 4, 9];
+          this.polar.series[2].data = [];
+          this.polar.series[3].data = [];
+        } else if (val == 3) {
+          this.polar.legend.data = ["新增询价单数"];
+          this.polar.series[0].data = [];
+          this.polar.series[1].data = [];
+          this.polar.series[2].data = [2, 2, 12, 1, 2, 2, 6];
+          this.polar.series[3].data = [];
+        } else {
+          this.polar.legend.data = ["新增订单数"];
+          this.polar.series[0].data = [];
+          this.polar.series[1].data = [];
+          this.polar.series[2].data = [];
+          this.polar.series[3].data = [56, 76, 45, 2, 23, 98, 68];
+        }
+      },
       triggleTab(currentTabId) {
         this.currentTab = currentTabId;
-      },
-      callback(key) {
-        console.log("nav", key);
-        if (key == 2) {
-          this.xAxisData = [];
-          this.newVisitNumber = [];
-          this.newStoreNumber = [2, 3, 23, 2, 9, 4, 9];
-          this.newInquiryNumber = [];
-          this.newOrderNumber = [];
-        }
       },
       onPanelChange(date, dateString) {
         console.log(date, dateString);
@@ -347,14 +393,13 @@
         this.currentTab = -1;
       }
     },
-    components: { "v-chart": ECharts }
+    components: { "v-chart": ECharts, manageNumberNav }
   };
 </script>
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
-  .shopInfo {
-    // background-color: #f6f6f6;
+  .shopIndex {
     .container-box {
       .header {
         margin-bottom: 16px;
@@ -400,6 +445,48 @@
         }
       }
       .nav-box {
+        .trend {
+          background-color: #fff;
+          height: 484px;
+          padding-top: 21px;
+          margin-top: 1px;
+          border-bottom: $border-style;
+          .time {
+            margin-bottom: 30px;
+            display: flex;
+            ul {
+              display: flex;
+              align-items: center;
+              li {
+                padding: 0 18px;
+                height: 31px;
+                line-height: 31px;
+                text-align: center;
+                color: #999;
+                font-size: 14px;
+                margin-right: 20px;
+                cursor: pointer;
+                &.active {
+                  background: rgba(241, 2, 21, 0.03);
+                  border-radius: 15.5px;
+                  color: $theme-color;
+                  font-weight: 600;
+                }
+              }
+            }
+            .calendar {
+              width: 174px;
+              margin-left: 22px;
+              /deep/.el-range-separator {
+                width: 8%;
+              }
+            }
+          }
+          .echarts {
+            width: 900px;
+            height: 397px;
+          }
+        }
         /deep/.ant-tabs {
           .ant-tabs-bar {
             height: 53px;
@@ -439,6 +526,7 @@
             }
           }
           .ant-tabs-content {
+            display: none;
             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
             .ant-tabs-tabpane {
               background-color: #fff;
@@ -488,9 +576,10 @@
         .statisticalTable {
           padding: 34px 20px;
           background-color: #fff;
-          margin-top: 10px;
+          margin-top: 1px;
+          margin-bottom: 130px;
           ul {
-            border: 1px solid #ddd;
+            border: $border-style;
             li {
               display: flex;
               height: 48px;

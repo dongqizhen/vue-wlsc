@@ -12,7 +12,7 @@
           :key="item.id"
         ></a-tab-pane>
       </a-tabs>
-      <a-tabs :defaultActiveKey="0" @change="callback" v-else>
+      <a-tabs :defaultActiveKey="0" @change="callBack" v-else>
         <a-tab-pane
           v-for="(item, i) in navArr"
           :tab="item"
