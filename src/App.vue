@@ -80,4 +80,10 @@
       }
     }
   }
+  .ant-select-dropdown-menu-item:hover {
+    background-color: #fafafa;
+  }
+  .ant-select-dropdown-menu-item-active {
+    background-color: #fff;
+  }
 </style>

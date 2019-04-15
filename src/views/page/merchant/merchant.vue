@@ -102,7 +102,7 @@
         // this.defaultSelectedKeys[0] = e.key;
       }
     },
-    mounted() {
+    beforeMount() {
       switch (this.$route.path.split("/")[2]) {
         case "shopIndex":
           this.defaultSelectedKeys = ["1"];

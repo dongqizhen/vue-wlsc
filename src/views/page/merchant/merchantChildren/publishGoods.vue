@@ -4,16 +4,22 @@
       <commonTitle title="发布商品"></commonTitle>
       <div class="informationContent">
         <div class="title">基本信息</div>
-        <div class="common productName">
+        <div class="common ">
           <div class="left-box"><span class="red">*</span>产品名称</div>
           <div class="right-box">
-            <a-input placeholder="请输入产品名称" />
+            <a-input
+              placeholder="请输入产品名称"
+              v-model="submitData.productName"
+            />
           </div>
         </div>
         <div class="common">
           <div class="left-box">产品编号</div>
           <div class="right-box">
-            <a-input placeholder="请输入产品编号" />
+            <a-input
+              placeholder="请输入产品编号"
+              v-model="submitData.productNumber"
+            />
           </div>
         </div>
         <div class="common">
@@ -21,7 +27,7 @@
           <div class="right-box">
             <a-select
               defaultValue="请选择大类"
-              style="width: 136px"
+              style="width: 136px;margin-right:10px;"
               @change="handleProductBigTypeChange"
               :options="options"
             />
@@ -47,21 +53,29 @@
         <div class="common">
           <div class="left-box"><span class="red">*</span>品牌</div>
           <div class="right-box">
-            <a-input placeholder="请输入品牌" />
+            <a-input placeholder="请输入品牌" v-model="submitData.brand" />
           </div>
         </div>
         <div class="common">
           <div class="left-box"><span class="red">*</span>型号</div>
           <div class="right-box">
-            <a-input placeholder="请输入型号" />
+            <a-input placeholder="请输入型号" v-model="submitData.model" />
           </div>
         </div>
         <div class="common guidePrice">
           <div class="left-box">指导价</div>
           <div class="right-box">
-            <a-input placeholder="区间最低" class="priceMin" />
+            <a-input
+              placeholder="区间最低"
+              class="priceMin"
+              v-model="submitData.minPrice"
+            />
             <div class="joiner">一</div>
-            <a-input placeholder="区间最高" class="priceMax" />
+            <a-input
+              placeholder="区间最高"
+              class="priceMax"
+              v-model="submitData.maxPrice"
+            />
             <!-- <div class="inquiry">询价</div> -->
             <a-checkbox @change="onChange">询价</a-checkbox>
           </div>
@@ -69,13 +83,19 @@
         <div class="common">
           <div class="left-box"><span class="red">*</span>备件号</div>
           <div class="right-box">
-            <a-input placeholder="请输入备件号" />
+            <a-input
+              placeholder="请输入备件号"
+              v-model="submitData.sparePartNumber"
+            />
           </div>
         </div>
         <div class="common">
           <div class="left-box">库存数量</div>
           <div class="right-box">
-            <a-input placeholder="请输入库存数量" />
+            <a-input
+              placeholder="请输入库存数量"
+              v-model="submitData.stockQuantity"
+            />
           </div>
         </div>
       </div>
@@ -97,25 +117,31 @@
         <div class="common">
           <div class="left-box">生产厂家</div>
           <div class="right-box">
-            <a-input placeholder="请输入生产厂家" />
+            <a-input
+              placeholder="请输入生产厂家"
+              v-model="submitData.manufacturer"
+            />
           </div>
         </div>
         <div class="common">
           <div class="left-box">件装量</div>
           <div class="right-box">
-            <a-input placeholder="请输入件装量" />
+            <a-input placeholder="请输入件装量" v-model="submitData.capacity" />
           </div>
         </div>
         <div class="common">
           <div class="left-box">单位</div>
           <div class="right-box">
-            <a-input placeholder="请输入单位" />
+            <a-input placeholder="请输入单位" v-model="submitData.unit" />
           </div>
         </div>
         <div class="common">
           <div class="left-box">最小起订量</div>
           <div class="right-box">
-            <a-input placeholder="请输入最小起订量" />
+            <a-input
+              placeholder="请输入最小起订量"
+              v-model="submitData.minOrderQuantity"
+            />
           </div>
         </div>
       </div>
@@ -128,20 +154,29 @@
       </div>
       <div class="pictureContent">
         <a-upload
-          name="avatar"
           listType="picture-card"
           class="avatar-uploader"
-          :showUploadList="false"
+          :showUploadList="true"
           action="//jsonplaceholder.typicode.com/posts/"
           :beforeUpload="beforeUpload"
+          :fileList="fileList"
+          @preview="handlePreview"
           @change="handleChange"
         >
-          <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
-          <div v-else>
-            <a-icon :type="loading ? 'loading' : 'plus'" />
+          <div v-if="fileList.length < 3">
+            <a-icon class="icon">
+              <use xlink:href="#icontianjiatupian1"></use>
+            </a-icon>
             <div class="ant-upload-text">点击添加图片</div>
           </div>
         </a-upload>
+        <a-modal
+          :visible="previewVisible"
+          :footer="null"
+          @cancel="handleCancel"
+        >
+          <img alt="example" style="width: 100%" :src="previewImage" />
+        </a-modal>
       </div>
     </div>
     <div class="commonBoxStyle productIntroduce">
@@ -151,6 +186,7 @@
           type="textarea"
           placeholder="请输入商品描述"
           class="noInput"
+          v-model="submitData.introduce"
         ></a-input>
       </div>
     </div>
@@ -165,14 +201,21 @@
 <script>
   import { Upload } from "ant-design-vue";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
-  function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result));
-    reader.readAsDataURL(img);
-  }
+
   export default {
     data() {
       return {
+        previewVisible: false,
+        previewImage: "",
+        fileList: [
+          // {
+          //   uid: "-1",
+          //   name: "xxx.png",
+          //   status: "done",
+          //   url:
+          //     "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+          // }
+        ],
         defaultCascaderValue: [],
         loading: false,
         imageUrl: "",
@@ -195,10 +238,35 @@
             key: "0571",
             disabled: true
           }
-        ]
+        ],
+        submitData: {
+          productName: "",
+          productNumber: "",
+          brand: "",
+          model: "",
+          minPrice: "",
+          maxPrice: "",
+          sparePartNumber: "",
+          stockQuantity: "",
+          manufacturer: "",
+          capacity: "",
+          unit: "",
+          minOrderQuantity: "",
+          introduce: ""
+        }
       };
     },
     methods: {
+      handleCancel() {
+        this.previewVisible = false;
+      },
+      handlePreview(file) {
+        this.previewImage = file.url || file.thumbUrl;
+        this.previewVisible = true;
+      },
+      handleChange({ fileList }) {
+        this.fileList = fileList;
+      },
       onChange(e) {
         console.log(`checked = ${e.target.checked}`);
       },
@@ -212,29 +280,17 @@
         console.log(this.cities);
         this.secondCity = cityData[value][0];
       },
-      handleChange(info) {
-        if (info.file.status === "uploading") {
-          this.loading = true;
-          return;
-        }
-        if (info.file.status === "done") {
-          // Get this url from response in real world.
-          getBase64(info.file.originFileObj, imageUrl => {
-            this.imageUrl = imageUrl;
-            this.loading = false;
-          });
-        }
-      },
       beforeUpload(file) {
-        const isJPG = file.type === "image/jpeg";
-        if (!isJPG) {
-          this.$message.error("You can only upload JPG file!");
-        }
+        // const isJPG = file.type === "image/jpeg";
+        // if (!isJPG) {
+        //   this.$message.error("You can only upload JPG file!");
+        // }
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
           this.$message.error("Image must smaller than 2MB!");
         }
-        return isJPG && isLt2M;
+        return isLt2M;
+        // return isJPG && isLt2M;
       }
     },
     components: {
@@ -246,6 +302,7 @@
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
+  @import "../../../../assets/scss/_input";
   .publishGoods {
     .commonBoxStyle {
       padding: 4px 20px;
@@ -292,6 +349,9 @@
           line-height: 34px;
           border: 1px solid #cccccc;
           border-radius: 3px;
+        }
+        .bigType {
+          margin-right: 10px;
         }
       }
     }
@@ -348,15 +408,24 @@
         }
       }
     }
-    .specification {
-    }
+
     .productPicture {
       .pictureContent {
+        height: 118px;
+        margin-bottom: 18px;
         /deep/.avatar-uploader {
           .ant-upload.ant-upload-select-picture-card {
             width: 118px;
             height: 118px;
             border: none;
+            .anticon {
+              width: 18px;
+              height: 18px;
+              svg {
+                width: 100%;
+                height: 100%;
+              }
+            }
             .ant-upload-text {
               font-family: PingFangSC-Regular;
               font-size: 12px;
@@ -364,6 +433,17 @@
             }
             img {
               width: 100%;
+            }
+          }
+          .ant-upload-list {
+            .ant-upload-list-item {
+              width: 118px;
+              height: 118px;
+              margin-right: 30px;
+              padding: 0;
+              img {
+                width: 100%;
+              }
             }
           }
         }
