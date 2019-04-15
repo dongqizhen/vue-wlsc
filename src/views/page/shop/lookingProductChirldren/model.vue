@@ -1,6 +1,10 @@
 <template>
   <div class="model">
     <div class="left">
+      <recommends-tab-vue
+        :tabs="['推荐产品(12)', '文章(9)', '视频(8)', '案例(8)']"
+        v-on:tabClick="tabClick"
+      ></recommends-tab-vue>
       <shop-nav-vue :navArr="['发布时间', '按价格', '按好评']"></shop-nav-vue>
       <div class="main-content">
         <ul>
@@ -20,6 +24,7 @@
   import shopNavVue from "../../../../components/common/shopNav.vue";
   import productItemVue from "../../../../components/common/item/productItem.vue";
   import brandCardVue from "../../../../components/common/brandCard.vue";
+  import recommendsTabVue from "../../../../components/common/recommendsTab.vue";
 
   export default {
     data() {
@@ -28,7 +33,11 @@
     components: {
       shopNavVue,
       productItemVue,
-      brandCardVue
+      brandCardVue,
+      recommendsTabVue
+    },
+    methods: {
+      tabClick(i) {}
     }
   };
 </script>
@@ -40,6 +49,10 @@
     justify-content: space-between;
     .left {
       width: 775px;
+      /deep/ .recommend_tabs {
+        margin-bottom: 20px;
+        margin-top: 4px;
+      }
       .main-content {
         margin-right: -7.5px;
         ul {

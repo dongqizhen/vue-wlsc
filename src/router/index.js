@@ -170,6 +170,11 @@ export default new Router({
                 component: () =>
                     import ('../views/page/shop/lookingProductChirldren/model')
             }]
+        }, {
+            name: '关于我们',
+            path: '/aboutUs',
+            component: () =>
+                import ('../views/page/shop/aboutUs')
         }
 
     ]

@@ -94,7 +94,7 @@
       </div>
 
       <div class="right">
-        <brand-card-vue></brand-card-vue>
+        <brand-card-vue v-if="$route.query.nav_index == 1"></brand-card-vue>
       </div>
     </div>
   </div>
