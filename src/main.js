@@ -21,7 +21,8 @@ import {
     LocaleProvider,
     Tooltip,
     Rate,
-    Anchor
+    Anchor,
+    Form
 } from "ant-design-vue";
 import "swiper/dist/css/swiper.css";
 import {
@@ -30,7 +31,7 @@ import {
 
 Vue.config.productionTip = false;
 
-Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor)
+Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form)
 
 new Vue({
     el: '#app',

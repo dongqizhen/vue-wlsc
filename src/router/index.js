@@ -175,6 +175,11 @@ export default new Router({
             path: '/aboutUs',
             component: () =>
                 import ('../views/page/shop/aboutUs')
+        }, {
+            name: '登录',
+            path: '/login',
+            component: () =>
+                import ('../views/page/login/login')
         }
 
     ]
