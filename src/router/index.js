@@ -201,6 +201,11 @@ export default new Router({
             path: '/register/agreement',
             component: () =>
                 import ('../views/page/login/agreement')
+        }, {
+            name: '个人中心',
+            path: '/userCenter',
+            component: () =>
+                import ('../views/page/shop/userCenter')
         }
 
     ]

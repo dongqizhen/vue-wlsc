@@ -8,7 +8,7 @@
         <router-link to="/register" tag="span"><a>免费注册</a></router-link>
       </div>
       <ul class="right">
-        <router-link tag="li" to="#">
+        <router-link tag="li" to="/userCenter">
           <a>
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icongouwuche"></use>

@@ -1,8 +1,8 @@
 <template>
   <center-page
-    titleText="商家中心"
+    titleText="个人中心"
     :dataArr="dataArr"
-    :openKeys="['sub1', 'sub2', 'sub3']"
+    :openKeys="['sub1']"
     :defaultSelectedKeys="['1']"
   ></center-page>
 </template>
@@ -15,35 +15,19 @@
           {
             id: 1,
             key: "sub1",
-            name: "店铺管理",
-            icon: "#icondianpuguanli",
+            name: "",
+            icon: "",
             menus: [
-              { key: "1", name: "店铺首页", href: "/merchant/shopIndex" },
-              { key: "2", name: "店铺信息", href: "/merchant/shopInfo" },
-              { key: "3", name: "店铺认证", href: "/merchant/shopCertification" }
-            ]
-          },
-          {
-            id: 2,
-            key: "sub2",
-            name: "店铺运营",
-            icon: "#icondianpuyunying",
-            menus: [
-              { key: "4", name: "发布产品", href: "/merchant/publishGoods" },
-              { key: "5", name: "产品管理", href: "/merchant/productManage" },
-              { key: "6", name: "询价管理", href: "/merchant/inquiryManage" },
-              { key: "7", name: "订单管理", href: "/merchant/orderManage" }
-            ]
-          },
-          {
-            id: 3,
-            key: "sub3",
-            name: "其他",
-            icon: "#iconqita",
-            menus: [
-              { key: "8", name: "账号安全", href: "/merchant/accountSecurity" },
-              { key: "9", name: "个人中心", href: "/merchant/personalCenter" },
-              { key: "10", name: "消息中心", href: "/merchant/messageCenter" }
+              { key: "1", name: "选购单", href: "/merchant/shopIndex" },
+              { key: "2", name: "我的询价", href: "/merchant/shopInfo" },
+              { key: "3", name: "我的订单", href: "/merchant/shopCertification" },
+              { key: "4", name: "我的报价", href: "/merchant/publishGoods" },
+              { key: "5", name: "我的收藏", href: "/merchant/productManage" },
+              { key: "6", name: "地址管理", href: "/merchant/inquiryManage" },
+              { key: "7", name: "发票管理", href: "/merchant/orderManage" },
+              { key: "10", name: "账号安全", href: "/merchant/accountSecurity" },
+              { key: "8", name: "个人信息", href: "/merchant/personalCenter" },
+              { key: "9", name: "消息中心", href: "/merchant/messageCenter" }
             ]
           }
         ]

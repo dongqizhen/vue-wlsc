@@ -1,55 +1,87 @@
 <template>
-  <center-page
-    titleText="商家中心"
-    :dataArr="dataArr"
-    :openKeys="['sub1', 'sub2', 'sub3']"
-    :defaultSelectedKeys="['1']"
-  ></center-page>
+  <div class="merchant">
+    <a-layout>
+      <a-layout-header>
+        <Header></Header>
+        <slot name="navCenter"></slot>
+      </a-layout-header>
+      <a-layout>
+        <a-layout-sider>
+          <div class="title">
+            <slot name="Icon"></slot>
+            {{ titleText }}
+          </div>
+          <a-menu
+            mode="inline"
+            :openKeys="openKeys"
+            style="width: 170px"
+            :defaultSelectedKeys="defaultSelectedKeys"
+            @click="handleClick"
+          >
+            <a-sub-menu v-for="itemObj in dataArr" :key="itemObj.key">
+              <span slot="title">
+                <svg class="icon" aria-hidden="true">
+                  <use v-bind:xlink:href="itemObj.icon"></use>
+                </svg>
+                <span>{{ itemObj.name }}</span>
+              </span>
+              <a-menu-item
+                v-for="menuItem in itemObj.menus"
+                :key="menuItem.key"
+              >
+                <router-link :to="menuItem.href">
+                  {{ menuItem.name }}
+                </router-link>
+              </a-menu-item>
+            </a-sub-menu>
+          </a-menu>
+        </a-layout-sider>
+        <a-layout-content>
+          <div class="right-content">
+            <router-view></router-view>
+          </div>
+        </a-layout-content>
+      </a-layout>
+      <a-layout-footer>
+        <Footer></Footer>
+      </a-layout-footer>
+    </a-layout>
+  </div>
 </template>
 <script>
-  import centerPage from "../../../components/common/centerPage";
+  import Header from "../header/header";
+  import Footer from "../footer/footer";
   export default {
+    inject: ["reload"],
     data() {
-      return {
-        dataArr: [
-          {
-            id: 1,
-            key: "sub1",
-            name: "店铺管理",
-            icon: "#icondianpuguanli",
-            menus: [
-              { key: "1", name: "店铺首页", href: "/merchant/shopIndex" },
-              { key: "2", name: "店铺信息", href: "/merchant/shopInfo" },
-              { key: "3", name: "店铺认证", href: "/merchant/shopCertification" }
-            ]
-          },
-          {
-            id: 2,
-            key: "sub2",
-            name: "店铺运营",
-            icon: "#icondianpuyunying",
-            menus: [
-              { key: "4", name: "发布产品", href: "/merchant/publishGoods" },
-              { key: "5", name: "产品管理", href: "/merchant/productManage" },
-              { key: "6", name: "询价管理", href: "/merchant/inquiryManage" },
-              { key: "7", name: "订单管理", href: "/merchant/orderManage" }
-            ]
-          },
-          {
-            id: 3,
-            key: "sub3",
-            name: "其他",
-            icon: "#iconqita",
-            menus: [
-              { key: "8", name: "账号安全", href: "/merchant/accountSecurity" },
-              { key: "9", name: "个人中心", href: "/merchant/personalCenter" },
-              { key: "10", name: "消息中心", href: "/merchant/messageCenter" }
-            ]
-          }
-        ]
-      };
+      return {};
     },
-    methods: {},
+    props: {
+      titleText: {
+        type: String,
+        required: true
+      },
+      dataArr: {
+        type: Array,
+        required: true
+      },
+      openKeys: {
+        type: Array,
+        default: []
+      },
+      defaultSelectedKeys: {
+        type: Array,
+        required: true
+      }
+    },
+    methods: {
+      handleClick(e) {},
+      goBack() {
+        this.$router.replace({ path: "/merchant" });
+        //replace替换原路由，作用是避免回退死循环
+        this.reload();
+      }
+    },
     beforeMount() {
       switch (this.$route.path.split("/")[2]) {
         case "shopIndex":
@@ -108,13 +140,14 @@
       window.removeEventListener("popstate", this.goBack, false);
     },
     components: {
-      centerPage
+      Header,
+      Footer
     }
   };
 </script>
 
 <style lang="scss" scoped>
-  @import "../../../assets/scss/_commonScss";
+  @import "../../assets/scss/_commonScss";
   .merchant {
     /deep/.ant-layout {
       background: $base-background;
@@ -205,8 +238,8 @@
                   &.ant-menu-item-selected {
                     padding-right: 20px;
                     background: rgba(241, 2, 21, 0.03)
-                      url("../../../assets/images/redRightArrow.svg") no-repeat
-                      140px center / 14px 26px;
+                      url("../../assets/images/redRightArrow.svg") no-repeat 140px
+                      center / 14px 26px;
                     a {
                       color: $theme-color;
                     }
