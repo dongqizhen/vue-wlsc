@@ -902,7 +902,7 @@
     }
     .right {
       flex: 1;
-      /deep/ > .ant-btn-default {
+      /deep/ & > .ant-btn-default {
         height: 40px;
         width: 152px;
         background: #ffffff;

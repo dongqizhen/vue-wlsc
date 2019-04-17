@@ -1,5 +1,12 @@
 <template>
-  <router-link class="video-item" tag="li" to="/details/videoDetails">
+  <router-link
+    class="video-item"
+    tag="li"
+    :to="{
+      payh: '/details/videoDetails',
+      query: { nav_index: $route.query.nav_index }
+    }"
+  >
     <a target="_blank">
       <div class="video_box"></div>
       <div class="content">

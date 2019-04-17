@@ -1,5 +1,12 @@
 <template>
-  <router-link class="product-item" tag="li" to="/details/productDetails">
+  <router-link
+    class="product-item"
+    tag="li"
+    :to="{
+      path: '/details/productDetails',
+      query: { nav_index: $route.query.nav_index }
+    }"
+  >
     <a target="_blank">
       <li>
         <div class="img">

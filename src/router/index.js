@@ -145,7 +145,6 @@ export default new Router({
             component: () =>
                 import ('../views/page/shop/shopDetails')
         }, {
-
             path: '/lookingProduct',
             component: () =>
                 import ('../views/page/shop/lookingProduct'),
@@ -176,7 +175,11 @@ export default new Router({
             component: () =>
                 import ('../views/page/shop/aboutUs')
         }, {
-
+            name: '参数对比',
+            path: '/comparisonOfParameters',
+            component: () =>
+                import ('../views/page/shop/comparisonOfParameters')
+        }, {
             path: '/login',
             component: () =>
                 import ('../views/page/login/login'),

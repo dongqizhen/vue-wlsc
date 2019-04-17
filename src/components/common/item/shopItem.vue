@@ -1,7 +1,7 @@
 <template>
   <router-link
     tag="li"
-    :to="{ path: 'shopDetails', query: { nav_index: 3 } }"
+    :to="{ path: 'shopDetails', query: { nav_index: $route.query.nav_index } }"
     class="shop-item"
     append
   >

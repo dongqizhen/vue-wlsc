@@ -1,5 +1,9 @@
 <template>
-  <router-link class="model-item" tag="li" to="model">
+  <router-link
+    class="model-item"
+    tag="li"
+    :to="{ path: 'model', query: { nav_index: $route.query.nav_index } }"
+  >
     <a target="_blank">
       <div class="img_box">
         <img src="../../../assets/images/demo.jpg" alt="" />

@@ -5,10 +5,18 @@
       v-on:tabClick="tabClick"
     >
       <a-button slot="btn">
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconcanshuduibi"></use>
-        </svg>
-        参数对比
+        <router-link
+          :to="{
+            path: '/comparisonOfParameters',
+            query: { nav_index: $route.query.nav_index }
+          }"
+          target="_blank"
+        >
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconcanshuduibi"></use>
+          </svg>
+          参数对比
+        </router-link>
       </a-button>
     </recommends-tab-vue>
     <div class="main-content">
@@ -73,7 +81,7 @@
         font-size: 16px;
         font-weight: 500;
         line-height: 40px;
-        display: flex;
+
         display: flex;
         justify-content: center;
         align-items: center;
@@ -81,6 +89,17 @@
         position: absolute;
         right: 0;
         top: -2.5px;
+        a {
+          display: flex;
+          align-items: center;
+          line-height: 38px;
+          .icon {
+            height: 15px;
+            width: 15px;
+            margin-right: 5px;
+            margin-top: 1px;
+          }
+        }
         &:hover {
           opacity: 0.7;
         }
@@ -90,11 +109,11 @@
           align-items: center;
           line-height: 38px;
         }
-
         .icon {
           height: 15px;
           width: 15px;
           margin-right: 5px;
+          margin-top: 1px;
         }
       }
     }
