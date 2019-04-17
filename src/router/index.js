@@ -184,17 +184,17 @@ export default new Router({
                 name: '登录',
                 path: '/',
                 component: () =>
-                    import ('../views/page/login/loginChirldren/loginUp')
+                    import ('../views/page/login/loginChildren/loginUp')
             }, {
                 name: '注册',
                 path: '/register',
                 component: () =>
-                    import ('../views/page/login/loginChirldren/register')
+                    import ('../views/page/login/loginChildren/register')
             }, {
                 name: '忘记密码',
                 path: '/forgetPassword',
                 component: () =>
-                    import ('../views/page/login/loginChirldren/forgetPassword')
+                    import ('../views/page/login/loginChildren/forgetPassword')
             }]
         }, {
             name: '服务协议',
