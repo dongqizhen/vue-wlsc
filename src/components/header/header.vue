@@ -5,7 +5,7 @@
       <div class="left">
         <p>欢迎来到网来商城</p>
         <router-link to="/login">请登录</router-link>
-        <router-link to="#" tag="span"><a>免费注册</a></router-link>
+        <router-link to="/register" tag="span"><a>免费注册</a></router-link>
       </div>
       <ul class="right">
         <router-link tag="li" to="#">

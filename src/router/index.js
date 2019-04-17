@@ -145,7 +145,7 @@ export default new Router({
             component: () =>
                 import ('../views/page/shop/shopDetails')
         }, {
-            name: '找产品',
+
             path: '/lookingProduct',
             component: () =>
                 import ('../views/page/shop/lookingProduct'),
@@ -176,10 +176,31 @@ export default new Router({
             component: () =>
                 import ('../views/page/shop/aboutUs')
         }, {
-            name: '登录',
+
             path: '/login',
             component: () =>
-                import ('../views/page/login/login')
+                import ('../views/page/login/login'),
+            children: [{
+                name: '登录',
+                path: '/',
+                component: () =>
+                    import ('../views/page/login/loginChirldren/loginUp')
+            }, {
+                name: '注册',
+                path: '/register',
+                component: () =>
+                    import ('../views/page/login/loginChirldren/register')
+            }, {
+                name: '忘记密码',
+                path: '/forgetPassword',
+                component: () =>
+                    import ('../views/page/login/loginChirldren/forgetPassword')
+            }]
+        }, {
+            name: '服务协议',
+            path: '/register/agreement',
+            component: () =>
+                import ('../views/page/login/agreement')
         }
 
     ]
