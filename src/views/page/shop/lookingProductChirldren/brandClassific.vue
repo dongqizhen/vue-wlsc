@@ -28,10 +28,19 @@
 
           <ul>
             <router-link
-              :to="{
-                path: 'oneOfBrandClassificne',
-                query: { nav_index: $route.query.nav_index }
-              }"
+              :to="
+                $route.query.nav_index == 1
+                  ? {
+                      path: 'oneOfBrandClassificne',
+                      query: { nav_index: $route.query.nav_index }
+                    }
+                  : $route.query.nav_index == 2
+                  ? {
+                      path: 'brand',
+                      query: { nav_index: $route.query.nav_index }
+                    }
+                  : ''
+              "
               append
               tag="li"
             >
@@ -117,15 +126,22 @@
           </ul>
         </li>
       </ul>
-      <div class="right"></div>
+      <div class="right">
+        <brand-card-vue v-if="$route.query.nav_index == 2"></brand-card-vue>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import brandCardVue from "../../../../components/common/brandCard.vue";
+
   export default {
     data() {
       return {};
+    },
+    components: {
+      brandCardVue
     }
   };
 </script>

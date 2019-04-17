@@ -30,7 +30,7 @@
     },
     {
       title: "找品牌",
-      path: "/"
+      path: "/lookingProduct/oneOfBrandClassificne"
     },
     {
       title: "找店铺",
@@ -38,7 +38,7 @@
     },
     {
       title: "关于我们",
-      path: "/"
+      path: "/aboutUs"
     }
   ];
   export default {

@@ -20,8 +20,12 @@
           </h2>
           <p>Hi,下午好</p>
           <div class="btn">
-            <span class="login_in">登录</span>
-            <span class="sign_in">注册</span>
+            <router-link to="/login" tag="span" class="login_in"
+              >登录</router-link
+            >
+            <router-link to="/register" tag="span" class="sign_in"
+              >注册</router-link
+            >
           </div>
         </div>
         <div class="notice">
@@ -192,6 +196,9 @@
               font-size: 14px;
               color: #ffffff;
               cursor: pointer;
+              &:hover {
+                opacity: 0.9;
+              }
             }
           }
         }

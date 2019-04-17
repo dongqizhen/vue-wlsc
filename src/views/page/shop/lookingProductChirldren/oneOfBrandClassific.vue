@@ -46,7 +46,16 @@
     <div class="content">
       <div class="left">
         <ul>
-          <router-link to="brand" tag="li">
+          <router-link
+            :to="
+              $route.query.nav_index == 2
+                ? { path: '/lookingProduct', query: { nav_index: 2 } }
+                : $route.query.nav_index == 1
+                ? { path: 'brand', query: { nav_index: 1 } }
+                : ''
+            "
+            tag="li"
+          >
             <a target="_blank">
               <div class="img_box"></div>
               松下
@@ -94,7 +103,7 @@
       </div>
 
       <div class="right">
-        <brand-card-vue></brand-card-vue>
+        <brand-card-vue v-if="$route.query.nav_index == 1"></brand-card-vue>
       </div>
     </div>
   </div>

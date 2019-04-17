@@ -22,7 +22,9 @@ import {
     LocaleProvider,
     Tooltip,
     Rate,
-    Upload
+    Upload,
+    Anchor,
+    Form
 } from "ant-design-vue";
 import "swiper/dist/css/swiper.css";
 import {
@@ -30,7 +32,9 @@ import {
 } from 'element-ui';
 Vue.config.productionTip = false;
 
-Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Icon).use(Upload)
+
+Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form).use(Icon).use(Upload)
+
 new Vue({
     el: '#app',
     router,

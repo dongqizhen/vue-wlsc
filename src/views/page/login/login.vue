@@ -1,10 +1,145 @@
 <template>
-  <div></div>
+  <div class="login">
+    <div class="container">
+      <div class="main-container">
+        <h2 class="logo">
+          <img src="../../../assets/images/logo.png" alt="" />
+        </h2>
+        <div class="login-container">
+          <div class="banner">
+            <img src="../../../assets/images/登录注册页插图.png" alt="" />
+          </div>
+          <div class="login-box">
+            <router-view></router-view>
+            <div class="wechat">
+              <span></span>
+              <p>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconweixin"></use>
+                </svg>
+                微信登录
+              </p>
+              <span></span>
+            </div>
+          </div>
+        </div>
+        <div class="slogan">
+          <span></span>
+          这里写一句口号网来商城最棒
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-  export default {};
+  export default {
+    data() {
+      return {};
+    }
+  };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  @import "../../../assets/scss/_commonScss";
+
+  input::-webkit-input-placeholder {
+    color: #ccc;
+    font-size: 15px !important;
+    //line-height: 30px;
+    line-height: normal;
+  }
+
+  #app {
+    height: 100%;
+  }
+  .login {
+    height: 100%;
+    background: #fdf6ea;
+  }
+  .container {
+    background: #fdf6ea;
+    padding: 0;
+
+    .main-container {
+      width: 1200px;
+      margin: 0 auto;
+      .logo {
+        padding: 84px 0;
+        padding-top: 65px;
+        cursor: pointer;
+      }
+      .login-container {
+        height: 535px;
+        background: #fff;
+        width: 948px;
+        margin: 0 auto;
+        box-shadow: 2px 7px 24px 0 rgba(241, 2, 21, 0.09);
+        border-radius: 12px;
+        display: flex;
+        justify-content: flex-start;
+        .banner {
+        }
+        .login-box {
+          /* width: 508px; */
+          height: 100%;
+          flex: 1;
+          margin-left: -14px;
+
+          position: relative;
+          display: flex;
+          justify-content: center;
+          .wechat {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            bottom: 40px;
+            margin: 0 auto;
+            span {
+              display: flex;
+              width: 132px;
+              border-bottom: 1px solid #cccccc;
+            }
+            p {
+              margin: 0 10px;
+              font-size: 15px;
+              color: #999999;
+              display: flex;
+              align-items: center;
+              cursor: pointer;
+              &:hover {
+                opacity: 0.7;
+              }
+              .icon {
+                height: 16px;
+                width: 19px;
+                margin-right: 2px;
+              }
+            }
+          }
+        }
+      }
+      .slogan {
+        font-size: 16px;
+        color: #ee7322;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 77px;
+        padding-bottom: 100px;
+        span {
+          display: flex;
+          width: 124px;
+          height: 2px;
+          transform: scaleX(-1);
+          background-image: linear-gradient(
+            270deg,
+            rgba(238, 115, 34, 0.5) 0%,
+            #ee7322 99%
+          );
+        }
+      }
+    }
+  }
 </style>

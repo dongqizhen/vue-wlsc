@@ -49,6 +49,9 @@
   h6 {
     margin-bottom: 0;
   }
+  #app {
+    height: 100%;
+  }
   .icon {
     width: 1em;
     height: 1em;

@@ -916,6 +916,9 @@
         justify-content: center;
         align-items: center;
         margin-bottom: 12px;
+        &:hover {
+          opacity: 0.7;
+        }
         > span {
           display: flex;
           justify-content: center;
