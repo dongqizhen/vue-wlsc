@@ -112,22 +112,22 @@ export default new Router({
                 path: 'videoDetails',
                 name: '视频详情',
                 component: () =>
-                    import ('../views/page/shop/detaileChirldren/videoDetails')
+                    import ('../views/page/shop/detailsChildren/videoDetails')
             }, {
                 path: 'caseDetails',
                 name: '案例详情',
                 component: () =>
-                    import ('../views/page/shop/detaileChirldren/caseDetails')
+                    import ('../views/page/shop/detailsChildren/caseDetails')
             }, {
                 path: 'articleDetails',
                 name: '文章详情',
                 component: () =>
-                    import ('../views/page/shop/detaileChirldren/articleDetails')
+                    import ('../views/page/shop/detailsChildren/articleDetails')
             }, {
                 path: 'productDetails',
                 name: '产品详情',
                 component: () =>
-                    import ('../views/page/shop/detaileChirldren/productDetails')
+                    import ('../views/page/shop/detailsChildren/productDetails')
             }]
         }, {
             name: "搜索",
@@ -153,22 +153,22 @@ export default new Router({
                 name: '产品分类',
                 path: '/',
                 component: () =>
-                    import ('../views/page/shop/lookingProductChirldren/brandClassific')
+                    import ('../views/page/shop/lookingProductChildren/brandClassific')
             }, {
                 name: '产品分类主页',
                 path: 'oneOfBrandClassificne',
                 component: () =>
-                    import ('../views/page/shop/lookingProductChirldren/oneOfBrandClassific')
+                    import ('../views/page/shop/lookingProductChildren/oneOfBrandClassific')
             }, {
                 name: '品牌主页',
                 path: 'brand',
                 component: () =>
-                    import ('../views/page/shop/lookingProductChirldren/brand')
+                    import ('../views/page/shop/lookingProductChildren/brand')
             }, {
                 name: '型号主页',
                 path: 'model',
                 component: () =>
-                    import ('../views/page/shop/lookingProductChirldren/model')
+                    import ('../views/page/shop/lookingProductChildren/model')
             }]
         }, {
             name: '关于我们',
