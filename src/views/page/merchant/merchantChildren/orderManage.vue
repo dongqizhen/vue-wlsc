@@ -81,22 +81,11 @@
           </ul>
         </div>
         <div class="tfooter">
-          <div class="checkedAllBox">
-            <div class="left-box">
-              <span>
-                <a-checkbox @change="onCheckAllChange" :checked="checkAll">
-                </a-checkbox>
-              </span>
-              <span>全选</span>
-              <span>
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#iconshanchu"></use>
-                </svg>
-                删除
-              </span>
-              <span>共<i>2</i>条</span>
-            </div>
-          </div>
+          <checkAll
+            :amount="checkedList.length"
+            :checkAll="checkAll"
+            v-on:isCheckAll="isCheckAllMethod"
+          ></checkAll>
         </div>
       </div>
     </div>
@@ -105,9 +94,12 @@
 <script>
   import manageNumberNav from "../../../../components/common/manageNumberNav";
   import orderTitle from "../../../../components/common/orderTitle";
+  import checkAll from "../../../../components/common/checkAll";
   export default {
     data() {
       return {
+        data: ["1", "2", "3"],
+        checkedList: [],
         checkAll: false,
         tabs: [
           {
@@ -149,12 +141,25 @@
       };
     },
     methods: {
+      isCheckAllMethod(val) {
+        if (val) {
+          this.checkAll = true;
+          this.checkedList = [];
+          for (const val of this.data) {
+            this.checkedList.push(val.id);
+          }
+        } else {
+          this.checkAll = false;
+          this.checkedList = [];
+        }
+      },
       onPanelChange() {},
       onCheckAllChange() {}
     },
     components: {
       manageNumberNav,
-      orderTitle
+      orderTitle,
+      checkAll
     }
   };
 </script>

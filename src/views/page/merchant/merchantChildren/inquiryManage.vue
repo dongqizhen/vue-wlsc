@@ -76,22 +76,11 @@
               <div>删除订单</div>
             </div>
           </ul>
-          <div class="checkedAllBox">
-            <div class="left-box">
-              <span>
-                <a-checkbox @change="onCheckAllChange" :checked="checkAll">
-                </a-checkbox>
-              </span>
-              <span>全选</span>
-              <span>
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#iconshanchu"></use>
-                </svg>
-                删除
-              </span>
-              <span>共<i>2</i>条</span>
-            </div>
-          </div>
+          <checkAll
+            :amount="checkedList.length"
+            :checkAll="checkAll"
+            v-on:isCheckAll="isCheckAllMethod"
+          ></checkAll>
         </div>
       </div>
     </div>
@@ -131,6 +120,7 @@
   const defaultCheckedList = [];
   import _ from "lodash";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
+  import checkAll from "../../../../components/common/checkAll";
   export default {
     data() {
       return {
@@ -160,6 +150,18 @@
       };
     },
     methods: {
+      isCheckAllMethod(val) {
+        if (val) {
+          this.checkAll = true;
+          this.checkedList = [];
+          for (const val of this.data) {
+            this.checkedList.push(val.id);
+          }
+        } else {
+          this.checkAll = false;
+          this.checkedList = [];
+        }
+      },
       onChange(id) {
         if (_.indexOf(this.checkedList, id) == -1) {
           this.checkedList.push(id);
@@ -212,7 +214,8 @@
       }
     },
     components: {
-      commonTitle
+      commonTitle,
+      checkAll
     }
   };
 </script>

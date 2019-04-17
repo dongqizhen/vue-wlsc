@@ -30,13 +30,21 @@
               style="width: 136px;margin-right:10px;"
               @change="handleProductBigTypeChange"
               :options="options"
-            />
+            >
+              <a-icon slot="suffixIcon" class="icon">
+                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+              </a-icon>
+            </a-select>
             <a-select
               defaultValue="请选择小类"
               style="width: 136px"
               @change="handleProductSmallTypeChange"
               :options="options"
-            />
+            >
+              <a-icon slot="suffixIcon" class="icon">
+                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+              </a-icon>
+            </a-select>
           </div>
         </div>
         <div class="common">
@@ -47,7 +55,11 @@
               style="width: 136px"
               @change="handleProductTypeChange"
               :options="options"
-            />
+            >
+              <a-icon slot="suffixIcon" class="icon">
+                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+              </a-icon>
+            </a-select>
           </div>
         </div>
         <div class="common">
@@ -76,7 +88,6 @@
               class="priceMax"
               v-model="submitData.maxPrice"
             />
-            <!-- <div class="inquiry">询价</div> -->
             <a-checkbox @change="onChange">询价</a-checkbox>
           </div>
         </div>
@@ -111,7 +122,11 @@
               style="width: 136px"
               @change="handleProductAddressChange"
               :options="options"
-            />
+            >
+              <a-icon slot="suffixIcon" class="icon">
+                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+              </a-icon>
+            </a-select>
           </div>
         </div>
         <div class="common">
@@ -154,52 +169,21 @@
         </span>
       </div>
       <div class="pictureContent">
-        <div class="demo-upload-list" v-for="item in uploadList" :key="item.id">
-          <template v-if="item.status === 'finished'">
-            <img :src="item.url" />
-            <div class="demo-upload-list-cover">
-              <Icon
-                type="ios-eye-outline"
-                @click.native="handleView(item.name)"
-              ></Icon>
-              <Icon
-                type="ios-trash-outline"
-                @click.native="handleRemove(item)"
-              ></Icon>
-            </div>
-          </template>
-          <!-- <template v-else>
-            <Progress
-              v-if="item.showProgress"
-              :percent="item.percentage"
-              hide-info
-            ></Progress>
-          </template> -->
-        </div>
-        <Upload
-          ref="upload"
-          :show-upload-list="false"
-          :default-file-list="defaultList"
-          :on-success="handleSuccess"
-          :format="['jpg', 'jpeg', 'png']"
-          :max-size="2048"
-          :on-format-error="handleFormatError"
-          :on-exceeded-size="handleMaxSize"
-          :before-upload="handleBeforeUpload"
-          multiple
-          type="drag"
-          action="//jsonplaceholder.typicode.com/posts/"
-          style="display: inline-block;width:118px;"
+        <div
+          v-for="file in uploadList"
+          :key="file.uid"
+          class="uploadItem"
+          :data-id="file.uid"
         >
-          <div style="width: 118px;height:118px;line-height: 118px;">
-            <Icon type="ios-camera" size="40"></Icon>
+          <img :src="file.url" />
+          <div class="demo-upload-list-cover">
+            <svg class="icon" aria-hidden="true" @click="handleRemove(file)">
+              <use xlink:href="#iconshangchuanshangpinguanbi"></use>
+            </svg>
           </div>
-        </Upload>
-
-        <!-- <div v-for="file in fileList" :key="file.uid" class="">
-          <img :src="file.imageUrl" />
         </div>
         <a-upload
+          ref="upload"
           listType="picture-card"
           class="avatar-uploader"
           :showUploadList="false"
@@ -207,13 +191,13 @@
           :beforeUpload="beforeUpload"
           @change="handleChange"
         >
-          <div v-if="fileList.length < 3">
+          <div v-if="uploadList.length < 3">
             <a-icon class="icon">
               <use xlink:href="#icontianjiatupian1"></use>
             </a-icon>
             <div class="ant-upload-text">点击添加图片</div>
           </div>
-        </a-upload> -->
+        </a-upload>
       </div>
     </div>
     <div class="commonBoxStyle productIntroduce">
@@ -245,36 +229,8 @@
   export default {
     data() {
       return {
-        defaultList: [
-          {
-            name: "a42bdcc1178e62b4694c830f028db5c0",
-            url:
-              "https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar"
-          },
-          {
-            name: "bc7521e033abdd1e92222d733590f104",
-            url:
-              "https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar"
-          }
-        ],
-        imgName: "",
-        visible: false,
         uploadList: [],
-        previewVisible: false,
-        previewImage: "",
-        fileList: [
-          // {
-          //   uid: "-1",
-          //   name: "xxx.png",
-          //   status: "done",
-          //   url:
-          //     "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-          // }
-        ],
         defaultCascaderValue: [],
-        loading: false,
-        imageUrl: "",
-        introduce: "",
         options: [
           {
             label: "北京",
@@ -312,58 +268,28 @@
       };
     },
     methods: {
-      handleView(name) {
-        this.imgName = name;
-        this.visible = true;
-      },
       handleRemove(file) {
-        const fileList = this.$refs.upload.fileList;
-        this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+        this.uploadList.splice(this.uploadList.indexOf(file), 1);
       },
-      handleSuccess(res, file) {
-        console.log(res, file);
-        // file.url =
-        //   "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
-        // file.name = "7eb99afb9d5f317c912f08b5212fd69a";
-      },
-      handleFormatError(file) {
-        this.$Notice.warning({
-          title: "The file format is incorrect",
-          desc:
-            "File format of " +
-            file.name +
-            " is incorrect, please select jpg or png."
-        });
-      },
-      handleMaxSize(file) {
-        this.$Notice.warning({
-          title: "Exceeding file size limit",
-          desc: "File  " + file.name + " is too large, no more than 2M."
-        });
-      },
-      handleBeforeUpload() {
-        const check = this.uploadList.length < 5;
-        if (!check) {
-          this.$Notice.warning({
-            title: "Up to five pictures can be uploaded."
-          });
+      handleChange(info) {
+        for (const val of info.fileList) {
+          val.url =
+            "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
         }
-        return check;
+        this.uploadList = info.fileList;
+        // if (info.file.status === "uploading") {
+        //   this.loading = true;
+        //   return;
+        // }
+        // if (info.file.status == "done") {
+        //   getBase64(info.file.originFileObj, imageUrl => {
+        //     info.fileList[0].imageUrl = imageUrl;
+        //     this.loading = false;
+        //   });
+        //   this.fileList = info.fileList;
+        //   console.log(this.fileList);
+        // }
       },
-      // handleChange(info) {
-      //   if (info.file.status === "uploading") {
-      //     this.loading = true;
-      //     return;
-      //   }
-      //   if (info.file.status == "done") {
-      //     getBase64(info.file.originFileObj, imageUrl => {
-      //       info.fileList[0].imageUrl = imageUrl;
-      //       this.loading = false;
-      //     });
-      //     this.fileList = info.fileList;
-      //     console.log(this.fileList);
-      //   }
-      // },
       onChange(e) {
         console.log(`checked = ${e.target.checked}`);
       },
@@ -391,11 +317,7 @@
       }
     },
     components: {
-      // AUpload: Upload,
       commonTitle
-    },
-    mounted() {
-      this.uploadList = this.$refs.upload.fileList;
     }
   };
 </script>
@@ -538,7 +460,28 @@
           bottom: 0;
           left: 0;
           right: 0;
-          // background: rgba(0, 0, 0, 0.2);
+          .icon {
+            width: 23px;
+            height: 23px;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+          }
+        }
+        .uploadItem {
+          width: 118px;
+          height: 118px;
+          margin-right: 30px;
+          position: relative;
+          img {
+            width: 100%;
+          }
+          &:hover {
+            cursor: pointer;
+            .demo-upload-list-cover {
+              display: block;
+            }
+          }
         }
         /deep/.avatar-uploader {
           .ant-upload.ant-upload-select-picture-card {
