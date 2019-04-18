@@ -120,6 +120,7 @@
             html-type="submit"
             class="login-form-button"
             :disabled="hasErrors(form.getFieldsError())"
+            @click="changeLoginState(true)"
           >
             登录
           </a-button>
@@ -130,11 +131,13 @@
 </template>
 
 <script>
+  import { mapMutations } from "vuex";
   export default {
     data() {
       return {};
     },
     methods: {
+      ...mapMutations(["changeLoginState"]),
       callback() {},
       handleSubmit(e) {
         e.preventDefault();

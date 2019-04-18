@@ -341,10 +341,18 @@
     </div>
     <div class="right">
       <a-button>
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconcanshuduibi"></use>
-        </svg>
-        参数对比
+        <router-link
+          :to="{
+            path: '/comparisonOfParameters',
+            query: { nav_index: $route.query.nav_index }
+          }"
+          target="_blank"
+        >
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconcanshuduibi"></use>
+          </svg>
+          参数对比
+        </router-link>
       </a-button>
       <shop-card-vue></shop-card-vue>
     </div>
@@ -520,6 +528,9 @@
               height: 100%;
               display: flex;
               align-items: center;
+              &.swiper-button-disabled {
+                cursor: not-allowed !important;
+              }
             }
             .swiper-button-prev {
               left: 0;
@@ -902,7 +913,7 @@
     }
     .right {
       flex: 1;
-      /deep/ & > .ant-btn-default {
+      .ant-btn-default {
         height: 40px;
         width: 152px;
         background: #ffffff;
@@ -916,6 +927,18 @@
         justify-content: center;
         align-items: center;
         margin-bottom: 12px;
+        a {
+          display: flex;
+          align-items: center;
+          line-height: 38px;
+          text-decoration: none;
+          .icon {
+            height: 15px;
+            width: 15px;
+            margin-right: 5px;
+            margin-top: 1px;
+          }
+        }
         &:hover {
           opacity: 0.7;
         }

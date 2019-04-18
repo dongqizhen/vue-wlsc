@@ -49,6 +49,7 @@
       display: flex;
       height: 100%;
       flex-direction: column;
+      text-decoration: none;
     }
     &:hover {
       .top {

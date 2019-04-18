@@ -28,7 +28,7 @@
           </div>
           <div class="col" v-for="(item, i) in arr" :key="item.id">
             <div class="header">
-              <p :class="item.name || 'no-data'">
+              <p :class="item.name ? '' : 'no-data'">
                 {{ item.name || "暂无型号" }}
               </p>
 
@@ -37,7 +37,82 @@
                   <use xlink:href="#icontianjiaduibichanpinshanchu"></use>
                 </svg>
               </span>
-              <a-button type="primary">更换型号</a-button>
+              <a-button type="primary" @click.self.stop="changeModel(i)"
+                >更换型号</a-button
+              >
+              <transition name="bounce">
+                <div class="modal-content" v-if="defaultShowIndex == i">
+                  <h2>品牌</h2>
+                  <ul class="index-list">
+                    <li>
+                      <h3>A</h3>
+                      <ul>
+                        <li>
+                          <div class="img_box"></div>
+                          <p>奥洁Aojie</p>
+                        </li>
+                        <li>
+                          <div class="img_box"></div>
+                          <p>澳柯玛</p>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <h3>B</h3>
+                      <ul>
+                        <li>
+                          <div class="img_box"></div>
+                          <p>奥洁Aojie</p>
+                        </li>
+                        <li>
+                          <div class="img_box"></div>
+                          <p>澳柯玛</p>
+                        </li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      <h3>B</h3>
+                      <ul>
+                        <li>
+                          <div class="img_box"></div>
+                          <p>奥洁Aojie</p>
+                        </li>
+                        <li>
+                          <div class="img_box"></div>
+                          <p>澳柯玛</p>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <h3>B</h3>
+                      <ul>
+                        <li>
+                          <div class="img_box"></div>
+                          <p>奥洁Aojie</p>
+                        </li>
+                        <li>
+                          <div class="img_box"></div>
+                          <p>澳柯玛</p>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <h3>B</h3>
+                      <ul>
+                        <li>
+                          <div class="img_box"></div>
+                          <p>奥洁Aojie</p>
+                        </li>
+                        <li>
+                          <div class="img_box"></div>
+                          <p>澳柯玛</p>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </transition>
             </div>
             <ul>
               <li>参数一</li>
@@ -68,6 +143,7 @@
   import sideBar from "../../../components/sideBar/sideBar.vue";
   import { mixin } from "../../../components/mixin/mixin";
   import _ from "lodash";
+
   export default {
     data() {
       return {
@@ -88,7 +164,8 @@
             name: "",
             id: 4
           }
-        ]
+        ],
+        defaultShowIndex: null
       };
     },
     mixins: [mixin],
@@ -99,6 +176,7 @@
       Nav,
       sideBar
     },
+    mounted() {},
     methods: {
       delbtnClick(i) {
         if (this.arr.length > 4) {
@@ -118,6 +196,13 @@
           name: "",
           id: this.arr.length + 1
         });
+      },
+      changeModel(i, e) {
+        // e.stopPropagation();
+        this.defaultShowIndex = i;
+      },
+      hideClick() {
+        this.defaultShowIndex = null;
       }
     }
   };
@@ -125,6 +210,21 @@
 
 <style lang="scss" scoped>
   @import "../../../assets/scss/_commonScss";
+  .bounce-enter-active {
+    animation: bounce-in 0.5s;
+  }
+
+  @keyframes bounce-in {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
   .container {
     .commonWidth {
       > h2 {
@@ -166,7 +266,7 @@
             flex-wrap: wrap;
             font-weight: 600;
             padding: 0 10px;
-            p {
+            > p {
               display: flex;
               align-items: flex-start;
               text-align: center;
@@ -219,8 +319,103 @@
                 border-color: #f5f5f5;
               }
             }
+            .modal-content {
+              width: 100%;
+              width: 241px;
+              height: 405px;
+              background: #fff;
+              box-shadow: $base-box-shadow;
+              position: absolute;
+              top: 133px;
+              left: 50%;
+              z-index: 9999;
+              border-radius: 3px;
+              display: flex;
+              flex-direction: column;
+              border: 1px solid #dddddd;
+              h2 {
+                height: 30px;
+                border-bottom: 1px solid #dddddd;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                font-size: 12px;
+                color: #666666;
+                padding-left: 12px;
+                font-weight: 600;
+              }
+              > ul {
+                flex: 1;
+                overflow: auto;
+                &::-webkit-scrollbar {
+                  width: 2px;
+                  height: 2px;
+
+                  background-color: #b5b1b1;
+                }
+                &::-webkit-scrollbar-track {
+                  background: #f6f6f6;
+                  border-radius: 2px;
+                }
+                &::-webkit-scrollbar-thumb {
+                  background: #aaa;
+                  border-radius: 2px;
+                }
+                > li {
+                  h3 {
+                    height: 23px;
+                    background: #f5f5f5;
+                    font-size: 12px;
+                    color: #999999;
+                    font-weight: 600;
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    padding-left: 12px;
+                  }
+                  ul {
+                    li {
+                      padding-left: 12px;
+                      display: flex;
+                      justify-content: flex-start;
+                      align-items: center;
+                      height: 34px;
+                      border-bottom: 1px solid #dddddd;
+                      cursor: pointer;
+                      font-size: 12px;
+                      color: #999999;
+                      &:hover {
+                        color: $theme-color;
+                        background: rgba(245, 166, 35, 0.03);
+                      }
+                      .img_box {
+                        height: 18px;
+                        width: 25px;
+                        background: $base-background;
+                        margin-right: 6px;
+                      }
+                      p {
+                        display: flex;
+                        line-height: 34px;
+                      }
+                      &:last-child {
+                        border: 0;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            .fix-box {
+              position: fixed;
+              height: 100%;
+              width: 100%;
+              top: 0;
+              left: 0;
+              z-index: 0;
+            }
           }
-          ul {
+          > ul {
             li {
               border-top: 1px solid #e0e7ea;
               border-right: 1px solid #e0e7ea;
@@ -272,6 +467,7 @@
         padding: 0;
         cursor: pointer;
         display: flex;
+        z-index: 2;
         span {
           font-size: 14px;
           color: #ffffff;

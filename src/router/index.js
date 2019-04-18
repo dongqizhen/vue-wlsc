@@ -180,6 +180,11 @@ export default new Router({
             component: () =>
                 import ('../views/page/shop/comparisonOfParameters')
         }, {
+            name: '店铺介绍',
+            path: '/shopIntroduction',
+            component: () =>
+                import ('../views/page/shop/shopIntroduction')
+        }, {
             path: '/login',
             component: () =>
                 import ('../views/page/login/login'),
