@@ -70,6 +70,34 @@
           height: 16px;
         }
       }
+      &::after {
+        content: "回复";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 15px;
+        color: #ffffff;
+        background: $theme-color;
+        display: none;
+      }
+      &:nth-child(2) {
+        &::after {
+          content: "收藏";
+        }
+      }
+      &:nth-child(3) {
+        &::after {
+          content: "点赞";
+        }
+      }
+      &:nth-child(4) {
+        &::after {
+          content: "分享";
+        }
+      }
     }
   }
 </style>

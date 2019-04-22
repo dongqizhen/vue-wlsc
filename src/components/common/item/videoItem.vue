@@ -3,7 +3,7 @@
     class="video-item"
     tag="li"
     :to="{
-      payh: '/details/videoDetails',
+      path: '/details/videoDetails',
       query: { nav_index: $route.query.nav_index }
     }"
   >

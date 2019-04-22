@@ -94,7 +94,7 @@
 
 <style scoped lang="scss">
   @import "../../../assets/scss/_commonScss";
-  li {
+  li.case-item {
     height: 181px;
     margin-bottom: 16px;
     background: #fff;

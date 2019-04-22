@@ -29,6 +29,7 @@
         <a-input
           placeholder="请输入验证码"
           maxlength="6"
+          autocomplete="off"
           v-decorator="[
             'seccode',
             {
@@ -41,13 +42,14 @@
             }
           ]"
         >
-          <span slot="suffix">获取验证码</span>
+          <span slot="suffix" @click="gainCodeHandler">{{ content }}</span>
         </a-input>
       </a-form-item>
       <a-form-item>
         <a-input
           placeholder="请输入新密码，长度不少于6位"
           autocomplete="off"
+          type="password"
           v-decorator="[
             'password',
             {
@@ -55,6 +57,10 @@
                 {
                   required: true,
                   message: '请输入密码'
+                },
+                {
+                  min: 6,
+                  message: '密码长度应不少于6位'
                 }
               ],
               validateTrigger: 'change'
@@ -67,13 +73,17 @@
         <a-input
           placeholder="请再次输入密码"
           autocomplete="off"
+          type="password"
           v-decorator="[
             'confirmPassword',
             {
               rules: [
                 {
                   required: true,
-                  message: '请输入密码'
+                  message: '请确认密码'
+                },
+                {
+                  validator: compareToFirstPassword
                 }
               ],
               validateTrigger: 'change'
@@ -108,12 +118,15 @@
 </template>
 
 <script>
+  import { timer } from "../../../../components/mixin/mixin";
+
   export default {
     data() {
       return {
         checkNick: false
       };
     },
+    mixins: [timer],
     beforeCreate() {
       this.form = this.$form.createForm(this);
     },
@@ -129,6 +142,14 @@
       },
       hasErrors(fieldsError) {
         return Object.keys(fieldsError).some(field => fieldsError[field]);
+      },
+      compareToFirstPassword(rule, value, callback) {
+        const form = this.form;
+        if (value && value !== form.getFieldValue("password")) {
+          callback("两次输入密码不一致");
+        } else {
+          callback();
+        }
       },
       handleChange(e) {
         this.checkNick = e.target.checked;
@@ -201,6 +222,12 @@
                 color: #999999;
               }
             }
+            .ant-form-explain {
+              padding-right: 18px;
+              background: url("../../../../assets/images/err.svg") no-repeat right
+                center;
+              background-size: 15px 15px;
+            }
           }
         }
         &:nth-child(2) {
@@ -222,15 +249,27 @@
       }
       .agreement {
         display: flex;
+        .ant-checkbox-wrapper:hover .ant-checkbox-inner,
+        .ant-checkbox:hover .ant-checkbox-inner,
+        .ant-checkbox-input:focus + .ant-checkbox-inner {
+          border-color: #fb752b;
+        }
         .ant-checkbox-wrapper {
           span:not(.ant-checkbox) {
             padding: 0 5px;
             padding-right: 0;
           }
+
           .ant-checkbox {
             .ant-checkbox-inner {
               width: 15px;
               height: 15px;
+            }
+            &.ant-checkbox-checked {
+              .ant-checkbox-inner {
+                background-color: #fb752b;
+                border-color: #fb752b;
+              }
             }
           }
         }
@@ -251,8 +290,11 @@
         border: 0;
         font-size: 18px;
         color: #ffffff;
-        opacity: 0.32;
+
         font-weight: 600;
+        &:disabled {
+          opacity: 0.32;
+        }
       }
       > span {
         display: flex;

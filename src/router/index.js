@@ -3,7 +3,9 @@ import Router from "vue-router";
 
 Vue.use(Router);
 
-export default new Router({
+
+
+const router = new Router({
     mode: "history",
     base: process.env.BASE_URL,
     routes: [{
@@ -126,6 +128,9 @@ export default new Router({
             }, {
                 path: 'productDetails',
                 name: '产品详情',
+                meta: {
+                    title: '产品详情'
+                },
                 component: () =>
                     import ('../views/page/shop/detailsChildren/productDetails')
             }]
@@ -213,3 +218,13 @@ export default new Router({
 
     ]
 });
+
+router.beforeEach((to, from, next) => {
+    /* 路由发生变化修改页面title */
+    if (to.meta.title) {
+        document.title = to.meta.title
+    }
+    next()
+})
+
+export default router;

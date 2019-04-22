@@ -311,73 +311,6 @@
     },
     mounted() {
       // console.log(Swiper);
-
-      new Swiper(".swiper-container.nav_slide", {
-        slidesPerView: "auto",
-        // freeMode: true,
-        direction: "horizontal",
-        slideToClickedSlide: true,
-        on: {
-          init: function() {
-            console.log(this);
-            // this.marginLeft = $(this.slides.eq(0)).css("margin-left");
-
-            this.navSlideWidth = this.slides[0].clientWidth; //导航字数需要统一,每个导航宽度一致
-            console.log(this.navSlideWidth);
-            /*  bar = this.$el.find('.bar')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         bar.css('width', this.navSlideWidth)
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         bar.transition(tSpeed) */
-            this.navSum = this.slides[this.slides.length - 1].offsetLeft; //最后一个slide的位置
-
-            this.clientWidth = parseInt(this.$wrapperEl.clientWidth); //Nav的可视宽度
-
-            this.navWidth = this.navSlideWidth * this.slides.length;
-            /*  for (i = 0; i < this.slides.length; i++) {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  this.navWidth += parseInt($(this.slides.eq(i)).outerWidth(true));
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                } */
-            //topBar = this.$el.parents('body').find('#top') //页头
-          },
-          touchStart: function() {
-            this.updateSlides();
-          },
-          tap: function(e) {
-            console.log(this);
-            if (this.clickedIndex == undefined) return;
-            // mySwiper.slideTo(this.clickIndex, 0);
-
-            /* $(this.slides[this.clickedIndex])
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              .addClass("active")
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              .siblings()
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              .removeClass("active"); */
-            //导航居中
-            let navActiveSlideLeft = this.slides[this.clickedIndex].offsetLeft; //activeSlide距左边的距离
-            this.setTransition(300);
-
-            if (parseInt(this.navWidth) <= this.clientWidth) {
-              this.setTranslate(0);
-            } else {
-              if (
-                navActiveSlideLeft <
-                (this.clientWidth - parseInt(this.navSlideWidth)) / 2
-              ) {
-                this.setTranslate(0);
-              } else if (
-                navActiveSlideLeft >
-                this.navWidth -
-                  (parseInt(this.navSlideWidth) + this.clientWidth) / 2
-              ) {
-                this.setTranslate(this.clientWidth - this.navWidth);
-              } else {
-                this.setTranslate(
-                  (this.clientWidth - parseInt(this.navSlideWidth)) / 2 -
-                    navActiveSlideLeft +
-                    parseInt(this.marginLeft)
-                );
-              }
-            }
-          }
-        }
-      });
     },
     computed: {
       dragOptions() {
@@ -457,15 +390,15 @@
                   justify-content: center;
                   align-items: center;
                   cursor: pointer;
-                  font-family: PingFangSC-Medium;
+                  font-weight: 600;
                   font-size: 18px;
-                  color: #999999;
+                  color: #666;
                 }
                 .bar {
                   position: absolute;
                   height: 3px;
                   width: 180px;
-                  background: #f5a623;
+                  background: $theme-color;
                   bottom: -0.5px;
                   i {
                     display: flex;
@@ -478,7 +411,7 @@
                     border-left: 5.5px solid transparent;
                     border-right: 5.5px solid transparent;
 
-                    border-bottom: 6px solid #f5a623;
+                    border-bottom: 6px solid $theme-color;
                   }
                 }
               }

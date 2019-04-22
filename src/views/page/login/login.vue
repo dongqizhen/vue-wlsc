@@ -128,16 +128,20 @@
         justify-content: center;
         margin-top: 77px;
         padding-bottom: 100px;
+
         span {
           display: flex;
           width: 124px;
           height: 2px;
           transform: scaleX(-1);
-          background-image: linear-gradient(
-            270deg,
-            rgba(238, 115, 34, 0.5) 0%,
-            #ee7322 99%
-          );
+          background: url("../../../assets/images/line.png") no-repeat center;
+          &:last-child {
+            transform: rotate(360deg);
+            margin-left: 10px;
+          }
+          &:first-child {
+            margin-right: 10px;
+          }
         }
       }
     }

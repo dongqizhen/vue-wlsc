@@ -9,15 +9,53 @@
         <breadcrumb-vue></breadcrumb-vue>
         <div class="select-area">
           选择销售地区：
-          <span>
+          <span @click="selectArea">
             <svg class="icon area" aria-hidden="true">
               <use xlink:href="#iconzhaodianpuweizhi"></use>
             </svg>
-            北京西城区
-            <svg class="icon" aria-hidden="true">
+            {{ selectMainArea }}
+
+            <svg
+              class="icon"
+              aria-hidden="true"
+              :class="areaIsShow && 'active'"
+            >
               <use xlink:href="#iconxuanweizhixialajiantou"></use>
             </svg>
           </span>
+          <transition name="slide-fade">
+            <div class="area-container" v-if="areaIsShow">
+              <h2>
+                <span
+                  :class="isActive == 0 && 'active'"
+                  @click="provinceClick"
+                  >{{ province }}</span
+                >
+                <span :class="isActive != 0 && 'active'" v-if="isActive != 0">{{
+                  city
+                }}</span>
+              </h2>
+              <i></i>
+              <ul v-if="isActive == 0">
+                <li
+                  v-for="(item, i) in area"
+                  :key="`eare-${i}`"
+                  @click="handleClick(item)"
+                >
+                  {{ item }}
+                </li>
+              </ul>
+              <ul v-else>
+                <li
+                  v-for="(item, i) in cityArr"
+                  :key="`city-${i}`"
+                  @click="cityItemClick(item)"
+                >
+                  {{ item }}
+                </li>
+              </ul>
+            </div>
+          </transition>
         </div>
         <product-category-vue></product-category-vue>
         <div class="main-content">
@@ -54,10 +92,50 @@
 
   import { mixin } from "../../../components/mixin/mixin";
 
+  const area = [
+    "安徽省",
+    "北京市",
+    "重庆市",
+    "福建省",
+    "甘肃省",
+    "广东省",
+    "广西壮族自治区",
+    "贵州省",
+    "安徽省",
+    "广东省",
+    "广东省",
+    "广东省",
+    "广东省",
+    "广东省",
+    "广东省",
+    "广东省",
+    "广东省",
+    "广东省"
+  ];
+
+  let cityArr = [
+    "顺义区",
+    "西城区",
+    "东城区",
+    "房山区",
+    "大兴区",
+    "密云区",
+    "海淀区",
+    "海淀区",
+    "海淀区"
+  ];
+
   export default {
     data() {
       return {
-        arr: [1, 2, 3, 4, 5]
+        arr: [1, 2, 3, 4, 5],
+        areaIsShow: false, //控制选择地区弹层是否显示
+        area, //省份列表
+        cityArr, //市列表
+        province: "选择省/直辖市",
+        city: "选择市",
+        isActive: 0,
+        selectMainArea: "北京市西城区"
       };
     },
     mixins: [mixin],
@@ -74,7 +152,27 @@
       shopLeftSideVue,
       shopNavVue
     },
-    created() {}
+    created() {},
+    methods: {
+      selectArea() {
+        this.areaIsShow = !this.areaIsShow;
+        this.isActive = 0;
+        this.province = "选择省/直辖市";
+      },
+      handleClick(val) {
+        console.log(val);
+        this.province = val;
+        this.isActive = 1;
+      },
+      provinceClick() {
+        this.isActive = 0;
+        this.province = "选择省/直辖市";
+      },
+      cityItemClick(item) {
+        this.selectMainArea = this.province + item;
+        this.areaIsShow = false;
+      }
+    }
   };
 </script>
 
@@ -90,6 +188,7 @@
       justify-content: flex-start;
       align-items: center;
       margin-bottom: 30px;
+      position: relative;
       span {
         font-size: 18px;
         color: #333333;
@@ -98,6 +197,7 @@
         justify-content: flex-start;
         align-items: center;
         cursor: pointer;
+
         .area {
           height: 24px;
           width: 18px;
@@ -107,7 +207,82 @@
           width: 12px;
           height: 6px;
           margin-left: 3px;
+          transition: all 0.3s;
+          &.active {
+            transform: rotate(180deg);
+          }
         }
+      }
+      .area-container {
+        position: absolute;
+        background: #fff;
+        box-shadow: $base-box-shadow;
+        padding: 18px 20px;
+        width: 785px;
+        top: 40px;
+        z-index: 100;
+        opacity: 1;
+        h2 {
+          border-bottom: 1px solid #dddddd;
+          display: flex;
+          justify-content: flex-start;
+          span {
+            display: flex;
+            width: 126px;
+            height: 38px;
+            font-weight: 600;
+            font-size: 15px;
+
+            align-items: center;
+            justify-content: center;
+            color: #333333;
+            &.active {
+              background: #019ddd;
+              color: #ffffff;
+            }
+          }
+        }
+        i {
+          display: flex;
+          position: absolute;
+          top: -6px;
+          width: 0px;
+          left: 200px;
+          margin-left: -5.5px;
+          height: 0px;
+
+          border-left: 25px solid transparent;
+          border-right: 25px solid transparent;
+
+          border-bottom: 12px solid #fff;
+        }
+        ul {
+          display: flex;
+          justify-content: flex-start;
+          flex-wrap: wrap;
+          padding-top: 20px;
+          li {
+            width: 25%;
+            display: flex;
+            justify-content: center;
+            line-height: 36px;
+            cursor: pointer;
+            &:hover {
+              color: #019ddd;
+            }
+          }
+        }
+      }
+      .slide-fade-enter-active {
+        transition: all 0.3s ease;
+      }
+      .slide-fade-leave-active {
+        transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+      }
+      .slide-fade-enter,
+      .slide-fade-leave-to {
+        transform: translateY(10px);
+        opacity: 0;
       }
     }
     .main-content {
