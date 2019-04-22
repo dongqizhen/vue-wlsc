@@ -377,7 +377,7 @@
   import shareMenuVue from "../../../../components/common/share/shareMenu.vue";
   import img from "../../../../assets/images/demo.jpg";
   import { Icon } from "ant-design-vue";
-  import modal from "../../../../components/common/modal.vue";
+  import modal from "../../../../components/modal/modal.vue";
   const IconFont = Icon.createFromIconfontCN({
     scriptUrl: "//at.alicdn.com/t/font_1093268_lw1r0m4k91i.js"
   });

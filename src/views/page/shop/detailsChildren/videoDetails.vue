@@ -90,7 +90,7 @@
           >
         </a-tabs>
       </div>
-      <comment-vue :isLogin="isLogin"></comment-vue>
+      <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
       <menu-vue></menu-vue>
     </div>
     <div class="right"></div>
@@ -103,9 +103,7 @@
   import menuVue from "../../../../components/common/share/menu.vue";
   export default {
     data() {
-      return {
-        isLogin: true //是否登录
-      };
+      return {};
     },
     components: {
       shareMenuVue,

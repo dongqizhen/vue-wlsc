@@ -189,6 +189,7 @@
       align-items: center;
       margin-bottom: 30px;
       position: relative;
+
       span {
         font-size: 18px;
         color: #333333;
@@ -283,6 +284,15 @@
       .slide-fade-leave-to {
         transform: translateY(10px);
         opacity: 0;
+      }
+    }
+    /deep/ .product-category {
+      .product {
+        h2 {
+          .btn {
+            display: none;
+          }
+        }
       }
     }
     .main-content {

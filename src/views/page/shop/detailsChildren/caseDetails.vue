@@ -67,7 +67,7 @@
           <share-menu-vue></share-menu-vue>
         </div>
       </div>
-      <comment-vue :isLogin="isLogin"></comment-vue>
+      <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
       <menu-vue></menu-vue>
     </div>
     <div class="right"></div>
