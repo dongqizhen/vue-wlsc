@@ -121,109 +121,9 @@
     <Footer />
     <!-- 侧边栏 -->
     <side-bar />
-    <modal :isShow="visible" :options="options">
-      <div slot="content">
-        <div class="common_brand">
-          <h2>常用品牌<span>鼠标拖拽可排序，点击“x”取消</span></h2>
-          <draggable
-            class="list-group"
-            v-model="myArray2"
-            v-bind="dragOptions"
-            @start="drag = true"
-            @end="drag = false"
-          >
-            <transition-group
-              tag="ul"
-              class="common"
-              type="transition"
-              :name="!drag ? 'flip-list' : null"
-            >
-              <li v-for="(item, i) in myArray2" :key="`key-${i}`">
-                <div class="img_box"></div>
-                {{ item }}
-                <i>
-                  <svg class="icon" aria-hidden="true">
-                    <use
-                      xlink:href="#iconguanlichangyongpinpaiquxiaochahao"
-                    ></use>
-                  </svg>
-                </i>
-              </li>
-            </transition-group>
-          </draggable>
-        </div>
-        <div class="all_brand">
-          <h2>全部分类<span>点击即可设为常用分类</span></h2>
-          <div class="word_nav">
-            <span>全部</span>
-            <ul>
-              <li>A</li>
-              <li>B</li>
-              <li>C</li>
-              <li>D</li>
-              <li>E</li>
-              <li>F</li>
-              <li>G</li>
-              <li>H</li>
-              <li>I</li>
-              <li>J</li>
-              <li>K</li>
-              <li>L</li>
-              <li>M</li>
-              <li>N</li>
-              <li>O</li>
-              <li>P</li>
-              <li>Q</li>
-              <li>R</li>
-              <li>S</li>
-              <li>T</li>
-              <li>U</li>
-              <li>V</li>
-              <li>W</li>
-              <li>X</li>
-              <li>Y</li>
-              <li>Z</li>
-            </ul>
-            <div class="inp_box">
-              <input type="text" placeholder="请输入品牌名称" />
-              <span>搜索</span>
-            </div>
-          </div>
-
-          <draggable
-            v-model="myArray"
-            v-bind="dragOptions"
-            @start="drag = true"
-            @end="drag = false"
-          >
-            <transition-group
-              tag="ul"
-              class="common"
-              type="transition"
-              :name="!drag ? 'flip-list' : null"
-            >
-              <li v-for="(item, i) in myArray" :key="i">
-                <div class="img_box"></div>
-                {{ item }}
-                <i>
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#iconguanlichangyongpinpaitianjia"></use>
-                  </svg>
-                </i>
-              </li>
-            </transition-group>
-          </draggable>
-        </div>
-        <a-button
-          key="submit"
-          type="primary"
-          @click="handleOk"
-          :loading="false"
-        >
-          完成
-        </a-button>
-      </div>
-    </modal>
+    <common-brands-modal-vue
+      :brandVisible="brandVisible"
+    ></common-brands-modal-vue>
   </div>
 </template>
 
@@ -233,8 +133,7 @@
   import Footer from "../components/footer/footer.vue";
   import sideBar from "../components/sideBar/sideBar.vue";
   import banner from "../components/common/banner.vue";
-  import modal from "../components/common/modal.vue";
-  import draggable from "vuedraggable";
+
   import { Icon } from "ant-design-vue";
   import caseItem from "../components/common/item/caseItem.vue";
   import articleItem from "../components/common/item/articleItem.vue";
@@ -244,40 +143,17 @@
   import Nav from "../components/common/nav.vue";
   import productCategoryVue from "../components/common/productCategory.vue";
   import recommendsTabVue from "../components/common/recommendsTab.vue";
+  import CommonBrandsModalVue from "../components/modal/CommonBrandsModal.vue";
 
   const IconFont = Icon.createFromIconfontCN({
     scriptUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js"
   });
-  let myArray = [
-    "迈瑞",
-    "飞利浦",
-    "飞利浦",
-    "飞利浦",
-    "飞利浦",
-    "飞利浦",
-    "飞利浦",
-    "飞利浦",
-    "飞利浦",
-    "飞利浦"
-  ];
-
-  let myArray2 = ["西门子", "奔腾"];
 
   export default {
     data() {
       return {
-        visible: false, //控制modal层弹出
-        options: {
-          title: "管理常用品牌",
-          closable: true,
-          maskClosable: true,
-          wrapClassName: "commonBrand",
-          centered: true
-        },
-        myArray,
-        myArray2,
-        drag: false,
-        recommend_tabs_index: 0
+        recommend_tabs_index: 0,
+        brandVisible: false //控制modal层弹出
       };
     },
     components: {
@@ -286,8 +162,7 @@
       search,
       sideBar,
       banner,
-      modal,
-      draggable,
+      CommonBrandsModalVue,
       IconFont,
       caseItem,
       articleItem,
@@ -298,96 +173,16 @@
       recommendsTabVue
     },
     methods: {
-      handleClick() {
-        this.visible = true;
-      },
-      handleOk() {
-        this.visible = false;
-      },
       tabClick(i) {
         this.recommend_tabs_index = i;
       },
-      moreButtonClick() {}
+      moreButtonClick() {},
+      handleClick() {
+        this.brandVisible = true;
+      }
     },
     mounted() {
       // console.log(Swiper);
-
-      new Swiper(".swiper-container.nav_slide", {
-        slidesPerView: "auto",
-        // freeMode: true,
-        direction: "horizontal",
-        slideToClickedSlide: true,
-        on: {
-          init: function() {
-            console.log(this);
-            // this.marginLeft = $(this.slides.eq(0)).css("margin-left");
-
-            this.navSlideWidth = this.slides[0].clientWidth; //导航字数需要统一,每个导航宽度一致
-            console.log(this.navSlideWidth);
-            /*  bar = this.$el.find('.bar')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         bar.css('width', this.navSlideWidth)
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         bar.transition(tSpeed) */
-            this.navSum = this.slides[this.slides.length - 1].offsetLeft; //最后一个slide的位置
-
-            this.clientWidth = parseInt(this.$wrapperEl.clientWidth); //Nav的可视宽度
-
-            this.navWidth = this.navSlideWidth * this.slides.length;
-            /*  for (i = 0; i < this.slides.length; i++) {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  this.navWidth += parseInt($(this.slides.eq(i)).outerWidth(true));
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                } */
-            //topBar = this.$el.parents('body').find('#top') //页头
-          },
-          touchStart: function() {
-            this.updateSlides();
-          },
-          tap: function(e) {
-            console.log(this);
-            if (this.clickedIndex == undefined) return;
-            // mySwiper.slideTo(this.clickIndex, 0);
-
-            /* $(this.slides[this.clickedIndex])
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              .addClass("active")
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              .siblings()
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              .removeClass("active"); */
-            //导航居中
-            let navActiveSlideLeft = this.slides[this.clickedIndex].offsetLeft; //activeSlide距左边的距离
-            this.setTransition(300);
-
-            if (parseInt(this.navWidth) <= this.clientWidth) {
-              this.setTranslate(0);
-            } else {
-              if (
-                navActiveSlideLeft <
-                (this.clientWidth - parseInt(this.navSlideWidth)) / 2
-              ) {
-                this.setTranslate(0);
-              } else if (
-                navActiveSlideLeft >
-                this.navWidth -
-                  (parseInt(this.navSlideWidth) + this.clientWidth) / 2
-              ) {
-                this.setTranslate(this.clientWidth - this.navWidth);
-              } else {
-                this.setTranslate(
-                  (this.clientWidth - parseInt(this.navSlideWidth)) / 2 -
-                    navActiveSlideLeft +
-                    parseInt(this.marginLeft)
-                );
-              }
-            }
-          }
-        }
-      });
-    },
-    computed: {
-      dragOptions() {
-        return {
-          animation: 200,
-          group: "description",
-          disabled: false,
-          ghostClass: "ghost"
-        };
-      }
     }
   };
 </script>
@@ -457,15 +252,15 @@
                   justify-content: center;
                   align-items: center;
                   cursor: pointer;
-                  font-family: PingFangSC-Medium;
+                  font-weight: 600;
                   font-size: 18px;
-                  color: #999999;
+                  color: #666;
                 }
                 .bar {
                   position: absolute;
                   height: 3px;
                   width: 180px;
-                  background: #f5a623;
+                  background: $theme-color;
                   bottom: -0.5px;
                   i {
                     display: flex;
@@ -478,7 +273,7 @@
                     border-left: 5.5px solid transparent;
                     border-right: 5.5px solid transparent;
 
-                    border-bottom: 6px solid #f5a623;
+                    border-bottom: 6px solid $theme-color;
                   }
                 }
               }

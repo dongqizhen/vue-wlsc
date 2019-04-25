@@ -169,7 +169,7 @@
             color: #333333;
             margin-bottom: 21.5px;
             position: relative;
-            cursor: move;
+            cursor: pointer;
 
             .img_box {
               background: #fff;
@@ -192,6 +192,11 @@
         }
         .common_brand {
           margin-bottom: 24px;
+          .list-group {
+            li {
+              cursor: move;
+            }
+          }
         }
         .all_brand {
           overflow: hidden;
@@ -349,6 +354,97 @@
         }
       }
     }
+    &.commonType {
+      .ant-modal {
+        .ant-modal-body {
+          .common {
+            min-height: 40px;
+
+            padding: 0 5px;
+            padding-top: 6px;
+            > li {
+              margin-bottom: 0px;
+              font-size: 14px;
+              color: #333333;
+              height: 28px;
+              width: auto;
+              background: #ffffff;
+              border: 1px solid #cccccc;
+              border-radius: 14px;
+              padding: 0 10px;
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+              line-height: 26px;
+              margin-right: 12px;
+              span {
+                display: flex;
+                justify-content: flex-start;
+              }
+              i {
+                position: static;
+                display: flex;
+                align-items: center;
+                padding-left: 8px;
+                &:hover {
+                  opacity: 0.7;
+                }
+                .icon {
+                  height: 9px;
+                  width: 9px;
+                }
+              }
+            }
+          }
+          .all_brand {
+            .word_nav {
+              height: 40px;
+              border-bottom: 1px solid #cccccc;
+              .swiper-wrapper {
+                position: relative;
+                .swiper-slide {
+                  width: 90px;
+                  font-size: 15px;
+                  line-height: 40px;
+                  color: #666666;
+                  cursor: pointer;
+                  &:hover {
+                    color: $theme-color;
+                  }
+                }
+                .bar {
+                  width: 60px;
+                  height: 2px;
+                  background: $theme-color;
+                  position: absolute;
+                  bottom: 0px;
+                }
+              }
+            }
+            .common {
+              background: #fff;
+              padding-left: 0;
+              padding-right: 0;
+              li {
+                background: #ffffff;
+                margin-bottom: 9px;
+                border-radius: 1px;
+                span {
+                  font-size: 13px;
+                  color: #666666;
+                  i {
+                    .icon {
+                      height: 12px;
+                      width: 12px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
   .success {
     .ant-modal {
@@ -368,14 +464,16 @@
               color: #333333;
               font-weight: 600;
               display: flex;
+              height: 34px;
               justify-content: flex-start;
               align-items: center;
-              line-height: 30px;
+              line-height: 34px;
               margin-bottom: 40px;
               .icon {
                 height: 34px;
                 width: 34px;
                 margin-right: 12px;
+                margin-top: 2px;
               }
             }
             .btn {

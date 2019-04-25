@@ -1,14 +1,23 @@
 <template>
   <div class="brand">
+    <breadcrumb-vue :routes="routes"></breadcrumb-vue>
     <recommends-tab-vue
       :tabs="['型号列表(4)', '文章(9)', '视频(8)', '案例(8)']"
       v-on:tabClick="tabClick"
     >
       <a-button slot="btn">
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconcanshuduibi"></use>
-        </svg>
-        参数对比
+        <router-link
+          :to="{
+            path: '/comparisonOfParameters',
+            query: { nav_index: $route.query.nav_index }
+          }"
+          target="_blank"
+        >
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconcanshuduibi"></use>
+          </svg>
+          参数对比
+        </router-link>
       </a-button>
     </recommends-tab-vue>
     <div class="main-content">
@@ -31,18 +40,66 @@
   import modelItemVue from "../../../../components/common/item/modelItem.vue";
   import brandCardVue from "../../../../components/common/brandCard.vue";
   import recommendsTabVue from "../../../../components/common/recommendsTab.vue";
+  import breadcrumbVue from "../../../../components/common/breadcrumb.vue";
 
   export default {
     data() {
       return {
-        arr: [1, 2, 3, 4, 5]
+        arr: [1, 2, 3, 4, 5],
+        routes: ""
       };
     },
     components: {
       shopNavVue,
       modelItemVue,
       brandCardVue,
-      recommendsTabVue
+      recommendsTabVue,
+      breadcrumbVue
+    },
+    created() {
+      this.routes =
+        this.$route.query.nav_index == 2
+          ? [
+              {
+                name: "首页",
+                path: "/"
+              },
+              {
+                name: "找品牌",
+                path:
+                  "/lookingProduct/oneOfBrandClassificne?nav_index=" +
+                  this.$route.query.nav_index
+              },
+              {
+                name: "松下",
+                path: "/lookingProduct?nav_index=" + this.$route.query.nav_index
+              },
+              {
+                name: "超声手术设备",
+                path: "/lookingProduct/brand"
+              }
+            ]
+          : [
+              {
+                name: "首页",
+                path: "/"
+              },
+              {
+                name: "找产品",
+                path: "/lookingProduct?nav_index=" + this.$route.query.nav_index
+              },
+              {
+                name: "超声手术设备",
+                path:
+                  "/lookingProduct/oneOfBrandClassificne?nav_index=" +
+                  this.$route.query.nav_index
+              },
+              {
+                name: "松下",
+                path:
+                  "/lookingProduct/brand?nav_index=" + this.$route.query.nav_index
+              }
+            ];
     },
     methods: {
       tabClick(i) {
@@ -73,7 +130,7 @@
         font-size: 16px;
         font-weight: 500;
         line-height: 40px;
-        display: flex;
+
         display: flex;
         justify-content: center;
         align-items: center;
@@ -81,6 +138,17 @@
         position: absolute;
         right: 0;
         top: -2.5px;
+        a {
+          display: flex;
+          align-items: center;
+          line-height: 38px;
+          .icon {
+            height: 15px;
+            width: 15px;
+            margin-right: 5px;
+            margin-top: 1px;
+          }
+        }
         &:hover {
           opacity: 0.7;
         }
@@ -90,11 +158,11 @@
           align-items: center;
           line-height: 38px;
         }
-
         .icon {
           height: 15px;
           width: 15px;
           margin-right: 5px;
+          margin-top: 1px;
         }
       }
     }

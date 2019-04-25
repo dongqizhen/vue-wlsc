@@ -3,7 +3,7 @@
     <div class="login" v-if="!isLogin">
       <div>
         登录后方可发表评论
-        <span>登录</span>
+        <span @click="toLogin">登录</span>
       </div>
     </div>
     <div class="write-review-container">
@@ -18,8 +18,14 @@
       <h2>
         2条回复
         <ul>
-          <li class="active">按时间倒序</li>
-          <li>按时间正序</li>
+          <li
+            :class="i == defaultVal && 'active'"
+            v-for="(item, i) in ['按时间倒序', '按时间正序']"
+            :key="`sort-${i}`"
+            @click="handerClick(i)"
+          >
+            {{ item }}
+          </li>
         </ul>
       </h2>
       <div class="review_content">
@@ -38,7 +44,9 @@
 
   export default {
     data() {
-      return {};
+      return {
+        defaultVal: 0
+      };
     },
     props: {
       isLogin: {
@@ -49,6 +57,17 @@
     },
     components: {
       commentItemVue
+    },
+    methods: {
+      toLogin() {
+        const { href } = this.$router.resolve({
+          path: "/login"
+        });
+        window.open(href, "_blank");
+      },
+      handerClick(i) {
+        this.defaultVal = i;
+      }
     }
   };
 </script>

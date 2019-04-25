@@ -33,7 +33,7 @@
           <share-menu-vue></share-menu-vue>
         </div>
       </div>
-      <comment-vue :isLogin="isLogin"></comment-vue>
+      <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
       <menu-vue></menu-vue>
     </div>
     <div class="right"></div>
@@ -147,7 +147,7 @@
       left: -60px;
       top: 0;
       flex-direction: column;
-      padding: 12px 0;
+      padding: 0;
       background: #fff;
       // justify-content: space-between;
       box-shadow: $base-box-shadow;
@@ -155,12 +155,23 @@
         display: flex;
         flex-direction: column;
         height: auto;
+        width: 100%;
+        position: relative;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
         margin-top: 0;
         line-height: 18px;
         // margin-bottom: 24px;
         cursor: pointer;
         i {
           margin-right: 0;
+        }
+
+        &:hover {
+          &::after {
+            display: flex;
+          }
         }
       }
     }

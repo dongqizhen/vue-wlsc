@@ -5,7 +5,7 @@
     <Nav :defaultNav="defaultNav"></Nav>
     <div class="container">
       <div class="commonWidth">
-        <breadcrumb-vue></breadcrumb-vue>
+        <breadcrumb-vue :routes="routes"></breadcrumb-vue>
         <product-category-vue></product-category-vue>
         <div class="main-content">
           <div class="left">
@@ -48,7 +48,23 @@
 
   export default {
     data() {
-      return { arr: [1, 2, 3, 4, 5] };
+      return {
+        arr: [1, 2, 3, 4, 5],
+        routes: [
+          {
+            name: "首页",
+            path: "/"
+          },
+          {
+            name: "找店铺",
+            path: "/lookingShop?nav_index=3"
+          },
+          {
+            name: "北京华脉诚信科技有限公司",
+            path: "#"
+          }
+        ]
+      };
     },
     mixins: [mixin],
     components: {

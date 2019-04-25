@@ -3,14 +3,19 @@ import Router from "vue-router";
 
 Vue.use(Router);
 
-export default new Router({
+
+
+const router = new Router({
     mode: "history",
     base: process.env.BASE_URL,
     routes: [{
             path: "/",
             name: "首页",
             component: () =>
-                import ( /* webpackChunkName: "index" */ "../views/index")
+                import ( /* webpackChunkName: "index" */ "../views/index"),
+            meta: {
+                title: '网来商城'
+            },
         },
         {
             path: "/merchant",
@@ -126,6 +131,9 @@ export default new Router({
             }, {
                 path: 'productDetails',
                 name: '产品详情',
+                meta: {
+                    title: '产品详情'
+                },
                 component: () =>
                     import ('../views/page/shop/detailsChildren/productDetails')
             }]
@@ -145,7 +153,6 @@ export default new Router({
             component: () =>
                 import ('../views/page/shop/shopDetails')
         }, {
-
             path: '/lookingProduct',
             component: () =>
                 import ('../views/page/shop/lookingProduct'),
@@ -176,7 +183,16 @@ export default new Router({
             component: () =>
                 import ('../views/page/shop/aboutUs')
         }, {
-
+            name: '参数对比',
+            path: '/comparisonOfParameters',
+            component: () =>
+                import ('../views/page/shop/comparisonOfParameters')
+        }, {
+            name: '店铺介绍',
+            path: '/shopIntroduction',
+            component: () =>
+                import ('../views/page/shop/shopIntroduction')
+        }, {
             path: '/login',
             component: () =>
                 import ('../views/page/login/login'),
@@ -291,3 +307,14 @@ export default new Router({
 
     ]
 });
+
+router.beforeEach((to, from, next) => {
+
+    /* 路由发生变化修改页面title */
+    if (to.meta.title) {
+        document.title = to.meta.title
+    }
+    next()
+})
+
+export default router;

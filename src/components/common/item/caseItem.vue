@@ -1,5 +1,12 @@
 <template>
-  <router-link tag="li" class="case-item" to="/details/caseDetails">
+  <router-link
+    tag="li"
+    class="case-item"
+    :to="{
+      path: '/details/caseDetails',
+      query: { nav_index: $route.query.nav_index }
+    }"
+  >
     <a target="_blank">
       <div class="photo">
         <div class="img_box"></div>
@@ -87,7 +94,7 @@
 
 <style scoped lang="scss">
   @import "../../../assets/scss/_commonScss";
-  li {
+  li.case-item {
     height: 181px;
     margin-bottom: 16px;
     background: #fff;

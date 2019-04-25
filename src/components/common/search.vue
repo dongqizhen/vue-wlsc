@@ -47,6 +47,12 @@
           </ul>
         </div>
       </div>
+      <span>
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#iconrexiandianhua"></use>
+        </svg>
+        4000-1212-11
+      </span>
     </div>
   </div>
 </template>
@@ -84,6 +90,7 @@
       padding-top: 23px;
       display: flex;
       justify-content: flex-start;
+      position: relative;
       h1 {
         margin-right: 41px;
       }
@@ -165,6 +172,26 @@
               }
             }
           }
+        }
+      }
+      > span {
+        width: 168px;
+        height: 35px;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #ffffff;
+        border: 1px solid #f5a623;
+        font-size: 18px;
+        color: #f5a623;
+        font-weight: 600;
+        right: -135px;
+        bottom: 10px;
+        .icon {
+          width: 16px;
+          height: 16px;
+          margin-right: 8px;
         }
       }
     }

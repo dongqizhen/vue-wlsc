@@ -1,7 +1,10 @@
 <template>
   <router-link
     tag="li"
-    to="/details/articleDetails"
+    :to="{
+      path: '/details/articleDetails',
+      query: { nav_index: $route.query.nav_index }
+    }"
     class="article-item"
     append
   >

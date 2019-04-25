@@ -2,13 +2,23 @@
   <div class="forget-password">
     <h2>忘记密码</h2>
     <a-form :form="form" @submit="handleSubmit">
-      <a-form-item>
+      <a-form-item
+        :validate-status="Error('phone1') ? 'error' : ''"
+        :help="Error('phone1') || ''"
+      >
+        <transition name="slide-fade">
+          <span v-if="phone1_success" class="extra">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconzhengque"></use>
+            </svg>
+          </span>
+        </transition>
         <a-input
           placeholder="请输入手机号"
           maxlength="11"
           autocomplete="off"
           v-decorator="[
-            'phone',
+            'phone1',
             {
               rules: [
                 {
@@ -26,9 +36,14 @@
         >
         </a-input>
       </a-form-item>
-      <a-form-item>
+      <a-form-item
+        :validate-status="Error('password') ? 'error' : ''"
+        :help="Error('password') || ''"
+      >
         <a-input
           placeholder="请输入新密码，长度不少于6位"
+          type="password"
+          autocomplete="off"
           v-decorator="[
             'password',
             {
@@ -36,6 +51,10 @@
                 {
                   required: true,
                   message: '请输入密码'
+                },
+                {
+                  min: 6,
+                  message: '密码长度应不少于6位'
                 }
               ]
             }
@@ -44,10 +63,23 @@
           <!-- <span slot="suffix">获取验证码</span> -->
         </a-input>
       </a-form-item>
-      <a-form-item>
+      <a-form-item
+        :validate-status="Error('seccode') ? 'error' : ''"
+        :help="Error('seccode') || ''"
+      >
+        <transition name="slide-fade">
+          <span v-if="seccode_err" class="extra seccode">
+            验证码错误
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconxingzhuang2"></use>
+            </svg>
+          </span>
+        </transition>
         <a-input
           placeholder="请输入验证码"
           maxlength="6"
+          autocomplete="off"
+          @change="seccodeChange"
           v-decorator="[
             'seccode',
             {
@@ -60,7 +92,7 @@
             }
           ]"
         >
-          <span slot="suffix">获取验证码</span>
+          <span slot="suffix" @click="gainCodeHandler">{{ content }}</span>
         </a-input>
       </a-form-item>
       <a-button
@@ -76,26 +108,15 @@
 </template>
 
 <script>
+  import { timer, FormValidator } from "../../../../components/mixin/mixin";
+
   export default {
     data() {
       return {};
     },
+    mixins: [timer, FormValidator],
     methods: {
-      callback() {},
-      handleSubmit(e) {
-        e.preventDefault();
-        this.form.validateFieldsAndScroll((err, values) => {
-          if (!err) {
-            console.log("Received values of form: ", values);
-          }
-        });
-      },
-      hasErrors(fieldsError) {
-        return Object.keys(fieldsError).some(field => fieldsError[field]);
-      }
-    },
-    beforeCreate() {
-      this.form = this.$form.createForm(this);
+      callback() {}
     }
   };
 </script>
@@ -169,6 +190,43 @@
                 color: #999999;
               }
             }
+            .extra {
+              position: absolute;
+              right: 0;
+              top: -5px;
+              opacity: 1;
+              z-index: 100;
+              &.seccode,
+              &.password_err {
+                top: -26px;
+                color: #f11f1f;
+                font-size: 14px;
+              }
+              &.password_err {
+                top: -5px;
+              }
+              .icon {
+                width: 15px;
+                height: 15px;
+              }
+            }
+            .slide-fade-enter-active {
+              transition: all 0.4s ease;
+            }
+            .slide-fade-leave-active {
+              transition: all 0.4s cubic-bezier(1, 0.5, 0.8, 1);
+            }
+            .slide-fade-enter,
+            .slide-fade-leave-to {
+              transform: translateY(10px);
+              opacity: 0;
+            }
+            .ant-form-explain {
+              padding-right: 18px;
+              background: url("../../../../assets/images/err.svg") no-repeat right
+                center;
+              background-size: 15px 15px;
+            }
           }
         }
         &:nth-child(3) {
@@ -206,8 +264,11 @@
         border: 0;
         font-size: 18px;
         color: #ffffff;
-        opacity: 0.32;
+
         font-weight: 600;
+        &:disabled {
+          opacity: 0.32;
+        }
       }
     }
     &:last-child {

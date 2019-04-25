@@ -329,7 +329,8 @@
                       <i></i>
                     </li>
                   </ul>
-                  <div class="big-image">
+
+                  <div class="big-image" :class="bigImageIsShow && 'active'">
                     <img src="../../../../assets/images/demo.jpg" alt="" />
                   </div>
                 </div>
@@ -341,27 +342,22 @@
     </div>
     <div class="right">
       <a-button>
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconcanshuduibi"></use>
-        </svg>
-        参数对比
+        <router-link
+          :to="{
+            path: '/comparisonOfParameters',
+            query: { nav_index: $route.query.nav_index }
+          }"
+          target="_blank"
+        >
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconcanshuduibi"></use>
+          </svg>
+          参数对比
+        </router-link>
       </a-button>
       <shop-card-vue></shop-card-vue>
     </div>
-    <modal :isShow="visible" :options="options">
-      <div slot="content">
-        <p>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#iconzhanghaoanquanduigou"></use>
-          </svg>
-          成功加入选购单
-        </p>
-        <div class="btn">
-          <a-button>去询价</a-button>
-          <a-button>继续选购</a-button>
-        </div>
-      </div>
-    </modal>
+    <login-modal-vue :Visible="visible" :type="type"></login-modal-vue>
   </div>
 </template>
 
@@ -369,47 +365,55 @@
   import shareMenuVue from "../../../../components/common/share/shareMenu.vue";
   import img from "../../../../assets/images/demo.jpg";
   import { Icon } from "ant-design-vue";
-  import modal from "../../../../components/common/modal.vue";
+  import modal from "../../../../components/modal/modal.vue";
   const IconFont = Icon.createFromIconfontCN({
     scriptUrl: "//at.alicdn.com/t/font_1093268_lw1r0m4k91i.js"
   });
   import Swiper from "swiper";
   import shopCardVue from "../../../../components/common/shopCard.vue";
+  import loginModalVue from "../../../../components/modal/loginModal.vue";
+  import { mapState } from "vuex";
 
   export default {
     data() {
       return {
-        isLogin: true, //是否登录
         imgarr: [img, img],
-        defaultIndex: 0,
+        defaultIndex: null,
         visible: false,
-        options: {
-          title: "提示",
-          closable: true,
-          maskClosable: false,
-          wrapClassName: "success",
-          centered: false
-        }
+        title: "",
+        type: "",
+        bigImageIsShow: false
       };
     },
     components: {
       shareMenuVue,
       IconFont,
-      modal,
-      shopCardVue
+      shopCardVue,
+      loginModalVue
     },
     methods: {
       changeImage(i, e) {
-        console.log(e);
-        this.defaultIndex = i;
+        if (this.defaultIndex == i) {
+          this.bigImageIsShow = !this.bigImageIsShow;
+        } else {
+          this.defaultIndex = i;
+          this.bigImageIsShow = true;
+        }
       },
       callback(val) {
         console.log(val);
       },
       addCarSuccess() {
+        if (!this.isLogin) {
+          this.type = "login";
+        }
         this.visible = true;
       }
     },
+    computed: {
+      ...mapState(["isLogin"])
+    },
+
     mounted() {
       const evt = new Event(),
         m = new Magnifier(evt);
@@ -443,6 +447,7 @@
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
+
   .product-details {
     display: flex;
     justify-content: flex-start;
@@ -520,6 +525,9 @@
               height: 100%;
               display: flex;
               align-items: center;
+              &.swiper-button-disabled {
+                cursor: not-allowed !important;
+              }
             }
             .swiper-button-prev {
               left: 0;
@@ -884,9 +892,14 @@
                       }
                     }
                     .big-image {
-                      height: 352px;
-                      width: 352px;
                       background: $base-background;
+                      height: 0;
+                      width: 0;
+                      transition: all 0.3s;
+                      &.active {
+                        height: 352px;
+                        width: 352px;
+                      }
                       img {
                         height: 100%;
                         width: 100%;
@@ -902,7 +915,7 @@
     }
     .right {
       flex: 1;
-      /deep/ > .ant-btn-default {
+      .ant-btn-default {
         height: 40px;
         width: 152px;
         background: #ffffff;
@@ -916,6 +929,18 @@
         justify-content: center;
         align-items: center;
         margin-bottom: 12px;
+        a {
+          display: flex;
+          align-items: center;
+          line-height: 38px;
+          text-decoration: none;
+          .icon {
+            height: 15px;
+            width: 15px;
+            margin-right: 5px;
+            margin-top: 1px;
+          }
+        }
         &:hover {
           opacity: 0.7;
         }

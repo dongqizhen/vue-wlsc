@@ -3,6 +3,7 @@ import Vue from "vue";
 import state from './state'
 import actions from './actions'
 import mutations from './mutations'
+import createVuexAlong from 'vuex-along'
 /* import createPersistedState from 'vuex-persistedstate'
 
 const plugins = [createPersistedState()] */
@@ -14,5 +15,9 @@ export default new Vuex.Store({
     state,
     actions,
     mutations,
+    plugins: [createVuexAlong({
+        name: "vuex-along", // 设置保存的集合名字，避免同站点下的多项目数据冲突
+        
+    })]
     //plugins
 })

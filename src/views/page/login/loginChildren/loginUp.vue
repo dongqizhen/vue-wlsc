@@ -2,14 +2,24 @@
   <div class="login-up">
     <a-tabs defaultActiveKey="1" @change="callback">
       <a-tab-pane tab="快速登录" key="1">
-        <a-form :form="form" @submit="handleSubmit">
-          <a-form-item>
+        <a-form :form="form" @submit="handleSubmitOne">
+          <a-form-item
+            :validate-status="Error('phone1') ? 'error' : ''"
+            :help="Error('phone1') || ''"
+          >
+            <transition name="slide-fade">
+              <span v-if="phone1_success" class="extra">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconzhengque"></use>
+                </svg>
+              </span>
+            </transition>
             <a-input
               placeholder="请输入手机号"
               maxlength="11"
               autocomplete="off"
               v-decorator="[
-                'phone',
+                'phone1',
                 {
                   rules: [
                     {
@@ -24,13 +34,25 @@
                   validateTrigger: 'change'
                 }
               ]"
-            >
-            </a-input>
+            ></a-input>
           </a-form-item>
-          <a-form-item>
+          <a-form-item
+            :validate-status="Error('seccode') ? 'error' : ''"
+            :help="Error('seccode') || ''"
+          >
+            <transition name="slide-fade">
+              <span v-if="seccode_err" class="extra seccode">
+                验证码错误
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconxingzhuang2"></use>
+                </svg>
+              </span>
+            </transition>
             <a-input
               placeholder="请输入验证码"
               maxlength="6"
+              @change="seccodeChange"
+              autocomplete="off"
               v-decorator="[
                 'seccode',
                 {
@@ -43,7 +65,7 @@
                 }
               ]"
             >
-              <span slot="suffix">获取验证码</span>
+              <span slot="suffix" @click="gainCodeHandler">{{ content }}</span>
             </a-input>
           </a-form-item>
           <div class="register-box">
@@ -56,21 +78,31 @@
             type="primary"
             html-type="submit"
             class="login-form-button"
-            :disabled="hasErrors(form.getFieldsError())"
+            :disabled="hasErrors(form.getFieldsError(['phone1', 'seccode']))"
           >
             登录
           </a-button>
         </a-form>
       </a-tab-pane>
       <a-tab-pane tab="密码登录" key="2" forceRender>
-        <a-form :form="form" @submit="handleSubmit">
-          <a-form-item>
+        <a-form :form="form" @submit="handleSubmitTwo">
+          <a-form-item
+            :validate-status="Error('phone2') ? 'error' : ''"
+            :help="Error('phone2') || ''"
+          >
+            <transition name="slide-fade">
+              <span v-if="phone2_success" class="extra">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconzhengque"></use>
+                </svg>
+              </span>
+            </transition>
             <a-input
               placeholder="请输入手机号"
               maxlength="11"
               autocomplete="off"
               v-decorator="[
-                'phone',
+                'phone2',
                 {
                   rules: [
                     {
@@ -85,12 +117,25 @@
                   validateTrigger: 'change'
                 }
               ]"
-            >
-            </a-input>
+            ></a-input>
           </a-form-item>
-          <a-form-item>
+          <a-form-item
+            :validate-status="Error('password') ? 'error' : ''"
+            :help="Error('password') || ''"
+          >
+            <transition name="slide-fade">
+              <span v-if="password_err" class="extra password_err">
+                密码错误
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconxingzhuang2"></use>
+                </svg>
+              </span>
+            </transition>
             <a-input
               placeholder="请输入密码"
+              type="password"
+              autocomplete="off"
+              @change="passwordChange"
               v-decorator="[
                 'password',
                 {
@@ -98,6 +143,10 @@
                     {
                       required: true,
                       message: '请输入密码'
+                    },
+                    {
+                      min: 6,
+                      message: '密码长度应不少于6位'
                     }
                   ]
                 }
@@ -119,7 +168,7 @@
             type="primary"
             html-type="submit"
             class="login-form-button"
-            :disabled="hasErrors(form.getFieldsError())"
+            :disabled="hasErrors(form.getFieldsError(['phone2', 'password']))"
           >
             登录
           </a-button>
@@ -130,13 +179,23 @@
 </template>
 
 <script>
+  import { mapMutations } from "vuex";
+  import { timer } from "../../../../components/mixin/mixin";
+
   export default {
     data() {
-      return {};
+      return {
+        phone1_success: false,
+        phone2_success: false,
+        password_err: false
+      };
     },
+    mixins: [timer],
     methods: {
+      ...mapMutations(["changeLoginState"]),
       callback() {},
-      handleSubmit(e) {
+      handleSubmitOne(e) {
+        this.seccode_err = true;
         e.preventDefault();
         this.form.validateFieldsAndScroll((err, values) => {
           if (!err) {
@@ -144,9 +203,51 @@
           }
         });
       },
+      handleSubmitTwo(e) {
+        e.preventDefault();
+        this.password_err = true;
+        this.form.validateFieldsAndScroll((err, values) => {
+          if (!err) {
+            console.log("Received values of form: ", values);
+          }
+        });
+      },
       hasErrors(fieldsError) {
-        return Object.keys(fieldsError).some(field => fieldsError[field]);
+        return Object.keys(fieldsError).some(field => {
+          return fieldsError[field];
+        });
+      },
+      seccodeChange(e) {
+        this.seccode_err = false;
+      },
+      passwordChange() {
+        this.password_err = false;
+      },
+      Error(field) {
+        const {
+          getFieldError,
+          isFieldTouched,
+          getFieldValue,
+          setFieldsValue
+        } = this.form;
+        const val = getFieldValue(field);
+
+        switch (field) {
+          case "phone1":
+            this.phone1_success =
+              val && getFieldError(field) == undefined ? true : false;
+
+            break;
+          case "phone2":
+            this.phone2_success =
+              val != "" && getFieldError(field) == undefined ? true : false;
+        }
+        return isFieldTouched(field) && getFieldError(field);
       }
+    },
+    computed: {},
+    mounted() {
+      this.text = this.form.validateFields();
     },
     beforeCreate() {
       this.form = this.$form.createForm(this);
@@ -159,8 +260,7 @@
   .login-up {
     height: 100%;
     width: 100%;
-    padding: 0 71px;
-    padding-top: 87px;
+    padding: 87px 71px 0;
     /deep/ .ant-tabs-top {
       .ant-tabs-bar {
         border-bottom: 0;
@@ -170,7 +270,6 @@
           .ant-tabs-nav-wrap {
             .ant-tabs-nav {
               width: 100%;
-
               > div:not(.ant-tabs-ink-bar) {
                 display: flex;
                 justify-content: center;
@@ -255,6 +354,43 @@
                       color: #999999;
                     }
                   }
+                  .extra {
+                    position: absolute;
+                    right: 0;
+                    top: -5px;
+                    opacity: 1;
+                    z-index: 100;
+                    &.seccode,
+                    &.password_err {
+                      top: -26px;
+                      color: #f11f1f;
+                      font-size: 14px;
+                    }
+                    &.password_err {
+                      top: -5px;
+                    }
+                    .icon {
+                      width: 15px;
+                      height: 15px;
+                    }
+                  }
+                  .slide-fade-enter-active {
+                    transition: all 0.4s ease;
+                  }
+                  .slide-fade-leave-active {
+                    transition: all 0.4s cubic-bezier(1, 0.5, 0.8, 1);
+                  }
+                  .slide-fade-enter,
+                  .slide-fade-leave-to {
+                    transform: translateY(10px);
+                    opacity: 0;
+                  }
+                  .ant-form-explain {
+                    padding-right: 18px;
+                    background: url("../../../../assets/images/err.svg") no-repeat
+                      right center;
+                    background-size: 15px 15px;
+                  }
                 }
               }
               &:nth-child(2) {
@@ -292,8 +428,11 @@
               border: 0;
               font-size: 18px;
               color: #ffffff;
-              opacity: 0.32;
+
               font-weight: 600;
+              &:disabled {
+                opacity: 0.32;
+              }
             }
           }
           &:last-child {
@@ -302,7 +441,7 @@
                 .ant-form-item-control-wrapper {
                   .ant-form-item-control {
                     .ant-form-explain {
-                      top: 0px !important;
+                      top: 0 !important;
                     }
                   }
                 }

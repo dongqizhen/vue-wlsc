@@ -13,7 +13,17 @@
         <li><span>销售地区：</span><span>北京市；天津市</span></li>
       </ul>
       <div class="btn">
-        <a-button>进店看看</a-button>
+        <a-button>
+          <router-link
+            :to="{
+              path: '/shopIntroduction',
+              query: { nav_index: $route.query.nav_index }
+            }"
+            target="_blank"
+          >
+            进店看看
+          </router-link>
+        </a-button>
         <a-button>收藏店铺</a-button>
       </div>
       <div class="service">
@@ -98,6 +108,9 @@
       /deep/ .ant-btn-default {
         width: 87px;
         height: 31px;
+        a {
+          text-decoration: none;
+        }
         span {
           display: flex;
           height: 29px;

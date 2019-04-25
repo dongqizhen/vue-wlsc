@@ -3,6 +3,9 @@ import App from "./App.vue";
 import router from "./router/index";
 import store from './store/index';
 import 'iview/dist/styles/iview.css';
+import vChatTitle from 'vue-wechat-title'
+import Share from 'vue-social-share'
+import 'vue-social-share/dist/client.css';
 import {
     BackTop,
     Modal,
@@ -33,7 +36,8 @@ import {
 Vue.config.productionTip = false;
 
 
-Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form).use(Icon).use(Upload)
+// Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form).use(Icon).use(Upload)
+Vue.use(vChatTitle).use(Share).use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form)
 
 new Vue({
     el: '#app',

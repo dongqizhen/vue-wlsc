@@ -5,7 +5,6 @@
     <Nav :defaultNav="defaultNav"></Nav>
     <div class="container">
       <div class="commonWidth">
-        <breadcrumb-vue></breadcrumb-vue>
         <div class="content">
           <router-view></router-view>
         </div>
@@ -26,7 +25,9 @@
   import { mixin } from "../../../components/mixin/mixin";
   export default {
     data() {
-      return {};
+      return {
+        routes: ""
+      };
     },
     mixins: [mixin],
     components: {
