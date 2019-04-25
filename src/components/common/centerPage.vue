@@ -1,9 +1,8 @@
 <template>
-  <div class="merchant">
+  <div class="centerPageCommon">
     <a-layout>
       <a-layout-header>
-        <Header></Header>
-        <slot name="navCenter"></slot>
+        <slot name="header"></slot>
       </a-layout-header>
       <a-layout>
         <a-layout-sider>
@@ -49,10 +48,8 @@
   </div>
 </template>
 <script>
-  import Header from "../header/header";
   import Footer from "../footer/footer";
   export default {
-    inject: ["reload"],
     data() {
       return {};
     },
@@ -70,77 +67,13 @@
         default: []
       },
       defaultSelectedKeys: {
-        type: Array,
-        required: true
+        type: Array
       }
     },
     methods: {
-      handleClick(e) {},
-      goBack() {
-        this.$router.replace({ path: "/merchant" });
-        //replace替换原路由，作用是避免回退死循环
-        this.reload();
-      }
-    },
-    beforeMount() {
-      switch (this.$route.path.split("/")[2]) {
-        case "shopIndex":
-          this.defaultSelectedKeys = ["1"];
-          break;
-        case "shopInfo":
-          this.defaultSelectedKeys = ["2"];
-          break;
-        case "shopCertification":
-          this.defaultSelectedKeys = ["3"];
-          break;
-        case "publishGoods":
-          this.defaultSelectedKeys = ["4"];
-          break;
-        case "productManage":
-          this.defaultSelectedKeys = ["5"];
-          break;
-        case "inquiryManage":
-          this.defaultSelectedKeys = ["6"];
-          break;
-        case "orderManage":
-          this.defaultSelectedKeys = ["7"];
-          break;
-        case "accountSecurity":
-          this.defaultSelectedKeys = ["8"];
-          break;
-        case "changePassword":
-          this.defaultSelectedKeys = ["8"];
-          break;
-        case "changeEmail":
-          this.defaultSelectedKeys = ["8"];
-          break;
-        case "changePhone":
-          this.defaultSelectedKeys = ["8"];
-          break;
-        case "personalCenter":
-          this.defaultSelectedKeys = ["9"];
-          break;
-        case "messageCenter":
-          this.defaultSelectedKeys = ["10"];
-          break;
-        case "messageDetail":
-          this.defaultSelectedKeys = ["10"];
-          break;
-      }
-    },
-
-    mounted() {
-      if (window.history && window.history.pushState) {
-        history.pushState(null, null, document.URL);
-        window.addEventListener("popstate", this.goBack, false);
-      }
-    },
-
-    destroyed() {
-      window.removeEventListener("popstate", this.goBack, false);
+      handleClick(e) {}
     },
     components: {
-      Header,
       Footer
     }
   };
@@ -148,31 +81,11 @@
 
 <style lang="scss" scoped>
   @import "../../assets/scss/_commonScss";
-  .merchant {
+  .centerPageCommon {
     /deep/.ant-layout {
       background: $base-background;
       .ant-layout-header {
         padding: 0;
-        height: $header-height;
-        background: $theme-color;
-        .header {
-          background: $theme-color;
-          .content {
-            .left {
-              color: #fff;
-              a {
-                color: #fff;
-              }
-            }
-            .right {
-              li {
-                a {
-                  color: #fff;
-                }
-              }
-            }
-          }
-        }
       }
       .ant-layout-sider {
         background: $base-background;
@@ -182,7 +95,7 @@
         margin-right: 20px;
         margin-bottom: 111px;
         .ant-layout-sider-children {
-          height: 693px;
+          height: auto;
           background-color: #fff;
           .title {
             width: 100%;

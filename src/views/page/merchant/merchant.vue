@@ -3,14 +3,21 @@
     titleText="商家中心"
     :dataArr="dataArr"
     :openKeys="['sub1', 'sub2', 'sub3']"
-    :defaultSelectedKeys="['1']"
-  ></center-page>
+    :defaultSelectedKeys="defaultSelectedKeys"
+  >
+    <div slot="header">
+      <Header></Header>
+    </div>
+  </center-page>
 </template>
 <script>
+  import Header from "../../../components/header/header";
   import centerPage from "../../../components/common/centerPage";
   export default {
+    inject: ["reload"],
     data() {
       return {
+        defaultSelectedKeys: ["1"],
         dataArr: [
           {
             id: 1,
@@ -49,7 +56,13 @@
         ]
       };
     },
-    methods: {},
+    methods: {
+      goBack() {
+        //replace替换原路由，作用是避免回退死循环
+        this.$router.replace({ path: "/merchant" });
+        this.reload();
+      }
+    },
     beforeMount() {
       switch (this.$route.path.split("/")[2]) {
         case "shopIndex":
@@ -96,18 +109,17 @@
           break;
       }
     },
-
     mounted() {
       if (window.history && window.history.pushState) {
         history.pushState(null, null, document.URL);
         window.addEventListener("popstate", this.goBack, false);
       }
     },
-
     destroyed() {
       window.removeEventListener("popstate", this.goBack, false);
     },
     components: {
+      Header,
       centerPage
     }
   };
@@ -115,7 +127,7 @@
 
 <style lang="scss" scoped>
   @import "../../../assets/scss/_commonScss";
-  .merchant {
+  .centerPageCommon {
     /deep/.ant-layout {
       background: $base-background;
       .ant-layout-header {
@@ -141,90 +153,6 @@
           }
         }
       }
-      .ant-layout-sider {
-        background: $base-background;
-        width: 170px !important;
-        min-width: 170px !important;
-        flex: 0 !important;
-        margin-right: 20px;
-        margin-bottom: 111px;
-        .ant-layout-sider-children {
-          height: 693px;
-          background-color: #fff;
-          .title {
-            width: 100%;
-            height: 69px;
-            line-height: 69px;
-            padding-left: 16px;
-            color: #333;
-            font-size: 20px;
-            font-weight: 600;
-            font-family: PingFangSC-Semibold;
-            border-bottom: 0.2px solid #ddd;
-          }
-          .ant-menu-inline {
-            border-right: none;
-            .ant-menu-submenu {
-              .ant-menu-submenu-title {
-                padding-left: 20px !important;
-                margin: 0;
-                color: #333;
-                font-size: 16px;
-                font-weight: 600;
-                height: 48px;
-                line-height: 48px;
-                .ant-menu-submenu-arrow {
-                  display: none;
-                }
-                .icon {
-                  margin-right: 7px;
-                }
-              }
-              .ant-menu-sub {
-                .ant-menu-item {
-                  color: #333;
-                  margin: 0;
-                  height: 48px;
-                  line-height: 48px;
-                  padding-left: 43px !important;
-                  -webkit-transition: color 0.3s
-                      cubic-bezier(0.645, 0.045, 0.355, 1),
-                    border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
-                    background 0s cubic-bezier(0.645, 0.045, 0.355, 1),
-                    padding 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
-                  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
-                    border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
-                    background 0s cubic-bezier(0.645, 0.045, 0.355, 1),
-                    padding 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
-                  &:hover {
-                    background: #fafafa;
-                    a {
-                      color: $theme-color;
-                    }
-                  }
-                  &.ant-menu-item-selected {
-                    padding-right: 20px;
-                    background: rgba(241, 2, 21, 0.03)
-                      url("../../../assets/images/redRightArrow.svg") no-repeat
-                      140px center / 14px 26px;
-                    a {
-                      color: $theme-color;
-                    }
-                  }
-                  &::after {
-                    border-right: none;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    .ant-layout-has-sider {
-      width: 1200px;
-      margin: 0 auto;
-      margin-top: 24px;
     }
   }
 </style>

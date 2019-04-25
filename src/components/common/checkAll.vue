@@ -37,7 +37,7 @@
     },
     methods: {
       onCheckAllChange(e) {
-        console.log(e);
+        // console.log(e);
         this.$emit("isCheckAll", e.target.checked);
       }
     }

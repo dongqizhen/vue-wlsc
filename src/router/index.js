@@ -202,10 +202,91 @@ export default new Router({
             component: () =>
                 import ('../views/page/login/agreement')
         }, {
-            name: '个人中心',
             path: '/userCenter',
             component: () =>
-                import ('../views/page/shop/userCenter')
+                import ('../views/page/shop/userCenter'),
+            children: [{
+                    path: "/",
+                    name: '选购单',
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/purchaseOrder")
+                },
+                {
+                    path: "myInquiry",
+                    name: "我的询价",
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/myInquiry")
+                },
+                {
+                    path: "myOrder",
+                    name: "我的订单",
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/myOrder")
+                },
+                {
+                    path: "myQuote",
+                    name: "我的报价",
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/myQuote")
+                },
+                {
+                    path: "myStore",
+                    name: "我的收藏",
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/myStore")
+                },
+                {
+                    path: "addressManage",
+                    name: "地址管理",
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/addressManage")
+                },
+                {
+                    path: "invoiceManage",
+                    name: "发票管理",
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/invoiceManage")
+                },
+                {
+                    path: "myMessage",
+                    name: "个人信息",
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/myMessage")
+                },
+                {
+                    path: "myCenter",
+                    name: "个人信息中心",
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/messageCenter"),
+                },
+                {
+                    path: "userSecurity",
+                    name: "用户安全",
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/accountSecurity")
+                },
+                {
+                    path: "messageDetail",
+                    name: '消息详情',
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/messageDetails")
+                }, {
+                    path: "changePassword",
+                    name: '修改密码',
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/changePassword")
+                }, {
+                    path: "changePhone",
+                    name: '修改手机号',
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/changePhone")
+                }, {
+                    path: "changeEmail",
+                    name: '修改邮箱',
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/changeEmail")
+                },
+            ]
         }
 
     ]

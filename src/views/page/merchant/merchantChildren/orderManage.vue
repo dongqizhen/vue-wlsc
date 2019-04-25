@@ -35,48 +35,7 @@
         <div class="tbody">
           <ul>
             <li>
-              <order-title></order-title>
-              <div class="productInfoBox">
-                <div class="productInfo">
-                  <div class="itemProduct">
-                    <span>
-                      <img
-                        src="http://file.haoyigong.com/server/upload/1533522814856.jpg"
-                      />
-                    </span>
-                    <span>John Brown</span>
-                    <span>￥1000</span>
-                    <span>12</span>
-                  </div>
-                  <div class="itemProduct">
-                    <span>
-                      <img
-                        src="http://file.haoyigong.com/server/upload/1554081863934.jpg"
-                      />
-                    </span>
-                    <span>John Brown</span>
-                    <span>￥1000</span>
-                    <span>12</span>
-                  </div>
-                </div>
-                <div class="actualPrice">￥2600.00</div>
-                <div class="operating">
-                  <div class="lookPay">查看支付证明</div>
-                  <div class="sure">确认发货</div>
-                  <div class="lookOrderDetail">查看订单详情</div>
-                  <div class="deleteOrder">删除订单</div>
-                </div>
-              </div>
-              <div class="shippingAddress">
-                <div class="left-box">收货地址</div>
-                <div class="right-box">
-                  <div>
-                    <span>收货人：李先生</span>
-                    <span>联系方式：18611110000</span>
-                  </div>
-                  <div>收货地址：北京市顺义区天竺保税区</div>
-                </div>
-              </div>
+              <order-item></order-item>
             </li>
           </ul>
         </div>
@@ -93,7 +52,7 @@
 </template>
 <script>
   import manageNumberNav from "../../../../components/common/manageNumberNav";
-  import orderTitle from "../../../../components/common/orderTitle";
+  import orderItem from "../../../../components/common/orderItem";
   import checkAll from "../../../../components/common/checkAll";
   export default {
     data() {
@@ -158,7 +117,7 @@
     },
     components: {
       manageNumberNav,
-      orderTitle,
+      orderItem,
       checkAll
     }
   };
@@ -282,118 +241,6 @@
           ul {
             li {
               margin-bottom: 12px;
-              .productInfoBox {
-                display: flex;
-                border: $border-style;
-                border-top: none;
-                .productInfo {
-                  width: 598px;
-                  .itemProduct {
-                    display: flex;
-                    height: 90px;
-                    padding-top: 10px;
-                    border-bottom: $border-style;
-                    &:last-child {
-                      border-bottom: none;
-                    }
-                    span {
-                      @extend %span;
-                    }
-                  }
-                }
-                .actualPrice {
-                  width: 190px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  border-left: $border-style;
-                }
-                .operating {
-                  width: 175px;
-                  display: flex;
-                  flex-direction: column;
-                  align-items: center;
-                  justify-content: center;
-                  border-left: $border-style;
-                }
-              }
-              .shippingAddress {
-                display: flex;
-                border: $border-style;
-                border-top: none;
-                color: #333333;
-                font-size: 12px;
-                .left-box {
-                  width: 93px;
-                  height: 83px;
-                  line-height: 83px;
-                  text-align: center;
-                  border-right: $border-style;
-                  font-weight: 600;
-                }
-                .right-box {
-                  display: flex;
-                  flex-direction: column;
-                  justify-content: center;
-                  padding-left: 17px;
-
-                  div {
-                    &:first-child {
-                      margin-bottom: 8px;
-                      span {
-                        margin-right: 38px;
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-        .tfooter {
-          .checkedAllBox {
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid #dddddd;
-            .left-box {
-              span {
-                &:first-child {
-                  width: 34px;
-                  margin-right: 12px;
-                  padding-left: 20px;
-                }
-                &:nth-child(3) {
-                  margin-right: 40px;
-                  padding-left: 42px;
-                }
-                i {
-                  font-style: normal;
-                  color: $theme-color;
-                  font-size: 16px;
-                  font-weight: 600;
-                }
-              }
-            }
-            .right-box {
-              button {
-                width: 76px;
-                height: 42px;
-                line-height: 42px;
-                border: 0;
-                outline: none;
-                background-color: transparent;
-                color: #fff;
-                text-align: center;
-                cursor: pointer;
-                &.shelf {
-                  background-color: $theme-color;
-                }
-                &.obtained {
-                  background-color: #f5a623;
-                }
-              }
             }
           }
         }

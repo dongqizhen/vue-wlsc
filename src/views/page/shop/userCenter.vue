@@ -3,14 +3,42 @@
     titleText="个人中心"
     :dataArr="dataArr"
     :openKeys="['sub1']"
-    :defaultSelectedKeys="['1']"
-  ></center-page>
+    :defaultSelectedKeys="defaultSelectedKeys"
+  >
+    <div slot="header">
+      <Header></Header>
+      <div class="middleNav">
+        <div class="navBox">
+          <div class="logo">
+            <a href="#">
+              <img src="../../../assets/images/white-logo.png" />
+            </a>
+          </div>
+          <Nav></Nav>
+          <div class="telphone">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconbaiserexiandianhua"></use>
+            </svg>
+            400-012-1122
+          </div>
+        </div>
+      </div>
+    </div>
+    <span slot="Icon">
+      <svg class="icon" aria-hidden="true">
+        <use xlink:href="#icongerenzhongxin"></use>
+      </svg>
+    </span>
+  </center-page>
 </template>
 <script>
+  import Header from "../../../components/header/header";
   import centerPage from "../../../components/common/centerPage";
+  import Nav from "../../../components/common/nav";
   export default {
     data() {
       return {
+        defaultSelectedKeys: ["1"],
         dataArr: [
           {
             id: 1,
@@ -18,16 +46,16 @@
             name: "",
             icon: "",
             menus: [
-              { key: "1", name: "选购单", href: "/merchant/shopIndex" },
-              { key: "2", name: "我的询价", href: "/merchant/shopInfo" },
-              { key: "3", name: "我的订单", href: "/merchant/shopCertification" },
-              { key: "4", name: "我的报价", href: "/merchant/publishGoods" },
-              { key: "5", name: "我的收藏", href: "/merchant/productManage" },
-              { key: "6", name: "地址管理", href: "/merchant/inquiryManage" },
-              { key: "7", name: "发票管理", href: "/merchant/orderManage" },
-              { key: "10", name: "账号安全", href: "/merchant/accountSecurity" },
-              { key: "8", name: "个人信息", href: "/merchant/personalCenter" },
-              { key: "9", name: "消息中心", href: "/merchant/messageCenter" }
+              { key: "1", name: "选购单", href: "/userCenter" },
+              { key: "2", name: "我的询价", href: "/userCenter/myInquiry" },
+              { key: "3", name: "我的订单", href: "/userCenter/myOrder" },
+              { key: "4", name: "我的报价", href: "/userCenter/myQuote" },
+              { key: "5", name: "我的收藏", href: "/userCenter/myStore" },
+              { key: "6", name: "地址管理", href: "/userCenter/addressManage" },
+              { key: "7", name: "发票管理", href: "/userCenter/invoiceManage" },
+              { key: "8", name: "个人信息", href: "/userCenter/myMessage" },
+              { key: "9", name: "消息中心", href: "/userCenter/myCenter" },
+              { key: "10", name: "账号安全", href: "/userCenter/userSecurity" }
             ]
           }
         ]
@@ -39,25 +67,25 @@
         case "shopIndex":
           this.defaultSelectedKeys = ["1"];
           break;
-        case "shopInfo":
+        case "myInquiry":
           this.defaultSelectedKeys = ["2"];
           break;
-        case "shopCertification":
+        case "myOrder":
           this.defaultSelectedKeys = ["3"];
           break;
-        case "publishGoods":
+        case "myQuote":
           this.defaultSelectedKeys = ["4"];
           break;
-        case "productManage":
+        case "myStore":
           this.defaultSelectedKeys = ["5"];
           break;
-        case "inquiryManage":
+        case "addressManage":
           this.defaultSelectedKeys = ["6"];
           break;
-        case "orderManage":
+        case "invoiceManage":
           this.defaultSelectedKeys = ["7"];
           break;
-        case "accountSecurity":
+        case "myMessage":
           this.defaultSelectedKeys = ["8"];
           break;
         case "changePassword":
@@ -69,14 +97,17 @@
         case "changePhone":
           this.defaultSelectedKeys = ["8"];
           break;
-        case "personalCenter":
+        case "myCenter":
           this.defaultSelectedKeys = ["9"];
           break;
-        case "messageCenter":
+        case "userSecurity":
           this.defaultSelectedKeys = ["10"];
           break;
         case "messageDetail":
           this.defaultSelectedKeys = ["10"];
+          break;
+        default:
+          this.defaultSelectedKeys = ["1"];
           break;
       }
     },
@@ -92,123 +123,70 @@
       window.removeEventListener("popstate", this.goBack, false);
     },
     components: {
-      centerPage
+      Header,
+      centerPage,
+      Nav
     }
   };
 </script>
 
 <style lang="scss" scoped>
   @import "../../../assets/scss/_commonScss";
-  .merchant {
+  .centerPageCommon {
     /deep/.ant-layout {
       background: $base-background;
       .ant-layout-header {
         padding: 0;
-        height: $header-height;
-        background: $theme-color;
-        .header {
-          background: $theme-color;
-          .content {
-            .left {
-              color: #fff;
+        height: auto;
+        .middleNav {
+          width: 100%;
+          height: 95px;
+          background-color: $theme-color;
+          .navBox {
+            width: 1200px;
+            height: 95px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            .logo {
+              margin-right: 30px;
               a {
-                color: #fff;
+                display: block;
+                width: 100%;
+                height: 100%;
               }
             }
-            .right {
-              li {
-                a {
-                  color: #fff;
+            .nav {
+              height: 100%;
+              .top_nav {
+                height: 100%;
+                border-bottom: none;
+                .commonWidth {
+                  width: 830px;
                 }
+                ul {
+                  li {
+                    a {
+                      color: #fff;
+                    }
+                  }
+                }
+              }
+            }
+            .telphone {
+              font-size: 24px;
+              color: #fff;
+              .icon {
+                width: 20px;
+                height: 20px;
               }
             }
           }
         }
       }
-      .ant-layout-sider {
-        background: $base-background;
-        width: 170px !important;
-        min-width: 170px !important;
-        flex: 0 !important;
-        margin-right: 20px;
-        margin-bottom: 111px;
-        .ant-layout-sider-children {
-          height: 693px;
-          background-color: #fff;
-          .title {
-            width: 100%;
-            height: 69px;
-            line-height: 69px;
-            padding-left: 16px;
-            color: #333;
-            font-size: 20px;
-            font-weight: 600;
-            font-family: PingFangSC-Semibold;
-            border-bottom: 0.2px solid #ddd;
-          }
-          .ant-menu-inline {
-            border-right: none;
-            .ant-menu-submenu {
-              .ant-menu-submenu-title {
-                padding-left: 20px !important;
-                margin: 0;
-                color: #333;
-                font-size: 16px;
-                font-weight: 600;
-                height: 48px;
-                line-height: 48px;
-                .ant-menu-submenu-arrow {
-                  display: none;
-                }
-                .icon {
-                  margin-right: 7px;
-                }
-              }
-              .ant-menu-sub {
-                .ant-menu-item {
-                  color: #333;
-                  margin: 0;
-                  height: 48px;
-                  line-height: 48px;
-                  padding-left: 43px !important;
-                  -webkit-transition: color 0.3s
-                      cubic-bezier(0.645, 0.045, 0.355, 1),
-                    border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
-                    background 0s cubic-bezier(0.645, 0.045, 0.355, 1),
-                    padding 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
-                  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
-                    border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
-                    background 0s cubic-bezier(0.645, 0.045, 0.355, 1),
-                    padding 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
-                  &:hover {
-                    background: #fafafa;
-                    a {
-                      color: $theme-color;
-                    }
-                  }
-                  &.ant-menu-item-selected {
-                    padding-right: 20px;
-                    background: rgba(241, 2, 21, 0.03)
-                      url("../../../assets/images/redRightArrow.svg") no-repeat
-                      140px center / 14px 26px;
-                    a {
-                      color: $theme-color;
-                    }
-                  }
-                  &::after {
-                    border-right: none;
-                  }
-                }
-              }
-            }
-          }
-        }
+      .ant-menu-submenu-title {
+        display: none;
       }
-    }
-    .ant-layout-has-sider {
-      width: 1200px;
-      margin: 0 auto;
-      margin-top: 24px;
     }
   }
 </style>
