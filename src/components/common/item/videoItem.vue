@@ -8,7 +8,20 @@
     }"
   >
     <a target="_blank">
-      <div class="video_box"></div>
+      <div class="video_box">
+        <img src="../../../assets/images/demo.jpg" alt="" />
+        <span class="look-num">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconxinghaoliebiaoliulanliang-copy"></use>
+          </svg>
+          30万
+        </span>
+        <div class="play-btn">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconshipinliebiaoyebofang"></use>
+          </svg>
+        </div>
+      </div>
       <div class="content">
         <h2>
           胎儿静脉导管缺如及脐静脉文字
@@ -75,6 +88,44 @@
     .video_box {
       height: 211px;
       background: #f7f9fa;
+      position: relative;
+      img {
+        height: 100%;
+        width: 100%;
+      }
+      .look-num {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 26px;
+        width: 100%;
+        font-size: 12px;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        padding-left: 12px;
+        background-image: linear-gradient(
+          -180deg,
+          rgba(98, 98, 98, 0) 0%,
+          rgba(51, 51, 51, 0.3) 100%
+        );
+        .icon {
+          height: 10px;
+          width: 15px;
+          margin-right: 5px;
+        }
+      }
+      .play-btn {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -22px;
+        margin-top: -22px;
+        .icon {
+          width: 44px;
+          height: 44px;
+        }
+      }
     }
     .content {
       padding: 10px;

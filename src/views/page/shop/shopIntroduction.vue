@@ -131,6 +131,9 @@
       sideBar,
       breadcrumbVue,
       shopCardVue
+    },
+    beforeRouteLeave(to, from, next) {
+      console.log(to, from);
     }
   };
 </script>

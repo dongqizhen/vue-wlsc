@@ -464,14 +464,16 @@
               color: #333333;
               font-weight: 600;
               display: flex;
+              height: 34px;
               justify-content: flex-start;
               align-items: center;
-              line-height: 30px;
+              line-height: 34px;
               margin-bottom: 40px;
               .icon {
                 height: 34px;
                 width: 34px;
                 margin-right: 12px;
+                margin-top: 2px;
               }
             }
             .btn {

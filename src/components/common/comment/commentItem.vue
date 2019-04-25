@@ -14,9 +14,13 @@
           <div class="replay-btn">
             <span @click="replayBtnClick">回复</span>
             &nbsp;&nbsp;·&nbsp;&nbsp;
-            <span>
+            <span @click="packUp">
               2条回复
-              <svg class="icon" aria-hidden="true">
+              <svg
+                class="icon"
+                :class="commentIsShow && 'active'"
+                aria-hidden="true"
+              >
                 <use xlink:href="#iconhuifuzhankai"></use>
               </svg>
             </span>
@@ -28,29 +32,54 @@
             89
           </span>
         </div>
-        <div class="replay-area">
-          <a-textarea placeholder="写下您的评论" :rows="4" />
-          <span>发送</span>
+        <transition name="slide-fade">
+          <div class="replay-area" v-if="isLogin && iptIsShow">
+            <a-textarea placeholder="写下您的评论" :rows="4" />
+            <span>发送</span>
+          </div>
+        </transition>
+      </div>
+      <transition name="slide-fade">
+        <div class="replay-container" v-if="commentIsShow">
+          <ul>
+            <slot name="replay-container"></slot>
+          </ul>
         </div>
-      </div>
-      <div class="replay-container">
-        <ul>
-          <slot name="replay-container"></slot>
-        </ul>
-      </div>
+      </transition>
     </div>
+    <login-modal-vue type="login" :Visible="visible"></login-modal-vue>
   </li>
 </template>
 
 <script>
+  import { mapState } from "vuex";
+  import loginModalVue from "../../modal/loginModal.vue";
+
   export default {
     data() {
-      return {};
+      return {
+        iptIsShow: false,
+        commentIsShow: false,
+        visible: false
+      };
+    },
+    components: {
+      loginModalVue
     },
     methods: {
       replayBtnClick() {
-        alert();
+        if (this.isLogin) {
+          this.iptIsShow = !this.iptIsShow;
+        } else {
+          this.visible = true;
+        }
+      },
+      packUp() {
+        this.commentIsShow = !this.commentIsShow;
       }
+    },
+    computed: {
+      ...mapState(["isLogin"])
     }
   };
 </script>
@@ -77,10 +106,30 @@
       border-color: $theme-color;
     }
   }
+
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.3s ease;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+  }
+
+  .slide-fade-enter-active {
+    transition: all 0.3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+  }
+  .slide-fade-enter,
+  .slide-fade-leave-to {
+    transform: translateY(-5px);
+    opacity: 0;
+  }
   li {
     display: flex;
     justify-content: flex-start;
-    padding-bottom: 20px;
+    //padding-bottom: 20px;
     border-bottom: 1px solid #dddddd;
     &:last-child {
       border: 0;
@@ -127,6 +176,7 @@
         .btn {
           display: flex;
           justify-content: space-between;
+          margin-bottom: 24px;
           .replay-btn {
             display: flex;
             justify-content: flex-start;
@@ -140,6 +190,10 @@
                 height: 6px;
                 margin-top: 2px;
                 margin-left: 8px;
+                transition: all 0.3s;
+                &.active {
+                  transform: rotate(180deg);
+                }
               }
             }
           }
@@ -158,7 +212,7 @@
           }
         }
         .replay-area {
-          margin-top: 10px;
+          // margin-top: 10px;
           span {
             display: flex;
             height: 33px;
@@ -177,6 +231,8 @@
             }
           }
         }
+      }
+      .replay-container {
       }
     }
   }

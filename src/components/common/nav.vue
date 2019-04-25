@@ -6,11 +6,14 @@
           v-for="(item, i) in nav_title"
           :key="`nav-${i}`"
           tag="li"
-          :to="{ path: item.path, query: { nav_index: i } }"
+          :to="{
+            path: item.path,
+            query: { nav_index: i }
+          }"
           @click="nav_change"
         >
           <a target="_blank" :class="i == defaultNav ? 'active' : ''">{{
-            item.title
+            item.name
           }}</a>
         </router-link>
       </ul>
@@ -21,23 +24,23 @@
 <script>
   const nav_title = [
     {
-      title: "首页",
+      name: "首页",
       path: "/"
     },
     {
-      title: "找产品",
+      name: "找产品",
       path: "/lookingProduct"
     },
     {
-      title: "找品牌",
+      name: "找品牌",
       path: "/lookingProduct/oneOfBrandClassificne"
     },
     {
-      title: "找店铺",
+      name: "找店铺",
       path: "/lookingShop"
     },
     {
-      title: "关于我们",
+      name: "关于我们",
       path: "/aboutUs"
     }
   ];

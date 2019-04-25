@@ -329,7 +329,8 @@
                       <i></i>
                     </li>
                   </ul>
-                  <div class="big-image">
+
+                  <div class="big-image" :class="bigImageIsShow && 'active'">
                     <img src="../../../../assets/images/demo.jpg" alt="" />
                   </div>
                 </div>
@@ -356,20 +357,7 @@
       </a-button>
       <shop-card-vue></shop-card-vue>
     </div>
-    <modal :isShow="visible" :options="options">
-      <div slot="content">
-        <p>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#iconzhanghaoanquanduigou"></use>
-          </svg>
-          成功加入选购单
-        </p>
-        <div class="btn">
-          <a-button>去询价</a-button>
-          <a-button>继续选购</a-button>
-        </div>
-      </div>
-    </modal>
+    <login-modal-vue :Visible="visible" :type="type"></login-modal-vue>
   </div>
 </template>
 
@@ -383,41 +371,49 @@
   });
   import Swiper from "swiper";
   import shopCardVue from "../../../../components/common/shopCard.vue";
+  import loginModalVue from "../../../../components/modal/loginModal.vue";
+  import { mapState } from "vuex";
 
   export default {
     data() {
       return {
-        isLogin: true, //是否登录
         imgarr: [img, img],
-        defaultIndex: 0,
+        defaultIndex: null,
         visible: false,
-        options: {
-          title: "提示",
-          closable: true,
-          maskClosable: false,
-          wrapClassName: "success",
-          centered: false
-        }
+        title: "",
+        type: "",
+        bigImageIsShow: false
       };
     },
     components: {
       shareMenuVue,
       IconFont,
-      modal,
-      shopCardVue
+      shopCardVue,
+      loginModalVue
     },
     methods: {
       changeImage(i, e) {
-        console.log(e);
-        this.defaultIndex = i;
+        if (this.defaultIndex == i) {
+          this.bigImageIsShow = !this.bigImageIsShow;
+        } else {
+          this.defaultIndex = i;
+          this.bigImageIsShow = true;
+        }
       },
       callback(val) {
         console.log(val);
       },
       addCarSuccess() {
+        if (!this.isLogin) {
+          this.type = "login";
+        }
         this.visible = true;
       }
     },
+    computed: {
+      ...mapState(["isLogin"])
+    },
+
     mounted() {
       const evt = new Event(),
         m = new Magnifier(evt);
@@ -451,6 +447,7 @@
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
+
   .product-details {
     display: flex;
     justify-content: flex-start;
@@ -895,9 +892,14 @@
                       }
                     }
                     .big-image {
-                      height: 352px;
-                      width: 352px;
                       background: $base-background;
+                      height: 0;
+                      width: 0;
+                      transition: all 0.3s;
+                      &.active {
+                        height: 352px;
+                        width: 352px;
+                      }
                       img {
                         height: 100%;
                         width: 100%;

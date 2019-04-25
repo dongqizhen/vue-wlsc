@@ -5,7 +5,7 @@
     <Nav :defaultNav="defaultNav"></Nav>
     <div class="container">
       <div class="commonWidth">
-        <breadcrumb-vue></breadcrumb-vue>
+        <breadcrumb-vue :routes="routes"></breadcrumb-vue>
         <div class="content">
           <router-view></router-view>
         </div>
@@ -32,10 +32,6 @@
           {
             path: "/",
             name: "首页"
-          },
-          {
-            path: "/detaile",
-            name: "文章详情"
           }
         ]
       };
@@ -50,7 +46,15 @@
       breadcrumbVue
     },
     mounted() {
-      console.log(this);
+      console.log(this.$router, this.$route);
+    },
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.routes.push({
+          name: vm.$route.name,
+          path: vm.$route.path
+        });
+      });
     }
   };
 </script>

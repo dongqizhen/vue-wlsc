@@ -1,5 +1,6 @@
 <template>
   <div class="one-of-brand-classific">
+    <breadcrumb-vue :routes="routes"></breadcrumb-vue>
     <div class="search">
       <span>常用品牌</span>
       <span>一线品牌</span>
@@ -37,16 +38,22 @@
         <span>搜索</span>
       </div>
     </div>
-    <span class="manageBtn">
+    <span class="manageBtn" @click="brandVisible = !brandVisible">
       <svg class="icon" aria-hidden="true">
         <use xlink:href="#iconguanlichangyongfenlei"></use>
       </svg>
       管理常用品牌
+      <common-brands-modal-vue
+        :brandVisible="brandVisible"
+      ></common-brands-modal-vue>
     </span>
     <div class="content">
       <div class="left">
         <ul>
           <router-link
+            v-for="(item, i) in arr"
+            :key="`cp-${i}`"
+            tag="li"
             :to="
               $route.query.nav_index == 2
                 ? { path: '/lookingProduct', query: { nav_index: 2 } }
@@ -54,51 +61,12 @@
                 ? { path: 'brand', query: { nav_index: 1 } }
                 : ''
             "
-            tag="li"
           >
-            <a target="_blank">
+            <a>
               <div class="img_box"></div>
               松下
             </a>
           </router-link>
-          <router-link to="/" tag="li" append>
-            <a target="_blank">
-              <div class="img_box"></div>
-              西门子
-            </a>
-          </router-link>
-          <li>
-            <div class="img_box"></div>
-            迈瑞
-          </li>
-          <li>
-            <div class="img_box"></div>
-            3M
-          </li>
-          <li>
-            <div class="img_box"></div>
-            GE
-          </li>
-          <li>
-            <div class="img_box"></div>
-            Bio-Rad伯乐
-          </li>
-          <li>
-            <div class="img_box"></div>
-            KYMD
-          </li>
-          <li>
-            <div class="img_box"></div>
-            吉丽医疗
-          </li>
-          <li>
-            <div class="img_box"></div>
-            ZHAOFENG
-          </li>
-          <li>
-            <div class="img_box"></div>
-            SKE
-          </li>
         </ul>
       </div>
 
@@ -111,13 +79,67 @@
 
 <script>
   import brandCardVue from "../../../../components/common/brandCard.vue";
+  import breadcrumbVue from "../../../../components/common/breadcrumb.vue";
+  import CommonBrandsModalVue from "../../../../components/modal/CommonBrandsModal";
 
+  const arr = [
+    "松下",
+    "迈瑞",
+    "西门子",
+    "松下",
+    "松下",
+    "松下",
+    "松下",
+    "松下",
+    "松下",
+    "松下",
+    "松下",
+    "松下",
+    "松下"
+  ];
   export default {
     data() {
-      return {};
+      return {
+        arr,
+        routes: "",
+        brandVisible: false
+      };
+    },
+    created() {
+      this.routes =
+        this.$route.query.nav_index == 2
+          ? [
+              {
+                name: "首页",
+                path: "/"
+              },
+              {
+                name: "找品牌",
+                path: "/lookingProduct/oneOfBrandClassificne"
+              }
+            ]
+          : [
+              {
+                name: "首页",
+                path: "/"
+              },
+              {
+                name: "找产品",
+                path: "/lookingProduct?nav_index=" + this.$route.query.nav_index
+              },
+              {
+                name: "超声手术设备",
+                path: "/lookingProduct/oneOfBrandClassificne"
+              }
+            ];
     },
     components: {
-      brandCardVue
+      brandCardVue,
+      breadcrumbVue,
+      CommonBrandsModalVue
+    },
+    methods: {
+      handleClick(item, i) {}
     }
   };
 </script>

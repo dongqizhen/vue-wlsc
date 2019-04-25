@@ -12,7 +12,10 @@ const router = new Router({
             path: "/",
             name: "首页",
             component: () =>
-                import ( /* webpackChunkName: "index" */ "../views/index")
+                import ( /* webpackChunkName: "index" */ "../views/index"),
+            meta: {
+                title: '网来商城'
+            },
         },
         {
             path: "/merchant",
@@ -220,6 +223,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+
     /* 路由发生变化修改页面title */
     if (to.meta.title) {
         document.title = to.meta.title

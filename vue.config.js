@@ -2,9 +2,9 @@
 // 这里只列一部分，具体配置惨考文档 https://cli.vuejs.org/zh/config/#publicpath
 
 const path = require('path')
-
+const API_HOST = require('./src/config/API.js')
+console.log(API_HOST)
 const resolve = (dir) => {
-    console.log(path.join(__dirname, dir))
     return path.join(__dirname, dir)
 }
 

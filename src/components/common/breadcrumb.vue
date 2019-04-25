@@ -7,11 +7,11 @@
         </svg>
       </span>
 
-      <template slot="itemRender" slot-scope="{ route, params, routes, paths }">
+      <template slot="itemRender" slot-scope="{ route, params, routes }">
         <span v-if="routes.indexOf(route) === routes.length - 1">
           {{ route.name }}
         </span>
-        <router-link v-else :to="`/${paths.join('/')}`">
+        <router-link v-else :to="{ path: route.path }" replace>
           {{ route.name }}
         </router-link>
       </template>
@@ -23,17 +23,22 @@
   export default {
     data() {
       return {
-        routes: [
-          {
-            path: "/",
-            name: "首页"
-          },
-          {
-            path: "/detaile",
-            name: "文章详情"
-          }
-        ]
+        // routes: [
+        //   {
+        //     path: "/",
+        //     name: "首页"
+        //   },
+        //   {
+        //     path: "/detaile",
+        //     name: "文章详情"
+        //   }
+        // ]
       };
+    },
+    props: {
+      routes: {
+        type: Array
+      }
     }
   };
 </script>

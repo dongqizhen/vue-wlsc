@@ -6,7 +6,7 @@
     <Nav :defaultNav="defaultNav"></Nav>
     <div class="container">
       <div class="commonWidth">
-        <breadcrumb-vue></breadcrumb-vue>
+        <breadcrumb-vue :routes="routes"></breadcrumb-vue>
         <div class="select-area">
           选择销售地区：
           <span @click="selectArea">
@@ -135,7 +135,17 @@
         province: "选择省/直辖市",
         city: "选择市",
         isActive: 0,
-        selectMainArea: "北京市西城区"
+        selectMainArea: "北京市西城区",
+        routes: [
+          {
+            name: "首页",
+            path: "/"
+          },
+          {
+            name: "找店铺",
+            path: "/lookingShop"
+          }
+        ]
       };
     },
     mixins: [mixin],
@@ -152,7 +162,9 @@
       shopLeftSideVue,
       shopNavVue
     },
-    created() {},
+    created() {
+      //this.routes = JSON.parse(this.$route.query.routes);
+    },
     methods: {
       selectArea() {
         this.areaIsShow = !this.areaIsShow;

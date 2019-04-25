@@ -13,9 +13,10 @@
             <router-view></router-view>
             <div class="wechat">
               <span></span>
-              <p>
+              <p @mouseenter="isHover = true" @mouseleave="isHover = false">
                 <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#iconweixin"></use>
+                  <use v-if="!isHover" xlink:href="#iconweixin"></use>
+                  <use v-else xlink:href="#iconweixin-copy"></use>
                 </svg>
                 微信登录
               </p>
@@ -36,7 +37,9 @@
 <script>
   export default {
     data() {
-      return {};
+      return {
+        isHover: false
+      };
     }
   };
 </script>
@@ -110,6 +113,7 @@
               cursor: pointer;
               &:hover {
                 opacity: 0.7;
+                color: #5bcf47;
               }
               .icon {
                 height: 16px;
