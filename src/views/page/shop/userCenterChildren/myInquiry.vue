@@ -1,59 +1,16 @@
 <template>
   <div class="messageCenter">
-    <common-title title="消息中心"></common-title>
-    <div class="tabBar">
-      <div class="left-box">
-        <manage-number-nav :navArr="tabs" v-on:tab="getTab"></manage-number-nav>
+    <common-title title="我的询价">
+      <div slot="titleRight" class="right-box">
+        <ul>
+          <li class="active">报价中(1)</li>
+          <li>已报价(2)</li>
+          <li>已关闭(1)</li>
+        </ul>
       </div>
-      <div class="right-box">
-        <div :class="current == 1 ? 'active' : ''" @click="system(1)">
-          系统通知(24)
-        </div>
-        <div :class="current == 2 ? 'active' : ''" @click="system(2)">
-          私信消息(12)
-        </div>
-      </div>
-    </div>
+    </common-title>
     <div class="listContainer">
-      <div class="listContent">
-        <ul v-if="current == 1">
-          <router-link
-            tag="li"
-            v-for="item in data"
-            :key="item.id"
-            :to="{
-              path: 'messageDetail',
-              query: { id: item.id }
-            }"
-          >
-            <system-notice
-              :data="item"
-              :checkedList="checkedList"
-              v-on:getChecked="getChecked"
-              :unRead="unRead"
-            ></system-notice>
-          </router-link>
-        </ul>
-        <ul v-else>
-          <router-link
-            class="messageBox"
-            tag="li"
-            v-for="item in data"
-            :key="item.id"
-            :to="{
-              path: 'messageDetail',
-              query: { id: item.id }
-            }"
-          >
-            <private-message
-              :data="item"
-              :checkedList="checkedList"
-              v-on:getChecked="getChecked"
-              :unRead="unRead"
-            ></private-message>
-          </router-link>
-        </ul>
-      </div>
+      <div class="listContent"></div>
       <div class="tfooter">
         <check-all
           :amount="checkedList.length"
@@ -71,18 +28,13 @@
         </check-all>
       </div>
     </div>
-    <pagination></pagination>
   </div>
 </template>
 
 <script>
   import _ from "lodash";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
-  import manageNumberNav from "../../../../components/common/manageNumberNav";
-  import systemNotice from "../../../../components/common/systemNoticeItem";
-  import privateMessage from "../../../../components/common/privateMessageItem";
   import checkAll from "../../../../components/common/checkAll";
-  import pagination from "../../../../components/common/pagination";
   export default {
     data() {
       return {
@@ -102,40 +54,11 @@
               "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
           }
         ],
-        tabs: [],
         checkAll: false,
-        checkedList: [],
-        current: 1,
-        unRead: true
+        checkedList: []
       };
     },
-    beforeMount() {
-      this.tabs = [
-        {
-          id: 2,
-          name: "未读消息",
-          amount: 24
-        },
-        {
-          id: 3,
-          name: "已读消息",
-          amount: 12
-        }
-      ];
-    },
     methods: {
-      getTab(val) {
-        if (this.tabs[0].id == val) {
-          this.unRead = true;
-        } else {
-          this.unRead = false;
-        }
-      },
-      system(val) {
-        this.current = val;
-        this.checkedList = [];
-        this.checkAll = false;
-      },
       getChecked(val) {
         if (typeof val == "object") {
           this.checkedList = val;
@@ -166,16 +89,11 @@
         if (this.checkedList.length > 0) {
           //向后台发送请求，标记为已读，成功后将刷新数据
         }
-      },
-      onPaginationChange() {}
+      }
     },
     components: {
       commonTitle,
-      manageNumberNav,
-      systemNotice,
-      privateMessage,
-      checkAll,
-      pagination
+      checkAll
     }
   };
 </script>
@@ -188,39 +106,28 @@
     padding: 4px 20px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
     margin-bottom: 10px;
-    .tabBar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: $border-style;
-      margin-top: 3px;
-      /deep/.nav {
-        border-bottom: none;
-        .ant-tabs {
-          .ant-tabs-ink-bar {
-            bottom: 0 !important;
-          }
-        }
-      }
+    .common-title {
       .right-box {
-        display: flex;
-        align-items: center;
-        height: 27px;
-        div {
-          width: 95px;
-          height: 27px;
-          line-height: 27px;
-          border: $border-style;
-          text-align: center;
-          font-size: 12px;
-          color: #333;
-          cursor: pointer;
-          &:first-child {
+        ul {
+          display: flex;
+          align-items: center;
+          li {
+            width: 76px;
+            height: 27px;
+            line-height: 27px;
+            border: 1px solid #dddddd;
+            font-size: 12px;
+            color: #333;
+            text-align: center;
+            font-weight: normal;
             border-right: none;
-          }
-          &.active {
-            background: #ffdfaa;
-            border: 1px solid #f5a623;
+            &:last-child {
+              border-right: 1px solid #dddddd;
+            }
+            &.active {
+              background: #ffdfaa;
+              border: 1px solid #f5a623;
+            }
           }
         }
       }

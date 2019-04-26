@@ -3,10 +3,10 @@
     <div class="container-box">
       <common-title title="店铺信息"></common-title>
       <div class="content">
-        <div class="common shopName">
+        <div class="common">
           <div class="left-box"><span class="red">*</span>店铺名称</div>
           <div class="right-box">
-            <a-input placeholder="请输入店铺名称" />
+            <a-input placeholder="请输入店铺名称" v-model="shopName" />
           </div>
         </div>
         <div class="common shopType">
@@ -15,44 +15,34 @@
             <a-select
               placeholder="请选择经营模式"
               style="width: 222px"
-              @change="handleChange"
+              @change="handleShopTypeChange"
             >
               <a-icon slot="suffixIcon" class="icon">
                 <use xlink:href="#icontianjiaduibichanpinxiala"></use>
               </a-icon>
-              <a-select-option value="jack">Jack</a-select-option>
-              <a-select-option value="lucy">Lucy</a-select-option>
-              <a-select-option value="Yiminghe">yiminghe</a-select-option>
+              <a-select-option
+                v-for="item in shopTypeData"
+                :key="item.id"
+                :value="item.id"
+              >
+                {{ item.value }}
+              </a-select-option>
             </a-select>
           </div>
         </div>
         <div class="common shopIndexPicture">
           <div class="left-box">店铺首页图片</div>
           <div class="right-box">
-            <a-upload
-              name="avatar"
-              listType="picture-card"
-              class="avatar-uploader"
-              :showUploadList="false"
-              action="//jsonplaceholder.typicode.com/posts/"
-              :beforeUpload="beforeUpload"
-              @change="handleChange"
-            >
-              <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
-              <div v-else>
-                <a-icon v-if="loading" type="loading"></a-icon>
-                <a-icon v-else class="icon">
-                  <use xlink:href="#icontianjiatupian1"></use>
-                </a-icon>
-                <div class="ant-upload-text">点击添加图片</div>
-              </div>
-            </a-upload>
+            <upload v-on:getVal="getImgUrl"></upload>
           </div>
         </div>
-        <div class="common shopBusinessScope">
+        <div class="common ">
           <div class="left-box"><span class="red">*</span>经营范围</div>
           <div class="right-box">
-            <a-input placeholder="请输入店铺经营范围" />
+            <a-input
+              placeholder="请输入店铺经营范围"
+              v-model="shopBusinessScope"
+            />
           </div>
         </div>
         <div class="common shopSaleArea">
@@ -85,7 +75,7 @@
         <div class="common submit">
           <div class="left-box"></div>
           <div class="right-box">
-            <a-button>保存</a-button>
+            <a-button @click="save">保存</a-button>
           </div>
         </div>
       </div>
@@ -94,147 +84,92 @@
 </template>
 
 <script>
-  import { Upload } from "ant-design-vue";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
+  import upload from "../../../../components/common/upload";
 
-  const selectArr = [{ key: 1, value: "beijing" }, { key: 2, value: "tianjin" }];
-  function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result));
-    reader.readAsDataURL(img);
-  }
-  const provinceData = ["Zhejiang", "Jiangsu"];
-  const cityData = {
-    Zhejiang: [
-      { label: "北京", value: "Hangzhou", id: 1 },
-      { label: "天津", value: "Ningbo", id: 2 },
-      { label: "上海", value: "Wenzhou", id: 3 }
-    ],
-    Jiangsu: [
-      { label: "苏州", value: "Nanjing", id: 4 },
-      { label: "常州", value: "Suzhou", id: 5 },
-      { label: "南京", value: "Zhenjiang", id: 6 }
-    ]
-  };
-  const defaultCity = cityData[provinceData[0]][0];
   export default {
     data() {
       return {
+        shopName: "",
+        shopBusinessScope: "",
         defaultCascaderValue: [],
-        provinceData,
-        cityData,
-        cities: cityData[provinceData[0]],
-        secondCity: cityData[provinceData[0]][0],
-        defaultCity,
-        selectArr,
-        loading: false,
-        imageUrl: "",
         introduce: "",
+        shopType: "",
+        shopTypeData: [
+          { id: 1, value: "111" },
+          { id: 2, value: "222" },
+          { is: 3, value: "333" }
+        ],
         options: [
           {
-            label: "北京",
-            value: "Zhejiang",
-            title: "北京 010",
-            key: "010"
+            value: "zhejiang",
+            label: "Zhejiang",
+            children: [
+              {
+                value: "hangzhou",
+                label: "Hangzhou",
+                children: [
+                  {
+                    value: "xihu",
+                    label: "West Lake"
+                  }
+                ]
+              }
+            ]
           },
           {
-            label: "上海",
-            value: "Jiangsu",
-            key: "021"
-          },
-          {
-            label: "杭州",
-            value: "hangzhou",
-            key: "0571",
-            disabled: true
+            value: "jiangsu",
+            label: "Jiangsu",
+            children: [
+              {
+                value: "nanjing",
+                label: "Nanjing",
+                children: [
+                  {
+                    value: "zhonghuamen",
+                    label: "Zhong Hua Men"
+                  }
+                ]
+              }
+            ]
           }
         ]
       };
     },
     methods: {
-      onChange() {},
+      save() {
+        console.log(this.shopName);
+        console.log(this.shopType);
+        console.log(this.shopBusinessScope);
+        console.log(this.shopName);
+        console.log(this.shopName);
+      },
+      getImgUrl(val) {
+        console.log(val);
+      },
+      onChange(value) {
+        console.log(value);
+      },
       handleShopTypeChange(value) {
         console.log(`selected ${value}`);
-      },
-      handleProvinceChange(value) {
-        this.cities = cityData[value];
-        console.log(this.cities);
-        this.secondCity = cityData[value][0];
-      },
-      handleCityChange(value) {
-        console.log(value);
-      },
-      handleAreaChange(value) {
-        console.log(value);
-      },
-      handleChange(info) {
-        if (info.file.status === "uploading") {
-          this.loading = true;
-          return;
-        }
-        if (info.file.status === "done") {
-          // Get this url from response in real world.
-          getBase64(info.file.originFileObj, imageUrl => {
-            this.imageUrl = imageUrl;
-            this.loading = false;
-          });
-        }
-      },
-      beforeUpload(file) {
-        console.log(file);
-        // const isJPG = file.type === "image/jpeg";
-        // if (!isJPG) {
-        //   this.$message.error("You can only upload JPG file!");
-        // }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-          this.$message.error("Image must smaller than 2MB!");
-        }
-        return isLt2M;
-        // return isJPG && isLt2M;
+        this.shopType = value;
       }
     },
     components: {
-      AUpload: Upload,
-      commonTitle
+      commonTitle,
+      upload
     }
   };
 </script>
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
+  @import "../../../../assets/scss/_input";
   .shopInfo {
     background-color: #fff;
-    height: 693px;
+    min-height: 693px;
     padding: 4px 20px;
     box-shadow: $base-box-shadow;
-    /deep/.ant-input:hover {
-      border-color: $theme-color !important;
-    }
-    /deep/.ant-input:focus {
-      border-color: $theme-color !important;
-      box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2) !important;
-    }
-    /deep/.ant-select-selection:hover {
-      border-color: $theme-color;
-    }
-    /deep/.ant-select-open .ant-select-selection {
-      border-color: $theme-color;
-      box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
-    }
-    /deep/ .ant-select-selection:focus,
-    .ant-select-selection:active {
-      border-color: $theme-color;
-      box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
-    }
-    /deep/.ant-cascader-picker:hover .ant-cascader-input {
-      border-color: $theme-color;
-    }
-    /deep/.ant-cascader-picker:focus .ant-cascader-input {
-      border-color: $theme-color;
-      box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
-    }
-
     .content {
       margin-top: 24px;
       .common {
@@ -278,35 +213,22 @@
               right: 20px;
             }
           }
-          /deep/.avatar-uploader {
-            .ant-upload.ant-upload-select-picture-card {
-              width: 118px;
-              height: 118px;
-              border: none;
-              background-color: #f5f5f5;
-              .ant-upload-text {
-                font-family: PingFangSC-Regular;
-                font-size: 12px;
-                color: #ccc;
-              }
-              .anticon {
-                width: 18px;
-                height: 18px;
-                svg {
-                  width: 100%;
-                  height: 100%;
-                }
-              }
-              img {
-                width: 100%;
-              }
-            }
-          }
         }
         .saleArea {
           /deep/.ant-select {
             margin-right: 14px;
           }
+          .ant-cascader-picker-arrow {
+            right: 20px;
+          }
+          /deep/.ant-cascader-picker .ant-cascader-picker-clear {
+            display: none;
+          }
+        }
+      }
+      .shopIndexPicture {
+        .right-box {
+          height: 118px;
         }
       }
       .ant-btn {

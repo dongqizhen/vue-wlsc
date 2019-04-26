@@ -27,15 +27,11 @@
                   placeholder="请选择状态"
                   style="width: 112px"
                   @change="handleChange"
+                  :options="options"
                 >
-                  <a-icon slot="suffixIcon">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-                    </svg>
+                  <a-icon slot="suffixIcon" class="icon">
+                    <use xlink:href="#icontianjiaduibichanpinxiala"></use>
                   </a-icon>
-                  <a-select-option value="jack">Jack</a-select-option>
-                  <a-select-option value="lucy">Lucy</a-select-option>
-                  <a-select-option value="Yiminghe">yiminghe</a-select-option>
                 </a-select>
               </div>
             </div>
@@ -46,28 +42,21 @@
                   placeholder="请选择大类"
                   style="width: 112px"
                   @change="handleProductBigTypeChange"
+                  :options="options"
                 >
-                  <a-icon slot="suffixIcon">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-                    </svg>
+                  <a-icon slot="suffixIcon" class="icon">
+                    <use xlink:href="#icontianjiaduibichanpinxiala"></use>
                   </a-icon>
-                  <a-select-option value="jack">Jack</a-select-option>
-                  <a-select-option value="lucy">Lucy</a-select-option>
-                  <a-select-option value="Yiminghe">yiminghe</a-select-option>
                 </a-select>
                 <a-select
                   placeholder="请选择小类"
                   style="width: 112px"
                   @change="handleProductSmallTypeChange"
+                  :options="options"
                 >
-                  <a-icon slot="suffixIcon">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-                    </svg>
+                  <a-icon slot="suffixIcon" class="icon">
+                    <use xlink:href="#icontianjiaduibichanpinxiala"></use>
                   </a-icon>
-                  <a-select-option value="jack">Jack</a-select-option>
-                  <a-select-option value="lucy">Lucy</a-select-option>
                 </a-select>
               </div>
             </div>
@@ -111,7 +100,11 @@
               </span>
             </li>
           </ul>
-          <check-all>
+          <check-all
+            :amount="checkedList.length"
+            :checkAll="checkAll"
+            v-on:isCheckAll="isCheckAllMethod"
+          >
             <div slot="right-box" class="right-box">
               <button class="shelf">上架</button>
               <button class="obtained">下架</button>
@@ -191,6 +184,18 @@
       };
     },
     methods: {
+      isCheckAllMethod(val) {
+        if (val) {
+          this.checkAll = true;
+          this.checkedList = [];
+          for (const val of this.data) {
+            this.checkedList.push(val.id);
+          }
+        } else {
+          this.checkAll = false;
+          this.checkedList = [];
+        }
+      },
       onChange(id) {
         if (_.indexOf(this.checkedList, id) == -1) {
           this.checkedList.push(id);

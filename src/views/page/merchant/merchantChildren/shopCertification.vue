@@ -3,18 +3,37 @@
     <div class="basicInformation">
       <commonTitle title="认证材料">
         <span slot="titleRight" class="certificationStatus">
-          <svg class="icon" aria-hidden="true">
+          <svg class="icon" aria-hidden="true" v-if="certificationStatus == 1">
             <use xlink:href="#iconbaojiazhong"></use>
           </svg>
-          认证状态：认证中
+          <svg
+            class="icon"
+            aria-hidden="true"
+            v-else-if="certificationStatus == 2"
+          >
+            <use xlink:href="#iconyibaojia"></use>
+          </svg>
+          <svg class="icon" aria-hidden="true" v-else>
+            <use xlink:href="#iconbaojiazhong"></use>
+          </svg>
+          认证状态：{{
+            certificationStatus == 1
+              ? "认证中"
+              : certificationStatus == 2
+              ? "已认证"
+              : "未认证"
+          }}
         </span>
       </commonTitle>
       <div class="informationContent">
         <div class="title">基本信息</div>
-        <div class="common companyName">
+        <div class="common ">
           <div class="left-box"><span class="red">*</span>公司名称</div>
           <div class="right-box">
-            <a-input placeholder="请输入公司名称" />
+            <a-input
+              placeholder="请输入公司名称"
+              v-model="submitData.companyName"
+            />
           </div>
         </div>
         <div class="common companyAddress">
@@ -26,7 +45,11 @@
               placeholder="请选择省/市/区"
               :defaultValue="defaultCascaderValue"
               style="width: 390px"
-            />
+            >
+              <a-icon slot="suffixIcon" class="icon">
+                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+              </a-icon>
+            </a-cascader>
           </div>
         </div>
         <div class="common companyIntroduce">
@@ -35,69 +58,93 @@
             <a-textarea
               placeholder="请在这里对公司做一个介绍"
               type="textarea"
-              v-model="introduce"
+              v-model="submitData.introduce"
               class="noInput"
             />
           </div>
         </div>
-        <div class="common companyLegalPerson">
+        <div class="common ">
           <div class="left-box">法定代表人</div>
           <div class="right-box">
-            <a-input placeholder="请输入法定代表人" />
+            <a-input
+              placeholder="请输入法定代表人"
+              v-model="submitData.companyLegalPerson"
+            />
           </div>
         </div>
-        <div class="common companyContact">
+        <div class="common ">
           <div class="left-box"><span class="red">*</span>联系人</div>
           <div class="right-box">
-            <a-input placeholder="请输入联系人" />
+            <a-input
+              placeholder="请输入联系人"
+              v-model="submitData.companyContact"
+            />
           </div>
         </div>
-        <div class="common companyPhone">
+        <div class="common ">
           <div class="left-box"><span class="red">*</span>手机号</div>
           <div class="right-box">
-            <a-input placeholder="请输入手机号" />
+            <a-input
+              placeholder="请输入手机号"
+              v-model="submitData.companyPhone"
+            />
           </div>
         </div>
-        <div class="common companyTelephone">
+        <div class="common ">
           <div class="left-box"><span class="red">*</span>办公室电话</div>
           <div class="right-box">
-            <a-input placeholder="请输入办公室电话" />
+            <a-input
+              placeholder="请输入办公室电话"
+              v-model="submitData.companyTelephone"
+            />
           </div>
         </div>
-        <div class="common companyEmail">
+        <div class="common ">
           <div class="left-box"><span class="red">*</span>企业邮箱</div>
           <div class="right-box">
-            <a-input placeholder="请输入企业邮箱" />
+            <a-input
+              placeholder="请输入企业邮箱"
+              v-model="submitData.companyEmail"
+            />
           </div>
         </div>
-        <div class="common companyFax">
+        <div class="common ">
           <div class="left-box">传真</div>
           <div class="right-box">
-            <a-input placeholder="请输入传真" />
+            <a-input placeholder="请输入传真" v-model="submitData.companyFax" />
           </div>
         </div>
-        <div class="common companyBankAccount">
+        <div class="common ">
           <div class="left-box">开户银行</div>
           <div class="right-box">
-            <a-input placeholder="请输入开户银行" />
+            <a-input
+              placeholder="请输入开户银行"
+              v-model="submitData.companyBankAccount"
+            />
           </div>
         </div>
-        <div class="common companyOpenAccount">
+        <div class="common ">
           <div class="left-box">开户账号</div>
           <div class="right-box">
-            <a-input placeholder="请输入开户账号" />
+            <a-input
+              placeholder="请输入开户账号"
+              v-model="submitData.companyOpenAccount"
+            />
           </div>
         </div>
-        <div class="common companyQQ">
+        <div class="common ">
           <div class="left-box">QQ号</div>
           <div class="right-box">
-            <a-input placeholder="请输入QQ号" />
+            <a-input placeholder="请输入QQ号" v-model="submitData.companyQQ" />
           </div>
         </div>
-        <div class="common companyWeChat">
+        <div class="common ">
           <div class="left-box">微信号</div>
           <div class="right-box">
-            <a-input placeholder="请输入微信号" />
+            <a-input
+              placeholder="请输入微信号"
+              v-model="submitData.companyWeChat"
+            />
           </div>
         </div>
       </div>
@@ -110,86 +157,56 @@
             <span class="red">*</span>营业执照<i>(三合一)</i>
           </div>
           <div class="right-box">
-            <a-upload
-              name="avatar"
-              listType="picture-card"
-              class="avatar-uploader"
-              :showUploadList="false"
-              action="//jsonplaceholder.typicode.com/posts/"
-              :beforeUpload="beforeUpload"
-              @change="handleChange"
-            >
-              <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
-              <div v-else>
-                <a-icon :type="loading ? 'loading' : 'plus'" />
-                <div class="ant-upload-text">点击添加图片</div>
-              </div>
-            </a-upload>
+            <upload v-on:getVal="getLicenseUrl"></upload>
           </div>
         </div>
         <div class="common companyTaxRegistration">
           <div class="left-box">税务登记证</div>
           <div class="right-box">
-            <a-upload
-              name="avatar"
-              listType="picture-card"
-              class="avatar-uploader"
-              :showUploadList="false"
-              action="//jsonplaceholder.typicode.com/posts/"
-              :beforeUpload="beforeUpload"
-              @change="handleChange"
-            >
-              <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
-              <div v-else>
-                <a-icon :type="loading ? 'loading' : 'plus'" />
-                <div class="ant-upload-text">点击添加图片</div>
-              </div>
-            </a-upload>
+            <upload v-on:getVal="getTaxRegistrationUrl"></upload>
           </div>
         </div>
         <div class="common companyProductionLicense">
           <div class="left-box">医疗器械经营或生产许可证</div>
           <div class="right-box">
-            <a-upload
-              name="avatar"
-              listType="picture-card"
-              class="avatar-uploader"
-              :showUploadList="false"
-              action="//jsonplaceholder.typicode.com/posts/"
-              :beforeUpload="beforeUpload"
-              @change="handleChange"
-            >
-              <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
-              <div v-else>
-                <a-icon :type="loading ? 'loading' : 'plus'" />
-                <div class="ant-upload-text">点击添加图片</div>
-              </div>
-            </a-upload>
+            <upload v-on:getVal="getProductionLicenseUrl"></upload>
           </div>
         </div>
       </div>
     </div>
     <div class="submit">
-      <a-button>提交审核</a-button>
+      <a-button @click="submit">提交审核</a-button>
     </div>
   </div>
 </template>
 
 <script>
-  import { Upload } from "ant-design-vue";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
-  function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result));
-    reader.readAsDataURL(img);
-  }
+  import upload from "../../../../components/common/upload";
+
   export default {
     data() {
       return {
+        certificationStatus: 2,
         defaultCascaderValue: [],
-        loading: false,
-        imageUrl: "",
         introduce: "",
+        submitData: {
+          companyName: "",
+          introduce: "",
+          companyLegalPerson: "",
+          companyContact: "",
+          companyPhone: "",
+          companyTelephone: "",
+          companyEmail: "",
+          companyFax: "",
+          companyBankAccount: "",
+          companyOpenAccount: "",
+          companyQQ: "",
+          companyWeChat: "",
+          licenseUrl: "",
+          taxRegistrationUrl: "",
+          productionLicenseUrl: ""
+        },
         options: [
           {
             label: "北京",
@@ -212,48 +229,22 @@
       };
     },
     methods: {
+      submit() {
+        console.log(this.submitData);
+      },
       onChange() {},
-      handleShopTypeChange(value) {
-        console.log(`selected ${value}`);
+      getLicenseUrl(val) {
+        this.submitData.licenseUrl = val[0].thumbUrl;
       },
-      handleProvinceChange(value) {
-        this.cities = cityData[value];
-        console.log(this.cities);
-        this.secondCity = cityData[value][0];
+      getTaxRegistrationUrl(val) {
+        this.submitData.taxRegistrationUrl = val[0].thumbUrl;
       },
-      handleCityChange(value) {
-        console.log(value);
-      },
-      handleAreaChange(value) {
-        console.log(value);
-      },
-      handleChange(info) {
-        if (info.file.status === "uploading") {
-          this.loading = true;
-          return;
-        }
-        if (info.file.status === "done") {
-          // Get this url from response in real world.
-          getBase64(info.file.originFileObj, imageUrl => {
-            this.imageUrl = imageUrl;
-            this.loading = false;
-          });
-        }
-      },
-      beforeUpload(file) {
-        const isJPG = file.type === "image/jpeg";
-        if (!isJPG) {
-          this.$message.error("You can only upload JPG file!");
-        }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-          this.$message.error("Image must smaller than 2MB!");
-        }
-        return isJPG && isLt2M;
+      getProductionLicenseUrl(val) {
+        this.submitData.productionLicenseUrl = val[0].thumbUrl;
       }
     },
     components: {
-      AUpload: Upload,
+      upload,
       commonTitle
     }
   };
@@ -261,6 +252,7 @@
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
+  @import "../../../../assets/scss/_input";
   .shopCertification {
     %title {
       font-family: PingFangSC-Medium;
@@ -351,20 +343,6 @@
               font-style: normal;
               color: #666;
               margin-left: 3px;
-            }
-          }
-          .right-box {
-            /deep/.avatar-uploader {
-              .ant-upload.ant-upload-select-picture-card {
-                width: 118px;
-                height: 118px;
-                border: none;
-                .ant-upload-text {
-                  font-family: PingFangSC-Regular;
-                  font-size: 12px;
-                  color: #ccc;
-                }
-              }
             }
           }
         }

@@ -1,108 +1,69 @@
 <template>
-  <div class="merchant">
-    <a-layout>
-      <a-layout-header><Header></Header></a-layout-header>
-      <a-layout>
-        <a-layout-sider>
-          <div class="title">商家中心</div>
-          <a-menu
-            mode="inline"
-            :openKeys="openKeys"
-            style="width: 170px"
-            :defaultSelectedKeys="defaultSelectedKeys"
-            @click="handleClick"
-          >
-            <a-sub-menu key="sub1">
-              <span slot="title">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icondianpuguanli"></use>
-                </svg>
-                <span>店铺管理</span>
-              </span>
-              <a-menu-item key="1">
-                <router-link to="/merchant/shopIndex">店铺首页</router-link>
-              </a-menu-item>
-              <a-menu-item key="2">
-                <router-link to="/merchant/shopInfo">店铺信息</router-link>
-              </a-menu-item>
-              <a-menu-item key="3">
-                <router-link to="/merchant/shopCertification">
-                  店铺认证
-                </router-link>
-              </a-menu-item>
-            </a-sub-menu>
-            <a-sub-menu key="sub2">
-              <span slot="title">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icondianpuyunying"></use>
-                </svg>
-                <span>店铺运营</span>
-              </span>
-              <a-menu-item key="4">
-                <router-link to="/merchant/publishGoods">发布产品</router-link>
-              </a-menu-item>
-              <a-menu-item key="5">
-                <router-link to="/merchant/productManage">产品管理</router-link>
-              </a-menu-item>
-              <a-menu-item key="6">
-                <router-link to="/merchant/inquiryManage">询价管理</router-link>
-              </a-menu-item>
-              <a-menu-item key="7">
-                <router-link to="/merchant/orderManage">订单管理</router-link>
-              </a-menu-item>
-            </a-sub-menu>
-            <a-sub-menu key="sub3">
-              <span slot="title">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#iconqita"></use>
-                </svg>
-                <span>其他</span>
-              </span>
-              <a-menu-item key="8">
-                <router-link to="/merchant/accountSecurity">
-                  账号安全
-                </router-link>
-              </a-menu-item>
-              <a-menu-item key="9">
-                <router-link to="/merchant/personalCenter">
-                  个人中心
-                </router-link>
-              </a-menu-item>
-              <a-menu-item key="10">
-                <router-link to="/merchant/messageCenter">
-                  消息中心
-                </router-link>
-              </a-menu-item>
-            </a-sub-menu>
-          </a-menu>
-        </a-layout-sider>
-        <a-layout-content>
-          <div class="right-content">
-            <router-view></router-view>
-          </div>
-        </a-layout-content>
-      </a-layout>
-      <a-layout-footer><Footer></Footer></a-layout-footer>
-    </a-layout>
-  </div>
+  <center-page
+    titleText="商家中心"
+    :dataArr="dataArr"
+    :openKeys="['sub1', 'sub2', 'sub3']"
+    :defaultSelectedKeys="defaultSelectedKeys"
+  >
+    <div slot="header">
+      <Header></Header>
+    </div>
+  </center-page>
 </template>
 <script>
   import Header from "../../../components/header/header";
-  import Footer from "../../../components/footer/footer";
+  import centerPage from "../../../components/common/centerPage";
   export default {
+    inject: ["reload"],
     data() {
       return {
-        openKeys: ["sub1", "sub2", "sub3"],
-        defaultSelectedKeys: ["1"]
+        defaultSelectedKeys: ["1"],
+        dataArr: [
+          {
+            id: 1,
+            key: "sub1",
+            name: "店铺管理",
+            icon: "#icondianpuguanli",
+            menus: [
+              { key: "1", name: "店铺首页", href: "/merchant/shopIndex" },
+              { key: "2", name: "店铺信息", href: "/merchant/shopInfo" },
+              { key: "3", name: "店铺认证", href: "/merchant/shopCertification" }
+            ]
+          },
+          {
+            id: 2,
+            key: "sub2",
+            name: "店铺运营",
+            icon: "#icondianpuyunying",
+            menus: [
+              { key: "4", name: "发布产品", href: "/merchant/publishGoods" },
+              { key: "5", name: "产品管理", href: "/merchant/productManage" },
+              { key: "6", name: "询价管理", href: "/merchant/inquiryManage" },
+              { key: "7", name: "订单管理", href: "/merchant/orderManage" }
+            ]
+          },
+          {
+            id: 3,
+            key: "sub3",
+            name: "其他",
+            icon: "#iconqita",
+            menus: [
+              { key: "8", name: "账号安全", href: "/merchant/accountSecurity" },
+              { key: "9", name: "个人中心", href: "/merchant/personalCenter" },
+              { key: "10", name: "消息中心", href: "/merchant/messageCenter" }
+            ]
+          }
+        ]
       };
     },
     methods: {
-      handleClick(e) {
-        console.log("click", e);
-        // this.defaultSelectedKeys[0] = e.key;
+      goBack() {
+        //replace替换原路由，作用是避免回退死循环
+        this.$router.replace({ path: "/merchant" });
+        this.reload();
       }
     },
-    mounted() {
+    beforeMount() {
       switch (this.$route.path.split("/")[2]) {
         case "shopIndex":
           this.defaultSelectedKeys = ["1"];
@@ -148,16 +109,25 @@
           break;
       }
     },
+    mounted() {
+      if (window.history && window.history.pushState) {
+        history.pushState(null, null, document.URL);
+        window.addEventListener("popstate", this.goBack, false);
+      }
+    },
+    destroyed() {
+      window.removeEventListener("popstate", this.goBack, false);
+    },
     components: {
       Header,
-      Footer
+      centerPage
     }
   };
 </script>
 
 <style lang="scss" scoped>
   @import "../../../assets/scss/_commonScss";
-  .merchant {
+  .centerPageCommon {
     /deep/.ant-layout {
       background: $base-background;
       .ant-layout-header {
@@ -183,90 +153,6 @@
           }
         }
       }
-      .ant-layout-sider {
-        background: $base-background;
-        width: 170px !important;
-        min-width: 170px !important;
-        flex: 0 !important;
-        margin-right: 20px;
-        margin-bottom: 111px;
-        .ant-layout-sider-children {
-          height: 693px;
-          background-color: #fff;
-          .title {
-            width: 100%;
-            height: 69px;
-            line-height: 69px;
-            padding-left: 16px;
-            color: #333;
-            font-size: 20px;
-            font-weight: 600;
-            font-family: PingFangSC-Semibold;
-            border-bottom: 0.2px solid #ddd;
-          }
-          .ant-menu-inline {
-            border-right: none;
-            .ant-menu-submenu {
-              .ant-menu-submenu-title {
-                padding-left: 20px !important;
-                margin: 0;
-                color: #333;
-                font-size: 16px;
-                font-weight: 600;
-                height: 48px;
-                line-height: 48px;
-                .ant-menu-submenu-arrow {
-                  display: none;
-                }
-                .icon {
-                  margin-right: 7px;
-                }
-              }
-              .ant-menu-sub {
-                .ant-menu-item {
-                  color: #333;
-                  margin: 0;
-                  height: 48px;
-                  line-height: 48px;
-                  padding-left: 43px !important;
-                  -webkit-transition: color 0.3s
-                      cubic-bezier(0.645, 0.045, 0.355, 1),
-                    border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
-                    background 0s cubic-bezier(0.645, 0.045, 0.355, 1),
-                    padding 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
-                  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
-                    border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
-                    background 0s cubic-bezier(0.645, 0.045, 0.355, 1),
-                    padding 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
-                  &:hover {
-                    background: #fafafa;
-                    a {
-                      color: $theme-color;
-                    }
-                  }
-                  &.ant-menu-item-selected {
-                    padding-right: 20px;
-                    background: rgba(241, 2, 21, 0.03)
-                      url("../../../assets/images/redRightArrow.svg") no-repeat
-                      140px center / 14px 26px;
-                    a {
-                      color: $theme-color;
-                    }
-                  }
-                  &::after {
-                    border-right: none;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    .ant-layout-has-sider {
-      width: 1200px;
-      margin: 0 auto;
-      margin-top: 24px;
     }
   }
 </style>

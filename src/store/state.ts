@@ -3,7 +3,7 @@ interface StateType {
 }
 
  let state:StateType={
-    isLogin:false
+    isLogin:true
 }
 
 export default state;

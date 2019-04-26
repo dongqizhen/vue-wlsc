@@ -4,16 +4,22 @@
       <commonTitle title="发布商品"></commonTitle>
       <div class="informationContent">
         <div class="title">基本信息</div>
-        <div class="common productName">
+        <div class="common ">
           <div class="left-box"><span class="red">*</span>产品名称</div>
           <div class="right-box">
-            <a-input placeholder="请输入产品名称" />
+            <a-input
+              placeholder="请输入产品名称"
+              v-model="submitData.productName"
+            />
           </div>
         </div>
         <div class="common">
           <div class="left-box">产品编号</div>
           <div class="right-box">
-            <a-input placeholder="请输入产品编号" />
+            <a-input
+              placeholder="请输入产品编号"
+              v-model="submitData.productNumber"
+            />
           </div>
         </div>
         <div class="common">
@@ -21,16 +27,24 @@
           <div class="right-box">
             <a-select
               defaultValue="请选择大类"
-              style="width: 136px"
+              style="width: 136px;margin-right:10px;"
               @change="handleProductBigTypeChange"
               :options="options"
-            />
+            >
+              <a-icon slot="suffixIcon" class="icon">
+                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+              </a-icon>
+            </a-select>
             <a-select
               defaultValue="请选择小类"
               style="width: 136px"
               @change="handleProductSmallTypeChange"
               :options="options"
-            />
+            >
+              <a-icon slot="suffixIcon" class="icon">
+                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+              </a-icon>
+            </a-select>
           </div>
         </div>
         <div class="common">
@@ -41,41 +55,58 @@
               style="width: 136px"
               @change="handleProductTypeChange"
               :options="options"
-            />
+            >
+              <a-icon slot="suffixIcon" class="icon">
+                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+              </a-icon>
+            </a-select>
           </div>
         </div>
         <div class="common">
           <div class="left-box"><span class="red">*</span>品牌</div>
           <div class="right-box">
-            <a-input placeholder="请输入品牌" />
+            <a-input placeholder="请输入品牌" v-model="submitData.brand" />
           </div>
         </div>
         <div class="common">
           <div class="left-box"><span class="red">*</span>型号</div>
           <div class="right-box">
-            <a-input placeholder="请输入型号" />
+            <a-input placeholder="请输入型号" v-model="submitData.model" />
           </div>
         </div>
         <div class="common guidePrice">
           <div class="left-box">指导价</div>
           <div class="right-box">
-            <a-input placeholder="区间最低" class="priceMin" />
+            <a-input
+              placeholder="区间最低"
+              class="priceMin"
+              v-model="submitData.minPrice"
+            />
             <div class="joiner">一</div>
-            <a-input placeholder="区间最高" class="priceMax" />
-            <!-- <div class="inquiry">询价</div> -->
+            <a-input
+              placeholder="区间最高"
+              class="priceMax"
+              v-model="submitData.maxPrice"
+            />
             <a-checkbox @change="onChange">询价</a-checkbox>
           </div>
         </div>
         <div class="common">
           <div class="left-box"><span class="red">*</span>备件号</div>
           <div class="right-box">
-            <a-input placeholder="请输入备件号" />
+            <a-input
+              placeholder="请输入备件号"
+              v-model="submitData.sparePartNumber"
+            />
           </div>
         </div>
         <div class="common">
           <div class="left-box">库存数量</div>
           <div class="right-box">
-            <a-input placeholder="请输入库存数量" />
+            <a-input
+              placeholder="请输入库存数量"
+              v-model="submitData.stockQuantity"
+            />
           </div>
         </div>
       </div>
@@ -91,44 +122,68 @@
               style="width: 136px"
               @change="handleProductAddressChange"
               :options="options"
-            />
+            >
+              <a-icon slot="suffixIcon" class="icon">
+                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+              </a-icon>
+            </a-select>
           </div>
         </div>
         <div class="common">
           <div class="left-box">生产厂家</div>
           <div class="right-box">
-            <a-input placeholder="请输入生产厂家" />
+            <a-input
+              placeholder="请输入生产厂家"
+              v-model="submitData.manufacturer"
+            />
           </div>
         </div>
         <div class="common">
           <div class="left-box">件装量</div>
           <div class="right-box">
-            <a-input placeholder="请输入件装量" />
+            <a-input placeholder="请输入件装量" v-model="submitData.capacity" />
           </div>
         </div>
         <div class="common">
           <div class="left-box">单位</div>
           <div class="right-box">
-            <a-input placeholder="请输入单位" />
+            <a-input placeholder="请输入单位" v-model="submitData.unit" />
           </div>
         </div>
         <div class="common">
           <div class="left-box">最小起订量</div>
           <div class="right-box">
-            <a-input placeholder="请输入最小起订量" />
+            <a-input
+              placeholder="请输入最小起订量"
+              v-model="submitData.minOrderQuantity"
+            />
           </div>
         </div>
       </div>
     </div>
     <div class="commonBoxStyle productPicture">
       <div class="title">
-        商品图片<span
-          >(图片尺寸为600*400，仅之处jpg.jpeg.png格式，单张大小不超过1M。)</span
-        >
+        商品图片
+        <span>
+          (图片尺寸为600*400，仅之处jpg.jpeg.png格式，单张大小不超过1M。)
+        </span>
       </div>
       <div class="pictureContent">
+        <div
+          v-for="file in uploadList"
+          :key="file.uid"
+          class="uploadItem"
+          :data-id="file.uid"
+        >
+          <img :src="file.url" />
+          <div class="demo-upload-list-cover">
+            <svg class="icon" aria-hidden="true" @click="handleRemove(file)">
+              <use xlink:href="#iconshangchuanshangpinguanbi"></use>
+            </svg>
+          </div>
+        </div>
         <a-upload
-          name="avatar"
+          ref="upload"
           listType="picture-card"
           class="avatar-uploader"
           :showUploadList="false"
@@ -136,9 +191,10 @@
           :beforeUpload="beforeUpload"
           @change="handleChange"
         >
-          <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
-          <div v-else>
-            <a-icon :type="loading ? 'loading' : 'plus'" />
+          <div v-if="uploadList.length < 3">
+            <a-icon class="icon">
+              <use xlink:href="#icontianjiatupian1"></use>
+            </a-icon>
             <div class="ant-upload-text">点击添加图片</div>
           </div>
         </a-upload>
@@ -151,6 +207,7 @@
           type="textarea"
           placeholder="请输入商品描述"
           class="noInput"
+          v-model="submitData.introduce"
         ></a-input>
       </div>
     </div>
@@ -163,20 +220,17 @@
 </template>
 
 <script>
-  import { Upload } from "ant-design-vue";
-  import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   function getBase64(img, callback) {
     const reader = new FileReader();
     reader.addEventListener("load", () => callback(reader.result));
     reader.readAsDataURL(img);
   }
+  import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   export default {
     data() {
       return {
+        uploadList: [],
         defaultCascaderValue: [],
-        loading: false,
-        imageUrl: "",
-        introduce: "",
         options: [
           {
             label: "北京",
@@ -195,10 +249,47 @@
             key: "0571",
             disabled: true
           }
-        ]
+        ],
+        submitData: {
+          productName: "",
+          productNumber: "",
+          brand: "",
+          model: "",
+          minPrice: "",
+          maxPrice: "",
+          sparePartNumber: "",
+          stockQuantity: "",
+          manufacturer: "",
+          capacity: "",
+          unit: "",
+          minOrderQuantity: "",
+          introduce: ""
+        }
       };
     },
     methods: {
+      handleRemove(file) {
+        this.uploadList.splice(this.uploadList.indexOf(file), 1);
+      },
+      handleChange(info) {
+        for (const val of info.fileList) {
+          val.url =
+            "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
+        }
+        this.uploadList = info.fileList;
+        // if (info.file.status === "uploading") {
+        //   this.loading = true;
+        //   return;
+        // }
+        // if (info.file.status == "done") {
+        //   getBase64(info.file.originFileObj, imageUrl => {
+        //     info.fileList[0].imageUrl = imageUrl;
+        //     this.loading = false;
+        //   });
+        //   this.fileList = info.fileList;
+        //   console.log(this.fileList);
+        // }
+      },
       onChange(e) {
         console.log(`checked = ${e.target.checked}`);
       },
@@ -212,33 +303,20 @@
         console.log(this.cities);
         this.secondCity = cityData[value][0];
       },
-      handleChange(info) {
-        if (info.file.status === "uploading") {
-          this.loading = true;
-          return;
-        }
-        if (info.file.status === "done") {
-          // Get this url from response in real world.
-          getBase64(info.file.originFileObj, imageUrl => {
-            this.imageUrl = imageUrl;
-            this.loading = false;
-          });
-        }
-      },
       beforeUpload(file) {
-        const isJPG = file.type === "image/jpeg";
-        if (!isJPG) {
-          this.$message.error("You can only upload JPG file!");
-        }
+        // const isJPG = file.type === "image/jpeg";
+        // if (!isJPG) {
+        //   this.$message.error("You can only upload JPG file!");
+        // }
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
           this.$message.error("Image must smaller than 2MB!");
         }
-        return isJPG && isLt2M;
+        return isLt2M;
+        // return isJPG && isLt2M;
       }
     },
     components: {
-      AUpload: Upload,
       commonTitle
     }
   };
@@ -246,6 +324,7 @@
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
+  @import "../../../../assets/scss/_input";
   .publishGoods {
     .commonBoxStyle {
       padding: 4px 20px;
@@ -292,6 +371,9 @@
           line-height: 34px;
           border: 1px solid #cccccc;
           border-radius: 3px;
+        }
+        .bigType {
+          margin-right: 10px;
         }
       }
     }
@@ -348,15 +430,72 @@
         }
       }
     }
-    .specification {
-    }
+
     .productPicture {
       .pictureContent {
+        height: 118px;
+        margin-bottom: 18px;
+        display: flex;
+        .demo-upload-list {
+          width: 118px;
+          height: 118px;
+          margin-right: 30px;
+          border: 1px dashed #ccc;
+          position: relative;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+          &:hover {
+            cursor: pointer;
+            .demo-upload-list-cover {
+              display: block;
+            }
+          }
+        }
+        .demo-upload-list-cover {
+          display: none;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          .icon {
+            width: 23px;
+            height: 23px;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+          }
+        }
+        .uploadItem {
+          width: 118px;
+          height: 118px;
+          margin-right: 30px;
+          position: relative;
+          img {
+            width: 100%;
+          }
+          &:hover {
+            cursor: pointer;
+            .demo-upload-list-cover {
+              display: block;
+            }
+          }
+        }
         /deep/.avatar-uploader {
           .ant-upload.ant-upload-select-picture-card {
             width: 118px;
             height: 118px;
             border: none;
+            .anticon {
+              width: 18px;
+              height: 18px;
+              svg {
+                width: 100%;
+                height: 100%;
+              }
+            }
             .ant-upload-text {
               font-family: PingFangSC-Regular;
               font-size: 12px;
@@ -364,6 +503,17 @@
             }
             img {
               width: 100%;
+            }
+          }
+          .ant-upload-list {
+            .ant-upload-list-item {
+              width: 118px;
+              height: 118px;
+              margin-right: 30px;
+              padding: 0;
+              img {
+                width: 100%;
+              }
             }
           }
         }
