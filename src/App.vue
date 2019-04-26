@@ -12,6 +12,9 @@
       return {
         locale: zhCN
       };
+    },
+    mounted() {
+      console.log(this.$API_URL);
     }
   };
 </script>

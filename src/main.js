@@ -34,6 +34,8 @@ import {
 
 Vue.config.productionTip = false;
 
+Vue.prototype.$API_URL = env.API_HOST
+
 Vue.use(vChatTitle).use(Share).use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form)
 
 new Vue({
