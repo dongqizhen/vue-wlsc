@@ -49,7 +49,7 @@
             icon: "#iconqita",
             menus: [
               { key: "8", name: "账号安全", href: "/merchant/accountSecurity" },
-              { key: "9", name: "个人中心", href: "/merchant/personalCenter" },
+              // { key: "9", name: "个人中心", href: "/merchant/personalCenter" },
               { key: "10", name: "消息中心", href: "/merchant/messageCenter" }
             ]
           }

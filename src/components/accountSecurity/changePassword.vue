@@ -1,5 +1,5 @@
 <template>
-  <div class="changePassword">
+  <div class="commonPassword">
     <commonTitle title="账号安全">
       <div class="infoPath" slot="infoPath">
         <svg class="icon" aria-hidden="true">
@@ -50,7 +50,7 @@
 </script>
 <style lang="scss" scoped>
   @import "../../assets/scss/_commonScss";
-  .changePassword {
+  .commonPassword {
     padding: 0 20px;
     background-color: #fff;
     min-height: 693px;
@@ -69,7 +69,7 @@
         }
         .right-box {
           height: 34px;
-          @include placeholderStyle();
+          @include placeholderStyle;
           input {
             width: 389px;
           }

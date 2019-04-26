@@ -53,7 +53,7 @@
               { key: "5", name: "我的收藏", href: "/userCenter/myStore" },
               { key: "6", name: "地址管理", href: "/userCenter/addressManage" },
               { key: "7", name: "发票管理", href: "/userCenter/invoiceManage" },
-              { key: "8", name: "个人信息", href: "/userCenter/myMessage" },
+              // { key: "8", name: "个人信息", href: "/userCenter/myMessage" },
               { key: "9", name: "消息中心", href: "/userCenter/myCenter" },
               { key: "10", name: "账号安全", href: "/userCenter/userSecurity" }
             ]

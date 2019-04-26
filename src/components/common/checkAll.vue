@@ -12,10 +12,11 @@
         </svg>
         删除
       </span>
-      <span
-        >共<i>{{ amount }}</i
-        >条</span
-      >
+      <span>
+        共
+        <i>{{ amount }}</i>
+        条
+      </span>
     </div>
     <slot name="right-box"></slot>
   </div>
@@ -67,25 +68,6 @@
           color: $theme-color;
           font-size: 16px;
           font-weight: 600;
-        }
-      }
-    }
-    .right-box {
-      button {
-        width: 76px;
-        height: 42px;
-        line-height: 42px;
-        border: 0;
-        outline: none;
-        background-color: transparent;
-        color: #fff;
-        text-align: center;
-        cursor: pointer;
-        &.shelf {
-          background-color: $theme-color;
-        }
-        &.obtained {
-          background-color: #f5a623;
         }
       }
     }

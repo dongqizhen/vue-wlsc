@@ -1,6 +1,6 @@
 <template>
   <div class="orderItem">
-    <order-title></order-title>
+    <order-title :isOrder="true"></order-title>
     <div class="productInfoBox">
       <div class="productInfo">
         <div
@@ -18,11 +18,14 @@
       <div class="operating">
         <div class="lookPay">查看支付证明</div>
         <div class="sure">确认发货</div>
-        <div class="lookOrderDetail">查看订单详情</div>
+        <div class="lookOrderDetail">
+          <router-link to="orderDetail">查看订单详情</router-link>
+        </div>
         <div class="deleteOrder">删除订单</div>
       </div>
     </div>
-    <div class="shippingAddress">
+    <delivery-info></delivery-info>
+    <!-- <div class="shippingAddress">
       <div class="left-box">收货地址</div>
       <div class="right-box">
         <div>
@@ -31,11 +34,12 @@
         </div>
         <div>收货地址：北京市顺义区天竺保税区</div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
   import orderTitle from "./orderTitle";
+  import deliveryInfo from "./deliveryInformation";
   export default {
     data() {
       return {
@@ -65,7 +69,8 @@
       };
     },
     components: {
-      orderTitle
+      orderTitle,
+      deliveryInfo
     }
   };
 </script>
@@ -74,6 +79,7 @@
   @import "../../assets/scss/_commonScss";
   .orderItem {
     %span {
+      margin-right: 30px;
       &:first-child {
         width: 70px;
         margin-left: 46px;
@@ -84,15 +90,13 @@
         }
       }
       &:nth-child(2) {
-        width: 185px;
-        margin-right: 56px;
+        width: 197px;
       }
       &:nth-child(3) {
-        width: 98px;
-        margin-right: 30px;
+        width: 100px;
       }
       &:nth-child(4) {
-        width: 98px;
+        width: 83px;
       }
     }
     .productInfoBox {
@@ -131,34 +135,7 @@
       }
     }
     .shippingAddress {
-      display: flex;
-      border: $border-style;
       border-top: none;
-      color: #333333;
-      font-size: 12px;
-      .left-box {
-        width: 93px;
-        height: 83px;
-        line-height: 83px;
-        text-align: center;
-        border-right: $border-style;
-        font-weight: 600;
-      }
-      .right-box {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding-left: 17px;
-
-        div {
-          &:first-child {
-            margin-bottom: 8px;
-            span {
-              margin-right: 38px;
-            }
-          }
-        }
-      }
     }
   }
 </style>

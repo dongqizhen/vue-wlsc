@@ -27,17 +27,16 @@ import {
     Rate,
     Upload,
     Anchor,
-    Form
+    Form,
+    DatePicker
 } from "ant-design-vue";
 import "swiper/dist/css/swiper.css";
-import {
-    DatePicker
-} from 'element-ui';
+// import {
+//     DatePicker
+// } from 'element-ui';
 Vue.config.productionTip = false;
 
-
-// Vue.use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form).use(Icon).use(Upload)
-Vue.use(vChatTitle).use(Share).use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form)
+Vue.use(vChatTitle).use(Share).use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Upload).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form)
 
 new Vue({
     el: '#app',

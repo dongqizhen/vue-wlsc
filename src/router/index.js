@@ -62,10 +62,22 @@ const router = new Router({
                         import ("../views/page/merchant/merchantChildren/inquiryManage")
                 },
                 {
+                    path: "inquiryDetail",
+                    name: "询价单详情",
+                    component: () =>
+                        import ("../views/page/merchant/merchantChildren/inquiryOrderDetail")
+                },
+                {
                     path: "orderManage",
                     name: "订单管理",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/orderManage")
+                },
+                {
+                    path: "orderDetail",
+                    name: "订单详情",
+                    component: () =>
+                        import ("../views/page/merchant/merchantChildren/orderDetail")
                 },
                 {
                     path: "accountSecurity",
@@ -94,17 +106,17 @@ const router = new Router({
                     path: "changePassword",
                     name: '更改密码',
                     component: () =>
-                        import ("../components/accountSecurity/changePassword")
+                        import ("../views/page/merchant/merchantChildren/changePassword")
                 }, {
                     path: "changePhone",
                     name: '更改手机号',
                     component: () =>
-                        import ("../components/accountSecurity/changePhone")
+                        import ("../views/page/merchant/merchantChildren/changePhone")
                 }, {
                     path: "changeEmail",
                     name: '更改邮箱',
                     component: () =>
-                        import ("../components/accountSecurity/changeEmail")
+                        import ("../views/page/merchant/merchantChildren/changeEmail")
                 },
             ]
         },

@@ -5,7 +5,7 @@
         <a-checkbox @change="onChange"></a-checkbox>
       </div>
       <div class="common orderNumber">
-        <span>订单编号：</span>
+        <span>{{ isOrder ? "订单" : "询价单" }}编号：</span>
         <span>WLTX20181203-Z01</span>
       </div>
       <div class="common orderSubmitTime">
@@ -14,8 +14,17 @@
             <use xlink:href="#icontijiaoshijian"></use>
           </svg>
         </span>
-        <span>订单时间：</span>
+        <span>{{ isOrder ? "订单" : "询价单" }}提交时间：</span>
         <span>2019-09-12 18:30</span>
+      </div>
+      <div class="common userName" v-if="isOrder == false">
+        <span>
+          <img
+            src="http://file.haoyigong.com/server/upload/1554429391594.jpg"
+          />
+        </span>
+        <span>询价人：</span>
+        <span>周磊</span>
       </div>
     </div>
     <div class="right-box">
@@ -25,7 +34,7 @@
             <use xlink:href="#iconbaojiazhong"></use>
           </svg>
         </span>
-        <span>订单状态：</span>
+        <span>{{ isOrder ? "订单" : "询价单" }}状态：</span>
         <span>待接单</span>
       </div>
     </div>
@@ -35,6 +44,12 @@
   export default {
     data() {
       return {};
+    },
+    props: {
+      isOrder: {
+        type: Boolean,
+        required: true
+      }
     },
     methods: {
       onChange() {}
