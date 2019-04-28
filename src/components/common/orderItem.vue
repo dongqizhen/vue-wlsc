@@ -1,45 +1,14 @@
 <template>
   <div class="orderItem">
     <order-title :isOrder="true"></order-title>
-    <div class="productInfoBox">
-      <div class="productInfo">
-        <div
-          class="itemProduct"
-          v-for="product in productArr"
-          :key="product.id"
-        >
-          <span><img :src="product.imgUrl"/></span>
-          <span>{{ product.name }}</span>
-          <span>{{ product.price }}</span>
-          <span>{{ product.amount }}</span>
-        </div>
-      </div>
-      <div class="actualPrice">￥2600.00</div>
-      <div class="operating">
-        <div class="lookPay">查看支付证明</div>
-        <div class="sure">确认发货</div>
-        <div class="lookOrderDetail">
-          <router-link to="orderDetail">查看订单详情</router-link>
-        </div>
-        <div class="deleteOrder">删除订单</div>
-      </div>
-    </div>
+    <order-item-product></order-item-product>
     <delivery-info></delivery-info>
-    <!-- <div class="shippingAddress">
-      <div class="left-box">收货地址</div>
-      <div class="right-box">
-        <div>
-          <span>收货人：李先生</span>
-          <span>联系方式：18611110000</span>
-        </div>
-        <div>收货地址：北京市顺义区天竺保税区</div>
-      </div>
-    </div> -->
   </div>
 </template>
 <script>
   import orderTitle from "./orderTitle";
   import deliveryInfo from "./deliveryInformation";
+  import orderItemProduct from "./orderItemProduct";
   export default {
     data() {
       return {
@@ -70,69 +39,16 @@
     },
     components: {
       orderTitle,
-      deliveryInfo
+      deliveryInfo,
+      orderItemProduct
     }
   };
 </script>
 
 <style lang="scss" scoped>
-  @import "../../assets/scss/_commonScss";
   .orderItem {
-    %span {
-      margin-right: 30px;
-      &:first-child {
-        width: 70px;
-        margin-left: 46px;
-        margin-right: 12px;
-        img {
-          width: 70px;
-          height: 70px;
-        }
-      }
-      &:nth-child(2) {
-        width: 197px;
-      }
-      &:nth-child(3) {
-        width: 100px;
-      }
-      &:nth-child(4) {
-        width: 83px;
-      }
-    }
     .productInfoBox {
-      display: flex;
-      border: $border-style;
       border-top: none;
-      .productInfo {
-        width: 598px;
-        .itemProduct {
-          display: flex;
-          height: 90px;
-          padding-top: 10px;
-          border-bottom: $border-style;
-          &:last-child {
-            border-bottom: none;
-          }
-          span {
-            @extend %span;
-          }
-        }
-      }
-      .actualPrice {
-        width: 190px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-left: $border-style;
-      }
-      .operating {
-        width: 175px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        border-left: $border-style;
-      }
     }
     .shippingAddress {
       border-top: none;

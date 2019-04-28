@@ -4,6 +4,8 @@
     <div class="orderContainer">
       <order-title :isOrder="true"></order-title>
       <delivery-info></delivery-info>
+      <list-title :titleArr="titleArr"></list-title>
+      <order-item-product></order-item-product>
     </div>
   </div>
 </template>
@@ -11,14 +13,20 @@
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import orderTitle from "../../../../components/common/orderTitle";
   import deliveryInfo from "../../../../components/common/deliveryInformation";
+  import listTitle from "../../../../components/common/listTitle";
+  import orderItemProduct from "../../../../components/common/orderItemProduct";
   export default {
     data() {
-      return {};
+      return {
+        titleArr: ["产品图片", "产品名称", "单价", "数量", "实付金额", "操作"]
+      };
     },
     components: {
       commonTitle,
       orderTitle,
-      deliveryInfo
+      deliveryInfo,
+      listTitle,
+      orderItemProduct
     }
   };
 </script>
@@ -37,6 +45,29 @@
         }
         .checkedBox {
           display: none;
+        }
+      }
+      /deep/.listTitle {
+        margin: 12px 0;
+        ul {
+          li {
+            &:first-child {
+              margin-left: 20px;
+            }
+            &:nth-child(4) {
+              width: 153px;
+            }
+            &:nth-child(5) {
+              width: 190px;
+              margin-right: 0;
+              justify-content: center;
+            }
+            &:nth-child(6) {
+              width: 175px;
+              margin-right: 0;
+              justify-content: center;
+            }
+          }
         }
       }
     }

@@ -177,16 +177,20 @@
     <div class="submit">
       <a-button @click="submit">提交审核</a-button>
     </div>
+    <login-modal-vue :Visible="visible" :type="type"></login-modal-vue>
   </div>
 </template>
 
 <script>
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import upload from "../../../../components/common/upload";
-
+  import loginModalVue from "../../../../components/modal/loginModal.vue";
+  import { mapState } from "vuex";
   export default {
     data() {
       return {
+        visible: false,
+        type: "",
         certificationStatus: 2,
         defaultCascaderValue: [],
         introduce: "",
@@ -231,6 +235,13 @@
     methods: {
       submit() {
         console.log(this.submitData);
+        this.addCarSuccess();
+      },
+      addCarSuccess() {
+        if (!this.isLogin) {
+          this.type = "login";
+        }
+        this.visible = true;
       },
       onChange() {},
       getLicenseUrl(val) {
@@ -243,9 +254,13 @@
         this.submitData.productionLicenseUrl = val[0].thumbUrl;
       }
     },
+    computed: {
+      ...mapState(["isLogin"])
+    },
     components: {
       upload,
-      commonTitle
+      commonTitle,
+      loginModalVue
     }
   };
 </script>

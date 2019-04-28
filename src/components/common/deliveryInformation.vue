@@ -1,6 +1,6 @@
 <template>
   <div class="shippingAddress">
-    <div class="left-box">收货地址</div>
+    <div class="left-box">收货信息</div>
     <div class="right-box">
       <div>
         <span>收货人：李先生</span>
