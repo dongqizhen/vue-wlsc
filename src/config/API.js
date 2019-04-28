@@ -1,7 +1,9 @@
+'use strict';
+
 const chalk = require('chalk');
 const command = process.env.npm_lifecycle_event;
-let API_HOST = {};
 
+let API_HOST = {};
 
 let alpha = { // 开发
     URL: "http://60.195.252.86:8083",
@@ -26,20 +28,26 @@ let release = { // 正式版本
     FILE_URL: "http://file.haoyigong.com"
 }
 
-if (command == "dev:alpha") {
-    console.log(chalk.green('当前环境为:alpha'));
+if (command == "serve:alpha") {
+    console.log(chalk.green('当前环境为（development）:开发'));
     API_HOST = alpha;
-} else if (command == "dev:beta") {
-    console.log(chalk.green('当前环境为:beta'));
+} else if (command == "serve:beta") {
+    console.log(chalk.green('当前环境为（development）:测试'));
     API_HOST = beta;
-} else if (command == "dev:gamma") {
-    console.log(chalk.green('当前环境为:gamma'));
+} else if (command == "serve:gamma") {
+    console.log(chalk.green('当前环境为（development）:验收'));
     API_HOST = gamma;
-} else if (command == "dev:release") {
-    console.log(chalk.green('当前环境为:release'));
+} else if (command == "serve:release") {
+    console.log(chalk.green('当前环境为（development）:正式'));
     API_HOST = release;
 } else {
+    console.log(chalk.green('当前环境为（development）:开发'));
     API_HOST = alpha;
 }
 
-module.exports = API_HOST
+
+
+module.exports = {
+    NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+    API_HOST: JSON.stringify(API_HOST)
+}

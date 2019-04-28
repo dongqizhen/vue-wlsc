@@ -4,7 +4,20 @@
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve",
+        "serve:alpha": "vue-cli-service serve",
+        "serve:beta": "vue-cli-service serve",
+        "serve:gamma": "vue-cli-service serve",
+        "serve:release": "vue-cli-service serve",
+        "start": "vue-cli-service serve",
+        "start:alpha": "vue-cli-service serve",
+        "start:beta": "vue-cli-service serve",
+        "start:gamma": "vue-cli-service serve",
+        "start:release": "vue-cli-service serve",
         "build": "vue-cli-service build",
+        "build:alpha": "vue-cli-service build",
+        "build:beta": "vue-cli-service build",
+        "build:gamma": "vue-cli-service build",
+        "build:release": "vue-cli-service build",
         "lint": "vue-cli-service lint"
     },
     "dependencies": {

@@ -1,104 +1,107 @@
 <template>
-  <a-locale-provider :locale="locale">
-    <div id="app">
-      <router-view v-if="isRouterAlive" />
-    </div>
-  </a-locale-provider>
+    <a-locale-provider :locale="locale">
+        <div id="app">
+            <router-view v-if="isRouterAlive" />
+        </div>
+    </a-locale-provider>
 </template>
 <script>
-  import zhCN from "ant-design-vue/lib/locale-provider/zh_CN";
-  export default {
+import zhCN from "ant-design-vue/lib/locale-provider/zh_CN";
+export default {
     provide() {
-      return { reload: this.reload };
+        return { reload: this.reload };
     },
     data() {
-      return {
-        locale: zhCN,
-        isRouterAlive: true
-      };
+        return {
+            locale: zhCN,
+            isRouterAlive: true
+        };
+    },
+    mounted() {
+        console.log(this.$API_URL);
     },
     methods: {
-      reload() {
-        this.isRouterAlive = false;
-        this.$nextTick(function() {
-          this.isRouterAlive = true;
-        });
-      }
+        reload() {
+            this.isRouterAlive = false;
+            this.$nextTick(function() {
+                this.isRouterAlive = true;
+            });
+        }
     }
-  };
+};
 </script>
 <style lang="scss">
-  ::-webkit-input-placeholder {
+::-webkit-input-placeholder {
     color: #b2b2b2;
-  }
+}
 
-  :-moz-placeholder {
+:-moz-placeholder {
     /* Mozilla Firefox 4 to 18 */
     color: #b2b2b2;
-  }
-  ::-moz-placeholder {
+}
+::-moz-placeholder {
     /* Mozilla Firefox 19+ */
     color: #b2b2b2;
-  }
-  :-ms-input-placeholder {
+}
+:-ms-input-placeholder {
     /* Internet Explorer 10-11 */
     color: #b2b2b2;
-  }
+}
 
-  p {
+p {
     margin-bottom: 0;
-  }
-  ol,
-  ul,
-  li {
+}
+ol,
+ul,
+li {
     margin-bottom: 0;
-  }
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     margin-bottom: 0;
-  }
-  #app {
+}
+#app {
     height: 100%;
-  }
-  .icon {
+}
+.icon {
     width: 1em;
     height: 1em;
     vertical-align: -0.15em;
     fill: currentColor;
     overflow: hidden;
-  }
-  .commonWidth {
+}
+.commonWidth {
     width: 1024px;
     margin: 0 auto;
     height: 100%;
-  }
-  .container {
+}
+.container {
     padding-bottom: 110px;
     background: #f7f9fa;
-  }
-  .el-picker-panel {
+}
+.el-picker-panel {
     .el-date-table {
-      td.today {
-        span {
-          color: #f10215;
+        td.today {
+            span {
+                color: #f10215;
+            }
         }
-      }
-      td.start-date,
-      td.end-date {
-        span {
-          background-color: #f10215;
+        td.start-date,
+        td.end-date {
+            span {
+                background-color: #f10215;
+            }
         }
-      }
     }
-  }
-  .ant-select-dropdown-menu-item:hover {
+}
+.ant-select-dropdown-menu-item:hover {
     background-color: #fafafa;
-  }
-  .ant-select-dropdown-menu-item-active {
+}
+.ant-select-dropdown-menu-item-active {
     background-color: #fff;
-  }
+}
 </style>
