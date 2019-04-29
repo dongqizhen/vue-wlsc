@@ -83,7 +83,9 @@ export default {
         },
         ...mapMutations(["changeLoginState"])
     },
-    computed: { ...mapState(["isLogin"]) }
+    computed: {
+        ...mapState(["isLogin"])
+    }
 };
 </script>
 

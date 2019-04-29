@@ -144,6 +144,7 @@
   import productCategoryVue from "../components/common/productCategory.vue";
   import recommendsTabVue from "../components/common/recommendsTab.vue";
   import CommonBrandsModalVue from "../components/modal/CommonBrandsModal.vue";
+  import { _getData } from "../config/getData";
 
   const IconFont = Icon.createFromIconfontCN({
     scriptUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js"
@@ -155,6 +156,9 @@
         recommend_tabs_index: 0,
         brandVisible: false //控制modal层弹出
       };
+    },
+    mounted() {
+      _getData("api/goods/goodslist", {}).then(data => {});
     },
     components: {
       Header,
@@ -180,9 +184,6 @@
       handleClick() {
         this.brandVisible = true;
       }
-    },
-    mounted() {
-      // console.log(Swiper);
     }
   };
 </script>

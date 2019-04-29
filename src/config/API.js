@@ -6,10 +6,7 @@ const command = process.env.npm_lifecycle_event;
 let API_HOST = {};
 
 let alpha = { // 开发
-    URL: "http://60.195.252.86:8083",
-    INFO_URL: "http://60.195.252.86:8082",
-    WEB_URL: "http://60.195.252.86:8080",
-    FILE_URL: "http://60.195.252.86:8080"
+    URL: "http://60.195.252.91:8080/platform"
 }
 let beta = { // 测试
     URL: "https://www.api/code",

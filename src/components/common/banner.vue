@@ -1,13 +1,11 @@
 <template>
   <div class="banner">
     <div class="commonWidth">
-      <swiper ref="mySwiper" :options="swiperOption">
+      <swiper ref="mySwiper" :options="swiperOption" v-if="banner.length">
         <!-- slides -->
-        <swiper-slide><img src="../../assets/images/banner.png"/></swiper-slide>
-        <swiper-slide><img src="../../assets/images/banner.png"/></swiper-slide>
-        <swiper-slide><img src="../../assets/images/banner.png"/></swiper-slide>
-        <swiper-slide><img src="../../assets/images/banner.png"/></swiper-slide>
-        <swiper-slide><img src="../../assets/images/banner.png"/></swiper-slide>
+        <swiper-slide v-for="item in banner" :key="item.id">
+          <img :src="item.image_url" />
+        </swiper-slide>
         <!-- Optional controls -->
         <ul class="swiper-pagination" slot="pagination"></ul>
       </swiper>
@@ -63,6 +61,8 @@
 
 <script>
   import { swiper, swiperSlide } from "vue-awesome-swiper";
+  import { _getData } from "../../config/getData";
+
   export default {
     data() {
       return {
@@ -94,10 +94,17 @@
             // type: "custom",
             clickable: true
           }
-        }
+        },
+        banner: []
       };
     },
-    components: { swiper, swiperSlide }
+    components: { swiper, swiperSlide },
+    methods: {},
+    mounted() {
+      _getData("api/ad/banner", {}).then(data => {
+        this.banner = data.banner;
+      });
+    }
   };
 </script>
 
