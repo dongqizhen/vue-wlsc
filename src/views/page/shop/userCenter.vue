@@ -140,11 +140,11 @@
         height: auto;
         .middleNav {
           width: 100%;
-          height: 95px;
-          background-color: $theme-color;
+          height: 70px;
+          background-image: linear-gradient(180deg, #ff4e1a 0%, #f10000 100%);
           .navBox {
             width: 1200px;
-            height: 95px;
+            height: 70px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -168,6 +168,7 @@
                   li {
                     a {
                       color: #fff;
+                      background: none;
                     }
                   }
                 }
