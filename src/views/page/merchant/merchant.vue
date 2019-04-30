@@ -57,11 +57,11 @@
       };
     },
     methods: {
-      goBack() {
-        //replace替换原路由，作用是避免回退死循环
-        this.$router.replace({ path: "/merchant" });
-        this.reload();
-      }
+      // goBack() {
+      //   //replace替换原路由，作用是避免回退死循环
+      //   // this.$router.replace({ path: "/merchant" });
+      //   // this.reload();
+      // }
     },
     beforeMount() {
       switch (this.$route.path.split("/")[2]) {
@@ -109,15 +109,15 @@
           break;
       }
     },
-    mounted() {
-      if (window.history && window.history.pushState) {
-        history.pushState(null, null, document.URL);
-        window.addEventListener("popstate", this.goBack, false);
-      }
-    },
-    destroyed() {
-      window.removeEventListener("popstate", this.goBack, false);
-    },
+    // mounted() {
+    //   if (window.history && window.history.pushState) {
+    //     history.pushState(null, null, document.URL);
+    //     window.addEventListener("popstate", this.goBack, false);
+    //   }
+    // },
+    // destroyed() {
+    //   window.removeEventListener("popstate", this.goBack, false);
+    // },
     components: {
       Header,
       centerPage

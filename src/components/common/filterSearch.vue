@@ -10,11 +10,7 @@
       <div class="common">
         <div class="left-box">下单日期</div>
         <div class="right-box">
-          <a-range-picker @change="changeDate">
-            <svg class="icon" aria-hidden="true" slot="suffixIcon">
-              <use xlink:href="#iconriqi1"></use>
-            </svg>
-          </a-range-picker>
+          <calendar-range></calendar-range>
         </div>
       </div>
     </div>
@@ -25,6 +21,7 @@
   </div>
 </template>
 <script>
+  import calendarRange from "./calendarRange";
   export default {
     data() {
       return {
@@ -33,6 +30,9 @@
     },
     methods: {
       changeDate() {}
+    },
+    components: {
+      calendarRange
     }
   };
 </script>
@@ -61,29 +61,6 @@
           .ant-input {
             width: 121px;
             height: 27px;
-          }
-          /deep/.ant-calendar-picker {
-            width: 200px;
-            height: 27px;
-            line-height: 27px;
-            .ant-input {
-              height: 27px;
-              line-height: 27px;
-              padding: 4px;
-              display: flex;
-              align-items: center;
-              .ant-calendar-range-picker-input {
-                width: 43%;
-              }
-              .ant-calendar-range-picker-separator {
-                height: 17px;
-                line-height: 17px;
-              }
-              .ant-calendar-picker-clear,
-              .ant-calendar-picker-icon {
-                right: 6px;
-              }
-            }
           }
         }
       }

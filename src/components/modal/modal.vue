@@ -446,57 +446,150 @@
       }
     }
   }
+  %ant-modal {
+    padding-bottom: 0;
+    .ant-modal-content {
+      .ant-modal-body {
+        height: 226px;
+        padding: 0;
+        > div {
+          display: flex;
+          height: 100%;
+          align-items: center;
+          flex-direction: column;
+          justify-content: center;
+          p {
+            font-size: 24px;
+            color: #333333;
+            font-weight: 600;
+            display: flex;
+            height: 34px;
+            justify-content: flex-start;
+            align-items: center;
+            line-height: 34px;
+            margin-bottom: 40px;
+            .icon {
+              height: 34px;
+              width: 34px;
+              margin-right: 12px;
+              margin-top: 2px;
+            }
+          }
+          .btn {
+            .ant-btn {
+              height: 42px;
+              width: 115px;
+              font-size: 18px;
+              color: #666666;
+              border: 1px solid #cccccc;
+              border-radius: 3px;
+              &:hover {
+                opacity: 0.7;
+              }
+              &:first-child {
+                margin-right: 12px;
+                background: #f5a623;
+                border: 1px #f5a623 solid;
+                color: #ffffff;
+              }
+              &:last-child {
+                &::after {
+                  display: none;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   .success {
     .ant-modal {
+      @extend %ant-modal;
+    }
+  }
+  .submitSuccess {
+    .ant-modal {
+      width: 696px !important;
+      height: 329px !important;
+      @extend %ant-modal;
+      .ant-modal-content {
+        .ant-modal-body {
+          height: 291px;
+          > div {
+            .alertContent {
+              width: 361px;
+              height: 44px;
+              font-size: 16px;
+              color: #333333;
+              margin-bottom: 44px;
+              text-align: center;
+            }
+          }
+        }
+      }
+    }
+  }
+  .lookPay {
+    .ant-modal {
+      width: 696px !important;
+      height: 828px !important;
       padding-bottom: 0;
       .ant-modal-content {
         .ant-modal-body {
-          height: 226px;
+          height: 790px;
           padding: 0;
           > div {
-            display: flex;
+            width: 100%;
             height: 100%;
-            align-items: center;
-            flex-direction: column;
-            justify-content: center;
-            p {
-              font-size: 24px;
-              color: #333333;
-              font-weight: 600;
+          }
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    }
+  }
+  .confirmDelivery {
+    .ant-modal {
+      width: 696px !important;
+      height: 271px !important;
+      padding-bottom: 0;
+      .ant-modal-content {
+        .ant-modal-body {
+          height: 233px;
+          padding: 0;
+          > div {
+            padding-left: 44px;
+            padding-top: 4px;
+            .common {
               display: flex;
-              height: 34px;
-              justify-content: flex-start;
               align-items: center;
-              line-height: 34px;
-              margin-bottom: 40px;
-              .icon {
-                height: 34px;
-                width: 34px;
-                margin-right: 12px;
-                margin-top: 2px;
+              margin-top: 20px;
+              .left-box {
+                font-size: 12px;
+                color: #666666;
+                margin-right: 24px;
+              }
+              .right-box {
+                .ant-input {
+                  width: 240px;
+                  height: 31px;
+                }
               }
             }
             .btn {
+              margin-top: 30px;
+              margin-left: 72px;
               .ant-btn {
-                height: 42px;
-                width: 115px;
-                font-size: 18px;
-                color: #666666;
-                border: 1px solid #cccccc;
-                border-radius: 3px;
-                &:hover {
-                  opacity: 0.7;
-                }
+                padding: 0 24px;
+                margin-right: 7px;
                 &:first-child {
-                  margin-right: 12px;
-                  background: #f5a623;
-                  border: 1px #f5a623 solid;
-                  color: #ffffff;
-                }
-                &:last-child {
-                  &::after {
-                    display: none;
-                  }
+                  border: 1px solid #f5a623;
+                  background-color: #f5a623;
+                  color: #fff;
+                  font-size: 12px;
                 }
               }
             }

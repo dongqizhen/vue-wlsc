@@ -2,24 +2,7 @@
   <div class="login-modal">
     <modal :isShow="visible" :options="options">
       <div slot="content" v-if="type != 'login'">
-        <p>
-          <svg class="icon" aria-hidden="true">
-            <use
-              v-if="type != 'login'"
-              xlink:href="#iconzhanghaoanquanduigou"
-            ></use>
-            <use v-else xlink:href="#iconweidenglugantanhao"></use>
-          </svg>
-          {{ title }}
-        </p>
-        <div class="alertContent">
-          您的开店申请已经提交成功，请耐心等待7个工作日
-          如果修改，请进入首页再次编辑。
-        </div>
-        <div class="btn">
-          <a-button>返回首页</a-button>
-          <a-button>联系客服</a-button>
-        </div>
+        <img src="http://file.haoyigong.com/server/upload/1533522814856.jpg" />
       </div>
       <div slot="content" v-else>
         <p>
@@ -45,10 +28,10 @@
       return {
         visible: false,
         options: {
-          title: "提示",
+          title: "查看支付证明",
           closable: true,
           maskClosable: false,
-          wrapClassName: "submitSuccess",
+          wrapClassName: "lookPay",
           centered: false
         }
       };

@@ -2,23 +2,33 @@
   <div class="login-modal">
     <modal :isShow="visible" :options="options">
       <div slot="content" v-if="type != 'login'">
-        <p>
-          <svg class="icon" aria-hidden="true">
-            <use
-              v-if="type != 'login'"
-              xlink:href="#iconzhanghaoanquanduigou"
-            ></use>
-            <use v-else xlink:href="#iconweidenglugantanhao"></use>
-          </svg>
-          {{ title }}
-        </p>
-        <div class="alertContent">
-          您的开店申请已经提交成功，请耐心等待7个工作日
-          如果修改，请进入首页再次编辑。
+        <div class="orderInfo">
+          <div class="common">
+            <div class="left-box">
+              快递公司
+            </div>
+            <div class="right-box">
+              <a-input
+                placeholder="请输入快递公司"
+                v-model="courierCompany"
+              ></a-input>
+            </div>
+          </div>
+          <div class="common">
+            <div class="left-box">
+              快递单号
+            </div>
+            <div class="right-box">
+              <a-input
+                placeholder="请输入快递单号"
+                v-model="courierNumber"
+              ></a-input>
+            </div>
+          </div>
         </div>
         <div class="btn">
-          <a-button>返回首页</a-button>
-          <a-button>联系客服</a-button>
+          <a-button>确认发货</a-button>
+          <a-button>取消</a-button>
         </div>
       </div>
       <div slot="content" v-else>
@@ -43,12 +53,14 @@
   export default {
     data() {
       return {
+        courierCompany: "",
+        courierNumber: "",
         visible: false,
         options: {
-          title: "提示",
+          title: "填写快递单号",
           closable: true,
           maskClosable: false,
-          wrapClassName: "submitSuccess",
+          wrapClassName: "confirmDelivery",
           centered: false
         }
       };

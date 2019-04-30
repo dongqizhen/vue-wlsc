@@ -177,14 +177,17 @@
     <div class="submit">
       <a-button @click="submit">提交审核</a-button>
     </div>
-    <login-modal-vue :Visible="visible" :type="type"></login-modal-vue>
+    <submit-success-modal
+      :Visible="visible"
+      :type="type"
+    ></submit-success-modal>
   </div>
 </template>
 
 <script>
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import upload from "../../../../components/common/upload";
-  import loginModalVue from "../../../../components/modal/loginModal.vue";
+  import submitSuccessModal from "../../../../components/modal/submitSuccessModal";
   import { mapState } from "vuex";
   export default {
     data() {
@@ -260,7 +263,7 @@
     components: {
       upload,
       commonTitle,
-      loginModalVue
+      submitSuccessModal
     }
   };
 </script>

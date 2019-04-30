@@ -42,31 +42,43 @@
                 {{ time.name }}
               </li>
             </ul>
-            <div class="calendar">
-              <div class="block">
-                <el-date-picker
-                  v-model="value7"
-                  type="daterange"
-                  align="right"
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                  @change="changeDate"
-                >
-                </el-date-picker>
-              </div>
-            </div>
+            <calendar-range></calendar-range>
           </div>
           <v-chart :options="polar" :init-options="initOptions"></v-chart>
         </div>
         <div class="statisticalTable">
           <ul>
             <li>
-              <span>时间</span>
-              <span>新增访问店铺数</span>
-              <span>新增收藏店铺数</span>
-              <span>新增询价单数</span>
-              <span>新增订单数</span>
+              <span @click="tabClick(1)">
+                时间
+                <svg class="icon" aria-hidden="true">
+                  <use v-bind:xlink:href="timeSvg"></use>
+                </svg>
+              </span>
+              <span @click="tabClick(2)">
+                新增访问店铺数
+                <svg class="icon" aria-hidden="true">
+                  <use v-bind:xlink:href="visitSvg"></use>
+                </svg>
+              </span>
+              <span @click="tabClick(3)">
+                新增收藏店铺数
+                <svg class="icon" aria-hidden="true">
+                  <use v-bind:xlink:href="storeSvg"></use>
+                </svg>
+              </span>
+              <span @click="tabClick(4)">
+                新增询价单数
+                <svg class="icon" aria-hidden="true">
+                  <use v-bind:xlink:href="inquirySvg"></use>
+                </svg>
+              </span>
+              <span @click="tabClick(5)">
+                新增订单数
+                <svg class="icon" aria-hidden="true">
+                  <use v-bind:xlink:href="orderSvg"></use>
+                </svg>
+              </span>
             </li>
             <li v-for="item in items" :key="item.id">
               <span>{{ item.time }}</span>
@@ -84,6 +96,7 @@
 
 <script>
   import manageNumberNav from "../../../../components/common/manageNumberNav";
+  import calendarRange from "../../../../components/common/calendarRange";
   import ECharts from "vue-echarts";
   import "zrender/lib/svg/svg";
 
@@ -98,6 +111,16 @@
   export default {
     data() {
       return {
+        flag1: -1,
+        flag2: 0,
+        flag3: 0,
+        flag4: 0,
+        flag5: 0,
+        timeSvg: "#iconpaixu",
+        visitSvg: "#iconpaixucopy",
+        storeSvg: "#iconpaixucopy",
+        inquirySvg: "#iconpaixucopy",
+        orderSvg: "#iconpaixucopy",
         xAxisData: [
           "2019-03-01",
           "2019-03-02",
@@ -310,8 +333,7 @@
             }
           ]
           // animationDuration: 1000
-        },
-        value7: ""
+        }
       };
     },
     mounted() {
@@ -336,6 +358,65 @@
       this.polar.series[3].data = [56, 76, 45, 2, 23, 98, 68];
     },
     methods: {
+      tabClick(i) {
+        if (i == 1) {
+          this.flag1 = this.flag1 + 1;
+          console.log(this.flag1);
+          if (this.flag1 % 2) {
+            this.timeSvg = "#iconpaixu";
+          } else {
+            this.timeSvg = "#iconpaixu1";
+          }
+          this.visitSvg = "#iconpaixucopy";
+          this.storeSvg = "#iconpaixucopy";
+          this.inquirySvg = "#iconpaixucopy";
+          this.orderSvg = "#iconpaixucopy";
+        } else if (i == 2) {
+          this.flag2 = this.flag2 + 1;
+          if (this.flag2 % 2) {
+            this.visitSvg = "#iconpaixu";
+          } else {
+            this.visitSvg = "#iconpaixu1";
+          }
+          this.timeSvg = "#iconpaixucopy";
+          this.storeSvg = "#iconpaixucopy";
+          this.inquirySvg = "#iconpaixucopy";
+          this.orderSvg = "#iconpaixucopy";
+        } else if (i == 3) {
+          this.flag3 = this.flag3 + 1;
+          if (this.flag3 % 2) {
+            this.storeSvg = "#iconpaixu";
+          } else {
+            this.storeSvg = "#iconpaixu1";
+          }
+          this.timeSvg = "#iconpaixucopy";
+          this.visitSvg = "#iconpaixucopy";
+          this.inquirySvg = "#iconpaixucopy";
+          this.orderSvg = "#iconpaixucopy";
+        } else if (i == 4) {
+          this.flag4 = this.flag4 + 1;
+          if (this.flag4 % 2) {
+            this.inquirySvg = "#iconpaixu";
+          } else {
+            this.inquirySvg = "#iconpaixu1";
+          }
+          this.timeSvg = "#iconpaixucopy";
+          this.storeSvg = "#iconpaixucopy";
+          this.visitSvg = "#iconpaixucopy";
+          this.orderSvg = "#iconpaixucopy";
+        } else if (i == 5) {
+          this.flag5 = this.flag5 + 1;
+          if (this.flag5 % 2) {
+            this.orderSvg = "#iconpaixu";
+          } else {
+            this.orderSvg = "#iconpaixu1";
+          }
+          this.timeSvg = "#iconpaixucopy";
+          this.storeSvg = "#iconpaixucopy";
+          this.inquirySvg = "#iconpaixucopy";
+          this.visitSvg = "#iconpaixucopy";
+        }
+      },
       getTab(val) {
         console.log(val);
         if (val == 0) {
@@ -393,7 +474,7 @@
         this.currentTab = -1;
       }
     },
-    components: { "v-chart": ECharts, manageNumberNav }
+    components: { "v-chart": ECharts, manageNumberNav, calendarRange }
   };
 </script>
 
@@ -474,13 +555,6 @@
                 }
               }
             }
-            .calendar {
-              width: 174px;
-              margin-left: 22px;
-              /deep/.el-range-separator {
-                width: 8%;
-              }
-            }
           }
           .echarts {
             width: 900px;
@@ -489,88 +563,7 @@
         }
         /deep/.ant-tabs {
           .ant-tabs-bar {
-            height: 53px;
-            line-height: 53px;
             padding-left: 27px;
-            background-color: #fff;
-            border-bottom: none;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
-            .ant-tabs-nav-container {
-              height: 100%;
-              .ant-tabs-nav-wrap {
-                height: 100%;
-                .ant-tabs-nav-scroll {
-                  height: 100%;
-                  .ant-tabs-nav {
-                    height: 100%;
-                    font-size: 15px;
-                    color: #666666;
-                    font-family: PingFangSC-Regular;
-                    .ant-tabs-tab {
-                      padding: 12px 0;
-                      margin-right: 67px;
-                      &:hover {
-                        color: $theme-color;
-                      }
-                    }
-                    .ant-tabs-ink-bar {
-                      background-color: $theme-color;
-                    }
-                  }
-                  .ant-tabs-tab-active {
-                    font-family: PingFangSC-Medium;
-                    color: $theme-color;
-                  }
-                }
-              }
-            }
-          }
-          .ant-tabs-content {
-            display: none;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
-            .ant-tabs-tabpane {
-              background-color: #fff;
-              padding-left: 27px;
-              .trend {
-                height: 484px;
-                .time {
-                  margin-top: 21px;
-                  margin-bottom: 30px;
-                  display: flex;
-                  ul {
-                    display: flex;
-                    align-items: center;
-                    li {
-                      padding: 0 18px;
-                      height: 31px;
-                      line-height: 31px;
-                      text-align: center;
-                      color: #999;
-                      font-size: 14px;
-                      margin-right: 20px;
-                      cursor: pointer;
-                      &.active {
-                        background: rgba(241, 2, 21, 0.03);
-                        border-radius: 15.5px;
-                        color: $theme-color;
-                        font-weight: 600;
-                      }
-                    }
-                  }
-                  .calendar {
-                    width: 174px;
-                    margin-left: 22px;
-                    /deep/.el-range-separator {
-                      width: 8%;
-                    }
-                  }
-                }
-                .echarts {
-                  width: 900px;
-                  height: 397px;
-                }
-              }
-            }
           }
         }
         .statisticalTable {

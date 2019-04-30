@@ -2,7 +2,10 @@
   <div class="orderTitle">
     <div class="left-box">
       <div class="checkedBox">
-        <a-checkbox @change="onChange"></a-checkbox>
+        <a-checkbox
+          @change="onChange(data.id)"
+          :checked="checkedChange(data.id)"
+        ></a-checkbox>
       </div>
       <div class="common orderNumber">
         <span>{{ isOrder ? "订单" : "询价单" }}编号：</span>
@@ -41,18 +44,47 @@
   </div>
 </template>
 <script>
+  import _ from "lodash";
   export default {
     data() {
-      return {};
+      return { list: this.checkedList };
     },
     props: {
+      data: {
+        type: Object,
+        required: true
+      },
       isOrder: {
         type: Boolean,
         required: true
+      },
+      checkedList: {
+        type: Array,
+        required: true
+      }
+    },
+    watch: {
+      checkedList() {
+        this.list = this.checkedList;
       }
     },
     methods: {
-      onChange() {}
+      onChange(id) {
+        if (_.indexOf(this.list, id) == -1) {
+          this.list.push(id);
+          this.$emit("getChecked", this.list);
+        } else {
+          this.list = _.without(this.list, id);
+          this.$emit("getChecked", id);
+        }
+      },
+      checkedChange(id) {
+        for (const val of this.list) {
+          if (val == id) {
+            return true;
+          }
+        }
+      }
     }
   };
 </script>

@@ -1,6 +1,11 @@
 <template>
   <div class="orderItem">
-    <order-title :isOrder="true"></order-title>
+    <order-title
+      :isOrder="true"
+      :checkedList="checkedList"
+      v-on:getChecked="getChecked"
+      :data="data"
+    ></order-title>
     <order-item-product></order-item-product>
     <delivery-info></delivery-info>
   </div>
@@ -36,6 +41,21 @@
           }
         ]
       };
+    },
+    props: {
+      data: {
+        type: Object,
+        required: true
+      },
+      checkedList: {
+        type: Array,
+        required: true
+      }
+    },
+    methods: {
+      getChecked(val) {
+        this.$emit("getChecked", val);
+      }
     },
     components: {
       orderTitle,

@@ -169,6 +169,7 @@
             html-type="submit"
             class="login-form-button"
             :disabled="hasErrors(form.getFieldsError(['phone2', 'password']))"
+            @click="changeLoginState(true)"
           >
             登录
           </a-button>

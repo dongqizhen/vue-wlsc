@@ -7,8 +7,12 @@
         <list-title :titleArr="titleArr"></list-title>
         <div class="tbody">
           <ul>
-            <li>
-              <order-item></order-item>
+            <li v-for="item in data" :key="item.id">
+              <order-item
+                :data="item"
+                :checkedList="checkedList"
+                v-on:getChecked="getChecked"
+              ></order-item>
             </li>
           </ul>
         </div>
@@ -32,7 +36,22 @@
   export default {
     data() {
       return {
-        data: ["1", "2", "3"],
+        data: [
+          {
+            id: 1,
+            title: "卖家申请店铺审核通过提示",
+            createOn: "2018-11-18",
+            introduce:
+              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
+          },
+          {
+            id: 2,
+            title: "卖家申请店铺审核未通过提示",
+            createOn: "2018-11-19",
+            introduce:
+              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
+          }
+        ],
         checkedList: [],
         checkAll: false,
         tabs: [
@@ -76,6 +95,20 @@
       };
     },
     methods: {
+      getChecked(val) {
+        if (typeof val == "object") {
+          this.checkedList = val;
+        } else {
+          if (_.indexOf(this.checkedList, val) != -1) {
+            this.checkedList = _.without(this.checkedList, val);
+          }
+        }
+        if (this.checkedList.length == this.data.length) {
+          this.checkAll = true;
+        } else {
+          this.checkAll = false;
+        }
+      },
       isCheckAllMethod(val) {
         if (val) {
           this.checkAll = true;
@@ -132,6 +165,16 @@
           ul {
             li {
               margin-bottom: 12px;
+              /deep/.itemProduct {
+                span {
+                  &:first-child {
+                    margin-left: 46px;
+                  }
+                  &:nth-child(2) {
+                    width: 197px;
+                  }
+                }
+              }
             }
           }
         }
