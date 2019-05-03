@@ -315,6 +315,11 @@ const router = new Router({
                         import ("../views/page/shop/userCenterChildren/changeEmail")
                 },
             ]
+        }, {
+            name: "底部tab",
+            path: '/footer/guide',
+            component: () =>
+                import ('../views/page/guide')
         }
 
     ]

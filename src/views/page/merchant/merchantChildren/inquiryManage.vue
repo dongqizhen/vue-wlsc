@@ -13,7 +13,18 @@
       <div class="listContainer">
         <div class="listContent">
           <list-title :titleArr="titleArr"></list-title>
-          <inquiry-item :data="data"></inquiry-item>
+          <div class="tbody">
+            <ul>
+              <li v-for="item in data" :key="item.id">
+                <inquiry-item
+                  :data="item"
+                  :checkedList="checkedList"
+                  v-on:getChecked="getChecked"
+                  :isDetail="false"
+                ></inquiry-item>
+              </li>
+            </ul>
+          </div>
           <checkAll
             :amount="checkedList.length"
             :checkAll="checkAll"
@@ -78,22 +89,25 @@
       };
     },
     methods: {
+      getChecked(val) {
+        if (typeof val == "object") {
+          this.checkedList = val;
+        } else {
+          if (_.indexOf(this.checkedList, val) != -1) {
+            this.checkedList = _.without(this.checkedList, val);
+          }
+        }
+        if (this.checkedList.length == this.data.length) {
+          this.checkAll = true;
+        } else {
+          this.checkAll = false;
+        }
+      },
       isCheckAllMethod(val) {
         if (val) {
           this.checkAll = true;
           this.checkedList = [];
           for (const val of this.data) {
-            this.checkedList.push(val.id);
-          }
-        } else {
-          this.checkAll = false;
-          this.checkedList = [];
-        }
-      },
-      onCheckAllChange() {
-        if (!this.checkAll) {
-          this.checkAll = true;
-          for (const val of data) {
             this.checkedList.push(val.id);
           }
         } else {
@@ -164,6 +178,13 @@
                   width: 96px;
                   justify-content: center;
                 }
+              }
+            }
+          }
+          .tbody {
+            > ul {
+              > li {
+                margin-bottom: 12px;
               }
             }
           }

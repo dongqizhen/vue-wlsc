@@ -5,7 +5,10 @@
       <order-title :isOrder="false"></order-title>
       <div class="inquiryContent">
         <list-title :titleArr="titleArr"></list-title>
-        <inquiry-order-product></inquiry-order-product>
+        <div class="listContent">
+          <inquiry-product-item :isDetail="true"></inquiry-product-item>
+          <inquiry-product-item :isDetail="true"></inquiry-product-item>
+        </div>
         <div class="list-footer">
           <check-all
             :amount="checkedList.length"
@@ -26,7 +29,7 @@
   import orderTitle from "../../../../components/common/orderTitle";
   import listTitle from "../../../../components/common/listTitle";
   import checkAll from "../../../../components/common/checkAll";
-  import inquiryOrderProduct from "../../../../components/common/inquiryOrderProduct";
+  import inquiryProductItem from "../../../../components/common/inquiryProductItem";
   export default {
     data() {
       return {
@@ -49,7 +52,7 @@
       orderTitle,
       listTitle,
       checkAll,
-      inquiryOrderProduct
+      inquiryProductItem
     }
   };
 </script>
@@ -89,6 +92,14 @@
             &:nth-child(7) {
               width: 120px;
             }
+          }
+        }
+      }
+      /deep/.listContent {
+        .inquiryProductItem {
+          border-bottom: none;
+          &:last-child {
+            border-bottom: $border-style;
           }
         }
       }

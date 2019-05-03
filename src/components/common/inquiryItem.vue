@@ -1,18 +1,15 @@
 <template>
   <div class="inquiryItem">
-    <order-title :isOrder="isOrder"></order-title>
+    <order-title
+      :isOrder="true"
+      :checkedList="checkedList"
+      v-on:getChecked="getChecked"
+      :data="data"
+    ></order-title>
     <div class="inquiryProduct">
       <div class="leftInfoBox">
-        <ul>
-          <li v-for="item in data" :key="item.id">
-            <span><img :src="item.img"/></span>
-            <span>{{ item.name }}</span>
-            <span>{{ item.price }}</span>
-            <span>{{ item.number }}</span>
-            <span>{{ item.arrivalTime }}</span>
-            <span>{{ item.remark }}</span>
-          </li>
-        </ul>
+        <inquiry-product-item :isDetail="isDetail"></inquiry-product-item>
+        <inquiry-product-item :isDetail="isDetail"></inquiry-product-item>
       </div>
       <div class="operating">
         <div>
@@ -25,18 +22,33 @@
 </template>
 <script>
   import orderTitle from "./orderTitle";
+  import inquiryProductItem from "./inquiryProductItem";
   export default {
     data() {
       return { isOrder: false };
     },
     props: {
       data: {
+        type: Object,
+        required: true
+      },
+      checkedList: {
         type: Array,
+        required: true
+      },
+      isDetail: {
+        type: Boolean,
         required: true
       }
     },
+    methods: {
+      getChecked(val) {
+        this.$emit("getChecked", val);
+      }
+    },
     components: {
-      orderTitle
+      orderTitle,
+      inquiryProductItem
     }
   };
 </script>
@@ -48,43 +60,39 @@
     margin-bottom: 10px;
     .leftInfoBox {
       flex: 1;
-      ul {
-        li {
-          height: 90px;
-          display: flex;
-          padding-top: 10px;
-          border-bottom: 0.5px solid #dddddd;
-          &:last-child {
-            border-bottom: none;
-          }
-          span {
-            font-size: 12px;
-            color: #666;
-            margin-right: 30px;
-            &:nth-child(1) {
+      /deep/.inquiryProductItem {
+        border: none;
+        border-bottom: 1px solid #ddd;
+        &:last-child {
+          border-bottom: none;
+        }
+        span {
+          font-size: 12px;
+          color: #666;
+          margin-right: 30px;
+          &:nth-child(1) {
+            width: 70px;
+            margin-left: 46px;
+            margin-right: 12px;
+            img {
               width: 70px;
-              margin-left: 46px;
-              margin-right: 12px;
-              img {
-                width: 70px;
-                height: 70px;
-              }
+              height: 70px;
             }
-            &:nth-child(2) {
-              width: 155px;
-            }
-            &:nth-child(3) {
-              width: 100px;
-            }
-            &:nth-child(4) {
-              width: 60px;
-            }
-            &:nth-child(5) {
-              width: 113px;
-            }
-            &:nth-child(6) {
-              flex: 1;
-            }
+          }
+          &:nth-child(2) {
+            width: 155px;
+          }
+          &:nth-child(3) {
+            width: 100px;
+          }
+          &:nth-child(4) {
+            width: 60px;
+          }
+          &:nth-child(5) {
+            width: 113px;
+          }
+          &:nth-child(6) {
+            flex: 1;
           }
         }
       }

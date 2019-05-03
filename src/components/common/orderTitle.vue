@@ -1,7 +1,7 @@
 <template>
   <div class="orderTitle">
     <div class="left-box">
-      <div class="checkedBox">
+      <div class="checkedBox" v-if="isOrder">
         <a-checkbox
           @change="onChange(data.id)"
           :checked="checkedChange(data.id)"
@@ -52,7 +52,7 @@
     props: {
       data: {
         type: Object,
-        required: true
+        required: false
       },
       isOrder: {
         type: Boolean,
@@ -60,7 +60,7 @@
       },
       checkedList: {
         type: Array,
-        required: true
+        required: false
       }
     },
     watch: {
