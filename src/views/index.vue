@@ -62,9 +62,9 @@
           ></recommends-tab-vue>
           <div class="recommend_page">
             <ul class="floor" v-if="recommend_tabs_index == 0">
-              <li>
+              <li v-for="(item, i) in goodList" :key="item.id">
                 <h2>
-                  <p>1F 电子超声</p>
+                  <p>{{ i + 1 }}F {{ item.name }}</p>
                   <ul>
                     <li>心电图机</li>
                     <li>心电图工作站</li>
@@ -81,7 +81,17 @@
                     <a target="_blank">
                       更多
                       <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#iconhuangsegengduo"></use>
+                        <use
+                          :xlink:href="
+                            i == 0
+                              ? '#iconhuangsegengduo'
+                              : i == 1
+                              ? '#iconlvsegengduo'
+                              : i == 2
+                              ? '#iconzisegengduo'
+                              : '#iconlansegengduo'
+                          "
+                        ></use>
                       </svg>
                     </a>
                   </router-link>
@@ -89,7 +99,11 @@
                 <div class="content">
                   <div class="left"></div>
                   <ul class="right">
-                    <product-item></product-item>
+                    <product-item
+                      v-for="val in item.goodsList"
+                      :key="val.id"
+                      :list="val"
+                    ></product-item>
                   </ul>
                 </div>
               </li>
@@ -154,11 +168,19 @@
     data() {
       return {
         recommend_tabs_index: 0,
-        brandVisible: false //控制modal层弹出
+        brandVisible: false, //控制modal层弹出
+        goodList: []
+        // background: ["#F5A623", "#43D480", "#8880FE", "#0283FF"]
       };
     },
     mounted() {
-      _getData("api/goods/goodslist", {}).then(data => {});
+      _getData("api/index/caseCount", {}).then(data => {
+        console.log("data", data);
+      });
+      _getData("api/goods/goodslist", {}).then(data => {
+        console.log("data", data);
+        this.goodList = data.list;
+      });
     },
     components: {
       Header,
@@ -335,8 +357,9 @@
                     border-radius: 20px 20px 0 0;
                     display: flex;
                     align-items: center;
-                    font-family: PingFangSC-Medium;
+                    // font-family: PingFangSC-Medium;
                     font-size: 18px;
+                    font-weight: 600;
                     color: #ffffff;
                     padding-left: 27px;
                   }
@@ -349,7 +372,7 @@
                     border-bottom: 1px solid #f5a623;
                     padding-bottom: 3px;
                     li {
-                      font-family: PingFangSC-Regular;
+                      // font-family: PingFangSC-Regular;
                       font-size: 14px;
                       color: #333333;
                       margin-right: 30px;
@@ -396,6 +419,51 @@
                     display: flex;
                     justify-content: space-between;
                     padding-top: 4px;
+                  }
+                }
+                &:nth-child(2) {
+                  h2 {
+                    p {
+                      background: #43d480;
+                    }
+                    ul {
+                      border-color: #43d480;
+                    }
+                    span {
+                      a {
+                        border-color: #43d480;
+                      }
+                    }
+                  }
+                }
+                &:nth-child(3) {
+                  h2 {
+                    p {
+                      background: #8880fe;
+                    }
+                    ul {
+                      border-color: #8880fe;
+                    }
+                    span {
+                      a {
+                        border-color: #8880fe;
+                      }
+                    }
+                  }
+                }
+                &:nth-child(4) {
+                  h2 {
+                    p {
+                      background: #0283ff;
+                    }
+                    ul {
+                      border-color: #0283ff;
+                    }
+                    span {
+                      a {
+                        border-color: #0283ff;
+                      }
+                    }
                   }
                 }
               }

@@ -141,7 +141,7 @@ const router = new Router({
                 component: () =>
                     import ('../views/page/shop/detailsChildren/articleDetails')
             }, {
-                path: 'productDetails',
+                path: 'productDetails/:id',
                 name: '产品详情',
                 meta: {
                     title: '产品详情'

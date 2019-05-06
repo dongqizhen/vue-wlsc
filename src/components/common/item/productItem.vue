@@ -3,17 +3,17 @@
     class="product-item"
     tag="li"
     :to="{
-      path: '/details/productDetails',
+      path: `/details/productDetails/${list.id}`,
       query: { nav_index: $route.query.nav_index }
     }"
   >
     <a target="_blank">
       <li>
         <div class="img">
-          <img src="../../../assets/images/demo.jpg" alt="" />
+          <img :src="list.list_pic_url" alt="" />
         </div>
         <div class="price">
-          ¥799
+          ¥{{ list.market_price }}
           <span>
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconxiaoliang"></use>
@@ -22,7 +22,7 @@
           </span>
         </div>
         <p>
-          超声探头这里最多可以显示两行字，多余的用…展示
+          {{ list.name }}
         </p>
         <div class="brand_small">
           <span>品牌：GE</span>
@@ -40,7 +40,16 @@
 </template>
 
 <script>
-  export default {};
+  export default {
+    data() {
+      return {};
+    },
+    props: {
+      list: {
+        type: Object
+      }
+    }
+  };
 </script>
 
 <style scoped lang="scss">
@@ -104,6 +113,7 @@
       color: #333333;
       font-weight: 600;
       line-height: 17px;
+      height: 34px;
       margin-bottom: 7px;
     }
     .brand_small {

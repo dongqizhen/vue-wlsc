@@ -39,10 +39,10 @@
               <ul v-if="isActive == 0">
                 <li
                   v-for="(item, i) in area"
-                  :key="`eare-${i}`"
+                  :key="item.id"
                   @click="handleClick(item)"
                 >
-                  {{ item }}
+                  {{ item.name }}
                 </li>
               </ul>
               <ul v-else>
@@ -51,7 +51,7 @@
                   :key="`city-${i}`"
                   @click="cityItemClick(item)"
                 >
-                  {{ item }}
+                  {{ item.name }}
                 </li>
               </ul>
             </div>
@@ -89,52 +89,19 @@
   import shopItemVue from "../../../components/common/item/shopItem.vue";
   import shopLeftSideVue from "../../../components/common/shopLeftSide.vue";
   import shopNavVue from "../../../components/common/shopNav.vue";
-
   import { mixin } from "../../../components/mixin/mixin";
-
-  const area = [
-    "安徽省",
-    "北京市",
-    "重庆市",
-    "福建省",
-    "甘肃省",
-    "广东省",
-    "广西壮族自治区",
-    "贵州省",
-    "安徽省",
-    "广东省",
-    "广东省",
-    "广东省",
-    "广东省",
-    "广东省",
-    "广东省",
-    "广东省",
-    "广东省",
-    "广东省"
-  ];
-
-  let cityArr = [
-    "顺义区",
-    "西城区",
-    "东城区",
-    "房山区",
-    "大兴区",
-    "密云区",
-    "海淀区",
-    "海淀区",
-    "海淀区"
-  ];
+  import { _getData } from "../../../config/getData";
 
   export default {
     data() {
       return {
         arr: [1, 2, 3, 4, 5],
         areaIsShow: false, //控制选择地区弹层是否显示
-        area, //省份列表
-        cityArr, //市列表
+        area: [], //省份列表
+        cityArr: [], //市列表
         province: "选择省/直辖市",
         city: "选择市",
-        isActive: 0,
+        isActive: 0, //是否显示市弹出层
         selectMainArea: "北京市西城区",
         routes: [
           {
@@ -149,7 +116,6 @@
       };
     },
     mixins: [mixin],
-    methods: {},
     components: {
       Header,
       Footer,
@@ -165,6 +131,12 @@
     created() {
       //this.routes = JSON.parse(this.$route.query.routes);
     },
+    mounted() {
+      _getData("api/address/getProvince", {}).then(data => {
+        console.log("data", data);
+        this.area = data;
+      });
+    },
     methods: {
       selectArea() {
         this.areaIsShow = !this.areaIsShow;
@@ -173,15 +145,23 @@
       },
       handleClick(val) {
         console.log(val);
-        this.province = val;
-        this.isActive = 1;
+        this.province = val.name;
+
+        _getData("api/address/getCity", { provinceId: val.id })
+          .then(data => {
+            console.log(data);
+            this.cityArr = data;
+          })
+          .then(() => {
+            this.isActive = 1;
+          });
       },
       provinceClick() {
         this.isActive = 0;
         this.province = "选择省/直辖市";
       },
       cityItemClick(item) {
-        this.selectMainArea = this.province + item;
+        this.selectMainArea = this.province + item.name;
         this.areaIsShow = false;
       }
     }

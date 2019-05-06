@@ -9,7 +9,7 @@
             </svg>
             产品分类
           </span>
-          <span class="btn" @click="handleClick">
+          <span class="btn" @click="handleClick" v-if="isShow">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconguanlichangyongfenlei"></use>
             </svg>
@@ -19,7 +19,19 @@
         <div class="product_container">
           <div class="swiper-container nav_slide">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" v-for="item in navArr" :key="item.id">
+              <div
+                class="swiper-slide"
+                @click="navHandleClick()"
+                v-if="isLogin"
+              >
+                常用分类
+              </div>
+              <div
+                class="swiper-slide"
+                v-for="(item, i) in navArr"
+                :key="item.id"
+                @click="navHandleClick(item.id, i)"
+              >
                 {{ item.name }}
               </div>
 
@@ -33,41 +45,20 @@
                   <router-link
                     :to="{
                       path: '/lookingProduct/oneOfBrandClassificne',
-                      query: { nav_index: 1 }
+                      query: {
+                        nav_index: 1,
+                        categoryId: item.id,
+                        categoryName: item.name
+                      }
                     }"
                     tag="li"
+                    v-for="item in pageArr"
+                    :key="item.id"
                   >
-                    <a target="_blank">超声手术设备</a>
+                    <a target="_blank">{{ item.name }}</a>
                   </router-link>
-                  <li>高强度超声治疗设备</li>
-                  <li>超声手术设备附件</li>
-                  <li>X 射线高压发生器</li>
-                  <li>X射线管</li>
-                  <li>X射线管组件</li>
-                  <li>限束装置</li>
-                  <li>高强度超声治疗设备</li>
-                  <li>激光手术设备</li>
-                  <li>医用激光光纤</li>
-                  <li>主电缆</li>
-                  <li>超声手术设备</li>
-                  <li>高强度超声治疗设备</li>
-                  <li>超声手术设备附件</li>
-                  <li>X 射线高压发生器</li>
-                  <li>X射线管</li>
-                  <li>X射线管组件</li>
-                  <li>限束装置</li>
-                  <li>高强度超声治疗设备</li>
-                  <li>激光手术设备</li>
-                  <li>医用激光光纤</li>
-                  <li>主电缆</li>
                 </ul>
               </div>
-              <div class="swiper-slide">电子超声</div>
-              <div class="swiper-slide">临床检验</div>
-              <div class="swiper-slide">实验仪器</div>
-              <div class="swiper-slide">医学影像</div>
-              <div class="swiper-slide">实验仪器</div>
-              <div class="swiper-slide">医学影像</div>
             </div>
           </div>
         </div>
@@ -83,42 +74,18 @@
   import modalVue from "../modal/modal";
   import Swiper from "swiper";
   import CommonCategoriesModalVue from "../modal/CommonCategoriesModal.vue";
+  import { _getData } from "../../config/getData";
+  import { mapState, mapMutations } from "vuex";
+  import _ from "lodash";
 
   export default {
     data() {
       return {
         visible: false, //控制modal层弹出
-
-        navArr: [
-          {
-            name: "常用分类",
-            id: 1
-          },
-          {
-            name: "电子超声",
-            id: 2
-          },
-          {
-            name: "临床检验",
-            id: 3
-          },
-          {
-            name: "实验仪器",
-            id: 4
-          },
-          {
-            name: "医学影像",
-            id: 5
-          },
-          {
-            name: "常用分类",
-            id: 6
-          },
-          {
-            name: "医学影像",
-            id: 7
-          }
-        ]
+        defaultsVal: 0,
+        isShow: true, //是否显示管理常用分类按钮
+        navArr: [],
+        pageArr: []
       };
     },
     components: {
@@ -128,9 +95,34 @@
     methods: {
       handleClick() {
         this.visible = true;
+      },
+      async getCommonCategory() {
+        //获取常用分类
+        _getData("api/ucatalog/list", {}).then(data => {
+          console.log("data", data);
+          this.pageArr = data.userCategoryList;
+        });
+      },
+      navHandleClick(id, i) {
+        if (id) {
+          this.isShow = false;
+          this.pageArr = this.navArr[i].subCategoryList;
+        } else {
+          this.isShow = true;
+          this.getCommonCategory();
+        }
       }
     },
+    computed: {
+      ...mapState(["isLogin"])
+    },
     mounted() {
+      this.getCommonCategory();
+      _getData("api/catalog/listAll", {}).then(data => {
+        console.log(data);
+        this.navArr = data.currentCategory;
+      });
+
       new Swiper(".product-category .swiper-container.nav_slide", {
         slidesPerView: "auto",
         // freeMode: true,
@@ -153,7 +145,7 @@
             this.updateSlides();
           },
           tap: function(e) {
-            console.log(this);
+            //console.log(this);
             if (this.clickedIndex == undefined) return;
             // mySwiper.slideTo(this.clickIndex, 0);
             const activeSlidePosition = this.slides[this.clickedIndex].offsetLeft;
@@ -166,6 +158,11 @@
             // let navActiveSlideLeft = this.slides[this.clickedIndex].offsetLeft; //activeSlide距左边的距离
             this.setTransition(300);
 
+            if (this.navWidth <= this.clientWidth) {
+              this.setTranslate(0);
+              return;
+            }
+
             if (
               activeSlidePosition <
               (this.clientWidth - parseInt(this.navSlideWidth)) / 2
@@ -176,6 +173,11 @@
               this.navWidth -
                 (parseInt(this.navSlideWidth) + this.clientWidth) / 2
             ) {
+              console.log(
+                activeSlidePosition,
+                this.navSlideWidth,
+                this.clientWidth
+              );
               this.setTranslate(this.clientWidth - this.navWidth);
             } else {
               this.setTranslate(

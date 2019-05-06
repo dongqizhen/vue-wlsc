@@ -52,19 +52,30 @@
         <ul>
           <router-link
             v-for="(item, i) in arr"
-            :key="`cp-${i}`"
+            :key="item.id"
             tag="li"
             :to="
               $route.query.nav_index == 2
                 ? { path: '/lookingProduct', query: { nav_index: 2 } }
                 : $route.query.nav_index == 1
-                ? { path: 'brand', query: { nav_index: 1 } }
+                ? {
+                    path: 'brand',
+                    query: {
+                      nav_index: 1,
+                      categoryId: $route.query.categoryId,
+                      categoryName: $route.query.categoryName,
+                      brandId: item.id,
+                      brandName: item.name
+                    }
+                  }
                 : ''
             "
           >
             <a>
-              <div class="img_box"></div>
-              松下
+              <div class="img_box">
+                <img :src="item.list_pic_url" alt="" />
+              </div>
+              {{ item.name }}
             </a>
           </router-link>
         </ul>
@@ -81,26 +92,13 @@
   import brandCardVue from "../../../../components/common/brandCard.vue";
   import breadcrumbVue from "../../../../components/common/breadcrumb.vue";
   import CommonBrandsModalVue from "../../../../components/modal/CommonBrandsModal";
+  import { _getData } from "../../../../config/getData";
 
-  const arr = [
-    "松下",
-    "迈瑞",
-    "西门子",
-    "松下",
-    "松下",
-    "松下",
-    "松下",
-    "松下",
-    "松下",
-    "松下",
-    "松下",
-    "松下",
-    "松下"
-  ];
   export default {
     data() {
       return {
-        arr,
+        arr: [],
+        navArr: {}, //全部类型小类
         routes: "",
         brandVisible: false
       };
@@ -128,7 +126,7 @@
                 path: "/lookingProduct?nav_index=" + this.$route.query.nav_index
               },
               {
-                name: "超声手术设备",
+                name: this.$route.query.categoryName,
                 path: "/lookingProduct/oneOfBrandClassificne"
               }
             ];
@@ -137,6 +135,16 @@
       brandCardVue,
       breadcrumbVue,
       CommonBrandsModalVue
+    },
+    mounted() {
+      _getData("api/brand/merge", { id: this.$route.query.categoryId })
+        .then(data => {
+          this.navArr = data;
+        })
+        .then(() => {
+          console.log(this.navArr);
+          this.arr = this.navArr.listAll;
+        });
     },
     methods: {
       handleClick(item, i) {}
@@ -268,6 +276,10 @@
                 background: #fff;
                 box-shadow: $base-box-shadow;
                 margin-bottom: 8px;
+                img {
+                  height: 100%;
+                  width: 100%;
+                }
               }
               &:hover {
                 color: $theme-color;

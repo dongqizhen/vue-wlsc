@@ -169,7 +169,7 @@
             html-type="submit"
             class="login-form-button"
             :disabled="hasErrors(form.getFieldsError(['phone2', 'password']))"
-            @click="changeLoginState(true)"
+            @click="passwordLogin"
           >
             登录
           </a-button>
@@ -182,6 +182,7 @@
 <script>
   import { mapMutations } from "vuex";
   import { timer } from "../../../../components/mixin/mixin";
+  import { _getData } from "../../../../config/getData";
 
   export default {
     data() {
@@ -193,8 +194,9 @@
     },
     mixins: [timer],
     methods: {
-      ...mapMutations(["changeLoginState"]),
+      ...mapMutations(["changeLoginState", "changeUserInfoState"]),
       callback() {},
+      passwordLogin() {},
       handleSubmitOne(e) {
         this.seccode_err = true;
         e.preventDefault();
@@ -206,10 +208,34 @@
       },
       handleSubmitTwo(e) {
         e.preventDefault();
-        this.password_err = true;
+
         this.form.validateFieldsAndScroll((err, values) => {
           if (!err) {
             console.log("Received values of form: ", values);
+          }
+        });
+        console.log(this.form.getFieldsValue());
+        const { phone2, password } = this.form.getFieldsValue();
+        _getData(`${this.$API_URL.HYGLOGINURL}/server/user!request.action`, {
+          method: "loginAppWithPlatForm",
+          token: "",
+          version: "3.1.0",
+          deviceId: "",
+          source: "h5",
+          params: {
+            platform: "app",
+            accountNo: phone2,
+            password
+          }
+        }).then(data => {
+          console.log(data);
+          if (data.data.status.code == 1106) {
+            this.password_err = true;
+            return;
+          } else if (data.data.status.code == 200) {
+            this.changeLoginState(true);
+            this.changeUserInfoState(data.data.result);
+            this.$router.go(-1);
           }
         });
       },

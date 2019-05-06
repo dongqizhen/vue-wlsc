@@ -1,11 +1,10 @@
 import axios from './axios'
 
-export async function _getData(url = '', data = {}, successCallBack, errorCallBack) {
+export async function _getData(url = '', data = {}, config = {}) {
 
     if (!data.userid) {
         delete data.userid
     }
-
     return await axios.post(url, {
         ... {
 
@@ -13,14 +12,12 @@ export async function _getData(url = '', data = {}, successCallBack, errorCallBa
         ...data
     }).then(data => {
         console.log(data)
-            // /* if (data.data.status.code == 200) {
-            //     successCallBack(data.data.result)
+        if (data.data.code == 0) {
+            return data.data.result
+        } else {
+            return data
+        }
 
-        // } else {
-        //     console.log(data.data.status)
-
-        // } */
-        return data.data.result
     }).catch(err => {
         // /* if (errorCallBack) {
         //     errorCallBack(err)

@@ -4,7 +4,7 @@
       <div class="magnifying">
         <div class="img_box">
           <a class="magnifier-thumb-wrapper">
-            <img id="thumb" src="../../../../assets/images/demo.jpg" />
+            <img id="thumb" :src="productInfo.list_pic_url" />
           </a>
           <div class="magnifier-preview" id="preview"></div>
           <div class="swiper-container">
@@ -66,17 +66,17 @@
           </div>
         </div>
         <div class="main">
-          <h2>超声手术设备这里要把产品的详细名称显示完整自动换行</h2>
+          <h2>{{ productInfo.name }}</h2>
           <div class="price">
             <span>指导价：</span>
-            <span>¥23000</span>
+            <span>¥{{ productInfo.market_price }}</span>
             <span>询价</span>
           </div>
           <ul class="params">
             <li>
               <span>
                 <span>产品分类：</span>
-                <a>超声 电子超声</a>
+                <a>{{ productInfo.category_name }}</a>
               </span>
               <span>
                 <span>品牌：</span>
@@ -100,7 +100,7 @@
               </span>
               <span>
                 <span>数量 库存：</span>
-                <a>999</a>
+                <a>{{ productInfo.goods_number }}</a>
               </span>
             </li>
             <li>
@@ -128,13 +128,7 @@
       <div class="introduce-tabs">
         <a-tabs defaultActiveKey="1">
           <a-tab-pane tab="产品介绍" key="1" :forceRender="true">
-            <p class="introduce">
-              超声手术刀临床用于切割与凝血、白内障乳化、肿瘤吸引切除、吸脂等方面。对于含水分多、胶原成分少的组织效果最好，如脑、肝、脾等器官，而对胶原成分多的组织作用甚微，如血管、筋膜等。临床主要应用在脑外科、神经外科肿瘤、肝肿瘤、胸外科各种肿瘤的切除，脂肪吸除以及各种含水分丰富的细胞组织的切除。近年来其使用领域已覆盖眼科、脑外科、神经外科、普外科、泌尿外科、胸外科、妇科、小儿外科、五官科等。
-              1.
-              吸引式超声手术刀：由主机，治疗声头，吸引装置组成，利用超声的空化作用，粉碎病变组织或准备除去的组织，再用泵吸出，完成治疗。吸引式超声手术刀止血的原理是在破坏和吸除高含水量组织细胞同时，使弹性较强的高胶原含量组织完好无损，使手术在安全、少血或无血条件下进行
-              Β] 。 2.
-              切割式超声手术刀：由主机和治疗声头组成，它是利用治疗声头的超声效应和高频机械振动，切割、分离组织，是与传统的外科手术相似的超声治疗方式，刀头小、产热少、止血好，可在视野很小的情况下进行操作，常用于腹腔镜手术
-            </p>
+            <p class="introduce" v-html="productInfo.goods_desc"></p>
           </a-tab-pane>
           <a-tab-pane tab="产品规格/参数" key="2" :forceRender="true">
             <ul class="specification">
@@ -373,14 +367,17 @@
   import shopCardVue from "../../../../components/common/shopCard.vue";
   import loginModalVue from "../../../../components/modal/loginModal.vue";
   import { mapState } from "vuex";
+  import { _getData } from "../../../../config/getData";
 
   export default {
     data() {
       return {
+        productInfo: {}, //产品详情
         imgarr: [img, img],
         defaultIndex: null,
         visible: false,
         title: "",
+        imgUrl: "",
         type: "",
         bigImageIsShow: false
       };
@@ -415,15 +412,24 @@
     },
 
     mounted() {
-      const evt = new Event(),
-        m = new Magnifier(evt);
-      m.attach({
-        thumb: "#thumb",
-        large: img,
-        largeWrapper: "preview",
-        zoom: 2,
-        zoomable: true
-      });
+      _getData("api/goods/gooddetail", {
+        id: this.$route.params.id
+      })
+        .then(data => {
+          console.log(data);
+          this.productInfo = data.productInfo;
+        })
+        .then(() => {
+          const evt = new Event(),
+            m = new Magnifier(evt);
+          m.attach({
+            thumb: "#thumb",
+            large: this.productInfo.list_pic_url,
+            largeWrapper: "preview",
+            zoom: 2,
+            zoomable: true
+          });
+        });
 
       const swiper = new Swiper(".swiper-container", {
         slidesPerView: 5,
@@ -493,9 +499,13 @@
             height: 352px;
             width: 352px;
             top: 0;
+            // background: #f7f9fa;
             right: -362px;
             z-index: 100;
             pointer-events: none;
+            /deep/ img {
+              background: #f7f9fa !important;
+            }
           }
           /deep/ .swiper-container {
             margin-top: 16px;
@@ -545,11 +555,12 @@
 
           h2 {
             font-family: PingFangSC-Medium;
-            font-size: 20px;
+            font-size: 18px;
             color: #333333;
             font-weight: 600;
             margin-bottom: 10px;
             line-height: 28px;
+            height: 56px;
           }
           .price {
             height: 50px;
@@ -733,6 +744,15 @@
                 color: #666666;
                 letter-spacing: 0;
                 line-height: 27px;
+                img {
+                  width: 100%;
+                }
+                > p {
+                  width: 100%;
+                  img {
+                    width: 100%;
+                  }
+                }
               }
               .specification {
                 width: 590px;

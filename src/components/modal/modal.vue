@@ -358,10 +358,11 @@
       .ant-modal {
         .ant-modal-body {
           .common {
-            min-height: 40px;
+            min-height: 43px;
 
             padding: 0 5px;
             padding-top: 6px;
+
             > li {
               margin-bottom: 0px;
               font-size: 14px;
@@ -377,6 +378,7 @@
               align-items: center;
               line-height: 26px;
               margin-right: 12px;
+              position: relative;
               span {
                 display: flex;
                 justify-content: flex-start;
@@ -392,6 +394,28 @@
                 .icon {
                   height: 9px;
                   width: 9px;
+                }
+              }
+              &::before {
+                content: "添加至常用品牌";
+                display: flex;
+                align-items: center;
+                white-space: pre;
+                height: 100%;
+                width: 100%;
+                position: absolute;
+                background: #fdefd9;
+                text-align: center;
+                display: none;
+                font-family: PingFangSC-Semibold;
+                font-size: 12px;
+                color: #f5a623;
+                justify-content: center;
+              }
+              &:hover {
+                border-color: #fdefd9;
+                &::before {
+                  display: flex;
                 }
               }
             }
@@ -459,7 +483,7 @@
           flex-direction: column;
           justify-content: center;
           p {
-            font-size: 24px;
+            font-size: 20px;
             color: #333333;
             font-weight: 600;
             display: flex;
@@ -469,8 +493,8 @@
             line-height: 34px;
             margin-bottom: 40px;
             .icon {
-              height: 34px;
-              width: 34px;
+              height: 28px;
+              width: 28px;
               margin-right: 12px;
               margin-top: 2px;
             }
@@ -479,7 +503,7 @@
             .ant-btn {
               height: 42px;
               width: 115px;
-              font-size: 18px;
+              font-size: 16px;
               color: #666666;
               border: 1px solid #cccccc;
               border-radius: 3px;

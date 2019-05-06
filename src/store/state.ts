@@ -1,9 +1,13 @@
 interface StateType {
-    isLogin:Boolean
+    isLogin:Boolean,
+    userInfo:Object
 }
 
  let state:StateType={
-    isLogin:true
+    isLogin:false,
+    userInfo:{
+
+    }
 }
 
 export default state;

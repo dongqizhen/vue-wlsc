@@ -40,8 +40,9 @@
                 class="swiper-slide"
                 v-for="(item, i) in myArr"
                 :key="`item-${i}`"
+                @click="getSecond(item.id)"
               >
-                {{ item }}
+                {{ item.name }}
               </div>
               <div class="bar"><i></i></div>
             </div>
@@ -60,9 +61,9 @@
               :name="!drag ? 'flip-list' : null"
             > -->
           <ul class="common">
-            <li v-for="(item, i) in myArray" :key="i">
+            <li v-for="item in myArray" :key="item.id">
               <span>
-                {{ item }}
+                {{ item.name }}
                 <i>
                   <svg class="icon" aria-hidden="true">
                     <use xlink:href="#iconguanlichangyongfenleijiahao"></use>
@@ -92,23 +93,7 @@
   import draggable from "vuedraggable";
   import modal from "./modal.vue";
   import Swiper from "swiper";
-
-  let myArray = [
-    "迈瑞",
-    "飞利浦",
-    "飞利浦",
-    "飞利浦",
-    "飞利浦",
-    "飞利浦",
-    "飞利浦",
-    "飞利浦",
-    "飞利浦",
-    "飞利浦"
-  ];
-
-  let myArray2 = ["主电缆", "激光手术设备", "医用激光光纤"];
-
-  let myArr = ["电子超声", "临床检验", "试验仪器", "医学影像"];
+  import { _getData } from "../../config/getData";
 
   export default {
     data() {
@@ -122,9 +107,9 @@
           centered: false
         },
         drag: false,
-        myArray,
-        myArray2,
-        myArr
+        myArray: [], //二级分类
+        myArray2: [], //常用分类
+        myArr: [] //一级分类
       };
     },
     props: {
@@ -195,6 +180,22 @@
         });
       });
     },
+    mounted() {
+      //获取常用分类
+      _getData("api/ucatalog/list", {}).then(data => {
+        console.log("data", data);
+        this.myArray2 = data.userCategoryList;
+      });
+      //获取一级分类
+      _getData("api/catalog/first", {})
+        .then(data => {
+          console.log("data", data);
+          this.myArr = data.categoryList;
+        })
+        .then(() => {
+          this.getSecond(this.myArr[0].id);
+        });
+    },
     components: {
       modal,
       draggable
@@ -202,6 +203,14 @@
     methods: {
       handleOk() {
         this.visible = false;
+      },
+      async getSecond(id) {
+        //获取二级分类
+        await _getData("api/catalog/second", {
+          id
+        }).then(data => {
+          this.myArray = data.subCategory;
+        });
       }
     },
     computed: {

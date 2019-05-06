@@ -244,6 +244,8 @@
   import brandCardVue from "../../../../components/common/brandCard.vue";
   import breadcrumbVue from "../../../../components/common/breadcrumb.vue";
   import CommonCategoriesModalVue from "../../../../components/modal/CommonCategoriesModal.vue";
+  import { _getData } from "../../../../config/getData";
+  import { mapState, mapMutations } from "vuex";
 
   export default {
     data() {
@@ -252,8 +254,8 @@
         visible: false,
         left_showMore: false,
         left_index: null,
-        left_show_arr: [],
-        right_show_arr: []
+        left_show_arr: [], //左侧点击更多是否展开控制数组
+        right_show_arr: [] //右侧点击更多是否展开控制数组
       };
     },
     components: {
@@ -261,11 +263,13 @@
       breadcrumbVue,
       CommonCategoriesModalVue
     },
+    computed: {
+      ...mapState(["isLogin"])
+    },
     methods: {
       LeftMoreBtnClick(i) {
         if (this.left_show_arr[i]) {
           this.left_show_arr.splice(i, 1, false);
-
           return;
         }
         this.left_show_arr.splice(i, 1, true);
@@ -278,6 +282,13 @@
         }
         this.right_show_arr.splice(i, 1, true);
       }
+    },
+    mounted() {
+      //获取常用分类
+      _getData("api/ucatalog/list", {}).then(data => {
+        console.log("data", data);
+        //this.myArray2 = data.userCategoryList;
+      });
     },
     created() {
       this.routes =

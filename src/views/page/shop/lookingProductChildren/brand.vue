@@ -41,6 +41,7 @@
   import brandCardVue from "../../../../components/common/brandCard.vue";
   import recommendsTabVue from "../../../../components/common/recommendsTab.vue";
   import breadcrumbVue from "../../../../components/common/breadcrumb.vue";
+  import { _getData } from "../../../../config/getData";
 
   export default {
     data() {
@@ -55,6 +56,13 @@
       brandCardVue,
       recommendsTabVue,
       breadcrumbVue
+    },
+    beforeRouteEnter(to, from, next) {
+      console.log(to, from);
+      next();
+    },
+    mounted() {
+      this.getModelList();
     },
     created() {
       this.routes =
@@ -89,13 +97,13 @@
                 path: "/lookingProduct?nav_index=" + this.$route.query.nav_index
               },
               {
-                name: "超声手术设备",
+                name: this.$route.query.categoryName,
                 path:
                   "/lookingProduct/oneOfBrandClassificne?nav_index=" +
                   this.$route.query.nav_index
               },
               {
-                name: "松下",
+                name: this.$route.query.brandName,
                 path:
                   "/lookingProduct/brand?nav_index=" + this.$route.query.nav_index
               }
@@ -104,6 +112,13 @@
     methods: {
       tabClick(i) {
         console.log(i);
+      },
+      async getModelList(sort = 1) {
+        return await _getData("api/brandmodel/list", {
+          categoryId: this.$route.query.categoryId,
+          brandId: this.$route.query.brandId,
+          sortOrder: sort
+        });
       }
     }
   };
@@ -121,7 +136,7 @@
       margin-bottom: 20px;
       margin-top: 4px;
       overflow: initial;
-      /deep/ .ant-btn-default {
+      .ant-btn-default {
         height: 40px;
         width: 120px;
         background: #ffffff;

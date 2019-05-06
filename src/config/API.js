@@ -6,7 +6,9 @@ const command = process.env.npm_lifecycle_event;
 let API_HOST = {};
 
 let alpha = { // 开发
-    URL: "http://60.195.252.91:8080/platform"
+    // URL: "http://60.195.252.91:8080/platform",
+    URL: "http://192.168.2.233:8080/platform",
+    HYGLOGINURL: 'http://60.195.252.86:8080'
 }
 let beta = { // 测试
     URL: "https://www.api/code",

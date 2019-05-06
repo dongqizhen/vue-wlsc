@@ -12,12 +12,22 @@
       <div class="login">
         <div class="avatar">
           <h2>
-            <svg class="icon" aria-hidden="true">
+            <svg class="icon" aria-hidden="true" v-if="!userInfo.imageUrl">
               <use xlink:href="#iconweidenglutouxiang"></use>
             </svg>
+            <img :src="userInfo.imageUrl" alt="" v-else />
           </h2>
-          <p>Hi,下午好</p>
-          <div class="btn">
+          <p>
+            {{
+              isLogin
+                ? "亲爱的" +
+                  userInfo.accountNo.substr(0, 3) +
+                  "****" +
+                  userInfo.accountNo.substr(7)
+                : "Hi"
+            }},下午好
+          </p>
+          <div class="btn" v-if="!isLogin">
             <router-link to="/login" tag="span" class="login_in"
               >登录</router-link
             >
@@ -62,6 +72,7 @@
 <script>
   import { swiper, swiperSlide } from "vue-awesome-swiper";
   import { _getData } from "../../config/getData";
+  import { mapState } from "vuex";
 
   export default {
     data() {
@@ -100,6 +111,9 @@
     },
     components: { swiper, swiperSlide },
     methods: {},
+    computed: {
+      ...mapState(["isLogin", "userInfo"])
+    },
     mounted() {
       _getData("api/ad/banner", {}).then(data => {
         this.banner = data.banner;
@@ -163,6 +177,7 @@
           flex-direction: column;
           align-items: center;
           justify-content: center;
+          height: 145px;
           h2 {
             height: 50px;
             width: 50px;
@@ -174,9 +189,14 @@
             align-items: center;
             margin-top: 16px;
             margin-bottom: 10px;
+            overflow: hidden;
             .icon {
               height: 32px;
               width: 28px;
+            }
+            img {
+              height: 100%;
+              width: 100%;
             }
           }
           p {
