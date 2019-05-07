@@ -2,14 +2,14 @@
  * @Author: mikey.dongqizhen 
  * @Date: 2019-04-18 17:08:47 
  * @Last Modified by: mikey.dongqizhen
- * @Last Modified time: 2019-05-06 17:01:21
+ * @Last Modified time: 2019-05-07 10:02:15
  */
 
 
 // config axios https://www.jianshu.com/p/7a9fbcbb1114
 import axios from 'axios'
 
-let request = axios.create()
+let request = axios.create();
 let token = JSON.parse(window.localStorage["vuex-along"])['vuex-along'].userInfo.token
 
 //添加请求拦截器

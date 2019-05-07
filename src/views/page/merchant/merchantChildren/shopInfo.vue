@@ -48,17 +48,7 @@
         <div class="common shopSaleArea">
           <div class="left-box"><span class="red">*</span>销售地区</div>
           <div class="right-box saleArea">
-            <a-cascader
-              :options="options"
-              @change="onChange"
-              placeholder="请选择省/市/区"
-              :defaultValue="defaultCascaderValue"
-              style="width: 390px"
-            >
-              <a-icon slot="suffixIcon" class="icon">
-                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-              </a-icon>
-            </a-cascader>
+            <cascade-select></cascade-select>
           </div>
         </div>
         <div class="common shopIntroduce">
@@ -86,7 +76,8 @@
 <script>
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import upload from "../../../../components/common/upload";
-
+  import cascadeSelect from "../../../../components/common/cascadeSelect";
+  import { _getData } from "../../../../config/getData";
   export default {
     data() {
       return {
@@ -107,13 +98,7 @@
             children: [
               {
                 value: "hangzhou",
-                label: "Hangzhou",
-                children: [
-                  {
-                    value: "xihu",
-                    label: "West Lake"
-                  }
-                ]
+                label: "Hangzhou"
               }
             ]
           },
@@ -123,13 +108,7 @@
             children: [
               {
                 value: "nanjing",
-                label: "Nanjing",
-                children: [
-                  {
-                    value: "zhonghuamen",
-                    label: "Zhong Hua Men"
-                  }
-                ]
+                label: "Nanjing"
               }
             ]
           }
@@ -143,6 +122,9 @@
         console.log(this.shopBusinessScope);
         console.log(this.shopName);
         console.log(this.shopName);
+        _getData(this.$API_URL.merchantURL + "/api/store", {}).then(data => {
+          console.log("111", data);
+        });
       },
       getImgUrl(val) {
         console.log(val);
@@ -157,7 +139,8 @@
     },
     components: {
       commonTitle,
-      upload
+      upload,
+      cascadeSelect
     }
   };
 </script>
