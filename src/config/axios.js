@@ -2,7 +2,7 @@
  * @Author: mikey.dongqizhen 
  * @Date: 2019-04-18 17:08:47 
  * @Last Modified by: mikey.dongqizhen
- * @Last Modified time: 2019-05-07 10:02:15
+ * @Last Modified time: 2019-05-07 17:25:34
  */
 
 
@@ -15,9 +15,10 @@ let token = JSON.parse(window.localStorage["vuex-along"])['vuex-along'].userInfo
 //添加请求拦截器
 request.interceptors.request.use(function(config) {
     if (config.url.indexOf('!request.action') == -1) {
+        config.headers['X-Nideshop-Token'] = token
         config.transformRequest = [
             (data) => {
-                return JSON.stringify(data)
+                return new_to_Data(data) //JSON.stringify(data)
             }
         ]
     } else {
@@ -41,7 +42,7 @@ request.withCredentials = false // 是否携带cookie信息
 request.responseType = `json`
 request.defaults.headers.post['Content-Type'] = 'application/json';
 if (token) {
-    request.defaults.headers.common['X-Nideshop-Token'] = token;
+    //request.defaults.headers.common['X-Nideshop-Token'] = token;
 }
 
 request.defaults.transformRequest = [ //`transformRequest`选项允许我们在请求发送到服务器之前对请求的数据做出一些改动该选项只适用于以下请求方式：`put/post/patch`数组里面的最后一个函数必须返回一个字符串、-一个`ArrayBuffer`或者`Stream`

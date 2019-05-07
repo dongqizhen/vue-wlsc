@@ -108,9 +108,7 @@
       cascadeRight
     },
     mounted() {
-      _getData(this.$API_URL.merchantURL + "/api/address/getProvince", {}).then(
-        data => {}
-      );
+      _getData("/api/address/getProvince", {}).then(data => {});
     }
   };
 </script>

@@ -111,7 +111,11 @@
             <div class="recommend_content_box" v-else>
               <div class="left">
                 <ul class="recommend_article" v-if="recommend_tabs_index == 1">
-                  <article-item></article-item>
+                  <article-item
+                    v-for="item in articlelist"
+                    :key="item.id"
+                    :item="item"
+                  ></article-item>
                 </ul>
                 <ul class="recommond_video" v-if="recommend_tabs_index == 2">
                   <video-item></video-item>
@@ -167,9 +171,10 @@
   export default {
     data() {
       return {
-        recommend_tabs_index: 0,
+        recommend_tabs_index: 1, //推荐nav标识
         brandVisible: false, //控制modal层弹出
-        goodList: []
+        goodList: [], //产品
+        articlelist: [] //案列
         // background: ["#F5A623", "#43D480", "#8880FE", "#0283FF"]
       };
     },
@@ -180,6 +185,49 @@
       _getData("api/goods/goodslist", {}).then(data => {
         console.log("data", data);
         this.goodList = data.list;
+      });
+      //文章
+      _getData(`${this.$API_URL.HYGLOGINURL}/server/article!request.action`, {
+        method: "getTopArticleListV30",
+        token: "",
+        userid: "",
+        version: "3.0.0",
+        deviceId: "",
+        source: "",
+        params: {
+          currentPage: 1,
+          countPerPage: 9
+        }
+      }).then(data => {
+        console.log("1111", data);
+        this.articlelist = data.data.result.articlelist;
+      });
+      //案例
+      _getData(
+        `${this.$API_URL.HYGPROURl}/server_pro/maintenance!request.action`,
+        {
+          method: "getHomeRecommendListV30",
+          token: "",
+          userid: "",
+          version: "3.0.0",
+          deviceId: "",
+          source: "",
+          params: {}
+        }
+      ).then(data => {
+        console.log("222", data);
+      });
+      //视频
+      _getData(`${this.$API_URL.HYGPROURl}/server_pro/video!request.action`, {
+        method: "getHomeRecommendListV30",
+        token: "",
+        userid: "",
+        version: "3.0.0",
+        deviceId: "",
+        source: "",
+        params: {}
+      }).then(data => {
+        console.log("333", data);
       });
     },
     components: {
