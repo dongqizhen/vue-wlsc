@@ -45,24 +45,18 @@
             </i>
             系统公告
           </h2>
-          <ul>
-            <li>
-              <span>【公告】</span>
-              <p>2017十一假期暂停什么十一假期暂停什么…</p>
-            </li>
-            <li>
-              <span>【公告】</span>
-              <p>2017十一假期暂停什么…</p>
-            </li>
-            <li>
-              <span>【公告】</span>
-              <p>2017十一假期暂停什么…</p>
-            </li>
-            <li>
-              <span>【公告】</span>
-              <p>2017十一假期暂停什么…</p>
-            </li>
-          </ul>
+          <div class="con1 swiper-container">
+            <ul ref="con1" class="swiper-wrapper">
+              <li
+                v-for="(item, i) in items"
+                :key="`item-${i}`"
+                class="swiper-slide"
+              >
+                <span>【公告】</span>
+                <p>{{ item }}</p>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -73,10 +67,14 @@
   import { swiper, swiperSlide } from "vue-awesome-swiper";
   import { _getData } from "../../config/getData";
   import { mapState } from "vuex";
+  import _ from "lodash";
+  import Swiper from "swiper";
 
   export default {
     data() {
       return {
+        num: 0,
+        animate: false,
         swiperOption: {
           //是一个组件自有属性，如果notNextTick设置为true，组件则不会通过NextTick来实例化swiper，也就意味着你可以在第一时间获取到swiper对象，假如你需要刚加载遍使用获取swiper对象来做什么事，那么这个属性一定要是true
 
@@ -106,6 +104,14 @@
             clickable: true
           }
         },
+        items: [
+          "2018十一假期暂停什么…",
+          "2019十一假期暂停什么…",
+          "2020十一假期暂停什么…",
+          "2021十一假期暂停什么…",
+          "2022十一假期暂停什么…",
+          "2023十一假期暂停什么…"
+        ],
         banner: []
       };
     },
@@ -114,7 +120,19 @@
     computed: {
       ...mapState(["isLogin", "userInfo"])
     },
+    created() {},
     mounted() {
+      var myswiper = new Swiper(".notice .swiper-container", {
+        slidesPerView: 4,
+        spaceBetween: 0,
+        direction: "vertical",
+        autoplay: {
+          disableOnInteraction: false,
+          delay: 2000
+        },
+        loop: true
+      });
+
       _getData("api/ad/banner", {}).then(data => {
         this.banner = data.banner;
       });
@@ -190,6 +208,7 @@
             margin-top: 16px;
             margin-bottom: 10px;
             overflow: hidden;
+            opacity: 1;
             .icon {
               height: 32px;
               width: 28px;
@@ -232,6 +251,10 @@
         .notice {
           padding: 0 13px;
           width: 100%;
+          flex: 1;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
           h2 {
             border-bottom: #d8d8d8 1px solid;
             height: 25px;
@@ -250,26 +273,32 @@
               }
             }
           }
-          ul {
-            width: 100%;
-            li {
-              height: 30px;
-              font-family: PingFangSC-Regular;
-              font-size: 12px;
-              color: #ffffff;
-              line-height: 30px;
-              border-bottom: 0.5px dotted rgba(255, 255, 255, 0.52);
-              display: flex;
-              justify-content: flex-start;
-              cursor: pointer;
-              &:hover {
-                color: $theme-color;
-              }
-              p {
-                flex: 1;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+          .con1 {
+            overflow: hidden;
+            flex: 1;
+            ul {
+              width: 100%;
+              transition: all 1s;
+              li {
+                height: 30px;
+                font-family: PingFangSC-Regular;
+                font-size: 12px;
+                color: #ffffff;
+                line-height: 30px;
+                border-bottom: 0.5px dotted rgba(255, 255, 255, 0.52);
+                display: flex;
+                justify-content: flex-start;
+                cursor: pointer;
+
+                &:hover {
+                  color: $theme-color;
+                }
+                p {
+                  flex: 1;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                }
               }
             }
           }

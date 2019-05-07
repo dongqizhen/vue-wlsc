@@ -269,7 +269,11 @@
               font-size: 15px;
               color: #333333;
               text-decoration: none;
+              width: 144px;
               cursor: pointer;
+              flex-wrap: wrap;
+              text-align: center;
+              word-break: break-all;
               .img_box {
                 width: 144px;
                 height: 104px;

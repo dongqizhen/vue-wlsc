@@ -9,10 +9,12 @@
     append
   >
     <a target="_blank">
-      <div class="img_box"></div>
+      <div class="img_box">
+        <img :src="item.cover" alt="" />
+      </div>
       <div class="content">
         <h2>
-          这里显示文章名称，只显示一行这里显示文章名称，只显示一行
+          {{ item.topic }}
         </h2>
         <p>
           这不仅仅是一篇简单的文章，这个文章是前辈日积月累的新的，重要的地方读三遍，写三遍。这里展示两行，多余的用…来表示。
@@ -62,7 +64,12 @@
 </template>
 
 <script>
-  export default {};
+  export default {
+    data() {
+      return {};
+    },
+    props: ["item"]
+  };
 </script>
 
 <style scoped lang="scss">
