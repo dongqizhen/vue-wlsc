@@ -2,7 +2,7 @@
  * @Author: mikey.dongqizhen 
  * @Date: 2019-04-18 17:08:47 
  * @Last Modified by: mikey.dongqizhen
- * @Last Modified time: 2019-05-07 17:25:34
+ * @Last Modified time: 2019-05-08 11:45:11
  */
 
 
@@ -18,7 +18,8 @@ request.interceptors.request.use(function(config) {
         config.headers['X-Nideshop-Token'] = token
         config.transformRequest = [
             (data) => {
-                return new_to_Data(data) //JSON.stringify(data)
+                return new_to_Data(data)
+                    //JSON.stringify(data)
             }
         ]
     } else {

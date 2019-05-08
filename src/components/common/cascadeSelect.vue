@@ -2,7 +2,7 @@
   <div class="cascadeSelectBox">
     <div class="selectText">
       <span>
-        <p v-for="item in defaultProviceData" :key="item.id">{{ item.name }}</p>
+        <!-- <p v-for="item in defaultProviceData" :key="item.id">{{ item.name }}</p> -->
       </span>
       <span>
         <svg class="icon" aria-hidden="true">
@@ -17,12 +17,14 @@
             v-for="item in proviceData"
             :key="item.id"
             :class="[addClass(item.id), currentId == item.id ? 'active' : '']"
-            @click="activeEvent(item.id)"
+            @click="activeEvent(item.id, item)"
           >
             <i></i>
             {{ item.name }}
             <span v-for="dataItem in defaultProviceData" :key="dataItem.id">
-              <span v-if="dataItem.id == item.id">({{ dataItem.count }})</span>
+              <span v-show="dataItem.id == item.id">
+                ({{ dataItem.count }})
+              </span>
             </span>
           </li>
         </ul>
@@ -30,7 +32,9 @@
       <div class="right-box">
         <cascade-right
           :data="cityData"
-          :defaultSelect="defaultSelect"
+          :defaultCityData="defaultCityData"
+          v-on:getSelectArr="getSelectArr"
+          :provinceId="provinceId"
         ></cascade-right>
       </div>
     </div>
@@ -39,57 +43,38 @@
 <script>
   import cascadeRight from "./cascadeSelectRight";
   import { _getData } from "../../config/getData";
+  import _ from "lodash";
   export default {
     data() {
       return {
-        proviceData: [
-          { id: 1, name: "北京市" },
-          { id: 3, name: "天津市" },
-          { id: 4, name: "河北省" },
-          { id: 5, name: "山西省" },
-          { id: 6, name: "内蒙古自治区" },
-          { id: 7, name: "辽宁省" },
-          { id: 8, name: "吉林省" },
-          { id: 9, name: "黑龙江省" },
-          { id: 10, name: "上海市" },
-          { id: 11, name: "江苏省" },
-          { id: 12, name: "浙江省" },
-          { id: 13, name: "安徽省" },
-          { id: 14, name: "福建省" },
-          { id: 15, name: "江西省" },
-          { id: 16, name: "山东省" },
-          { id: 17, name: "河南省" },
-          { id: 18, name: "湖北省" },
-          { id: 19, name: "湖南省" },
-          { id: 20, name: "广东省" },
-          { id: 21, name: "广西壮族自治区" },
-          { id: 22, name: "海南省" },
-          { id: 23, name: "重庆市" },
-          { id: 24, name: "四川省" },
-          { id: 25, name: "贵州省" },
-          { id: 26, name: "云南省" },
-          { id: 27, name: "西藏自治区" },
-          { id: 28, name: "陕西省" },
-          { id: 29, name: "甘肃省" },
-          { id: 30, name: "青海省" },
-          { id: 31, name: "宁夏回族自治区" },
-          { id: 32, name: "新疆维吾尔自治区" },
-          { id: 33, name: "台湾省" },
-          { id: 34, name: "香港特别行政区" },
-          { id: 35, name: "澳门特别行政区" },
-          { id: 36, name: "全国" }
+        proviceData: [],
+        cityData: [],
+        defaultCityData: [],
+        defaultProviceData: [
+          {
+            id: 1,
+            name: "北京市",
+            count: 2,
+            defaultCityData: [
+              { id: 1, name: "朝阳区" },
+              { id: 11, name: "房山区" }
+            ]
+          },
+          {
+            id: 22,
+            name: "海南省",
+            count: "全部",
+            defaultCityData: [
+              { id: 230, name: "海口市" },
+              { id: 231, name: "三亚市" },
+              { id: 232, name: "东方市" }
+            ]
+          }
         ],
-        cityData: [
-          { id: 1, cityName: "菏泽市" },
-          { id: 2, cityName: "烟台市" },
-          { id: 3, cityName: "潍坊市" },
-          { id: 4, cityName: "济南市" },
-          { id: 5, cityName: "青岛市" },
-          { id: 6, cityName: "泰安市" }
-        ],
-        defaultSelect: [],
-        defaultProviceData: [{ id: -1, name: "请选择省/市" }],
-        currentId: -1
+        currentId: -1,
+        activeProvinceName: "",
+        selectArr: [],
+        provinceId: -1
       };
     },
     methods: {
@@ -100,15 +85,90 @@
           }
         }
       },
-      activeEvent(id) {
+      activeEvent(id, item) {
         this.currentId = id;
+        this.getCityData(id);
+        this.activeProvinceName = item.name;
+      },
+      getCityData(id) {
+        _getData("/api/address/getCity", { provinceId: id }).then(data => {
+          console.log(data);
+          this.cityData = data;
+          var IDArr = [];
+          if (
+            _.filter(this.defaultProviceData, value => {
+              return id == value.id;
+            }).length != 0
+          ) {
+            this.defaultCityData = _.filter(this.defaultProviceData, value => {
+              return id == value.id;
+            });
+          } else {
+            this.defaultCityData = [];
+          }
+          console.log(this.defaultProviceData);
+          console.log(
+            _.filter(this.defaultProviceData, value => {
+              return id == value.id;
+            })
+          );
+          //IDArr.push(value.id);
+          // if (id == value.id) {
+          //   console.log(111);
+          //   console.log(value.defaultCityData);
+          //   this.defaultCityData = value.defaultCityData;
+          // } else {
+          //   this.defaultCityData = [];
+          // }
+          // if(_.indexOf(IDArr, id)!=-1){
+
+          //             }else{
+
+          //             }
+        });
+      },
+      getSelectArr(arr) {
+        console.log(arr);
+        let that = this;
+        _.forEach(this.defaultProviceData, function(value) {
+          if (value.id == that.currentId) {
+            that.defaultProviceData = _.without(that.defaultProviceData, value);
+          }
+        });
+        if (arr.length != 0) {
+          that.defaultProviceData.push({
+            id: that.currentId,
+            name: that.activeProvinceName,
+            count: arr.length
+          });
+          that.defaultProviceData.push({
+            id: that.currentId,
+            defaultCityData: arr
+          });
+        }
+        console.log(that.defaultProviceData);
       }
     },
     components: {
       cascadeRight
     },
     mounted() {
-      _getData("/api/address/getProvince", {}).then(data => {});
+      _getData("/api/address/getProvince", {}).then(data => {
+        console.log(data);
+        this.proviceData = data;
+        _getData("/api/address/getCity", { provinceId: data[0].id }).then(
+          data => {
+            console.log(data);
+            this.cityData = data;
+            this.currentId = data[0].id;
+            _.forEach(this.defaultProviceData, value => {
+              if (data[0].id == value.id) {
+                this.defaultCityData = value.defaultCityData;
+              }
+            });
+          }
+        );
+      });
     }
   };
 </script>

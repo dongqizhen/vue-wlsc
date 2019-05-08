@@ -21,6 +21,6 @@ function new_to_Data(json) {
     } else {
         console.log('使用new_to_Data加密', data);
         data = aesEncrypt(data);
-        return data;
+        return encodeURIComponent(data);
     }
 }

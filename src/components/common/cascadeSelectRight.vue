@@ -8,10 +8,10 @@
     <div class="downBox">
       <span v-for="item in data" :key="item.id">
         <a-checkbox
-          @change="checkedChange(item.id)"
+          @change="checkedChange(item)"
           :checked="checkedVal(item.id)"
         ></a-checkbox>
-        {{ item.cityName }}
+        {{ item.name }}
       </span>
     </div>
   </div>
@@ -21,7 +21,7 @@
   export default {
     data() {
       return {
-        selectArr: this.defaultSelect,
+        selectArr: this.defaultCityData,
         checkedAll: false
       };
     },
@@ -30,28 +30,41 @@
         type: Array,
         required: true
       },
-      defaultSelect: {
-        type: Array
+      defaultCityData: {
+        type: Array,
+        required: true
+      },
+      provinceId: {
+        type: Number,
+        required: true
+      }
+    },
+    watch: {
+      defaultCityData() {
+        this.selectArr = this.defaultCityData;
       }
     },
     methods: {
       checkAll(e) {
         if (e.target.checked) {
+          this.selectArr = [];
           for (const val of this.data) {
-            this.selectArr.push(val.id);
+            this.selectArr.push(val);
           }
           this.checkedAll = true;
         } else {
           this.selectArr = [];
           this.checkedAll = false;
         }
+        this.$emit("getSelectArr", this.selectArr);
       },
-      checkedChange(id) {
-        if (_.indexOf(this.selectArr, id) == -1) {
-          this.selectArr.push(id);
+      checkedChange(item) {
+        if (_.indexOf(this.selectArr, item) == -1) {
+          this.selectArr.push(item);
         } else {
-          this.selectArr = _.without(this.selectArr, id);
+          this.selectArr = _.without(this.selectArr, item);
         }
+        this.$emit("getSelectArr", this.selectArr);
         if (this.selectArr.length == this.data.length) {
           this.checkedAll = true;
         } else {
@@ -60,7 +73,7 @@
       },
       checkedVal(id) {
         for (const val of this.selectArr) {
-          if (val == id) {
+          if (val.id == id) {
             return true;
           }
         }
