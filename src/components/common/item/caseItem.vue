@@ -9,41 +9,41 @@
   >
     <a target="_blank">
       <div class="photo">
-        <div class="img_box"></div>
+        <div class="img_box">
+          <img :src="item.userImageUrl" alt="" />
+        </div>
         <p>
-          张峰
-          <a
-            >2019-02-18
+          {{ item.author }}
+          <a>
+            {{ item.createdOn }}
             <span>
               <i>
                 <svg class="icon" aria-hidden="true">
                   <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
                 </svg>
               </i>
-              178
+              {{ item.dcount }}
             </span>
           </a>
         </p>
-        <span>
-          <i>
+        <span :class="!item.tradeType ? 'free' : ''">
+          <i v-if="item.tradeType">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconzuanshi"></use>
             </svg>
           </i>
-          100
+          {{ isPay }}
         </span>
       </div>
       <h2>
-        扫描床体边盖插头、座变形导通不良，保护边盖电路故障，造成主机正常扫描中经常突然…
+        {{ item.name }}
       </h2>
-      <p>
-        这不仅仅是一篇简单的文章，这个文章是前辈日积月累的新的，重要的地方读三遍，写三遍。这里展示两行，多余的用…来表示。
-      </p>
+      <p v-html="item.introduce"></p>
       <div class="tip">
         <ul>
-          <li>标签字数</li>
-          <li>标签字数</li>
-          <li>最长显示多少再定</li>
+          <li>{{ item.productline }}</li>
+          <li>{{ item.brandName }}</li>
+          <li>{{ item.modelName }}</li>
         </ul>
         <div class="toolMenu">
           <span>
@@ -52,7 +52,7 @@
                 <use xlink:href="#iconpinglun"></use>
               </svg>
             </i>
-            167
+            {{ item.commentNum }}
           </span>
           <span>
             <i>
@@ -60,7 +60,7 @@
                 <use xlink:href="#iconshoucang"></use>
               </svg>
             </i>
-            999
+            {{ item.favoriteNum }}
           </span>
           <span>
             <i>
@@ -68,7 +68,7 @@
                 <use xlink:href="#iconzan"></use>
               </svg>
             </i>
-            89
+            {{ item.amount }}
           </span>
           <span>
             <i>
@@ -76,7 +76,7 @@
                 <use xlink:href="#iconfenxiang"></use>
               </svg>
             </i>
-            89
+            {{ item.shareNum }}
           </span>
         </div>
       </div>
@@ -88,6 +88,16 @@
   export default {
     data() {
       return {};
+    },
+    props: ["item"],
+    computed: {
+      isPay() {
+        if (this.item.tradeType) {
+          return;
+        } else {
+          return "免费";
+        }
+      }
     }
   };
 </script>
@@ -121,6 +131,11 @@
         border-radius: 16px;
         background: #f7f9fa;
         margin-right: 8px;
+        img {
+          height: 100%;
+          width: 100%;
+          border-radius: 16px;
+        }
       }
       p {
         flex: 1;
@@ -145,6 +160,9 @@
             align-items: center;
             i {
               margin-right: 5px;
+              display: flex;
+              align-items: center;
+              //margin-top: 1px;
               .icon {
                 width: 14px;
                 height: 10px;
@@ -157,6 +175,9 @@
         font-family: PingFangSC-Medium;
         font-size: 14px;
         color: #bd10e0;
+        &.free {
+          color: #f5a623;
+        }
       }
     }
     h2 {
@@ -174,6 +195,7 @@
       font-family: PingFangSC-Regular;
       font-size: 14px;
       color: #999999;
+      min-height: 42px;
     }
     .tip {
       height: 50px;

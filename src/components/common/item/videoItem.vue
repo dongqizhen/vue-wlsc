@@ -4,17 +4,17 @@
     tag="li"
     :to="{
       path: '/details/videoDetails',
-      query: { nav_index: $route.query.nav_index }
+      query: { nav_index: $route.query.nav_index, id: item.id }
     }"
   >
     <a target="_blank">
       <div class="video_box">
-        <img src="../../../assets/images/demo.jpg" alt="" />
+        <img :src="item.image" alt="" />
         <span class="look-num">
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#iconxinghaoliebiaoliulanliang-copy"></use>
           </svg>
-          30万
+          {{ item.watchAmount }}
         </span>
         <div class="play-btn">
           <svg class="icon" aria-hidden="true">
@@ -24,7 +24,7 @@
       </div>
       <div class="content">
         <h2>
-          胎儿静脉导管缺如及脐静脉文字
+          {{ item.title }}
         </h2>
         <div class="lecturer">
           <p>
@@ -33,16 +33,16 @@
                 <use xlink:href="#iconjiangshi"></use>
               </svg>
             </i>
-            讲师: 樊铮 贾樟柯…
+            讲师：{{ item.speaker }}
           </p>
           <ul>
-            <li>标签字数</li>
-            <li>标签字数</li>
-            <li>标签字数</li>
+            <li v-for="label in item.labelList" :key="label.id">
+              {{ label.name }}
+            </li>
           </ul>
         </div>
       </div>
-      <menu-vue></menu-vue>
+      <menu-vue :item="item"></menu-vue>
     </a>
   </router-link>
 </template>
@@ -56,7 +56,8 @@
     },
     components: {
       menuVue
-    }
+    },
+    props: ["item"]
   };
 </script>
 
@@ -172,6 +173,7 @@
         }
         ul {
           display: flex;
+          flex: 1;
           justify-content: flex-start;
           li {
             margin-right: 4px;

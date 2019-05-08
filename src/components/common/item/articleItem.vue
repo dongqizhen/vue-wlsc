@@ -3,14 +3,14 @@
     tag="li"
     :to="{
       path: '/details/articleDetails',
-      query: { nav_index: $route.query.nav_index }
+      query: { nav_index: $route.query.nav_index, id: item.id }
     }"
     class="article-item"
     append
   >
     <a target="_blank">
       <div class="img_box">
-        <img :src="item.cover" alt="" />
+        <img :src="item.cover0" alt="" />
       </div>
       <div class="content">
         <h2>
@@ -20,9 +20,9 @@
           这不仅仅是一篇简单的文章，这个文章是前辈日积月累的新的，重要的地方读三遍，写三遍。这里展示两行，多余的用…来表示。
         </p>
         <ul>
-          <li>标签字数</li>
-          <li>标签字数</li>
-          <li>最长显示多少再定</li>
+          <li v-for="label in item.labelList" :key="label.id">
+            {{ label.name }}
+          </li>
         </ul>
         <div class="toolMenu">
           <span>
@@ -31,7 +31,7 @@
                 <use xlink:href="#iconpinglun"></use>
               </svg>
             </i>
-            167
+            {{ item.commentNum }}
           </span>
           <span>
             <i>
@@ -39,7 +39,7 @@
                 <use xlink:href="#iconshoucang"></use>
               </svg>
             </i>
-            999
+            {{ item.favoriteNum }}
           </span>
           <span>
             <i>
@@ -47,7 +47,7 @@
                 <use xlink:href="#iconzan"></use>
               </svg>
             </i>
-            89
+            {{ item.amount }}
           </span>
           <span>
             <i>
@@ -55,7 +55,7 @@
                 <use xlink:href="#iconfenxiang"></use>
               </svg>
             </i>
-            89
+            {{ item.shareNum }}
           </span>
         </div>
       </div>
@@ -102,6 +102,10 @@
       width: 160px;
       background: #f7f9fa;
       margin-right: 20px;
+      img {
+        height: 100%;
+        width: 100%;
+      }
     }
     .content {
       display: flex;
@@ -156,7 +160,10 @@
           line-height: 21px;
           i {
             margin-right: 4px;
+            display: flex;
+            align-items: center;
             .icon {
+              //margin-top: 2px;
               width: 16px;
               height: 16px;
             }

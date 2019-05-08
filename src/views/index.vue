@@ -112,16 +112,24 @@
               <div class="left">
                 <ul class="recommend_article" v-if="recommend_tabs_index == 1">
                   <article-item
-                    v-for="item in articlelist"
+                    v-for="item in articleList"
                     :key="item.id"
                     :item="item"
                   ></article-item>
                 </ul>
                 <ul class="recommond_video" v-if="recommend_tabs_index == 2">
-                  <video-item></video-item>
+                  <video-item
+                    v-for="item in videoList"
+                    :key="item.id"
+                    :item="item"
+                  ></video-item>
                 </ul>
                 <ul class="recommond_case" v-if="recommend_tabs_index == 3">
-                  <case-item></case-item>
+                  <case-item
+                    v-for="item in maintenanceList"
+                    :key="item.id"
+                    :item="item"
+                  ></case-item>
                 </ul>
                 <a-button>
                   查看全部
@@ -171,10 +179,12 @@
   export default {
     data() {
       return {
-        recommend_tabs_index: 1, //推荐nav标识
+        recommend_tabs_index: 0, //推荐nav标识
         brandVisible: false, //控制modal层弹出
         goodList: [], //产品
-        articlelist: [] //案列
+        articleList: [], //案列,
+        videoList: [], //视频
+        maintenanceList: []
         // background: ["#F5A623", "#43D480", "#8880FE", "#0283FF"]
       };
     },
@@ -200,7 +210,7 @@
         }
       }).then(data => {
         console.log("1111", data);
-        this.articlelist = data.data.result.articlelist;
+        this.articleList = data.data.result.articlelist;
       });
       //案例
       _getData(
@@ -216,6 +226,7 @@
         }
       ).then(data => {
         console.log("222", data);
+        this.maintenanceList = data.data.result.maintenancelist;
       });
       //视频
       _getData(`${this.$API_URL.HYGPROURl}/server_pro/video!request.action`, {
@@ -228,6 +239,7 @@
         params: {}
       }).then(data => {
         console.log("333", data);
+        this.videoList = data.data.result.videolist;
       });
     },
     components: {
