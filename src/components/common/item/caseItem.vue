@@ -4,7 +4,7 @@
     class="case-item"
     :to="{
       path: '/details/caseDetails',
-      query: { nav_index: $route.query.nav_index }
+      query: { nav_index: $route.query.nav_index, id: item.id }
     }"
   >
     <a target="_blank">

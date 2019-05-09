@@ -17,6 +17,7 @@
         </h2>
         <div class="video">
           <video-player
+            v-if="detail && detail.videoSubList.length"
             class="video-player-box vjs-custom-skin"
             :style="{ 'background-image': detail.image }"
             ref="videoPlayer"
@@ -26,11 +27,11 @@
           >
           </video-player>
           <!-- <img :src="detail.image" alt="" /> -->
-          <span class="video_menu">
+          <!-- <span class="video_menu">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconshipinxiangqingyebofangjian"></use>
             </svg>
-          </span>
+          </span> -->
         </div>
         <ul>
           <li v-for="label in detail.labelList" :key="label.id">
@@ -93,12 +94,12 @@
                 利用百克钳可靠的止血效果，不仅能让手术视野更加干净，而且明显减少止血钳的使用，避免了对最后使用切割闭合器的干扰。手术全程在百克钳辅助下完成，只在脾动脉处使用了止血钳。切除手术
               </span> -->
             </div>
-            <share-menu-vue></share-menu-vue>
           </a-tab-pane>
           <a-tab-pane tab="课件目录" key="2" :forceRender="true"
             >Content of Tab Pane 2</a-tab-pane
           >
         </a-tabs>
+        <share-menu-vue></share-menu-vue>
       </div>
       <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
       <menu-vue :item="detail"></menu-vue>
@@ -119,14 +120,22 @@
   export default {
     data() {
       return {
-        detail: {},
+        detail: "",
         playerOptions: {
           // videojs options
           muted: true,
           languages: {
             en: {
               Play: "播放",
-              Pause: "暂停"
+              Pause: "暂停",
+              Loaded: "加载",
+              Unmute: "取消静音",
+              Mute: "静音",
+              Fullscreen: "全屏",
+              Replay: "重新播放",
+              "Non-Fullscreen": "退出全屏",
+              "Play Video": "点击播放",
+              "Playback Rate": "播放速度"
             }
           },
           playbackRates: [0.7, 1.0, 1.5, 2.0],
@@ -234,6 +243,15 @@
             .vjs-poster {
               background-size: 100% 100%;
             }
+            .vjs-big-play-button {
+              width: 80px;
+              height: 80px;
+              border-radius: 41px;
+              border: none;
+              background: url("../../../../assets/images/play.svg") no-repeat
+                center;
+              background-size: 100% 100%;
+            }
           }
         }
         .video_menu {
@@ -326,6 +344,10 @@
       background: #fff;
       box-shadow: $base-box-shadow;
       margin-bottom: 10px;
+      .share-menu {
+        margin-left: 20px;
+        border-top: 0.5px solid #dddddd;
+      }
       /deep/ .ant-tabs {
         .ant-tabs-bar {
           height: 54px;
@@ -370,7 +392,7 @@
             .introduce-content {
               padding-top: 21px;
               padding-bottom: 25px;
-              border-bottom: 0.5px solid #dddddd;
+
               p {
                 font-size: 16px;
                 color: #666666;

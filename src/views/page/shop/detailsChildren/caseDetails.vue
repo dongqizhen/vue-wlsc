@@ -3,15 +3,15 @@
     <div class="left">
       <div class="case_box">
         <h2>
-          全自动三分类血细胞分析仪:机器警，提示“更换稀释液”，但实际稀释液液量正常。
+          {{ detail.name }}
           <p>
             <span>
               <svg class="icon" aria-hidden="true">
                 <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
               </svg>
-              30万
+              {{ detail.dcount }}
             </span>
-            <span>2017-08-22 19:32</span>
+            <span>{{ detail.createOn }}</span>
           </p>
         </h2>
         <div class="lecturer">
@@ -20,12 +20,12 @@
             讲师介绍
           </h3> -->
           <div class="photo">
-            <div class="img_box"></div>
+            <div class="img_box">
+              <img :src="detail.userImageUrl" alt="" />
+            </div>
             <p>
-              托尼老师
-              <span
-                >研究员级高级工程师，江苏省人民医院（南京医科大学第一附属医院）副院长，国家卫计委医院管理研究所临床医学工程首席专家，中国医师协会临床工程师分会副会长，中华医学会医学工程学分会候任主委，江苏省医院协会设备管理专业委员会主任委员，江苏省医疗设备器械质量控制中心主任。</span
-              >
+              {{ detail.author }}
+              <span></span>
             </p>
           </div>
         </div>
@@ -37,38 +37,32 @@
               </svg>
               故障现象
             </h2>
-            <p>机器报警，提示“更换稀释液”，但实际稀释液量正常。</p>
+            <p v-html="decodeURIComponent(detail.failurePhenomenon)"></p>
             <h2>
               <svg class="icon" aria-hidden="true">
                 <use xlink:href="#iconguzhangfenxi"></use>
               </svg>
               故障分析
             </h2>
-            <p>
-              机器无稀释液时，稀释液缓冲杯的的浮子开关接触不到液面，则面，产生信号送到主板，主板发出指令打开电磁阀SV1、SV2，使缓冲杯中产生负压，吸入稀释液，同时主板发出指令，通过正压力吸入稀释液，同时主板发出指令吸入稀释液，同时主板发出指令。
-              机器无稀释液时，稀释液缓冲杯的的浮子开关接触不到液面，则产生信号送到主板。
-            </p>
+            <p v-html="decodeURIComponent(detail.failureAnalysis)"></p>
             <h2>
               <svg class="icon" aria-hidden="true">
                 <use xlink:href="#iconjiejuefangan"></use>
               </svg>
               解决方案
             </h2>
-            <p>
-              机器无稀释液时，稀释液缓冲杯的的浮子开关接触不到液面，则产生信号送到主板，主板发出指令打开电磁阀SV1、SV2，使缓冲杯中产生负压，吸入稀释液，同时主板发出指令，通过正压力吸入稀释液，同时主板发出指令吸入稀释液，同时主板发出指令。
-              机器无稀释液时，稀释液缓冲杯的的浮子开关接触不到液面，则产生信号送到主板，主板发出指令打开电磁阀SV1、SV2，使缓冲杯中产生负压，吸入稀释液，同时主板发出指令，通过正压力吸入稀释液，同时主板发出指令吸入稀释液，同时主板发出指令。
-            </p>
+            <p v-html="decodeURIComponent(detail.solution)"></p>
           </div>
           <ul>
-            <li>标签字数</li>
-            <li>标签字数</li>
-            <li>最长显示多少再定</li>
+            <li>{{ detail.productLineName }}</li>
+            <li>{{ detail.brandName }}</li>
+            <li>{{ detail.modelName }}</li>
           </ul>
           <share-menu-vue></share-menu-vue>
         </div>
       </div>
       <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
-      <menu-vue></menu-vue>
+      <menu-vue :item="detail"></menu-vue>
     </div>
     <div class="right"></div>
   </div>
@@ -78,16 +72,34 @@
   import shareMenuVue from "../../../../components/common/share/shareMenu.vue";
   import commentVue from "../../../../components/common/comment/comment.vue";
   import menuVue from "../../../../components/common/share/menu.vue";
+  import { _getData } from "../../../../config/getData";
+
   export default {
     data() {
       return {
-        isLogin: true
+        isLogin: true,
+        detail: ""
       };
     },
     components: {
       shareMenuVue,
       commentVue,
       menuVue
+    },
+    mounted() {
+      _getData(
+        `${this.$API_URL.HYGPROURl}/server_pro/maintenance!request.action`,
+        {
+          method: "getMaintenanceByIdV29",
+          userid: "",
+          token: "",
+          params: {
+            id: this.$route.query.id //维修宝id
+          }
+        }
+      ).then(data => {
+        this.detail = data.data.result;
+      });
     }
   };
 </script>
@@ -168,6 +180,11 @@
             background: $base-background;
             margin-right: 10px;
             border-radius: 25px;
+            img {
+              height: 100%;
+              width: 100%;
+              border-radius: 25px;
+            }
           }
           p {
             font-weight: 600;

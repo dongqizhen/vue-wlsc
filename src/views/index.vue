@@ -57,7 +57,8 @@
       <div class="recommend">
         <div class="commonWidth">
           <recommends-tab-vue
-            :tabs="['推荐产品(12)', '文章(9)', '视频(8)', '案例(8)']"
+            :tabs="nav"
+            v-if="nav.length"
             v-on:tabClick="tabClick"
           ></recommends-tab-vue>
           <div class="recommend_page">
@@ -184,13 +185,21 @@
         goodList: [], //产品
         articleList: [], //案列,
         videoList: [], //视频
-        maintenanceList: []
+        maintenanceList: [],
+        nav: []
         // background: ["#F5A623", "#43D480", "#8880FE", "#0283FF"]
       };
     },
     mounted() {
+      //获取推荐数量
       _getData("api/index/caseCount", {}).then(data => {
         console.log("data", data);
+        this.nav = [
+          `推荐产品(${data.count})`,
+          `文章(${data.articleNum})`,
+          `视频(${data.videoNum})`,
+          `案例(${data.maintenanceNum})`
+        ];
       });
       _getData("api/goods/goodslist", {}).then(data => {
         console.log("data", data);
