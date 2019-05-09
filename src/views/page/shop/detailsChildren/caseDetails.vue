@@ -1,70 +1,79 @@
 <template>
   <div class="case-details">
-    <div class="left">
-      <div class="case_box">
-        <h2>
-          {{ detail.name }}
-          <p>
-            <span>
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
-              </svg>
-              {{ detail.dcount }}
-            </span>
-            <span>{{ detail.createOn }}</span>
-          </p>
-        </h2>
-        <div class="lecturer">
-          <!-- <h3>
+    <div v-if="!isLoading">
+      <div class="left">
+        <div class="case_box">
+          <h2>
+            {{ detail.name }}
+            <p>
+              <span>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
+                </svg>
+                {{ detail.dcount }}
+              </span>
+              <span>{{ detail.createOn }}</span>
+            </p>
+          </h2>
+          <div class="lecturer">
+            <!-- <h3>
             <i></i>
             讲师介绍
           </h3> -->
-          <div class="photo">
-            <div class="img_box">
-              <img :src="detail.userImageUrl" alt="" />
+            <div class="photo">
+              <div class="img_box">
+                <img :src="detail.userImageUrl" alt="" />
+              </div>
+              <p>
+                {{ detail.author }}
+                <span></span>
+              </p>
             </div>
-            <p>
-              {{ detail.author }}
-              <span></span>
-            </p>
+          </div>
+          <div class="introduce">
+            <div class="content">
+              <h2>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconguzhangxianxiang"></use>
+                </svg>
+                故障现象
+              </h2>
+              <p v-html="decodeURIComponent(detail.failurePhenomenon)"></p>
+              <h2>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconguzhangfenxi"></use>
+                </svg>
+                故障分析
+              </h2>
+              <p v-html="decodeURIComponent(detail.failureAnalysis)"></p>
+              <h2>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconjiejuefangan"></use>
+                </svg>
+                解决方案
+              </h2>
+              <p v-html="decodeURIComponent(detail.solution)"></p>
+            </div>
+            <ul>
+              <li>{{ detail.productLineName }}</li>
+              <li>{{ detail.brandName }}</li>
+              <li>{{ detail.modelName }}</li>
+            </ul>
+            <share-menu-vue></share-menu-vue>
           </div>
         </div>
-        <div class="introduce">
-          <div class="content">
-            <h2>
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconguzhangxianxiang"></use>
-              </svg>
-              故障现象
-            </h2>
-            <p v-html="decodeURIComponent(detail.failurePhenomenon)"></p>
-            <h2>
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconguzhangfenxi"></use>
-              </svg>
-              故障分析
-            </h2>
-            <p v-html="decodeURIComponent(detail.failureAnalysis)"></p>
-            <h2>
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconjiejuefangan"></use>
-              </svg>
-              解决方案
-            </h2>
-            <p v-html="decodeURIComponent(detail.solution)"></p>
-          </div>
-          <ul>
-            <li>{{ detail.productLineName }}</li>
-            <li>{{ detail.brandName }}</li>
-            <li>{{ detail.modelName }}</li>
-          </ul>
-          <share-menu-vue></share-menu-vue>
-        </div>
+        <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
+        <menu-vue :item="detail"></menu-vue>
       </div>
-      <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
-      <menu-vue :item="detail"></menu-vue>
+      <div class="right"></div>
     </div>
-    <div class="right"></div>
+    <div v-else>
+      <a-skeleton active />
+      <br />
+      <a-skeleton active />
+      <br />
+      <a-skeleton active />
+    </div>
   </div>
 </template>
 
@@ -78,6 +87,7 @@
     data() {
       return {
         isLogin: true,
+        isLoading: true,
         detail: ""
       };
     },
@@ -97,15 +107,22 @@
             id: this.$route.query.id //维修宝id
           }
         }
-      ).then(data => {
-        this.detail = data.data.result;
-      });
+      )
+        .then(data => {
+          this.detail = data.data.result;
+        })
+        .then(() => {
+          this.isLoading = false;
+        });
     }
   };
 </script>
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
+  .case-details {
+    width: 100%;
+  }
   .left {
     width: $content-left;
     background: $base-background;

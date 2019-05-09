@@ -63,7 +63,7 @@
       next(vm => {
         console.log(vm);
         vm.routes =
-          vm.$route.query.nav_index == 2
+          vm.$route.query.nav_index == 2 //找品牌
             ? [
                 {
                   name: "首页",
@@ -76,8 +76,14 @@
                     vm.$route.query.nav_index
                 },
                 {
-                  name: "松下",
-                  path: "/lookingProduct?nav_index=" + vm.$route.query.nav_index
+                  name: vm.$route.query.brandName,
+                  path:
+                    "/lookingProduct?nav_index=" +
+                    vm.$route.query.nav_index +
+                    "&brandId=" +
+                    vm.$route.query.brandId +
+                    "&brandName=" +
+                    vm.$route.query.brandName
                 },
                 {
                   name: "超声手术设备",
@@ -85,6 +91,7 @@
                 }
               ]
             : [
+                //找产品
                 {
                   name: "首页",
                   path: "/"

@@ -1,34 +1,43 @@
 <template>
   <div class="article-details">
-    <div class="left">
-      <div class="article_box">
-        <h2>
-          {{ detail.topic }}
-          <p>
-            <span>
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
-              </svg>
-              {{ detail.hits }}
-            </span>
-            <span>{{ detail.createdOn }}</span>
-          </p>
-        </h2>
+    <div v-if="!isLoading">
+      <div class="left">
+        <div class="article_box">
+          <h2>
+            {{ detail.topic }}
+            <p>
+              <span>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
+                </svg>
+                {{ detail.hits }}
+              </span>
+              <span>{{ detail.createdOn }}</span>
+            </p>
+          </h2>
 
-        <div class="introduce">
-          <div class="content" v-html="detail.content"></div>
-          <ul>
-            <li>标签字数</li>
-            <li>标签字数</li>
-            <li>最长显示多少再定</li>
-          </ul>
-          <share-menu-vue></share-menu-vue>
+          <div class="introduce">
+            <div class="content" v-html="detail.content"></div>
+            <ul>
+              <li>标签字数</li>
+              <li>标签字数</li>
+              <li>最长显示多少再定</li>
+            </ul>
+            <share-menu-vue></share-menu-vue>
+          </div>
         </div>
+        <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
+        <menu-vue :item="detail"></menu-vue>
       </div>
-      <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
-      <menu-vue :item="detail"></menu-vue>
+      <div class="right"></div>
     </div>
-    <div class="right"></div>
+    <div v-else>
+      <a-skeleton active />
+      <br />
+      <a-skeleton active />
+      <br />
+      <a-skeleton active />
+    </div>
   </div>
 </template>
 
@@ -42,6 +51,7 @@
     data() {
       return {
         isLogin: true,
+        isLoading: true,
         detail: {}
       };
     },
@@ -57,15 +67,22 @@
         userid: "",
         token: "",
         params: { id: this.$route.query.id }
-      }).then(data => {
-        this.detail = data.data.result;
-      });
+      })
+        .then(data => {
+          this.detail = data.data.result;
+        })
+        .then(() => {
+          this.isLoading = false;
+        });
     }
   };
 </script>
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
+  .article-details {
+    width: 100%;
+  }
   .left {
     width: $content-left;
     background: $base-background;

@@ -223,7 +223,7 @@
           deviceId: "",
           source: "h5",
           params: {
-            platform: "app",
+            platform: "h5",
             accountNo: phone2,
             password
           }

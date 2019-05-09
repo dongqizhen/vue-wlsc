@@ -1,64 +1,65 @@
 <template>
   <div class="video-details">
-    <div class="left">
-      <div class="video_box">
-        <h2>
-          {{ detail.title }}
-          <p>
-            <span>
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
-              </svg>
-              {{ detail.watchAmount }}
-            </span>
-            <span>{{ detail.createdOn }}</span>
-            <span>课程总时长：{{ detail.totalTime }}</span>
-          </p>
-        </h2>
-        <div class="video">
-          <video-player
-            v-if="detail && detail.videoSubList.length"
-            class="video-player-box vjs-custom-skin"
-            :style="{ 'background-image': detail.image }"
-            ref="videoPlayer"
-            :options="playerOptions"
-            :playsinline="true"
-            customEventName="customstatechangedeventname"
-          >
-          </video-player>
-          <!-- <img :src="detail.image" alt="" /> -->
-          <!-- <span class="video_menu">
+    <div v-if="!isLoading">
+      <div class="left">
+        <div class="video_box">
+          <h2>
+            {{ detail.title }}
+            <p>
+              <span>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
+                </svg>
+                {{ detail.watchAmount }}
+              </span>
+              <span>{{ detail.createdOn }}</span>
+              <span>课程总时长：{{ detail.totalTime }}</span>
+            </p>
+          </h2>
+          <div class="video">
+            <video-player
+              v-if="detail && detail.videoSubList.length"
+              class="video-player-box vjs-custom-skin"
+              :style="{ 'background-image': detail.image }"
+              ref="videoPlayer"
+              :options="playerOptions"
+              :playsinline="true"
+              customEventName="customstatechangedeventname"
+            >
+            </video-player>
+            <!-- <img :src="detail.image" alt="" /> -->
+            <!-- <span class="video_menu">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconshipinxiangqingyebofangjian"></use>
             </svg>
           </span> -->
-        </div>
-        <ul>
-          <li v-for="label in detail.labelList" :key="label.id">
-            {{ label.name }}
-          </li>
-        </ul>
-        <div class="lecturer">
-          <h3>
-            <i></i>
-            讲师介绍
-          </h3>
-          <div class="photo">
-            <div class="img_box"></div>
-            <p>
-              {{ detail.speaker }}
-              <span>
-                {{ detail.videoUserIntroduce }}
-              </span>
-            </p>
+          </div>
+          <ul>
+            <li v-for="label in detail.labelList" :key="label.id">
+              {{ label.name }}
+            </li>
+          </ul>
+          <div class="lecturer">
+            <h3>
+              <i></i>
+              讲师介绍
+            </h3>
+            <div class="photo">
+              <div class="img_box"></div>
+              <p>
+                {{ detail.speaker }}
+                <span>
+                  {{ detail.videoUserIntroduce }}
+                </span>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="introduce">
-        <a-tabs defaultActiveKey="1">
-          <a-tab-pane tab="课件介绍" key="1" :forceRender="true">
-            <div class="introduce-content" v-html="detail.introduce">
-              <!-- <h2>
+        <div class="introduce">
+          <a-tabs defaultActiveKey="1">
+            <a-tab-pane tab="课件介绍" key="1" :forceRender="true">
+              <div class="introduce-content" v-html="detail.introduce">
+                <!-- <h2>
                 <svg class="icon" aria-hidden="true">
                   <use xlink:href="#iconkejianjieshaoziseyuandian"></use>
                 </svg>
@@ -93,18 +94,26 @@
               <span>
                 利用百克钳可靠的止血效果，不仅能让手术视野更加干净，而且明显减少止血钳的使用，避免了对最后使用切割闭合器的干扰。手术全程在百克钳辅助下完成，只在脾动脉处使用了止血钳。切除手术
               </span> -->
-            </div>
-          </a-tab-pane>
-          <a-tab-pane tab="课件目录" key="2" :forceRender="true"
-            >Content of Tab Pane 2</a-tab-pane
-          >
-        </a-tabs>
-        <share-menu-vue></share-menu-vue>
+              </div>
+            </a-tab-pane>
+            <a-tab-pane tab="课件目录" key="2" :forceRender="true"
+              >Content of Tab Pane 2</a-tab-pane
+            >
+          </a-tabs>
+          <share-menu-vue></share-menu-vue>
+        </div>
+        <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
+        <menu-vue :item="detail"></menu-vue>
       </div>
-      <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
-      <menu-vue :item="detail"></menu-vue>
+      <div class="right"></div>
     </div>
-    <div class="right"></div>
+    <div v-else>
+      <a-skeleton active />
+      <br />
+      <a-skeleton active />
+      <br />
+      <a-skeleton active />
+    </div>
   </div>
 </template>
 
@@ -121,6 +130,7 @@
     data() {
       return {
         detail: "",
+        isLoading: true,
         playerOptions: {
           // videojs options
           muted: true,
@@ -168,17 +178,24 @@
         method: "getVideoByIdV1",
         userid: "",
         params: { id: this.$route.query.id }
-      }).then(data => {
-        this.detail = data.data.result;
-        this.playerOptions.poster = this.detail.image;
-        this.playerOptions.sources[0].src = this.detail.videoSubList[0].url;
-      });
+      })
+        .then(data => {
+          this.detail = data.data.result;
+          this.playerOptions.poster = this.detail.image;
+          this.playerOptions.sources[0].src = this.detail.videoSubList[0].url;
+        })
+        .then(() => {
+          this.isLoading = false;
+        });
     }
   };
 </script>
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
+  .video-details {
+    width: 100%;
+  }
   .left {
     width: $content-left;
     background: $base-background;
