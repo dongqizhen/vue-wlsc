@@ -1,42 +1,43 @@
 <template>
   <div class="article-details">
-    <div class="left">
-      <div class="article_box">
-        <h2>
-          涉违规接受企业医疗设备捐赠！市卫健委被责令整改！
-          <p>
-            <span>
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
-              </svg>
-              30万
-            </span>
-            <span>2017-08-22 19:32</span>
-          </p>
-        </h2>
+    <div v-if="!isLoading">
+      <div class="left">
+        <div class="article_box">
+          <h2>
+            {{ detail.topic }}
+            <p>
+              <span>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
+                </svg>
+                {{ detail.hits }}
+              </span>
+              <span>{{ detail.createdOn }}</span>
+            </p>
+          </h2>
 
-        <div class="introduce">
-          <div class="content">
-            据长江日报3月10日消息，根据武汉市党委统一部署，2月下旬，市委五个巡察组对武汉市第一医院、武汉市中心医院、原武汉市卫生和计划生育委员会（现武汉市卫生健康委员会）等11家单位整改落实情况进行了回访督查，被巡察单位已完成面上问题整改495个，整改率为90.7%。
-            其中武汉市卫健委就被巡查出的“违规接受企业设备捐赠”问题接受整改，并进行了全面清查。
-            在全系统18家委属医疗卫生单位全面清查违规接受企业免费捐赠、投放医疗设备，捆绑销售试剂、耗材等问题，对违规接受捐赠的215台设备，除1台报废外，清退121台、残值购回93台，31名相关责任人受到责任追究。
-            并且武汉市还就此印发《关于加强医疗卫生机构接受医疗设备捐赠及规范耗材使用的通知》，明确受赠范围，严格医用耗材采购及使用监管，严令禁止违规接受捐赠、捆绑销售耗材等行为。
-            捐赠设备是否构成违规，实际上很长时间以来在医药购销领域都比较难界定。原国家卫计委、国家中医药管理局《关于印发加强医疗卫生行风建设“九不准”的通知》中对“严禁接受附有影响公平竞争条件的捐赠资助，严禁将接受捐赠资助与采购商品(服务)挂钩”的要求，对于违规捐赠设备有了清楚界定。
-            简单来说，如果假借租赁、捐赠、投放设备等形式，捆绑耗材和配套设备销售等就会涉嫌商业贿赂不正当竞争行为，属于违规捐赠。
-            此次武汉市卫健委因直属医疗卫生单位存在违规接受设备捐赠，被党委巡视组直接要求整改，并且开展全面清查，对超30人进行追责，也看出对于医械购销领域涉及商业贿赂不正当竞争行为的试剂耗材捆绑设备销售、违规捐赠打击力度之大！
+          <div class="introduce">
+            <div class="content" v-html="detail.content"></div>
+            <ul>
+              <li>标签字数</li>
+              <li>标签字数</li>
+              <li>最长显示多少再定</li>
+            </ul>
+            <share-menu-vue></share-menu-vue>
           </div>
-          <ul>
-            <li>标签字数</li>
-            <li>标签字数</li>
-            <li>最长显示多少再定</li>
-          </ul>
-          <share-menu-vue></share-menu-vue>
         </div>
+        <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
+        <menu-vue :item="detail"></menu-vue>
       </div>
-      <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
-      <menu-vue></menu-vue>
+      <div class="right"></div>
     </div>
-    <div class="right"></div>
+    <div v-else>
+      <a-skeleton active />
+      <br />
+      <a-skeleton active />
+      <br />
+      <a-skeleton active />
+    </div>
   </div>
 </template>
 
@@ -44,22 +45,44 @@
   import shareMenuVue from "../../../../components/common/share/shareMenu.vue";
   import commentVue from "../../../../components/common/comment/comment.vue";
   import menuVue from "../../../../components/common/share/menu.vue";
+  import { _getData } from "../../../../config/getData";
+
   export default {
     data() {
       return {
-        isLogin: true
+        isLogin: true,
+        isLoading: true,
+        detail: {}
       };
     },
     components: {
       shareMenuVue,
       commentVue,
       menuVue
+    },
+    mounted() {
+      //获取详情
+      _getData(`${this.$API_URL.HYGPROURl}/server_pro/learn!request.action`, {
+        method: "getArticleDetails",
+        userid: "",
+        token: "",
+        params: { id: this.$route.query.id }
+      })
+        .then(data => {
+          this.detail = data.data.result;
+        })
+        .then(() => {
+          this.isLoading = false;
+        });
     }
   };
 </script>
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
+  .article-details {
+    width: 100%;
+  }
   .left {
     width: $content-left;
     background: $base-background;

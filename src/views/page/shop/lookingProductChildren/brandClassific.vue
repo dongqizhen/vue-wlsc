@@ -13,15 +13,15 @@
       <div class="left">
         <div class="left-L">
           <ul class="clearfix">
-            <li v-for="(item, i) in [1, 2]" :key="`item-${i}`">
+            <li v-for="(item, i) in left" :key="`item-${i}`">
               <h2>
                 <span class="title">
                   <svg class="icon" aria-hidden="true">
                     <use xlink:href="#iconpingjiashixinwujiaoxing"></use>
                   </svg>
-                  常用分类
+                  {{ item.name }}
                 </span>
-                <span class="btn" @click="visible = !visible">
+                <span class="btn" @click="visible = !visible" v-if="!item.id">
                   <svg class="icon" aria-hidden="true">
                     <use xlink:href="#iconguanlichangyongfenlei"></use>
                   </svg>
@@ -52,54 +52,13 @@
                   "
                   append
                   tag="li"
+                  v-for="val in item.subCategoryList"
+                  :key="val.id"
                 >
-                  <a>超声手术设备</a></router-link
-                >
-                <router-link
-                  :to="
-                    $route.query.nav_index == 1
-                      ? {
-                          path: 'oneOfBrandClassificne',
-                          query: {
-                            nav_index: $route.query.nav_index
-                          }
-                        }
-                      : $route.query.nav_index == 2
-                      ? {
-                          path: 'brand',
-                          query: {
-                            nav_index: $route.query.nav_index
-                          }
-                        }
-                      : ''
-                  "
-                  append
-                  tag="li"
-                >
-                  <a>高强度超声治疗设备</a></router-link
-                >
-                <router-link to="oneOfBrandClassificne" append tag="li">
-                  <a>激光手术设备</a></router-link
-                >
-                <router-link to="oneOfBrandClassificne" append tag="li">
-                  <a>手术辅助照明灯</a></router-link
-                >
-
-                <li>医用激光光纤</li>
-                <li>主电缆</li>
-                <li>手术无影灯</li>
-                <li>手术辅助照明灯</li>
-                <li>医用射线防护用具</li>
-                <li>超声手术设备</li>
-                <li>高强度超声治疗设备</li>
-                <li>手术辅助照明灯</li>
-                <li>医用射线防护用具</li>
-                <li>超声手术设备</li>
-                <li>高强度超声治疗设备</li>
-                <li>手术辅助照明灯</li>
-                <li>医用射线防护用具</li>
-                <li>超声手术设备</li>
-                <li>高强度超声治疗设备</li>
+                  <a>
+                    {{ val.name }}
+                  </a>
+                </router-link>
               </ul>
 
               <span
@@ -123,22 +82,13 @@
         </div>
         <div class="left-R">
           <ul class="clearfix">
-            <li v-for="(item, i) in [1, 2]" :key="`item1-${i}`">
+            <li v-for="(item, i) in right" :key="`item_right-${i}`">
               <h2>
                 <span class="title">
                   <svg class="icon" aria-hidden="true">
                     <use xlink:href="#iconpingjiashixinwujiaoxing"></use>
                   </svg>
-                  常用分类
-                </span>
-                <span class="btn" @click="visible = !visible">
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#iconguanlichangyongfenlei"></use>
-                  </svg>
-                  管理常用分类
-                  <common-categories-modal-vue
-                    :Visible="visible"
-                  ></common-categories-modal-vue>
+                  {{ item.name }}
                 </span>
               </h2>
 
@@ -149,68 +99,33 @@
                       ? {
                           path: 'oneOfBrandClassificne',
                           query: {
-                            nav_index: $route.query.nav_index
+                            nav_index: $route.query.nav_index,
+                            categoryId: val.id,
+                            categoryName: val.name
                           }
                         }
                       : $route.query.nav_index == 2
                       ? {
                           path: 'brand',
                           query: {
-                            nav_index: $route.query.nav_index
+                            nav_index: $route.query.nav_index,
+                            categoryId: val.id,
+                            categoryName: val.name,
+                            brandId: $route.query.brandId,
+                            brandName: $route.query.brandName
                           }
                         }
                       : ''
                   "
                   append
                   tag="li"
+                  v-for="val in item.subCategoryList"
+                  :key="val.id"
                 >
-                  <a>超声手术设备</a></router-link
-                >
-                <router-link
-                  :to="
-                    $route.query.nav_index == 1
-                      ? {
-                          path: 'oneOfBrandClassificne',
-                          query: {
-                            nav_index: $route.query.nav_index
-                          }
-                        }
-                      : $route.query.nav_index == 2
-                      ? {
-                          path: 'brand',
-                          query: {
-                            nav_index: $route.query.nav_index
-                          }
-                        }
-                      : ''
-                  "
-                  append
-                  tag="li"
-                >
-                  <a>高强度超声治疗设备</a></router-link
-                >
-                <router-link to="oneOfBrandClassificne" append tag="li">
-                  <a>激光手术设备</a></router-link
-                >
-                <router-link to="oneOfBrandClassificne" append tag="li">
-                  <a>手术辅助照明灯</a></router-link
-                >
-
-                <li>医用激光光纤</li>
-                <li>主电缆</li>
-                <li>手术无影灯</li>
-                <li>手术辅助照明灯</li>
-                <li>医用射线防护用具</li>
-                <li>超声手术设备</li>
-                <li>高强度超声治疗设备</li>
-                <li>手术辅助照明灯</li>
-                <li>医用射线防护用具</li>
-                <li>超声手术设备</li>
-                <li>高强度超声治疗设备</li>
-                <li>手术辅助照明灯</li>
-                <li>医用射线防护用具</li>
-                <li>超声手术设备</li>
-                <li>高强度超声治疗设备</li>
+                  <a>
+                    {{ val.name }}
+                  </a>
+                </router-link>
               </ul>
               <span
                 @click="rightMoreBtnClick(i)"
@@ -246,6 +161,7 @@
   import CommonCategoriesModalVue from "../../../../components/modal/CommonCategoriesModal.vue";
   import { _getData } from "../../../../config/getData";
   import { mapState, mapMutations } from "vuex";
+  import _ from "lodash";
 
   export default {
     data() {
@@ -255,7 +171,10 @@
         left_showMore: false,
         left_index: null,
         left_show_arr: [], //左侧点击更多是否展开控制数组
-        right_show_arr: [] //右侧点击更多是否展开控制数组
+        right_show_arr: [], //右侧点击更多是否展开控制数组
+        left: [], //左侧渲染数组
+        right: [], //右侧渲染数组
+        commonCategorie: []
       };
     },
     components: {
@@ -286,11 +205,46 @@
     mounted() {
       //获取常用分类
       _getData("api/ucatalog/list", {}).then(data => {
-        console.log("data", data);
-        //this.myArray2 = data.userCategoryList;
+        console.log("289data", data);
+        if (this.isLogin) {
+          this.left[0].subCategoryList = data.userCategoryList;
+        }
       });
+
+      //获取所有分类
+      _getData("api/catalog/listAll", {})
+        .then(data => {
+          console.log("所有", data);
+          console.log(this.left);
+          _.map(data.currentCategory, (val, i) => {
+            if ((i + 1) % 2 == 1) {
+              if (this.isLogin) {
+                this.right.push(val);
+              } else {
+                this.left.push(val);
+              }
+            } else {
+              if (this.isLogin) {
+                this.left.push(val);
+              } else {
+                this.right.push(val);
+              }
+            }
+          });
+          console.log(this.left, this.right);
+        })
+        .then(() => {});
     },
     created() {
+      if (this.isLogin) {
+        this.left = [
+          {
+            name: "常用分类",
+            id: "",
+            subCategoryList: []
+          }
+        ];
+      }
       this.routes =
         this.$route.query.nav_index == 1
           ? [
@@ -315,7 +269,7 @@
                   this.$route.query.nav_index
               },
               {
-                name: "松下",
+                name: this.$route.query.brandName,
                 path: "/lookingProduct"
               }
             ];

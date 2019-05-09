@@ -125,7 +125,11 @@
           </div>
         </div>
       </div>
+
       <div class="introduce-tabs">
+        <!-- <a-affix :offsetTop="0">
+          <a-button type="primary">Affix top</a-button>
+        </a-affix> -->
         <a-tabs defaultActiveKey="1">
           <a-tab-pane tab="产品介绍" key="1" :forceRender="true">
             <p class="introduce" v-html="productInfo.goods_desc"></p>
@@ -331,6 +335,10 @@
               </li>
             </ul>
           </a-tab-pane>
+
+          <template slot="renderTabBar" slot-scope="props, DefaultTabBar">
+            <component :is="DefaultTabBar" {...props} class="tab-affix" />
+          </template>
         </a-tabs>
       </div>
     </div>
@@ -400,18 +408,42 @@
       callback(val) {
         console.log(val);
       },
+      toggle(tabIndex) {
+        this.whichTab = tabIndex;
+        window.location.href = "#searchBar"; // 锚点
+      },
       addCarSuccess() {
         if (!this.isLogin) {
           this.type = "login";
         }
         this.visible = true;
+      },
+      handleScroll() {
+        let scrollTop =
+          window.pageYOffset ||
+          document.documentElement.scrollTop ||
+          document.body.scrollTop;
+        let dom = document.querySelector(".ant-tabs-nav-wrap");
+        let offsetTop = document
+          .querySelector(".introduce-tabs")
+          .getBoundingClientRect().top;
+
+        if (offsetTop <= 0) {
+          dom.style.position = "fixed";
+          dom.style.top = "0";
+        } else {
+          dom.style.position = "static";
+        }
       }
     },
     computed: {
       ...mapState(["isLogin"])
     },
-
+    destroyed() {
+      window.removeEventListener("scroll", this.handleScroll);
+    },
     mounted() {
+      window.addEventListener("scroll", this.handleScroll);
       _getData("api/goods/gooddetail", {
         id: this.$route.params.id
       })
@@ -688,7 +720,16 @@
             margin-bottom: 0;
             .ant-tabs-nav-container {
               height: 49px;
+              border-bottom: 1px solid #e8e8e8;
+              .ant-tabs-nav-wrap {
+                width: 768px;
+                z-index: 1000;
+                border-bottom: 1px solid #e8e8e8;
+                //background: #fff;
+              }
               .ant-tabs-nav-scroll {
+                background: #fff;
+                border-bottom: 1px solid #e8e8e8;
                 .ant-tabs-nav {
                   > div {
                     display: flex;
@@ -701,6 +742,7 @@
                 .ant-tabs-tab {
                   padding: 0;
                   margin: 0;
+                  background: #fff;
                   height: 50px;
                   width: 170px;
                   display: flex;
@@ -737,6 +779,7 @@
           }
           .ant-tabs-content {
             padding: 20px 0;
+
             .ant-tabs-tabpane {
               padding: 0 20px;
               .introduce {

@@ -27,13 +27,16 @@ import {
     Upload,
     Anchor,
     Form,
-    DatePicker
+    DatePicker,
+    Skeleton,
+    Affix
 } from "ant-design-vue";
 import "swiper/dist/css/swiper.css";
 
 Vue.config.productionTip = false;
 
-Vue.use(vChatTitle).use(Share).use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Upload).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form);
+
+Vue.use(vChatTitle).use(Share).use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Upload).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form).use(Skeleton).use(Affix);
 
 Vue.prototype.$API_URL = env.API_HOST;
 

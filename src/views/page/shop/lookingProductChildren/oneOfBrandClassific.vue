@@ -56,7 +56,14 @@
             tag="li"
             :to="
               $route.query.nav_index == 2
-                ? { path: '/lookingProduct', query: { nav_index: 2 } }
+                ? {
+                    path: '/lookingProduct',
+                    query: {
+                      nav_index: 2,
+                      brandId: item.id,
+                      brandName: item.name
+                    }
+                  }
                 : $route.query.nav_index == 1
                 ? {
                     path: 'brand',

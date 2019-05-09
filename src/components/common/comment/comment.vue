@@ -9,7 +9,9 @@
     <div class="write-review-container">
       <div class="write-review" v-if="isLogin">
         <div class="top">
-          <div class="img-box"></div>
+          <div class="img-box">
+            <img :src="userInfo.imageUrl" alt="" />
+          </div>
           <a-textarea placeholder="写下您的评论" :rows="4" />
         </div>
 
@@ -41,6 +43,7 @@
 
 <script>
   import commentItemVue from "./commentItem.vue";
+  import { mapState } from "vuex";
 
   export default {
     data() {
@@ -58,12 +61,16 @@
     components: {
       commentItemVue
     },
+    computed: {
+      ...mapState(["userInfo"])
+    },
     methods: {
       toLogin() {
-        const { href } = this.$router.resolve({
-          path: "/login"
-        });
-        window.open(href, "_blank");
+        this.$router.push({ path: "/login" });
+        // const { href } = this.$router.resolve({
+        //   path: "/login"
+        // });
+        // window.open(href, "_blank");
       },
       handerClick(i) {
         this.defaultVal = i;
@@ -144,6 +151,11 @@
             background: $base-background;
             margin-right: 8px;
             border-radius: 16px;
+            img {
+              height: 100%;
+              width: 100%;
+              border-radius: 16px;
+            }
           }
         }
 

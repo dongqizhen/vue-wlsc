@@ -6,7 +6,7 @@
           <use xlink:href="#iconpinglun"></use>
         </svg>
       </i>
-      167
+      {{ item.commentNum }}
     </span>
     <span>
       <i>
@@ -14,7 +14,7 @@
           <use xlink:href="#iconshoucang"></use>
         </svg>
       </i>
-      999
+      {{ item.favoriteNum }}
     </span>
     <span>
       <i>
@@ -22,7 +22,7 @@
           <use xlink:href="#iconzan"></use>
         </svg>
       </i>
-      89
+      {{ item.amount }}
     </span>
     <span>
       <i>
@@ -30,7 +30,7 @@
           <use xlink:href="#iconfenxiang"></use>
         </svg>
       </i>
-      89
+      {{ item.shareNum }}
     </span>
   </div>
 </template>
@@ -39,7 +39,8 @@
   export default {
     data() {
       return {};
-    }
+    },
+    props: ["item"]
   };
 </script>
 

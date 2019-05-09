@@ -57,7 +57,8 @@
       <div class="recommend">
         <div class="commonWidth">
           <recommends-tab-vue
-            :tabs="['推荐产品(12)', '文章(9)', '视频(8)', '案例(8)']"
+            :tabs="nav"
+            v-if="nav.length"
             v-on:tabClick="tabClick"
           ></recommends-tab-vue>
           <div class="recommend_page">
@@ -112,16 +113,24 @@
               <div class="left">
                 <ul class="recommend_article" v-if="recommend_tabs_index == 1">
                   <article-item
-                    v-for="item in articlelist"
+                    v-for="item in articleList"
                     :key="item.id"
                     :item="item"
                   ></article-item>
                 </ul>
                 <ul class="recommond_video" v-if="recommend_tabs_index == 2">
-                  <video-item></video-item>
+                  <video-item
+                    v-for="item in videoList"
+                    :key="item.id"
+                    :item="item"
+                  ></video-item>
                 </ul>
                 <ul class="recommond_case" v-if="recommend_tabs_index == 3">
-                  <case-item></case-item>
+                  <case-item
+                    v-for="item in maintenanceList"
+                    :key="item.id"
+                    :item="item"
+                  ></case-item>
                 </ul>
                 <a-button>
                   查看全部
@@ -171,16 +180,26 @@
   export default {
     data() {
       return {
-        recommend_tabs_index: 1, //推荐nav标识
+        recommend_tabs_index: 0, //推荐nav标识
         brandVisible: false, //控制modal层弹出
         goodList: [], //产品
-        articlelist: [] //案列
+        articleList: [], //案列,
+        videoList: [], //视频
+        maintenanceList: [],
+        nav: []
         // background: ["#F5A623", "#43D480", "#8880FE", "#0283FF"]
       };
     },
     mounted() {
+      //获取推荐数量
       _getData("api/index/caseCount", {}).then(data => {
         console.log("data", data);
+        this.nav = [
+          `推荐产品(${data.count})`,
+          `文章(${data.articleNum})`,
+          `视频(${data.videoNum})`,
+          `案例(${data.maintenanceNum})`
+        ];
       });
       _getData("api/goods/goodslist", {}).then(data => {
         console.log("data", data);
@@ -200,7 +219,7 @@
         }
       }).then(data => {
         console.log("1111", data);
-        this.articlelist = data.data.result.articlelist;
+        this.articleList = data.data.result.articlelist;
       });
       //案例
       _getData(
@@ -216,6 +235,7 @@
         }
       ).then(data => {
         console.log("222", data);
+        this.maintenanceList = data.data.result.maintenancelist;
       });
       //视频
       _getData(`${this.$API_URL.HYGPROURl}/server_pro/video!request.action`, {
@@ -228,6 +248,7 @@
         params: {}
       }).then(data => {
         console.log("333", data);
+        this.videoList = data.data.result.videolist;
       });
     },
     components: {

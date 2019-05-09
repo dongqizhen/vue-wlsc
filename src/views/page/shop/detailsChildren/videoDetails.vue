@@ -1,53 +1,65 @@
 <template>
   <div class="video-details">
-    <div class="left">
-      <div class="video_box">
-        <h2>
-          胎儿静脉导管缺如及脐静脉回流异常的超声诊断
-          <p>
-            <span>
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
-              </svg>
-              30万
-            </span>
-            <span>2017-08-22 19:32</span>
-            <span>课程总时长：04:21</span>
-          </p>
-        </h2>
-        <div class="video">
-          <span class="video_menu">
+    <div v-if="!isLoading">
+      <div class="left">
+        <div class="video_box">
+          <h2>
+            {{ detail.title }}
+            <p>
+              <span>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
+                </svg>
+                {{ detail.watchAmount }}
+              </span>
+              <span>{{ detail.createdOn }}</span>
+              <span>课程总时长：{{ detail.totalTime }}</span>
+            </p>
+          </h2>
+          <div class="video">
+            <video-player
+              v-if="detail && detail.videoSubList.length"
+              class="video-player-box vjs-custom-skin"
+              :style="{ 'background-image': detail.image }"
+              ref="videoPlayer"
+              :options="playerOptions"
+              :playsinline="true"
+              customEventName="customstatechangedeventname"
+            >
+            </video-player>
+            <!-- <img :src="detail.image" alt="" /> -->
+            <!-- <span class="video_menu">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconshipinxiangqingyebofangjian"></use>
             </svg>
-          </span>
-        </div>
-        <ul>
-          <li>标签字数</li>
-          <li>标签字数</li>
-          <li>最长显示多少再定</li>
-        </ul>
-        <div class="lecturer">
-          <h3>
-            <i></i>
-            讲师介绍
-          </h3>
-          <div class="photo">
-            <div class="img_box"></div>
-            <p>
-              托尼老师
-              <span
-                >研究员级高级工程师，江苏省人民医院（南京医科大学第一附属医院）副院长，国家卫计委医院管理研究所临床医学工程首席专家，中国医师协会临床工程师分会副会长，中华医学会医学工程学分会候任主委，江苏省医院协会设备管理专业委员会主任委员，江苏省医疗设备器械质量控制中心主任。</span
-              >
-            </p>
+          </span> -->
+          </div>
+          <ul>
+            <li v-for="label in detail.labelList" :key="label.id">
+              {{ label.name }}
+            </li>
+          </ul>
+          <div class="lecturer">
+            <h3>
+              <i></i>
+              讲师介绍
+            </h3>
+            <div class="photo">
+              <div class="img_box"></div>
+              <p>
+                {{ detail.speaker }}
+                <span>
+                  {{ detail.videoUserIntroduce }}
+                </span>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="introduce">
-        <a-tabs defaultActiveKey="1">
-          <a-tab-pane tab="课件介绍" key="1" :forceRender="true">
-            <div class="introduce-content">
-              <h2>
+        <div class="introduce">
+          <a-tabs defaultActiveKey="1">
+            <a-tab-pane tab="课件介绍" key="1" :forceRender="true">
+              <div class="introduce-content" v-html="detail.introduce">
+                <!-- <h2>
                 <svg class="icon" aria-hidden="true">
                   <use xlink:href="#iconkejianjieshaoziseyuandian"></use>
                 </svg>
@@ -81,19 +93,27 @@
               </h2>
               <span>
                 利用百克钳可靠的止血效果，不仅能让手术视野更加干净，而且明显减少止血钳的使用，避免了对最后使用切割闭合器的干扰。手术全程在百克钳辅助下完成，只在脾动脉处使用了止血钳。切除手术
-              </span>
-            </div>
-            <share-menu-vue></share-menu-vue>
-          </a-tab-pane>
-          <a-tab-pane tab="课件目录" key="2" :forceRender="true"
-            >Content of Tab Pane 2</a-tab-pane
-          >
-        </a-tabs>
+              </span> -->
+              </div>
+            </a-tab-pane>
+            <a-tab-pane tab="课件目录" key="2" :forceRender="true"
+              >Content of Tab Pane 2</a-tab-pane
+            >
+          </a-tabs>
+          <share-menu-vue></share-menu-vue>
+        </div>
+        <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
+        <menu-vue :item="detail"></menu-vue>
       </div>
-      <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
-      <menu-vue></menu-vue>
+      <div class="right"></div>
     </div>
-    <div class="right"></div>
+    <div v-else>
+      <a-skeleton active />
+      <br />
+      <a-skeleton active />
+      <br />
+      <a-skeleton active />
+    </div>
   </div>
 </template>
 
@@ -101,20 +121,81 @@
   import shareMenuVue from "../../../../components/common/share/shareMenu.vue";
   import commentVue from "../../../../components/common/comment/comment.vue";
   import menuVue from "../../../../components/common/share/menu.vue";
+  import { _getData } from "../../../../config/getData";
+  import "video.js/dist/video-js.css";
+  import "vue-video-player/src/custom-theme.css";
+  import { videoPlayer } from "vue-video-player";
+
   export default {
     data() {
-      return {};
+      return {
+        detail: "",
+        isLoading: true,
+        playerOptions: {
+          // videojs options
+          muted: true,
+          languages: {
+            en: {
+              Play: "播放",
+              Pause: "暂停",
+              Loaded: "加载",
+              Unmute: "取消静音",
+              Mute: "静音",
+              Fullscreen: "全屏",
+              Replay: "重新播放",
+              "Non-Fullscreen": "退出全屏",
+              "Play Video": "点击播放",
+              "Playback Rate": "播放速度"
+            }
+          },
+          playbackRates: [0.7, 1.0, 1.5, 2.0],
+          preload: true,
+          fluid: true,
+          sources: [
+            {
+              type: "video/mp4",
+              src: ""
+            }
+          ],
+          poster: ""
+        },
+        globalOptions: {}
+      };
     },
     components: {
       shareMenuVue,
       commentVue,
-      menuVue
+      menuVue,
+      videoPlayer
+    },
+    computed: {
+      player() {
+        return this.$refs.videoPlayer.player;
+      }
+    },
+    mounted() {
+      _getData(`${this.$API_URL.HYGPROURl}/server_pro/video!request.action`, {
+        method: "getVideoByIdV1",
+        userid: "",
+        params: { id: this.$route.query.id }
+      })
+        .then(data => {
+          this.detail = data.data.result;
+          this.playerOptions.poster = this.detail.image;
+          this.playerOptions.sources[0].src = this.detail.videoSubList[0].url;
+        })
+        .then(() => {
+          this.isLoading = false;
+        });
     }
   };
 </script>
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
+  .video-details {
+    width: 100%;
+  }
   .left {
     width: $content-left;
     background: $base-background;
@@ -165,6 +246,31 @@
         background: $base-background;
         position: relative;
         cursor: pointer;
+        background-size: 100% 100%;
+        img {
+          height: 100%;
+          width: 100%;
+        }
+        /deep/ .video-player-box {
+          width: 100%;
+          height: 100%;
+          .video-js {
+            width: 100% !important;
+            height: 100% !important;
+            .vjs-poster {
+              background-size: 100% 100%;
+            }
+            .vjs-big-play-button {
+              width: 80px;
+              height: 80px;
+              border-radius: 41px;
+              border: none;
+              background: url("../../../../assets/images/play.svg") no-repeat
+                center;
+              background-size: 100% 100%;
+            }
+          }
+        }
         .video_menu {
           position: absolute;
           left: 50%;
@@ -255,6 +361,10 @@
       background: #fff;
       box-shadow: $base-box-shadow;
       margin-bottom: 10px;
+      .share-menu {
+        margin-left: 20px;
+        border-top: 0.5px solid #dddddd;
+      }
       /deep/ .ant-tabs {
         .ant-tabs-bar {
           height: 54px;
@@ -297,8 +407,14 @@
           padding: 4px 20px 0;
           .ant-tabs-tabpane {
             .introduce-content {
+              padding-top: 21px;
               padding-bottom: 25px;
-              border-bottom: 0.5px solid #dddddd;
+
+              p {
+                font-size: 16px;
+                color: #666666;
+                line-height: 32px;
+              }
             }
 
             h2 {
