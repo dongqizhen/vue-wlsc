@@ -9,7 +9,7 @@
 // config axios https://www.jianshu.com/p/7a9fbcbb1114
 import axios from 'axios'
 
-let request = axios.create()
+let request = axios.create();
 let token = JSON.parse(window.localStorage["vuex-along"])['vuex-along'].userInfo.token
 
 //添加请求拦截器
