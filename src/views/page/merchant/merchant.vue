@@ -13,8 +13,9 @@
 <script>
   import Header from "../../../components/header/header";
   import centerPage from "../../../components/common/centerPage";
+  import { mapState, mapMutations } from "vuex";
   export default {
-    inject: ["reload"],
+    // inject: ["reload"],
     data() {
       return {
         defaultSelectedKeys: ["1"],
@@ -62,51 +63,57 @@
       //   // this.$router.replace({ path: "/merchant" });
       //   // this.reload();
       // }
+      ...mapMutations(["changeLoginState", "changeUserInfoState"])
     },
+    computed: { ...mapState(["isLogin", "userInfo"]) },
     beforeMount() {
-      switch (this.$route.path.split("/")[2]) {
-        case "shopIndex":
-          this.defaultSelectedKeys = ["1"];
-          break;
-        case "shopInfo":
-          this.defaultSelectedKeys = ["2"];
-          break;
-        case "shopCertification":
-          this.defaultSelectedKeys = ["3"];
-          break;
-        case "publishGoods":
-          this.defaultSelectedKeys = ["4"];
-          break;
-        case "productManage":
-          this.defaultSelectedKeys = ["5"];
-          break;
-        case "inquiryManage":
-          this.defaultSelectedKeys = ["6"];
-          break;
-        case "orderManage":
-          this.defaultSelectedKeys = ["7"];
-          break;
-        case "accountSecurity":
-          this.defaultSelectedKeys = ["8"];
-          break;
-        case "changePassword":
-          this.defaultSelectedKeys = ["8"];
-          break;
-        case "changeEmail":
-          this.defaultSelectedKeys = ["8"];
-          break;
-        case "changePhone":
-          this.defaultSelectedKeys = ["8"];
-          break;
-        case "personalCenter":
-          this.defaultSelectedKeys = ["9"];
-          break;
-        case "messageCenter":
-          this.defaultSelectedKeys = ["10"];
-          break;
-        case "messageDetail":
-          this.defaultSelectedKeys = ["10"];
-          break;
+      if (!this.isLogin) {
+        this.$router.push({ path: "/login" });
+      } else {
+        switch (this.$route.path.split("/")[2]) {
+          case "shopIndex":
+            this.defaultSelectedKeys = ["1"];
+            break;
+          case "shopInfo":
+            this.defaultSelectedKeys = ["2"];
+            break;
+          case "shopCertification":
+            this.defaultSelectedKeys = ["3"];
+            break;
+          case "publishGoods":
+            this.defaultSelectedKeys = ["4"];
+            break;
+          case "productManage":
+            this.defaultSelectedKeys = ["5"];
+            break;
+          case "inquiryManage":
+            this.defaultSelectedKeys = ["6"];
+            break;
+          case "orderManage":
+            this.defaultSelectedKeys = ["7"];
+            break;
+          case "accountSecurity":
+            this.defaultSelectedKeys = ["8"];
+            break;
+          case "changePassword":
+            this.defaultSelectedKeys = ["8"];
+            break;
+          case "changeEmail":
+            this.defaultSelectedKeys = ["8"];
+            break;
+          case "changePhone":
+            this.defaultSelectedKeys = ["8"];
+            break;
+          case "personalCenter":
+            this.defaultSelectedKeys = ["9"];
+            break;
+          case "messageCenter":
+            this.defaultSelectedKeys = ["10"];
+            break;
+          case "messageDetail":
+            this.defaultSelectedKeys = ["10"];
+            break;
+        }
       }
     },
     // mounted() {

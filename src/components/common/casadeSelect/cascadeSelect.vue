@@ -1,8 +1,15 @@
 <template>
   <div class="cascadeSelectBox">
-    <div class="selectText">
+    <div :class="['selectText', isShow ? 'active' : 'unactive']">
       <span>
-        <!-- <p v-for="item in defaultProviceData" :key="item.id">{{ item.name }}</p> -->
+        <div v-if="defaultProvinceData.length == 0">请选择省/市</div>
+        <div v-else>
+          <i v-for="(item, index) in defaultProvinceData" :key="item.id">
+            {{ item.name }}({{ item.count }}){{
+              index == defaultProvinceData.length - 1 ? "" : "/"
+            }}
+          </i>
+        </div>
       </span>
       <span>
         <svg class="icon" aria-hidden="true">
@@ -10,7 +17,7 @@
         </svg>
       </span>
     </div>
-    <div class="selectValBox">
+    <div class="selectValBox" v-show="isShow">
       <div class="left-box">
         <ul>
           <li
@@ -21,7 +28,7 @@
           >
             <i></i>
             {{ item.name }}
-            <span v-for="dataItem in defaultProviceData" :key="dataItem.id">
+            <span v-for="dataItem in defaultProvinceData" :key="dataItem.id">
               <span v-show="dataItem.id == item.id">
                 ({{ dataItem.count }})
               </span>
@@ -34,7 +41,8 @@
           :data="cityData"
           :defaultCityData="defaultCityData"
           v-on:getSelectArr="getSelectArr"
-          :provinceId="provinceId"
+          v-on:getCheckAll="getCheckAllMethod"
+          :isCheckAll="isCheckAll"
         ></cascade-right>
       </div>
     </div>
@@ -42,7 +50,7 @@
 </template>
 <script>
   import cascadeRight from "./cascadeSelectRight";
-  import { _getData } from "../../config/getData";
+  import { _getData } from "../../../config/getData";
   import _ from "lodash";
   export default {
     data() {
@@ -50,36 +58,43 @@
         proviceData: [],
         cityData: [],
         defaultCityData: [],
-        defaultProviceData: [
-          {
-            id: 1,
-            name: "北京市",
-            count: 2,
-            defaultCityData: [
-              { id: 1, name: "朝阳区" },
-              { id: 11, name: "房山区" }
-            ]
-          },
-          {
-            id: 22,
-            name: "海南省",
-            count: "全部",
-            defaultCityData: [
-              { id: 230, name: "海口市" },
-              { id: 231, name: "三亚市" },
-              { id: 232, name: "东方市" }
-            ]
-          }
+        defaultProvinceData: [
+          // {
+          //   id: 1,
+          //   name: "北京市",
+          //   count: 2,
+          //   defaultCityData: [
+          //     { id: 1, name: "朝阳区" },
+          //     { id: 11, name: "房山区" }
+          //   ]
+          // },
+          // {
+          //   id: 22,
+          //   name: "海南省",
+          //   count: "全部",
+          //   defaultCityData: [
+          //     { id: 230, name: "海口市" },
+          //     { id: 231, name: "三亚市" },
+          //     { id: 232, name: "东方市" }
+          //   ]
+          // }
         ],
         currentId: -1,
         activeProvinceName: "",
         selectArr: [],
-        provinceId: -1
+        provinceId: -1,
+        isCheckAll: false
       };
+    },
+    props: {
+      isShow: {
+        type: Boolean,
+        required: true
+      }
     },
     methods: {
       addClass(id) {
-        for (const val of this.defaultProviceData) {
+        for (const val of this.defaultProvinceData) {
           if (id == val.id) {
             return "select-active";
           }
@@ -94,59 +109,43 @@
         _getData("/api/address/getCity", { provinceId: id }).then(data => {
           console.log(data);
           this.cityData = data;
-          var IDArr = [];
           if (
-            _.filter(this.defaultProviceData, value => {
+            _.filter(this.defaultProvinceData, value => {
               return id == value.id;
             }).length != 0
           ) {
-            this.defaultCityData = _.filter(this.defaultProviceData, value => {
+            this.defaultCityData = _.filter(this.defaultProvinceData, value => {
               return id == value.id;
-            });
+            })[0].defaultCityData;
           } else {
             this.defaultCityData = [];
           }
-          console.log(this.defaultProviceData);
-          console.log(
-            _.filter(this.defaultProviceData, value => {
-              return id == value.id;
-            })
-          );
-          //IDArr.push(value.id);
-          // if (id == value.id) {
-          //   console.log(111);
-          //   console.log(value.defaultCityData);
-          //   this.defaultCityData = value.defaultCityData;
-          // } else {
-          //   this.defaultCityData = [];
-          // }
-          // if(_.indexOf(IDArr, id)!=-1){
-
-          //             }else{
-
-          //             }
+          if (this.defaultCityData.length == data.length) {
+            this.isCheckAll = true;
+          } else {
+            this.isCheckAll = false;
+          }
         });
       },
       getSelectArr(arr) {
-        console.log(arr);
-        let that = this;
-        _.forEach(this.defaultProviceData, function(value) {
-          if (value.id == that.currentId) {
-            that.defaultProviceData = _.without(that.defaultProviceData, value);
+        _.forEach(this.defaultProvinceData, value => {
+          if (value.id == this.currentId) {
+            this.defaultProvinceData = _.without(this.defaultProvinceData, value);
           }
         });
         if (arr.length != 0) {
-          that.defaultProviceData.push({
-            id: that.currentId,
-            name: that.activeProvinceName,
-            count: arr.length
-          });
-          that.defaultProviceData.push({
-            id: that.currentId,
+          this.defaultProvinceData.push({
+            id: this.currentId,
+            name: this.activeProvinceName,
+            count: arr.length == this.cityData.length ? "全部" : arr.length,
             defaultCityData: arr
           });
         }
-        console.log(that.defaultProviceData);
+        // console.log(this.defaultProvinceData);
+        this.$emit("getSaleArea", this.defaultProvinceData);
+      },
+      getCheckAllMethod(val) {
+        this.isCheckAll = val;
       }
     },
     components: {
@@ -156,12 +155,13 @@
       _getData("/api/address/getProvince", {}).then(data => {
         console.log(data);
         this.proviceData = data;
+        this.activeProvinceName = data[0].name;
         _getData("/api/address/getCity", { provinceId: data[0].id }).then(
           data => {
             console.log(data);
             this.cityData = data;
             this.currentId = data[0].id;
-            _.forEach(this.defaultProviceData, value => {
+            _.forEach(this.defaultProvinceData, value => {
               if (data[0].id == value.id) {
                 this.defaultCityData = value.defaultCityData;
               }
@@ -173,7 +173,7 @@
   };
 </script>
 <style lang="scss" scoped>
-  @import "../../assets/scss/_commonScss";
+  @import "../../../assets/scss/_commonScss";
   .cascadeSelectBox {
     .selectText {
       width: 390px;
@@ -186,12 +186,31 @@
       font-size: 14px;
       display: flex;
       justify-content: space-between;
+      cursor: pointer;
+      &.active {
+        border-color: $theme-color;
+        box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
+        .icon {
+          transform: rotate(180deg);
+          transition: all 0.3s;
+        }
+      }
+      &.unactive {
+        .icon {
+          transform: rotate(0deg);
+          transition: all 0.3s;
+        }
+      }
       span {
         &:first-child {
           min-height: 100%;
-          p {
-            height: 30px;
+          div {
+            min-height: 30px;
             line-height: 30px;
+            i {
+              font-style: normal;
+              color: #333;
+            }
           }
         }
         &:last-child {

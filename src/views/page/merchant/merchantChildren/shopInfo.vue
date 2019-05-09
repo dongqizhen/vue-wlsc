@@ -6,7 +6,10 @@
         <div class="common">
           <div class="left-box"><span class="red">*</span>店铺名称</div>
           <div class="right-box">
-            <a-input placeholder="请输入店铺名称" v-model="shopName" />
+            <a-input
+              placeholder="请输入店铺名称"
+              v-model="submitData.shopName"
+            />
           </div>
         </div>
         <div class="common shopType">
@@ -21,11 +24,11 @@
                 <use xlink:href="#icontianjiaduibichanpinxiala"></use>
               </a-icon>
               <a-select-option
-                v-for="item in shopTypeData"
+                v-for="item in submitData.shopTypeData"
                 :key="item.id"
                 :value="item.id"
               >
-                {{ item.value }}
+                {{ item.name }}
               </a-select-option>
             </a-select>
           </div>
@@ -41,14 +44,17 @@
           <div class="right-box">
             <a-input
               placeholder="请输入店铺经营范围"
-              v-model="shopBusinessScope"
+              v-model="submitData.shopScope"
             />
           </div>
         </div>
         <div class="common shopSaleArea">
           <div class="left-box"><span class="red">*</span>销售地区</div>
-          <div class="right-box saleArea">
-            <cascade-select></cascade-select>
+          <div class="right-box saleArea" @click="showSelectBox">
+            <cascade-select
+              :isShow="isShow"
+              v-on:getSaleArea="getSaleArea"
+            ></cascade-select>
           </div>
         </div>
         <div class="common shopIntroduce">
@@ -57,7 +63,7 @@
             <a-textarea
               placeholder="请在这里对店铺做一个介绍"
               type="textarea"
-              v-model="introduce"
+              v-model="submitData.introduce"
               class="noInput"
             />
           </div>
@@ -70,77 +76,69 @@
         </div>
       </div>
     </div>
+    <div
+      :class="['modal-box', isShow ? 'active' : '']"
+      @click="isShowModal"
+    ></div>
   </div>
 </template>
 
 <script>
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import upload from "../../../../components/common/upload";
-  import cascadeSelect from "../../../../components/common/cascadeSelect";
+  import cascadeSelect from "../../../../components/common/casadeSelect/cascadeSelect";
   import { _getData } from "../../../../config/getData";
   export default {
     data() {
       return {
-        shopName: "",
-        shopBusinessScope: "",
-        defaultCascaderValue: [],
-        introduce: "",
-        shopType: "",
-        shopTypeData: [
-          { id: 1, value: "111" },
-          { id: 2, value: "222" },
-          { is: 3, value: "333" }
-        ],
-        options: [
-          {
-            value: "zhejiang",
-            label: "Zhejiang",
-            children: [
-              {
-                value: "hangzhou",
-                label: "Hangzhou"
-              }
-            ]
-          },
-          {
-            value: "jiangsu",
-            label: "Jiangsu",
-            children: [
-              {
-                value: "nanjing",
-                label: "Nanjing"
-              }
-            ]
-          }
-        ]
+        isShow: false,
+        shopTypeData: [],
+        submitData: {
+          shopName: "",
+          shopType: "",
+          file: "",
+          shopScope: "",
+          cascade: [],
+          introduce: ""
+        }
       };
     },
     methods: {
       save() {
-        console.log(this.shopName);
-        console.log(this.shopType);
-        console.log(this.shopBusinessScope);
-        console.log(this.shopName);
-        console.log(this.shopName);
-        _getData(this.$API_URL.merchantURL + "/api/store", {}).then(data => {
-          console.log("111", data);
-        });
+        console.log(this.submitData);
+        // _getData("/api/store", this.submitData).then(data => {
+        //   console.log("111", data);
+        // });
       },
       getImgUrl(val) {
         console.log(val);
-      },
-      onChange(value) {
-        console.log(value);
+        this.submitData.file = val[0].url;
       },
       handleShopTypeChange(value) {
         console.log(`selected ${value}`);
-        this.shopType = value;
+        this.submitData.shopType = value;
+      },
+      isShowModal() {
+        this.isShow = false;
+      },
+      showSelectBox() {
+        this.isShow = true;
+      },
+      getSaleArea(val) {
+        // console.log(val);
+        this.submitData.cascade = val;
       }
     },
     components: {
       commonTitle,
       upload,
       cascadeSelect
+    },
+    mounted() {
+      _getData("/api/storeType/queryStoreType", {}).then(data => {
+        console.log("店铺类型", data);
+        this.shopTypeData = data;
+      });
     }
   };
 </script>
@@ -178,6 +176,7 @@
         }
         .right-box {
           @include placeholderStyle;
+
           .ant-input {
             width: 390px;
             height: 34px;
@@ -198,14 +197,11 @@
           }
         }
         .saleArea {
-          /deep/.ant-select {
-            margin-right: 14px;
-          }
-          .ant-cascader-picker-arrow {
-            right: 20px;
-          }
-          /deep/.ant-cascader-picker .ant-cascader-picker-clear {
-            display: none;
+          /deep/.selectText {
+            &:hover {
+              cursor: pointer;
+              border: 1px solid $theme-color !important;
+            }
           }
         }
       }
@@ -226,6 +222,18 @@
         color: #fff;
         margin-left: 58px;
       }
+    }
+  }
+  .modal-box {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0);
+    display: none;
+    &.active {
+      display: block;
     }
   }
 </style>

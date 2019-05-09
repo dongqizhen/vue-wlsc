@@ -3,18 +3,16 @@
     <div class="basicInformation">
       <commonTitle title="认证材料">
         <span slot="titleRight" class="certificationStatus">
-          <svg class="icon" aria-hidden="true" v-if="certificationStatus == 1">
-            <use xlink:href="#iconbaojiazhong"></use>
-          </svg>
-          <svg
-            class="icon"
-            aria-hidden="true"
-            v-else-if="certificationStatus == 2"
-          >
-            <use xlink:href="#iconyibaojia"></use>
-          </svg>
-          <svg class="icon" aria-hidden="true" v-else>
-            <use xlink:href="#iconbaojiazhong"></use>
+          <svg class="icon" aria-hidden="true">
+            <use
+              xlink:href="#iconbaojiazhong"
+              v-if="certificationStatus == 1"
+            ></use>
+            <use
+              xlink:href="#iconyibaojia"
+              v-else-if="certificationStatus == 2"
+            ></use>
+            <use xlink:href="#iconbaojiazhong" v-else></use>
           </svg>
           认证状态：{{
             certificationStatus == 1

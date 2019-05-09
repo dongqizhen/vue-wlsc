@@ -6,13 +6,13 @@ const command = process.env.npm_lifecycle_event;
 let API_HOST = {};
 
 let alpha = { // 开发
-    URL: "http://60.195.252.91:8080/platform",
+    // URL: "http://60.195.252.91:8080/platform",
     // URL: "http://192.168.2.110:8080/platform",
-    // URL: "http://192.168.2.233:8080/platform",
+    URL: "http://192.168.2.233:8080/platform",
     HYGLOGINURL: 'http://60.195.252.86:8080',
     HYGINFOURL: "http://60.195.252.86:8082",
-    HYGPROURl: "http://60.195.252.86:8083",
-
+    HYGPROURL: "http://60.195.252.86:8083",
+    HYGFILEURL: "http://60.195.252.86:8080",
 }
 let beta = { // 测试
     URL: "https://www.api/code",
@@ -22,13 +22,15 @@ let gamma = { // 验收版本
     URL: "http://prople.haoyigong.com",
     HYGLOGINURL: "http://webple.haoyigong.com",
     HYGINFOURL: "http://infople.haoyigong.com",
-    HYGPROURl: "http://prople.haoyigong.com",
+    HYGPROURL: "http://prople.haoyigong.com",
+    HYGFILEURL: "http://fileple.haoyigong.com",
 }
 let release = { // 正式版本
     URL: "http://pro.haoyigong.com",
     HYGLOGINURL: 'http://web.haoyigong.com',
     HYGINFOURL: "http://info.haoyigong.com",
-    HYGPROURl: "http://pro.haoyigong.com",
+    HYGPROURL: "http://pro.haoyigong.com",
+    HYGFILEURL: "http://file.haoyigong.com",
 }
 
 if (command == "serve:alpha") {

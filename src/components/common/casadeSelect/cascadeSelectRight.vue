@@ -1,28 +1,28 @@
 <template>
-  <div class="cascadeSelectLeft">
-    <ul>
-      <li><i></i>安徽省</li>
-      <li class="select-active"><i></i>北京市<span>(全部)</span></li>
-      <li><i></i>山东省</li>
-      <li class="select-active"><i></i>广西壮族自治区<span>(12)</span></li>
-      <li class="active"><i></i>新疆维吾尔自治区<span>(全部)</span></li>
-      <li><i></i>重庆市</li>
-      <li><i></i>重庆市</li>
-      <li><i></i>重庆市</li>
-      <li><i></i>重庆市</li>
-      <li><i></i>重庆市</li>
-      <li><i></i>重庆市</li>
-      <li><i></i>重庆市</li>
-      <li><i></i>重庆市</li>
-    </ul>
+  <div class="cascadeSelectRight">
+    <div class="upBox">
+      <span>
+        <a-checkbox @change="checkAll" :checked="isCheckAll"></a-checkbox>全选
+      </span>
+    </div>
+    <div class="downBox">
+      <span v-for="item in data" :key="item.id">
+        <a-checkbox
+          @change="checkedChange(item)"
+          :checked="checkedVal(item.id)"
+        ></a-checkbox>
+        {{ item.name }}
+      </span>
+    </div>
   </div>
 </template>
 <script>
+  import _ from "lodash";
   export default {
     data() {
       return {
-        selectArr: this.defaultSelect,
-        checkedAll: false
+        selectArr: this.defaultCityData,
+        checkedAll: this.isCheckAll
       };
     },
     props: {
@@ -30,37 +30,56 @@
         type: Array,
         required: true
       },
-      defaultSelect: {
-        type: Array
+      defaultCityData: {
+        type: Array,
+        required: true
+      },
+      isCheckAll: {
+        type: Boolean,
+        required: true
+      }
+    },
+    watch: {
+      defaultCityData() {
+        this.selectArr = this.defaultCityData;
+      },
+      isCheckAll() {
+        this.checkedAll = this.isCheckAll;
       }
     },
     methods: {
       checkAll(e) {
         if (e.target.checked) {
+          this.selectArr = [];
           for (const val of this.data) {
-            this.selectArr.push(val.id);
+            this.selectArr.push(val);
           }
           this.checkedAll = true;
         } else {
           this.selectArr = [];
           this.checkedAll = false;
         }
+        this.$emit("getSelectArr", this.selectArr);
+        this.$emit("getCheckAll", this.checkedAll);
       },
-      checkedChange(id) {
-        if (_.indexOf(this.selectArr, id) == -1) {
-          this.selectArr.push(id);
+      checkedChange(item) {
+        if (_.indexOf(this.selectArr, item) == -1) {
+          this.selectArr.push(item);
         } else {
-          this.selectArr = _.without(this.selectArr, id);
+          this.selectArr = _.without(this.selectArr, item);
         }
+
         if (this.selectArr.length == this.data.length) {
           this.checkedAll = true;
         } else {
           this.checkedAll = false;
         }
+        this.$emit("getSelectArr", this.selectArr);
+        this.$emit("getCheckAll", this.checkedAll);
       },
       checkedVal(id) {
         for (const val of this.selectArr) {
-          if (val == id) {
+          if (val.id == id) {
             return true;
           }
         }

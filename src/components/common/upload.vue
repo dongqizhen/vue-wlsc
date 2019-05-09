@@ -4,7 +4,7 @@
       listType="picture-card"
       class="avatar-uploader"
       :showUploadList="false"
-      action="//jsonplaceholder.typicode.com/posts/"
+      :action="actionURL"
       :beforeUpload="beforeUpload"
       @change="handleChange"
     >
@@ -27,7 +27,8 @@
   export default {
     data() {
       return {
-        uploadList: []
+        uploadList: [],
+        actionURL: this.$API_URL.HYGFILEURL + "/server/imageupload"
       };
     },
     methods: {
