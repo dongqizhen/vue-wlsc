@@ -111,11 +111,11 @@
         // });
       },
       getImgUrl(val) {
-        console.log(val);
+        // console.log(val);
         this.submitData.file = val[0].url;
       },
       handleShopTypeChange(value) {
-        console.log(`selected ${value}`);
+        // console.log(`selected ${value}`);
         this.submitData.shopType = value;
       },
       isShowModal() {
