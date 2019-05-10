@@ -23,10 +23,11 @@ const router = new Router({
                 import ("../views/page/merchant/merchant"),
             children: [{
                     path: "/",
-                    name: '店铺首页',
+                    name: '我要开店',
                     component: () =>
-                        import ("../views/page/merchant/merchantChildren/shopIndex")
+                        import ("../views/page/merchant/merchantChildren/openShop")
                 }, {
+                    name: '店铺首页',
                     path: "shopIndex",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/shopIndex")
