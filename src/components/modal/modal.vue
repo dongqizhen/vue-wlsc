@@ -358,7 +358,7 @@
       .ant-modal {
         .ant-modal-body {
           .common {
-            min-height: 43px;
+            min-height: 40px;
 
             padding: 0 5px;
             padding-top: 6px;
@@ -416,6 +416,17 @@
                 border-color: #fdefd9;
                 &::before {
                   display: flex;
+                }
+              }
+            }
+          }
+          .list-group {
+            .common {
+              > li:hover {
+                border: 1px solid #cccccc;
+                cursor: pointer;
+                &::before {
+                  display: none;
                 }
               }
             }

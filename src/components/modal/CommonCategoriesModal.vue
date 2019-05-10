@@ -19,8 +19,8 @@
             >
               <li v-for="(item, i) in myArray2" :key="`key-${i}`">
                 <span>
-                  {{ item }}
-                  <i>
+                  {{ item.name }}
+                  <i @click="delHandleClick(item)">
                     <svg class="icon" aria-hidden="true">
                       <use
                         xlink:href="#iconguanlichangyongfenleiquxiaochahao"
@@ -61,7 +61,11 @@
               :name="!drag ? 'flip-list' : null"
             > -->
           <ul class="common">
-            <li v-for="item in myArray" :key="item.id">
+            <li
+              v-for="item in myArray"
+              :key="item.id"
+              @click="handleClick(item)"
+            >
               <span>
                 {{ item.name }}
                 <i>
@@ -94,6 +98,7 @@
   import modal from "./modal.vue";
   import Swiper from "swiper";
   import { _getData } from "../../config/getData";
+  import _ from "lodash";
 
   export default {
     data() {
@@ -203,6 +208,25 @@
     methods: {
       handleOk() {
         this.visible = false;
+      },
+      delHandleClick(item) {
+        this.myArray2 = _.without(this.myArray2, item);
+        console.log(this.myArray2);
+      },
+      handleClick(item) {
+        let commonArr = _.intersectionBy(this.myArray, this.myArray2, "name");
+        if (commonArr.length) {
+          this.$message.warning("已添加至常用分类", 1);
+          return;
+        } else {
+          this.myArray2.push(item);
+        }
+        //保存常用分类
+        _getData("api/ucatalog/custom", {
+          categoryStr: item.id
+        }).then(data => {
+          this.$emit("success");
+        });
       },
       async getSecond(id) {
         //获取二级分类

@@ -63,6 +63,9 @@
         p {
           color: $theme-color;
         }
+        img {
+          transform: scale(1.1);
+        }
       }
     }
     width: 253px;
@@ -70,15 +73,18 @@
     box-shadow: $base-box-shadow;
     padding: 15px 15px;
     padding-bottom: 10px;
+
     .img {
       display: flex;
       height: 224px;
       width: 224px;
       background: #f7f9fa;
       margin-bottom: 8.6px;
+
       img {
         height: 100%;
         width: 100%;
+        transition: all 0.5s ease;
       }
     }
     .price {
@@ -108,8 +114,8 @@
       }
     }
     p {
-      font-family: PingFangSC-Medium;
-      font-size: 12px;
+      //font-family: PingFangSC-Medium;
+      font-size: 13px;
       color: #333333;
       font-weight: 600;
       line-height: 17px;

@@ -76,7 +76,11 @@
                     tag="span"
                     :to="{
                       path: '/lookingProduct/oneOfBrandClassificne',
-                      query: { nav_index: 1 }
+                      query: {
+                        nav_index: 1,
+                        categoryId: item.id,
+                        categoryName: item.name
+                      }
                     }"
                   >
                     <a target="_blank">
@@ -223,7 +227,7 @@
       });
       //案例
       _getData(
-        `${this.$API_URL.HYGPROURl}/server_pro/maintenance!request.action`,
+        `${this.$API_URL.HYGPROURL}/server_pro/maintenance!request.action`,
         {
           method: "getHomeRecommendListV30",
           token: "",
@@ -238,7 +242,7 @@
         this.maintenanceList = data.data.result.maintenancelist;
       });
       //视频
-      _getData(`${this.$API_URL.HYGPROURl}/server_pro/video!request.action`, {
+      _getData(`${this.$API_URL.HYGPROURL}/server_pro/video!request.action`, {
         method: "getHomeRecommendListV30",
         token: "",
         userid: "",
