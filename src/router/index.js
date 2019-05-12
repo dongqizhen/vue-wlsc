@@ -3,8 +3,6 @@ import Router from "vue-router";
 
 Vue.use(Router);
 
-
-
 const router = new Router({
     mode: "history",
     base: process.env.BASE_URL,
@@ -19,6 +17,9 @@ const router = new Router({
         },
         {
             path: "/merchant",
+            meta: {
+                requireAuth: true
+            },
             component: () =>
                 import ("../views/page/merchant/merchant"),
             children: [{
@@ -332,7 +333,11 @@ router.beforeEach((to, from, next) => {
     if (to.meta.title) {
         document.title = to.meta.title
     }
+    const nextRoute = ['merchant'];
+    // let isLogin = this.$store.state.isLogin;
+    // console.log("999999", isLogin)
     next()
+
 })
 
 export default router;

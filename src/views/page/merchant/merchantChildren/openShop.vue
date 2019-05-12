@@ -80,11 +80,11 @@
     },
     methods: {
       getShopInfo(val) {
-        console.log(val);
+        // console.log(val);
         this.current = val.current + 1;
       },
       cancel(val) {
-        console.log(val);
+        // console.log(val);
         this.current = val - 1;
       },
       sure(val) {

@@ -27,7 +27,7 @@
             系统通知(24)
           </a>
         </router-link>
-        <router-link tag="li" to="#" v-if="isLogin">
+        <router-link tag="li" to="/merchant/messageCenter" v-if="isLogin">
           <a>
             私信消息(12)
           </a>
