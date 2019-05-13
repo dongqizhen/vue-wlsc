@@ -152,6 +152,20 @@
       /deep/ .swiper-container {
         height: 100%;
         cursor: pointer;
+        .swiper-slide {
+          > div {
+            width: 100%;
+            height: 100%;
+          }
+          img {
+            background: url("../../assets/images/loading.gif") no-repeat center;
+            background-color: #fff;
+            background-size: (307 / 3) * 2px (298 / 3) * 2px;
+            width: 100%;
+            height: 100%;
+            border: 0;
+          }
+        }
         .swiper-pagination {
           height: 8px;
           width: 100%;

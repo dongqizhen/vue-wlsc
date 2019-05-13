@@ -209,6 +209,7 @@
       handleOk() {
         this.visible = false;
       },
+      //删除常用品牌
       delHandleClick(item) {
         this.myArray2 = _.without(this.myArray2, item);
         console.log(this.myArray2);

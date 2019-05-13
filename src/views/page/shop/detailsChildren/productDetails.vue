@@ -505,13 +505,13 @@
     width: 100%;
     /deep/ img[lazy="loading"] {
       /*your style here*/
-      // background: url("../../../../assets/images/loding.gif") no-repeat center;
+      // background: url("../../../../assets/images/loading.gif") no-repeat center;
       // background-size: 200px;
       background-color: #f7f9fa;
     }
     /deep/ img[lazy="error"] {
       /*your style here*/
-      background: url("../../../../assets/images/loding.gif") no-repeat center;
+      background: url("../../../../assets/images/loading.gif") no-repeat center;
       background-size: 200px;
       // background-color: #f7f9fa;
     }

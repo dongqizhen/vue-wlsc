@@ -1,31 +1,24 @@
 <template>
-  <div class="product-category">
-    <div class="product">
+  <div class="brand-category">
+    <div class="brand">
       <div class="commonWidth">
         <h2>
           <span class="title">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconchanpinfenlei"></use>
             </svg>
-            产品分类
+            品牌分类
           </span>
           <span class="btn" @click="handleClick" v-if="isShow">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconguanlichangyongfenlei"></use>
             </svg>
-            管理常用分类
+            管理常用品牌
           </span>
         </h2>
         <div class="product_container">
           <div class="swiper-container nav_slide">
             <div class="swiper-wrapper">
-              <!-- <div
-                class="swiper-slide"
-                @click="navHandleClick()"
-                v-if="isLogin"
-              >
-                常用分类
-              </div> -->
               <div
                 class="swiper-slide"
                 v-for="(item, i) in navArr"
@@ -45,79 +38,85 @@
                 <ul>
                   <router-link
                     :to="{
-                      path: '/lookingProduct/oneOfBrandClassificne',
+                      path: '/lookingProduct',
                       query: {
-                        nav_index: 1,
-                        categoryId: item.id,
-                        categoryName: item.name
+                        nav_index: 2,
+                        brandId: item.id,
+                        brandName: item.name
                       }
                     }"
                     tag="li"
                     v-for="item in pageArr"
                     :key="item.id"
                   >
-                    <a target="_blank">{{ item.name }}</a>
+                    <a target="_blank">
+                      <div class="img_box">
+                        <img
+                          :src="item.list_pic_url || item.app_list_pic_url"
+                          alt=""
+                        />
+                      </div>
+                      {{ item.name }}
+                    </a>
                   </router-link>
                 </ul>
               </div>
             </div>
           </div>
         </div>
-        <common-categories-modal-vue
-          :Visible="visible"
+        <common-brands-modal-vue
+          :brandVisible="brandVisible"
           v-on:success="success"
-        ></common-categories-modal-vue>
+        ></common-brands-modal-vue>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import CommonBrandsModalVue from "../modal/CommonBrandsModal.vue";
   import Swiper from "swiper";
-  import CommonCategoriesModalVue from "../modal/CommonCategoriesModal.vue";
-  import { _getData } from "../../config/getData";
   import { mapState, mapMutations } from "vuex";
-  import _ from "lodash";
+  import { _getData } from "../../config/getData";
 
   export default {
     data() {
       return {
-        visible: false, //控制modal层弹出
-        defaultsVal: 0, //默认高量nav下标
+        arr: "", //全部类型的品牌
+        navArr: [{ name: "一线品牌", id: "yixian" }],
+        pageArr: [],
         isShow: true, //是否显示管理常用分类按钮
-        navArr: [],
-        pageArr: []
+        defaultsVal: 0, //默认高量nav下标
+        brandVisible: false //控制modal层弹出
       };
-    },
-    components: {
-      CommonCategoriesModalVue
     },
     methods: {
       //控制弹出层显示
       handleClick() {
-        this.visible = true;
+        this.brandVisible = true;
       },
       success() {
-        this.getCommonCategory();
-      },
-      //获取常用分类
-      async getCommonCategory() {
-        _getData("api/ucatalog/list", {}).then(data => {
-          console.log("data", data);
-          this.pageArr = data.userCategoryList;
-        });
+        this.getCommonBrandCategory();
       },
       //点击nav
       navHandleClick(id, i, e) {
         //点击nav
         if (id) {
           this.isShow = false;
-          this.pageArr = this.navArr[i].subCategoryList;
+          this.pageArr = this.arr.firstLineList;
         } else {
           this.isShow = true;
-          this.getCommonCategory();
+          this.getCommonBrandCategory();
         }
         this.defaultsVal = i;
+      },
+      //获取常用分类
+      async getCommonBrandCategory() {
+        _getData("api/brand/merge", {}).then(data => {
+          console.log("userBrandList", data);
+          this.pageArr = data.userbrandList;
+          this.arr = data;
+        });
       }
     },
     computed: {
@@ -126,20 +125,20 @@
     created() {
       //如果登录 则显示常用分类
       if (this.isLogin) {
-        this.navArr.push({
+        this.navArr.unshift({
           name: "常用分类",
           id: ""
         });
       }
     },
+    components: { CommonBrandsModalVue },
     mounted() {
-      this.getCommonCategory();
-      _getData("api/catalog/listAll", {}).then(data => {
-        console.log(data);
-        this.navArr = [...this.navArr, ...data.currentCategory];
-      });
-
-      new Swiper(".product-category .swiper-container.nav_slide", {
+      this.getCommonBrandCategory();
+      //   _getData("api/brand/merge", {}).then(data => {
+      //     console.log("aaaaa", data);
+      //     this.arr = data;
+      //   });
+      new Swiper(".brand-category .swiper-container.nav_slide", {
         slidesPerView: "auto",
         // freeMode: true,
         direction: "horizontal",
@@ -246,8 +245,7 @@
       }
     }
   }
-
-  .product {
+  .brand {
     margin-bottom: 25px;
     .commonWidth {
       h2 {
@@ -308,17 +306,35 @@
             display: flex;
             justify-content: flex-start;
             flex-wrap: wrap;
-            padding: 20px 20px;
+            margin-right: -12px;
+            padding: 18px 20px;
             padding-bottom: 0;
             li {
-              font-size: 13px;
-              color: #666666;
-              margin-bottom: 20px;
-              margin-right: 30px;
-              cursor: pointer;
+              margin-right: 12px;
+              margin-bottom: 30px;
               a {
-                color: #666666;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                font-size: 15px;
+                color: #333333;
                 text-decoration: none;
+                width: 144px;
+                cursor: pointer;
+                flex-wrap: wrap;
+                text-align: center;
+                word-break: break-all;
+                .img_box {
+                  width: 144px;
+                  height: 104px;
+                  background: #fff;
+                  box-shadow: $base-box-shadow;
+                  margin-bottom: 8px;
+                  img {
+                    height: 100%;
+                    width: 100%;
+                  }
+                }
                 &:hover {
                   color: $theme-color;
                 }

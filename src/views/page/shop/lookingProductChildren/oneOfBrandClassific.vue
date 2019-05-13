@@ -1,19 +1,26 @@
 <template>
   <div class="one-of-brand-classific">
     <breadcrumb-vue :routes="routes"></breadcrumb-vue>
-    <div class="search">
+    <div class="search" ref="search">
       <span
         v-for="(val, i) in nav"
         :key="`nav-${i}`"
         @click="navClick(val, i)"
-        :class="val == defaultsNav ? 'active' : ''"
+        :class="val == defaultsNav && 'active'"
       >
         {{ val }}
       </span>
       <!-- <span>一线品牌</span>
       <span class="all active">全部</span> -->
       <ul>
-        <li v-for="item in letter" :key="item">{{ item }}</li>
+        <li
+          v-for="item in letter"
+          :key="item"
+          @click="letterClick(item)"
+          :class="item == defaultsNav && 'active'"
+        >
+          {{ item }}
+        </li>
       </ul>
       <div class="ipt">
         <input type="text" placeholder="请输入品牌名称" />
@@ -62,7 +69,7 @@
           >
             <a>
               <div class="img_box">
-                <img :src="item.list_pic_url" alt="" />
+                <img :src="item.list_pic_url || item.app_list_pic_url" alt="" />
               </div>
               {{ item.name }}
             </a>
@@ -85,34 +92,6 @@
   import { mapState, mapMutations } from "vuex";
   import _ from "lodash";
   import pinyin from "pinyin";
-  const letter = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z"
-  ];
 
   export default {
     data() {
@@ -120,7 +99,9 @@
         arr: [],
         navArr: "", //全部类型小类
         routes: "",
-        letter, //字母索引
+        letterArr: "",
+        letterVal: "",
+        letter: [], //字母索引
         nav: ["一线品牌", "全部"],
         defaultsNav: "全部", //默认高亮的nav
         brandVisible: false
@@ -173,14 +154,26 @@
         .then(() => {
           console.log(this.navArr);
           this.arr = this.navArr.listAll;
+          this.letterArr = _.groupBy(this.arr, val => {
+            return _.upperFirst(val.pinyin).substring(0, 1);
+          });
+          //console.log(this.letterArr, _.keys(this.letterArr));
+          this.letter = _.orderBy(_.keys(this.letterArr), val => val, ["asc"]);
         });
-
-      console.log(pinyin("CK制造商"));
     },
     methods: {
+      letterClick(item) {
+        this.defaultsNav = item;
+        this.arr = _.pick(this.letterArr, [item])[item];
+        console.log(this.$refs.search.childNodes);
+        [...this.$refs.search.childNodes].map((val, i) => {
+          val.classList.remove("active");
+        });
+      },
       handleClick(item, i) {},
       navClick(val, i) {
         this.defaultsNav = val;
+        console.log(this.defaultsNav);
         switch (val) {
           case "全部":
             this.arr = this.navArr.listAll;
@@ -224,10 +217,10 @@
           color: #f10215;
           font-weight: 600;
         }
-        /* &:not(.all) {
-                                              color: #666666;
-                                              border: 1px solid #333333;
-                                            } */
+        // &:not(.all) {
+        //   color: #666666;
+        //   border: 1px solid #333333;
+        // }
         &:hover {
           color: $theme-color;
         }
@@ -241,9 +234,12 @@
           font-size: 14px;
           color: #666666;
           font-weight: 600;
-          margin-right: 18px;
+          padding-right: 18px;
           cursor: pointer;
           &:hover {
+            color: $theme-color;
+          }
+          &.active {
             color: $theme-color;
           }
         }

@@ -154,10 +154,25 @@
           padding: 0 20px;
           padding-top: 21.5px;
           display: flex;
+          padding-right: 0;
           justify-content: flex-start;
           flex-wrap: wrap;
-          margin-right: -16px;
+          //margin-right: -16px;
           min-height: 138px;
+          &::-webkit-scrollbar {
+            width: 2px;
+            height: 2px;
+
+            background-color: #b5b1b1;
+          }
+          &::-webkit-scrollbar-track {
+            background: #f6f6f6;
+            border-radius: 2px;
+          }
+          &::-webkit-scrollbar-thumb {
+            background: #aaa;
+            border-radius: 2px;
+          }
           li {
             width: 97px;
             display: flex;
@@ -177,6 +192,10 @@
               height: 70px;
               margin-bottom: 6px;
               box-shadow: $base-box-shadow;
+              img {
+                height: 100%;
+                width: 100%;
+              }
             }
             i {
               position: absolute;
@@ -193,8 +212,26 @@
         .common_brand {
           margin-bottom: 24px;
           .list-group {
-            li {
-              cursor: move;
+            ul {
+              max-height: 260px;
+              overflow: auto;
+              &::-webkit-scrollbar {
+                width: 2px;
+                height: 2px;
+
+                background-color: #b5b1b1;
+              }
+              &::-webkit-scrollbar-track {
+                background: #f6f6f6;
+                border-radius: 2px;
+              }
+              &::-webkit-scrollbar-thumb {
+                background: #aaa;
+                border-radius: 2px;
+              }
+              li {
+                cursor: move;
+              }
             }
           }
         }
@@ -214,12 +251,19 @@
               align-items: center;
               height: 20px;
               width: 40px;
-              background: rgba(241, 2, 21, 0.03);
-              border: 0.5px solid $theme-color;
-              font-family: PingFangSC-Medium;
+              border: 1px solid #333333;
+              font-weight: 600;
               font-size: 12px;
-              color: $theme-color;
               margin-right: 6px;
+              cursor: pointer;
+              &:hover {
+                color: $theme-color;
+              }
+              &.active {
+                color: $theme-color;
+                background: rgba(241, 2, 21, 0.03);
+                border: 0.5px solid $theme-color;
+              }
             }
             ul {
               display: flex;
@@ -227,8 +271,9 @@
               align-items: center;
               flex: 1;
               height: 100%;
+
               li {
-                font-family: PingFangSC-Medium;
+                font-weight: 600;
                 font-size: 12px;
                 color: #666666;
                 padding: 0 6.5px;
@@ -236,6 +281,9 @@
                 height: 100%;
                 line-height: 28.5px;
                 &:hover {
+                  color: $theme-color;
+                }
+                &.active {
                   color: $theme-color;
                 }
               }
@@ -280,8 +328,11 @@
             }
           }
           .common {
+            height: 260px;
+            overflow: auto;
             li {
               .img_box {
+                position: relative;
                 &::before {
                   content: "添加至\A常用品牌";
                   display: flex;
@@ -296,6 +347,7 @@
                   font-size: 12px;
                   color: #f5a623;
                   justify-content: center;
+                  position: absolute;
                 }
                 &:hover {
                   &::before {

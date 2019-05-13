@@ -6,6 +6,7 @@ import vChatTitle from 'vue-wechat-title'
 import Share from 'vue-social-share'
 import 'vue-social-share/dist/client.css';
 import VueLazyload from 'vue-lazyload'
+import NoData from './components/common/nodata'
 import {
     BackTop,
     Modal,
@@ -46,6 +47,9 @@ Vue.use(vChatTitle).use(VueLazyload, {
 
 Vue.prototype.$API_URL = env.API_HOST;
 Vue.prototype.$message = Message
+
+Vue.component('no-data', NoData)
+
 new Vue({
     el: '#app',
     router,
