@@ -1,37 +1,26 @@
 <template>
   <div class="one-of-brand-classific">
     <breadcrumb-vue :routes="routes"></breadcrumb-vue>
-    <div class="search">
-      <span>常用品牌</span>
-      <span>一线品牌</span>
-      <span class="all">全部</span>
+    <div class="search" ref="search">
+      <span
+        v-for="(val, i) in nav"
+        :key="`nav-${i}`"
+        @click="navClick(val, i)"
+        :class="val == defaultsNav && 'active'"
+      >
+        {{ val }}
+      </span>
+      <!-- <span>一线品牌</span>
+      <span class="all active">全部</span> -->
       <ul>
-        <li>A</li>
-        <li>B</li>
-        <li>C</li>
-        <li>D</li>
-        <li>E</li>
-        <li>F</li>
-        <li>G</li>
-        <li>H</li>
-        <li>I</li>
-        <li>J</li>
-        <li>K</li>
-        <li>L</li>
-        <li>M</li>
-        <li>N</li>
-        <li>O</li>
-        <li>P</li>
-        <li>Q</li>
-        <li>R</li>
-        <li>S</li>
-        <li>T</li>
-        <li>U</li>
-        <li>V</li>
-        <li>W</li>
-        <li>X</li>
-        <li>Y</li>
-        <li>Z</li>
+        <li
+          v-for="item in letter"
+          :key="item"
+          @click="letterClick(item)"
+          :class="item == defaultsNav && 'active'"
+        >
+          {{ item }}
+        </li>
       </ul>
       <div class="ipt">
         <input type="text" placeholder="请输入品牌名称" />
@@ -80,7 +69,7 @@
           >
             <a>
               <div class="img_box">
-                <img :src="item.list_pic_url" alt="" />
+                <img :src="item.list_pic_url || item.app_list_pic_url" alt="" />
               </div>
               {{ item.name }}
             </a>
@@ -100,17 +89,31 @@
   import breadcrumbVue from "../../../../components/common/breadcrumb.vue";
   import CommonBrandsModalVue from "../../../../components/modal/CommonBrandsModal";
   import { _getData } from "../../../../config/getData";
+  import { mapState, mapMutations } from "vuex";
+  import _ from "lodash";
+  import pinyin from "pinyin";
 
   export default {
     data() {
       return {
         arr: [],
-        navArr: {}, //全部类型小类
+        navArr: "", //全部类型小类
         routes: "",
+        letterArr: "",
+        letterVal: "",
+        letter: [], //字母索引
+        nav: ["一线品牌", "全部"],
+        defaultsNav: "全部", //默认高亮的nav
         brandVisible: false
       };
     },
+    computed: {
+      ...mapState(["isLogin"])
+    },
     created() {
+      if (this.isLogin) {
+        this.nav.unshift("常用品牌");
+      }
       this.routes =
         this.$route.query.nav_index == 2
           ? [
@@ -151,10 +154,38 @@
         .then(() => {
           console.log(this.navArr);
           this.arr = this.navArr.listAll;
+          this.letterArr = _.groupBy(this.arr, val => {
+            return _.upperFirst(val.pinyin).substring(0, 1);
+          });
+          //console.log(this.letterArr, _.keys(this.letterArr));
+          this.letter = _.orderBy(_.keys(this.letterArr), val => val, ["asc"]);
         });
     },
     methods: {
-      handleClick(item, i) {}
+      letterClick(item) {
+        this.defaultsNav = item;
+        this.arr = _.pick(this.letterArr, [item])[item];
+        console.log(this.$refs.search.childNodes);
+        [...this.$refs.search.childNodes].map((val, i) => {
+          val.classList.remove("active");
+        });
+      },
+      handleClick(item, i) {},
+      navClick(val, i) {
+        this.defaultsNav = val;
+        console.log(this.defaultsNav);
+        switch (val) {
+          case "全部":
+            this.arr = this.navArr.listAll;
+            break;
+          case "一线品牌":
+            this.arr = this.navArr.firstLineList;
+            break;
+          case "常用品牌":
+            this.arr = this.navArr.userbrandList;
+            break;
+        }
+      }
     }
   };
 </script>
@@ -177,17 +208,19 @@
         line-height: 26px;
         cursor: pointer;
         margin-right: 10px;
-        &.all {
+        color: #666666;
+        border: 1px solid #333333;
+        &.active {
           background: rgba(241, 2, 21, 0.03);
           border: 1px solid #f10215;
           font-size: 14px;
           color: #f10215;
           font-weight: 600;
         }
-        &:not(.all) {
-          color: #666666;
-          border: 1px solid #333333;
-        }
+        // &:not(.all) {
+        //   color: #666666;
+        //   border: 1px solid #333333;
+        // }
         &:hover {
           color: $theme-color;
         }
@@ -201,9 +234,12 @@
           font-size: 14px;
           color: #666666;
           font-weight: 600;
-          margin-right: 18px;
+          padding-right: 18px;
           cursor: pointer;
           &:hover {
+            color: $theme-color;
+          }
+          &.active {
             color: $theme-color;
           }
         }

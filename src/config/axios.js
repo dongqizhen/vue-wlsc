@@ -2,7 +2,7 @@
  * @Author: mikey.dongqizhen 
  * @Date: 2019-04-18 17:08:47 
  * @Last Modified by: mikey.dongqizhen
- * @Last Modified time: 2019-05-13 10:46:54
+ * @Last Modified time: 2019-05-13 10:48:02
  */
 
 
@@ -10,10 +10,10 @@
 import axios from 'axios'
 
 let request = axios.create();
-// console.log(window.localStorage["vuex-along"])
-
+//console.log(window.localStorage["vuex-along"])
+let token
 if (window.localStorage["vuex-along"] != "{}") {
-    let token = JSON.parse(window.localStorage["vuex-along"])['vuex-along'].userInfo.token
+    token = JSON.parse(window.localStorage["vuex-along"])['vuex-along'].userInfo.token
 }
 
 
@@ -25,11 +25,10 @@ request.interceptors.request.use(function(config) {
             (data) => {
                 console.log(data)
                 return new_to_Data(data)
-                    // return JSON.stringify(data)
+                    //return JSON.stringify(data)
             }
         ]
     } else {
-        // console.log(config)
         config.headers['Content-Type'] = "application/x-www-form-urlencoded"
         config.transformRequest = [
             (data) => {

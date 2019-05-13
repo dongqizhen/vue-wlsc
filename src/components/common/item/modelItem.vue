@@ -9,7 +9,7 @@
         <img src="../../../assets/images/demo.jpg" alt="" />
       </div>
       <div class="introduce">
-        <h2>型号名称CA-50</h2>
+        <h2>{{ item.name }}</h2>
         <p>参考价格：<span>10～100万</span></p>
         <span>
           产品分类（子类）/品牌/型号
@@ -26,7 +26,12 @@
 </template>
 
 <script>
-  export default {};
+  export default {
+    data() {
+      return {};
+    },
+    props: ["item"]
+  };
 </script>
 
 <style lang="scss" scoped>

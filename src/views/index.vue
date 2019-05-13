@@ -12,47 +12,7 @@
       <!-- 产品分类 -->
       <product-category-vue></product-category-vue>
       <!-- 品牌分类 -->
-      <div class="brand">
-        <div class="commonWidth">
-          <h2>
-            <span class="title">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconchanpinfenlei"></use>
-              </svg>
-              品牌分类
-            </span>
-            <span class="btn" @click="handleClick">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconguanlichangyongfenlei"></use>
-              </svg>
-              管理常用品牌
-            </span>
-          </h2>
-          <div class="product_container">
-            <div class="swiper-container nav_slide">
-              <div class="swiper-wrapper">
-                <div class="swiper-slide">常用分类</div>
-                <div class="swiper-slide">电子超声</div>
-                <div class="swiper-slide">临床检验</div>
-                <div class="swiper-slide">实验仪器</div>
-
-                <div class="bar"><i></i></div>
-              </div>
-            </div>
-            <div class="swiper-container page">
-              <div class="swiper-wrapper">
-                <div class="swiper-slide"></div>
-                <div class="swiper-slide"></div>
-                <div class="swiper-slide"></div>
-                <div class="swiper-slide">实验仪器</div>
-                <div class="swiper-slide">医学影像</div>
-                <div class="swiper-slide">实验仪器</div>
-                <div class="swiper-slide">医学影像</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <brand-category-vue></brand-category-vue>
       <!-- 推荐产品 -->
       <div class="recommend">
         <div class="commonWidth">
@@ -76,7 +36,11 @@
                     tag="span"
                     :to="{
                       path: '/lookingProduct/oneOfBrandClassificne',
-                      query: { nav_index: 1 }
+                      query: {
+                        nav_index: 1,
+                        categoryId: item.id,
+                        categoryName: item.name
+                      }
                     }"
                   >
                     <a target="_blank">
@@ -148,9 +112,6 @@
     <Footer />
     <!-- 侧边栏 -->
     <side-bar />
-    <common-brands-modal-vue
-      :brandVisible="brandVisible"
-    ></common-brands-modal-vue>
   </div>
 </template>
 
@@ -170,8 +131,8 @@
   import Nav from "../components/common/nav.vue";
   import productCategoryVue from "../components/common/productCategory.vue";
   import recommendsTabVue from "../components/common/recommendsTab.vue";
-  import CommonBrandsModalVue from "../components/modal/CommonBrandsModal.vue";
   import { _getData } from "../config/getData";
+  import brandCategoryVue from "../components/common/brandCategory.vue";
 
   const IconFont = Icon.createFromIconfontCN({
     scriptUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js"
@@ -181,7 +142,6 @@
     data() {
       return {
         recommend_tabs_index: 0, //推荐nav标识
-        brandVisible: false, //控制modal层弹出
         goodList: [], //产品
         articleList: [], //案列,
         videoList: [], //视频
@@ -223,7 +183,7 @@
       });
       //案例
       _getData(
-        `${this.$API_URL.HYGPROURl}/server_pro/maintenance!request.action`,
+        `${this.$API_URL.HYGPROURL}/server_pro/maintenance!request.action`,
         {
           method: "getHomeRecommendListV30",
           token: "",
@@ -238,7 +198,7 @@
         this.maintenanceList = data.data.result.maintenancelist;
       });
       //视频
-      _getData(`${this.$API_URL.HYGPROURl}/server_pro/video!request.action`, {
+      _getData(`${this.$API_URL.HYGPROURL}/server_pro/video!request.action`, {
         method: "getHomeRecommendListV30",
         token: "",
         userid: "",
@@ -257,7 +217,6 @@
       search,
       sideBar,
       banner,
-      CommonBrandsModalVue,
       IconFont,
       caseItem,
       articleItem,
@@ -265,7 +224,8 @@
       productItem,
       Nav,
       productCategoryVue,
-      recommendsTabVue
+      recommendsTabVue,
+      brandCategoryVue
     },
     methods: {
       tabClick(i) {
@@ -285,112 +245,6 @@
     .container {
       background: #f7f9fa;
       padding-bottom: 110px;
-
-      %h2 {
-        height: 42px;
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-        align-items: center;
-        span {
-          display: flex;
-          align-items: center;
-        }
-        span.title {
-          font-weight: 600;
-          font-size: 16px;
-          color: #333333;
-          line-height: 16px;
-
-          .icon {
-            width: 19px;
-            height: 13px;
-            margin-right: 7px;
-          }
-        }
-        span.btn {
-          font-size: 14px;
-          color: #999999;
-          line-height: 14px;
-          cursor: pointer;
-          .icon {
-            width: 13px;
-            height: 14px;
-            margin-right: 5px;
-            margin-top: 1px;
-          }
-        }
-      }
-      .brand {
-        margin-bottom: 25px;
-        .commonWidth {
-          h2 {
-            @extend %h2;
-          }
-          .product_container {
-            background: #ffffff;
-            box-shadow: $base-box-shadow;
-            .swiper-container.nav_slide {
-              height: 63px;
-              border-bottom: 0.5px solid #ccc;
-              // overflow-y: auto;
-              .swiper-wrapper {
-                position: relative;
-                height: 62px;
-
-                .swiper-slide {
-                  width: 180px;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  cursor: pointer;
-                  font-weight: 600;
-                  font-size: 18px;
-                  color: #666;
-                }
-                .bar {
-                  position: absolute;
-                  height: 3px;
-                  width: 180px;
-                  background: $theme-color;
-                  bottom: -0.5px;
-                  i {
-                    display: flex;
-                    position: absolute;
-                    bottom: 1px;
-                    width: 0px;
-                    left: 50%;
-                    margin-left: -5.5px;
-                    height: 0px;
-                    border-left: 5.5px solid transparent;
-                    border-right: 5.5px solid transparent;
-
-                    border-bottom: 6px solid $theme-color;
-                  }
-                }
-              }
-            }
-            .page {
-              //min-height: 200px;
-              ul {
-                display: flex;
-                justify-content: flex-start;
-                flex-wrap: wrap;
-                padding: 18px 20px;
-                padding-bottom: 0;
-                li {
-                  font-family: PingFangSC-Regular;
-                  font-size: 13px;
-                  color: #666666;
-                  margin-bottom: 20px;
-                  margin-right: 30px;
-                  cursor: pointer;
-                }
-              }
-            }
-          }
-        }
-      }
 
       .recommend {
         .commonWidth {

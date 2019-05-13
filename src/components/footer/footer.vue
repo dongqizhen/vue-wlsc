@@ -6,61 +6,61 @@
           <ul>
             <li>
               <h2>入门指南</h2>
-              <router-link tag="span" to="#">
+              <router-link tag="span" to="/footer/guide/aboutUs">
                 <a>关于我们</a>
               </router-link>
-              <router-link tag="span" to="#">
+              <router-link tag="span" to="/footer/guide/howToRegister">
                 <a>如何注册</a>
               </router-link>
-              <router-link tag="span" to="#">
+              <router-link tag="span" to="/footer/guide/sellerEntry">
                 <a>卖家入门</a>
               </router-link>
-              <router-link tag="span" to="#">
+              <router-link tag="span" to="/footer/guide/buyerEntry">
                 <a>买家入门</a>
               </router-link>
             </li>
             <li>
               <h2>采购专家</h2>
-              <router-link tag="span" to="#">
+              <router-link tag="span" to="/footer/guide/inquirySystem">
                 <a>询价系统</a>
               </router-link>
-              <router-link tag="span" to="#">
+              <router-link tag="span" to="/footer/guide/quickOrder">
                 <a>快速下单</a>
               </router-link>
-              <router-link tag="span" to="#">
+              <router-link tag="span" to="/footer/guide/howToPurchase">
                 <a>如何采购</a>
               </router-link>
-              <router-link tag="span" to="#">
+              <router-link tag="span" to="/footer/guide/complaints">
                 <a>投诉维权</a>
               </router-link>
             </li>
             <li>
               <h2>购货商家</h2>
-              <router-link tag="span" to="#">
+              <router-link tag="span" to="/footer/guide/howToOpenShop">
                 <a>开通店铺</a>
               </router-link>
-              <router-link tag="span" to="#">
+              <router-link tag="span" to="/footer/guide/marketingCenter">
                 <a>营销中心</a>
               </router-link>
-              <router-link tag="span" to="#">
+              <router-link tag="span" to="/footer/guide/releaseNewProducts">
                 <a>发布新品</a>
               </router-link>
-              <router-link tag="span" to="#">
+              <router-link tag="span" to="/footer/guide/merchantService">
                 <a>商家服务</a>
               </router-link>
             </li>
             <li>
               <h2>平台服务</h2>
-              <router-link tag="span" to="#">
+              <router-link tag="span" to="/footer/guide/paymentMethod">
                 <a>支付方式</a>
               </router-link>
-              <router-link tag="span" to="#">
+              <router-link tag="span" to="/footer/guide/tradingRights">
                 <a>交易维权</a>
               </router-link>
-              <router-link tag="span" to="#">
+              <router-link tag="span" to="/footer/guide/customerService">
                 <a>客服中心</a>
               </router-link>
-              <router-link tag="span" to="#">
+              <router-link tag="span" to="/footer/guide/shopRules">
                 <a>网来商城规则</a>
               </router-link>
             </li>

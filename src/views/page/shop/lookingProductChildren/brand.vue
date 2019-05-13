@@ -24,9 +24,14 @@
       <div class="left">
         <shop-nav-vue :navArr="['按首字母排序', '按点击量排序']"></shop-nav-vue>
 
-        <ul>
-          <model-item-vue v-for="item in arr" :key="item"></model-item-vue>
+        <ul v-if="!isLoading">
+          <model-item-vue
+            v-for="item in arr"
+            :key="item.id"
+            :item="item"
+          ></model-item-vue>
         </ul>
+        <loading-vue v-else></loading-vue>
       </div>
       <div class="right">
         <brand-card-vue></brand-card-vue>
@@ -42,12 +47,14 @@
   import recommendsTabVue from "../../../../components/common/recommendsTab.vue";
   import breadcrumbVue from "../../../../components/common/breadcrumb.vue";
   import { _getData } from "../../../../config/getData";
+  import loadingVue from "../../../../components/common/loading.vue";
 
   export default {
     data() {
       return {
-        arr: [1, 2, 3, 4, 5],
-        routes: []
+        arr: [],
+        routes: [],
+        isLoading: true
       };
     },
     components: {
@@ -55,7 +62,8 @@
       modelItemVue,
       brandCardVue,
       recommendsTabVue,
-      breadcrumbVue
+      breadcrumbVue,
+      loadingVue
     },
 
     beforeRouteEnter(to, from, next) {
@@ -118,7 +126,14 @@
       });
     },
     mounted() {
-      this.getModelList();
+      this.getModelList()
+        .then(data => {
+          console.log(data);
+          this.arr = data.brandModelList;
+        })
+        .then(() => {
+          this.isLoading = false;
+        });
     },
     created() {
       // this.routes =
@@ -242,6 +257,8 @@
       justify-content: space-between;
       .left {
         width: $content-left;
+        display: flex;
+        flex-direction: column;
         /deep/ .shop-nav {
           .nav {
             margin-bottom: 12px;

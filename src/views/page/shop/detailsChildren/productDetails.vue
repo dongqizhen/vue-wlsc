@@ -132,7 +132,14 @@
         </a-affix> -->
         <a-tabs defaultActiveKey="1">
           <a-tab-pane tab="产品介绍" key="1" :forceRender="true">
-            <p class="introduce" v-html="productInfo.goods_desc"></p>
+            <p
+              class="introduce"
+              v-html="convertStr"
+              v-if="productInfo"
+              v-lazy-container="{
+                selector: 'img'
+              }"
+            ></p>
           </a-tab-pane>
           <a-tab-pane tab="产品规格/参数" key="2" :forceRender="true">
             <ul class="specification">
@@ -380,7 +387,7 @@
   export default {
     data() {
       return {
-        productInfo: {}, //产品详情
+        productInfo: "", //产品详情
         imgarr: [img, img],
         defaultIndex: null,
         visible: false,
@@ -437,7 +444,13 @@
       }
     },
     computed: {
-      ...mapState(["isLogin"])
+      ...mapState(["isLogin"]),
+      convertStr() {
+        return this.productInfo.goods_desc.replace(
+          /(?<=\<img [^>]*src=['"])([^'"]+)(?=[^>]*>)/gi,
+          '"data-src="$1'
+        );
+      }
     },
     destroyed() {
       window.removeEventListener("scroll", this.handleScroll);
@@ -490,6 +503,18 @@
     display: flex;
     justify-content: flex-start;
     width: 100%;
+    /deep/ img[lazy="loading"] {
+      /*your style here*/
+      // background: url("../../../../assets/images/loading.gif") no-repeat center;
+      // background-size: 200px;
+      background-color: #f7f9fa;
+    }
+    /deep/ img[lazy="error"] {
+      /*your style here*/
+      background: url("../../../../assets/images/loading.gif") no-repeat center;
+      background-size: 200px;
+      // background-color: #f7f9fa;
+    }
     .left {
       width: $content-left;
       background: $base-background;
@@ -790,6 +815,7 @@
                 img {
                   width: 100%;
                 }
+
                 > p {
                   width: 100%;
                   img {

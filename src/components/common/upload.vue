@@ -34,6 +34,7 @@
     methods: {
       handleRemove(file) {
         this.uploadList.splice(this.uploadList.indexOf(file), 1);
+        this.$emit("getVal", this.uploadList);
       },
       handleChange({ fileList }) {
         console.log(fileList);

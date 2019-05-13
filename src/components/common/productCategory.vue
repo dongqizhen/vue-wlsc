@@ -19,18 +19,19 @@
         <div class="product_container">
           <div class="swiper-container nav_slide">
             <div class="swiper-wrapper">
-              <div
+              <!-- <div
                 class="swiper-slide"
                 @click="navHandleClick()"
                 v-if="isLogin"
               >
                 常用分类
-              </div>
+              </div> -->
               <div
                 class="swiper-slide"
                 v-for="(item, i) in navArr"
                 :key="item.id"
-                @click="navHandleClick(item.id, i)"
+                :class="i == defaultsVal && 'active'"
+                @click="navHandleClick(item.id, i, $event)"
               >
                 {{ item.name }}
               </div>
@@ -64,6 +65,7 @@
         </div>
         <common-categories-modal-vue
           :Visible="visible"
+          v-on:success="success"
         ></common-categories-modal-vue>
       </div>
     </div>
@@ -71,7 +73,6 @@
 </template>
 
 <script>
-  import modalVue from "../modal/modal";
   import Swiper from "swiper";
   import CommonCategoriesModalVue from "../modal/CommonCategoriesModal.vue";
   import { _getData } from "../../config/getData";
@@ -82,28 +83,33 @@
     data() {
       return {
         visible: false, //控制modal层弹出
-        defaultsVal: 0,
+        defaultsVal: 0, //默认高量nav下标
         isShow: true, //是否显示管理常用分类按钮
         navArr: [],
         pageArr: []
       };
     },
     components: {
-      modalVue,
       CommonCategoriesModalVue
     },
     methods: {
+      //控制弹出层显示
       handleClick() {
         this.visible = true;
       },
+      success() {
+        this.getCommonCategory();
+      },
+      //获取常用分类
       async getCommonCategory() {
-        //获取常用分类
         _getData("api/ucatalog/list", {}).then(data => {
           console.log("data", data);
           this.pageArr = data.userCategoryList;
         });
       },
-      navHandleClick(id, i) {
+      //点击nav
+      navHandleClick(id, i, e) {
+        //点击nav
         if (id) {
           this.isShow = false;
           this.pageArr = this.navArr[i].subCategoryList;
@@ -111,16 +117,26 @@
           this.isShow = true;
           this.getCommonCategory();
         }
+        this.defaultsVal = i;
       }
     },
     computed: {
       ...mapState(["isLogin"])
     },
+    created() {
+      //如果登录 则显示常用分类
+      if (this.isLogin) {
+        this.navArr.push({
+          name: "常用分类",
+          id: ""
+        });
+      }
+    },
     mounted() {
       this.getCommonCategory();
       _getData("api/catalog/listAll", {}).then(data => {
         console.log(data);
-        this.navArr = data.currentCategory;
+        this.navArr = [...this.navArr, ...data.currentCategory];
       });
 
       new Swiper(".product-category .swiper-container.nav_slide", {
@@ -257,6 +273,12 @@
               font-weight: 600;
               font-size: 18px;
               color: #666;
+              &.active {
+                color: $theme-color;
+              }
+              &:hover {
+                color: $theme-color;
+              }
             }
             .bar {
               position: absolute;

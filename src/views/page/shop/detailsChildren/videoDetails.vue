@@ -174,7 +174,7 @@
       }
     },
     mounted() {
-      _getData(`${this.$API_URL.HYGPROURl}/server_pro/video!request.action`, {
+      _getData(`${this.$API_URL.HYGPROURL}/server_pro/video!request.action`, {
         method: "getVideoByIdV1",
         userid: "",
         params: { id: this.$route.query.id }

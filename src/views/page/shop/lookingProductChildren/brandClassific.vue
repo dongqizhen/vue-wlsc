@@ -38,14 +38,20 @@
                       ? {
                           path: 'oneOfBrandClassificne',
                           query: {
-                            nav_index: $route.query.nav_index
+                            nav_index: $route.query.nav_index,
+                            categoryId: val.id,
+                            categoryName: val.name
                           }
                         }
                       : $route.query.nav_index == 2
                       ? {
                           path: 'brand',
                           query: {
-                            nav_index: $route.query.nav_index
+                            nav_index: $route.query.nav_index,
+                            categoryId: val.id,
+                            categoryName: val.name,
+                            brandId: $route.query.brandId,
+                            brandName: $route.query.brandName
                           }
                         }
                       : ''

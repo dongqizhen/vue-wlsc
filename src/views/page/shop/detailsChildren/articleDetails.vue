@@ -17,7 +17,13 @@
           </h2>
 
           <div class="introduce">
-            <div class="content" v-html="detail.content"></div>
+            <div
+              class="content"
+              v-html="convertStr"
+              v-lazy-container="{
+                selector: 'img'
+              }"
+            ></div>
             <ul>
               <li>标签字数</li>
               <li>标签字数</li>
@@ -60,9 +66,17 @@
       commentVue,
       menuVue
     },
+    computed: {
+      convertStr() {
+        return this.detail.content.replace(
+          /(?<=\<img [^>]*src=['"])([^'"]+)(?=[^>]*>)/gi,
+          '"data-src="$1'
+        );
+      }
+    },
     mounted() {
       //获取详情
-      _getData(`${this.$API_URL.HYGPROURl}/server_pro/learn!request.action`, {
+      _getData(`${this.$API_URL.HYGPROURL}/server_pro/learn!request.action`, {
         method: "getArticleDetails",
         userid: "",
         token: "",
@@ -136,6 +150,21 @@
           font-size: 16px;
           color: #333333;
           line-height: 32px;
+
+          /deep/ img[lazy="loading"] {
+            /*your style here*/
+            background: url("../../../../assets/images/loading.gif") no-repeat
+              center;
+            background-size: 200px;
+            // background-color: #f7f9fa;
+          }
+          /deep/ img[lazy="error"] {
+            /*your style here*/
+            background: url("../../../../assets/images/loading.gif") no-repeat
+              center;
+            background-size: 200px;
+            // background-color: #f7f9fa;
+          }
         }
         > ul {
           display: flex;

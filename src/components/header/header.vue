@@ -81,8 +81,13 @@
         //window.clearVuexAlong();
         this.changeLoginState(false);
         this.changeUserInfoState({});
+        this.changeDefaultSelectedKeys(["0"]);
       },
-      ...mapMutations(["changeLoginState", "changeUserInfoState"])
+      ...mapMutations([
+        "changeLoginState",
+        "changeUserInfoState",
+        "changeDefaultSelectedKeys"
+      ])
     },
     computed: {
       ...mapState(["isLogin", "userInfo"])

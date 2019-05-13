@@ -321,7 +321,104 @@ const router = new Router({
             name: "底部tab",
             path: '/footer/guide',
             component: () =>
-                import ('../views/page/guide')
+                import ('../views/page/guide/guide'),
+            children: [{
+                    name: "关于我们",
+                    path: "aboutUs",
+                    component: () =>
+                        import ("../views/page/guide/guideChildren/aboutUs.vue")
+                },
+                {
+                    name: "如何注册",
+                    path: "howToRegister",
+                    component: () =>
+                        import ("../views/page/guide/guideChildren/howToRegister.vue")
+                },
+                {
+                    name: "卖家入门",
+                    path: "sellerEntry",
+                    component: () =>
+                        import ("../views/page/guide/guideChildren/sellerEntry.vue")
+                },
+                {
+                    name: "买家入门",
+                    path: "buyerEntry",
+                    component: () =>
+                        import ("../views/page/guide/guideChildren/buyerEntry.vue")
+                },
+                {
+                    name: "询价系统",
+                    path: "inquirySystem",
+                    component: () =>
+                        import ("../views/page/guide/guideChildren/inquirySystem.vue")
+                },
+                {
+                    name: "快速下单",
+                    path: "quickOrder",
+                    component: () =>
+                        import ("../views/page/guide/guideChildren/quickOrder.vue")
+                },
+                {
+                    name: "如何采购",
+                    path: "howToPurchase",
+                    component: () =>
+                        import ("../views/page/guide/guideChildren/howToPurchase.vue")
+                },
+                {
+                    name: "投诉维权",
+                    path: "complaints",
+                    component: () =>
+                        import ("../views/page/guide/guideChildren/complaints.vue")
+                },
+                {
+                    name: "开通店铺",
+                    path: "howToOpenShop",
+                    component: () =>
+                        import ("../views/page/guide/guideChildren/howToOpenShop.vue")
+                },
+                {
+                    name: "营销中心",
+                    path: "marketingCenter",
+                    component: () =>
+                        import ("../views/page/guide/guideChildren/marketingCenter.vue")
+                },
+                {
+                    name: "发布新品",
+                    path: "releaseNewProducts",
+                    component: () =>
+                        import ("../views/page/guide/guideChildren/releaseNewProducts.vue")
+                },
+                {
+                    name: "商家服务",
+                    path: "merchantService",
+                    component: () =>
+                        import ("../views/page/guide/guideChildren/merchantService.vue")
+                },
+                {
+                    name: "支付方式",
+                    path: "paymentMethod",
+                    component: () =>
+                        import ("../views/page/guide/guideChildren/paymentMethod.vue")
+                },
+                {
+                    name: "交易维权",
+                    path: "tradingRights",
+                    component: () =>
+                        import ("../views/page/guide/guideChildren/tradingRights.vue")
+                },
+                {
+                    name: "客服中心",
+                    path: "customerService",
+                    component: () =>
+                        import ("../views/page/guide/guideChildren/customerService.vue")
+                },
+                {
+                    name: "网来商城规则",
+                    path: "shopRules",
+                    component: () =>
+                        import ("../views/page/guide/guideChildren/shopRules.vue")
+                },
+            ]
         }
 
     ]

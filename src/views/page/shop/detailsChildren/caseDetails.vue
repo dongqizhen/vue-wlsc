@@ -98,7 +98,7 @@
     },
     mounted() {
       _getData(
-        `${this.$API_URL.HYGPROURl}/server_pro/maintenance!request.action`,
+        `${this.$API_URL.HYGPROURL}/server_pro/maintenance!request.action`,
         {
           method: "getMaintenanceByIdV29",
           userid: "",
