@@ -2,7 +2,7 @@
  * @Author: mikey.dongqizhen 
  * @Date: 2019-04-18 17:08:47 
  * @Last Modified by: mikey.dongqizhen
- * @Last Modified time: 2019-05-12 18:21:56
+ * @Last Modified time: 2019-05-13 10:46:54
  */
 
 
@@ -10,7 +10,7 @@
 import axios from 'axios'
 
 let request = axios.create();
-console.log(window.localStorage["vuex-along"])
+// console.log(window.localStorage["vuex-along"])
 
 if (window.localStorage["vuex-along"] != "{}") {
     let token = JSON.parse(window.localStorage["vuex-along"])['vuex-along'].userInfo.token
@@ -23,12 +23,13 @@ request.interceptors.request.use(function(config) {
         config.headers['X-Nideshop-Token'] = token
         config.transformRequest = [
             (data) => {
+                console.log(data)
                 return new_to_Data(data)
                     // return JSON.stringify(data)
             }
         ]
     } else {
-        console.log(config)
+        // console.log(config)
         config.headers['Content-Type'] = "application/x-www-form-urlencoded"
         config.transformRequest = [
             (data) => {

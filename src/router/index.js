@@ -333,11 +333,18 @@ router.beforeEach((to, from, next) => {
     if (to.meta.title) {
         document.title = to.meta.title
     }
-    const nextRoute = ['merchant'];
-    // let isLogin = this.$store.state.isLogin;
-    // console.log("999999", isLogin)
+    let isLogin = JSON.parse(window.localStorage["vuex-along"])["vuex-along"];
+    if (window.localStorage["vuex-along"] == "{}" || JSON.parse(window.localStorage["vuex-along"])["vuex-along"].isLogin == false) {
+        isLogin = false;
+    } else {
+        isLogin = true;
+    }
+    if (to.meta.requireAuth) {
+        if (!isLogin) {
+            router.push({ name: "login" });
+        }
+    }
     next()
-
 })
 
 export default router;
