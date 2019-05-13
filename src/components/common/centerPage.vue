@@ -166,6 +166,9 @@
           }
         }
       }
+      .ant-layout-footer {
+        padding: 0;
+      }
     }
     .ant-layout-has-sider {
       width: 1200px;

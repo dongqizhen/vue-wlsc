@@ -13,7 +13,7 @@
           </div>
         </div>
         <div class="common shopType">
-          <div class="left-box">店铺类型</div>
+          <div class="left-box"><span class="red">*</span>店铺类型</div>
           <div class="right-box">
             <a-select
               placeholder="请选择经营模式"
@@ -34,7 +34,7 @@
           </div>
         </div>
         <div class="common shopIndexPicture">
-          <div class="left-box">店铺首页图片</div>
+          <div class="left-box"><span class="red">*</span>店铺首页图片</div>
           <div class="right-box">
             <upload v-on:getVal="getImgUrl"></upload>
           </div>
@@ -71,7 +71,9 @@
         <div class="common submit">
           <div class="left-box"></div>
           <div class="right-box">
-            <a-button @click="save">保存</a-button>
+            <a-button @click="save">
+              {{ isOpenShop ? "下一步" : "保存" }}
+            </a-button>
           </div>
         </div>
       </div>
@@ -103,19 +105,32 @@
         }
       };
     },
+    props: {
+      isOpenShop: {
+        type: Boolean
+      },
+      current: {
+        type: Number
+      }
+    },
     methods: {
       save() {
         console.log(this.submitData);
         // _getData("/api/store", this.submitData).then(data => {
         //   console.log("111", data);
         // });
+        console.log(this.isOpenShop);
+        if (this.isOpenShop) {
+          this.submitData = { ...this.submitData, current: this.current };
+          this.$emit("getShopInfo", this.submitData);
+        }
       },
       getImgUrl(val) {
-        console.log(val);
+        // console.log(val);
         this.submitData.file = val[0].url;
       },
       handleShopTypeChange(value) {
-        console.log(`selected ${value}`);
+        // console.log(`selected ${value}`);
         this.submitData.shopType = value;
       },
       isShowModal() {
@@ -147,80 +162,84 @@
   @import "../../../../assets/scss/_commonScss";
   @import "../../../../assets/scss/_input";
   .shopInfo {
-    background-color: #fff;
-    min-height: 693px;
-    padding: 4px 20px;
-    box-shadow: $base-box-shadow;
-    .content {
-      margin-top: 24px;
-      .common {
-        display: flex;
-        align-items: center;
-        margin-bottom: 30px;
-        &:nth-last-child(2) {
-          align-items: flex-start;
+    margin-bottom: 50px;
+    .container-box {
+      background-color: #fff;
+      min-height: 693px;
+      padding: 4px 20px;
+      box-shadow: $base-box-shadow;
+      .content {
+        margin-top: 24px;
+        .common {
+          display: flex;
+          align-items: center;
+          margin-bottom: 30px;
+          &:nth-last-child(2),
+          &:nth-last-child(3) {
+            align-items: flex-start;
+            .left-box {
+              margin-top: 6px;
+            }
+          }
           .left-box {
-            margin-top: 6px;
+            margin-right: 24px;
+            font-family: PingFangSC-Medium;
+            font-weight: 600;
+            font-size: 14px;
+            color: #151515;
+            .red {
+              color: $theme-color;
+              margin-left: -6.8px;
+            }
           }
-        }
-        .left-box {
-          margin-right: 24px;
-          font-family: PingFangSC-Medium;
-          font-weight: 600;
-          font-size: 14px;
-          color: #151515;
-          .red {
-            color: $theme-color;
-            margin-left: -6.8px;
-          }
-        }
-        .right-box {
-          @include placeholderStyle;
+          .right-box {
+            @include placeholderStyle;
 
-          .ant-input {
-            width: 390px;
-            height: 34px;
-            line-height: 34px;
-            border: 1px solid #cccccc;
-            border-radius: 3px;
+            .ant-input {
+              width: 390px;
+              height: 34px;
+              line-height: 34px;
+              border: 1px solid #cccccc;
+              border-radius: 3px;
+            }
+            .noInput {
+              height: 109px;
+              outline: none;
+              resize: none;
+              line-height: 22px;
+            }
+            /deep/.ant-select {
+              .ant-select-arrow {
+                right: 20px;
+              }
+            }
           }
-          .noInput {
-            height: 109px;
-            outline: none;
-            resize: none;
-            line-height: 22px;
-          }
-          /deep/.ant-select {
-            .ant-select-arrow {
-              right: 20px;
+          .saleArea {
+            /deep/.selectText {
+              &:hover {
+                cursor: pointer;
+                border: 1px solid $theme-color !important;
+              }
             }
           }
         }
-        .saleArea {
-          /deep/.selectText {
-            &:hover {
-              cursor: pointer;
-              border: 1px solid $theme-color !important;
-            }
+        .shopIndexPicture {
+          .right-box {
+            height: 118px;
           }
         }
-      }
-      .shopIndexPicture {
-        .right-box {
-          height: 118px;
+        .ant-btn {
+          // width: 65px;
+          height: 33px;
+          background: #f5a623;
+          border-radius: 3px;
+          border: none;
+          box-shadow: none;
+          font-family: PingFangSC-Medium;
+          font-size: 14px;
+          color: #fff;
+          margin-left: 58px;
         }
-      }
-      .ant-btn {
-        width: 65px;
-        height: 33px;
-        background: #f5a623;
-        border-radius: 3px;
-        border: none;
-        box-shadow: none;
-        font-family: PingFangSC-Medium;
-        font-size: 14px;
-        color: #fff;
-        margin-left: 58px;
       }
     }
   }

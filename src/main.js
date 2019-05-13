@@ -32,7 +32,8 @@ import {
     DatePicker,
     Skeleton,
     Affix,
-    Message
+    Message,
+    Steps
 } from "ant-design-vue";
 import "swiper/dist/css/swiper.css";
 
@@ -43,7 +44,7 @@ Vue.use(vChatTitle).use(VueLazyload, {
     preLoad: 1.3,
     attempt: 1,
     lazyComponent: true
-}).use(Share).use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Upload).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form).use(Skeleton).use(Affix);
+}).use(Share).use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Upload).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form).use(Skeleton).use(Affix).use(Steps);
 
 Vue.prototype.$API_URL = env.API_HOST;
 Vue.prototype.$message = Message

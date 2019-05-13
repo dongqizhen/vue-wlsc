@@ -2,7 +2,7 @@
   <div class="shopCertification">
     <div class="basicInformation">
       <commonTitle title="认证材料">
-        <span slot="titleRight" class="certificationStatus">
+        <span slot="titleRight" class="certificationStatus" v-if="!isOpenShop">
           <svg class="icon" aria-hidden="true">
             <use
               xlink:href="#iconbaojiazhong"
@@ -173,6 +173,9 @@
       </div>
     </div>
     <div class="submit">
+      <a-button @click="cancel" v-if="isOpenShop" class="cancel"
+        >上一步</a-button
+      >
       <a-button @click="submit">提交审核</a-button>
     </div>
     <submit-success-modal
@@ -233,10 +236,25 @@
         ]
       };
     },
+    props: {
+      isOpenShop: {
+        type: Boolean
+      },
+      current: {
+        type: Number
+      }
+    },
     methods: {
       submit() {
         console.log(this.submitData);
-        this.addCarSuccess();
+        if (this.isOpenShop) {
+          this.$emit("sure", this.current);
+        } else {
+          this.addCarSuccess();
+        }
+      },
+      cancel() {
+        this.$emit("cancel", this.current);
       },
       addCarSuccess() {
         if (!this.isLogin) {
@@ -376,6 +394,9 @@
       margin-top: 34px;
       margin-bottom: 111px;
       margin-left: 30px;
+      &.cancel {
+        background-color: #9b9b9b;
+      }
     }
   }
 </style>

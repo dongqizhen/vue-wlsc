@@ -18,7 +18,7 @@
     // inject: ["reload"],
     data() {
       return {
-        defaultSelectedKeys: ["1"],
+        defaultSelectedKeys: ["0"],
         dataArr: [
           {
             id: 1,

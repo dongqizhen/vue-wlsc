@@ -3,8 +3,6 @@ import Router from "vue-router";
 
 Vue.use(Router);
 
-
-
 const router = new Router({
     mode: "history",
     base: process.env.BASE_URL,
@@ -19,14 +17,18 @@ const router = new Router({
         },
         {
             path: "/merchant",
+            meta: {
+                requireAuth: true
+            },
             component: () =>
                 import ("../views/page/merchant/merchant"),
             children: [{
                     path: "/",
-                    name: '店铺首页',
+                    name: '我要开店',
                     component: () =>
-                        import ("../views/page/merchant/merchantChildren/shopIndex")
+                        import ("../views/page/merchant/merchantChildren/openShop")
                 }, {
+                    name: '店铺首页',
                     path: "shopIndex",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/shopIndex")
@@ -331,7 +333,11 @@ router.beforeEach((to, from, next) => {
     if (to.meta.title) {
         document.title = to.meta.title
     }
+    const nextRoute = ['merchant'];
+    // let isLogin = this.$store.state.isLogin;
+    // console.log("999999", isLogin)
     next()
+
 })
 
 export default router;
