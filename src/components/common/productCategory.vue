@@ -205,6 +205,11 @@
           }
         }
       });
+    },
+    watch: {
+      navArr(newVal, oldVal) {
+        console.log(555555555, newVal, oldVal);
+      }
     }
   };
 </script>

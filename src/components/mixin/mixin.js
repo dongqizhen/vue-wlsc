@@ -47,7 +47,8 @@ const timer = {
 const FormValidator = {
     data() {
         return {
-            phone1_success: false,
+            phone1_success: false, //手机号
+            seccode_err: false //验证码
         }
     },
     mounted() {
@@ -70,6 +71,9 @@ const FormValidator = {
             return Object.keys(fieldsError).some(field => {
                 return fieldsError[field];
             });
+        },
+        seccodeChange(e) {
+            this.seccode_err = false;
         },
         Error(field) {
             const {

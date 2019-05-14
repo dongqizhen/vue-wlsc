@@ -1,7 +1,16 @@
 <template>
   <div class="no-data">
-    <img src="../../assets/images/no_data/no-content.png" alt="" />
-    <span></span>
+    <img
+      src="../../assets/images/no_data/no-content.png"
+      alt=""
+      v-if="type == 'no-content'"
+    />
+    <img
+      src="../../assets/images/no_data/no-comment.png"
+      alt=""
+      v-else-if="type == 'no-comment'"
+    />
+    <span>{{ text }}</span>
   </div>
 </template>
 
@@ -9,6 +18,16 @@
   export default {
     data() {
       return {};
+    },
+    props: {
+      type: {
+        type: String,
+        default: "no-content"
+      },
+      text: {
+        type: String,
+        default: ""
+      }
     }
   };
 </script>
@@ -16,11 +35,18 @@
 <style lang="scss" scoped>
   .no-data {
     display: flex;
+    width: 100%;
     align-items: center;
     justify-content: center;
     background: rgba($color: #fff, $alpha: 0);
+    flex-direction: column;
     img {
-      width: 124px * 2;
+      width: 124px * 1.5;
+      margin-bottom: 16px;
+    }
+    span {
+      color: #999;
+      font-size: 14px;
     }
   }
 </style>

@@ -96,7 +96,7 @@
                     :item="item"
                   ></case-item>
                 </ul>
-                <a-button>
+                <a-button @click="skip">
                   查看全部
                   <icon-font type="iconchakanquanbu" />
                 </a-button>
@@ -232,6 +232,25 @@
         this.recommend_tabs_index = i;
       },
       moreButtonClick() {},
+      //查看全部
+      skip() {
+        console.log(this.recommend_tabs_index);
+        switch (this.recommend_tabs_index) {
+          case 1:
+            window.open(
+              "http://www.haoyigong.com/industryinfomation/industryInfomation_index.html"
+            );
+            break;
+          case 2:
+            window.open(
+              "http://www.haoyigong.com/MicroClassroom/ClassroomList.html"
+            );
+            break;
+          case 3:
+            window.open("http://www.haoyigong.com/maintenance/repair.html");
+            break;
+        }
+      },
       handleClick() {
         this.brandVisible = true;
       }

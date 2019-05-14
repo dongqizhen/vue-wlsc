@@ -2,9 +2,20 @@
   <router-link
     class="model-item"
     tag="li"
-    :to="{ path: 'model', query: { nav_index: $route.query.nav_index } }"
+    :to="{
+      path: 'model',
+      query: {
+        nav_index: $route.query.nav_index,
+        categoryId: $route.query.categoryId,
+        categoryName: $route.query.categoryName,
+        brandId: $route.query.brandId,
+        brandName: $route.query.brandName,
+        modelId: item.id,
+        modelName: item.name
+      }
+    }"
   >
-    <a target="_blank">
+    <a>
       <div class="img_box">
         <img src="../../../assets/images/demo.jpg" alt="" />
       </div>
@@ -12,7 +23,7 @@
         <h2>{{ item.name }}</h2>
         <p>参考价格：<span>10～100万</span></p>
         <span>
-          产品分类（子类）/品牌/型号
+          {{ item.brand_name }}/{{ item.category_name }}/型号
           <span>
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>

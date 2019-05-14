@@ -81,6 +81,7 @@
         //window.clearVuexAlong();
         this.changeLoginState(false);
         this.changeUserInfoState({});
+        this.$router.push("/login");
         this.changeDefaultSelectedKeys(["0"]);
       },
       ...mapMutations([

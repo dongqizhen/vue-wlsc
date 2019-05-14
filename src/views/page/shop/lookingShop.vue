@@ -99,10 +99,10 @@
         areaIsShow: false, //控制选择地区弹层是否显示
         area: [], //省份列表
         cityArr: [], //市列表
-        province: "选择省/直辖市",
+        province: "选择省/直辖市", //省头部显示名称
         city: "选择市",
         isActive: 0, //是否显示市弹出层
-        selectMainArea: "北京市西城区",
+        selectMainArea: "北京市西城区", //默认显示地址
         routes: [
           {
             name: "首页",

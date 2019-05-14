@@ -181,7 +181,7 @@
 
 <script>
   import { mapMutations } from "vuex";
-  import { timer } from "../../../../components/mixin/mixin";
+  import { timer, FormValidator } from "../../../../components/mixin/mixin";
   import { _getData } from "../../../../config/getData";
 
   export default {
@@ -189,10 +189,11 @@
       return {
         phone1_success: false,
         phone2_success: false,
-        password_err: false
+        password_err: false,
+        seccode_err: false
       };
     },
-    mixins: [timer],
+    mixins: [timer, FormValidator],
     methods: {
       ...mapMutations(["changeLoginState", "changeUserInfoState"]),
       callback() {},
@@ -235,49 +236,18 @@
           } else if (data.data.status.code == 200) {
             this.changeLoginState(true);
             this.changeUserInfoState(data.data.result);
-            this.$router.go(-1);
+            this.$router.back();
           }
         });
       },
-      hasErrors(fieldsError) {
-        return Object.keys(fieldsError).some(field => {
-          return fieldsError[field];
-        });
-      },
-      seccodeChange(e) {
-        this.seccode_err = false;
-      },
+
       passwordChange() {
         this.password_err = false;
-      },
-      Error(field) {
-        const {
-          getFieldError,
-          isFieldTouched,
-          getFieldValue,
-          setFieldsValue
-        } = this.form;
-        const val = getFieldValue(field);
-
-        switch (field) {
-          case "phone1":
-            this.phone1_success =
-              val && getFieldError(field) == undefined ? true : false;
-
-            break;
-          case "phone2":
-            this.phone2_success =
-              val != "" && getFieldError(field) == undefined ? true : false;
-        }
-        return isFieldTouched(field) && getFieldError(field);
       }
     },
     computed: {},
     mounted() {
-      this.text = this.form.validateFields();
-    },
-    beforeCreate() {
-      this.form = this.$form.createForm(this);
+      //this.text = this.form.validateFields();
     }
   };
 </script>
