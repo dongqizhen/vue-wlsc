@@ -155,6 +155,7 @@
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import pagination from "../../../../components/common/pagination";
   import checkAll from "../../../../components/common/checkAll";
+  import { _getData } from "../../../../config/getData";
   export default {
     data() {
       return {
@@ -245,13 +246,19 @@
       },
       handleProductSmallTypeChange(value) {
         console.log(value);
+      },
+      getProductList() {
+        _getData("/api/goods/goodslist", {}).then(data => {
+          console.log(data);
+        });
       }
     },
     components: {
       commonTitle,
       pagination,
       checkAll
-    }
+    },
+    mounted() {}
   };
 </script>
 

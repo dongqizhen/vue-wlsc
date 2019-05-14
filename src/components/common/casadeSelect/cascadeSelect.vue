@@ -58,27 +58,6 @@
         proviceData: [],
         cityData: [],
         defaultCityData: [],
-        defaultProvinceData: [
-          // {
-          //   id: 1,
-          //   name: "北京市",
-          //   count: 2,
-          //   defaultCityData: [
-          //     { id: 1, name: "朝阳区" },
-          //     { id: 11, name: "房山区" }
-          //   ]
-          // },
-          // {
-          //   id: 22,
-          //   name: "海南省",
-          //   count: "全部",
-          //   defaultCityData: [
-          //     { id: 230, name: "海口市" },
-          //     { id: 231, name: "三亚市" },
-          //     { id: 232, name: "东方市" }
-          //   ]
-          // }
-        ],
         currentId: -1,
         activeProvinceName: "",
         selectArr: [],
@@ -89,6 +68,10 @@
     props: {
       isShow: {
         type: Boolean,
+        required: true
+      },
+      defaultProvinceData: {
+        type: Array,
         required: true
       }
     },

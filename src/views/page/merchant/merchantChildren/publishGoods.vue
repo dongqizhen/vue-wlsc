@@ -7,10 +7,7 @@
         <div class="common ">
           <div class="left-box"><span class="red">*</span>产品名称</div>
           <div class="right-box">
-            <a-input
-              placeholder="请输入产品名称"
-              v-model="submitData.productName"
-            />
+            <a-input placeholder="请输入产品名称" v-model="submitData.name" />
           </div>
         </div>
         <div class="common">
@@ -18,7 +15,7 @@
           <div class="right-box">
             <a-input
               placeholder="请输入产品编号"
-              v-model="submitData.productNumber"
+              v-model="submitData.goodsSn"
             />
           </div>
         </div>
@@ -105,7 +102,7 @@
           <div class="right-box">
             <a-input
               placeholder="请输入库存数量"
-              v-model="submitData.stockQuantity"
+              v-model="submitData.goodsNumber"
             />
           </div>
         </div>
@@ -251,14 +248,14 @@
           }
         ],
         submitData: {
-          productName: "",
-          productNumber: "",
+          name: "",
+          goodsSn: "",
           brand: "",
           model: "",
           minPrice: "",
           maxPrice: "",
           sparePartNumber: "",
-          stockQuantity: "",
+          goodsNumber: "",
           manufacturer: "",
           capacity: "",
           unit: "",

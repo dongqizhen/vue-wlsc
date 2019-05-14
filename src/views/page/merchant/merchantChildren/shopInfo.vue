@@ -24,7 +24,7 @@
                 <use xlink:href="#icontianjiaduibichanpinxiala"></use>
               </a-icon>
               <a-select-option
-                v-for="item in submitData.shopTypeData"
+                v-for="item in shopTypeData"
                 :key="item.id"
                 :value="item.id"
               >
@@ -53,6 +53,7 @@
           <div class="right-box saleArea" @click="showSelectBox">
             <cascade-select
               :isShow="isShow"
+              :defaultProvinceData="submitData.defaultProvinceData"
               v-on:getSaleArea="getSaleArea"
             ></cascade-select>
           </div>
@@ -100,7 +101,7 @@
           shopType: "",
           file: "",
           shopScope: "",
-          cascade: [],
+          defaultProvinceData: [],
           introduce: ""
         }
       };
@@ -116,18 +117,43 @@
     methods: {
       save() {
         console.log(this.submitData);
-        // _getData("/api/store", this.submitData).then(data => {
-        //   console.log("111", data);
-        // });
         console.log(this.isOpenShop);
+        if (this.submitData.shopName == "") {
+          alert("请输入店铺名称");
+          return;
+        }
+        if (this.submitData.shopType == "") {
+          alert("请选择店铺类型");
+          return;
+        }
+        if (this.submitData.file == "") {
+          alert("请上传店铺首页图片");
+          return;
+        }
+        if (this.submitData.shopScope == "") {
+          alert("请输入店铺经营范围");
+          return;
+        }
+        if (this.submitData.defaultProvinceData.length == 0) {
+          alert("请选择销售地区");
+          return;
+        }
         if (this.isOpenShop) {
           this.submitData = { ...this.submitData, current: this.current };
           this.$emit("getShopInfo", this.submitData);
+        } else {
+          // _getData("/api/store", this.submitData).then(data => {
+          //   console.log("111", data);
+          // });
         }
       },
       getImgUrl(val) {
         // console.log(val);
-        this.submitData.file = val[0].url;
+        if (val.length == 0) {
+          this.submitData.file = "";
+        } else {
+          this.submitData.file = val[0].url;
+        }
       },
       handleShopTypeChange(value) {
         // console.log(`selected ${value}`);
@@ -140,8 +166,8 @@
         this.isShow = true;
       },
       getSaleArea(val) {
-        // console.log(val);
-        this.submitData.cascade = val;
+        console.log(val);
+        this.submitData.defaultProvinceData = val;
       }
     },
     components: {

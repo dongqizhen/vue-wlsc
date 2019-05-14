@@ -38,11 +38,14 @@
           <div class="left-box"><span class="red">*</span>公司地址</div>
           <div class="right-box">
             <a-cascader
+              :fieldNames="{ label: 'name', value: 'id', children: 'children' }"
+              :loadData="loadData"
               :options="options"
               @change="onChange"
               placeholder="请选择省/市/区"
               :defaultValue="defaultCascaderValue"
               style="width: 390px"
+              changeOnSelect
             >
               <a-icon slot="suffixIcon" class="icon">
                 <use xlink:href="#icontianjiaduibichanpinxiala"></use>
@@ -56,7 +59,7 @@
             <a-textarea
               placeholder="请在这里对公司做一个介绍"
               type="textarea"
-              v-model="submitData.introduce"
+              v-model="submitData.companyIntroduction"
               class="noInput"
             />
           </div>
@@ -66,7 +69,7 @@
           <div class="right-box">
             <a-input
               placeholder="请输入法定代表人"
-              v-model="submitData.companyLegalPerson"
+              v-model="submitData.checking"
             />
           </div>
         </div>
@@ -75,17 +78,14 @@
           <div class="right-box">
             <a-input
               placeholder="请输入联系人"
-              v-model="submitData.companyContact"
+              v-model="submitData.link_name"
             />
           </div>
         </div>
         <div class="common ">
           <div class="left-box"><span class="red">*</span>手机号</div>
           <div class="right-box">
-            <a-input
-              placeholder="请输入手机号"
-              v-model="submitData.companyPhone"
-            />
+            <a-input placeholder="请输入手机号" v-model="submitData.mobile" />
           </div>
         </div>
         <div class="common ">
@@ -93,7 +93,7 @@
           <div class="right-box">
             <a-input
               placeholder="请输入办公室电话"
-              v-model="submitData.companyTelephone"
+              v-model="submitData.workPhone"
             />
           </div>
         </div>
@@ -109,16 +109,13 @@
         <div class="common ">
           <div class="left-box">传真</div>
           <div class="right-box">
-            <a-input placeholder="请输入传真" v-model="submitData.companyFax" />
+            <a-input placeholder="请输入传真" v-model="submitData.fax" />
           </div>
         </div>
         <div class="common ">
           <div class="left-box">开户银行</div>
           <div class="right-box">
-            <a-input
-              placeholder="请输入开户银行"
-              v-model="submitData.companyBankAccount"
-            />
+            <a-input placeholder="请输入开户银行" v-model="submitData.bank" />
           </div>
         </div>
         <div class="common ">
@@ -126,14 +123,14 @@
           <div class="right-box">
             <a-input
               placeholder="请输入开户账号"
-              v-model="submitData.companyOpenAccount"
+              v-model="submitData.bankNum"
             />
           </div>
         </div>
         <div class="common ">
           <div class="left-box">QQ号</div>
           <div class="right-box">
-            <a-input placeholder="请输入QQ号" v-model="submitData.companyQQ" />
+            <a-input placeholder="请输入QQ号" v-model="submitData.qqCode" />
           </div>
         </div>
         <div class="common ">
@@ -141,7 +138,7 @@
           <div class="right-box">
             <a-input
               placeholder="请输入微信号"
-              v-model="submitData.companyWeChat"
+              v-model="submitData.weiXinCode"
             />
           </div>
         </div>
@@ -173,9 +170,9 @@
       </div>
     </div>
     <div class="submit">
-      <a-button @click="cancel" v-if="isOpenShop" class="cancel"
-        >上一步</a-button
-      >
+      <a-button @click="cancel" v-if="isOpenShop" class="cancel">
+        上一步
+      </a-button>
       <a-button @click="submit">提交审核</a-button>
     </div>
     <submit-success-modal
@@ -190,6 +187,8 @@
   import upload from "../../../../components/common/upload";
   import submitSuccessModal from "../../../../components/modal/submitSuccessModal";
   import { mapState } from "vuex";
+  import { _getData } from "../../../../config/getData";
+  import _ from "lodash";
   export default {
     data() {
       return {
@@ -197,43 +196,25 @@
         type: "",
         certificationStatus: 2,
         defaultCascaderValue: [],
-        introduce: "",
         submitData: {
           companyName: "",
-          introduce: "",
-          companyLegalPerson: "",
-          companyContact: "",
-          companyPhone: "",
-          companyTelephone: "",
+          address: [],
+          companyIntroduction: "",
+          checking: "",
+          link_name: "",
+          mobile: "",
+          workPhone: "",
           companyEmail: "",
-          companyFax: "",
-          companyBankAccount: "",
-          companyOpenAccount: "",
-          companyQQ: "",
-          companyWeChat: "",
+          fax: "",
+          bank: "",
+          bankNum: "",
+          qqCode: "",
+          weiXinCode: "",
           licenseUrl: "",
           taxRegistrationUrl: "",
           productionLicenseUrl: ""
         },
-        options: [
-          {
-            label: "北京",
-            value: "Zhejiang",
-            title: "北京 010",
-            key: "010"
-          },
-          {
-            label: "上海",
-            value: "Jiangsu",
-            key: "021"
-          },
-          {
-            label: "杭州",
-            value: "hangzhou",
-            key: "0571",
-            disabled: true
-          }
-        ]
+        options: []
       };
     },
     props: {
@@ -247,6 +228,39 @@
     methods: {
       submit() {
         console.log(this.submitData);
+        if (this.submitData.companyName == "") {
+          alert("请输入公司名称");
+          return;
+        }
+        if (this.submitData.address.length == 0) {
+          alert("请选择公司地址");
+          return;
+        }
+        if (this.submitData.companyIntroduction == "") {
+          alert("请输入公司介绍");
+          return;
+        }
+        if (this.submitData.link_name == "") {
+          alert("请输入联系人");
+          return;
+        }
+        if (this.submitData.mobile == "") {
+          alert("请输入手机号");
+          return;
+        }
+        if (this.submitData.workPhone == "") {
+          alert("请输入办公室电话");
+          return;
+        }
+        if (this.submitData.companyEmail == "") {
+          alert("请输入企业邮箱");
+          return;
+        }
+
+        if (this.submitData.licenseUrl == "") {
+          alert("请上传营业执照");
+          return;
+        }
         if (this.isOpenShop) {
           this.$emit("sure", this.current);
         } else {
@@ -262,15 +276,75 @@
         }
         this.visible = true;
       },
-      onChange() {},
+      onChange(val) {
+        console.log(val);
+        this.submitData.address = val;
+      },
+      loadData(selectedOptions) {
+        console.log("111111", selectedOptions);
+        const targetOption = selectedOptions[selectedOptions.length - 1];
+        targetOption.loading = true;
+        if (selectedOptions.length == 1) {
+          console.log("获取市");
+          _getData("/api/address/getCity", { provinceId: targetOption.id }).then(
+            data => {
+              targetOption.loading = false;
+              targetOption.children = _.map(data, value => {
+                if (
+                  selectedOptions[0].name != "北京市" &&
+                  selectedOptions[0].name != "天津市" &&
+                  selectedOptions[0].name != "重庆市" &&
+                  selectedOptions[0].name != "上海市"
+                ) {
+                  return (value = { ...value, isLeaf: false });
+                } else {
+                  return (value = { ...value, isLeaf: true });
+                }
+              });
+              this.options = [...this.options];
+            }
+          );
+        } else {
+          console.log("获取区");
+          if (
+            selectedOptions[0].name != "北京市" &&
+            selectedOptions[0].name != "天津市" &&
+            selectedOptions[0].name != "重庆市" &&
+            selectedOptions[0].name != "上海市"
+          ) {
+            _getData("/api/address/getCounty", {
+              provinceId: selectedOptions[0].id,
+              cityId: targetOption.id
+            }).then(data => {
+              targetOption.loading = false;
+              targetOption.children = data;
+              this.options = [...this.options];
+            });
+          } else {
+            targetOption.loading = false;
+          }
+        }
+      },
       getLicenseUrl(val) {
-        this.submitData.licenseUrl = val[0].thumbUrl;
+        if (val.length) {
+          this.submitData.licenseUrl = val[0].url;
+        } else {
+          this.submitData.licenseUrl = "";
+        }
       },
       getTaxRegistrationUrl(val) {
-        this.submitData.taxRegistrationUrl = val[0].thumbUrl;
+        if (val.length) {
+          this.submitData.taxRegistrationUrl = val[0].url;
+        } else {
+          this.submitData.licenseUrl = "";
+        }
       },
       getProductionLicenseUrl(val) {
-        this.submitData.productionLicenseUrl = val[0].thumbUrl;
+        if (val.length) {
+          this.submitData.productionLicenseUrl = val[0].url;
+        } else {
+          this.submitData.licenseUrl = "";
+        }
       }
     },
     computed: {
@@ -280,6 +354,14 @@
       upload,
       commonTitle,
       submitSuccessModal
+    },
+    mounted() {
+      _getData("/api/address/getProvince", {}).then(data => {
+        console.log(data);
+        this.options = _.map(data, value => {
+          return (value = { ...value, isLeaf: false });
+        });
+      });
     }
   };
 </script>

@@ -4,6 +4,9 @@ const mutations = {
     },
     changeUserInfoState(state:any,val:Object){
         state.userInfo = val
+    },
+    changeDefaultSelectedKeys(state:any,val:Array<any>){
+        state.defaultSelectedKeys = val
     }
 }
 
