@@ -143,11 +143,28 @@
           </a-tab-pane>
           <a-tab-pane tab="产品规格/参数" key="2" :forceRender="true">
             <ul class="specification">
-              <li><span>商品名称</span><span>超声手术设备</span></li>
-              <li><span>品牌名称</span><span>普利生</span></li>
-              <li><span>型号</span><span>C2000-A</span></li>
-              <li><span>单位</span><span>台</span></li>
-              <li><span>生产厂家</span><span>北京普利生仪器有限公司</span></li>
+              <li>
+                <h2>ECG心电</h2>
+                <ul>
+                  <li>
+                    <span>导联</span>
+                    <span>震荡法</span>
+                  </li>
+                  <li>
+                    <span>扫描速度</span>
+                    <span>50mm/s，监护模式：12.5mm/s</span>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <h2>SPO2血氧饱和度</h2>
+                <ul>
+                  <li>
+                    <span>扫描速度</span>
+                    <span>50mm/s，监护模式：12.5mm/s</span>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </a-tab-pane>
           <a-tab-pane tab="产品评价(36)" key="3" :forceRender="true">
@@ -826,29 +843,55 @@
               .specification {
                 width: 590px;
                 border: #dddddd 1px solid;
-                border-bottom: 0;
-                li {
-                  height: 46px;
+                //border-bottom: 0;
+                margin: 0 auto;
+                width: 710px;
+                > li {
                   display: flex;
                   justify-content: flex-start;
                   align-items: center;
-                  border-bottom: #dddddd 1px solid;
-                  span {
-                    font-size: 14px;
-                    color: #666666;
-                    height: 100%;
+                  flex-direction: column;
+                  h2 {
+                    height: 40px;
+                    width: 100%;
                     display: flex;
                     align-items: center;
-                    &:first-child {
-                      background: #f5f5f5;
-                      width: 123px;
-                      border-right: #dddddd 1px solid;
-                      padding-left: 24px;
-                    }
-                    &:last-child {
-                      flex: 1;
-                      padding-left: 90px;
-                      font-weight: 600;
+                    padding-left: 16px;
+                    background: #f5f5f5;
+                    font-size: 13px;
+                    color: #333333;
+                    font-weight: 600;
+                    //border-bottom: #dddddd 1px solid;
+                  }
+                  > ul {
+                    width: 100%;
+                    li {
+                      display: flex;
+                      justify-content: flex-start;
+                      align-items: center;
+                      height: 44px;
+                      border-bottom: #dddddd 1px solid;
+                      span {
+                        font-size: 13px;
+                        color: #666666;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        padding-left: 16px;
+                        &:first-child {
+                          //background: #f5f5f5;
+                          width: 165px;
+                          border-right: #dddddd 1px solid;
+                        }
+                        &:last-child {
+                          flex: 1;
+
+                          font-weight: 600;
+                        }
+                      }
+                      &:last-child {
+                        border-bottom: 0;
+                      }
                     }
                   }
                 }

@@ -32,7 +32,7 @@
             <share-menu-vue></share-menu-vue>
           </div>
         </div>
-        <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
+        <comment-vue :isLogin="$store.state.isLogin" type="5"></comment-vue>
         <menu-vue :item="detail"></menu-vue>
       </div>
       <div class="right"></div>

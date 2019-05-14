@@ -2,7 +2,7 @@
  * @Author: mikey.dongqizhen 
  * @Date: 2019-04-18 17:08:47 
  * @Last Modified by: mikey.dongqizhen
- * @Last Modified time: 2019-05-13 10:45:26
+ * @Last Modified time: 2019-05-14 15:03:46
  */
 
 
@@ -11,19 +11,19 @@ import axios from 'axios'
 
 let request = axios.create();
 //console.log(window.localStorage["vuex-along"])
-let token
-if (window.localStorage["vuex-along"] != "{}") {
-    token = JSON.parse(window.localStorage["vuex-along"])['vuex-along'].userInfo.token
-}
+
 
 
 //添加请求拦截器
 request.interceptors.request.use(function(config) {
     if (config.url.indexOf('!request.action') == -1) {
+        let token;
+        if (window.localStorage["vuex-along"] != "{}") {
+            token = JSON.parse(window.localStorage["vuex-along"])['vuex-along'].userInfo.token
+        }
         config.headers['X-Nideshop-Token'] = token
         config.transformRequest = [
             (data) => {
-                console.log(data)
                 return new_to_Data(data)
                     //return JSON.stringify(data)
             }

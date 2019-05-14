@@ -7,7 +7,7 @@
       <div class="commonWidth">
         <h2><span></span>参数对比</h2>
         <transition-group name="list-complete" tag="div" class="content">
-          <div class="col" key="first">
+          <!-- <div class="col" key="first">
             <div class="header">
               <p>
                 <svg class="icon" aria-hidden="true">
@@ -18,26 +18,39 @@
             </div>
             <ul>
               <li>参数一</li>
-              <li>参数一</li>
+              <li>参数3</li>
               <li>参数一</li>
               <li>参数一</li>
               <li>参数一</li>
               <li>参数一</li>
               <li>参数一</li>
             </ul>
-          </div>
+          </div> -->
+
           <div class="col" v-for="(item, i) in arr" :key="item.id">
             <div class="header">
-              <p :class="item.name ? '' : 'no-data'">
+              <p :class="item.name ? '' : 'no-data'" v-if="i != 0">
                 {{ item.name || "暂无型号" }}
               </p>
-
-              <span class="del-btn" v-if="item.name" @click="delbtnClick(i)">
+              <p v-else>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconcanshuduibi"></use>
+                </svg>
+                主要参数
+              </p>
+              <span
+                class="del-btn"
+                v-if="i != 0 && item.name"
+                @click="delbtnClick(i)"
+              >
                 <svg class="icon" aria-hidden="true">
                   <use xlink:href="#icontianjiaduibichanpinshanchu"></use>
                 </svg>
               </span>
-              <a-button type="primary" @click.self.stop="changeModel(i)"
+              <a-button
+                v-if="i != 0"
+                type="primary"
+                @click.self.stop="changeModel(i)"
                 >更换型号</a-button
               >
               <transition name="bounce">
@@ -114,6 +127,8 @@
                 </div>
               </transition>
             </div>
+            <!-- <div class="paramas"> -->
+            <h3>{{ i == 0 ? "通用规格" : "" }}</h3>
             <ul>
               <li>参数一</li>
               <li>参数一</li>
@@ -123,6 +138,7 @@
               <li>参数一</li>
               <li>参数一</li>
             </ul>
+            <!-- </div> -->
           </div>
         </transition-group>
         <a-button type="primary" @click="addbtnClick" v-if="arr.length < 6">
@@ -148,6 +164,10 @@
     data() {
       return {
         arr: [
+          {
+            name: "主要参数",
+            id: 0
+          },
           {
             name: "核磁共振MRI类 飞利浦 loge980-7890",
             id: 1
@@ -414,6 +434,16 @@
               left: 0;
               z-index: 0;
             }
+          }
+          h3 {
+            background: #f5f5f5;
+            font-size: 14px;
+            color: #333333;
+            font-weight: 600;
+            padding-left: 20px;
+            height: 50px;
+            display: flex;
+            align-items: center;
           }
           > ul {
             li {

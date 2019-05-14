@@ -18,7 +18,7 @@
         <span>发送</span>
       </div>
       <h2>
-        2条回复
+        {{ commentData.amount }}条回复
         <ul>
           <li
             :class="i == defaultVal && 'active'"
@@ -31,11 +31,16 @@
         </ul>
       </h2>
       <div class="review_content">
-        <ul>
-          <comment-item-vue>
+        <ul v-if="commentData.commentList.length">
+          <comment-item-vue
+            v-for="item in commentData.commentList"
+            :key="item.id"
+            :item="item"
+          >
             <comment-item-vue slot="replay-container"></comment-item-vue>
           </comment-item-vue>
         </ul>
+        <no-data v-else type="no-comment" text="暂无评论"></no-data>
       </div>
     </div>
   </div>
@@ -44,11 +49,13 @@
 <script>
   import commentItemVue from "./commentItem.vue";
   import { mapState } from "vuex";
+  import { _getData } from "../../../config/getData";
 
   export default {
     data() {
       return {
-        defaultVal: 0
+        commentData: "",
+        defaultVal: 0 //排序
       };
     },
     props: {
@@ -56,6 +63,9 @@
         type: Boolean,
         default: false,
         required: true
+      },
+      type: {
+        type: [Number, String] //行业资讯 5
       }
     },
     components: {
@@ -63,6 +73,20 @@
     },
     computed: {
       ...mapState(["userInfo"])
+    },
+    mounted() {
+      _getData(`${this.$API_URL.HYGPROURL}/server_pro/learn!request.action`, {
+        method: "getArticleCommentListV1",
+        userid: "",
+        token: "10533",
+        params: {
+          id: this.$route.query.id,
+          currentPage: 1,
+          countPerPage: "5"
+        }
+      }).then(data => {
+        this.commentData = data.data.result;
+      });
     },
     methods: {
       toLogin() {
@@ -141,6 +165,7 @@
         flex-direction: column;
         align-items: flex-end;
         background: #fff;
+
         .top {
           display: flex;
           justify-content: flex-start;
@@ -215,6 +240,10 @@
         display: flex;
         justify-content: flex-start;
         ul {
+          width: 100%;
+        }
+        /deep/ .no-data {
+          height: 500px;
         }
       }
     }

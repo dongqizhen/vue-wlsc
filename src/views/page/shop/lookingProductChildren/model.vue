@@ -1,5 +1,6 @@
 <template>
   <div class="model">
+    <breadcrumb-vue :routes="routes"></breadcrumb-vue>
     <recommends-tab-vue
       :tabs="[
         '整机(32)',
@@ -30,7 +31,7 @@
     <div class="main-content-box">
       <div class="left">
         <shop-nav-vue :navArr="['发布时间', '按价格', '按好评']"></shop-nav-vue>
-        <div class="main-content">
+        <div class="main-content" v-if="!isLoading">
           <ul>
             <product-item-vue></product-item-vue>
             <product-item-vue></product-item-vue>
@@ -38,6 +39,7 @@
           </ul>
           <pagination-vue></pagination-vue>
         </div>
+        <loading-vue v-else></loading-vue>
       </div>
       <div class="right">
         <brand-card-vue></brand-card-vue>
@@ -52,20 +54,124 @@
   import brandCardVue from "../../../../components/common/brandCard.vue";
   import recommendsTabVue from "../../../../components/common/recommendsTab.vue";
   import paginationVue from "../../../../components/common/pagination.vue";
+  import breadcrumbVue from "../../../../components/common/breadcrumb.vue";
+  import { _getData } from "../../../../config/getData";
+  import loadingVue from "../../../../components/common/loading.vue";
 
   export default {
     data() {
-      return {};
+      return {
+        routes: [],
+        isLoading: true
+      };
     },
     components: {
       shopNavVue,
       productItemVue,
       brandCardVue,
       recommendsTabVue,
-      paginationVue
+      paginationVue,
+      breadcrumbVue,
+      loadingVue
     },
     methods: {
       tabClick(i) {}
+    },
+    mounted() {
+      _getData("api/queryStore", { modelId: this.$route.query.modelId })
+        .then(data => {
+          this.isLoading = false;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    beforeRouteEnter(to, from, next) {
+      console.log(to, from);
+      next(vm => {
+        console.log(vm);
+        vm.routes =
+          vm.$route.query.nav_index == 2 //找品牌
+            ? [
+                {
+                  name: "首页",
+                  path: "/"
+                },
+                {
+                  name: "找品牌",
+                  path:
+                    "/lookingProduct/oneOfBrandClassificne?nav_index=" +
+                    vm.$route.query.nav_index
+                },
+                {
+                  name: vm.$route.query.brandName,
+                  path:
+                    "/lookingProduct?nav_index=" +
+                    vm.$route.query.nav_index +
+                    "&brandId=" +
+                    vm.$route.query.brandId +
+                    "&brandName=" +
+                    vm.$route.query.brandName
+                },
+                {
+                  name: vm.$route.query.categoryName,
+                  path:
+                    "/lookingProduct/brand?nav_index=" +
+                    vm.$route.query.nav_index +
+                    "&brandId=" +
+                    vm.$route.query.brandId +
+                    "&brandName=" +
+                    vm.$route.query.brandName +
+                    "&categoryId=" +
+                    vm.$route.query.categoryId +
+                    "&categoryName=" +
+                    vm.$route.query.categoryName
+                },
+                {
+                  name: vm.$route.query.modelName,
+                  path: "/lookingProduct/model?nav_index=2"
+                }
+              ]
+            : [
+                //找产品
+                {
+                  name: "首页",
+                  path: "/"
+                },
+                {
+                  name: "找产品",
+                  path: "/lookingProduct?nav_index=" + vm.$route.query.nav_index
+                },
+                {
+                  name: vm.$route.query.categoryName,
+                  path:
+                    "/lookingProduct/oneOfBrandClassificne?nav_index=" +
+                    vm.$route.query.nav_index +
+                    "&categoryId=" +
+                    vm.$route.query.categoryId +
+                    "&categoryName=" +
+                    vm.$route.query.categoryName
+                },
+                {
+                  name: vm.$route.query.brandName,
+                  path:
+                    "/lookingProduct/brand?nav_index=" +
+                    vm.$route.query.nav_index +
+                    "&brandId=" +
+                    vm.$route.query.brandId +
+                    "&brandName=" +
+                    vm.$route.query.brandName +
+                    "&categoryId=" +
+                    vm.$route.query.categoryId +
+                    "&categoryName=" +
+                    vm.$route.query.categoryName
+                },
+                {
+                  name: vm.$route.query.modelName,
+                  path: "/lookingProduct/model?nav_index=2"
+                }
+              ];
+      });
     }
   };
 </script>

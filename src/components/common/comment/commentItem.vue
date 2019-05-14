@@ -1,13 +1,15 @@
 <template>
   <li class="comment-item">
-    <div class="img_box"></div>
+    <div class="img_box">
+      <img :src="item.userImageUrl" alt="" />
+    </div>
     <div class="main">
       <span>
-        张德志
-        <span>2019-02-18&nbsp; 16:20</span>
+        {{ item.username }}
+        <span>{{ item.createdOn }}</span>
       </span>
       <p>
-        产品很不错。我下次会再来的！产品很不错。我下次会再来的！产品很不错。我下次会再来的！产品很不错。我下次会再来的！产品很不错。我下次会再来的！产品很不错。我下次会再来的！
+        {{ item.content }}
       </p>
       <div class="replay">
         <div class="btn">
@@ -63,6 +65,7 @@
         visible: false
       };
     },
+    props: ["item"],
     components: {
       loginModalVue
     },
@@ -131,8 +134,12 @@
     justify-content: flex-start;
     //padding-bottom: 20px;
     border-bottom: 1px solid #dddddd;
+    padding-top: 20px;
     &:last-child {
       border: 0;
+    }
+    &:first-child {
+      padding-top: 0;
     }
     .img_box {
       height: 30px;
@@ -141,6 +148,11 @@
       background: $base-background;
       margin-right: 8px;
       margin-top: 4px;
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 16px;
+      }
     }
     .main {
       flex: 1;

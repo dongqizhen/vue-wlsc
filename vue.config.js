@@ -15,7 +15,7 @@ module.exports = {
     // foobar.com/my-app/，集baseUrl到'/my-app/'.
 
     publicPath: process.env.NODE_ENV === 'production' ?
-        '/online/' : '/',
+        '/' : '/',
 
     // assetsDir: '../assets/', outputDir: 在npm run build时 生成文件的目录 type:string,
     // default:'dist' outputDir: 'dist', pages:{ type:Object,Default:undfind }

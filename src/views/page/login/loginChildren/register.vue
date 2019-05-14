@@ -1,13 +1,23 @@
 <template>
   <div class="register">
     <a-form :form="form" @submit="handleSubmit">
-      <a-form-item>
+      <a-form-item
+        :validate-status="Error('phone1') ? 'error' : ''"
+        :help="Error('phone1') || ''"
+      >
+        <transition name="slide-fade">
+          <span v-if="phone1_success" class="extra">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconzhengque"></use>
+            </svg>
+          </span>
+        </transition>
         <a-input
           placeholder="请输入手机号"
           maxlength="11"
           autocomplete="off"
           v-decorator="[
-            'phone',
+            'phone1',
             {
               rules: [
                 {
@@ -25,11 +35,23 @@
         >
         </a-input>
       </a-form-item>
-      <a-form-item>
+      <a-form-item
+        :validate-status="Error('seccode') ? 'error' : ''"
+        :help="Error('seccode') || ''"
+      >
+        <transition name="slide-fade">
+          <span v-if="seccode_err" class="extra seccode">
+            验证码错误
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconxingzhuang2"></use>
+            </svg>
+          </span>
+        </transition>
         <a-input
           placeholder="请输入验证码"
           maxlength="6"
           autocomplete="off"
+          @change="seccodeChange"
           v-decorator="[
             'seccode',
             {
@@ -45,7 +67,10 @@
           <span slot="suffix" @click="gainCodeHandler">{{ content }}</span>
         </a-input>
       </a-form-item>
-      <a-form-item>
+      <a-form-item
+        :validate-status="Error('password') ? 'error' : ''"
+        :help="Error('password') || ''"
+      >
         <a-input
           placeholder="请输入新密码，长度不少于6位"
           autocomplete="off"
@@ -69,7 +94,10 @@
         >
         </a-input>
       </a-form-item>
-      <a-form-item>
+      <a-form-item
+        :validate-status="Error('confirmPassword') ? 'error' : ''"
+        :help="Error('confirmPassword') || ''"
+      >
         <a-input
           placeholder="请再次输入密码"
           autocomplete="off"
@@ -93,10 +121,32 @@
         </a-input>
       </a-form-item>
       <div class="agreement">
-        <a-checkbox :checked="checkNick" @change="handleChange">
-          我已经阅读并接受
-        </a-checkbox>
-        <router-link to="agreement" append>《好医工服务协议》</router-link>
+        <a-form-item
+          :validate-status="Error('checkedBox') ? 'error' : ''"
+          :help="Error('checkedBox') || ''"
+        >
+          <a-checkbox
+            :checked="checkNick"
+            @change="handleChange"
+            v-decorator="[
+              'checkedBox',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message: '未接受协议'
+                  },
+                  {
+                    validator: isChecked
+                  }
+                ]
+              }
+            ]"
+          >
+            我已经阅读并接受
+          </a-checkbox>
+          <router-link to="agreement" append>《好医工服务协议》</router-link>
+        </a-form-item>
       </div>
 
       <a-button
@@ -104,6 +154,7 @@
         html-type="submit"
         class="login-form-button"
         :disabled="hasErrors(form.getFieldsError())"
+        @click="passwordLogin"
       >
         注册
       </a-button>
@@ -118,7 +169,7 @@
 </template>
 
 <script>
-  import { timer } from "../../../../components/mixin/mixin";
+  import { timer, FormValidator } from "../../../../components/mixin/mixin";
 
   export default {
     data() {
@@ -126,12 +177,15 @@
         checkNick: false
       };
     },
-    mixins: [timer],
+    mixins: [timer, FormValidator],
     beforeCreate() {
       this.form = this.$form.createForm(this);
     },
     methods: {
       callback() {},
+      passwordLogin() {
+        this.seccode_err = true;
+      },
       handleSubmit(e) {
         e.preventDefault();
         this.form.validateFieldsAndScroll((err, values) => {
@@ -142,6 +196,14 @@
       },
       hasErrors(fieldsError) {
         return Object.keys(fieldsError).some(field => fieldsError[field]);
+      },
+      isChecked(rule, value, callback) {
+        console.log(rule, value);
+        if (!value && value != "undefined") {
+          callback("未接受协议");
+        } else {
+          callback();
+        }
       },
       compareToFirstPassword(rule, value, callback) {
         const form = this.form;
@@ -154,7 +216,8 @@
       handleChange(e) {
         this.checkNick = e.target.checked;
         this.$nextTick(() => {
-          this.form.validateFields(["nickname"], { force: true });
+          console.log(this.form.validateFields(["checkedBox"]));
+          this.form.validateFields(["checkedBox"], { force: true });
         });
       }
     }
@@ -170,7 +233,7 @@
     width: 100%;
     /deep/ .ant-form {
       .ant-row {
-        margin-bottom: 40px;
+        margin-bottom: 38px;
         &:nth-child(4) {
           margin-bottom: 24px;
         }
@@ -222,6 +285,37 @@
                 color: #999999;
               }
             }
+            .extra {
+              position: absolute;
+              right: 0;
+              top: -5px;
+              opacity: 1;
+              z-index: 100;
+              &.seccode,
+              &.password_err {
+                top: -26px;
+                color: #f11f1f;
+                font-size: 14px;
+              }
+              &.password_err {
+                top: -5px;
+              }
+              .icon {
+                width: 15px;
+                height: 15px;
+              }
+            }
+            .slide-fade-enter-active {
+              transition: all 0.4s ease;
+            }
+            .slide-fade-leave-active {
+              transition: all 0.4s cubic-bezier(1, 0.5, 0.8, 1);
+            }
+            .slide-fade-enter,
+            .slide-fade-leave-to {
+              transform: translateY(10px);
+              opacity: 0;
+            }
             .ant-form-explain {
               padding-right: 18px;
               background: url("../../../../assets/images/err.svg") no-repeat right
@@ -253,6 +347,10 @@
         .ant-checkbox:hover .ant-checkbox-inner,
         .ant-checkbox-input:focus + .ant-checkbox-inner {
           border-color: #fb752b;
+        }
+        .ant-row {
+          margin-bottom: 0;
+          width: 100%;
         }
         .ant-checkbox-wrapper {
           span:not(.ant-checkbox) {
