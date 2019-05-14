@@ -111,49 +111,57 @@
     <div class="commonBoxStyle specification">
       <div class="title">产品规格参数</div>
       <div class="specificationContent">
-        <div class="common">
-          <div class="left-box">产地</div>
-          <div class="right-box">
-            <a-select
-              defaultValue="请选择产地"
-              style="width: 136px"
-              @change="handleProductAddressChange"
-              :options="options"
-            >
-              <a-icon slot="suffixIcon" class="icon">
-                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-              </a-icon>
-            </a-select>
-          </div>
-        </div>
-        <div class="common">
-          <div class="left-box">生产厂家</div>
-          <div class="right-box">
-            <a-input
-              placeholder="请输入生产厂家"
-              v-model="submitData.manufacturer"
-            />
-          </div>
-        </div>
-        <div class="common">
-          <div class="left-box">件装量</div>
-          <div class="right-box">
-            <a-input placeholder="请输入件装量" v-model="submitData.capacity" />
-          </div>
-        </div>
-        <div class="common">
-          <div class="left-box">单位</div>
-          <div class="right-box">
-            <a-input placeholder="请输入单位" v-model="submitData.unit" />
-          </div>
-        </div>
-        <div class="common">
-          <div class="left-box">最小起订量</div>
-          <div class="right-box">
-            <a-input
-              placeholder="请输入最小起订量"
-              v-model="submitData.minOrderQuantity"
-            />
+        <list-title :titleArr="titleArr"></list-title>
+        <div class="table-body">
+          <div class="itemType" v-for="item in params" :key="item.id">
+            <div v-if="item.id" class="itemBox">
+              <div class="typeName">{{ item.typeName }}</div>
+              <div class="typeValue">
+                <div class="paramsBox">
+                  <ul>
+                    <li
+                      v-for="(paramItem, index) in item.paramsArr"
+                      :key="index"
+                    >
+                      <div class="paramItemBox" v-if="paramItem.paramName">
+                        <span>{{ paramItem.paramName }}</span>
+                        <span>{{ paramItem.paramValue }}</span>
+                      </div>
+                      <div class="addBtn" v-else>
+                        <svg class="icon" aria-hidden="true">
+                          <use xlink:href="#icontianjiashangpin"></use>
+                        </svg>
+                        添加参数 (编辑参数名称和参数值)
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="delete">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#iconshanchu"></use>
+                  </svg>
+                  删除
+                </div>
+              </div>
+            </div>
+            <div v-else class="itemBox">
+              <div class="typeName">
+                <div class="addBtn">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icontianjiashangpin"></use>
+                  </svg>
+                  添加参数类型
+                </div>
+              </div>
+              <div class="typeValue">
+                <div class="addBtn">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icontianjiashangpin"></use>
+                  </svg>
+                  添加参数 (编辑参数名称和参数值)
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -223,30 +231,15 @@
     reader.readAsDataURL(img);
   }
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
+  import listTitle from "../../../../components/common/listTitle";
   export default {
     data() {
       return {
+        titleArr: ["参数类型", "参数名称", "参数值", "操作"],
+        params: [],
         uploadList: [],
         defaultCascaderValue: [],
-        options: [
-          {
-            label: "北京",
-            value: "Zhejiang",
-            title: "北京 010",
-            key: "010"
-          },
-          {
-            label: "上海",
-            value: "Jiangsu",
-            key: "021"
-          },
-          {
-            label: "杭州",
-            value: "hangzhou",
-            key: "0571",
-            disabled: true
-          }
-        ],
+        options: [],
         submitData: {
           name: "",
           goodsSn: "",
@@ -314,7 +307,8 @@
       }
     },
     components: {
-      commonTitle
+      commonTitle,
+      listTitle
     }
   };
 </script>
@@ -427,7 +421,117 @@
         }
       }
     }
+    .specification {
+      .specificationContent {
+        /deep/.listTitle {
+          ul {
+            li {
+              justify-content: center;
+              margin: 0;
+              &:first-child {
+                width: 144px;
+              }
+              &:nth-child(2) {
+                width: 173px;
+              }
+              &:nth-child(3) {
+                width: 567px;
+              }
+              &:nth-child(4) {
+                width: 78px;
+              }
+            }
+          }
+        }
 
+        .table-body {
+          border: $border-style;
+          margin-top: 10px;
+          margin-bottom: 57px;
+          .itemType {
+            border-bottom: $border-style;
+            display: flex;
+            .itemBox {
+              display: flex;
+            }
+            &:last-child {
+              border-bottom: none;
+            }
+            .addBtn {
+              height: 29px;
+              background: #f5f5f5;
+              border-radius: 14.5px;
+              font-size: 13px;
+              color: #f5a623;
+              margin: 10px 0;
+              padding: 6px 11px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: normal;
+              .icon {
+                width: 10px;
+                height: 10px;
+                margin-right: 2px;
+              }
+            }
+            .typeName {
+              width: 145px;
+              padding: 0 16px;
+              font-size: 14px;
+              color: #333333;
+              font-weight: 600;
+              border-right: $border-style;
+              display: flex;
+              align-items: center;
+            }
+            .typeValue {
+              width: 822px;
+              display: flex;
+              justify-content: center;
+              .paramsBox {
+                display: flex;
+                li {
+                  display: flex;
+                  justify-content: center;
+                  border-bottom: $border-style;
+                  border-right: $border-style;
+                  &:last-child {
+                    border-bottom: none;
+                  }
+                  .paramItemBox {
+                    display: flex;
+                    span {
+                      display: flex;
+                      align-items: center;
+                      padding: 14px 16px;
+                      &:first-child {
+                        width: 174px;
+                        border-right: $border-style;
+                      }
+                      &:last-child {
+                        width: 568px;
+                      }
+                    }
+                  }
+                }
+              }
+              .delete {
+                width: 79px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 12px;
+                color: #333333;
+                .icon {
+                  margin-right: 4px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     .productPicture {
       .pictureContent {
         height: 118px;

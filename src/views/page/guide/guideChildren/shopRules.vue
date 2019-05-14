@@ -17,9 +17,16 @@
 </template>
 <script>
   import guideRight from "../../../../components/common/guideRight";
+  import { mapMutations } from "vuex";
   export default {
     data() {
       return {};
+    },
+    methods: {
+      ...mapMutations(["changeDefaultSelectedKeys"])
+    },
+    created() {
+      this.changeDefaultSelectedKeys(["16"]);
     },
     components: {
       guideRight

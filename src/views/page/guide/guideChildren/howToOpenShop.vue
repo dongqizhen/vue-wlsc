@@ -25,10 +25,8 @@
     methods: {
       ...mapMutations(["changeDefaultSelectedKeys"])
     },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        vm.changeDefaultSelectedKeys(["9"]);
-      });
+    created() {
+      this.changeDefaultSelectedKeys(["9"]);
     },
     components: {
       guideRight

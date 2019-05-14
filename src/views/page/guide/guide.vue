@@ -56,7 +56,7 @@
           {
             id: 3,
             key: "sub3",
-            name: "购货商家",
+            name: "供货商家",
             icon: "#iconqita",
             menus: [
               {
@@ -114,10 +114,6 @@
     },
     computed: {
       defaultSelectedKeys() {
-        console.log(
-          JSON.parse(window.localStorage["vuex-along"])["vuex-along"]
-            .defaultSelectedKeys
-        );
         return JSON.parse(window.localStorage["vuex-along"])["vuex-along"]
           .defaultSelectedKeys;
       }
