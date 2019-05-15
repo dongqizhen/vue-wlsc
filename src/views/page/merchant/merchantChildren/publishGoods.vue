@@ -113,54 +113,12 @@
       <div class="specificationContent">
         <list-title :titleArr="titleArr"></list-title>
         <div class="table-body">
-          <div class="itemType" v-for="item in params" :key="item.id">
-            <div v-if="item.id" class="itemBox">
-              <div class="typeName">{{ item.typeName }}</div>
-              <div class="typeValue">
-                <div class="paramsBox">
-                  <ul>
-                    <li
-                      v-for="(paramItem, index) in item.paramsArr"
-                      :key="index"
-                    >
-                      <div class="paramItemBox" v-if="paramItem.paramName">
-                        <span>{{ paramItem.paramName }}</span>
-                        <span>{{ paramItem.paramValue }}</span>
-                      </div>
-                      <div class="addBtn" v-else>
-                        <svg class="icon" aria-hidden="true">
-                          <use xlink:href="#icontianjiashangpin"></use>
-                        </svg>
-                        添加参数 (编辑参数名称和参数值)
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <div class="delete">
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#iconshanchu"></use>
-                  </svg>
-                  删除
-                </div>
-              </div>
+          <div v-for="(item, index) in params" :key="index">
+            <div v-if="index < params.length - 1">
+              <new-param></new-param>
             </div>
-            <div v-else class="itemBox">
-              <div class="typeName">
-                <div class="addBtn">
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icontianjiashangpin"></use>
-                  </svg>
-                  添加参数类型
-                </div>
-              </div>
-              <div class="typeValue">
-                <div class="addBtn">
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icontianjiashangpin"></use>
-                  </svg>
-                  添加参数 (编辑参数名称和参数值)
-                </div>
-              </div>
+            <div v-else>
+              <add-btn v-on:getParams="addParams"></add-btn>
             </div>
           </div>
         </div>
@@ -232,11 +190,14 @@
   }
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import listTitle from "../../../../components/common/listTitle";
+  import addBtn from "../../../../components/common/productParams/addBtn";
+  import paramItem from "../../../../components/common/productParams/paramItem";
+  import newParam from "../../../../components/common/productParams/newParam";
   export default {
     data() {
       return {
         titleArr: ["参数类型", "参数名称", "参数值", "操作"],
-        params: [],
+        params: [{}],
         uploadList: [],
         defaultCascaderValue: [],
         options: [],
@@ -258,6 +219,9 @@
       };
     },
     methods: {
+      addParams() {
+        this.params.push({});
+      },
       handleRemove(file) {
         this.uploadList.splice(this.uploadList.indexOf(file), 1);
       },
@@ -294,21 +258,19 @@
         this.secondCity = cityData[value][0];
       },
       beforeUpload(file) {
-        // const isJPG = file.type === "image/jpeg";
-        // if (!isJPG) {
-        //   this.$message.error("You can only upload JPG file!");
-        // }
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
           this.$message.error("Image must smaller than 2MB!");
         }
         return isLt2M;
-        // return isJPG && isLt2M;
       }
     },
     components: {
       commonTitle,
-      listTitle
+      listTitle,
+      addBtn,
+      newParam,
+      paramItem
     }
   };
 </script>
@@ -448,87 +410,6 @@
           border: $border-style;
           margin-top: 10px;
           margin-bottom: 57px;
-          .itemType {
-            border-bottom: $border-style;
-            display: flex;
-            .itemBox {
-              display: flex;
-            }
-            &:last-child {
-              border-bottom: none;
-            }
-            .addBtn {
-              height: 29px;
-              background: #f5f5f5;
-              border-radius: 14.5px;
-              font-size: 13px;
-              color: #f5a623;
-              margin: 10px 0;
-              padding: 6px 11px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-weight: normal;
-              .icon {
-                width: 10px;
-                height: 10px;
-                margin-right: 2px;
-              }
-            }
-            .typeName {
-              width: 145px;
-              padding: 0 16px;
-              font-size: 14px;
-              color: #333333;
-              font-weight: 600;
-              border-right: $border-style;
-              display: flex;
-              align-items: center;
-            }
-            .typeValue {
-              width: 822px;
-              display: flex;
-              justify-content: center;
-              .paramsBox {
-                display: flex;
-                li {
-                  display: flex;
-                  justify-content: center;
-                  border-bottom: $border-style;
-                  border-right: $border-style;
-                  &:last-child {
-                    border-bottom: none;
-                  }
-                  .paramItemBox {
-                    display: flex;
-                    span {
-                      display: flex;
-                      align-items: center;
-                      padding: 14px 16px;
-                      &:first-child {
-                        width: 174px;
-                        border-right: $border-style;
-                      }
-                      &:last-child {
-                        width: 568px;
-                      }
-                    }
-                  }
-                }
-              }
-              .delete {
-                width: 79px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 12px;
-                color: #333333;
-                .icon {
-                  margin-right: 4px;
-                }
-              }
-            }
-          }
         }
       }
     }
