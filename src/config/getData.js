@@ -26,3 +26,11 @@ export async function _getData(url = '', data = {}, config = {}) {
         // } */
     })
 }
+
+export async function _getDataAll(funArr = []) {
+    axios.all(funArr)
+        .then(axios.spread(function(acct, perms) {
+            // 两个请求现在都执行完成
+            return true
+        }));
+}

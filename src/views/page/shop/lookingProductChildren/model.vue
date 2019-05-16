@@ -1,50 +1,47 @@
 <template>
   <div class="model">
     <breadcrumb-vue :routes="routes"></breadcrumb-vue>
-    <recommends-tab-vue
-      :tabs="[
-        '整机(32)',
-        '备件(12)',
-        '店铺(23)',
-        '文章(2)',
-        '视频(43)',
-        '案例(12)',
-        '中标信息(2)'
-      ]"
-      v-on:tabClick="tabClick"
-    >
-      <a-button slot="btn">
-        <router-link
-          :to="{
-            path: '/comparisonOfParameters',
-            query: { nav_index: $route.query.nav_index }
-          }"
-          target="_blank"
-        >
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#iconcanshuduibi"></use>
-          </svg>
-          参数对比
-        </router-link>
-      </a-button>
-    </recommends-tab-vue>
-    <div class="main-content-box">
-      <div class="left">
-        <shop-nav-vue :navArr="['发布时间', '按价格', '按好评']"></shop-nav-vue>
-        <div class="main-content" v-if="!isLoading">
-          <ul>
-            <product-item-vue></product-item-vue>
-            <product-item-vue></product-item-vue>
-            <product-item-vue></product-item-vue>
-          </ul>
-          <pagination-vue></pagination-vue>
+    <div v-if="!isLoading">
+      <recommends-tab-vue
+        v-if="tabs.length"
+        :tabs="tabs"
+        v-on:tabClick="tabClick"
+      >
+        <a-button slot="btn">
+          <router-link
+            :to="{
+              path: '/comparisonOfParameters',
+              query: { nav_index: $route.query.nav_index }
+            }"
+            target="_blank"
+          >
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconcanshuduibi"></use>
+            </svg>
+            参数对比
+          </router-link>
+        </a-button>
+      </recommends-tab-vue>
+      <div class="main-content-box">
+        <div class="left">
+          <shop-nav-vue
+            :navArr="['发布时间', '按价格', '按好评']"
+          ></shop-nav-vue>
+          <div class="main-content">
+            <ul>
+              <product-item-vue></product-item-vue>
+              <product-item-vue></product-item-vue>
+              <product-item-vue></product-item-vue>
+            </ul>
+            <pagination-vue></pagination-vue>
+          </div>
         </div>
-        <loading-vue v-else></loading-vue>
-      </div>
-      <div class="right">
-        <brand-card-vue></brand-card-vue>
+        <div class="right">
+          <brand-card-vue></brand-card-vue>
+        </div>
       </div>
     </div>
+    <loading-vue v-else></loading-vue>
   </div>
 </template>
 
@@ -55,14 +52,16 @@
   import recommendsTabVue from "../../../../components/common/recommendsTab.vue";
   import paginationVue from "../../../../components/common/pagination.vue";
   import breadcrumbVue from "../../../../components/common/breadcrumb.vue";
-  import { _getData } from "../../../../config/getData";
+  import { _getData, _getDataAll } from "../../../../config/getData";
   import loadingVue from "../../../../components/common/loading.vue";
+  import _ from "lodash";
 
   export default {
     data() {
       return {
         routes: [],
-        isLoading: true
+        isLoading: true,
+        tabs: []
       };
     },
     components: {
@@ -78,13 +77,57 @@
       tabClick(i) {}
     },
     mounted() {
-      _getData("api/queryStore", { modelId: this.$route.query.modelId })
-        .then(data => {
+      //获取nav数量
+      // _getData("api/goods/productCount", {
+      //   modelId: this.$route.query.modelId
+      // }).then(data => {
+      //   this.tabs = [
+      //     ..._.map(data.list, val => {
+      //       return `${val.name}(${val.count})`;
+      //     }),
+      //     ...[
+      //       `文章(${data.articleNum})`,
+      //       `视频(${data.videoNum})`,
+      //       `案例(${data.maintenanceNum})`
+      //     ]
+      //   ];
+      // });
+      // //获取店铺
+      // _getData("api/queryStore", { modelId: this.$route.query.modelId })
+      //   .then(data => {
+      //     this.isLoading = false;
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //   });
+
+      _getDataAll([
+        //获取nav数量
+        _getData("api/goods/productCount", {
+          modelId: this.$route.query.modelId
+        }).then(data => {
+          this.tabs = [
+            ..._.map(data.list, val => {
+              return `${val.name}(${val.count})`;
+            }),
+            ...[
+              `文章(${data.articleNum})`,
+              `视频(${data.videoNum})`,
+              `案例(${data.maintenanceNum})`
+            ]
+          ];
+        }),
+        //获取店铺
+        _getData("api/queryStore", { modelId: this.$route.query.modelId })
+          .then(data => {})
+          .catch(err => {
+            console.log(err);
+          })
+      ]).then(() => {
+        this.$nextTick().then(() => {
           this.isLoading = false;
-        })
-        .catch(err => {
-          console.log(err);
         });
+      });
     },
     beforeRouteEnter(to, from, next) {
       console.log(to, from);
