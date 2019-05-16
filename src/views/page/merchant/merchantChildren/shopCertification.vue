@@ -112,7 +112,7 @@
             <a-input placeholder="请输入传真" v-model="submitData.fax" />
           </div>
         </div>
-        <div class="common ">
+        <!-- <div class="common ">
           <div class="left-box">开户银行</div>
           <div class="right-box">
             <a-input placeholder="请输入开户银行" v-model="submitData.bank" />
@@ -126,7 +126,7 @@
               v-model="submitData.bankNum"
             />
           </div>
-        </div>
+        </div> -->
         <div class="common ">
           <div class="left-box">QQ号</div>
           <div class="right-box">

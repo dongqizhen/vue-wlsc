@@ -111,49 +111,15 @@
     <div class="commonBoxStyle specification">
       <div class="title">产品规格参数</div>
       <div class="specificationContent">
-        <div class="common">
-          <div class="left-box">产地</div>
-          <div class="right-box">
-            <a-select
-              defaultValue="请选择产地"
-              style="width: 136px"
-              @change="handleProductAddressChange"
-              :options="options"
-            >
-              <a-icon slot="suffixIcon" class="icon">
-                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-              </a-icon>
-            </a-select>
-          </div>
-        </div>
-        <div class="common">
-          <div class="left-box">生产厂家</div>
-          <div class="right-box">
-            <a-input
-              placeholder="请输入生产厂家"
-              v-model="submitData.manufacturer"
-            />
-          </div>
-        </div>
-        <div class="common">
-          <div class="left-box">件装量</div>
-          <div class="right-box">
-            <a-input placeholder="请输入件装量" v-model="submitData.capacity" />
-          </div>
-        </div>
-        <div class="common">
-          <div class="left-box">单位</div>
-          <div class="right-box">
-            <a-input placeholder="请输入单位" v-model="submitData.unit" />
-          </div>
-        </div>
-        <div class="common">
-          <div class="left-box">最小起订量</div>
-          <div class="right-box">
-            <a-input
-              placeholder="请输入最小起订量"
-              v-model="submitData.minOrderQuantity"
-            />
+        <list-title :titleArr="titleArr"></list-title>
+        <div class="table-body">
+          <div v-for="(item, index) in params" :key="index">
+            <div v-if="index < params.length - 1">
+              <new-param></new-param>
+            </div>
+            <div v-else>
+              <add-btn v-on:getParams="addParams"></add-btn>
+            </div>
           </div>
         </div>
       </div>
@@ -223,30 +189,18 @@
     reader.readAsDataURL(img);
   }
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
+  import listTitle from "../../../../components/common/listTitle";
+  import addBtn from "../../../../components/common/productParams/addBtn";
+  import paramItem from "../../../../components/common/productParams/paramItem";
+  import newParam from "../../../../components/common/productParams/newParam";
   export default {
     data() {
       return {
+        titleArr: ["参数类型", "参数名称", "参数值", "操作"],
+        params: [{}],
         uploadList: [],
         defaultCascaderValue: [],
-        options: [
-          {
-            label: "北京",
-            value: "Zhejiang",
-            title: "北京 010",
-            key: "010"
-          },
-          {
-            label: "上海",
-            value: "Jiangsu",
-            key: "021"
-          },
-          {
-            label: "杭州",
-            value: "hangzhou",
-            key: "0571",
-            disabled: true
-          }
-        ],
+        options: [],
         submitData: {
           name: "",
           goodsSn: "",
@@ -265,6 +219,9 @@
       };
     },
     methods: {
+      addParams() {
+        this.params.push({});
+      },
       handleRemove(file) {
         this.uploadList.splice(this.uploadList.indexOf(file), 1);
       },
@@ -301,20 +258,19 @@
         this.secondCity = cityData[value][0];
       },
       beforeUpload(file) {
-        // const isJPG = file.type === "image/jpeg";
-        // if (!isJPG) {
-        //   this.$message.error("You can only upload JPG file!");
-        // }
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
           this.$message.error("Image must smaller than 2MB!");
         }
         return isLt2M;
-        // return isJPG && isLt2M;
       }
     },
     components: {
-      commonTitle
+      commonTitle,
+      listTitle,
+      addBtn,
+      newParam,
+      paramItem
     }
   };
 </script>
@@ -427,7 +383,36 @@
         }
       }
     }
+    .specification {
+      .specificationContent {
+        /deep/.listTitle {
+          ul {
+            li {
+              justify-content: center;
+              margin: 0;
+              &:first-child {
+                width: 144px;
+              }
+              &:nth-child(2) {
+                width: 173px;
+              }
+              &:nth-child(3) {
+                width: 567px;
+              }
+              &:nth-child(4) {
+                width: 78px;
+              }
+            }
+          }
+        }
 
+        .table-body {
+          border: $border-style;
+          margin-top: 10px;
+          margin-bottom: 57px;
+        }
+      }
+    }
     .productPicture {
       .pictureContent {
         height: 118px;
