@@ -1,3 +1,5 @@
+import { _getData } from "../../config/getData";
+
 const mixin = {
     data() {
         return {
@@ -16,13 +18,24 @@ const timer = {
             content: "获取验证码", // 按钮里显示的内容
             totalTime: 60, //记录具体倒计时时间
             canClick: true, //添加canClick
-            seccode_err: false //控制验证码错误提示是否显示
+            seccode_err: false, //控制验证码错误提示是否显示
         };
     },
-    methods: {
-        gainCodeHandler() {
+    created() {
 
-            if (!this.canClick) return;
+    },
+    methods: {
+        help() {
+            return this.Error('phone1') || ''
+        },
+        gainCodeHandler(sectype = 6) {
+            let val = this.form.getFieldValue('phone1')
+            if (!this.phone1_success && !val) {
+                console.log(this.$refs.phone1)
+                this.$refs.phone1.help = '请输入手机号'
+            }
+            if (!this.canClick || !this.phone1_success) return;
+
             this.seccode_err = false
             this.canClick = false;
             this.content = this.totalTime + "s";
@@ -36,6 +49,20 @@ const timer = {
                     this.canClick = true; //这里重新开启
                 }
             }, 1000);
+            console.log(val)
+            _getData(`${this.$API_URL.HYGLOGINURL}/server/user!request.action`, {
+                "method": "getCode",
+                "userid": "",
+                "token": "",
+                "params": {
+                    "phone": val,
+                    "type": sectype
+                }
+            }).then(data => {
+                if (data.data.status.code == 1101) {
+                    this.phone1isRegister = true
+                }
+            })
         },
         seccodeChange(e) {
             this.seccode_err = false;
@@ -48,7 +75,9 @@ const FormValidator = {
     data() {
         return {
             phone1_success: false, //手机号
-            seccode_err: false //验证码
+            seccode_err: false, //验证码,
+            phone2isRegister: true, //用户是否注册
+            phone1isRegister: false
         }
     },
     mounted() {
@@ -86,13 +115,20 @@ const FormValidator = {
 
             switch (field) {
                 case "phone1":
+
                     this.phone1_success =
                         val && getFieldError(field) == undefined ? true : false;
-
+                    if (!this.phone1_success) {
+                        this.phone1isRegister = false
+                    }
                     break;
                 case "phone2":
+
                     this.phone2_success =
                         val != "" && getFieldError(field) == undefined ? true : false;
+                    if (!this.phone2_success) {
+                        this.phone2isRegister = true
+                    }
             }
             return isFieldTouched(field) && getFieldError(field);
         }

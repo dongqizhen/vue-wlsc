@@ -2,9 +2,10 @@
   <div class="login">
     <div class="container">
       <div class="main-container">
-        <h2 class="logo">
+        <router-link class="logo" tag="h2" to="/">
           <img src="../../../assets/images/logo.png" alt="" />
-        </h2>
+        </router-link>
+
         <div class="login-container">
           <div class="banner">
             <img src="../../../assets/images/登录注册页插图.png" alt="" />

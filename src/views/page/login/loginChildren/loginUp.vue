@@ -6,6 +6,7 @@
           <a-form-item
             :validate-status="Error('phone1') ? 'error' : ''"
             :help="Error('phone1') || ''"
+            ref="phone1"
           >
             <transition name="slide-fade">
               <span v-if="phone1_success" class="extra">
@@ -65,7 +66,9 @@
                 }
               ]"
             >
-              <span slot="suffix" @click="gainCodeHandler">{{ content }}</span>
+              <span slot="suffix" @click="gainCodeHandler(6)">{{
+                content
+              }}</span>
             </a-input>
           </a-form-item>
           <div class="register-box">
@@ -92,9 +95,15 @@
           >
             <transition name="slide-fade">
               <span v-if="phone2_success" class="extra">
-                <svg class="icon" aria-hidden="true">
+                <svg v-if="phone2isRegister" class="icon" aria-hidden="true">
                   <use xlink:href="#iconzhengque"></use>
                 </svg>
+                <span v-else>
+                  用户未注册
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#iconxingzhuang2"></use>
+                  </svg>
+                </span>
               </span>
             </transition>
             <a-input
@@ -194,16 +203,37 @@
       };
     },
     mixins: [timer, FormValidator],
+
     methods: {
       ...mapMutations(["changeLoginState", "changeUserInfoState"]),
       callback() {},
       passwordLogin() {},
       handleSubmitOne(e) {
-        this.seccode_err = true;
         e.preventDefault();
+        let { phone1, seccode } = this.form.getFieldsValue(["phone1", "seccode"]);
+
         this.form.validateFieldsAndScroll((err, values) => {
           if (!err) {
             console.log("Received values of form: ", values);
+          }
+        });
+        _getData(`${this.$API_URL.HYGLOGINURL}/server/user!request.action`, {
+          userid: "",
+          method: "loginAppByCode",
+          params: {
+            accountNo: phone1,
+            code: seccode,
+            platform: ""
+          },
+          token: ""
+        }).then(data => {
+          if (data.data.status.code == 200) {
+            //成功
+            this.changeLoginState(true);
+            this.changeUserInfoState(data.data.result);
+            this.$router.back();
+          } else if (data.data.status.code == 1116) {
+            this.seccode_err = true;
           }
         });
       },
@@ -215,7 +245,7 @@
             console.log("Received values of form: ", values);
           }
         });
-        console.log(this.form.getFieldsValue());
+
         const { phone2, password } = this.form.getFieldsValue();
         _getData(`${this.$API_URL.HYGLOGINURL}/server/user!request.action`, {
           method: "loginAppWithPlatForm",
@@ -229,14 +259,17 @@
             password
           }
         }).then(data => {
-          console.log(data);
           if (data.data.status.code == 1106) {
+            //密码错误
             this.password_err = true;
             return;
           } else if (data.data.status.code == 200) {
+            //成功
             this.changeLoginState(true);
             this.changeUserInfoState(data.data.result);
             this.$router.back();
+          } else if (data.data.status.code == 1102) {
+            this.phone2isRegister = false;
           }
         });
       },
@@ -357,6 +390,8 @@
                     top: -5px;
                     opacity: 1;
                     z-index: 100;
+                    color: #f11f1f;
+                    font-size: 14px;
                     &.seccode,
                     &.password_err {
                       top: -26px;

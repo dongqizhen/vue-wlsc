@@ -4,12 +4,19 @@
       <a-form-item
         :validate-status="Error('phone1') ? 'error' : ''"
         :help="Error('phone1') || ''"
+        ref="phone1"
       >
         <transition name="slide-fade">
           <span v-if="phone1_success" class="extra">
-            <svg class="icon" aria-hidden="true">
+            <svg v-if="!phone1isRegister" class="icon" aria-hidden="true">
               <use xlink:href="#iconzhengque"></use>
             </svg>
+            <span v-else>
+              用户已注册
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconxingzhuang2"></use>
+              </svg>
+            </span>
           </span>
         </transition>
         <a-input
@@ -64,7 +71,7 @@
             }
           ]"
         >
-          <span slot="suffix" @click="gainCodeHandler">{{ content }}</span>
+          <span slot="suffix" @click="gainCodeHandler(1)">{{ content }}</span>
         </a-input>
       </a-form-item>
       <a-form-item
@@ -84,8 +91,8 @@
                   message: '请输入密码'
                 },
                 {
-                  min: 6,
-                  message: '密码长度应不少于6位'
+                  pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}$/,
+                  message: '由字母和数字组成，长度不少于6位'
                 }
               ],
               validateTrigger: 'change'
@@ -170,6 +177,7 @@
 
 <script>
   import { timer, FormValidator } from "../../../../components/mixin/mixin";
+  import { _getData } from "../../../../config/getData";
 
   export default {
     data() {
@@ -181,6 +189,19 @@
     beforeCreate() {
       this.form = this.$form.createForm(this);
     },
+    mounted() {
+      _getData("http://shop.allbring.com/payPC!request.action", {
+        methods: "getWeiXinScanPay",
+        userid: "21a7e21f-99ca-48d9-889b-8109be900a60",
+        token: "408",
+        params: {
+          totalPrice: "0.1",
+          orderNo: "100001"
+        }
+      }).then(data => {
+        console.log(data);
+      });
+    },
     methods: {
       callback() {},
       passwordLogin() {
@@ -191,6 +212,19 @@
         this.form.validateFieldsAndScroll((err, values) => {
           if (!err) {
             console.log("Received values of form: ", values);
+          }
+        });
+        let { phone1, seccode, confirmPassword } = this.form.getFieldsValue();
+
+        _getData(`${this.$API_URL.HYGLOGINURL}/server/user!request.action`, {
+          method: "register",
+          userid: "",
+          token: "",
+          params: {
+            accountNo: phone1,
+            password: confirmPassword,
+            code: seccode,
+            pleaseCode: ""
           }
         });
       },
@@ -291,6 +325,8 @@
               top: -5px;
               opacity: 1;
               z-index: 100;
+              font-size: 14px;
+              color: #f11f1f;
               &.seccode,
               &.password_err {
                 top: -26px;
