@@ -21,7 +21,7 @@
             </ul>
           </div>
           <div class="shop">
-            <shop-card-vue></shop-card-vue>
+            <shop-card-vue type="introduce"></shop-card-vue>
           </div>
         </div>
       </div>
@@ -45,28 +45,42 @@
   import { mixin } from "../../../components/mixin/mixin";
   import productItemVue from "../../../components/common/item/productItem.vue";
   import shopCardVue from "../../../components/common/shopCard.vue";
+  import { _getData } from "../../../config/getData";
 
   export default {
     data() {
       return {
         arr: [1, 2, 3, 4, 5],
-        routes: [
-          {
-            name: "首页",
-            path: "/"
-          },
-          {
-            name: "找店铺",
-            path: "/lookingShop?nav_index=3"
-          },
-          {
-            name: "北京华脉诚信科技有限公司",
-            path: "#"
-          }
-        ]
+        routes: []
       };
     },
     mixins: [mixin],
+    created() {
+      this.routes = [
+        {
+          name: "首页",
+          path: "/"
+        },
+        {
+          name: "找店铺",
+          path: "/lookingShop?nav_index=3"
+        },
+        {
+          name: this.$route.query.shopName,
+          path: "#"
+        }
+      ];
+    },
+    mounted() {
+      _getData("/goods/getGoods", {
+        storeId: "",
+        attributeCategoryId: "",
+        currentPage: 1,
+        countPerPage: 6,
+        sort: "createOn",
+        order: "asc"
+      });
+    },
     components: {
       Header,
       Footer,
@@ -79,8 +93,7 @@
       shopNavVue,
       productItemVue,
       shopCardVue
-    },
-    created() {}
+    }
   };
 </script>
 

@@ -142,7 +142,7 @@
           this.submitData = { ...this.submitData, current: this.current };
           this.$emit("getShopInfo", this.submitData);
         } else {
-          // _getData("/api/store", this.submitData).then(data => {
+          // _getData("store", this.submitData).then(data => {
           //   console.log("111", data);
           // });
         }
@@ -176,7 +176,7 @@
       cascadeSelect
     },
     mounted() {
-      _getData("/api/storeType/queryStoreType", {}).then(data => {
+      _getData("storeType/queryStoreType", {}).then(data => {
         console.log("店铺类型", data);
         this.shopTypeData = data;
       });

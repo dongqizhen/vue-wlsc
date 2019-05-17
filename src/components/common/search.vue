@@ -93,6 +93,7 @@
       position: relative;
       h1 {
         margin-right: 41px;
+        width: 160px;
       }
       .ipt_box {
         > div.search_box {

@@ -187,12 +187,12 @@
     },
     mounted() {
       //获取常用分类
-      _getData("api/ucatalog/list", {}).then(data => {
+      _getData("ucatalog/list", {}).then(data => {
         console.log("data", data);
         this.myArray2 = data.userCategoryList;
       });
       //获取一级分类
-      _getData("api/catalog/first", {})
+      _getData("catalog/first", {})
         .then(data => {
           console.log("data", data);
           this.myArr = data.categoryList;
@@ -223,7 +223,7 @@
           this.myArray2.push(item);
         }
         //保存常用分类
-        _getData("api/ucatalog/custom", {
+        _getData("ucatalog/custom", {
           categoryStr: item.id
         }).then(data => {
           this.$emit("success");
@@ -231,7 +231,7 @@
       },
       async getSecond(id) {
         //获取二级分类
-        await _getData("api/catalog/second", {
+        await _getData("catalog/second", {
           id
         }).then(data => {
           this.myArray = data.subCategory;

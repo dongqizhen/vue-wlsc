@@ -162,6 +162,7 @@
         class="login-form-button"
         :disabled="hasErrors(form.getFieldsError())"
         @click="passwordLogin"
+        :loading="iconLoading"
       >
         注册
       </a-button>
@@ -182,26 +183,15 @@
   export default {
     data() {
       return {
-        checkNick: false
+        checkNick: false,
+        iconLoading: false
       };
     },
     mixins: [timer, FormValidator],
     beforeCreate() {
       this.form = this.$form.createForm(this);
     },
-    mounted() {
-      _getData("http://shop.allbring.com/payPC!request.action", {
-        methods: "getWeiXinScanPay",
-        userid: "21a7e21f-99ca-48d9-889b-8109be900a60",
-        token: "408",
-        params: {
-          totalPrice: "0.1",
-          orderNo: "100001"
-        }
-      }).then(data => {
-        console.log(data);
-      });
-    },
+    mounted() {},
     methods: {
       callback() {},
       passwordLogin() {
@@ -209,6 +199,7 @@
       },
       handleSubmit(e) {
         e.preventDefault();
+        this.iconLoading = true;
         this.form.validateFieldsAndScroll((err, values) => {
           if (!err) {
             console.log("Received values of form: ", values);
@@ -226,7 +217,16 @@
             code: seccode,
             pleaseCode: ""
           }
-        });
+        })
+          .then(data => {
+            setTimeout(() => {
+              this.iconLoading = false;
+            }, 300);
+            this.$message.success("注册成功", 1);
+          })
+          .then(() => {
+            this.$router.go(-1);
+          });
       },
       hasErrors(fieldsError) {
         return Object.keys(fieldsError).some(field => fieldsError[field]);

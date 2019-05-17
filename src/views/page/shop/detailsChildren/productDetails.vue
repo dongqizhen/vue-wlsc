@@ -474,7 +474,7 @@
     },
     mounted() {
       window.addEventListener("scroll", this.handleScroll);
-      _getData("api/goods/gooddetail", {
+      _getData("goods/gooddetail", {
         id: this.$route.params.id
       })
         .then(data => {

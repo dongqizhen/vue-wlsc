@@ -1,7 +1,14 @@
 <template>
   <router-link
     tag="li"
-    :to="{ path: 'shopDetails', query: { nav_index: $route.query.nav_index } }"
+    :to="{
+      path: 'shopDetails',
+      query: {
+        nav_index: $route.query.nav_index,
+        shopId: item.sid,
+        shopName: item.shopName
+      }
+    }"
     class="shop-item"
     append
   >
@@ -10,7 +17,7 @@
         <div class="img_box">
           <img src="../../../assets/images/demo.jpg" alt="" />
         </div>
-        <h2>北京华脉诚信科技有限公司</h2>
+        <h2>{{ item.shopName }}</h2>
         <p>
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#iconzhaodianpuweizhi"></use>
@@ -31,7 +38,12 @@
 </template>
 
 <script>
-  export default {};
+  export default {
+    data() {
+      return {};
+    },
+    props: ["item"]
+  };
 </script>
 
 <style lang="scss" scoped>

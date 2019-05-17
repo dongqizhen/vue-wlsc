@@ -8,9 +8,15 @@
       >
         <transition name="slide-fade">
           <span v-if="phone1_success" class="extra">
-            <svg class="icon" aria-hidden="true">
+            <svg v-if="!phone1isRegister" class="icon" aria-hidden="true">
               <use xlink:href="#iconzhengque"></use>
             </svg>
+            <span v-else>
+              用户未注册
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconxingzhuang2"></use>
+              </svg>
+            </span>
           </span>
         </transition>
         <a-input
@@ -53,8 +59,8 @@
                   message: '请输入密码'
                 },
                 {
-                  min: 6,
-                  message: '密码长度应不少于6位'
+                  pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}$/,
+                  message: '由字母和数字组成，长度不少于6位'
                 }
               ]
             }
@@ -92,7 +98,7 @@
             }
           ]"
         >
-          <span slot="suffix" @click="gainCodeHandler">{{ content }}</span>
+          <span slot="suffix" @click="gainCodeHandler(2)">{{ content }}</span>
         </a-input>
       </a-form-item>
       <a-button
@@ -100,6 +106,7 @@
         html-type="submit"
         class="login-form-button"
         :disabled="hasErrors(form.getFieldsError())"
+        :loading="iconLoading"
       >
         确定
       </a-button>
@@ -109,14 +116,42 @@
 
 <script>
   import { timer, FormValidator } from "../../../../components/mixin/mixin";
+  import { _getData } from "../../../../config/getData";
 
   export default {
     data() {
-      return {};
+      return {
+        iconLoading: false
+      };
     },
     mixins: [timer, FormValidator],
     methods: {
-      callback() {}
+      callback() {},
+      handleSubmit(e) {
+        e.preventDefault();
+        this.iconLoading = true;
+        let { phone1, seccode, password } = this.form.getFieldsValue();
+
+        _getData(`${this.$API_URL.HYGLOGINURL}/server/user!request.action`, {
+          method: "findPassword",
+          userid: "",
+          token: "",
+          params: {
+            accountNo: phone1,
+            password: password,
+            code: seccode
+          }
+        })
+          .then(data => {
+            setTimeout(() => {
+              this.iconLoading = false;
+            }, 300);
+            this.$message.success("密码已重置", 1);
+          })
+          .then(() => {
+            this.$router.go(-1);
+          });
+      }
     }
   };
 </script>
@@ -196,6 +231,8 @@
               top: -5px;
               opacity: 1;
               z-index: 100;
+              color: #f11f1f;
+              font-size: 14px;
               &.seccode,
               &.password_err {
                 top: -26px;

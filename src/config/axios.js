@@ -2,7 +2,7 @@
  * @Author: mikey.dongqizhen 
  * @Date: 2019-04-18 17:08:47 
  * @Last Modified by: mikey.dongqizhen
- * @Last Modified time: 2019-05-15 11:21:29
+ * @Last Modified time: 2019-05-17 17:42:47
  */
 
 
@@ -57,7 +57,7 @@ axios.defaults.transformRequest = [ //`transformRequest`选项允许我们在请
         return new_to_Data(data)
     }
 ]
-axios.defaults.baseURL = env.API_HOST.URL; //如果url不是绝对路径，那么会将baseURL和url拼接作为请求的接口地址
+axios.defaults.baseURL = `${env.API_HOST.URL}/api/`; //如果url不是绝对路径，那么会将baseURL和url拼接作为请求的接口地址
 
 // request.defaults.adapter = function(config) {
 //     /* ... */
