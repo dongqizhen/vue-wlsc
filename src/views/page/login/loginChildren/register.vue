@@ -190,13 +190,39 @@
       this.form = this.$form.createForm(this);
     },
     mounted() {
+      /*  _getData("http://shop.allbring.com/userOrder!request.action", {
+            methods: "updatePayType",
+            userid: "21a7e21f-99ca-48d9-889b-8109be900a60",
+            token: "408",
+            params: {
+              paymentType: "1",
+              orderId: "100"
+            }
+          }); */
+      // _getData("http://shop.allbring.com/userOrder!request.action", {
+      //   method: "saveAppOrder",
+      //   userid: 408,
+      //   token: "466f7725-9c14-4805-8d36-870a9fe941c2",
+      //   params: {
+      //     discountPrice: "1",
+      //     invoiceInfo: "",
+      //     invoiceType: 0,
+      //     memo: "",
+      //     paymentPrice: "1",
+      //     paymentType: 1,
+      //     shopList: [264],
+      //     shoppingCartList: [1206],
+      //     totalPrice: "1",
+      //     userAddressId: 124
+      //   }
+      // });
       _getData("http://shop.allbring.com/payPC!request.action", {
         methods: "getWeiXinScanPay",
         userid: "21a7e21f-99ca-48d9-889b-8109be900a60",
         token: "408",
         params: {
-          totalPrice: "0.1",
-          orderNo: "100001"
+          totalprice: "0.1",
+          orderNo: "1480305863633"
         }
       }).then(data => {
         console.log(data);
