@@ -63,7 +63,7 @@
         ></product-category-vue>
         <div class="main-content">
           <div class="left">
-            <shop-left-side-vue></shop-left-side-vue>
+            <shop-left-side-vue :categoryId="categoryId"></shop-left-side-vue>
           </div>
           <div class="right">
             <shop-nav-vue
@@ -102,7 +102,7 @@
   export default {
     data() {
       return {
-        arr: [],
+        arr: [], //店铺列表
         areaIsShow: false, //控制选择地区弹层是否显示
         area: [], //省份列表
         cityArr: [], //市列表
@@ -112,6 +112,7 @@
         selectMainArea: "北京市西城区", //默认显示地址
         provinceName: "北京市",
         cityName: "北京市",
+        categoryId: "", //分类id
         routes: [
           {
             name: "首页",
@@ -151,8 +152,10 @@
         });
     },
     methods: {
+      //点击产品分类
       categoryClick(item) {
         console.log(item);
+        this.categoryId = item.id;
         this.getShop(item.id).then(data => {
           // console.log(data);
         });

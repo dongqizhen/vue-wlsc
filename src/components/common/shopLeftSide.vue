@@ -1,7 +1,7 @@
 <template>
   <div class="shop-left-side">
     <h2>品牌</h2>
-    <div class="commonBrand">
+    <div class="commonBrand" v-if="isLogin">
       <h3>
         <span>
           <svg class="icon" aria-hidden="true">
@@ -13,11 +13,9 @@
       </h3>
       <div class="item-box">
         <ul>
-          <li>安科</li>
-          <li>北京华脉</li>
-          <li>迈瑞</li>
-          <li>安科</li>
-          <li>西门子</li>
+          <li v-for="item in brandList.userbrandList" :key="item.id">
+            {{ item.name }}
+          </li>
         </ul>
         <span>
           更多
@@ -33,17 +31,15 @@
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#iconyixianpinpai"></use>
           </svg>
-          常用品牌
+          一线品牌
         </span>
       </h3>
       <ul>
         <li class="item-box">
           <ul>
-            <li>安科</li>
-            <li>北京华脉</li>
-            <li>迈瑞</li>
-            <li>安科</li>
-            <li>西门子</li>
+            <li v-for="item in brandList.userbrandList" :key="item.id">
+              {{ item.name }}
+            </li>
           </ul>
           <span>
             更多
@@ -52,62 +48,10 @@
             </svg>
           </span>
         </li>
-        <li class="item-box">
-          <h4>A</h4>
+        <li class="item-box" v-for="(val, key) in letterArr" :key="key">
+          <h4>{{ key }}</h4>
           <ul>
-            <li>安科</li>
-            <li>北京华脉</li>
-            <li>迈瑞</li>
-            <li>安科</li>
-            <li>西门子</li>
-          </ul>
-          <span>
-            更多
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icongengduoxialajiantou"></use>
-            </svg>
-          </span>
-        </li>
-        <li class="item-box">
-          <h4>B</h4>
-          <ul>
-            <li>安科</li>
-            <li>北京华脉</li>
-            <li>迈瑞</li>
-            <li>安科</li>
-            <li>西门子</li>
-          </ul>
-          <span>
-            更多
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icongengduoxialajiantou"></use>
-            </svg>
-          </span>
-        </li>
-        <li class="item-box">
-          <h4>C</h4>
-          <ul>
-            <li>安科</li>
-            <li>北京华脉</li>
-            <li>迈瑞</li>
-            <li>安科</li>
-            <li>西门子</li>
-          </ul>
-          <span>
-            更多
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icongengduoxialajiantou"></use>
-            </svg>
-          </span>
-        </li>
-        <li class="item-box">
-          <h4>D</h4>
-          <ul>
-            <li>安科</li>
-            <li>北京华脉</li>
-            <li>迈瑞</li>
-            <li>安科</li>
-            <li>西门子</li>
+            <li v-for="item in val" :key="key + item.id">{{ item.name }}</li>
           </ul>
           <span>
             更多
@@ -122,9 +66,41 @@
 </template>
 
 <script>
+  import { mapState, mapMutations } from "vuex";
+  import { _getData } from "../../config/getData";
   export default {
     data() {
-      return {};
+      return {
+        brandList: [],
+        letterArr: [],
+        arr: []
+      };
+    },
+    props: ["categoryId"],
+    computed: {
+      ...mapState(["isLogin"])
+    },
+    methods: {
+      async getBrandList() {
+        return await _getData("brand/merge", { id: this.categoryId }).then(
+          data => {
+            console.log("456", data);
+            this.brandList = data;
+            this.arr = data.listAll;
+            console.log(
+              _.groupBy(this.arr, val => {
+                return _.upperFirst(val.pinyin).substring(0, 1);
+              })
+            );
+            this.letterArr = _.groupBy(this.arr, val => {
+              return _.upperFirst(val.pinyin).substring(0, 1);
+            });
+          }
+        );
+      }
+    },
+    mounted() {
+      this.getBrandList();
     }
   };
 </script>
@@ -174,6 +150,7 @@
     .item-box {
       padding: 20px 15px 0 20px;
       position: relative;
+
       h4 {
         background: #f5f5f5;
         height: 30px;
@@ -188,6 +165,8 @@
         justify-content: flex-start;
         flex-wrap: wrap;
         margin-right: -20px;
+        height: 82px;
+        overflow: hidden;
         li {
           font-size: 14px;
           color: #666666;
@@ -223,8 +202,10 @@
     > ul {
       > li.item-box {
         padding: 0;
+
         > ul {
           padding: 20px 15px 0 20px;
+          height: 102px;
           > li {
           }
         }

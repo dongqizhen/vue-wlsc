@@ -126,7 +126,7 @@
       //如果登录 则显示常用分类
       if (this.isLogin) {
         this.navArr.unshift({
-          name: "常用分类",
+          name: "常用品牌",
           id: ""
         });
       }
