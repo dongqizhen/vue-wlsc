@@ -78,6 +78,7 @@
 
 <style lang="scss">
   @import "../../assets/scss/_commonScss";
+  @import "../../assets/scss/_input";
   body .ant-modal-mask {
     background: rgba(0, 0, 0, 0.17);
   }
@@ -681,6 +682,43 @@
               }
             }
           }
+        }
+      }
+    }
+  }
+  .addAddress {
+    .alertContent {
+      .common {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        .left-box {
+          width: 73px;
+          font-size: 12px;
+          color: #666666;
+        }
+        .right-box {
+          .ant-input {
+            width: 240px;
+            height: 30px;
+            line-height: 30px;
+            font-size: 12px;
+            color: #333;
+          }
+        }
+      }
+    }
+    .btn {
+      .ant-btn {
+        &:first-child {
+          background: #f5a623;
+          border-radius: 3px;
+          font-size: 12px;
+          color: #ffffff;
+          font-weight: 600;
+          border: 1px solid #f5a623;
+          margin-left: 73px;
+          margin-right: 7px;
         }
       }
     }
