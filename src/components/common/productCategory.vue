@@ -42,7 +42,7 @@
           <div class="swiper-container page">
             <div class="swiper-wrapper">
               <div class="swiper-slide">
-                <ul>
+                <ul v-if="canSkip">
                   <router-link
                     :to="{
                       path: '/lookingProduct/oneOfBrandClassificne',
@@ -58,6 +58,15 @@
                   >
                     <a target="_blank">{{ item.name }}</a>
                   </router-link>
+                </ul>
+                <ul v-else>
+                  <li
+                    v-for="item in pageArr"
+                    :key="item.id"
+                    @click="categoryClick(item)"
+                  >
+                    <a>{{ item.name }}</a>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -89,10 +98,21 @@
         pageArr: []
       };
     },
+    props: {
+      canSkip: {
+        //是否可以跳转页面
+        type: Boolean,
+        default: true
+      }
+    },
     components: {
       CommonCategoriesModalVue
     },
     methods: {
+      //点击某一类
+      categoryClick(item) {
+        this.$emit("categoryClick", item);
+      },
       //控制弹出层显示
       handleClick() {
         this.visible = true;
@@ -102,7 +122,7 @@
       },
       //获取常用分类
       async getCommonCategory() {
-        _getData("api/ucatalog/list", {}).then(data => {
+        _getData("ucatalog/list", {}).then(data => {
           console.log("data", data);
           this.pageArr = data.userCategoryList;
         });
@@ -134,7 +154,7 @@
     },
     mounted() {
       this.getCommonCategory();
-      _getData("api/catalog/listAll", {}).then(data => {
+      _getData("catalog/listAll", {}).then(data => {
         console.log(data);
         this.navArr = [...this.navArr, ...data.currentCategory];
       });

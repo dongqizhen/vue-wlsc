@@ -82,6 +82,7 @@
             html-type="submit"
             class="login-form-button"
             :disabled="hasErrors(form.getFieldsError(['phone1', 'seccode']))"
+            :loading="iconLoading"
           >
             登录
           </a-button>
@@ -168,7 +169,7 @@
             <router-link to="forgetPassword" class="forget-password">
               忘记密码
             </router-link>
-            <router-link to="register" class="register" replace>
+            <router-link to="register" class="register">
               立即注册
             </router-link>
           </div>
@@ -179,6 +180,7 @@
             class="login-form-button"
             :disabled="hasErrors(form.getFieldsError(['phone2', 'password']))"
             @click="passwordLogin"
+            :loading="iconLoading2"
           >
             登录
           </a-button>
@@ -199,7 +201,9 @@
         phone1_success: false,
         phone2_success: false,
         password_err: false,
-        seccode_err: false
+        seccode_err: false,
+        iconLoading: false,
+        iconLoading2: false
       };
     },
     mixins: [timer, FormValidator],
@@ -210,6 +214,7 @@
       passwordLogin() {},
       handleSubmitOne(e) {
         e.preventDefault();
+        this.iconLoading = true;
         let { phone1, seccode } = this.form.getFieldsValue(["phone1", "seccode"]);
 
         this.form.validateFieldsAndScroll((err, values) => {
@@ -227,6 +232,9 @@
           },
           token: ""
         }).then(data => {
+          setTimeout(() => {
+            this.iconLoading = false;
+          }, 300);
           if (data.data.status.code == 200) {
             //成功
             this.changeLoginState(true);
@@ -239,7 +247,7 @@
       },
       handleSubmitTwo(e) {
         e.preventDefault();
-
+        this.iconLoading2 = true;
         this.form.validateFieldsAndScroll((err, values) => {
           if (!err) {
             console.log("Received values of form: ", values);
@@ -259,6 +267,10 @@
             password
           }
         }).then(data => {
+          setTimeout(() => {
+            this.iconLoading2 = false;
+          }, 300);
+
           if (data.data.status.code == 1106) {
             //密码错误
             this.password_err = true;

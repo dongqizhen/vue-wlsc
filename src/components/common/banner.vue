@@ -133,7 +133,7 @@
         loop: true
       });
 
-      _getData("api/ad/banner", {}).then(data => {
+      _getData("ad/banner", {}).then(data => {
         this.banner = data.banner;
       });
     }

@@ -57,7 +57,10 @@
             </div>
           </transition>
         </div>
-        <product-category-vue></product-category-vue>
+        <product-category-vue
+          :canSkip="false"
+          v-on:categoryClick="categoryClick"
+        ></product-category-vue>
         <div class="main-content">
           <div class="left">
             <shop-left-side-vue></shop-left-side-vue>
@@ -67,7 +70,11 @@
               :navArr="['推荐', '按点击量', '按好评']"
             ></shop-nav-vue>
             <ul class="shopItem">
-              <shop-item-vue v-for="item in arr" :key="item"></shop-item-vue>
+              <shop-item-vue
+                v-for="item in arr"
+                :key="item.id"
+                :item="item"
+              ></shop-item-vue>
             </ul>
           </div>
         </div>
@@ -95,7 +102,7 @@
   export default {
     data() {
       return {
-        arr: [1, 2, 3, 4, 5],
+        arr: [],
         areaIsShow: false, //控制选择地区弹层是否显示
         area: [], //省份列表
         cityArr: [], //市列表
@@ -103,6 +110,8 @@
         city: "选择市",
         isActive: 0, //是否显示市弹出层
         selectMainArea: "北京市西城区", //默认显示地址
+        provinceName: "北京市",
+        cityName: "北京市",
         routes: [
           {
             name: "首页",
@@ -132,22 +141,45 @@
       //this.routes = JSON.parse(this.$route.query.routes);
     },
     mounted() {
-      _getData("api/address/getProvince", {}).then(data => {
-        console.log("data", data);
-        this.area = data;
-      });
+      _getData("address/getProvince", {})
+        .then(data => {
+          console.log("data", data);
+          this.area = data;
+        })
+        .then(() => {
+          this.getShop();
+        });
     },
     methods: {
+      categoryClick(item) {
+        console.log(item);
+        this.getShop(item.id).then(data => {
+          // console.log(data);
+        });
+      },
       selectArea() {
         this.areaIsShow = !this.areaIsShow;
         this.isActive = 0;
         this.province = "选择省/直辖市";
       },
+      //异步获取店铺
+      async getShop(categoryId = "", brandId = "") {
+        return await _getData("queryEnquiry", {
+          brandId: "",
+          provinceName: this.provinceName,
+          cityName: this.cityName,
+          categoryId: "",
+          page: 1,
+          size: 6
+        }).then(data => {
+          this.arr = data.data;
+        });
+      },
       handleClick(val) {
         console.log(val);
         this.province = val.name;
 
-        _getData("api/address/getCity", { provinceId: val.id })
+        _getData("address/getCity", { provinceId: val.id })
           .then(data => {
             console.log(data);
             this.cityArr = data;

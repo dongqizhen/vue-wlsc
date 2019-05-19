@@ -147,7 +147,7 @@
       CommonBrandsModalVue
     },
     mounted() {
-      _getData("api/brand/merge", { id: this.$route.query.categoryId })
+      _getData("brand/merge", { id: this.$route.query.categoryId })
         .then(data => {
           this.navArr = data;
         })

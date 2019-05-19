@@ -185,7 +185,7 @@
         console.log(i);
       },
       async getModelList(sort = 1) {
-        return await _getData("api/brandmodel/list", {
+        return await _getData("brandmodel/list", {
           categoryId: this.$route.query.categoryId,
           brandId: this.$route.query.brandId,
           sortOrder: sort

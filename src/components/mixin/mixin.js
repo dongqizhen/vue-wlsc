@@ -38,18 +38,7 @@ const timer = {
 
             this.seccode_err = false
             this.canClick = false;
-            this.content = this.totalTime + "s";
-            let clock = window.setInterval(() => {
-                this.totalTime--;
-                this.content = this.totalTime + "s";
-                if (this.totalTime < 0) {
-                    window.clearInterval(clock);
-                    this.content = "获取验证码";
-                    this.totalTime = 60;
-                    this.canClick = true; //这里重新开启
-                }
-            }, 1000);
-            console.log(val)
+
             _getData(`${this.$API_URL.HYGLOGINURL}/server/user!request.action`, {
                 "method": "getCode",
                 "userid": "",
@@ -61,8 +50,27 @@ const timer = {
             }).then(data => {
                 if (data.data.status.code == 1101) {
                     this.phone1isRegister = true
+                } else if (data.data.status.code == 1102) {
+                    this.phone1isRegister = true
                 }
+            }).then(() => {
+
             })
+
+            this.content = this.totalTime + "s";
+            let clock = window.setInterval(() => {
+                this.totalTime--;
+                this.content = this.totalTime + "s";
+                if (this.totalTime < 0) {
+                    window.clearInterval(clock);
+                    this.content = "获取验证码";
+                    this.totalTime = 60;
+                    this.canClick = true; //这里重新开启
+                }
+            }, 1000);
+
+
+
         },
         seccodeChange(e) {
             this.seccode_err = false;
@@ -87,15 +95,15 @@ const FormValidator = {
         this.form = this.$form.createForm(this);
     },
     methods: {
-        handleSubmit(e) {
-            e.preventDefault();
-            this.seccode_err = true;
-            this.form.validateFieldsAndScroll((err, values) => {
-                if (!err) {
-                    console.log("Received values of form: ", values);
-                }
-            });
-        },
+        // handleSubmit(e) {
+        //     e.preventDefault();
+        //     this.seccode_err = true;
+        //     this.form.validateFieldsAndScroll((err, values) => {
+        //         if (!err) {
+        //             console.log("Received values of form: ", values);
+        //         }
+        //     });
+        // },
         hasErrors(fieldsError) {
             return Object.keys(fieldsError).some(field => {
                 return fieldsError[field];

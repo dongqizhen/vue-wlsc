@@ -210,7 +210,7 @@
     },
     mounted() {
       //获取常用分类
-      _getData("api/ucatalog/list", {}).then(data => {
+      _getData("ucatalog/list", {}).then(data => {
         console.log("289data", data);
         if (this.isLogin) {
           this.left[0].subCategoryList = data.userCategoryList;
@@ -218,7 +218,7 @@
       });
 
       //获取所有分类
-      _getData("api/catalog/listAll", {})
+      _getData("catalog/listAll", {})
         .then(data => {
           console.log("所有", data);
           console.log(this.left);

@@ -13,7 +13,7 @@
         <li><span>销售地区：</span><span>北京市；天津市</span></li>
       </ul>
       <div class="btn">
-        <a-button>
+        <a-button v-if="type == 'introduce'">
           <router-link
             :to="{
               path: '/shopIntroduction',
@@ -21,8 +21,11 @@
             }"
             target="_blank"
           >
-            进店看看
+            店铺介绍
           </router-link>
+        </a-button>
+        <a-button v-else>
+          进店看看
         </a-button>
         <a-button>收藏店铺</a-button>
       </div>
@@ -40,7 +43,12 @@
 </template>
 
 <script>
-  export default {};
+  export default {
+    data() {
+      return {};
+    },
+    props: ["type"]
+  };
 </script>
 
 <style lang="scss" scoped>

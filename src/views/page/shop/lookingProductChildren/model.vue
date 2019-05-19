@@ -78,7 +78,7 @@
     },
     mounted() {
       //获取nav数量
-      // _getData("api/goods/productCount", {
+      // _getData("goods/productCount", {
       //   modelId: this.$route.query.modelId
       // }).then(data => {
       //   this.tabs = [
@@ -93,7 +93,7 @@
       //   ];
       // });
       // //获取店铺
-      // _getData("api/queryStore", { modelId: this.$route.query.modelId })
+      // _getData("queryStore", { modelId: this.$route.query.modelId })
       //   .then(data => {
       //     this.isLoading = false;
       //   })
@@ -103,7 +103,7 @@
 
       _getDataAll([
         //获取nav数量
-        _getData("api/goods/productCount", {
+        _getData("goods/productCount", {
           modelId: this.$route.query.modelId
         }).then(data => {
           this.tabs = [
@@ -118,7 +118,7 @@
           ];
         }),
         //获取店铺
-        _getData("api/queryStore", { modelId: this.$route.query.modelId })
+        _getData("queryStore", { modelId: this.$route.query.modelId })
           .then(data => {})
           .catch(err => {
             console.log(err);

@@ -286,7 +286,7 @@
         targetOption.loading = true;
         if (selectedOptions.length == 1) {
           console.log("获取市");
-          _getData("/api/address/getCity", { provinceId: targetOption.id }).then(
+          _getData("address/getCity", { provinceId: targetOption.id }).then(
             data => {
               targetOption.loading = false;
               targetOption.children = _.map(data, value => {
@@ -312,7 +312,7 @@
             selectedOptions[0].name != "重庆市" &&
             selectedOptions[0].name != "上海市"
           ) {
-            _getData("/api/address/getCounty", {
+            _getData("address/getCounty", {
               provinceId: selectedOptions[0].id,
               cityId: targetOption.id
             }).then(data => {
@@ -356,7 +356,7 @@
       submitSuccessModal
     },
     mounted() {
-      _getData("/api/address/getProvince", {}).then(data => {
+      _getData("address/getProvince", {}).then(data => {
         console.log(data);
         this.options = _.map(data, value => {
           return (value = { ...value, isLeaf: false });

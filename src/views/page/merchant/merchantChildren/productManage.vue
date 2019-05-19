@@ -248,7 +248,7 @@
         console.log(value);
       },
       getProductList() {
-        _getData("/api/goods/goodslist", {}).then(data => {
+        _getData("goods/goodslist", {}).then(data => {
           console.log(data);
         });
       }

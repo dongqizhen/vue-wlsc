@@ -112,7 +112,7 @@
       },
       //获取常用分类
       async getCommonBrandCategory() {
-        _getData("api/brand/merge", {}).then(data => {
+        _getData("brand/merge", {}).then(data => {
           console.log("userBrandList", data);
           this.pageArr = data.userbrandList;
           this.arr = data;
@@ -134,7 +134,7 @@
     components: { CommonBrandsModalVue },
     mounted() {
       this.getCommonBrandCategory();
-      //   _getData("api/brand/merge", {}).then(data => {
+      //   _getData("brand/merge", {}).then(data => {
       //     console.log("aaaaa", data);
       //     this.arr = data;
       //   });
@@ -307,10 +307,10 @@
             justify-content: flex-start;
             flex-wrap: wrap;
             margin-right: -12px;
-            padding: 18px 20px;
+            padding: 18px 35px;
             padding-bottom: 0;
             li {
-              margin-right: 12px;
+              margin-right: 17px;
               margin-bottom: 30px;
               a {
                 display: flex;

@@ -89,7 +89,7 @@
         this.activeProvinceName = item.name;
       },
       getCityData(id) {
-        _getData("/api/address/getCity", { provinceId: id }).then(data => {
+        _getData("address/getCity", { provinceId: id }).then(data => {
           console.log(data);
           this.cityData = data;
           if (
@@ -135,11 +135,11 @@
       cascadeRight
     },
     mounted() {
-      _getData("/api/address/getProvince", {}).then(data => {
+      _getData("address/getProvince", {}).then(data => {
         console.log(data);
         this.proviceData = data;
         this.activeProvinceName = data[0].name;
-        _getData("/api/address/getCity", { provinceId: data[0].id }).then(
+        _getData("address/getCity", { provinceId: data[0].id }).then(
           data => {
             console.log(data);
             this.cityData = data;

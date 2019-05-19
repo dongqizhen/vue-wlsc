@@ -9,7 +9,7 @@
             v-model="myArray2"
             v-bind="dragOptions"
             @start="drag = true"
-            @end="drag = false"
+            @end="end"
             v-if="myArray2.length"
           >
             <transition-group
@@ -147,7 +147,7 @@
       }
     },
     mounted() {
-      _getData("api/brand/merge", { id: this.$route.query.categoryId })
+      _getData("brand/merge", { id: this.$route.query.categoryId })
         .then(data => {
           this.navArr = data;
         })
@@ -167,6 +167,10 @@
       draggable
     },
     methods: {
+      end(e) {
+        this.drag = false;
+        this.saveBrand();
+      },
       //删除常用品牌
       delHandleClick(item) {
         this.myArray2 = _.without(this.myArray2, item);
@@ -187,20 +191,23 @@
             break;
         }
       },
+      //保存品牌分类
+      async saveBrand() {
+        return await _getData("ubrand/custom", {
+          brandStr: _.join(_.map(this.myArray2, "id"), ",")
+        }).then(data => {
+          this.$emit("success");
+        });
+      },
       handleClick(item) {
-        let commonArr = _.indexOf(this.myArray2, item);
-
-        if (commonArr != -1) {
+        let commonArr = _.intersectionBy(this.myArray2, [item], "name");
+        if (commonArr.length) {
           this.$message.warning("已添加至常用分类", 1);
           return;
         } else {
           this.myArray2.push(item);
         }
-        _getData("api/ubrand/custom", {
-          brandStr: item.id
-        }).then(data => {
-          this.$emit("success");
-        });
+        this.saveBrand();
       },
       handleOk() {
         this.visible = false;

@@ -152,7 +152,7 @@
     },
     mounted() {
       //获取推荐数量
-      _getData("api/index/caseCount", {}).then(data => {
+      _getData("index/caseCount", {}).then(data => {
         console.log("data", data);
         this.nav = [
           `推荐产品(${data.count})`,
@@ -161,7 +161,7 @@
           `案例(${data.maintenanceNum})`
         ];
       });
-      _getData("api/goods/goodslist", {}).then(data => {
+      _getData("goods/goodslist", {}).then(data => {
         console.log("data", data);
         this.goodList = data.list;
       });
