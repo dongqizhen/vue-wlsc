@@ -9,10 +9,10 @@
         <div class="content">
           <div class="left">
             <ul class="header">
-              <li>2489<span>访问量</span></li>
-              <li>46<span>咨询数</span></li>
+              <li>{{ shopdetails.accessNum }}<span>访问量</span></li>
+              <li>{{ shopdetails.consultNum }}<span>咨询数</span></li>
               <li>--<span>成交数</span></li>
-              <li>89%<span>好评率</span></li>
+              <li>{{ shopdetails.highPraiseNum }}%<span>好评率</span></li>
             </ul>
             <div class="basic-information information">
               <h2><span></span>基本资料</h2>
@@ -24,7 +24,7 @@
                     </svg>
                     店铺名称
                   </span>
-                  北京华脉诚信科技有限公司
+                  {{ shopdetails.shopName }}
                 </li>
                 <li>
                   <span>
@@ -33,7 +33,7 @@
                     </svg>
                     店铺地址
                   </span>
-                  北京·顺义区·竺园路12号楼7号楼
+                  {{ shopdetails.companyAddress }}
                 </li>
                 <li>
                   <span>
@@ -42,7 +42,7 @@
                     </svg>
                     经营范围
                   </span>
-                  扫描仪、B超机、手术床以及各种医疗器械
+                  {{ shopdetails.shopScope }}
                 </li>
               </ul>
             </div>
@@ -56,7 +56,7 @@
                     </svg>
                     公司名称
                   </span>
-                  北京华脉诚信科技有限公司
+                  {{ shopdetails.companyName }}
                 </li>
                 <li>
                   <span>
@@ -65,7 +65,7 @@
                     </svg>
                     联系人
                   </span>
-                  张三
+                  {{ shopdetails.linkName }}
                 </li>
                 <li>
                   <span>
@@ -74,7 +74,7 @@
                     </svg>
                     手机号
                   </span>
-                  13999999999
+                  {{ shopdetails.mobile }}
                 </li>
                 <li>
                   <span>
@@ -83,7 +83,7 @@
                     </svg>
                     座机
                   </span>
-                  010-1234567
+                  {{ shopdetails.workPhone }}
                 </li>
                 <li>
                   <span>
@@ -92,13 +92,13 @@
                     </svg>
                     企业邮箱
                   </span>
-                  13999999999@cmdmedia.cn
+                  {{ shopdetails.email }}
                 </li>
               </ul>
             </div>
           </div>
           <div class="right">
-            <shop-card-vue></shop-card-vue>
+            <shop-card-vue :detail="shopdetails"></shop-card-vue>
           </div>
         </div>
       </div>
@@ -118,9 +118,10 @@
 
   import { mixin } from "../../../components/mixin/mixin";
   import shopCardVue from "../../../components/common/shopCard.vue";
+  import { _getData } from "../../../config/getData";
   export default {
     data() {
-      return {};
+      return { shopdetails: "" };
     },
     mixins: [mixin],
     components: {
@@ -134,6 +135,14 @@
     },
     beforeRouteLeave(to, from, next) {
       console.log(to, from);
+    },
+    mounted() {
+      _getData("/store/homeStore", {
+        storeId: this.$route.query.shopId
+      }).then(data => {
+        console.log(2222222, data);
+        this.shopdetails = data;
+      });
     }
   };
 </script>

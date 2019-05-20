@@ -161,8 +161,8 @@
           `案例(${data.maintenanceNum})`
         ];
       });
-      _getData("goods/goodslist", {}).then(data => {
-        console.log("data", data);
+      _getData("goods/homePagelist", {}).then(data => {
+        console.log("goods", data);
         this.goodList = data.list;
       });
       //文章

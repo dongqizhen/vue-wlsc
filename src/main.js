@@ -7,6 +7,7 @@ import Share from 'vue-social-share'
 import 'vue-social-share/dist/client.css';
 import VueLazyload from 'vue-lazyload'
 import NoData from './components/common/nodata'
+import loading from './components/common/loading'
 import {
     BackTop,
     Modal,
@@ -50,6 +51,7 @@ Vue.prototype.$API_URL = env.API_HOST;
 Vue.prototype.$message = Message
 
 Vue.component('no-data', NoData)
+Vue.component('loading', loading)
 
 new Vue({
     el: '#app',
