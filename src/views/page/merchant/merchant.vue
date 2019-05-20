@@ -14,8 +14,8 @@
   import Header from "../../../components/header/header";
   import centerPage from "../../../components/common/centerPage";
   import { mapState, mapMutations } from "vuex";
+  import { _getData } from "../../../config/getData";
   export default {
-    // inject: ["reload"],
     data() {
       return {
         defaultSelectedKeys: ["0"],
@@ -58,11 +58,6 @@
       };
     },
     methods: {
-      // goBack() {
-      //   //replace替换原路由，作用是避免回退死循环
-      //   // this.$router.replace({ path: "/merchant" });
-      //   // this.reload();
-      // }
       ...mapMutations(["changeLoginState", "changeUserInfoState"])
     },
     computed: { ...mapState(["isLogin", "userInfo"]) },
@@ -116,15 +111,11 @@
         }
       }
     },
-    // mounted() {
-    //   if (window.history && window.history.pushState) {
-    //     history.pushState(null, null, document.URL);
-    //     window.addEventListener("popstate", this.goBack, false);
-    //   }
-    // },
-    // destroyed() {
-    //   window.removeEventListener("popstate", this.goBack, false);
-    // },
+    mounted() {
+      _getData("/user/getUser", {}).then(data => {
+        console.log(data);
+      });
+    },
     components: {
       Header,
       centerPage

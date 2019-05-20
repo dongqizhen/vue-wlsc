@@ -1,58 +1,68 @@
 <template>
   <div class="messageCenter">
-    <common-title title="消息中心"></common-title>
-    <div class="tabBar">
-      <div class="left-box">
-        <manage-number-nav :navArr="tabs" v-on:tab="getTab"></manage-number-nav>
-      </div>
-      <div class="right-box">
-        <div :class="current == 1 ? 'active' : ''" @click="system(1)">
-          系统通知(24)
-        </div>
-        <div :class="current == 2 ? 'active' : ''" @click="system(2)">
-          私信消息(12)
-        </div>
-      </div>
-    </div>
+    <common-title title="我的报价"></common-title>
     <div class="listContainer">
+      <div class="selectInfoBox">
+        <div class="selectInfo">
+          <div class="common productName">
+            <div class="left-box">客户名称</div>
+            <div class="right-box">
+              <a-input placeholder="请输入客户名称" />
+            </div>
+          </div>
+          <div class="common productName">
+            <div class="left-box">商品名称</div>
+            <div class="right-box">
+              <a-input placeholder="请输入商品名称" />
+            </div>
+          </div>
+        </div>
+        <div class="selectBtn">
+          <button class="search">搜索</button>
+          <button class="clear">清空</button>
+        </div>
+      </div>
       <div class="listContent">
-        <ul v-if="current == 1">
-          <router-link
-            tag="li"
-            v-for="item in data"
-            :key="item.id"
-            :to="{
-              path: 'messageDetail',
-              query: { id: item.id }
-            }"
-          >
-            <system-notice
-              :data="item"
-              :checkedList="checkedList"
-              v-on:getChecked="getChecked"
-              :unRead="unRead"
-            ></system-notice>
-          </router-link>
-        </ul>
-        <ul v-else>
-          <router-link
-            class="messageBox"
-            tag="li"
-            v-for="item in data"
-            :key="item.id"
-            :to="{
-              path: 'messageDetail',
-              query: { id: item.id }
-            }"
-          >
-            <private-message
-              :data="item"
-              :checkedList="checkedList"
-              v-on:getChecked="getChecked"
-              :unRead="unRead"
-            ></private-message>
-          </router-link>
-        </ul>
+        <list-title :titleArr="titleArr"></list-title>
+        <div class="content">
+          <ul>
+            <li>
+              <div>
+                <a-checkbox></a-checkbox>
+              </div>
+              <div>山东中心医院</div>
+              <div>
+                <div>
+                  <p>普利生全自动血凝分析仪C2000-A1BKKKLL</p>
+                  <p>众驰伟业 全自动血凝分析仪 XL1000E</p>
+                  <p>众驰伟业 全自动血凝分析仪 XL1000E</p>
+                </div>
+                <div>
+                  <p>普利生C2000-A</p>
+                  <p>Zonci众XL1000E</p>
+                  <p>Zonci众XL1000E</p>
+                </div>
+                <div>
+                  <p>1</p>
+                  <p>1</p>
+                  <p>1</p>
+                </div>
+                <div>
+                  <p>台</p>
+                  <p>台</p>
+                  <p>台</p>
+                </div>
+              </div>
+              <div>¥16000.00</div>
+              <div>2019-12-02 16:09</div>
+              <div>
+                <div>查看</div>
+                <div>下载</div>
+                <div>删除</div>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
       <div class="tfooter">
         <check-all
@@ -60,82 +70,36 @@
           :checkAll="checkAll"
           v-on:isCheckAll="isCheckAllMethod"
         >
-          <div slot="right-box">
-            <div
-              v-bind:class="['remark', checkedList.length > 0 ? 'active' : '']"
-              @click="remarkRead"
-            >
-              标记已读
-            </div>
-          </div>
         </check-all>
       </div>
     </div>
-    <pagination></pagination>
   </div>
 </template>
 
 <script>
   import _ from "lodash";
+  import { _getData } from "../../../../config/getData";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
-  import manageNumberNav from "../../../../components/common/manageNumberNav";
-  import systemNotice from "../../../../components/common/systemNoticeItem";
-  import privateMessage from "../../../../components/common/privateMessageItem";
+  import listTitle from "../../../../components/common/listTitle";
   import checkAll from "../../../../components/common/checkAll";
-  import pagination from "../../../../components/common/pagination";
   export default {
     data() {
       return {
-        data: [
-          {
-            id: 1,
-            title: "卖家申请店铺审核通过提示",
-            createOn: "2018-11-18",
-            introduce:
-              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
-          },
-          {
-            id: 2,
-            title: "卖家申请店铺审核未通过提示",
-            createOn: "2018-11-19",
-            introduce:
-              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
-          }
+        titleArr: [
+          "客户名称",
+          "商品名称",
+          "品牌型号",
+          "数量",
+          "单位",
+          "报价总额",
+          "报价日期",
+          "操作"
         ],
-        tabs: [],
         checkAll: false,
-        checkedList: [],
-        current: 1,
-        unRead: true
+        checkedList: []
       };
     },
-    beforeMount() {
-      this.tabs = [
-        {
-          id: 2,
-          name: "未读消息",
-          amount: 24
-        },
-        {
-          id: 3,
-          name: "已读消息",
-          amount: 12
-        }
-      ];
-    },
     methods: {
-      getTab(val) {
-        if (this.tabs[0].id == val) {
-          this.unRead = true;
-        } else {
-          this.unRead = false;
-        }
-      },
-      system(val) {
-        this.current = val;
-        this.checkedList = [];
-        this.checkAll = false;
-      },
       getChecked(val) {
         if (typeof val == "object") {
           this.checkedList = val;
@@ -143,11 +107,6 @@
           if (_.indexOf(this.checkedList, val) != -1) {
             this.checkedList = _.without(this.checkedList, val);
           }
-        }
-        if (this.checkedList.length == this.data.length) {
-          this.checkAll = true;
-        } else {
-          this.checkAll = false;
         }
       },
       isCheckAllMethod(val) {
@@ -162,20 +121,21 @@
           this.checkedList = [];
         }
       },
-      remarkRead() {
-        if (this.checkedList.length > 0) {
-          //向后台发送请求，标记为已读，成功后将刷新数据
-        }
-      },
-      onPaginationChange() {}
+      getList() {
+        _getData("/enquiry/enquiryList", { page: 1, size: 10, status: "" }).then(
+          data => {
+            console.log(data);
+          }
+        );
+      }
+    },
+    mounted() {
+      this.getList();
     },
     components: {
       commonTitle,
-      manageNumberNav,
-      systemNotice,
-      privateMessage,
-      checkAll,
-      pagination
+      listTitle,
+      checkAll
     }
   };
 </script>
@@ -188,58 +148,152 @@
     padding: 4px 20px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
     margin-bottom: 10px;
-    .tabBar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: $border-style;
-      margin-top: 3px;
-      /deep/.nav {
-        border-bottom: none;
-        .ant-tabs {
-          .ant-tabs-ink-bar {
-            bottom: 0 !important;
-          }
-        }
-      }
-      .right-box {
-        display: flex;
-        align-items: center;
-        height: 27px;
-        div {
-          width: 95px;
-          height: 27px;
-          line-height: 27px;
-          border: $border-style;
-          text-align: center;
-          font-size: 12px;
-          color: #333;
-          cursor: pointer;
-          &:first-child {
-            border-right: none;
-          }
-          &.active {
-            background: #ffdfaa;
-            border: 1px solid #f5a623;
-          }
-        }
-      }
-    }
     .listContainer {
       margin-top: 12px;
-      .tfooter {
-        .remark {
-          width: 104px;
-          height: 42px;
-          background-color: #ccc;
-          color: #fff;
-          font-size: 14px;
-          line-height: 42px;
-          text-align: center;
-          font-weight: 600;
-          cursor: pointer;
-          &.active {
-            background-color: #f5a623;
+      .selectInfoBox {
+        display: flex;
+        margin-top: 24px;
+        margin-bottom: 24px;
+        .selectInfo {
+          display: flex;
+          .common {
+            display: flex;
+            align-items: center;
+            height: 27px;
+            margin-right: 30px;
+            .left-box {
+              font-size: 12px;
+              color: #333333;
+              margin-right: 6px;
+            }
+            .right-box {
+              @include placeholderStyle(12px);
+              .ant-input {
+                width: 121px;
+                height: 27px;
+              }
+            }
+          }
+        }
+        .selectBtn {
+          button {
+            border: 0;
+            outline: none;
+            background-color: transparent;
+            color: #fff;
+            font-size: 12px;
+            margin-right: 10px;
+            padding: 0 18px;
+            height: 27px;
+            line-height: 27px;
+            cursor: pointer;
+            &:last-child {
+              margin-right: 0;
+            }
+          }
+          .search {
+            background-color: $theme-color;
+          }
+          .clear {
+            background-color: #999;
+          }
+        }
+      }
+      .listContent {
+        /deep/.listTitle {
+          ul {
+            li {
+              &:first-child {
+                width: 86px;
+                margin-left: 56px;
+                margin-right: 30px;
+              }
+              &:nth-child(2) {
+                width: 155px;
+              }
+              &:nth-child(3) {
+                width: 100px;
+              }
+              &:nth-child(4) {
+                width: 69px;
+              }
+              &:nth-child(5) {
+                width: 50px;
+              }
+              &:nth-child(6) {
+                width: 90px;
+              }
+              &:nth-child(7) {
+                width: 68px;
+                margin-right: 60px;
+              }
+            }
+          }
+        }
+        .content {
+          margin-top: 10px;
+          ul {
+            li {
+              display: flex;
+              border: $border-style;
+              margin-bottom: 10px;
+              > div {
+                display: flex;
+                flex-direction: column;
+                margin-right: 30px;
+                padding-top: 10px;
+                font-size: 12px;
+                color: #333333;
+                p {
+                  height: 36px;
+                  margin-bottom: 22px;
+                }
+                &:first-child {
+                  width: 56px;
+                  padding-left: 20px;
+                  margin-right: 0;
+                  justify-content: center;
+                }
+                &:nth-child(2) {
+                  width: 86px;
+                  justify-content: center;
+                }
+                &:nth-child(3) {
+                  width: 464px;
+                  display: flex;
+                  flex-direction: initial;
+                  > div {
+                    margin-right: 30px;
+                    &:nth-child(1) {
+                      width: 155px;
+                    }
+                    &:nth-child(2) {
+                      width: 100px;
+                    }
+                    &:nth-child(3) {
+                      width: 69px;
+                    }
+                    &:nth-child(4) {
+                      width: 50px;
+                      margin-right: 0;
+                    }
+                  }
+                }
+                &:nth-child(4) {
+                  width: 90px;
+                  color: #f10215;
+                }
+                &:nth-child(5) {
+                  width: 68px;
+                  color: #666666;
+                  margin-right: 60px;
+                }
+                &:last-child {
+                  width: 54px;
+                  margin-right: 0;
+                }
+              }
+            }
           }
         }
       }

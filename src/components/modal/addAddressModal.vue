@@ -18,6 +18,7 @@
               <a-input
                 placeholder="请输入联系方式"
                 v-model="submitData.phone"
+                @change="onChange"
               ></a-input>
             </div>
           </div>
@@ -107,6 +108,9 @@
       modal
     },
     methods: {
+      onChange(val) {
+        console.log(val);
+      },
       toLogin() {
         const { href } = this.$router.resolve({
           path: "/login"
