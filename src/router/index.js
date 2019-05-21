@@ -24,6 +24,10 @@ const router = new Router({
                 import ("../views/page/merchant/merchant"),
             children: [{
                     path: "/",
+                    name: '默认',
+                },
+                {
+                    path: "openShop",
                     name: '我要开店',
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/openShop")

@@ -47,21 +47,21 @@
         <svg class="icon" aria-hidden="true">
           <use
             xlink:href="#iconzhanghaoanquanduigou"
-            v-if="certificationStatus == 2"
+            v-if="certificationStatus == 1"
           ></use>
           <use
             xlink:href="#iconzhanghaoanquancuowu"
-            v-else-if="certificationStatus == 1"
+            v-else-if="certificationStatus == 3"
           ></use>
         </svg>
         <div class="description">
           {{
-            certificationStatus == 2
+            certificationStatus == 1
               ? "您的开店申请已经提交成功，后台正在认证中，三个工作日内给您反馈，请耐心等待…"
               : "抱歉，您提交的资料有误，请点击“重新审核”进行认证或联系客服。"
           }}
         </div>
-        <a-button class="reset" @click="reset" v-if="certificationStatus == 1"
+        <a-button class="reset" @click="reset" v-if="certificationStatus == 3"
           >重新审核</a-button
         >
       </div>
@@ -69,25 +69,25 @@
   </div>
 </template>
 <script>
+  import { mapMutations } from "vuex";
   import shopInfo from "./shopInfo";
   import shopCertification from "./shopCertification";
   export default {
     data() {
       return {
-        current: 0,
         steps: ["填写店铺信息", "填写认证资料", "完成认证"],
-        certificationStatus: 2,
-        shopInfo: {}
+        shopInfo: {},
+        current: 0,
+        certificationStatus: 1
       };
     },
     methods: {
+      ...mapMutations(["changeDefaultSelectedKeys"]),
       getShopInfo(val) {
-        // console.log(val);
         this.current = val.current + 1;
         this.shopInfo = val;
       },
       cancel(val) {
-        // console.log(val);
         this.current = val - 1;
       },
       sure(val) {
@@ -100,6 +100,26 @@
     components: {
       shopInfo,
       shopCertification
+    },
+    created() {
+      console.log("bbbbbbbbbbbbbbbbb");
+      this.changeDefaultSelectedKeys(["0"]);
+      console.log(
+        JSON.parse(window.localStorage["vuex-along"])["vuex-along"]
+          .defaultSelectedKeys
+      );
+    },
+    mounted() {
+      if (this.$route.query.shopStatus == 1) {
+        this.current = 2;
+        this.certificationStatus = 1;
+      } else if (this.$route.query.shopStatus == 0) {
+        this.current = 0;
+        this.certificationStatus = 0;
+      } else if (this.$route.query.shopStatus == 3) {
+        this.current = 2;
+        this.certificationStatus = 3;
+      }
     }
   };
 </script>
