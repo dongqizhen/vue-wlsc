@@ -31,6 +31,16 @@
         actionURL: this.$API_URL.HYGFILEURL + "/server/imageupload"
       };
     },
+    props: {
+      imgUrl: {}
+    },
+    watch: {
+      imgUrl(newVal) {
+        console.log(newVal);
+        this.uploadList.push({ uid: -1, url: newVal });
+        console.log(this.uploadList);
+      }
+    },
     methods: {
       handleRemove(file) {
         this.uploadList.splice(this.uploadList.indexOf(file), 1);

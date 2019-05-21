@@ -1,245 +1,194 @@
 <template>
-  <div class="messageCenter">
-    <common-title title="消息中心"></common-title>
-    <div class="tabBar">
-      <div class="left-box">
-        <manage-number-nav :navArr="tabs" v-on:tab="getTab"></manage-number-nav>
-      </div>
-      <div class="right-box">
-        <div :class="current == 1 ? 'active' : ''" @click="system(1)">
-          系统通知(24)
-        </div>
-        <div :class="current == 2 ? 'active' : ''" @click="system(2)">
-          私信消息(12)
-        </div>
-      </div>
-    </div>
+  <div class="addressManage">
+    <common-title title="地址管理">
+      <span slot="titleRight" class="addAddress" @click="addCarSuccess">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icontianjiatupian1"></use>
+        </svg>
+        新增地址
+      </span>
+    </common-title>
     <div class="listContainer">
-      <div class="listContent">
-        <ul v-if="current == 1">
-          <router-link
-            tag="li"
-            v-for="item in data"
-            :key="item.id"
-            :to="{
-              path: 'messageDetail',
-              query: { id: item.id }
-            }"
-          >
-            <system-notice
-              :data="item"
-              :checkedList="checkedList"
-              v-on:getChecked="getChecked"
-              :unRead="unRead"
-            ></system-notice>
-          </router-link>
-        </ul>
-        <ul v-else>
-          <router-link
-            class="messageBox"
-            tag="li"
-            v-for="item in data"
-            :key="item.id"
-            :to="{
-              path: 'messageDetail',
-              query: { id: item.id }
-            }"
-          >
-            <private-message
-              :data="item"
-              :checkedList="checkedList"
-              v-on:getChecked="getChecked"
-              :unRead="unRead"
-            ></private-message>
-          </router-link>
-        </ul>
-      </div>
-      <div class="tfooter">
-        <check-all
-          :amount="checkedList.length"
-          :checkAll="checkAll"
-          v-on:isCheckAll="isCheckAllMethod"
-        >
-          <div slot="right-box">
-            <div
-              v-bind:class="['remark', checkedList.length > 0 ? 'active' : '']"
-              @click="remarkRead"
-            >
-              标记已读
+      <ul>
+        <li v-for="item in userAddressList" :key="item.id">
+          <div class="left-box">
+            <div class="itemTr">{{ item.userName }}<span>收</span></div>
+            <div class="itemTr">{{ item.address }}</div>
+            <div class="itemTr">{{ item.phone }}</div>
+          </div>
+          <div class="right-box">
+            <div class="edit" @click="addCarSuccess(item.id)">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconbianjidizhi"></use>
+              </svg>
+              编辑
+            </div>
+            <div>
+              <a-checkbox
+                @change="onChange(item.id)"
+                :checked="item.status != 0"
+                >{{ item.status ? "默认地址" : "设为默认地址" }}</a-checkbox
+              >
             </div>
           </div>
-        </check-all>
-      </div>
+        </li>
+      </ul>
     </div>
-    <pagination></pagination>
+    <add-address-modal
+      :Visible="visible"
+      :type="type"
+      :editId="editId"
+    ></add-address-modal>
   </div>
 </template>
 
 <script>
   import _ from "lodash";
+  import { mapState } from "vuex";
+  import { _getData } from "../../../../config/getData";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
-  import manageNumberNav from "../../../../components/common/manageNumberNav";
-  import systemNotice from "../../../../components/common/systemNoticeItem";
-  import privateMessage from "../../../../components/common/privateMessageItem";
-  import checkAll from "../../../../components/common/checkAll";
-  import pagination from "../../../../components/common/pagination";
+  import addAddressModal from "../../../../components/modal/addAddressModal";
   export default {
     data() {
       return {
-        data: [
-          {
-            id: 1,
-            title: "卖家申请店铺审核通过提示",
-            createOn: "2018-11-18",
-            introduce:
-              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
-          },
-          {
-            id: 2,
-            title: "卖家申请店铺审核未通过提示",
-            createOn: "2018-11-19",
-            introduce:
-              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
-          }
-        ],
-        tabs: [],
-        checkAll: false,
-        checkedList: [],
-        current: 1,
-        unRead: true
+        visible: false,
+        type: "",
+        userAddressList: [],
+        editId: 0
       };
     },
-    beforeMount() {
-      this.tabs = [
-        {
-          id: 2,
-          name: "未读消息",
-          amount: 24
-        },
-        {
-          id: 3,
-          name: "已读消息",
-          amount: 12
-        }
-      ];
+    computed: {
+      ...mapState(["isLogin"])
     },
     methods: {
-      getTab(val) {
-        if (this.tabs[0].id == val) {
-          this.unRead = true;
-        } else {
-          this.unRead = false;
-        }
-      },
-      system(val) {
-        this.current = val;
-        this.checkedList = [];
-        this.checkAll = false;
-      },
-      getChecked(val) {
-        if (typeof val == "object") {
-          this.checkedList = val;
-        } else {
-          if (_.indexOf(this.checkedList, val) != -1) {
-            this.checkedList = _.without(this.checkedList, val);
+      onChange(id) {
+        console.log(id);
+        _.each(this.userAddressList, (val, index) => {
+          if (val.id == id) {
+            if (val.status == 0) {
+              _.each(this.userAddressList, (val, index) => {
+                val.status = 0;
+              });
+              val.status = 1;
+            } else {
+              val.status = 0;
+            }
           }
-        }
-        if (this.checkedList.length == this.data.length) {
-          this.checkAll = true;
-        } else {
-          this.checkAll = false;
-        }
+        });
       },
-      isCheckAllMethod(val) {
-        if (val) {
-          this.checkAll = true;
-          this.checkedList = [];
-          for (const val of this.data) {
-            this.checkedList.push(val.id);
+      addCarSuccess(id) {
+        if (!this.isLogin) {
+          this.type = "login";
+        }
+        this.visible = true;
+        this.editId = id;
+      },
+      getAddressList() {
+        _getData(
+          `${this.$API_URL.HYGLOGINURL}/server/userAddress!request.action`,
+          {
+            method: "appPageList",
+            userid: "15301",
+            token: "09a52ead-ef25-411d-8ac2-e3384fceed68",
+            params: { currentPage: 1, countPerPage: 10 }
           }
-        } else {
-          this.checkAll = false;
-          this.checkedList = [];
-        }
-      },
-      remarkRead() {
-        if (this.checkedList.length > 0) {
-          //向后台发送请求，标记为已读，成功后将刷新数据
-        }
-      },
-      onPaginationChange() {}
+        ).then(data => {
+          console.log(data);
+          this.userAddressList = data.data.result.UserAddressList;
+        });
+      }
+    },
+    mounted() {
+      this.getAddressList();
     },
     components: {
       commonTitle,
-      manageNumberNav,
-      systemNotice,
-      privateMessage,
-      checkAll,
-      pagination
+      addAddressModal
+    },
+    watch: {
+      visible(newVal) {
+        if (!newVal) {
+          this.getAddressList();
+        }
+      }
     }
   };
 </script>
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
-  .messageCenter {
+  .addressManage {
     min-height: 693px;
     background-color: #fff;
     padding: 4px 20px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
     margin-bottom: 10px;
-    .tabBar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: $border-style;
-      margin-top: 3px;
-      /deep/.nav {
-        border-bottom: none;
-        .ant-tabs {
-          .ant-tabs-ink-bar {
-            bottom: 0 !important;
-          }
-        }
-      }
-      .right-box {
-        display: flex;
-        align-items: center;
-        height: 27px;
-        div {
-          width: 95px;
-          height: 27px;
-          line-height: 27px;
-          border: $border-style;
-          text-align: center;
-          font-size: 12px;
-          color: #333;
-          cursor: pointer;
-          &:first-child {
-            border-right: none;
-          }
-          &.active {
-            background: #ffdfaa;
-            border: 1px solid #f5a623;
-          }
-        }
-      }
+    .addAddress {
+      cursor: pointer;
     }
     .listContainer {
       margin-top: 12px;
-      .tfooter {
-        .remark {
-          width: 104px;
-          height: 42px;
-          background-color: #ccc;
-          color: #fff;
-          font-size: 14px;
-          line-height: 42px;
-          text-align: center;
-          font-weight: 600;
-          cursor: pointer;
-          &.active {
-            background-color: #f5a623;
+      ul {
+        li {
+          width: 100%;
+          height: 130px;
+          border: $border-style;
+          display: flex;
+          margin-bottom: 10px;
+          .left-box {
+            width: 814px;
+            padding: 20px 40px;
+            .itemTr {
+              margin-bottom: 10px;
+              color: #333;
+              font-size: 16px;
+              font-weight: 600;
+              &:last-child {
+                margin-bottom: none;
+                font-weight: normal;
+              }
+              span {
+                font-size: 12px;
+                color: #666666;
+                margin-left: 8px;
+                font-weight: normal;
+              }
+            }
+          }
+          .right-box {
+            width: 152px;
+            height: 100%;
+            border-left: $border-style;
+            background-color: #fbfbfb;
+            padding-left: 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-size: 12px;
+            color: #666666;
+            .edit {
+              margin-bottom: 10px;
+            }
+            /deep/.ant-checkbox-wrapper {
+              .ant-checkbox-inner {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                &:after {
+                  width: 4px;
+                  height: 8px;
+                  left: 3.8px;
+                  top: 0.65px;
+                }
+              }
+              span {
+                &:last-child {
+                  padding-left: 5px;
+                  font-size: 12px;
+                  color: #666666;
+                }
+              }
+            }
           }
         }
       }

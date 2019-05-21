@@ -5,7 +5,7 @@
         <div v-if="defaultProvinceData.length == 0">请选择省/市</div>
         <div v-else>
           <i v-for="(item, index) in defaultProvinceData" :key="item.id">
-            {{ item.name }}({{ item.count }}){{
+            {{ item.provinceName }}({{ item.count }}){{
               index == defaultProvinceData.length - 1 ? "" : "/"
             }}
           </i>
@@ -119,7 +119,7 @@
         if (arr.length != 0) {
           this.defaultProvinceData.push({
             id: this.currentId,
-            name: this.activeProvinceName,
+            provinceName: this.activeProvinceName,
             count: arr.length == this.cityData.length ? "全部" : arr.length,
             defaultCityData: arr
           });
@@ -139,18 +139,16 @@
         console.log(data);
         this.proviceData = data;
         this.activeProvinceName = data[0].name;
-        _getData("address/getCity", { provinceId: data[0].id }).then(
-          data => {
-            console.log(data);
-            this.cityData = data;
-            this.currentId = data[0].id;
-            _.forEach(this.defaultProvinceData, value => {
-              if (data[0].id == value.id) {
-                this.defaultCityData = value.defaultCityData;
-              }
-            });
-          }
-        );
+        _getData("address/getCity", { provinceId: data[0].id }).then(data => {
+          console.log(data);
+          this.cityData = data;
+          this.currentId = data[0].id;
+          _.forEach(this.defaultProvinceData, value => {
+            if (data[0].id == value.id) {
+              this.defaultCityData = value.defaultCityData;
+            }
+          });
+        });
       });
     }
   };

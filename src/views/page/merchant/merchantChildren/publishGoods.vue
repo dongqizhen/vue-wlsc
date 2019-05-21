@@ -26,7 +26,7 @@
               defaultValue="请选择大类"
               style="width: 136px;margin-right:10px;"
               @change="handleProductBigTypeChange"
-              :options="options"
+              :options="bigOptions"
             >
               <a-icon slot="suffixIcon" class="icon">
                 <use xlink:href="#icontianjiaduibichanpinxiala"></use>
@@ -36,7 +36,7 @@
               defaultValue="请选择小类"
               style="width: 136px"
               @change="handleProductSmallTypeChange"
-              :options="options"
+              :options="smallOptions"
             >
               <a-icon slot="suffixIcon" class="icon">
                 <use xlink:href="#icontianjiaduibichanpinxiala"></use>
@@ -51,7 +51,7 @@
               defaultValue="请选择类型"
               style="width: 136px"
               @change="handleProductTypeChange"
-              :options="options"
+              :options="typeOptions"
             >
               <a-icon slot="suffixIcon" class="icon">
                 <use xlink:href="#icontianjiaduibichanpinxiala"></use>
@@ -193,6 +193,7 @@
   import addBtn from "../../../../components/common/productParams/addBtn";
   import paramItem from "../../../../components/common/productParams/paramItem";
   import newParam from "../../../../components/common/productParams/newParam";
+  import { _getData } from "../../../../config/getData";
   export default {
     data() {
       return {
@@ -200,7 +201,9 @@
         params: [{}],
         uploadList: [],
         defaultCascaderValue: [],
-        options: [],
+        bigOptions: [],
+        smallOptions: [],
+        typeOptions: [],
         submitData: {
           name: "",
           goodsSn: "",
@@ -247,7 +250,10 @@
       onChange(e) {
         console.log(`checked = ${e.target.checked}`);
       },
-      handleProductBigTypeChange() {},
+      handleProductBigTypeChange(value) {
+        console.log(`selected ${value}`);
+        this.getSmallType(value);
+      },
       handleProductSmallTypeChange() {},
       handleProductTypeChange(value) {
         console.log(`selected ${value}`);
@@ -263,6 +269,16 @@
           this.$message.error("Image must smaller than 2MB!");
         }
         return isLt2M;
+      },
+      getSmallType(id) {
+        _getData("/catalog/second", { id: id }).then(data => {
+          console.log(data);
+          _.each(data.subCategory, val => {
+            val.label = val.name;
+            val.value = val.id;
+          });
+          this.smallOptions = data.subCategory;
+        });
       }
     },
     components: {
@@ -271,6 +287,17 @@
       addBtn,
       newParam,
       paramItem
+    },
+    mounted() {
+      _getData("/catalog/first", {}).then(data => {
+        console.log("一级", data);
+        _.each(data.categoryList, val => {
+          val.label = val.name;
+          val.value = val.id;
+        });
+        this.bigOptions = data.categoryList;
+      });
+      _getData();
     }
   };
 </script>

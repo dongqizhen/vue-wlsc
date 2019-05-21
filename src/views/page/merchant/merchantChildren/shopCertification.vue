@@ -76,10 +76,7 @@
         <div class="common ">
           <div class="left-box"><span class="red">*</span>联系人</div>
           <div class="right-box">
-            <a-input
-              placeholder="请输入联系人"
-              v-model="submitData.link_name"
-            />
+            <a-input placeholder="请输入联系人" v-model="submitData.linkName" />
           </div>
         </div>
         <div class="common ">
@@ -100,10 +97,7 @@
         <div class="common ">
           <div class="left-box"><span class="red">*</span>企业邮箱</div>
           <div class="right-box">
-            <a-input
-              placeholder="请输入企业邮箱"
-              v-model="submitData.companyEmail"
-            />
+            <a-input placeholder="请输入企业邮箱" v-model="submitData.email" />
           </div>
         </div>
         <div class="common ">
@@ -201,18 +195,18 @@
           address: [],
           companyIntroduction: "",
           checking: "",
-          link_name: "",
+          linkName: "",
           mobile: "",
           workPhone: "",
-          companyEmail: "",
+          email: "",
           fax: "",
           bank: "",
           bankNum: "",
           qqCode: "",
           weiXinCode: "",
-          licenseUrl: "",
-          taxRegistrationUrl: "",
-          productionLicenseUrl: ""
+          yyimage: "",
+          swimage: "",
+          zzjgimage: ""
         },
         options: []
       };
@@ -223,10 +217,14 @@
       },
       current: {
         type: Number
+      },
+      shopInfo: {
+        type: Object
       }
     },
     methods: {
       submit() {
+        console.log(this.shopInfo);
         console.log(this.submitData);
         if (this.submitData.companyName == "") {
           alert("请输入公司名称");
@@ -240,7 +238,7 @@
           alert("请输入公司介绍");
           return;
         }
-        if (this.submitData.link_name == "") {
+        if (this.submitData.linkName == "") {
           alert("请输入联系人");
           return;
         }
@@ -252,19 +250,31 @@
           alert("请输入办公室电话");
           return;
         }
-        if (this.submitData.companyEmail == "") {
+        if (this.submitData.email == "") {
           alert("请输入企业邮箱");
           return;
         }
 
-        if (this.submitData.licenseUrl == "") {
+        if (this.submitData.yyimage == "") {
           alert("请上传营业执照");
           return;
         }
         if (this.isOpenShop) {
-          this.$emit("sure", this.current);
+          this.submitData = {
+            ...this.submitData,
+            ...this.shopInfo,
+            companyProvinceId: 1,
+            companyCityId: 1,
+            companyCountryId: 13
+          };
+          console.log(this.submitData);
+          _getData("/store/addStore", this.submitData).then(data => {
+            console.log(data);
+            this.$emit("sure", this.current);
+          });
         } else {
-          this.addCarSuccess();
+          // _getData("/store/addStore");
+          // this.addCarSuccess();
         }
       },
       cancel() {
@@ -327,23 +337,23 @@
       },
       getLicenseUrl(val) {
         if (val.length) {
-          this.submitData.licenseUrl = val[0].url;
+          this.submitData.yyimage = val[0].url;
         } else {
-          this.submitData.licenseUrl = "";
+          this.submitData.yyimage = "";
         }
       },
       getTaxRegistrationUrl(val) {
         if (val.length) {
-          this.submitData.taxRegistrationUrl = val[0].url;
+          this.submitData.swimage = val[0].url;
         } else {
-          this.submitData.licenseUrl = "";
+          this.submitData.swimage = "";
         }
       },
       getProductionLicenseUrl(val) {
         if (val.length) {
-          this.submitData.productionLicenseUrl = val[0].url;
+          this.submitData.zzjgimage = val[0].url;
         } else {
-          this.submitData.licenseUrl = "";
+          this.submitData.zzjgimage = "";
         }
       }
     },

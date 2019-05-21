@@ -19,6 +19,7 @@
               placeholder="请选择经营模式"
               style="width: 222px"
               @change="handleShopTypeChange"
+              :defaultValue="submitData.type"
             >
               <a-icon slot="suffixIcon" class="icon">
                 <use xlink:href="#icontianjiaduibichanpinxiala"></use>
@@ -36,7 +37,7 @@
         <div class="common shopIndexPicture">
           <div class="left-box"><span class="red">*</span>店铺首页图片</div>
           <div class="right-box">
-            <upload v-on:getVal="getImgUrl"></upload>
+            <upload v-on:getVal="getImgUrl" :imgUrl="submitData.image"></upload>
           </div>
         </div>
         <div class="common ">
@@ -98,8 +99,8 @@
         shopTypeData: [],
         submitData: {
           shopName: "",
-          shopType: "",
-          file: "",
+          type: "",
+          image: "",
           shopScope: "",
           defaultProvinceData: [],
           introduce: ""
@@ -122,11 +123,11 @@
           alert("请输入店铺名称");
           return;
         }
-        if (this.submitData.shopType == "") {
+        if (this.submitData.type == "") {
           alert("请选择店铺类型");
           return;
         }
-        if (this.submitData.file == "") {
+        if (this.submitData.image == "") {
           alert("请上传店铺首页图片");
           return;
         }
@@ -142,22 +143,22 @@
           this.submitData = { ...this.submitData, current: this.current };
           this.$emit("getShopInfo", this.submitData);
         } else {
-          // _getData("store", this.submitData).then(data => {
-          //   console.log("111", data);
-          // });
+          _getData("store", this.submitData).then(data => {
+            console.log("111", data);
+          });
         }
       },
       getImgUrl(val) {
         // console.log(val);
         if (val.length == 0) {
-          this.submitData.file = "";
+          this.submitData.image = "";
         } else {
-          this.submitData.file = val[0].url;
+          this.submitData.image = val[0].url;
         }
       },
       handleShopTypeChange(value) {
         // console.log(`selected ${value}`);
-        this.submitData.shopType = value;
+        this.submitData.type = value;
       },
       isShowModal() {
         this.isShow = false;
@@ -180,6 +181,12 @@
         console.log("店铺类型", data);
         this.shopTypeData = data;
       });
+      if (!this.isOpenShop) {
+        _getData("/store/selectAllStore", {}).then(data => {
+          console.log("获取已填写的店铺信息：", data);
+          this.submitData = data;
+        });
+      }
     }
   };
 </script>
@@ -259,7 +266,7 @@
           height: 33px;
           background: #f5a623;
           border-radius: 3px;
-          border: none;
+          border: 1px solid #f5a623;
           box-shadow: none;
           font-family: PingFangSC-Medium;
           font-size: 14px;

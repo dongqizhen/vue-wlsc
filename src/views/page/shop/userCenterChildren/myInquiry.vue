@@ -1,16 +1,10 @@
 <template>
   <div class="messageCenter">
-    <common-title title="我的询价">
-      <div slot="titleRight" class="right-box">
-        <ul>
-          <li class="active">报价中(1)</li>
-          <li>已报价(2)</li>
-          <li>已关闭(1)</li>
-        </ul>
-      </div>
-    </common-title>
+    <common-title title="询价单"></common-title>
     <div class="listContainer">
-      <div class="listContent"></div>
+      <div class="listContent">
+        <order-title :isOrder="false"></order-title>
+      </div>
       <div class="tfooter">
         <check-all
           :amount="checkedList.length"
@@ -35,6 +29,8 @@
   import _ from "lodash";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import checkAll from "../../../../components/common/checkAll";
+  import orderTitle from "../../../../components/common/orderTitle";
+
   export default {
     data() {
       return {
@@ -93,7 +89,8 @@
     },
     components: {
       commonTitle,
-      checkAll
+      checkAll,
+      orderTitle
     }
   };
 </script>

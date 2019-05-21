@@ -41,6 +41,7 @@
         :current="current"
         v-on:cancel="cancel"
         v-on:sure="sure"
+        :shopInfo="shopInfo"
       ></shop-certification>
       <div class="submitSuccessOrFailure" v-if="current == 2">
         <svg class="icon" aria-hidden="true">
@@ -75,13 +76,15 @@
       return {
         current: 0,
         steps: ["填写店铺信息", "填写认证资料", "完成认证"],
-        certificationStatus: 2
+        certificationStatus: 2,
+        shopInfo: {}
       };
     },
     methods: {
       getShopInfo(val) {
         // console.log(val);
         this.current = val.current + 1;
+        this.shopInfo = val;
       },
       cancel(val) {
         // console.log(val);
