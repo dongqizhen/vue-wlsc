@@ -10,12 +10,15 @@
     <a target="_blank">
       <div class="video_box">
         <img :src="item.image" alt="" />
-        <span class="look-num">
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#iconxinghaoliebiaoliulanliang-copy"></use>
-          </svg>
-          {{ item.watchAmount }}
-        </span>
+        <p class="look-num">
+          <span>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconxinghaoliebiaoliulanliang-copy"></use>
+            </svg>
+            {{ item.watchAmount }}
+          </span>
+          <span>{{ item.totalTime }}</span>
+        </p>
         <div class="play-btn">
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#iconshipinliebiaoyebofang"></use>
@@ -104,12 +107,22 @@
         color: #ffffff;
         display: flex;
         align-items: center;
-        padding-left: 12px;
+        padding: 0 12px;
         background-image: linear-gradient(
           -180deg,
           rgba(98, 98, 98, 0) 0%,
           rgba(51, 51, 51, 0.3) 100%
         );
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        span {
+          height: 100%;
+          display: flex;
+          align-items: center;
+          font-size: 14px;
+          line-height: 26px;
+        }
         .icon {
           height: 10px;
           width: 15px;

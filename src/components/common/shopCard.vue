@@ -6,18 +6,32 @@
           <use xlink:href="#iconyirenzhengjiaobiao"></use>
         </svg>
       </span>
-      <div class="img_box"></div>
-      <p>北京华脉诚信科技有限公司</p>
+      <div class="img_box">
+        <img :src="detail.image" alt="" />
+      </div>
+      <p>{{ detail.shopName }}</p>
       <ul>
-        <li><span>店铺类型：</span><span>代理商</span></li>
-        <li><span>销售地区：</span><span>北京市；天津市</span></li>
+        <li>
+          <span>店铺类型：</span><span>{{ detail.typeName }}</span>
+        </li>
+        <li>
+          <span>销售地区：</span
+          ><span>
+            <span v-for="item in detail.listStoreCentreVo" :key="item.id">
+              {{ item.provinceName + item.cityName + "," }}
+            </span>
+          </span>
+        </li>
       </ul>
       <div class="btn">
         <a-button v-if="type == 'introduce'">
           <router-link
             :to="{
               path: '/shopIntroduction',
-              query: { nav_index: $route.query.nav_index }
+              query: {
+                nav_index: $route.query.nav_index,
+                shopId: $route.query.shopId
+              }
             }"
             target="_blank"
           >
@@ -27,7 +41,9 @@
         <a-button v-else>
           进店看看
         </a-button>
-        <a-button>收藏店铺</a-button>
+        <a-button @click="collect">{{
+          detail.collectId ? "已收藏" : "收藏店铺"
+        }}</a-button>
       </div>
       <div class="service">
         <a-button>
@@ -43,18 +59,34 @@
 </template>
 
 <script>
+  import { _getData } from "../../config/getData";
   export default {
     data() {
       return {};
     },
-    props: ["type"]
+    props: ["type", "detail"],
+    computed: {
+      isCollect() {
+        return;
+      }
+    },
+    methods: {
+      collect() {
+        _getData("collect/addordelete", {
+          valueId: this.detail.sid,
+          typeId: 1 //收藏类型 0 产品 1 店铺
+        }).then(data => {
+          if (data.code == 0) this.$message.success("店铺收藏成功");
+        });
+      }
+    }
   };
 </script>
 
 <style lang="scss" scoped>
   @import "../../assets/scss/_commonScss";
   .shop {
-    height: 362px;
+    min-height: 362px;
     background: #ffffff;
     box-shadow: $base-box-shadow;
     position: relative;
@@ -92,14 +124,18 @@
       li {
         display: flex;
         justify-content: flex-start;
-        height: 20px;
-        align-items: center;
+        min-height: 20px;
+        // align-items: center;
         margin-bottom: 12px;
-        span {
+        > span {
           font-size: 14px;
           color: #526c85;
+
           &:first-child {
             width: 70px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
           }
           &:last-child {
             font-weight: 600;
@@ -116,6 +152,7 @@
       /deep/ .ant-btn-default {
         width: 87px;
         height: 31px;
+        text-align: center;
         a {
           text-decoration: none;
         }
@@ -123,6 +160,7 @@
           display: flex;
           height: 29px;
           align-items: center;
+          justify-content: center;
           line-height: 29px;
         }
         &:hover {

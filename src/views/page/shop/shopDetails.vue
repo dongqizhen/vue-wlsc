@@ -6,7 +6,10 @@
     <div class="container">
       <div class="commonWidth">
         <breadcrumb-vue :routes="routes"></breadcrumb-vue>
-        <product-category-vue></product-category-vue>
+        <product-category-vue
+          :canSkip="false"
+          v-on:categoryClick="categoryClick"
+        ></product-category-vue>
         <div class="main-content">
           <div class="left">
             <shop-left-side-vue></shop-left-side-vue>
@@ -21,7 +24,11 @@
             </ul>
           </div>
           <div class="shop">
-            <shop-card-vue type="introduce"></shop-card-vue>
+            <shop-card-vue
+              v-if="shopdetails"
+              type="introduce"
+              :detail="shopdetails"
+            ></shop-card-vue>
           </div>
         </div>
       </div>
@@ -51,7 +58,9 @@
     data() {
       return {
         arr: [1, 2, 3, 4, 5],
-        routes: []
+        routes: [],
+        categoryId: "", //分类id
+        shopdetails: ""
       };
     },
     mixins: [mixin],
@@ -71,14 +80,28 @@
         }
       ];
     },
+    methods: {
+      categoryClick(item) {
+        console.log(item);
+        this.categoryId = item.id;
+      }
+    },
     mounted() {
       _getData("/goods/getGoods", {
-        storeId: "",
+        storeId: this.$route.query.shopId,
         attributeCategoryId: "",
         currentPage: 1,
         countPerPage: 6,
         sort: "createOn",
         order: "asc"
+      }).then(data => {
+        console.log("产品列表", data);
+      });
+      _getData("/store/homeStore", {
+        storeId: this.$route.query.shopId
+      }).then(data => {
+        console.log(2222222, data);
+        this.shopdetails = data;
       });
     },
     components: {
@@ -100,6 +123,15 @@
 <style lang="scss" scoped>
   @import "../../../assets/scss/_commonScss";
   .container {
+    /deep/ .product-category {
+      .product {
+        h2 {
+          .btn {
+            display: none;
+          }
+        }
+      }
+    }
     .main-content {
       display: flex;
       justify-content: flex-start;

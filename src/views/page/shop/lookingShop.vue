@@ -63,19 +63,30 @@
         ></product-category-vue>
         <div class="main-content">
           <div class="left">
-            <shop-left-side-vue></shop-left-side-vue>
+            <shop-left-side-vue
+              :categoryId="categoryId"
+              v-on:brandClick="brandClick"
+            ></shop-left-side-vue>
           </div>
           <div class="right">
             <shop-nav-vue
               :navArr="['推荐', '按点击量', '按好评']"
             ></shop-nav-vue>
-            <ul class="shopItem">
-              <shop-item-vue
-                v-for="item in arr"
-                :key="item.id"
-                :item="item"
-              ></shop-item-vue>
-            </ul>
+            <div v-if="!isLoading">
+              <div v-if="arr.length">
+                <ul class="shopItem">
+                  <shop-item-vue
+                    v-for="item in arr"
+                    :key="item.id"
+                    :item="item"
+                  ></shop-item-vue>
+                </ul>
+                <pagination></pagination>
+              </div>
+
+              <no-data v-else text="暂无店铺"></no-data>
+            </div>
+            <loading v-else></loading>
           </div>
         </div>
       </div>
@@ -98,11 +109,12 @@
   import shopNavVue from "../../../components/common/shopNav.vue";
   import { mixin } from "../../../components/mixin/mixin";
   import { _getData } from "../../../config/getData";
+  import pagination from "../../../components/common/pagination";
 
   export default {
     data() {
       return {
-        arr: [],
+        arr: [], //店铺列表
         areaIsShow: false, //控制选择地区弹层是否显示
         area: [], //省份列表
         cityArr: [], //市列表
@@ -112,6 +124,8 @@
         selectMainArea: "北京市西城区", //默认显示地址
         provinceName: "北京市",
         cityName: "北京市",
+        categoryId: "", //分类id
+        isLoading: true,
         routes: [
           {
             name: "首页",
@@ -135,7 +149,8 @@
       shopItemVue,
       sideBar,
       shopLeftSideVue,
-      shopNavVue
+      shopNavVue,
+      pagination
     },
     created() {
       //this.routes = JSON.parse(this.$route.query.routes);
@@ -151,11 +166,17 @@
         });
     },
     methods: {
+      //点击产品分类
       categoryClick(item) {
         console.log(item);
+        this.categoryId = item.id;
         this.getShop(item.id).then(data => {
           // console.log(data);
         });
+      },
+      brandClick(item) {
+        console.log(item);
+        this.getShop(this.categoryId, item.id);
       },
       selectArea() {
         this.areaIsShow = !this.areaIsShow;
@@ -164,16 +185,23 @@
       },
       //异步获取店铺
       async getShop(categoryId = "", brandId = "") {
+        this.isLoading = true;
         return await _getData("queryEnquiry", {
-          brandId: "",
+          brandId: brandId,
           provinceName: this.provinceName,
           cityName: this.cityName,
-          categoryId: "",
+          categoryId: categoryId,
           page: 1,
-          size: 6
-        }).then(data => {
-          this.arr = data.data;
-        });
+          size: 20
+        })
+          .then(data => {
+            this.arr = data.data;
+          })
+          .then(() => {
+            this.$nextTick().then(() => {
+              this.isLoading = false;
+            });
+          });
       },
       handleClick(val) {
         console.log(val);
@@ -341,6 +369,10 @@
           justify-content: flex-start;
           flex-wrap: wrap;
           margin-right: -25px;
+        }
+        .no-data {
+          height: 600px;
+          background: #fff;
         }
       }
     }

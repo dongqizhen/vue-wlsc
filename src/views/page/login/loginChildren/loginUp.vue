@@ -282,6 +282,8 @@
             this.$router.back();
           } else if (data.data.status.code == 1102) {
             this.phone2isRegister = false;
+          } else {
+            this.$message.error(data.data.status.message);
           }
         });
       },
