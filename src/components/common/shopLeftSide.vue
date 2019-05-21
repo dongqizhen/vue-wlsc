@@ -111,7 +111,7 @@
         arr: [],
         brandVisible: false,
         commonMore: false, //常用品牌更多
-        firstMore: false,
+        firstMore: false, //一线品牌更多
         listMore: []
       };
     },
@@ -162,9 +162,9 @@
               document.querySelectorAll(".item_container").forEach((val, i) => {
                 console.log(val.offsetHeight);
                 if (val.offsetHeight <= 102) {
-                  // document.querySelectorAll(".item-box")[i].removeChild("span");
-
-                  console.log(document.querySelectorAll(".item-box")[i]);
+                  let dom = (document.querySelectorAll(".item-box")[
+                    i
+                  ].lastChild.style.display = "none");
                 }
               });
             });

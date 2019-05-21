@@ -84,11 +84,13 @@
         display: flex;
         justify-content: flex-start;
         .banner {
+          flex: 1;
         }
         .login-box {
           /* width: 508px; */
           height: 100%;
-          flex: 1;
+
+          width: 508px;
           margin-left: -14px;
 
           position: relative;

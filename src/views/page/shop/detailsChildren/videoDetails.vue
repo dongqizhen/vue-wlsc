@@ -102,7 +102,12 @@
           </a-tabs>
           <share-menu-vue></share-menu-vue>
         </div>
-        <comment-vue :isLogin="$store.state.isLogin"></comment-vue>
+        <comment-vue
+          :isLogin="$store.state.isLogin"
+          :commentData="commentData"
+          v-if="commentData"
+          type="video"
+        ></comment-vue>
         <menu-vue :item="detail"></menu-vue>
       </div>
       <div class="right"></div>
@@ -159,7 +164,8 @@
           ],
           poster: ""
         },
-        globalOptions: {}
+        globalOptions: {},
+        commentData: ""
       };
     },
     components: {
@@ -171,6 +177,26 @@
     computed: {
       player() {
         return this.$refs.videoPlayer.player;
+      }
+    },
+    methods: {
+      //获取评论列表
+      async getCommentList() {
+        return await _getData(
+          `${this.$API_URL.HYGPROURL}/server_pro/video!request.action`,
+          {
+            method: "getReportCommentList_v27",
+            userid: "29942",
+            params: {
+              currentPage: 1,
+              countPerPage: 20,
+              id: this.$route.query.id,
+              type: "2"
+            }
+          }
+        ).then(data => {
+          this.commentData = data.data.result;
+        });
       }
     },
     mounted() {
@@ -185,7 +211,9 @@
           this.playerOptions.sources[0].src = this.detail.videoSubList[0].url;
         })
         .then(() => {
-          this.isLoading = false;
+          this.getCommentList().then(() => {
+            this.isLoading = false;
+          });
         });
     }
   };

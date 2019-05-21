@@ -32,7 +32,11 @@
             <share-menu-vue></share-menu-vue>
           </div>
         </div>
-        <comment-vue :isLogin="$store.state.isLogin" type="5"></comment-vue>
+        <comment-vue
+          :isLogin="$store.state.isLogin"
+          :commentData="commentData"
+          v-if="commentData"
+        ></comment-vue>
         <menu-vue :item="detail"></menu-vue>
       </div>
       <div class="right"></div>
@@ -58,7 +62,8 @@
       return {
         isLogin: true,
         isLoading: true,
-        detail: {}
+        detail: {},
+        commentData: ""
       };
     },
     components: {
@@ -88,6 +93,19 @@
         .then(() => {
           this.isLoading = false;
         });
+
+      _getData(`${this.$API_URL.HYGPROURL}/server_pro/learn!request.action`, {
+        method: "getArticleCommentListV1",
+        userid: "",
+        token: "10533",
+        params: {
+          id: this.$route.query.id,
+          currentPage: 1,
+          countPerPage: "5"
+        }
+      }).then(data => {
+        this.commentData = data.data.result;
+      });
     }
   };
 </script>

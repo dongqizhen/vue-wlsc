@@ -9,16 +9,32 @@
         <span>{{ item.createdOn }}</span>
       </span>
       <p>
-        {{ item.content }}
+        {{ item.content
+        }}{{
+          item.commentId && item.commentId != -1
+            ? "&nbsp;&nbsp;//@" +
+              item.commentName +
+              "：" +
+              decodeURI(item.commentContent)
+            : ""
+        }}
       </p>
       <div class="replay">
         <div class="btn">
           <div class="replay-btn">
             <span @click="replayBtnClick">回复</span>
-            &nbsp;&nbsp;·&nbsp;&nbsp;
-            <span @click="packUp">
-              2条回复
+
+            <span
+              @click="
+                if (!item.commentId) {
+                  packUp();
+                }
+              "
+            >
+              &nbsp;&nbsp;·&nbsp;
+              {{ item.commentNum }}条回复
               <svg
+                v-if="!item.commentId"
                 class="icon"
                 :class="commentIsShow && 'active'"
                 aria-hidden="true"
@@ -27,11 +43,12 @@
               </svg>
             </span>
           </div>
-          <span>
+          <span @click="giveALike(item.id)">
             <svg class="icon" aria-hidden="true">
-              <use xlink:href="#iconzan"></use>
+              <use xlink:href="#iconzan" v-if="!isCommentLike"></use>
+              <use xlink:href="#iconzanx" v-else></use>
             </svg>
-            89
+            {{ commentAmount }}
           </span>
         </div>
         <transition name="slide-fade">
@@ -56,18 +73,25 @@
 <script>
   import { mapState } from "vuex";
   import loginModalVue from "../../modal/loginModal.vue";
+  import { _getData } from "../../../config/getData";
 
   export default {
     data() {
       return {
         iptIsShow: false,
         commentIsShow: false,
-        visible: false
+        visible: false,
+        isCommentLike: 0, //评论是否点赞 0 否 1 是
+        commentAmount: 0
       };
     },
-    props: ["item"],
+    props: ["item", "likeType"],
     components: {
       loginModalVue
+    },
+    created() {
+      this.isCommentLike = this.item.isDianzan;
+      this.commentAmount = this.item.amount;
     },
     methods: {
       replayBtnClick() {
@@ -79,6 +103,24 @@
       },
       packUp() {
         this.commentIsShow = !this.commentIsShow;
+      },
+      //点赞
+      giveALike(id) {
+        this.isCommentLike = !this.isCommentLike;
+        _getData(`${this.$API_URL.HYGPROURL}/server_pro/dianzan!request.action`, {
+          method: "addOrDeleteDianzan_v27",
+          token: "",
+          userid: "29942",
+          params: {
+            id: id,
+            type: this.likeType,
+            controlflag: this.isCommentLike ? 0 : 1 //1表示取消，0表示添加（传的是现在的状态）
+          }
+        }).then(() => {
+          this.commentAmount = this.isCommentLike
+            ? (this.commentAmount += 1)
+            : (this.commentAmount -= 1);
+        });
       }
     },
     computed: {

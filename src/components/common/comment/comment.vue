@@ -12,10 +12,10 @@
           <div class="img-box">
             <img :src="userInfo.imageUrl" alt="" />
           </div>
-          <a-textarea placeholder="写下您的评论" :rows="4" />
+          <a-textarea placeholder="写下您的评论" v-model="value" :rows="4" />
         </div>
 
-        <span>发送</span>
+        <span @click="sendComment">发送</span>
       </div>
       <h2>
         {{ commentData.amount }}条回复
@@ -36,8 +36,15 @@
             v-for="item in commentData.commentList"
             :key="item.id"
             :item="item"
+            likeType="11"
           >
-            <comment-item-vue slot="replay-container"></comment-item-vue>
+            <comment-item-vue
+              slot="replay-container"
+              v-for="val in item.replyList"
+              :key="val.id"
+              :item="val"
+              likeType="11"
+            ></comment-item-vue>
           </comment-item-vue>
         </ul>
         <no-data v-else type="no-comment" text="暂无评论"></no-data>
@@ -54,8 +61,9 @@
   export default {
     data() {
       return {
-        commentData: "",
-        defaultVal: 0 //排序
+        defaultVal: 0, //排序
+        value: ""
+        //commentType: ""
       };
     },
     props: {
@@ -64,30 +72,28 @@
         default: false,
         required: true
       },
+      video: {},
+      commentData: {},
       type: {
-        type: [Number, String] //行业资讯 5
+        type: [String] //video 微课堂
       }
     },
     components: {
       commentItemVue
     },
     computed: {
-      ...mapState(["userInfo"])
-    },
-    mounted() {
-      _getData(`${this.$API_URL.HYGPROURL}/server_pro/learn!request.action`, {
-        method: "getArticleCommentListV1",
-        userid: "",
-        token: "10533",
-        params: {
-          id: this.$route.query.id,
-          currentPage: 1,
-          countPerPage: "5"
+      ...mapState(["userInfo"]),
+      getType() {
+        switch (this.type) {
+          case "video":
+            return {
+              commentType: 1
+            };
+            break;
         }
-      }).then(data => {
-        this.commentData = data.data.result;
-      });
+      }
     },
+    mounted() {},
     methods: {
       toLogin() {
         this.$router.push({ path: "/login" });
@@ -98,6 +104,35 @@
       },
       handerClick(i) {
         this.defaultVal = i;
+      },
+      sendComment() {
+        if (this.value == "") return;
+        _getData(
+          `${this.$API_URL.HYGPROURL}/server_pro/videoComment!request.action`,
+          {
+            method: "addModelComments",
+            userid: "29942",
+            params: {
+              id: this.$route.query.id, //视频id
+              type: this.getType.commentType, //表示聊一聊
+              content: window.encodeURI(this.value), //评论内容，编码
+              parentId: "", //被回复顶层评论id
+              commentId: "" //被回复记录id
+            }
+          }
+        )
+          .then(() => {
+            this.$nextTick()
+              .then(() => {
+                this.$message.success("评论成功");
+              })
+              .then(() => {
+                this.value = "";
+              });
+          })
+          .then(() => {
+            this.$parent.getCommentList();
+          });
       }
     }
   };
