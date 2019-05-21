@@ -118,6 +118,12 @@
           .defaultSelectedKeys;
       }
     },
+    watch: {
+      defaultSelectedKeys() {
+        return JSON.parse(window.localStorage["vuex-along"])["vuex-along"]
+          .defaultSelectedKeys;
+      }
+    },
     components: {
       Header,
       centerPage

@@ -95,6 +95,7 @@
 </template>
 
 <script>
+  import { mapMutations } from "vuex";
   import manageNumberNav from "../../../../components/common/manageNumberNav";
   import calendarRange from "../../../../components/common/calendarRange";
   import ECharts from "vue-echarts";
@@ -336,6 +337,9 @@
         }
       };
     },
+    created() {
+      this.changeDefaultSelectedKeys(["1"]);
+    },
     mounted() {
       this.polar.legend.data = [
         "新增访问店铺数",
@@ -357,7 +361,9 @@
       this.polar.series[2].data = [2, 2, 12, 1, 2, 2, 6];
       this.polar.series[3].data = [56, 76, 45, 2, 23, 98, 68];
     },
+
     methods: {
+      ...mapMutations(["changeDefaultSelectedKeys"]),
       tabClick(i) {
         if (i == 1) {
           this.flag1 = this.flag1 + 1;

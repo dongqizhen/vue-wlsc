@@ -18,7 +18,6 @@
   export default {
     data() {
       return {
-        defaultSelectedKeys: ["0"],
         dataArr: [
           {
             id: 1,
@@ -57,64 +56,31 @@
         ]
       };
     },
-    methods: {
-      ...mapMutations(["changeLoginState", "changeUserInfoState"])
+    computed: {
+      ...mapState(["isLogin", "defaultSelectedKeys"])
     },
-    computed: { ...mapState(["isLogin", "userInfo"]) },
-    beforeMount() {
+    watch: {
+      ...mapState(["defaultSelectedKeys"])
+    },
+    methods: {
+      ...mapMutations(["changeDefaultSelectedKeys"])
+    },
+    created() {
       if (!this.isLogin) {
         this.$router.push({ path: "/login" });
       } else {
-        switch (this.$route.path.split("/")[2]) {
-          case "shopIndex":
-            this.defaultSelectedKeys = ["1"];
-            break;
-          case "shopInfo":
-            this.defaultSelectedKeys = ["2"];
-            break;
-          case "shopCertification":
-            this.defaultSelectedKeys = ["3"];
-            break;
-          case "publishGoods":
-            this.defaultSelectedKeys = ["4"];
-            break;
-          case "productManage":
-            this.defaultSelectedKeys = ["5"];
-            break;
-          case "inquiryManage":
-            this.defaultSelectedKeys = ["6"];
-            break;
-          case "orderManage":
-            this.defaultSelectedKeys = ["7"];
-            break;
-          case "accountSecurity":
-            this.defaultSelectedKeys = ["8"];
-            break;
-          case "changePassword":
-            this.defaultSelectedKeys = ["8"];
-            break;
-          case "changeEmail":
-            this.defaultSelectedKeys = ["8"];
-            break;
-          case "changePhone":
-            this.defaultSelectedKeys = ["8"];
-            break;
-          case "personalCenter":
-            this.defaultSelectedKeys = ["9"];
-            break;
-          case "messageCenter":
-            this.defaultSelectedKeys = ["10"];
-            break;
-          case "messageDetail":
-            this.defaultSelectedKeys = ["10"];
-            break;
-        }
+        _getData("/user/getUser", {}).then(data => {
+          console.log("用户信息：", data);
+          if (data.audit_status == 2) {
+            this.$router.replace({ path: "/merchant/shopIndex" });
+          } else {
+            this.$router.replace({
+              path: "/merchant/openShop",
+              query: { shopStatus: data.audit_status }
+            });
+          }
+        });
       }
-    },
-    mounted() {
-      _getData("/user/getUser", {}).then(data => {
-        console.log(data);
-      });
     },
     components: {
       Header,

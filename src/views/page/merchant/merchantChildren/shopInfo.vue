@@ -88,6 +88,7 @@
 </template>
 
 <script>
+  import { mapMutations } from "vuex";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import upload from "../../../../components/common/upload";
   import cascadeSelect from "../../../../components/common/casadeSelect/cascadeSelect";
@@ -115,7 +116,11 @@
         type: Number
       }
     },
+    created() {
+      this.changeDefaultSelectedKeys(["2"]);
+    },
     methods: {
+      ...mapMutations(["changeDefaultSelectedKeys"]),
       save() {
         console.log(this.submitData);
         console.log(this.isOpenShop);
