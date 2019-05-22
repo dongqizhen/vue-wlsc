@@ -1,23 +1,32 @@
 <template>
   <li class="comment-item">
     <div class="img_box">
-      <img :src="item.userImageUrl" alt="" />
+      <svg class="icon" aria-hidden="true" v-if="!item.userImageUrl">
+        <use xlink:href="#iconweidenglutouxiang"></use>
+      </svg>
+      <img v-else :src="item.userImageUrl" alt="" />
     </div>
     <div class="main">
       <span>
         {{ item.username }}
         <span>{{ item.createdOn }}</span>
       </span>
-      <p>
-        {{ item.content
-        }}{{
+      <p v-html="content">
+        <!-- {{ decodeURI(item.content).replace(/\n/g, "<br />") }}
+        <span v-if="item.commentId && item.commentId != -1">
+          &nbsp;&nbsp;//
+          <span>@{{ item.commentName }}</span
+          >：{{ decodeURI(item.commentContent) }}
+        </span> -->
+
+        <!-- {{
           item.commentId && item.commentId != -1
             ? "&nbsp;&nbsp;//@" +
               item.commentName +
               "：" +
               decodeURI(item.commentContent)
             : ""
-        }}
+        }} -->
       </p>
       <div class="replay">
         <div class="btn">
@@ -26,7 +35,7 @@
 
             <span
               @click="
-                if (!item.commentId) {
+                if (item.replyList) {
                   packUp();
                 }
               "
@@ -34,7 +43,7 @@
               &nbsp;&nbsp;·&nbsp;
               {{ item.commentNum }}条回复
               <svg
-                v-if="!item.commentId"
+                v-if="item.replyList"
                 class="icon"
                 :class="commentIsShow && 'active'"
                 aria-hidden="true"
@@ -53,8 +62,10 @@
         </div>
         <transition name="slide-fade">
           <div class="replay-area" v-if="isLogin && iptIsShow">
-            <a-textarea placeholder="写下您的评论" :rows="4" />
-            <span>发送</span>
+            <a-textarea placeholder="写下您的评论" :rows="4" v-model="value" />
+            <a-button @click="sendComment(item)" :loading="loading"
+              >发送</a-button
+            >
           </div>
         </transition>
       </div>
@@ -78,28 +89,78 @@
   export default {
     data() {
       return {
-        iptIsShow: false,
+        iptIsShow: false, //是否显示回复框
         commentIsShow: false,
         visible: false,
         isCommentLike: 0, //评论是否点赞 0 否 1 是
-        commentAmount: 0
+        commentAmount: 0,
+        value: "",
+        content: "",
+        loading: false //发送按钮loading
       };
     },
-    props: ["item", "likeType"],
+    props: ["item", "type"],
     components: {
       loginModalVue
     },
     created() {
       this.isCommentLike = this.item.isDianzan;
       this.commentAmount = this.item.amount;
+      this.content =
+        decodeURI(this.item.content).replace(/\n/g, "<br />") +
+        (this.item.commentId && this.item.commentId != -1
+          ? "&nbsp;&nbsp;//<span>@" +
+            this.item.commentName +
+            "</span>：" +
+            decodeURI(this.item.commentContent).replace(/\n/g, "<br />")
+          : "");
     },
     methods: {
+      //点击回复按钮
       replayBtnClick() {
         if (this.isLogin) {
           this.iptIsShow = !this.iptIsShow;
         } else {
           this.visible = true;
         }
+      },
+      //点击发送按钮
+      sendComment(item) {
+        if (this.value == "") return;
+        this.loading = true;
+        _getData(
+          `${this.$API_URL.HYGPROURL}/server_pro/videoComment!request.action`,
+          {
+            method: "addModelComments",
+            userid: this.$userid,
+            params: {
+              id: this.$route.query.id, //视频id
+              type: this.type.commentType, //表示聊一聊
+              content: window.encodeURI(this.value), //评论内容，编码
+              parentId: item.replyList ? item.id : item.parentId, //被回复顶层评论id
+              commentId: item.replyList ? "" : item.id //被回复记录id
+            }
+          }
+        )
+          .then(() => {
+            this.$nextTick()
+              .then(() => {
+                this.$message.success("评论成功");
+                this.loading = false;
+              })
+              .then(() => {
+                this.value = "";
+                this.iptIsShow = false;
+                this.commentIsShow = true;
+              });
+          })
+          .then(() => {
+            if (this.$parent.$parent.getCommentList) {
+              this.$parent.$parent.getCommentList();
+            } else {
+              this.$parent.$parent.$parent.getCommentList();
+            }
+          });
       },
       packUp() {
         this.commentIsShow = !this.commentIsShow;
@@ -110,10 +171,10 @@
         _getData(`${this.$API_URL.HYGPROURL}/server_pro/dianzan!request.action`, {
           method: "addOrDeleteDianzan_v27",
           token: "",
-          userid: "29942",
+          userid: this.$userid,
           params: {
             id: id,
-            type: this.likeType,
+            type: this.type.likeType,
             controlflag: this.isCommentLike ? 0 : 1 //1表示取消，0表示添加（传的是现在的状态）
           }
         }).then(() => {
@@ -124,7 +185,16 @@
       }
     },
     computed: {
-      ...mapState(["isLogin"])
+      ...mapState(["isLogin"]),
+      getContent() {
+        return (this.item.content +=
+          this.item.commentId && this.item.commentId != -1
+            ? "&nbsp;&nbsp;//<span>@" +
+              this.item.commentName +
+              "</span>：" +
+              decodeURI(this.item.commentContent)
+            : "");
+      }
     }
   };
 </script>
@@ -187,13 +257,22 @@
       height: 30px;
       width: 30px;
       border-radius: 16px;
-      background: $base-background;
+      background: $image-box-color;
       margin-right: 8px;
       margin-top: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .icon {
+        height: 17px;
+        width: 17px;
+        margin-left: 1px;
+      }
       img {
         width: 100%;
         height: 100%;
         border-radius: 16px;
+        border: none;
       }
     }
     .main {
@@ -218,7 +297,14 @@
       > p {
         font-size: 14px;
         color: #333333;
+        line-height: 20px;
         margin-bottom: 6px;
+        // white-space: pre-line;
+        /deep/ span {
+          color: #3194d0;
+          > span {
+          }
+        }
       }
       .replay {
         font-size: 14px;
@@ -239,6 +325,9 @@
               cursor: pointer;
               display: flex;
               align-items: center;
+              &:hover {
+                opacity: 0.7;
+              }
               .icon {
                 width: 11px;
                 height: 6px;
@@ -267,7 +356,8 @@
         }
         .replay-area {
           // margin-top: 10px;
-          span {
+          margin-bottom: 24px;
+          /deep/ .ant-btn {
             display: flex;
             height: 33px;
             width: 76px;
@@ -280,6 +370,11 @@
             font-size: 14px;
             color: #ffffff;
             float: right;
+            border: none;
+            &::after {
+              display: none;
+            }
+            line-height: 33px;
             &:hover {
               opacity: 0.7;
             }

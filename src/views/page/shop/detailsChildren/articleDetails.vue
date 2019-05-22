@@ -36,6 +36,7 @@
           :isLogin="$store.state.isLogin"
           :commentData="commentData"
           v-if="commentData"
+          type="article"
         ></comment-vue>
         <menu-vue :item="detail"></menu-vue>
       </div>
@@ -79,11 +80,30 @@
         );
       }
     },
+    methods: {
+      async getCommentList(page = 1, pageSize = 20) {
+        return await _getData(
+          `${this.$API_URL.HYGPROURL}/server_pro/learn!request.action`,
+          {
+            method: "getArticleCommentListV1",
+            userid: this.$userid,
+            token: "",
+            params: {
+              id: this.$route.query.id,
+              currentPage: page,
+              countPerPage: pageSize
+            }
+          }
+        ).then(data => {
+          this.commentData = data.data.result;
+        });
+      }
+    },
     mounted() {
       //获取详情
       _getData(`${this.$API_URL.HYGPROURL}/server_pro/learn!request.action`, {
         method: "getArticleDetails",
-        userid: "",
+        userid: this.$userid,
         token: "",
         params: { id: this.$route.query.id }
       })
@@ -91,21 +111,10 @@
           this.detail = data.data.result;
         })
         .then(() => {
-          this.isLoading = false;
+          this.getCommentList().then(() => {
+            this.isLoading = false;
+          });
         });
-
-      _getData(`${this.$API_URL.HYGPROURL}/server_pro/learn!request.action`, {
-        method: "getArticleCommentListV1",
-        userid: "",
-        token: "10533",
-        params: {
-          id: this.$route.query.id,
-          currentPage: 1,
-          countPerPage: "5"
-        }
-      }).then(data => {
-        this.commentData = data.data.result;
-      });
     }
   };
 </script>

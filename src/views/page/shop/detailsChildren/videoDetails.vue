@@ -108,6 +108,7 @@
           v-if="commentData"
           type="video"
         ></comment-vue>
+
         <menu-vue :item="detail"></menu-vue>
       </div>
       <div class="right"></div>
@@ -165,7 +166,8 @@
           poster: ""
         },
         globalOptions: {},
-        commentData: ""
+        commentData: "",
+        loading: false
       };
     },
     components: {
@@ -181,28 +183,35 @@
     },
     methods: {
       //获取评论列表
-      async getCommentList() {
+      async getCommentList(page = 1, pageSize = 20) {
+        this.loading = true;
         return await _getData(
           `${this.$API_URL.HYGPROURL}/server_pro/video!request.action`,
           {
             method: "getReportCommentList_v27",
-            userid: "29942",
+            userid: this.$userid,
             params: {
-              currentPage: 1,
-              countPerPage: 20,
+              currentPage: page,
+              countPerPage: pageSize,
               id: this.$route.query.id,
               type: "2"
             }
           }
-        ).then(data => {
-          this.commentData = data.data.result;
-        });
+        )
+          .then(data => {
+            this.commentData = data.data.result;
+          })
+          .then(() => {
+            setTimeout(() => {
+              this.loading = false;
+            }, 300);
+          });
       }
     },
     mounted() {
       _getData(`${this.$API_URL.HYGPROURL}/server_pro/video!request.action`, {
         method: "getVideoByIdV1",
-        userid: "",
+        userid: this.$userid,
         params: { id: this.$route.query.id }
       })
         .then(data => {

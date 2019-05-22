@@ -2,8 +2,9 @@
   <div class="paginationBox">
     <a-pagination
       showQuickJumper
-      :total="totalCount"
+      :total="data.amount"
       @change="onPaginationChange"
+      :defaultPageSize="20"
     />
     <div class="sureBtn">确定</div>
   </div>
@@ -15,8 +16,18 @@
         totalCount: 50
       };
     },
+    props: {
+      data: {
+        type: [Object]
+      }
+    },
     methods: {
-      onPaginationChange() {}
+      onPaginationChange(page, pageSize) {
+        this.$emit("onPaginationChange", page);
+      }
+    },
+    mounted() {
+      console.log(this.data);
     }
   };
 </script>

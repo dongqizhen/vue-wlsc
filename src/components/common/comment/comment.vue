@@ -10,12 +10,15 @@
       <div class="write-review" v-if="isLogin">
         <div class="top">
           <div class="img-box">
-            <img :src="userInfo.imageUrl" alt="" />
+            <svg class="icon" aria-hidden="true" v-if="!userInfo.imageUrl">
+              <use xlink:href="#iconweidenglutouxiang"></use>
+            </svg>
+            <img v-else :src="userInfo.imageUrl" alt="" />
           </div>
           <a-textarea placeholder="写下您的评论" v-model="value" :rows="4" />
         </div>
 
-        <span @click="sendComment">发送</span>
+        <a-button :loading="loading" @click="sendComment">发送</a-button>
       </div>
       <h2>
         {{ commentData.amount }}条回复
@@ -30,26 +33,32 @@
           </li>
         </ul>
       </h2>
-      <div class="review_content">
+      <div class="review_content" v-if="!load">
         <ul v-if="commentData.commentList.length">
           <comment-item-vue
             v-for="item in commentData.commentList"
             :key="item.id"
             :item="item"
-            likeType="11"
+            :type="getType"
           >
             <comment-item-vue
               slot="replay-container"
               v-for="val in item.replyList"
               :key="val.id"
               :item="val"
-              likeType="11"
+              :type="getType"
             ></comment-item-vue>
           </comment-item-vue>
         </ul>
         <no-data v-else type="no-comment" text="暂无评论"></no-data>
       </div>
+      <loading v-else></loading>
     </div>
+    <pagination
+      :data="commentData"
+      v-if="commentData.commentList.length"
+      v-on:onPaginationChange="onPaginationChange"
+    ></pagination>
   </div>
 </template>
 
@@ -57,12 +66,15 @@
   import commentItemVue from "./commentItem.vue";
   import { mapState } from "vuex";
   import { _getData } from "../../../config/getData";
+  import pagination from "../pagination";
 
   export default {
     data() {
       return {
         defaultVal: 0, //排序
-        value: ""
+        value: "",
+        loading: false //发送按钮loading
+
         //commentType: ""
       };
     },
@@ -72,6 +84,10 @@
         default: false,
         required: true
       },
+      load: {
+        type: Boolean,
+        default: false
+      },
       video: {},
       commentData: {},
       type: {
@@ -79,15 +95,29 @@
       }
     },
     components: {
-      commentItemVue
+      commentItemVue,
+      pagination
     },
     computed: {
       ...mapState(["userInfo"]),
       getType() {
         switch (this.type) {
-          case "video":
+          case "video": //微课堂
             return {
-              commentType: 1
+              commentType: 1, //评论type
+              likeType: 11 //点赞type
+            };
+            break;
+          case "article": //行业资讯
+            return {
+              commentType: 5, //评论type
+              likeType: 12 //点赞type
+            };
+            break;
+          case "case": //维修宝
+            return {
+              commentType: 3, //评论type
+              likeType: 10 //点赞type
             };
             break;
         }
@@ -102,16 +132,21 @@
         // });
         // window.open(href, "_blank");
       },
+      onPaginationChange(page, pageSize) {
+        this.$parent.getCommentList(page);
+      },
       handerClick(i) {
         this.defaultVal = i;
       },
       sendComment() {
         if (this.value == "") return;
+        this.loading = true;
+
         _getData(
           `${this.$API_URL.HYGPROURL}/server_pro/videoComment!request.action`,
           {
             method: "addModelComments",
-            userid: "29942",
+            userid: this.$userid,
             params: {
               id: this.$route.query.id, //视频id
               type: this.getType.commentType, //表示聊一聊
@@ -125,6 +160,7 @@
             this.$nextTick()
               .then(() => {
                 this.$message.success("评论成功");
+                this.loading = false;
               })
               .then(() => {
                 this.value = "";
@@ -208,7 +244,7 @@
           .img-box {
             height: 30px;
             width: 30px;
-            background: $base-background;
+            background: $image-box-color;
             margin-right: 8px;
             border-radius: 16px;
             img {
@@ -219,7 +255,7 @@
           }
         }
 
-        span {
+        /deep/ .ant-btn {
           display: flex;
           height: 33px;
           width: 76px;
@@ -230,8 +266,12 @@
           background-image: linear-gradient(90deg, #ff4e1a 0%, #f10000 100%);
           font-weight: 600;
           font-size: 14px;
+          border: none;
+          line-height: 33px;
           color: #ffffff;
-
+          &::after {
+            display: none;
+          }
           &:hover {
             opacity: 0.7;
           }
@@ -281,6 +321,14 @@
           height: 500px;
         }
       }
+      /deep/ .loading {
+        background: #fff;
+        padding: 0px 30px;
+        padding-bottom: 30px;
+      }
+    }
+    /deep/ .paginationBox {
+      margin-bottom: 0;
     }
   }
 </style>
