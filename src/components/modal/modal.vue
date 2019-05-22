@@ -64,7 +64,7 @@
       }
     },
     mounted() {
-      console.log(this.options);
+      // console.log(this.options);
     },
     computed: {},
     watch: {

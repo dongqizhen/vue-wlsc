@@ -47,8 +47,14 @@ Vue.use(vChatTitle).use(VueLazyload, {
     lazyComponent: true
 }).use(Share).use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Upload).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form).use(Skeleton).use(Affix).use(Steps);
 
+let userid = '';
+if (window.localStorage["vuex-along"] != "{}") {
+    userid = JSON.parse(window.localStorage["vuex-along"])['vuex-along'].userInfo.id
+}
+
 Vue.prototype.$API_URL = env.API_HOST;
 Vue.prototype.$message = Message
+Vue.prototype.$userid = userid
 
 Vue.component('no-data', NoData)
 Vue.component('loading', loading)

@@ -10,12 +10,15 @@
       <div class="write-review" v-if="isLogin">
         <div class="top">
           <div class="img-box">
-            <img :src="userInfo.imageUrl" alt="" />
+            <svg class="icon" aria-hidden="true" v-if="!userInfo.imageUrl">
+              <use xlink:href="#iconweidenglutouxiang"></use>
+            </svg>
+            <img v-else :src="userInfo.imageUrl" alt="" />
           </div>
-          <a-textarea placeholder="写下您的评论" :rows="4" />
+          <a-textarea placeholder="写下您的评论" v-model="value" :rows="4" />
         </div>
 
-        <span>发送</span>
+        <a-button :loading="loading" @click="sendComment">发送</a-button>
       </div>
       <h2>
         {{ commentData.amount }}条回复
@@ -30,19 +33,73 @@
           </li>
         </ul>
       </h2>
-      <div class="review_content">
+      <div class="review_content" v-if="!load">
         <ul v-if="commentData.commentList.length">
           <comment-item-vue
             v-for="item in commentData.commentList"
             :key="item.id"
             :item="item"
+            :type="getType"
           >
-            <comment-item-vue slot="replay-container"></comment-item-vue>
+            <ul slot="replay-container">
+              <comment-item-vue
+                v-for="val in item.replyList"
+                :key="val.id"
+                :item="val"
+                :type="getType"
+              >
+              </comment-item-vue>
+              <comment-item-vue
+                v-if="showMore"
+                v-for="val in commetArr"
+                :key="val.id"
+                :item="val"
+                :type="getType"
+              >
+              </comment-item-vue>
+            </ul>
+
+            <div
+              class="more-comment"
+              slot="more-comment"
+              v-if="item.commentNum > 3"
+            >
+              <p
+                @click="
+                  if (showMore || commetArr != '') {
+                    showMore = !showMore;
+                  } else {
+                    moreComment(item.id);
+                  }
+                "
+              >
+                <span>
+                  {{
+                    showMore
+                      ? "收起"
+                      : "查看更多" + (item.commentNum - 3) + "条回复"
+                  }}
+                </span>
+                <svg
+                  class="icon"
+                  aria-hidden="true"
+                  :class="showMore && 'active'"
+                >
+                  <use xlink:href="#iconhuifuzhankai"></use>
+                </svg>
+              </p>
+            </div>
           </comment-item-vue>
         </ul>
         <no-data v-else type="no-comment" text="暂无评论"></no-data>
       </div>
+      <loading v-else></loading>
     </div>
+    <pagination
+      :data="commentData"
+      v-if="commentData.commentList.length"
+      v-on:onPaginationChange="onPaginationChange"
+    ></pagination>
   </div>
 </template>
 
@@ -50,12 +107,17 @@
   import commentItemVue from "./commentItem.vue";
   import { mapState } from "vuex";
   import { _getData } from "../../../config/getData";
+  import pagination from "../pagination";
 
   export default {
     data() {
       return {
-        commentData: "",
-        defaultVal: 0 //排序
+        defaultVal: 0, //排序
+        value: "",
+        loading: false, //发送按钮loading
+        showMore: false,
+        commetArr: "" //某一评论下边的全部评论
+        //commentType: ""
       };
     },
     props: {
@@ -64,31 +126,67 @@
         default: false,
         required: true
       },
+      load: {
+        type: Boolean,
+        default: false
+      },
+      video: {},
+      commentData: {},
       type: {
-        type: [Number, String] //行业资讯 5
+        type: [String] //video 微课堂
       }
     },
     components: {
-      commentItemVue
+      commentItemVue,
+      pagination
     },
     computed: {
-      ...mapState(["userInfo"])
-    },
-    mounted() {
-      _getData(`${this.$API_URL.HYGPROURL}/server_pro/learn!request.action`, {
-        method: "getArticleCommentListV1",
-        userid: "",
-        token: "10533",
-        params: {
-          id: this.$route.query.id,
-          currentPage: 1,
-          countPerPage: "5"
+      ...mapState(["userInfo"]),
+      getType() {
+        switch (this.type) {
+          case "video": //微课堂
+            return {
+              commentType: 1, //评论type
+              likeType: 11 //点赞type
+            };
+            break;
+          case "article": //行业资讯
+            return {
+              commentType: 5, //评论type
+              likeType: 12 //点赞type
+            };
+            break;
+          case "case": //维修宝
+            return {
+              commentType: 3, //评论type
+              likeType: 10 //点赞type
+            };
+            break;
         }
-      }).then(data => {
-        this.commentData = data.data.result;
-      });
+      }
     },
+    mounted() {},
     methods: {
+      //点击查看更多回复
+      moreComment(id) {
+        this.showMore = !this.showMore;
+        _getData(
+          `${this.$API_URL.HYGPROURL}/server_pro/videoComment!request.action`,
+          {
+            method: "getAppPageReplyList_v27",
+            token: "",
+            userid: this.$userid,
+            params: {
+              currentPage: 1,
+              countPerPage: "",
+              id: id, //顶层评论id
+              type: this.getType.commentType
+            }
+          }
+        ).then(data => {
+          this.commetArr = _.drop(data.data.result.replyList, 3);
+        });
+      },
       toLogin() {
         this.$router.push({ path: "/login" });
         // const { href } = this.$router.resolve({
@@ -96,8 +194,43 @@
         // });
         // window.open(href, "_blank");
       },
+      onPaginationChange(page, pageSize) {
+        this.$parent.getCommentList(page);
+      },
       handerClick(i) {
         this.defaultVal = i;
+      },
+      sendComment() {
+        if (this.value == "") return;
+        this.loading = true;
+
+        _getData(
+          `${this.$API_URL.HYGPROURL}/server_pro/videoComment!request.action`,
+          {
+            method: "addModelComments",
+            userid: this.$userid,
+            params: {
+              id: this.$route.query.id, //视频id
+              type: this.getType.commentType, //表示聊一聊
+              content: window.encodeURI(this.value), //评论内容，编码
+              parentId: "", //被回复顶层评论id
+              commentId: "" //被回复记录id
+            }
+          }
+        )
+          .then(() => {
+            this.$nextTick()
+              .then(() => {
+                this.$message.success("评论成功");
+                this.loading = false;
+              })
+              .then(() => {
+                this.value = "";
+              });
+          })
+          .then(() => {
+            this.$parent.getCommentList();
+          });
       }
     }
   };
@@ -173,7 +306,7 @@
           .img-box {
             height: 30px;
             width: 30px;
-            background: $base-background;
+            background: $image-box-color;
             margin-right: 8px;
             border-radius: 16px;
             img {
@@ -184,7 +317,7 @@
           }
         }
 
-        span {
+        /deep/ .ant-btn {
           display: flex;
           height: 33px;
           width: 76px;
@@ -195,8 +328,12 @@
           background-image: linear-gradient(90deg, #ff4e1a 0%, #f10000 100%);
           font-weight: 600;
           font-size: 14px;
+          border: none;
+          line-height: 33px;
           color: #ffffff;
-
+          &::after {
+            display: none;
+          }
           &:hover {
             opacity: 0.7;
           }
@@ -246,6 +383,14 @@
           height: 500px;
         }
       }
+      /deep/ .loading {
+        background: #fff;
+        padding: 0px 30px;
+        padding-bottom: 30px;
+      }
+    }
+    /deep/ .paginationBox {
+      margin-bottom: 0;
     }
   }
 </style>

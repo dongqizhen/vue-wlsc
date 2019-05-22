@@ -31,7 +31,7 @@
                   ></common-categories-modal-vue>
                 </span>
               </h2>
-              <ul :class="left_show_arr[i] && 'active'">
+              <ul :class="left_show_arr[i] && 'active'" class="box_com">
                 <router-link
                   :to="
                     $route.query.nav_index == 1
@@ -98,7 +98,7 @@
                 </span>
               </h2>
 
-              <ul :class="right_show_arr[i] && 'active'">
+              <ul :class="right_show_arr[i] && 'active'" class="box_com">
                 <router-link
                   :to="
                     $route.query.nav_index == 1
@@ -239,7 +239,16 @@
           });
           console.log(this.left, this.right);
         })
-        .then(() => {});
+        .then(() => {
+          this.$nextTick().then(() => {
+            document.querySelectorAll(".box_com").forEach((val, i) => {
+              console.log(val.offsetHeight);
+              if (val.offsetHeight <= 162) {
+                val.nextElementSibling.style.display = "none";
+              }
+            });
+          });
+        });
     },
     created() {
       if (this.isLogin) {
