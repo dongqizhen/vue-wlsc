@@ -48,7 +48,7 @@
     data() {
       return {
         data: [],
-        current: 1
+        current: 0
       };
     },
     methods: {

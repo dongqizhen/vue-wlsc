@@ -267,50 +267,55 @@
     },
     methods: {
       release() {
-        if (this.submitData.name == "") {
-          alert("请输入商品名称");
-          return;
-        }
-        if (this.submitData.bigCategoryId == "") {
-          alert("请选择大类");
-          return;
-        }
-        if (this.submitData.categoryId == "") {
-          alert("请选择小类");
-          return;
-        }
-        if (this.submitData.brandId == "") {
-          alert("请选择品牌");
-          return;
-        }
-        if (this.submitData.modelId == "") {
-          alert("请选择型号");
-          return;
-        }
-        if (!this.submitData.isEnquiry) {
-          if (this.submitData.minPrice == "") {
-            alert("请输入最小指导价");
-            return;
-          }
-          if (this.submitData.maxPrice == "") {
-            alert("请输入最小指导价");
-            return;
-          }
-          if (this.submitData.minPrice > this.submitData.maxPrice) {
-            alert("最小指导价不能大于最大值");
-            return;
-          }
-        }
-        if (this.submitData.goodsDesc == "") {
-          alert("请输入商品描述");
-          return;
-        }
-        if (this.isSparePart) {
-          if (this.submitData.sparePart == "") {
-            alert("请输入备件号");
-            return;
-          }
-        }
+        // if (this.submitData.name == "") {
+        //   alert("请输入商品名称");
+        //   return;
+        // }
+        // if (this.submitData.bigCategoryId == "") {
+        //   alert("请选择大类");
+        //   return;
+        // }
+        // if (this.submitData.categoryId == "") {
+        //   alert("请选择小类");
+        //   return;
+        // }
+        // if (this.submitData.brandId == "") {
+        //   alert("请选择品牌");
+        //   return;
+        // }
+        // if (this.submitData.modelId == "") {
+        //   alert("请选择型号");
+        //   return;
+        // }
+        // if (!this.submitData.isEnquiry) {
+        //   if (this.submitData.minPrice == "") {
+        //     alert("请输入最小指导价");
+        //     return;
+        //   }
+        //   if (this.submitData.maxPrice == "") {
+        //     alert("请输入最大指导价");
+        //     return;
+        //   }
+        //   if (
+        //     Number(this.submitData.minPrice) > Number(this.submitData.maxPrice)
+        //   ) {
+        //     alert("最小指导价不能大于最大值");
+        //     return;
+        //   }
+        // }
+        // if (this.submitData.goodsDesc == "") {
+        //   alert("请输入商品描述");
+        //   return;
+        // }
+        // if (this.isSparePart) {
+        //   if (this.submitData.sparePart == "") {
+        //     alert("请输入备件号");
+        //     return;
+        //   }
+        // }
+        _getData("/goods/addGoods", this.submitData).then(data => {
+          console.log(data);
+        });
       },
       save() {},
       reset() {},
@@ -688,9 +693,11 @@
       letter-spacing: 0;
     }
     .release {
+      border: 1px solid $theme-color;
       background-image: linear-gradient(90deg, #f10000 0%, #ff4e1a 100%);
     }
     .save {
+      border: 1px solid #f5a623;
       background: #f5a623;
     }
     .reset {
