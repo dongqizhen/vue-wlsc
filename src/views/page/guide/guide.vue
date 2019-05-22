@@ -16,6 +16,7 @@
   export default {
     data() {
       return {
+        a: 1,
         dataArr: [
           {
             id: 1,
@@ -114,12 +115,11 @@
     },
     computed: {
       defaultSelectedKeys() {
-        return JSON.parse(window.localStorage["vuex-along"])["vuex-along"]
-          .defaultSelectedKeys;
-      }
-    },
-    watch: {
-      defaultSelectedKeys() {
+        console.log(this.a++);
+        console.log(
+          JSON.parse(window.localStorage["vuex-along"])["vuex-along"]
+            .defaultSelectedKeys
+        );
         return JSON.parse(window.localStorage["vuex-along"])["vuex-along"]
           .defaultSelectedKeys;
       }

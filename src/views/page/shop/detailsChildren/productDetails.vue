@@ -121,7 +121,7 @@
               </svg>
               加入选购单
             </a-button>
-            <a-button>收藏商品</a-button>
+            <a-button @click="storeProduct">收藏商品</a-button>
           </div>
         </div>
       </div>
@@ -421,6 +421,14 @@
       loginModalVue
     },
     methods: {
+      storeProduct() {
+        _getData("/collect/addordelete", {
+          valueId: this.$route.params.id,
+          typeId: 0
+        }).then(data => {
+          console.log(data);
+        });
+      },
       changeImage(i, e) {
         if (this.defaultIndex == i) {
           this.bigImageIsShow = !this.bigImageIsShow;

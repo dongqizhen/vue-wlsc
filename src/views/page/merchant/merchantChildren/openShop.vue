@@ -102,12 +102,7 @@
       shopCertification
     },
     created() {
-      console.log("bbbbbbbbbbbbbbbbb");
       this.changeDefaultSelectedKeys(["0"]);
-      console.log(
-        JSON.parse(window.localStorage["vuex-along"])["vuex-along"]
-          .defaultSelectedKeys
-      );
     },
     mounted() {
       if (this.$route.query.shopStatus == 1) {

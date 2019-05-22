@@ -372,6 +372,11 @@
           return (value = { ...value, isLeaf: false });
         });
       });
+      if (!this.isOpenShop) {
+        _getData("/store/selectAllStore", {}).then(data => {
+          console.log(data);
+        });
+      }
     }
   };
 </script>

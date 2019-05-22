@@ -117,7 +117,9 @@
       }
     },
     created() {
-      this.changeDefaultSelectedKeys(["2"]);
+      if (this.$route.path.indexOf("shopInfo") != -1) {
+        this.changeDefaultSelectedKeys(["2"]);
+      }
     },
     methods: {
       ...mapMutations(["changeDefaultSelectedKeys"]),

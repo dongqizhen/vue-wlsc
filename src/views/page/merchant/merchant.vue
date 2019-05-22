@@ -59,9 +59,6 @@
     computed: {
       ...mapState(["isLogin", "defaultSelectedKeys"])
     },
-    watch: {
-      ...mapState(["defaultSelectedKeys"])
-    },
     methods: {
       ...mapMutations(["changeDefaultSelectedKeys"])
     },

@@ -2,7 +2,7 @@
  * @Author: mikey.dongqizhen 
  * @Date: 2019-04-18 17:08:47 
  * @Last Modified by: mikey.dongqizhen
- * @Last Modified time: 2019-05-17 17:42:47
+ * @Last Modified time: 2019-05-22 15:46:27
  */
 
 
@@ -24,6 +24,7 @@ axios.interceptors.request.use(function(config) {
         config.headers['X-Nideshop-Token'] = token
         config.transformRequest = [
             (data) => {
+                console.log(data)
                 return new_to_Data(data)
                     //return JSON.stringify(data)
             }

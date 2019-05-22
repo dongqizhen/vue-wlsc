@@ -185,6 +185,9 @@
           }
         }
       }
+      .ant-layout-content {
+        overflow: initial;
+      }
       .ant-menu-submenu-title {
         display: none;
       }

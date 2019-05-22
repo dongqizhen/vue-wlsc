@@ -1,246 +1,165 @@
 <template>
-  <div class="messageCenter">
-    <common-title title="消息中心"></common-title>
-    <div class="tabBar">
-      <div class="left-box">
-        <manage-number-nav :navArr="tabs" v-on:tab="getTab"></manage-number-nav>
-      </div>
-      <div class="right-box">
-        <div :class="current == 1 ? 'active' : ''" @click="system(1)">
-          系统通知(24)
+  <div class="myStore">
+    <common-title title="我的收藏">
+      <div slot="titleRight" class="right-box">
+        <div class="search-box">
+          <a-input placeholder="请输入搜索内容"></a-input>
+          <a-button class="searchBtn">搜索</a-button>
+          <a-button class="clearBtn">清空</a-button>
         </div>
-        <div :class="current == 2 ? 'active' : ''" @click="system(2)">
-          私信消息(12)
+        <div class="tab-box">
+          <div :class="current == 0 ? 'active' : ''" @click="getTab(0)">
+            产品(1)
+          </div>
+          <div :class="current == 1 ? 'active' : ''" @click="getTab(1)">
+            店铺(2)
+          </div>
         </div>
       </div>
-    </div>
+    </common-title>
     <div class="listContainer">
       <div class="listContent">
-        <ul v-if="current == 1">
-          <router-link
-            tag="li"
+        <ul v-if="current == 0">
+          <product-item
             v-for="item in data"
             :key="item.id"
-            :to="{
-              path: 'messageDetail',
-              query: { id: item.id }
-            }"
-          >
-            <system-notice
-              :data="item"
-              :checkedList="checkedList"
-              v-on:getChecked="getChecked"
-              :unRead="unRead"
-            ></system-notice>
-          </router-link>
+            :list="item"
+          ></product-item>
         </ul>
         <ul v-else>
-          <router-link
-            class="messageBox"
-            tag="li"
+          <shop-item
             v-for="item in data"
             :key="item.id"
-            :to="{
-              path: 'messageDetail',
-              query: { id: item.id }
-            }"
-          >
-            <private-message
-              :data="item"
-              :checkedList="checkedList"
-              v-on:getChecked="getChecked"
-              :unRead="unRead"
-            ></private-message>
-          </router-link>
+            :item="item"
+          ></shop-item>
         </ul>
       </div>
-      <div class="tfooter">
-        <check-all
-          :amount="checkedList.length"
-          :checkAll="checkAll"
-          v-on:isCheckAll="isCheckAllMethod"
-        >
-          <div slot="right-box">
-            <div
-              v-bind:class="['remark', checkedList.length > 0 ? 'active' : '']"
-              @click="remarkRead"
-            >
-              标记已读
-            </div>
-          </div>
-        </check-all>
-      </div>
     </div>
-    <pagination></pagination>
   </div>
 </template>
 
 <script>
   import _ from "lodash";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
-  import manageNumberNav from "../../../../components/common/manageNumberNav";
-  import systemNotice from "../../../../components/common/systemNoticeItem";
-  import privateMessage from "../../../../components/common/privateMessageItem";
-  import checkAll from "../../../../components/common/checkAll";
-  import pagination from "../../../../components/common/pagination";
+  import { _getData } from "../../../../config/getData";
+  import productItem from "../../../../components/common/item/productItem";
+  import shopItem from "../../../../components/common/item/shopItem";
   export default {
     data() {
       return {
-        data: [
-          {
-            id: 1,
-            title: "卖家申请店铺审核通过提示",
-            createOn: "2018-11-18",
-            introduce:
-              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
-          },
-          {
-            id: 2,
-            title: "卖家申请店铺审核未通过提示",
-            createOn: "2018-11-19",
-            introduce:
-              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
-          }
-        ],
-        tabs: [],
-        checkAll: false,
-        checkedList: [],
-        current: 1,
-        unRead: true
+        data: [],
+        current: 1
       };
-    },
-    beforeMount() {
-      this.tabs = [
-        {
-          id: 2,
-          name: "未读消息",
-          amount: 24
-        },
-        {
-          id: 3,
-          name: "已读消息",
-          amount: 12
-        }
-      ];
     },
     methods: {
       getTab(val) {
-        if (this.tabs[0].id == val) {
-          this.unRead = true;
-        } else {
-          this.unRead = false;
-        }
-      },
-      system(val) {
         this.current = val;
-        this.checkedList = [];
-        this.checkAll = false;
+        this.getList(val);
       },
-      getChecked(val) {
-        if (typeof val == "object") {
-          this.checkedList = val;
-        } else {
-          if (_.indexOf(this.checkedList, val) != -1) {
-            this.checkedList = _.without(this.checkedList, val);
-          }
-        }
-        if (this.checkedList.length == this.data.length) {
-          this.checkAll = true;
-        } else {
-          this.checkAll = false;
-        }
-      },
-      isCheckAllMethod(val) {
-        if (val) {
-          this.checkAll = true;
-          this.checkedList = [];
-          for (const val of this.data) {
-            this.checkedList.push(val.id);
-          }
-        } else {
-          this.checkAll = false;
-          this.checkedList = [];
-        }
-      },
-      remarkRead() {
-        if (this.checkedList.length > 0) {
-          //向后台发送请求，标记为已读，成功后将刷新数据
-        }
-      },
-      onPaginationChange() {}
+      getList(typeId) {
+        _getData("/collect/list", {
+          typeId: typeId,
+          currentPage: 1,
+          countPerPage: 1000000
+        }).then(data => {
+          console.log("获取收藏数据：", data);
+          this.data = data.data;
+        });
+      }
     },
     components: {
       commonTitle,
-      manageNumberNav,
-      systemNotice,
-      privateMessage,
-      checkAll,
-      pagination
+      productItem,
+      shopItem
+    },
+    mounted() {
+      this.getList(0);
     }
   };
 </script>
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
-  .messageCenter {
+  .myStore {
+    width: 1036px;
     min-height: 693px;
-    background-color: #fff;
-    padding: 4px 20px;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
     margin-bottom: 10px;
-    .tabBar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: $border-style;
-      margin-top: 3px;
-      /deep/.nav {
-        border-bottom: none;
-        .ant-tabs {
-          .ant-tabs-ink-bar {
-            bottom: 0 !important;
+    .common-title {
+      height: 59px;
+      background-color: #fff;
+      padding: 0 13px 0 20px;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
+      border-bottom: none;
+      .right-box {
+        width: 774px;
+        display: flex;
+        justify-content: space-between;
+        .search-box {
+          display: flex;
+          /deep/.ant-input {
+            height: 27px;
+            line-height: 27px;
+            font-size: 12px;
+            &:hover {
+              border-color: $theme-color;
+            }
+            &:focus {
+              border-color: $theme-color;
+              box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
+            }
+          }
+          /deep/.ant-btn {
+            margin-right: 10px;
+            height: 27px;
+            font-size: 12px;
+            color: #ffffff;
+            border-radius: 0%;
+          }
+          .searchBtn {
+            background-color: $theme-color;
+            border-color: $theme-color;
+            margin-left: 10px;
+          }
+          .clearBtn {
+            background-color: #999;
+            border-color: #999;
           }
         }
-      }
-      .right-box {
-        display: flex;
-        align-items: center;
-        height: 27px;
-        div {
-          width: 95px;
-          height: 27px;
-          line-height: 27px;
-          border: $border-style;
-          text-align: center;
-          font-size: 12px;
-          color: #333;
-          cursor: pointer;
-          &:first-child {
-            border-right: none;
-          }
-          &.active {
-            background: #ffdfaa;
-            border: 1px solid #f5a623;
+        .tab-box {
+          display: flex;
+          > div {
+            width: 69px;
+            height: 27px;
+            line-height: 27px;
+            font-size: 12px;
+            color: #333333;
+            font-weight: normal;
+            border: $border-style;
+            text-align: center;
+            cursor: pointer;
+            &:first-child {
+              border-right: none;
+            }
+            &.active {
+              background: #ffdfaa;
+              border: 1px solid #f5a623;
+            }
           }
         }
       }
     }
+
     .listContainer {
       margin-top: 12px;
-      .tfooter {
-        .remark {
-          width: 104px;
-          height: 42px;
-          background-color: #ccc;
-          color: #fff;
-          font-size: 14px;
-          line-height: 42px;
-          text-align: center;
-          font-weight: 600;
-          cursor: pointer;
-          &.active {
-            background-color: #f5a623;
-          }
+      margin-right: -50px;
+
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        li {
+          width: 254px;
+          margin-right: 8px;
+          float: left;
         }
       }
     }

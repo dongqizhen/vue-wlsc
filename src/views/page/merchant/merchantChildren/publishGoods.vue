@@ -62,6 +62,37 @@
         <div class="common">
           <div class="left-box"><span class="red">*</span>品牌</div>
           <div class="right-box">
+            <a-select
+              defaultValue="请选择品牌"
+              style="width: 136px"
+              @change="handleBrandChange"
+              :options="brandOptions"
+            >
+              <a-icon slot="suffixIcon" class="icon">
+                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+              </a-icon>
+            </a-select>
+          </div>
+        </div>
+        <div class="common">
+          <div class="left-box"><span class="red">*</span>型号</div>
+          <div class="right-box">
+            <a-select
+              defaultValue="请选择型号"
+              style="width: 136px"
+              @change="handleModelChange"
+              :options="modelOptions"
+            >
+              <a-icon slot="suffixIcon" class="icon">
+                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+              </a-icon>
+            </a-select>
+          </div>
+        </div>
+
+        <!-- <div class="common">
+          <div class="left-box"><span class="red">*</span>品牌</div>
+          <div class="right-box">
             <a-input placeholder="请输入品牌" v-model="submitData.brand" />
           </div>
         </div>
@@ -70,9 +101,9 @@
           <div class="right-box">
             <a-input placeholder="请输入型号" v-model="submitData.model" />
           </div>
-        </div>
+        </div> -->
         <div class="common guidePrice">
-          <div class="left-box">指导价</div>
+          <div class="left-box"><span class="red">*</span>指导价</div>
           <div class="right-box">
             <a-input
               placeholder="区间最低"
@@ -88,12 +119,12 @@
             <a-checkbox @change="onChange">询价</a-checkbox>
           </div>
         </div>
-        <div class="common">
+        <div class="common" v-if="isSparePart">
           <div class="left-box"><span class="red">*</span>备件号</div>
           <div class="right-box">
             <a-input
               placeholder="请输入备件号"
-              v-model="submitData.sparePartNumber"
+              v-model="submitData.sparePart"
             />
           </div>
         </div>
@@ -104,6 +135,12 @@
               placeholder="请输入库存数量"
               v-model="submitData.goodsNumber"
             />
+          </div>
+        </div>
+        <div class="common">
+          <div class="left-box">产地</div>
+          <div class="right-box">
+            <a-input placeholder="请输入产地" v-model="submitData.origin" />
           </div>
         </div>
       </div>
@@ -133,7 +170,7 @@
       </div>
       <div class="pictureContent">
         <div
-          v-for="file in uploadList"
+          v-for="file in submitData.uploadList"
           :key="file.uid"
           class="uploadItem"
           :data-id="file.uid"
@@ -154,7 +191,7 @@
           :beforeUpload="beforeUpload"
           @change="handleChange"
         >
-          <div v-if="uploadList.length < 3">
+          <div v-if="submitData.uploadList.length < 6">
             <a-icon class="icon">
               <use xlink:href="#icontianjiatupian1"></use>
             </a-icon>
@@ -170,14 +207,14 @@
           type="textarea"
           placeholder="请输入商品描述"
           class="noInput"
-          v-model="submitData.introduce"
+          v-model="submitData.goodsDesc"
         ></a-input>
       </div>
     </div>
     <div class="submit">
-      <a-button class="release">直接发布并上架</a-button>
-      <a-button class="save">保存</a-button>
-      <a-button class="reset">重置</a-button>
+      <a-button class="release" @click="release">直接发布并上架</a-button>
+      <a-button class="save" @click="save">保存</a-button>
+      <a-button class="reset" @click="reset">重置</a-button>
     </div>
   </div>
 </template>
@@ -199,69 +236,138 @@
       return {
         titleArr: ["参数类型", "参数名称", "参数值", "操作"],
         params: [{}],
-        uploadList: [],
         defaultCascaderValue: [],
         bigOptions: [],
         smallOptions: [],
         typeOptions: [],
+        brandOptions: [],
+        modelOptions: [],
+        categoryId: -1,
+        brandId: -1,
+        isSparePart: 0,
         submitData: {
           name: "",
           goodsSn: "",
-          brand: "",
-          model: "",
+          bigCategoryId: "", //大类
+          categoryId: "", //小类
+          goodsType: "", //产品类型
+          brandId: "",
+          modelId: "",
           minPrice: "",
           maxPrice: "",
-          sparePartNumber: "",
-          goodsNumber: "",
-          manufacturer: "",
-          capacity: "",
-          unit: "",
-          minOrderQuantity: "",
-          introduce: ""
+          sparePart: "", //备件号
+          goodsNumber: "", //库存
+          origin: "", //产地
+          goodsDesc: "",
+          isOnSale: "1",
+          isEnquiry: 0,
+          uploadList: [] //商品图片
         }
       };
     },
     methods: {
+      release() {
+        if (this.submitData.name == "") {
+          alert("请输入商品名称");
+          return;
+        }
+        if (this.submitData.bigCategoryId == "") {
+          alert("请选择大类");
+          return;
+        }
+        if (this.submitData.categoryId == "") {
+          alert("请选择小类");
+          return;
+        }
+        if (this.submitData.brandId == "") {
+          alert("请选择品牌");
+          return;
+        }
+        if (this.submitData.modelId == "") {
+          alert("请选择型号");
+          return;
+        }
+        if (!this.submitData.isEnquiry) {
+          if (this.submitData.minPrice == "") {
+            alert("请输入最小指导价");
+            return;
+          }
+          if (this.submitData.maxPrice == "") {
+            alert("请输入最小指导价");
+            return;
+          }
+          if (this.submitData.minPrice > this.submitData.maxPrice) {
+            alert("最小指导价不能大于最大值");
+            return;
+          }
+        }
+        if (this.submitData.goodsDesc == "") {
+          alert("请输入商品描述");
+          return;
+        }
+        if (this.isSparePart) {
+          if (this.submitData.sparePart == "") {
+            alert("请输入备件号");
+            return;
+          }
+        }
+      },
+      save() {},
+      reset() {},
       addParams() {
         this.params.push({});
       },
       handleRemove(file) {
-        this.uploadList.splice(this.uploadList.indexOf(file), 1);
+        this.submitData.uploadList.splice(
+          this.submitData.uploadList.indexOf(file),
+          1
+        );
       },
       handleChange(info) {
         for (const val of info.fileList) {
           val.url =
             "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
         }
-        this.uploadList = info.fileList;
-        // if (info.file.status === "uploading") {
-        //   this.loading = true;
-        //   return;
-        // }
-        // if (info.file.status == "done") {
-        //   getBase64(info.file.originFileObj, imageUrl => {
-        //     info.fileList[0].imageUrl = imageUrl;
-        //     this.loading = false;
-        //   });
-        //   this.fileList = info.fileList;
-        //   console.log(this.fileList);
-        // }
+        this.submitData.uploadList = info.fileList;
       },
       onChange(e) {
         console.log(`checked = ${e.target.checked}`);
+        if (e.target.checked) {
+          this.submitData.minPrice = "";
+          this.submitData.maxPrice = "";
+          this.submitData.isEnquiry = 1;
+        } else {
+          this.submitData.isEnquiry = 0;
+        }
       },
       handleProductBigTypeChange(value) {
         console.log(`selected ${value}`);
+        this.submitData.bigCategoryId = value;
         this.getSmallType(value);
       },
-      handleProductSmallTypeChange() {},
+      handleProductSmallTypeChange(value) {
+        console.log(`selected ${value}`);
+        this.submitData.categoryId = value;
+        this.getModelData(value);
+      },
       handleProductTypeChange(value) {
         console.log(`selected ${value}`);
+        this.submitData.goodsType = value;
+        console.log(this.typeOptions);
+        _.map(this.typeOptions, val => {
+          if (val.id == value) {
+            this.isSparePart = val.isSparePart;
+          }
+        });
       },
-      handleProductAddressChange(value) {
-        this.cities = cityData[value];
-        console.log(this.cities);
-        this.secondCity = cityData[value][0];
+      handleBrandChange(value) {
+        console.log(`selected ${value}`);
+        this.submitData.brandId = value;
+        this.getModelData(this.submitData.categoryId, value);
+      },
+      handleModelChange(value) {
+        console.log(`selected ${value}`);
+        this.submitData.modelId = value;
       },
       beforeUpload(file) {
         const isLt2M = file.size / 1024 / 1024 < 2;
@@ -278,6 +384,19 @@
             val.value = val.id;
           });
           this.smallOptions = data.subCategory;
+        });
+      },
+      getModelData(categoryId, brandId) {
+        _getData("/brandmodel/list", {
+          categoryId: categoryId,
+          brandId: brandId
+        }).then(data => {
+          console.log(data);
+          _.each(data.brandModelList, val => {
+            val.label = val.name;
+            val.value = val.id;
+          });
+          this.modelOptions = data.brandModelList;
         });
       }
     },
@@ -297,7 +416,22 @@
         });
         this.bigOptions = data.categoryList;
       });
-      _getData();
+      _getData("/goods/getGoodsType", {}).then(data => {
+        console.log("产品类型：", data);
+        _.each(data, val => {
+          val.label = val.name;
+          val.value = val.id;
+        });
+        this.typeOptions = data;
+      });
+      _getData("/brand/listAll", { firstLine: null }).then(data => {
+        console.log("产品品牌：", data);
+        _.each(data.brandList, val => {
+          val.label = val.name;
+          val.value = val.id;
+        });
+        this.brandOptions = data.brandList;
+      });
     }
   };
 </script>
