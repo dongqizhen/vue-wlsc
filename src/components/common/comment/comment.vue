@@ -41,13 +41,54 @@
             :item="item"
             :type="getType"
           >
-            <comment-item-vue
-              slot="replay-container"
-              v-for="val in item.replyList"
-              :key="val.id"
-              :item="val"
-              :type="getType"
-            ></comment-item-vue>
+            <ul slot="replay-container">
+              <comment-item-vue
+                v-for="val in item.replyList"
+                :key="val.id"
+                :item="val"
+                :type="getType"
+              >
+              </comment-item-vue>
+              <comment-item-vue
+                v-if="showMore"
+                v-for="val in commetArr"
+                :key="val.id"
+                :item="val"
+                :type="getType"
+              >
+              </comment-item-vue>
+            </ul>
+
+            <div
+              class="more-comment"
+              slot="more-comment"
+              v-if="item.commentNum > 3"
+            >
+              <p
+                @click="
+                  if (showMore || commetArr != '') {
+                    showMore = !showMore;
+                  } else {
+                    moreComment(item.id);
+                  }
+                "
+              >
+                <span>
+                  {{
+                    showMore
+                      ? "收起"
+                      : "查看更多" + (item.commentNum - 3) + "条回复"
+                  }}
+                </span>
+                <svg
+                  class="icon"
+                  aria-hidden="true"
+                  :class="showMore && 'active'"
+                >
+                  <use xlink:href="#iconhuifuzhankai"></use>
+                </svg>
+              </p>
+            </div>
           </comment-item-vue>
         </ul>
         <no-data v-else type="no-comment" text="暂无评论"></no-data>
@@ -73,8 +114,9 @@
       return {
         defaultVal: 0, //排序
         value: "",
-        loading: false //发送按钮loading
-
+        loading: false, //发送按钮loading
+        showMore: false,
+        commetArr: "" //某一评论下边的全部评论
         //commentType: ""
       };
     },
@@ -125,6 +167,26 @@
     },
     mounted() {},
     methods: {
+      //点击查看更多回复
+      moreComment(id) {
+        this.showMore = !this.showMore;
+        _getData(
+          `${this.$API_URL.HYGPROURL}/server_pro/videoComment!request.action`,
+          {
+            method: "getAppPageReplyList_v27",
+            token: "",
+            userid: this.$userid,
+            params: {
+              currentPage: 1,
+              countPerPage: "",
+              id: id, //顶层评论id
+              type: this.getType.commentType
+            }
+          }
+        ).then(data => {
+          this.commetArr = _.drop(data.data.result.replyList, 3);
+        });
+      },
       toLogin() {
         this.$router.push({ path: "/login" });
         // const { href } = this.$router.resolve({

@@ -31,6 +31,9 @@
       <div class="replay">
         <div class="btn">
           <div class="replay-btn">
+            <span v-if="$userid == item.userId" @click="deleteComment(item.id)">
+              删除&nbsp;&nbsp;·&nbsp;&nbsp;
+            </span>
             <span @click="replayBtnClick">回复</span>
 
             <span
@@ -71,9 +74,10 @@
       </div>
       <transition name="slide-fade">
         <div class="replay-container" v-if="commentIsShow">
-          <ul>
+          <div>
             <slot name="replay-container"></slot>
-          </ul>
+          </div>
+          <slot name="more-comment"></slot>
         </div>
       </transition>
     </div>
@@ -116,6 +120,31 @@
           : "");
     },
     methods: {
+      //删除评论
+      deleteComment(id) {
+        _getData(
+          `${this.$API_URL.HYGPROURL}/server_pro/videoComment!request.action`,
+          {
+            method: "deleteCommentById",
+            token: "",
+            userid: this.$userid,
+            params: {
+              objId: id, // id
+              type: this.type.commentType //表示聊一聊
+            }
+          }
+        )
+          .then(() => {
+            if (this.$parent.$parent.getCommentList) {
+              this.$parent.$parent.getCommentList();
+            } else {
+              this.$parent.$parent.$parent.getCommentList();
+            }
+          })
+          .then(() => {
+            this.$message.success("删除成功");
+          });
+      },
       //点击回复按钮
       replayBtnClick() {
         if (this.isLogin) {
@@ -316,7 +345,7 @@
         .btn {
           display: flex;
           justify-content: space-between;
-          margin-bottom: 24px;
+          margin-bottom: 20px;
           .replay-btn {
             display: flex;
             justify-content: flex-start;
@@ -356,7 +385,7 @@
         }
         .replay-area {
           // margin-top: 10px;
-          margin-bottom: 24px;
+          margin-bottom: 20px;
           /deep/ .ant-btn {
             display: flex;
             height: 33px;
@@ -382,6 +411,32 @@
         }
       }
       .replay-container {
+        /deep/ .more-comment {
+          width: auto;
+          display: flex;
+          font-size: 14px;
+          color: #406599;
+          cursor: pointer;
+          margin-bottom: 10px;
+          &:hover {
+            opacity: 0.7;
+          }
+          p {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+          }
+          .icon {
+            width: 11px;
+            height: 6px;
+            margin-top: 2px;
+            margin-left: 8px;
+            transition: all 0.3s;
+            &.active {
+              transform: rotate(180deg);
+            }
+          }
+        }
       }
     }
   }
