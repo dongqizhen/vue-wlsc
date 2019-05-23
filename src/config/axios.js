@@ -2,12 +2,16 @@
  * @Author: mikey.dongqizhen 
  * @Date: 2019-04-18 17:08:47 
  * @Last Modified by: mikey.dongqizhen
- * @Last Modified time: 2019-05-23 09:17:20
+ * @Last Modified time: 2019-05-23 16:09:13
  */
 
 
 // config axios https://www.jianshu.com/p/7a9fbcbb1114
 import axios from 'axios'
+import {
+    toData,
+    new_to_Data
+} from './jsonData'
 
 let request = axios.create();
 //console.log(window.localStorage["vuex-along"])
@@ -26,7 +30,7 @@ axios.interceptors.request.use(function(config) {
             (data) => {
                 console.log(data)
                 return new_to_Data(data)
-                    // return JSON.stringify(data)
+                    //return JSON.stringify(data)
             }
         ]
     } else {

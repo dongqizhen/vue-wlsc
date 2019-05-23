@@ -8,6 +8,8 @@ import 'vue-social-share/dist/client.css';
 import VueLazyload from 'vue-lazyload'
 import NoData from './components/common/nodata'
 import loading from './components/common/loading'
+import VueStar from 'vue-star'
+import animated from 'animate.css'
 import {
     BackTop,
     Modal,
@@ -45,7 +47,7 @@ Vue.use(vChatTitle).use(VueLazyload, {
     preLoad: 1.3,
     attempt: 1,
     lazyComponent: true
-}).use(Share).use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Upload).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form).use(Skeleton).use(Affix).use(Steps);
+}).use(animated).use(Share).use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Upload).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form).use(Skeleton).use(Affix).use(Steps);
 
 let userid = '';
 if (window.localStorage["vuex-along"] != "{}") {
@@ -58,6 +60,7 @@ Vue.prototype.$userid = userid
 
 Vue.component('no-data', NoData)
 Vue.component('loading', loading)
+Vue.component('VueStar', VueStar)
 
 new Vue({
     el: '#app',

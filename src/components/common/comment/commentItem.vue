@@ -55,11 +55,19 @@
               </svg>
             </span>
           </div>
-          <span @click="giveALike(item.id)">
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#iconzan" v-if="!isCommentLike"></use>
-              <use xlink:href="#iconzanx" v-else></use>
-            </svg>
+          <span>
+            <vue-star animate="animated jello" color="#F05654" ref="vueStar">
+              <svg
+                class="icon"
+                aria-hidden="true"
+                slot="icon"
+                @click="giveALike(item.id)"
+              >
+                <use xlink:href="#iconzan" v-if="!isCommentLike"></use>
+                <use xlink:href="#iconzanx" v-else></use>
+              </svg>
+            </vue-star>
+
             {{ commentAmount }}
           </span>
         </div>
@@ -109,6 +117,7 @@
     },
     created() {
       this.isCommentLike = this.item.isDianzan;
+
       this.commentAmount = this.item.amount;
       this.content =
         decodeURI(this.item.content).replace(/\n/g, "<br />") +
@@ -118,6 +127,12 @@
             "</span>：" +
             decodeURI(this.item.commentContent).replace(/\n/g, "<br />")
           : "");
+    },
+    mounted() {
+      if (this.isCommentLike) {
+        this.$refs.vueStar.$data.active = true;
+        this.$refs.vueStar.$data.toggleAnimate = true;
+      }
     },
     methods: {
       //删除评论
@@ -197,6 +212,7 @@
       //点赞
       giveALike(id) {
         this.isCommentLike = !this.isCommentLike;
+        console.log(this.$refs.vueStar);
         _getData(`${this.$API_URL.HYGPROURL}/server_pro/dianzan!request.action`, {
           method: "addOrDeleteDianzan_v27",
           token: "",
@@ -206,11 +222,19 @@
             type: this.type.likeType,
             controlflag: this.isCommentLike ? 0 : 1 //1表示取消，0表示添加（传的是现在的状态）
           }
-        }).then(() => {
-          this.commentAmount = this.isCommentLike
-            ? (this.commentAmount += 1)
-            : (this.commentAmount -= 1);
-        });
+        })
+          .then(() => {
+            this.commentAmount = this.isCommentLike
+              ? (this.commentAmount += 1)
+              : (this.commentAmount -= 1);
+          })
+          .then(() => {
+            if (this.$parent.$parent.getCommentList) {
+              this.$parent.$parent.getCommentList();
+            } else {
+              this.$parent.$parent.$parent.getCommentList();
+            }
+          });
       }
     },
     computed: {
@@ -267,9 +291,10 @@
   }
   .slide-fade-enter,
   .slide-fade-leave-to {
-    transform: translateY(-5px);
+    //transform: translateY(-5px);
     opacity: 0;
   }
+
   li {
     display: flex;
     justify-content: flex-start;
@@ -379,7 +404,15 @@
             .icon {
               width: 16px;
               height: 16px;
-              margin-right: 4px;
+            }
+            /deep/ .VueStar {
+              right: -10px;
+              .VueStar__icon {
+                width: 16px;
+                height: 16px;
+                display: flex;
+                margin-right: 4px;
+              }
             }
           }
         }
