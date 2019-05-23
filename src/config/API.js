@@ -5,10 +5,11 @@ const command = process.env.npm_lifecycle_event;
 
 let API_HOST = {};
 
+
 let alpha = { // 开发
-    // URL: "http://60.195.252.91:8080/platform",
+    URL: "http://60.195.252.91:8080/platform",
     //URL: "http://192.168.2.110:8080/platform",
-    URL: "http://192.168.2.233:8080/platform",
+    //URL: "http://192.168.2.233:8080/platform",
     HYGLOGINURL: 'http://60.195.252.86:8080',
     HYGINFOURL: "http://60.195.252.86:8082",
     HYGPROURL: "http://60.195.252.86:8083",
@@ -34,19 +35,19 @@ let release = { // 正式版本
 }
 
 if (command == "serve:alpha") {
-    console.log(chalk.green('当前环境为（development）:开发'));
+    console.log(chalk.green(`当前环境为（${process.env.NODE_ENV}）:开发`));
     API_HOST = alpha;
 } else if (command == "serve:beta") {
-    console.log(chalk.green('当前环境为（development）:测试'));
+    console.log(chalk.green(`当前环境为（${process.env.NODE_ENV}）:测试)`));
     API_HOST = beta;
 } else if (command == "serve:gamma") {
-    console.log(chalk.green('当前环境为（development）:验收'));
+    console.log(chalk.green(`当前环境为（${process.env.NODE_ENV}）:验收`));
     API_HOST = gamma;
 } else if (command == "serve:release") {
-    console.log(chalk.green('当前环境为（development）:正式'));
+    console.log(chalk.green(`当前环境为（${process.env.NODE_ENV}）:正式`));
     API_HOST = release;
 } else {
-    console.log(chalk.green('当前环境为（development）:开发'));
+    console.log(chalk.green(`当前环境为（${process.env.NODE_ENV}）:开发`));
     API_HOST = alpha;
 }
 

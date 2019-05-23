@@ -24,3 +24,8 @@ function new_to_Data(json) {
         return encodeURIComponent(data);
     }
 }
+
+export {
+    toData,
+    new_to_Data
+}
