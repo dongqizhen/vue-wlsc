@@ -3,10 +3,13 @@
 const webpack = require('webpack');
 const path = require('path')
 const API = require('./src/config/API.js')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const CompressionWebpackPlugin = require('compression-webpack-plugin');
 console.log(API)
 const resolve = (dir) => {
     return path.join(__dirname, dir)
 }
+const productionGzipExtensions = ['js', 'css'];
 
 module.exports = {
     // baseUrl  type:{string} default:'/' 将部署应用程序的基本URL 将部署应用程序的基本URL。 默认情况下，Vue
@@ -43,35 +46,49 @@ module.exports = {
     transpileDependencies: [
         'vue-echarts', 'resize-detector'
     ],
-    configureWebpack: {
-        resolve: {
-            extensions: [
-                '.js', '.vue', '.json', '.ts'
-            ],
-            alias: {
-                // 定义全局引入路径标识符
-                'vue$': 'vue/dist/vue.esm.js',
-                '@': resolve('src'),
-                '#': resolve('src/components'),
-                '^': resolve('src/module'),
-                '%': resolve('src/common'),
-                'static': path.resolve(__dirname, '../static')
-            }
-        },
-        module: {
-            rules: [{
-                test: /\.tsx?$/,
-                loader: 'ts-loader',
-                exclude: /node_modules/,
-                options: {
-                    appendTsSuffixTo: [/\.vue$/]
-                }
-            }]
-        },
-        plugins: [
-            new webpack.DefinePlugin({ 'env': API })
-        ]
+    configureWebpack: config => {
+        if (process.env.NODE_ENV === 'production') {
+            config.plugins.push(new CompressionWebpackPlugin({
+                algorithm: 'gzip',
+                test: new RegExp(`\\.(${productionGzipExtensions.join('|')})$`),
+                threshold: 10240,
+                minRatio: 0.8,
+            }));
+            config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
+        }
 
+        return {
+            resolve: {
+                extensions: [
+                    '.js', '.vue', '.json', '.ts'
+                ],
+                alias: {
+                    // 定义全局引入路径标识符
+                    'vue$': 'vue/dist/vue.esm.js',
+                    '@': resolve('src'),
+                    '#': resolve('src/components'),
+                    '^': resolve('src/module'),
+                    '%': resolve('src/common'),
+                    'static': path.resolve(__dirname, '../static')
+                }
+            },
+            module: {
+                rules: [{
+                    test: /\.tsx?$/,
+                    loader: 'ts-loader',
+                    exclude: /node_modules/,
+                    options: {
+                        appendTsSuffixTo: [/\.vue$/]
+                    }
+                }]
+            },
+
+            plugins: [
+                new webpack.DefinePlugin({
+                    'env': API
+                })
+            ]
+        }
     },
 
     css: {
