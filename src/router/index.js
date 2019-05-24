@@ -264,6 +264,18 @@ const router = new Router({
                         import ("../views/page/shop/userCenterChildren/myQuote")
                 },
                 {
+                    path: "lookQuote/:id",
+                    name: "产品报价单",
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/lookQuote")
+                },
+                {
+                    path: "editQuote/:id",
+                    name: "产品报价单",
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/editQuote")
+                },
+                {
                     path: "myStore",
                     name: "我的收藏",
                     component: () =>
@@ -327,7 +339,7 @@ const router = new Router({
             component: () =>
                 import ('../views/page/guide/guide'),
             children: [{
-                    name: "底部关于我们",
+                    name: "底部的关于我们",
                     path: "aboutUs",
                     component: () =>
                         import ("../views/page/guide/guideChildren/aboutUs.vue")
