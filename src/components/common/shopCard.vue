@@ -15,10 +15,13 @@
           <span>店铺类型：</span><span>{{ detail.typeName }}</span>
         </li>
         <li>
-          <span>销售地区：</span
-          ><span>
-            <span v-for="item in detail.listStoreCentreVo" :key="item.id">
-              {{ item.provinceName + item.cityName + "," }}
+          <span>销售地区： </span>
+          <span>
+            <span v-for="item in detail.defaultProvinceData" :key="item.id">
+              {{ item.provinceName + ":" }}
+              <span v-for="val in item.defaultCityData" :key="val.id">{{
+                val.name + ","
+              }}</span>
             </span>
           </span>
         </li>
@@ -109,6 +112,10 @@
       background: $base-background;
       margin-top: 34px;
       margin-bottom: 8px;
+      img {
+        height: 100%;
+        width: 100%;
+      }
     }
     p {
       font-size: 15px;
@@ -140,6 +147,15 @@
           &:last-child {
             font-weight: 600;
             flex: 1;
+          }
+        }
+        &:last-child {
+          flex-direction: column;
+          > span {
+            &:last-child {
+              display: flex;
+              flex-direction: column;
+            }
           }
         }
       }

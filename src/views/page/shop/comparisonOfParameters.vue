@@ -7,7 +7,7 @@
       <div class="commonWidth">
         <h2><span></span>参数对比</h2>
         <transition-group name="list-complete" tag="div" class="content">
-          <!-- <div class="col" key="first">
+          <div class="col" key="first">
             <div class="header">
               <p>
                 <svg class="icon" aria-hidden="true">
@@ -17,30 +17,32 @@
               </p>
             </div>
             <ul>
-              <li>参数一</li>
-              <li>参数3</li>
-              <li>参数一</li>
-              <li>参数一</li>
-              <li>参数一</li>
-              <li>参数一</li>
-              <li>参数一</li>
+              <li v-for="item in paramas" :key="item.specificationId">
+                {{ item.specificationName }}
+              </li>
             </ul>
-          </div> -->
-
-          <div class="col" v-for="(item, i) in arr" :key="item.id">
+          </div>
+          <div
+            class="col"
+            v-for="(item, i) in arr"
+            :key="`${item.categoryId}-${i}`"
+          >
             <div class="header">
-              <p :class="item.name ? '' : 'no-data'" v-if="i != 0">
-                {{ item.name || "暂无型号" }}
+              <p :class="item.modelName ? '' : 'no-data'">
+                {{
+                  item.modelName
+                    ? item.categoryName +
+                      "&nbsp;&nbsp;" +
+                      item.brandName +
+                      "&nbsp;&nbsp;" +
+                      item.modelName
+                    : "暂无型号"
+                }}
               </p>
-              <p v-else>
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#iconcanshuduibi"></use>
-                </svg>
-                主要参数
-              </p>
+
               <span
                 class="del-btn"
-                v-if="i != 0 && item.name"
+                v-if="item.modelName && i != 0"
                 @click="delbtnClick(i)"
               >
                 <svg class="icon" aria-hidden="true">
@@ -48,78 +50,38 @@
                 </svg>
               </span>
               <a-button
-                v-if="i != 0"
                 type="primary"
                 @click.self.stop="changeModel(i)"
-                >更换型号</a-button
+                v-if="i != 0"
               >
+                选择型号
+              </a-button>
               <transition name="bounce">
                 <div class="modal-content" v-if="defaultShowIndex == i">
-                  <h2>品牌</h2>
+                  <h2>
+                    <span>品牌</span>
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#iconwangyelujing"></use>
+                    </svg>
+                    <span>型号</span>
+                  </h2>
                   <ul class="index-list">
-                    <li>
-                      <h3>A</h3>
+                    <li v-for="(v, key) in brandList" :key="key">
+                      <h3>{{ key }}</h3>
                       <ul>
-                        <li>
-                          <div class="img_box"></div>
-                          <p>奥洁Aojie</p>
-                        </li>
-                        <li>
-                          <div class="img_box"></div>
-                          <p>澳柯玛</p>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <h3>B</h3>
-                      <ul>
-                        <li>
-                          <div class="img_box"></div>
-                          <p>奥洁Aojie</p>
-                        </li>
-                        <li>
-                          <div class="img_box"></div>
-                          <p>澳柯玛</p>
-                        </li>
-                      </ul>
-                    </li>
-
-                    <li>
-                      <h3>B</h3>
-                      <ul>
-                        <li>
-                          <div class="img_box"></div>
-                          <p>奥洁Aojie</p>
-                        </li>
-                        <li>
-                          <div class="img_box"></div>
-                          <p>澳柯玛</p>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <h3>B</h3>
-                      <ul>
-                        <li>
-                          <div class="img_box"></div>
-                          <p>奥洁Aojie</p>
-                        </li>
-                        <li>
-                          <div class="img_box"></div>
-                          <p>澳柯玛</p>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <h3>B</h3>
-                      <ul>
-                        <li>
-                          <div class="img_box"></div>
-                          <p>奥洁Aojie</p>
-                        </li>
-                        <li>
-                          <div class="img_box"></div>
-                          <p>澳柯玛</p>
+                        <li
+                          v-for="value in v"
+                          :key="value.id"
+                          @click="selectBrand(value)"
+                        >
+                          <div class="img_box">
+                            <img
+                              :src="value.app_list_pic_url"
+                              alt=""
+                              v-if="value.app_list_pic_url"
+                            />
+                          </div>
+                          <p>{{ value.name }}</p>
                         </li>
                       </ul>
                     </li>
@@ -127,18 +89,14 @@
                 </div>
               </transition>
             </div>
-            <!-- <div class="paramas"> -->
-            <h3>{{ i == 0 ? "通用规格" : "" }}</h3>
-            <ul>
-              <li>参数一</li>
-              <li>参数一</li>
-              <li>参数一</li>
-              <li>参数一</li>
-              <li>参数一</li>
-              <li>参数一</li>
-              <li>参数一</li>
+            <ul v-if="item.modelSpecificationInfo">
+              <li v-for="val in item.modelSpecificationInfo" :key="val.id">
+                {{ val.value }}
+              </li>
             </ul>
-            <!-- </div> -->
+            <ul v-else>
+              <li v-for="val in paramas" :key="val.specificationId"></li>
+            </ul>
           </div>
         </transition-group>
         <a-button type="primary" @click="addbtnClick" v-if="arr.length < 6">
@@ -159,32 +117,14 @@
   import sideBar from "../../../components/sideBar/sideBar.vue";
   import { mixin } from "../../../components/mixin/mixin";
   import _ from "lodash";
+  import { _getData } from "../../../config/getData";
 
   export default {
     data() {
       return {
-        arr: [
-          {
-            name: "主要参数",
-            id: 0
-          },
-          {
-            name: "核磁共振MRI类 飞利浦 loge980-7890",
-            id: 1
-          },
-          {
-            name: "放射类 GE loge9",
-            id: 2
-          },
-          {
-            name: "",
-            id: 3
-          },
-          {
-            name: "",
-            id: 4
-          }
-        ],
+        arr: [],
+        paramas: [],
+        brandList: [], //全部品牌
         defaultShowIndex: null
       };
     },
@@ -196,8 +136,49 @@
       Nav,
       sideBar
     },
-    mounted() {},
+    created() {
+      this.arr = _.fill(Array(4), { categoryId: this.$route.query.categoryId });
+    },
+    mounted() {
+      _getData("modelspecification/query", {
+        modelId: this.$route.query.modelId
+      }).then(data => {
+        console.log(data);
+        this.paramas = data.modelSpecificationInfo;
+        this.arr = [data, ..._.drop(this.arr)];
+      });
+      //根据分类获取品牌
+      _getData("brand/merge", { id: this.$route.query.categoryId })
+        .then(data => {
+          this.brandList = _.groupBy(
+            _.orderBy(
+              data.listAll,
+              val => {
+                return _.upperFirst(val.pinyin).substring(0, 1);
+              },
+              ["asc"]
+            ),
+            val => {
+              return _.upperFirst(val.pinyin).substring(0, 1);
+            }
+          );
+
+          console.log(this.brandList);
+        })
+        .then(() => {
+          // console.log(this.navArr);
+          // this.arr = this.navArr.listAll;
+          // this.letterArr = _.groupBy(this.arr, val => {
+          //   return _.upperFirst(val.pinyin).substring(0, 1);
+          // });
+          // //console.log(this.letterArr, _.keys(this.letterArr));
+          // this.letter = _.orderBy(_.keys(this.letterArr), val => val, ["asc"]);
+        });
+    },
     methods: {
+      selectBrand(val) {
+        console.log(val);
+      },
       delbtnClick(i) {
         if (this.arr.length > 4) {
           this.arr.splice(i, 1);
@@ -363,6 +344,18 @@
                 color: #666666;
                 padding-left: 12px;
                 font-weight: 600;
+                .icon {
+                  height: 8px;
+                  width: 8px;
+                  margin: 0 7px;
+                  margin-top: 2px;
+                }
+                span {
+                  cursor: pointer;
+                  &:hover {
+                    color: $theme-color;
+                  }
+                }
               }
               > ul {
                 flex: 1;
@@ -413,6 +406,10 @@
                         width: 25px;
                         background: $base-background;
                         margin-right: 6px;
+                        img {
+                          width: 100%;
+                          height: 100%;
+                        }
                       }
                       p {
                         display: flex;
@@ -434,16 +431,6 @@
               left: 0;
               z-index: 0;
             }
-          }
-          h3 {
-            background: #f5f5f5;
-            font-size: 14px;
-            color: #333333;
-            font-weight: 600;
-            padding-left: 20px;
-            height: 50px;
-            display: flex;
-            align-items: center;
           }
           > ul {
             li {

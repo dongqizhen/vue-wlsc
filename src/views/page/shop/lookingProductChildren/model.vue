@@ -11,7 +11,11 @@
           <router-link
             :to="{
               path: '/comparisonOfParameters',
-              query: { nav_index: $route.query.nav_index }
+              query: {
+                nav_index: $route.query.nav_index,
+                modelId: $route.query.modelId,
+                categoryId: $route.query.categoryId
+              }
             }"
             target="_blank"
           >
@@ -29,9 +33,11 @@
           ></shop-nav-vue>
           <div class="main-content">
             <ul>
-              <product-item-vue></product-item-vue>
-              <product-item-vue></product-item-vue>
-              <product-item-vue></product-item-vue>
+              <shop-item-vue
+                v-for="item in shopList"
+                :key="item.id"
+                :item="item"
+              ></shop-item-vue>
             </ul>
             <pagination-vue></pagination-vue>
           </div>
@@ -55,13 +61,15 @@
   import { _getData, _getDataAll } from "../../../../config/getData";
   import loadingVue from "../../../../components/common/loading.vue";
   import _ from "lodash";
+  import shopItemVue from "../../../../components/common/item/shopItem.vue";
 
   export default {
     data() {
       return {
         routes: [],
         isLoading: true,
-        tabs: []
+        tabs: [],
+        shopList: ""
       };
     },
     components: {
@@ -71,10 +79,27 @@
       recommendsTabVue,
       paginationVue,
       breadcrumbVue,
-      loadingVue
+      loadingVue,
+      shopItemVue
     },
     methods: {
-      tabClick(i) {}
+      tabClick(i) {},
+      async getShopList() {
+        return await _getData("queryStore", {
+          modelId: this.$route.query.modelId,
+          currentPage: 1,
+          countPerPage: 6,
+          sort: "createOn",
+          order: "asc"
+        })
+          .then(data => {
+            console.log("店铺", data);
+            this.shopList = data.data;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     },
     mounted() {
       //获取nav数量
@@ -106,11 +131,13 @@
         _getData("goods/productCount", {
           modelId: this.$route.query.modelId
         }).then(data => {
+          console.log("nav", data);
           this.tabs = [
             ..._.map(data.list, val => {
               return `${val.name}(${val.count})`;
             }),
             ...[
+              `店铺(${data.sroreCount})`,
               `文章(${data.articleNum})`,
               `视频(${data.videoNum})`,
               `案例(${data.maintenanceNum})`
@@ -118,11 +145,7 @@
           ];
         }),
         //获取店铺
-        _getData("queryStore", { modelId: this.$route.query.modelId })
-          .then(data => {})
-          .catch(err => {
-            console.log(err);
-          })
+        this.getShopList()
       ]).then(() => {
         this.$nextTick().then(() => {
           this.isLoading = false;
@@ -287,10 +310,10 @@
         }
         .main-content {
           margin-right: -7.5px;
-          ul {
+          > ul {
             display: flex;
             flex-wrap: wrap;
-            /deep/ li {
+            > li {
               margin-right: 7.5px;
               margin-bottom: 10px;
             }

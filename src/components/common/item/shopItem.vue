@@ -2,7 +2,7 @@
   <router-link
     tag="li"
     :to="{
-      path: 'shopDetails',
+      path: '/shopDetails',
       query: {
         nav_index: $route.query.nav_index,
         shopId: item.sid,
@@ -10,12 +10,11 @@
       }
     }"
     class="shop-item"
-    append
   >
     <a target="_blank">
       <div class="top">
         <div class="img_box">
-          <img src="../../../assets/images/demo.jpg" alt="" />
+          <img :src="item.image" alt="" v-if="item.image" />
         </div>
         <h2>{{ item.shopName }}</h2>
         <p>
@@ -78,6 +77,7 @@
         height: 224px;
         width: 224px;
         background: $base-background;
+
         img {
           height: 100%;
           width: 100%;
@@ -102,9 +102,10 @@
       padding: 0 15px;
       display: flex;
       align-items: center;
-      ul {
+      > ul {
         overflow: hidden;
         width: 100%;
+        //height: 100%;
         li {
           font-size: 12px;
           color: #999999;

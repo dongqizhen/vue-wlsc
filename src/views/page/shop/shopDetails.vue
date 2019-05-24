@@ -64,6 +64,7 @@
       };
     },
     mixins: [mixin],
+
     created() {
       this.routes = [
         {
