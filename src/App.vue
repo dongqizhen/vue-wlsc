@@ -104,4 +104,29 @@
   .ant-select-dropdown-menu-item-active {
     background-color: #fff;
   }
+  .el-select {
+    height: 33px;
+    .el-input {
+      height: 100%;
+      .el-input__inner {
+        height: 100%;
+        padding-left: 10px;
+        color: #333;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        &:focus {
+          border-color: #f10215;
+          box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
+        }
+        &:hover {
+          border-color: #f10215;
+        }
+      }
+    }
+  }
+  .el-select-dropdown__item {
+    &.selected {
+      color: #f10215;
+    }
+  }
 </style>

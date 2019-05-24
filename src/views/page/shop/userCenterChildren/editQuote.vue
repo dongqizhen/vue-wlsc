@@ -28,7 +28,7 @@
             <span>{{ item.number }}</span>
             <span>¥{{ item.number * item.unitPrice }}</span>
             <span>2019-02-12</span>
-            <span>这里有一段文本显示备注</span>
+            <span>{{ item.introduce }}</span>
             <span>
               <div @click="addCarSuccess(item.id)">编辑</div>
               <div>删除</div>
@@ -62,6 +62,8 @@
       :Visible="visible"
       :type="type"
       :editId="editId"
+      :goodsEnquirySn="$route.params.id"
+      v-on:getIsUpdate="getIsUpdate"
     ></edit-quote-modal>
   </div>
 </template>
@@ -100,15 +102,23 @@
         }
         this.visible = true;
         this.editId = id;
+      },
+      getIsUpdate(val) {
+        if (val) {
+          this.getQuoteOrderDetail();
+        }
+      },
+      getQuoteOrderDetail() {
+        _getData("/enquiry/getGoodsEnquiry", {
+          goodsEnquirySn: this.$route.params.id
+        }).then(data => {
+          console.log("获取的商品报价单详情：", data);
+          this.data = data;
+        });
       }
     },
     mounted() {
-      _getData("/enquiry/getGoodsEnquiry", {
-        goodsEnquirySn: this.$route.params.id
-      }).then(data => {
-        console.log("获取的商品报价单详情：", data);
-        this.data = data;
-      });
+      this.getQuoteOrderDetail();
     },
     components: {
       commonTitle,

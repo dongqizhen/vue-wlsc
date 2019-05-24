@@ -146,19 +146,28 @@
             <span class="red">*</span>营业执照<i>(三合一)</i>
           </div>
           <div class="right-box">
-            <upload v-on:getVal="getLicenseUrl"></upload>
+            <upload
+              v-on:getVal="getLicenseUrl"
+              :imgUrl="submitData.yyimage"
+            ></upload>
           </div>
         </div>
         <div class="common companyTaxRegistration">
           <div class="left-box">税务登记证</div>
           <div class="right-box">
-            <upload v-on:getVal="getTaxRegistrationUrl"></upload>
+            <upload
+              v-on:getVal="getTaxRegistrationUrl"
+              :imgUrl="submitData.swimage"
+            ></upload>
           </div>
         </div>
         <div class="common companyProductionLicense">
           <div class="left-box">医疗器械经营或生产许可证</div>
           <div class="right-box">
-            <upload v-on:getVal="getProductionLicenseUrl"></upload>
+            <upload
+              v-on:getVal="getProductionLicenseUrl"
+              :imgUrl="submitData.zzjgimage"
+            ></upload>
           </div>
         </div>
       </div>
@@ -300,39 +309,21 @@
             data => {
               targetOption.loading = false;
               targetOption.children = _.map(data, value => {
-                if (
-                  selectedOptions[0].name != "北京市" &&
-                  selectedOptions[0].name != "天津市" &&
-                  selectedOptions[0].name != "重庆市" &&
-                  selectedOptions[0].name != "上海市"
-                ) {
-                  return (value = { ...value, isLeaf: false });
-                } else {
-                  return (value = { ...value, isLeaf: true });
-                }
+                return (value = { ...value, isLeaf: false });
               });
               this.options = [...this.options];
             }
           );
         } else {
           console.log("获取区");
-          if (
-            selectedOptions[0].name != "北京市" &&
-            selectedOptions[0].name != "天津市" &&
-            selectedOptions[0].name != "重庆市" &&
-            selectedOptions[0].name != "上海市"
-          ) {
-            _getData("address/getCounty", {
-              provinceId: selectedOptions[0].id,
-              cityId: targetOption.id
-            }).then(data => {
-              targetOption.loading = false;
-              targetOption.children = data;
-              this.options = [...this.options];
-            });
-          } else {
+          _getData("address/getCounty", {
+            provinceId: selectedOptions[0].id,
+            cityId: targetOption.id
+          }).then(data => {
             targetOption.loading = false;
-          }
+            targetOption.children = data;
+            this.options = [...this.options];
+          });
         }
       },
       getLicenseUrl(val) {
@@ -374,7 +365,10 @@
       });
       if (!this.isOpenShop) {
         _getData("/store/selectAllStore", {}).then(data => {
-          console.log(data);
+          console.log("获取已填写的店铺信息：", data);
+          this.submitData = data;
+          this.defaultCascaderValue = [1, 1, 13];
+          console.log(this.submitData);
         });
       }
     }

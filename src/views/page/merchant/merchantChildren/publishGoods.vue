@@ -22,71 +22,91 @@
         <div class="common">
           <div class="left-box"><span class="red">*</span>产品分类</div>
           <div class="right-box">
-            <a-select
-              defaultValue="请选择大类"
+            <el-select
               style="width: 136px;margin-right:10px;"
+              v-model="submitData.bigCategoryId"
+              placeholder="请选择大类"
               @change="handleProductBigTypeChange"
-              :options="bigOptions"
             >
-              <a-icon slot="suffixIcon" class="icon">
-                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-              </a-icon>
-            </a-select>
-            <a-select
-              defaultValue="请选择小类"
-              style="width: 136px"
+              <el-option
+                v-for="item in bigOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+            <el-select
+              style="width: 136px;margin-right:10px;"
+              v-model="submitData.categoryId"
+              placeholder="请选择小类"
               @change="handleProductSmallTypeChange"
-              :options="smallOptions"
             >
-              <a-icon slot="suffixIcon" class="icon">
-                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-              </a-icon>
-            </a-select>
+              <el-option
+                v-for="item in smallOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
           </div>
         </div>
         <div class="common">
           <div class="left-box">产品类型</div>
           <div class="right-box">
-            <a-select
-              defaultValue="请选择类型"
-              style="width: 136px"
+            <el-select
+              style="width: 136px;margin-right:10px;"
+              v-model="submitData.goodsType"
+              placeholder="请选择类型"
               @change="handleProductTypeChange"
-              :options="typeOptions"
             >
-              <a-icon slot="suffixIcon" class="icon">
-                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-              </a-icon>
-            </a-select>
+              <el-option
+                v-for="item in typeOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
           </div>
         </div>
         <div class="common">
           <div class="left-box"><span class="red">*</span>品牌</div>
           <div class="right-box">
-            <a-select
-              defaultValue="请选择品牌"
-              style="width: 136px"
+            <el-select
+              style="width: 136px;margin-right:10px;"
+              v-model="submitData.brandId"
+              placeholder="请选择品牌"
               @change="handleBrandChange"
-              :options="brandOptions"
             >
-              <a-icon slot="suffixIcon" class="icon">
-                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-              </a-icon>
-            </a-select>
+              <el-option
+                v-for="item in brandOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
           </div>
         </div>
         <div class="common">
           <div class="left-box"><span class="red">*</span>型号</div>
           <div class="right-box">
-            <a-select
-              defaultValue="请选择型号"
-              style="width: 136px"
+            <el-select
+              style="width: 136px;margin-right:10px;"
+              v-model="submitData.modelId"
+              placeholder="请选择型号"
               @change="handleModelChange"
-              :options="modelOptions"
             >
-              <a-icon slot="suffixIcon" class="icon">
-                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-              </a-icon>
-            </a-select>
+              <el-option
+                v-for="item in modelOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
           </div>
         </div>
 
@@ -201,7 +221,7 @@
       </div>
     </div>
     <div class="commonBoxStyle productIntroduce">
-      <div class="title">商品介绍</div>
+      <div class="title"><i>*</i>商品介绍</div>
       <div class="introduceContent">
         <a-input
           type="textarea"
@@ -304,15 +324,15 @@
             return;
           }
         }
-        if (this.submitData.goodsDesc == "") {
-          alert("请输入商品描述");
-          return;
-        }
         if (this.isSparePart) {
           if (this.submitData.sparePart == "") {
             alert("请输入备件号");
             return;
           }
+        }
+        if (this.submitData.goodsDesc == "") {
+          alert("请输入商品描述");
+          return;
         }
         if (this.uploadList.length > 0) {
           _.map(this.uploadList, val => {
@@ -323,6 +343,8 @@
         }
         _getData("/goods/addGoods", this.submitData).then(data => {
           console.log(data);
+          alert("产品发布成功");
+          return;
         });
       },
       save() {},
@@ -469,6 +491,11 @@
           font-size: 12px;
           color: #999999;
           margin-left: 9px;
+        }
+        i {
+          font-style: normal;
+          color: $theme-color;
+          // font-size: 14px;
         }
       }
     }

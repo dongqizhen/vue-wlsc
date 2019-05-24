@@ -5,14 +5,14 @@ module.exports = {
             "import",
             { libraryName: "ant-design-vue", libraryDirectory: "es", style: true }, "ant-design-vue"
         ],
-        // [
-        //     'component',
-        //     {
-        //         'libraryName': 'element-ui',
-        //         'styleLibraryName': 'theme-chalk'
-        //     },
-        //     'element-ui'
-        // ],
+        [
+            'component',
+            {
+                'libraryName': 'element-ui',
+                'styleLibraryName': 'theme-chalk'
+            },
+            'element-ui'
+        ],
         // [
         //     'import',
         //     {

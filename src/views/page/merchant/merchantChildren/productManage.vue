@@ -23,41 +23,53 @@
             <div class="common productStatus">
               <div class="left-box">产品状态</div>
               <div class="right-box">
-                <a-select
+                <el-select
+                  style="width: 112px;margin-right:10px;"
+                  v-model="submitData.bigCategoryId"
                   placeholder="请选择状态"
-                  style="width: 112px"
-                  @change="handleChange"
-                  :options="options"
+                  @change="handleStatusChange"
                 >
-                  <a-icon slot="suffixIcon" class="icon">
-                    <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-                  </a-icon>
-                </a-select>
+                  <el-option
+                    v-for="item in statusOptions"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
               </div>
             </div>
             <div class="common productType">
               <div class="left-box">产品分类</div>
               <div class="right-box">
-                <a-select
+                <el-select
+                  style="width: 112px;margin-right:10px;"
+                  v-model="submitData.bigCategoryId"
                   placeholder="请选择大类"
-                  style="width: 112px"
                   @change="handleProductBigTypeChange"
-                  :options="options"
                 >
-                  <a-icon slot="suffixIcon" class="icon">
-                    <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-                  </a-icon>
-                </a-select>
-                <a-select
+                  <el-option
+                    v-for="item in bigOptions"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
+                <el-select
+                  style="width: 112px;margin-right:10px;"
+                  v-model="submitData.categoryId"
                   placeholder="请选择小类"
-                  style="width: 112px"
                   @change="handleProductSmallTypeChange"
-                  :options="options"
                 >
-                  <a-icon slot="suffixIcon" class="icon">
-                    <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-                  </a-icon>
-                </a-select>
+                  <el-option
+                    v-for="item in smallOptions"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
               </div>
             </div>
           </div>
@@ -110,7 +122,7 @@
               <button class="obtained">下架</button>
             </div>
           </check-all>
-          <pagination></pagination>
+          <pagination :data="data"></pagination>
         </div>
       </div>
     </div>
@@ -156,33 +168,27 @@
   import pagination from "../../../../components/common/pagination";
   import checkAll from "../../../../components/common/checkAll";
   import { _getData } from "../../../../config/getData";
+  import { setTimeout } from "timers";
   export default {
     data() {
       return {
         data,
+        bigOptions: [],
+        smallOptions: [],
+        statusOptions: [],
         checkAll: false,
         checkedList: defaultCheckedList,
         totalCount: 60,
-        options: [
-          {
-            label: "北京",
-            value: "Zhejiang",
-            title: "北京 010",
-            key: "010"
-          },
-          {
-            label: "上海",
-            value: "Jiangsu",
-            key: "021"
-          },
-          {
-            label: "杭州",
-            value: "hangzhou",
-            key: "0571",
-            disabled: true
-          }
-        ]
+        submitData: {
+          value: ""
+        }
       };
+    },
+    mounted() {
+      this.getProductList();
+      setTimeout(function() {
+        this.submitData.value = "Zhejiang";
+      }, 1000);
     },
     methods: {
       isCheckAllMethod(val) {
@@ -234,11 +240,7 @@
           this.checkedList = [];
         }
       },
-      onPaginationChange() {},
-      handleChange() {},
-      handleShopTypeChange(value) {
-        console.log(`selected ${value}`);
-      },
+      handleStatusChange() {},
       handleProductBigTypeChange(value) {
         this.cities = cityData[value];
         console.log(this.cities);
@@ -248,8 +250,15 @@
         console.log(value);
       },
       getProductList() {
-        _getData("goods/goodslist", {}).then(data => {
-          console.log(data);
+        _getData("/goods/sjGoodsList", {
+          name: "",
+          isOnSale: "",
+          bigCategoryId: "",
+          categoryId: "",
+          currentPage: 1,
+          countPerPage: "1000000"
+        }).then(data => {
+          console.log("获取产品列表：", data);
         });
       }
     },
@@ -257,13 +266,13 @@
       commonTitle,
       pagination,
       checkAll
-    },
-    mounted() {}
+    }
   };
 </script>
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
+  @import "../../../../assets/scss/_input";
   .productManage {
     .productContainer {
       background-color: #fff;
@@ -310,17 +319,10 @@
                   width: 121px;
                   height: 27px;
                 }
-                .ant-select {
-                  margin-right: 10px;
+                /deep/.el-select {
                   height: 27px;
-                  /deep/.ant-select-selection--single {
-                    height: 100%;
-                    .ant-select-selection__rendered {
-                      height: 100%;
-                      line-height: 27px;
-                    }
-                    .ant-select-selection__placeholder,
-                    .ant-select-search__field__placeholder {
+                  .el-input {
+                    .el-input__inner {
                       font-size: 12px;
                     }
                   }

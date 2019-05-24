@@ -723,4 +723,54 @@
       }
     }
   }
+  .editQuote {
+    .ant-modal {
+      width: 696px !important;
+      .ant-modal-body {
+        padding-left: 44px;
+      }
+      .alertContent {
+        .common {
+          display: flex;
+          align-items: center;
+          margin-bottom: 20px;
+          .left-box {
+            width: 73px;
+            font-size: 12px;
+            color: #666666;
+          }
+          .right-box {
+            .ant-input {
+              width: 240px;
+              height: 30px;
+              line-height: 30px;
+              font-size: 12px;
+              color: #333;
+            }
+            .textArea {
+              height: 94px;
+              resize: none;
+            }
+          }
+        }
+        .remark {
+          align-items: flex-start;
+        }
+      }
+      .btn {
+        .ant-btn {
+          &:first-child {
+            background: #f5a623;
+            border-radius: 3px;
+            font-size: 12px;
+            color: #ffffff;
+            font-weight: 600;
+            border: 1px solid #f5a623;
+            margin-left: 73px;
+            margin-right: 7px;
+          }
+        }
+      }
+    }
+  }
 </style>
