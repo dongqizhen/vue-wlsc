@@ -68,14 +68,14 @@
       } else {
         _getData("/user/getUser", {}).then(data => {
           console.log("用户信息：", data);
-          if (data.audit_status == 2) {
-            this.$router.replace({ path: "/merchant/shopIndex" });
-          } else {
-            this.$router.replace({
-              path: "/merchant/openShop",
-              query: { shopStatus: data.audit_status }
-            });
-          }
+          // if (data.audit_status == 2) {
+          //   this.$router.replace({ path: "/merchant/shopIndex" });
+          // } else {
+          //   this.$router.replace({
+          //     path: "/merchant/openShop",
+          //     query: { shopStatus: data.audit_status }
+          //   });
+          // }
         });
       }
     },

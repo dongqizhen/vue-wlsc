@@ -170,7 +170,7 @@
       </div>
       <div class="pictureContent">
         <div
-          v-for="file in submitData.uploadList"
+          v-for="file in uploadList"
           :key="file.uid"
           class="uploadItem"
           :data-id="file.uid"
@@ -191,7 +191,7 @@
           :beforeUpload="beforeUpload"
           @change="handleChange"
         >
-          <div v-if="submitData.uploadList.length < 6">
+          <div v-if="uploadList.length < 6">
             <a-icon class="icon">
               <use xlink:href="#icontianjiatupian1"></use>
             </a-icon>
@@ -245,6 +245,7 @@
         categoryId: -1,
         brandId: -1,
         isSparePart: 0,
+        uploadList: [],
         submitData: {
           name: "",
           goodsSn: "",
@@ -261,58 +262,65 @@
           goodsDesc: "",
           isOnSale: "1",
           isEnquiry: 0,
-          uploadList: [] //商品图片
+          listPicUrl: [] //商品图片
         }
       };
     },
     methods: {
       release() {
-        // if (this.submitData.name == "") {
-        //   alert("请输入商品名称");
-        //   return;
-        // }
-        // if (this.submitData.bigCategoryId == "") {
-        //   alert("请选择大类");
-        //   return;
-        // }
-        // if (this.submitData.categoryId == "") {
-        //   alert("请选择小类");
-        //   return;
-        // }
-        // if (this.submitData.brandId == "") {
-        //   alert("请选择品牌");
-        //   return;
-        // }
-        // if (this.submitData.modelId == "") {
-        //   alert("请选择型号");
-        //   return;
-        // }
-        // if (!this.submitData.isEnquiry) {
-        //   if (this.submitData.minPrice == "") {
-        //     alert("请输入最小指导价");
-        //     return;
-        //   }
-        //   if (this.submitData.maxPrice == "") {
-        //     alert("请输入最大指导价");
-        //     return;
-        //   }
-        //   if (
-        //     Number(this.submitData.minPrice) > Number(this.submitData.maxPrice)
-        //   ) {
-        //     alert("最小指导价不能大于最大值");
-        //     return;
-        //   }
-        // }
-        // if (this.submitData.goodsDesc == "") {
-        //   alert("请输入商品描述");
-        //   return;
-        // }
-        // if (this.isSparePart) {
-        //   if (this.submitData.sparePart == "") {
-        //     alert("请输入备件号");
-        //     return;
-        //   }
-        // }
+        if (this.submitData.name == "") {
+          alert("请输入商品名称");
+          return;
+        }
+        if (this.submitData.bigCategoryId == "") {
+          alert("请选择大类");
+          return;
+        }
+        if (this.submitData.categoryId == "") {
+          alert("请选择小类");
+          return;
+        }
+        if (this.submitData.brandId == "") {
+          alert("请选择品牌");
+          return;
+        }
+        if (this.submitData.modelId == "") {
+          alert("请选择型号");
+          return;
+        }
+        if (!this.submitData.isEnquiry) {
+          if (this.submitData.minPrice == "") {
+            alert("请输入最小指导价");
+            return;
+          }
+          if (this.submitData.maxPrice == "") {
+            alert("请输入最大指导价");
+            return;
+          }
+          if (
+            Number(this.submitData.minPrice) > Number(this.submitData.maxPrice)
+          ) {
+            alert("最小指导价不能大于最大值");
+            return;
+          }
+        }
+        if (this.submitData.goodsDesc == "") {
+          alert("请输入商品描述");
+          return;
+        }
+        if (this.isSparePart) {
+          if (this.submitData.sparePart == "") {
+            alert("请输入备件号");
+            return;
+          }
+        }
+        if (this.uploadList.length > 0) {
+          _.map(this.uploadList, val => {
+            this.submitData.listPicUrl.push(val.url);
+          });
+        } else {
+          this.submitData.listPicUrl = [];
+        }
         _getData("/goods/addGoods", this.submitData).then(data => {
           console.log(data);
         });
@@ -323,17 +331,14 @@
         this.params.push({});
       },
       handleRemove(file) {
-        this.submitData.uploadList.splice(
-          this.submitData.uploadList.indexOf(file),
-          1
-        );
+        this.uploadList.splice(this.uploadList.indexOf(file), 1);
       },
       handleChange(info) {
         for (const val of info.fileList) {
           val.url =
             "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
         }
-        this.submitData.uploadList = info.fileList;
+        this.uploadList = info.fileList;
       },
       onChange(e) {
         console.log(`checked = ${e.target.checked}`);

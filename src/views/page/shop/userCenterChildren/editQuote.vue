@@ -30,7 +30,7 @@
             <span>2019-02-12</span>
             <span>这里有一段文本显示备注</span>
             <span>
-              <div>编辑</div>
+              <div @click="addCarSuccess(item.id)">编辑</div>
               <div>删除</div>
             </span>
           </li>
@@ -58,15 +58,25 @@
         <span class="save">保存</span>
       </div>
     </div>
+    <edit-quote-modal
+      :Visible="visible"
+      :type="type"
+      :editId="editId"
+    ></edit-quote-modal>
   </div>
 </template>
 <script>
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
+  import editQuoteModal from "../../../../components/modal/editQuoteModal";
   import listTitle from "../../../../components/common/listTitle";
   import { _getData } from "../../../../config/getData";
+  import { mapState } from "vuex";
   export default {
     data() {
       return {
+        visible: false,
+        type: "",
+        editId: 0,
         titleArr: [
           "产品图片",
           "产品名称",
@@ -80,9 +90,17 @@
         data: []
       };
     },
-    components: {
-      commonTitle,
-      listTitle
+    computed: {
+      ...mapState(["isLogin"])
+    },
+    methods: {
+      addCarSuccess(id) {
+        if (!this.isLogin) {
+          this.type = "login";
+        }
+        this.visible = true;
+        this.editId = id;
+      }
     },
     mounted() {
       _getData("/enquiry/getGoodsEnquiry", {
@@ -91,6 +109,11 @@
         console.log("获取的商品报价单详情：", data);
         this.data = data;
       });
+    },
+    components: {
+      commonTitle,
+      listTitle,
+      editQuoteModal
     }
   };
 </script>
@@ -196,6 +219,9 @@
                 > div {
                   cursor: pointer;
                   margin-bottom: 10px;
+                  &:hover {
+                    color: $theme-color;
+                  }
                 }
               }
             }
