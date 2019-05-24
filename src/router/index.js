@@ -167,7 +167,7 @@ const router = new Router({
                 import ('../views/page/shop/lookingShop.vue')
         }, {
             name: '店铺详情',
-            path: '/lookingShop/shopDetails',
+            path: '/shopDetails',
             component: () =>
                 import ('../views/page/shop/shopDetails')
         }, {

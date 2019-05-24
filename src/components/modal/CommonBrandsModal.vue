@@ -175,6 +175,7 @@
       delHandleClick(item) {
         this.myArray2 = _.without(this.myArray2, item);
         console.log(this.myArray2);
+        this.saveBrand();
       },
       navClick(val, i) {
         this.defaultsNav = val;
