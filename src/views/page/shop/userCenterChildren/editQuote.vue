@@ -36,7 +36,7 @@
           </li>
         </ul>
       </div>
-      <div class="addProduct">
+      <div class="addProduct" @click="addCarSuccess">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icontianjiashangpin"></use>
         </svg>

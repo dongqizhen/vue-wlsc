@@ -19,6 +19,7 @@
               v-model="submitData.type"
               placeholder="请选择经营模式"
               @change="handleShopTypeChange"
+              style="width:222px;"
             >
               <el-option
                 v-for="item in shopTypeData"
@@ -263,27 +264,6 @@
             /deep/.ant-select {
               .ant-select-arrow {
                 right: 20px;
-              }
-            }
-            /deep/.el-select {
-              width: 222px;
-              height: 33px;
-              .el-input {
-                height: 100%;
-                .el-input__inner {
-                  height: 100%;
-                  padding-left: 10px;
-                  color: #333;
-                  font-size: 14px;
-                  border: $border-style;
-                  &:focus {
-                    border-color: $theme-color;
-                    box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
-                  }
-                  &:hover {
-                    border-color: $theme-color;
-                  }
-                }
               }
             }
           }

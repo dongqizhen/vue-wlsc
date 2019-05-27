@@ -321,9 +321,17 @@
                 }
                 /deep/.el-select {
                   height: 27px;
+                  line-height: 27px;
                   .el-input {
                     .el-input__inner {
                       font-size: 12px;
+                    }
+                    .el-input__suffix {
+                      .el-input__suffix-inner {
+                        .el-input__icon {
+                          line-height: 27px;
+                        }
+                      }
                     }
                   }
                 }

@@ -37,20 +37,23 @@
         <div class="common companyAddress">
           <div class="left-box"><span class="red">*</span>公司地址</div>
           <div class="right-box">
-            <a-cascader
-              :fieldNames="{ label: 'name', value: 'id', children: 'children' }"
-              :loadData="loadData"
+            <!-- <a-cascader
               :options="options"
               @change="onChange"
               placeholder="请选择省/市/区"
               :defaultValue="defaultCascaderValue"
               style="width: 390px"
-              changeOnSelect
             >
               <a-icon slot="suffixIcon" class="icon">
                 <use xlink:href="#icontianjiaduibichanpinxiala"></use>
               </a-icon>
-            </a-cascader>
+            </a-cascader> -->
+            <el-cascader
+              :options="options"
+              v-model="defaultCascaderValue"
+              placeholder="请选择省/市/区"
+              style="width: 390px"
+            ></el-cascader>
           </div>
         </div>
         <div class="common companyIntroduce">
@@ -299,33 +302,6 @@
         console.log(val);
         this.submitData.address = val;
       },
-      loadData(selectedOptions) {
-        console.log("111111", selectedOptions);
-        const targetOption = selectedOptions[selectedOptions.length - 1];
-        targetOption.loading = true;
-        if (selectedOptions.length == 1) {
-          console.log("获取市");
-          _getData("address/getCity", { provinceId: targetOption.id }).then(
-            data => {
-              targetOption.loading = false;
-              targetOption.children = _.map(data, value => {
-                return (value = { ...value, isLeaf: false });
-              });
-              this.options = [...this.options];
-            }
-          );
-        } else {
-          console.log("获取区");
-          _getData("address/getCounty", {
-            provinceId: selectedOptions[0].id,
-            cityId: targetOption.id
-          }).then(data => {
-            targetOption.loading = false;
-            targetOption.children = data;
-            this.options = [...this.options];
-          });
-        }
-      },
       getLicenseUrl(val) {
         if (val.length) {
           this.submitData.yyimage = val[0].url;
@@ -357,17 +333,35 @@
       submitSuccessModal
     },
     mounted() {
-      _getData("address/getProvince", {}).then(data => {
-        console.log(data);
-        this.options = _.map(data, value => {
-          return (value = { ...value, isLeaf: false });
+      _getData("/address/getAddress", {}).then(data => {
+        console.log("获取省市区：", data);
+        // this.options = data;
+        _.map(data, val => {
+          val.value = val.id;
+          val.label = val.name;
+          val.children = val.defaultCityData;
+          _.map(val.children, value => {
+            value.value = value.id;
+            value.label = value.name;
+            value.children = value.defaultCountyData;
+            _.map(value.children, item => {
+              item.value = item.id;
+              item.label = item.name;
+            });
+          });
         });
+        console.log(data);
+        this.options = data;
       });
       if (!this.isOpenShop) {
         _getData("/store/selectAllStore", {}).then(data => {
           console.log("获取已填写的店铺信息：", data);
           this.submitData = data;
-          this.defaultCascaderValue = [1, 1, 13];
+          this.defaultCascaderValue = [
+            data.provinceId,
+            data.cityId,
+            data.countryId
+          ];
           console.log(this.submitData);
         });
       }

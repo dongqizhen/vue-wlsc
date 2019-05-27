@@ -1,21 +1,27 @@
 <template>
   <div class="inquiryItem">
     <order-title
-      :isOrder="true"
+      :isOrder="isOrder"
       :checkedList="checkedList"
       v-on:getChecked="getChecked"
       :data="data"
+      :isTrue="isTrue"
+      :isShowInfo="isShowInfo"
     ></order-title>
     <div class="inquiryProduct">
       <div class="leftInfoBox">
-        <inquiry-product-item :isDetail="isDetail"></inquiry-product-item>
-        <inquiry-product-item :isDetail="isDetail"></inquiry-product-item>
+        <inquiry-product-item
+          v-for="item in data.list"
+          :key="item.id"
+          :itemData="item"
+          :isShowInfo="isShowInfo"
+        ></inquiry-product-item>
       </div>
       <div class="operating">
         <div>
-          <router-link to="inquiryDetail">查看详情</router-link>
+          <router-link to="inquiryOrderDetail">查看详情</router-link>
         </div>
-        <div>删除订单</div>
+        <div @click="deleteInquiryOrder(data.enquirySn)">删除询价单</div>
       </div>
     </div>
   </div>
@@ -23,9 +29,10 @@
 <script>
   import orderTitle from "./orderTitle";
   import inquiryProductItem from "./inquiryProductItem";
+  import { _getData } from "../../config/getData";
   export default {
     data() {
-      return { isOrder: false };
+      return { isOrder: false, isTrue: true };
     },
     props: {
       data: {
@@ -36,14 +43,18 @@
         type: Array,
         required: true
       },
-      isDetail: {
-        type: Boolean,
-        required: true
+      isShowInfo: {
+        type: Object
       }
     },
     methods: {
       getChecked(val) {
         this.$emit("getChecked", val);
+      },
+      deleteInquiryOrder(enquirySn) {
+        // _getData("").then(data => {
+        //   console.log(data);
+        // });
       }
     },
     components: {
@@ -104,11 +115,19 @@
       justify-content: center;
       align-items: center;
       border-left: 1px solid #ddd;
+      color: #333;
+      font-size: 12px;
       div {
         margin-bottom: 10px;
         cursor: pointer;
         a {
           color: #333;
+          &:hover {
+            color: #f10215;
+          }
+        }
+        &:hover {
+          color: #f10215;
         }
       }
     }

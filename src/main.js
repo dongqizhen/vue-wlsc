@@ -19,7 +19,7 @@ import {
     Button,
     Icon,
     breadcrumb,
-    Cascader,
+    // Cascader,
     Checkbox,
     Radio,
     Layout,
@@ -42,6 +42,7 @@ import "swiper/dist/css/swiper.css";
 import {
     Option,
     Select,
+    Cascader
 } from 'element-ui'
 Vue.config.productionTip = false;
 

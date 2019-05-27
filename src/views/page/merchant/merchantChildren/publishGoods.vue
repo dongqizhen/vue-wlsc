@@ -165,7 +165,7 @@
         </div>
       </div>
     </div>
-    <div class="commonBoxStyle specification">
+    <!-- <div class="commonBoxStyle specification">
       <div class="title">产品规格参数</div>
       <div class="specificationContent">
         <list-title :titleArr="titleArr"></list-title>
@@ -180,7 +180,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="commonBoxStyle productPicture">
       <div class="title">
         商品图片

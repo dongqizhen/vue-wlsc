@@ -123,7 +123,6 @@
           centered: false
         },
         submitData: {
-          goodsId: this.editId,
           goodsEnquirySn: this.goodsEnquirySn,
           goodsName: "",
           goodsImage: "",
@@ -163,7 +162,7 @@
       getImgUrl(val) {
         console.log(val);
         if (val.length > 0) {
-          this.submitData.goodsImage = val[0];
+          this.submitData.goodsImage = val[0].url;
         } else {
           this.submitData.goodsImage = "";
         }
@@ -178,6 +177,7 @@
       saveAddress() {
         console.log(this.submitData);
         if (this.submitData.goodsId) {
+          this.submitData.goodsId = this.editId;
           _getData("/enquiry/updateEnquiryGoods", this.submitData).then(data => {
             console.log(data);
             this.visible = false;
@@ -213,12 +213,16 @@
           });
         } else {
           this.submitData = {
-            userName: "",
-            phone: "",
-            address: "",
-            userLocation: "",
-            postalCode: "075411",
-            status: "0"
+            goodsEnquirySn: this.$route.params.id,
+            goodsName: "",
+            goodsImage: "",
+            goodsBrand: "",
+            goodsModel: "",
+            unitPrice: "",
+            unit: "",
+            number: "",
+            arrivalTime: "",
+            introduce: ""
           };
         }
       },

@@ -41,8 +41,9 @@
     },
     watch: {
       imgUrl(newVal) {
+        console.log(newVal);
+        this.uploadList = [];
         if (typeof newVal == "string" && newVal) {
-          this.uploadList = [];
           this.uploadList.push({ uid: -1, url: newVal });
         }
       }

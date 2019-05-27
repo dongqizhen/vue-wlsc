@@ -4,9 +4,24 @@
       <commonTitle title="询价管理">
         <div slot="titleRight" class="right-box">
           <ul>
-            <li class="active">报价中(1)</li>
-            <li>已报价(2)</li>
-            <li>已关闭(1)</li>
+            <li
+              :class="isShowInfo.current == 1 ? 'active' : ''"
+              @click="tab(1)"
+            >
+              报价中(1)
+            </li>
+            <li
+              :class="isShowInfo.current == 2 ? 'active' : ''"
+              @click="tab(2)"
+            >
+              已报价(2)
+            </li>
+            <li
+              :class="isShowInfo.current == 3 ? 'active' : ''"
+              @click="tab(3)"
+            >
+              已关闭(1)
+            </li>
           </ul>
         </div>
       </commonTitle>
@@ -15,12 +30,12 @@
           <list-title :titleArr="titleArr"></list-title>
           <div class="tbody">
             <ul>
-              <li v-for="item in data" :key="item.id">
+              <li v-for="item in data" :key="item.enquirySn">
                 <inquiry-item
                   :data="item"
                   :checkedList="checkedList"
                   v-on:getChecked="getChecked"
-                  :isDetail="false"
+                  :isShowInfo="isShowInfo"
                 ></inquiry-item>
               </li>
             </ul>
@@ -37,44 +52,21 @@
 </template>
 
 <script>
-  const data = [
-    {
-      id: "1",
-      name: "John Brown",
-      img: "http://file.haoyigong.com/server/upload/1533522814856.jpg",
-      price: "￥1000",
-      remark: "暂无备注信息",
-      number: 12,
-      arrivalTime: "2019-03-28"
-    },
-    {
-      id: "2",
-      img: "http://file.haoyigong.com/server/upload/1554081863934.jpg",
-      name: "Jim Green",
-      price: "￥1000",
-      remark: "暂无备注信息",
-      number: 12,
-      arrivalTime: "2019-03-28"
-    },
-    {
-      id: "3",
-      img: "http://file.haoyigong.com/server/upload/1553495655746.png",
-      name: "Joe Black",
-      price: "￥1000",
-      remark: "暂无备注信息",
-      number: 12,
-      arrivalTime: "2019-03-28"
-    }
-  ];
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import checkAll from "../../../../components/common/checkAll";
   import listTitle from "../../../../components/common/listTitle";
   import orderTitle from "../../../../components/common/orderTitle";
   import inquiryItem from "../../../../components/common/inquiryItem";
+  import { _getData } from "../../../../config/getData";
   export default {
     data() {
       return {
-        data,
+        isShowInfo: {
+          isDetail: false,
+          isShow: false,
+          current: 1
+        },
+        data: [],
         checkAll: false,
         checkedList: [],
         titleArr: [
@@ -89,6 +81,10 @@
       };
     },
     methods: {
+      tab(tabVal) {
+        this.isShowInfo.current = tabVal;
+        this.getInquiryList();
+      },
       getChecked(val) {
         if (typeof val == "object") {
           this.checkedList = val;
@@ -108,13 +104,26 @@
           this.checkAll = true;
           this.checkedList = [];
           for (const val of this.data) {
-            this.checkedList.push(val.id);
+            this.checkedList.push(val.enquirySn);
           }
         } else {
           this.checkAll = false;
           this.checkedList = [];
         }
+      },
+      getInquiryList() {
+        _getData("/enquiry/enquiryList", {
+          page: 1,
+          size: 10,
+          status: this.isShowInfo.current
+        }).then(data => {
+          console.log("获取询价管理的列表：", data);
+          this.data = data.data;
+        });
       }
+    },
+    mounted() {
+      this.getInquiryList();
     },
     components: {
       commonTitle,
@@ -150,6 +159,7 @@
               text-align: center;
               font-weight: normal;
               border-right: none;
+              cursor: pointer;
               &:last-child {
                 border-right: 1px solid #dddddd;
               }
