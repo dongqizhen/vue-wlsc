@@ -26,6 +26,11 @@
                 :class="i == defaultsVal && 'active'"
                 @click="navHandleClick(item.id, i, $event)"
               >
+                <svg class="icon" aria-hidden="true">
+                  <use
+                    :xlink:href="i == defaultsVal ? item.iconActive : item.icon"
+                  ></use>
+                </svg>
                 {{ item.name }}
               </div>
 
@@ -83,7 +88,14 @@
     data() {
       return {
         arr: "", //全部类型的品牌
-        navArr: [{ name: "一线品牌", id: "yixian" }],
+        navArr: [
+          {
+            name: "一线品牌",
+            id: "yixian",
+            iconActive: "#iconyixianpinpai",
+            icon: "#iconyixianpinpai-copy"
+          }
+        ],
         pageArr: [],
         isShow: true, //是否显示管理常用分类按钮
         defaultsVal: 0, //默认高量nav下标
@@ -127,7 +139,9 @@
       if (this.isLogin) {
         this.navArr.unshift({
           name: "常用品牌",
-          id: ""
+          id: "",
+          iconActive: "#iconpingjiashixinwujiaoxing",
+          icon: "#iconchangyong"
         });
       }
     },
@@ -271,6 +285,11 @@
               font-weight: 600;
               font-size: 18px;
               color: #666;
+              .icon {
+                height: 22px;
+                width: 22px;
+                margin-right: 8px;
+              }
               &.active {
                 color: $theme-color;
               }

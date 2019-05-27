@@ -154,6 +154,11 @@ const router = new Router({
                 },
                 component: () =>
                     import ('../views/page/shop/detailsChildren/productDetails')
+            }, {
+                path: 'bidInfoDetails',
+                name: '中标信息详情',
+                component: () =>
+                    import ('../views/page/shop/detailsChildren/bidInfoDetails')
             }]
         }, {
             name: "搜索",

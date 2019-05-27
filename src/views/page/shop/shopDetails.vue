@@ -94,7 +94,10 @@
         currentPage: 1,
         countPerPage: 6,
         sort: "createOn",
-        order: "asc"
+        order: "asc",
+        bigCategoryId: "",
+        categoryId: "",
+        brandId: ""
       }).then(data => {
         console.log("产品列表", data);
       });

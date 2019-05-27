@@ -1,5 +1,5 @@
 <template>
-  <div class="comparison-of-parameters">
+  <div class="comparison-of-parameters" @click.stop.prevent="hideClick">
     <Header></Header>
     <search></search>
     <Nav :defaultNav="defaultNav"></Nav>
@@ -57,35 +57,54 @@
                 选择型号
               </a-button>
               <transition name="bounce">
-                <div class="modal-content" v-if="defaultShowIndex == i">
+                <div
+                  class="modal-content"
+                  v-if="defaultShowIndex == i"
+                  @click.stop=""
+                >
                   <h2>
-                    <span>品牌</span>
-                    <svg class="icon" aria-hidden="true">
+                    <span @click.stop="brandTitleClick">品牌</span>
+                    <svg class="icon" aria-hidden="true" v-if="isShowModel">
                       <use xlink:href="#iconwangyelujing"></use>
                     </svg>
-                    <span>型号</span>
+                    <span v-if="isShowModel">型号</span>
                   </h2>
-                  <ul class="index-list">
-                    <li v-for="(v, key) in brandList" :key="key">
-                      <h3>{{ key }}</h3>
-                      <ul>
-                        <li
-                          v-for="value in v"
-                          :key="value.id"
-                          @click="selectBrand(value)"
-                        >
-                          <div class="img_box">
-                            <img
-                              :src="value.app_list_pic_url"
-                              alt=""
-                              v-if="value.app_list_pic_url"
-                            />
-                          </div>
-                          <p>{{ value.name }}</p>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
+                  <div v-if="!isModelLoading">
+                    <ul class="index-list" v-if="!isShowModel">
+                      <li v-for="(v, key) in brandList" :key="key">
+                        <h3>{{ key }}</h3>
+                        <ul>
+                          <li
+                            v-for="value in v"
+                            :key="value.id"
+                            @click.stop="selectBrand(value)"
+                          >
+                            <div class="img_box">
+                              <img
+                                :src="value.app_list_pic_url"
+                                alt=""
+                                v-if="value.app_list_pic_url"
+                              />
+                            </div>
+                            <p>{{ value.name }}</p>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                    <ul class="index-list" v-else>
+                      <li>
+                        <ul>
+                          <li
+                            v-for="v in modelList"
+                            :key="v.id"
+                            @click="selectModel(v)"
+                          >
+                            {{ v.name }}
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </transition>
             </div>
@@ -125,7 +144,10 @@
         arr: [],
         paramas: [],
         brandList: [], //全部品牌
-        defaultShowIndex: null
+        defaultShowIndex: null, //显示的modal层index
+        isShowModel: false, //是否展示型号层
+        modelList: [], //型号列表
+        isModelLoading: false
       };
     },
     mixins: [mixin],
@@ -137,16 +159,14 @@
       sideBar
     },
     created() {
-      this.arr = _.fill(Array(4), { categoryId: this.$route.query.categoryId });
+      this.arr = _.fill(Array(4), {
+        categoryId: this.$route.query.categoryId,
+        categoryName: this.$route.query.categoryName
+      });
     },
     mounted() {
-      _getData("modelspecification/query", {
-        modelId: this.$route.query.modelId
-      }).then(data => {
-        console.log(data);
-        this.paramas = data.modelSpecificationInfo;
-        this.arr = [data, ..._.drop(this.arr)];
-      });
+      //参数对比
+      this.getModelspecification(this.$route.query.modelId);
       //根据分类获取品牌
       _getData("brand/merge", { id: this.$route.query.categoryId })
         .then(data => {
@@ -176,34 +196,89 @@
         });
     },
     methods: {
+      //参数对比
+      async getModelspecification(modelId) {
+        return await _getData("modelspecification/query", {
+          modelId
+        }).then(data => {
+          console.log(data);
+          this.paramas = data.modelSpecificationInfo;
+          // this.arr = [data, ..._.drop(this.arr)];
+          console.log(this.defaultShowIndex);
+          this.arr.splice(this.defaultShowIndex || 0, 1, data);
+          console.log(this.arr);
+        });
+      },
       selectBrand(val) {
         console.log(val);
+        this.isShowModel = true;
+        console.log(this.arr[this.defaultShowIndex]);
+        this.arr.splice(this.defaultShowIndex, 1, {
+          categoryId: this.$route.query.categoryId,
+          categoryName: this.$route.query.categoryName,
+          brandName: val.name
+        });
+        // this.arr[this.defaultShowIndex]["brandName"] = val.name;
+        console.log(this.defaultShowIndex, this.arr);
+        this.getModelListByBrand(val.id).then(data => {
+          this.modelList = data.brandModelList;
+        });
       },
+      selectModel(val) {
+        console.log(val);
+        this.arr[this.defaultShowIndex]["modelName"] = val.name;
+        //;
+        this.getModelspecification(val.id).then(data => {
+          this.defaultShowIndex = null;
+        });
+      },
+      //点击品牌按钮
+      brandTitleClick() {
+        this.isShowModel = false;
+      },
+      //点击删除按钮
       delbtnClick(i) {
+        console.log(i);
         if (this.arr.length > 4) {
           this.arr.splice(i, 1);
 
           return;
         }
-        this.arr = _.flatMap(this.arr, (n, ind) => {
-          if (ind == i) {
-            n.name = "";
-          }
-          return [n];
+        // this.arr = _.flatMap(this.arr, (n, ind) => {
+        //   if (ind == i) {
+        //     n.name = "";
+        //   }
+        //   return [n];
+        // });
+        this.arr.splice(i, 1, {
+          categoryId: this.$route.query.categoryId,
+          categoryName: this.$route.query.categoryName
         });
       },
+      //获取品牌下型号列表
+      async getModelListByBrand(id) {
+        return await _getData("brandmodel/list", {
+          categoryId: this.$route.query.categoryId,
+          brandId: id
+        });
+      },
+      //点击添加型号按钮
       addbtnClick() {
         this.arr.push({
-          name: "",
-          id: this.arr.length + 1
+          categoryId: this.$route.query.categoryId,
+          categoryName: this.$route.query.categoryName
         });
       },
       changeModel(i, e) {
         // e.stopPropagation();
+        if (i != this.defaultShowIndex) {
+          this.isShowModel = false;
+        }
         this.defaultShowIndex = i;
       },
       hideClick() {
         this.defaultShowIndex = null;
+        this.isShowModel = false;
       }
     }
   };
@@ -271,7 +346,7 @@
               display: flex;
               align-items: flex-start;
               text-align: center;
-              padding-top: 30px;
+              padding-top: 25px;
               &.no-data {
                 font-size: 14px;
                 color: #999999;
@@ -351,13 +426,15 @@
                   margin-top: 2px;
                 }
                 span {
-                  cursor: pointer;
-                  &:hover {
-                    color: $theme-color;
+                  &:first-child {
+                    cursor: pointer;
+                    &:hover {
+                      color: $theme-color;
+                    }
                   }
                 }
               }
-              > ul {
+              > div > ul {
                 flex: 1;
                 overflow: auto;
                 &::-webkit-scrollbar {

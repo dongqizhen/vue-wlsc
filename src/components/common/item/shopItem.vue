@@ -61,6 +61,14 @@
       height: 100%;
       flex-direction: column;
       text-decoration: none;
+      &:hover {
+        p {
+          color: $theme-color;
+        }
+        img {
+          transform: scale(1.1);
+        }
+      }
     }
     &:hover {
       .top {
@@ -77,10 +85,11 @@
         height: 224px;
         width: 224px;
         background: $base-background;
-
+        overflow: hidden;
         img {
           height: 100%;
           width: 100%;
+          transition: all 0.5s ease;
         }
       }
       h2 {
