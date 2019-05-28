@@ -6,7 +6,7 @@
         :key="`tabs-${i}`"
         class="swiper-slide"
         :class="i == nav_val ? 'active' : ''"
-        @click="tabClick(i)"
+        @click="tabClick(i, item)"
       >
         {{ item }}
       </div>
@@ -40,7 +40,7 @@
         slidesPerView: "auto",
         // freeMode: true,
         direction: "horizontal",
-        slideToClickedSlide: true,
+        //slideToClickedSlide: true,
         //allowTouchMove: false,
         touchRatio: 0,
         on: {
@@ -63,10 +63,12 @@
             }
           },
           touchStart: function() {
-            this.updateSlides();
+            console.log(this);
+            this.update();
           },
           tap: function(e) {
             //alert();
+
             if (this.clickedIndex == undefined) return;
             // mySwiper.slideTo(this.clickIndex, 0);
 
@@ -84,9 +86,9 @@
       });
     },
     methods: {
-      tabClick(i) {
+      tabClick(i, item) {
         this.nav_val = i;
-        this.$emit("tabClick", i);
+        this.$emit("tabClick", i, item);
       }
     },
     beforeDestroy() {
@@ -101,9 +103,9 @@
     height: 35px;
     margin-bottom: 24px;
     margin-top: 40px;
-
+    position: relative;
     .swiper-wrapper {
-      position: relative;
+      position: absolute;
       display: flex;
       justify-content: flex-start;
     }

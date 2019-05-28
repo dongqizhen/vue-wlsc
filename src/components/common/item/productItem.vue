@@ -4,13 +4,18 @@
     tag="li"
     :to="{
       path: `/details/productDetails/${list.id}`,
-      query: { nav_index: $route.query.nav_index }
+      query: { nav_index: $route.query.nav_index, shopId: list.storeId }
     }"
   >
     <a target="_blank">
       <li>
-        <div class="img">
-          <img :src="list.list_pic_url" alt="" />
+        <div
+          class="img"
+          v-lazy-container="{
+            selector: 'img'
+          }"
+        >
+          <img :data-src="list.list_pic_url" alt="" v-if="list.list_pic_url" />
         </div>
         <div class="price">
           ¥{{ list.market_price }}
@@ -68,6 +73,18 @@
         }
       }
     }
+    /deep/ img[lazy="loading"] {
+      /*your style here*/
+      background: url("../../../assets/images/loading.gif") no-repeat center;
+      background-size: 100px;
+      background-color: #f7f9fa;
+    }
+    /deep/ img[lazy="error"] {
+      /*your style here*/
+      background: url("../../../assets/images/loading.gif") no-repeat center;
+      background-size: 100px;
+      // background-color: #f7f9fa;
+    }
     width: 253px;
     background: #fff;
     box-shadow: $base-box-shadow;
@@ -84,7 +101,7 @@
       img {
         height: 100%;
         width: 100%;
-        transition: all 0.5s ease;
+        transition: transform 0.5s ease;
       }
     }
     .price {

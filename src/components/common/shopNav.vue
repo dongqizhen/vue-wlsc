@@ -1,7 +1,11 @@
 <template>
   <div class="shop-nav">
     <div class="nav">
-      <a-tabs :defaultActiveKey="defaultActiveKey" @change="callback">
+      <a-tabs
+        :defaultActiveKey="defaultActiveKey"
+        @change="callback"
+        @tabClick="tabClcik"
+      >
         <a-tab-pane
           :tab="item"
           v-for="(item, i) in navArr"
@@ -28,7 +32,10 @@
       }
     },
     methods: {
-      callback(key) {}
+      callback(key) {},
+      tabClcik(key, val) {
+        this.$emit("tabClick", key);
+      }
     }
   };
 </script>

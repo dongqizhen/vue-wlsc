@@ -7,7 +7,7 @@
         </svg>
       </span>
       <div class="img_box">
-        <img :src="detail.image" alt="" />
+        <img :src="detail.image" alt="" v-if="detail.image" />
       </div>
       <p>{{ detail.shopName }}</p>
       <ul>
@@ -107,7 +107,7 @@
       }
     }
     .img_box {
-      height: 104px;
+      height: 179px;
       width: 179px;
       background: $base-background;
       margin-top: 34px;

@@ -14,7 +14,8 @@
               query: {
                 nav_index: $route.query.nav_index,
                 modelId: $route.query.modelId,
-                categoryId: $route.query.categoryId
+                categoryId: $route.query.categoryId,
+                categoryName: $route.query.categoryName
               }
             }"
             target="_blank"
@@ -38,6 +39,7 @@
                 :key="item.id"
                 :item="item"
               ></shop-item-vue>
+              <!-- <bid-info-item-vue /> -->
             </ul>
             <pagination-vue></pagination-vue>
           </div>
@@ -62,6 +64,7 @@
   import loadingVue from "../../../../components/common/loading.vue";
   import _ from "lodash";
   import shopItemVue from "../../../../components/common/item/shopItem.vue";
+  import bidInfoItemVue from "../../../../components/common/item/bidInfoItem.vue";
 
   export default {
     data() {
@@ -69,7 +72,8 @@
         routes: [],
         isLoading: true,
         tabs: [],
-        shopList: ""
+        shopList: "",
+        defaultVal: 0
       };
     },
     components: {
@@ -80,10 +84,15 @@
       paginationVue,
       breadcrumbVue,
       loadingVue,
-      shopItemVue
+      shopItemVue,
+      bidInfoItemVue
     },
     methods: {
-      tabClick(i) {},
+      tabClick(i, val) {
+        console.log(val);
+        this.defaultVal = i;
+      },
+      //获取商铺列表
       async getShopList() {
         return await _getData("queryStore", {
           modelId: this.$route.query.modelId,
@@ -137,10 +146,10 @@
               return `${val.name}(${val.count})`;
             }),
             ...[
-              `店铺(${data.sroreCount})`,
-              `文章(${data.articleNum})`,
-              `视频(${data.videoNum})`,
-              `案例(${data.maintenanceNum})`
+              `店铺(${data.sroreCount || 0})`,
+              `文章(${data.articleNum || 0})`,
+              `视频(${data.videoNum || 0})`,
+              `案例(${data.maintenanceNum || 0})`
             ]
           ];
         }),

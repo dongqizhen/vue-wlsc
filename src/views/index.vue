@@ -155,10 +155,10 @@
       _getData("index/caseCount", {}).then(data => {
         console.log("data", data);
         this.nav = [
-          `推荐产品(${data.count})`,
-          `文章(${data.articleNum})`,
-          `视频(${data.videoNum})`,
-          `案例(${data.maintenanceNum})`
+          `推荐产品(${data.count || 0})`,
+          `文章(${data.articleNum || 0})`,
+          `视频(${data.videoNum || 0})`,
+          `案例(${data.maintenanceNum || 0})`
         ];
       });
       _getData("goods/homePagelist", {}).then(data => {

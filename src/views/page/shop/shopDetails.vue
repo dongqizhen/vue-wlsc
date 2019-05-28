@@ -12,16 +12,26 @@
         ></product-category-vue>
         <div class="main-content">
           <div class="left">
-            <shop-left-side-vue></shop-left-side-vue>
+            <shop-left-side-vue
+              v-on:brandClick="brandClick"
+            ></shop-left-side-vue>
           </div>
           <div class="right">
-            <shop-nav-vue :navArr="['默认', '按销量', '按好评']"></shop-nav-vue>
-            <ul class="shopItem">
-              <product-item-vue
-                v-for="item in arr"
-                :key="item"
-              ></product-item-vue>
-            </ul>
+            <shop-nav-vue
+              :navArr="['发布时间', '按价格', '按好评']"
+              v-on:tabClick="tabClick"
+            ></shop-nav-vue>
+            <div v-if="!isLoading">
+              <ul class="shopItem" v-if="arr.length">
+                <product-item-vue
+                  v-for="item in arr"
+                  :key="item.id"
+                  :list="item"
+                ></product-item-vue>
+              </ul>
+              <no-data text="暂无数据" v-else></no-data>
+            </div>
+            <loading v-else></loading>
           </div>
           <div class="shop">
             <shop-card-vue
@@ -57,10 +67,14 @@
   export default {
     data() {
       return {
-        arr: [1, 2, 3, 4, 5],
+        arr: [],
         routes: [],
         categoryId: "", //分类id
-        shopdetails: ""
+        shopdetails: "",
+        brandId: "",
+        sort: "createOn",
+        isLoading: false
+        //list: []
       };
     },
     mixins: [mixin],
@@ -85,19 +99,47 @@
       categoryClick(item) {
         console.log(item);
         this.categoryId = item.id;
+        this.getGoodsList();
+      },
+      brandClick(item) {
+        this.brandId = item.id;
+        this.getGoodsList();
+      },
+      tabClick(i) {
+        this.sort = i == 0 ? "createOn" : i == 1 ? "price" : "rate";
+        this.getGoodsList();
+      },
+      //获取商品列表
+      async getGoodsList(
+        categoryId = this.categoryId,
+        brandId = this.brandId,
+        sort = this.sort
+      ) {
+        this.isLoading = true;
+        return await _getData("/goods/getGoods", {
+          storeId: this.$route.query.shopId,
+          attributeCategoryId: "",
+          currentPage: 1,
+          countPerPage: 10,
+          sort,
+          order: "asc",
+          bigCategoryId: "",
+          categoryId,
+          brandId
+        })
+          .then(data => {
+            console.log("产品列表", data);
+            this.arr = data.data;
+          })
+          .then(() => {
+            this.$nextTick().then(() => {
+              this.isLoading = false;
+            });
+          });
       }
     },
     mounted() {
-      _getData("/goods/getGoods", {
-        storeId: this.$route.query.shopId,
-        attributeCategoryId: "",
-        currentPage: 1,
-        countPerPage: 6,
-        sort: "createOn",
-        order: "asc"
-      }).then(data => {
-        console.log("产品列表", data);
-      });
+      this.getGoodsList();
       _getData("/store/homeStore", {
         storeId: this.$route.query.shopId
       }).then(data => {
@@ -160,6 +202,9 @@
             margin-right: 24px;
             margin-bottom: 20px;
           }
+        }
+        /deep/ .no-data {
+          height: 500px;
         }
       }
       .shop {
