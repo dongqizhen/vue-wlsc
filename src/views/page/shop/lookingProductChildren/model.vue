@@ -34,12 +34,12 @@
           ></shop-nav-vue>
           <div class="main-content">
             <ul>
-              <!-- <shop-item-vue
+              <shop-item-vue
                 v-for="item in shopList"
                 :key="item.id"
                 :item="item"
-              ></shop-item-vue> -->
-              <bid-info-item-vue />
+              ></shop-item-vue>
+              <!-- <bid-info-item-vue /> -->
             </ul>
             <pagination-vue></pagination-vue>
           </div>

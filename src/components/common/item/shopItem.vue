@@ -13,8 +13,13 @@
   >
     <a target="_blank">
       <div class="top">
-        <div class="img_box">
-          <img :src="item.image" alt="" v-if="item.image" />
+        <div
+          class="img_box"
+          v-lazy-container="{
+            selector: 'img'
+          }"
+        >
+          <img :data-src="item.image" alt="" v-if="item.image" />
         </div>
         <h2>{{ item.shopName }}</h2>
         <p>
@@ -56,16 +61,29 @@
     cursor: pointer;
     display: flex;
     margin-right: 24px;
+    /deep/ img[lazy="loading"] {
+      /*your style here*/
+      background: url("../../../assets/images/loading.gif") no-repeat center;
+      background-size: 100px;
+      background-color: #f7f9fa;
+    }
+    /deep/ img[lazy="error"] {
+      /*your style here*/
+      background: url("../../../assets/images/loading.gif") no-repeat center;
+      background-size: 100px;
+      // background-color: #f7f9fa;
+    }
     a {
       display: flex;
       height: 100%;
       flex-direction: column;
       text-decoration: none;
       &:hover {
-        p {
-          color: $theme-color;
-        }
+        /* p {
+                          color: $theme-color;
+                        } */
         img {
+          transition: all 0.5s ease;
           transform: scale(1.1);
         }
       }
@@ -89,7 +107,6 @@
         img {
           height: 100%;
           width: 100%;
-          transition: all 0.5s ease;
         }
       }
       h2 {

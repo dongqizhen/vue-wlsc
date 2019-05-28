@@ -4,7 +4,11 @@
       <div class="magnifying">
         <div class="img_box">
           <a class="magnifier-thumb-wrapper">
-            <img id="thumb" :src="productInfo.list_pic_url" />
+            <img
+              id="thumb"
+              :src="productInfo.list_pic_url"
+              v-if="productInfo.list_pic_url"
+            />
           </a>
           <div class="magnifier-preview" id="preview"></div>
           <div class="swiper-container">
@@ -369,7 +373,11 @@
           参数对比
         </router-link>
       </a-button>
-      <shop-card-vue></shop-card-vue>
+      <shop-card-vue
+        v-if="shopdetails"
+        type="introduce"
+        :detail="shopdetails"
+      ></shop-card-vue>
     </div>
     <login-modal-vue :Visible="visible" :type="type"></login-modal-vue>
   </div>
@@ -399,6 +407,7 @@
         title: "",
         imgUrl: "",
         type: "",
+        shopdetails: "",
         bigImageIsShow: false
       };
     },
@@ -477,6 +486,7 @@
     },
     mounted() {
       window.addEventListener("scroll", this.handleScroll);
+
       _getData("goods/gooddetail", {
         id: this.$route.params.id
       })
@@ -495,6 +505,13 @@
             zoomable: true
           });
         });
+
+      _getData("/store/homeStore", {
+        storeId: this.$route.query.shopId
+      }).then(data => {
+        console.log("店铺详情", data);
+        this.shopdetails = data;
+      });
 
       const swiper = new Swiper(".swiper-container", {
         slidesPerView: 5,
