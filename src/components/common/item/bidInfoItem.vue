@@ -4,7 +4,7 @@
     tag="li"
     :to="{
       path: '/details/bidinfoDetails',
-      query: { nav_index: $route.query.nav_index, id: 0 }
+      query: { nav_index: 0, id: 0 }
     }"
   >
     <a target="_blank">
@@ -48,11 +48,15 @@
     display: flex;
     margin-right: 0;
     width: 100%;
-    padding: 13.5px 20px;
+
     cursor: pointer;
     position: relative;
     a {
       text-decoration: none;
+      display: flex;
+      padding: 13.5px 20px;
+      height: 100%;
+      width: 100%;
     }
     &:hover {
       .bid-left {

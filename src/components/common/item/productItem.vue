@@ -69,7 +69,6 @@
           color: $theme-color;
         }
         img {
-          transition: all 0.5s ease;
           transform: scale(1.1);
         }
       }
@@ -102,6 +101,7 @@
       img {
         height: 100%;
         width: 100%;
+        transition: transform 0.5s ease;
       }
     }
     .price {

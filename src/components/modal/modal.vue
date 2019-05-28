@@ -1,31 +1,35 @@
 <template>
-  <div class="modal">
-    <!-- <a-button type="primary" @click="showModal">
+  <!-- <div class="modal"> -->
+  <!-- <a-button type="primary" @click="showModal">
       Open Modal with customized button props
     </a-button> -->
-    <a-modal
-      :title="options.title"
-      v-model="visible"
-      @ok="handleOk"
-      :afterClose="afterClose"
-      :wrapClassName="options.wrapClassName"
-      :maskClosable="options.maskClosable"
-      :maskStyle="
-        options.maskStyle || {
-          'background-color': 'rgba(0, 0, 0, 0.17)'
-        }
-      "
-      :footer="options.footer || null"
-      :centered="options.centered || false"
-    >
-      <slot name="content"></slot>
+  <a-modal
+    class="modal"
+    :title="options.title"
+    v-model="visible"
+    @ok="handleOk"
+    :afterClose="afterClose"
+    :wrapClassName="options.wrapClassName"
+    :maskClosable="options.maskClosable"
+    :getContainer="options.getContainer"
+    :destroyOnClose="options.destroyOnClose"
+    :maskStyle="
+      options.maskStyle || {
+        'background-color': 'rgba(0, 0, 0, 0.17)'
+      }
+    "
+    :footer="options.footer || null"
+    :centered="options.centered || false"
+  >
+    <slot name="content"></slot>
 
-      <div slot="footer"></div>
-    </a-modal>
-  </div>
+    <div slot="footer"></div>
+  </a-modal>
+  <!-- </div> -->
 </template>
 
 <script>
+  //!-----提示：父组件必须有visible属性-----
   export default {
     data() {
       return {
@@ -33,6 +37,7 @@
       };
     },
     props: {
+      //是否显示
       isShow: {
         type: Boolean,
         default: false
@@ -43,7 +48,9 @@
           title: "", //标题
           closable: true, //是否显示右上角的关闭按钮 Boolean
           maskClosable: true, //点击蒙层是否允许关闭 Boolean
-          wrapClassName: "",
+          wrapClassName: "", //对话框外层容器的类名
+          destroyOnClose: false, //关闭时销毁 Modal 里的子元素
+          getContainer: () => document.body, //指定 Modal 挂载的 HTML 节点
           maskStyle: {
             "background-color": "rgba(0, 0, 0, 0.17)"
           }
@@ -69,7 +76,7 @@
     computed: {},
     watch: {
       isShow(newVal, oldval) {
-        console.log(newVal);
+        //console.log(newVal);
         this.visible = newVal;
       }
     }
@@ -81,6 +88,10 @@
   @import "../../assets/scss/_input";
   body .ant-modal-mask {
     background: rgba(0, 0, 0, 0.17);
+  }
+  .ant-modal {
+    border: 5px solid rgba(151, 151, 151, 0.16);
+    padding-bottom: 0;
   }
   .ant-modal-wrap {
     .ant-modal-content {
@@ -124,7 +135,9 @@
   }
   .commonBrand {
     .ant-modal {
-      width: 863px !important;
+      width: 873px !important;
+
+      padding-bottom: 0;
       .ant-modal-header {
         margin-bottom: 15px;
       }
