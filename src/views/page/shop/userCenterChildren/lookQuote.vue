@@ -17,8 +17,8 @@
             <span>{{ item.number }}</span>
             <span>{{ item.goodsUnit }}</span>
             <span>¥{{ item.number * item.unitPrice }}</span>
-            <span>2019-02-12</span>
-            <span>这里有一段文本显示备注</span>
+            <span>{{ item.arrivalTime }}</span>
+            <span>{{ item.introduce }}</span>
           </li>
         </ul>
       </div>
@@ -245,6 +245,9 @@
           font-weight: 600;
           background: #f5a623;
           cursor: pointer;
+          a {
+            color: #fff;
+          }
         }
       }
     }

@@ -1,15 +1,15 @@
 <template>
   <div class="inquiryProductItem">
-    <span v-if="isDetail">
+    <span v-if="isShowInfo.isDetail">
       <a-checkbox @change="onChange"></a-checkbox>
     </span>
     <span>
-      <img src="http://file.haoyigong.com/server/upload/1554429391594.jpg" />
+      <img :src="itemData.list_pic_url" />
     </span>
-    <span>普利生全自动血凝分析仪C2000-A1BKKKLL</span>
-    <span>普利生C2000-A</span>
-    <span v-if="isDetail">¥198988282.00</span>
-    <span>12</span>
+    <span>{{ itemData.name }}</span>
+    <span>{{ itemData.unit_price }}</span>
+    <span v-if="isShowInfo.isDetail">¥198988282.00</span>
+    <span>{{ itemData.number }}</span>
     <span>2019-08-13</span>
     <span>这里有一段文本显示备注</span>
   </div>
@@ -20,9 +20,11 @@
       return {};
     },
     props: {
-      isDetail: {
-        type: Boolean,
-        required: true
+      itemData: {
+        type: Object
+      },
+      isShowInfo: {
+        type: Object
       }
     },
     methods: {

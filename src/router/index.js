@@ -257,6 +257,12 @@ const router = new Router({
                         import ("../views/page/shop/userCenterChildren/myInquiry")
                 },
                 {
+                    path: "inquiryOrderDetail",
+                    name: "询价单",
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/inquiryOrderDetail")
+                },
+                {
                     path: "myOrder",
                     name: "我的订单",
                     component: () =>

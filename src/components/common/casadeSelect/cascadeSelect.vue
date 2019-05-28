@@ -21,7 +21,7 @@
       <div class="left-box">
         <ul>
           <li
-            v-for="item in proviceData"
+            v-for="item in provinceData"
             :key="item.id"
             :class="[addClass(item.id), currentId == item.id ? 'active' : '']"
             @click="activeEvent(item.id, item)"
@@ -55,14 +55,15 @@
   export default {
     data() {
       return {
-        proviceData: [],
+        provinceData: [],
         cityData: [],
         defaultCityData: [],
         currentId: -1,
         activeProvinceName: "",
         selectArr: [],
         provinceId: -1,
-        isCheckAll: false
+        isCheckAll: false,
+        defaultProvinceData: this.defaultData
       };
     },
     props: {
@@ -70,9 +71,14 @@
         type: Boolean,
         required: true
       },
-      defaultProvinceData: {
+      defaultData: {
         type: Array,
         required: true
+      }
+    },
+    watch: {
+      defaultData() {
+        this.defaultProvinceData = this.defaultData;
       }
     },
     methods: {
@@ -137,17 +143,23 @@
     mounted() {
       _getData("address/getProvince", {}).then(data => {
         console.log(data);
-        this.proviceData = data;
+        this.provinceData = data;
         this.activeProvinceName = data[0].name;
         _getData("address/getCity", { provinceId: data[0].id }).then(data => {
           console.log(data);
           this.cityData = data;
           this.currentId = data[0].id;
+          // _.each(this.defaultProvinceData, val => {
+          //   val.id = val.provinceId;
+          // });
           _.forEach(this.defaultProvinceData, value => {
             if (data[0].id == value.id) {
               this.defaultCityData = value.defaultCityData;
             }
           });
+          if (data.length == this.defaultCityData.length) {
+            this.isCheckAll = true;
+          }
         });
       });
     }

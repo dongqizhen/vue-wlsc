@@ -10,7 +10,12 @@
     >
       <div v-for="item in uploadList" :key="item.uid" class="uploadPreview">
         <img :src="item.url" />
-        <svg class="icon" aria-hidden="true" @click.stop="handleRemove(item)">
+        <svg
+          class="icon"
+          aria-hidden="true"
+          @click.stop="handleRemove(item)"
+          v-if="uploadList.length > 0"
+        >
           <use xlink:href="#iconshangchuanshangpinguanbi"></use>
         </svg>
       </div>
@@ -37,8 +42,10 @@
     watch: {
       imgUrl(newVal) {
         console.log(newVal);
-        this.uploadList.push({ uid: -1, url: newVal });
-        console.log(this.uploadList);
+        this.uploadList = [];
+        if (typeof newVal == "string" && newVal) {
+          this.uploadList.push({ uid: -1, url: newVal });
+        }
       }
     },
     methods: {
@@ -47,7 +54,6 @@
         this.$emit("getVal", this.uploadList);
       },
       handleChange({ fileList }) {
-        console.log(fileList);
         fileList.splice(0, fileList.length - 1);
         fileList[0].url =
           "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
@@ -95,6 +101,8 @@
         color: #ccc;
       }
       .uploadPreview {
+        width: 118px;
+        height: 118px;
         position: relative;
         .icon {
           width: 23px;

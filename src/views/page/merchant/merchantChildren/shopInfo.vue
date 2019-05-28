@@ -15,23 +15,20 @@
         <div class="common shopType">
           <div class="left-box"><span class="red">*</span>店铺类型</div>
           <div class="right-box">
-            <a-select
+            <el-select
+              v-model="submitData.type"
               placeholder="请选择经营模式"
-              style="width: 222px"
               @change="handleShopTypeChange"
-              :defaultValue="submitData.type"
+              style="width:222px;"
             >
-              <a-icon slot="suffixIcon" class="icon">
-                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-              </a-icon>
-              <a-select-option
+              <el-option
                 v-for="item in shopTypeData"
                 :key="item.id"
+                :label="item.name"
                 :value="item.id"
               >
-                {{ item.name }}
-              </a-select-option>
-            </a-select>
+              </el-option>
+            </el-select>
           </div>
         </div>
         <div class="common shopIndexPicture">
@@ -54,7 +51,7 @@
           <div class="right-box saleArea" @click="showSelectBox">
             <cascade-select
               :isShow="isShow"
-              :defaultProvinceData="submitData.defaultProvinceData"
+              :defaultData="submitData.defaultProvinceData"
               v-on:getSaleArea="getSaleArea"
             ></cascade-select>
           </div>
@@ -116,6 +113,7 @@
         type: Number
       }
     },
+
     created() {
       if (this.$route.path.indexOf("shopInfo") != -1) {
         this.changeDefaultSelectedKeys(["2"]);
@@ -150,7 +148,14 @@
           this.submitData = { ...this.submitData, current: this.current };
           this.$emit("getShopInfo", this.submitData);
         } else {
-          _getData("store", this.submitData).then(data => {
+          _getData("/store/updateStore", {
+            shopName: this.submitData.shopName,
+            type: this.submitData.type,
+            image: this.submitData.image,
+            shopScope: this.submitData.shopScope,
+            defaultProvinceData: this.submitData.defaultProvinceData,
+            introduce: this.submitData.introduce
+          }).then(data => {
             console.log("111", data);
           });
         }
@@ -164,7 +169,7 @@
         }
       },
       handleShopTypeChange(value) {
-        // console.log(`selected ${value}`);
+        console.log(`selected ${value}`);
         this.submitData.type = value;
       },
       isShowModal() {
@@ -183,17 +188,25 @@
       upload,
       cascadeSelect
     },
+
     mounted() {
-      _getData("storeType/queryStoreType", {}).then(data => {
+      _getData("/storeType/queryStoreType", {}).then(data => {
         console.log("店铺类型", data);
-        this.shopTypeData = data;
-      });
-      if (!this.isOpenShop) {
-        _getData("/store/selectAllStore", {}).then(data => {
-          console.log("获取已填写的店铺信息：", data);
-          this.submitData = data;
+        _.each(data, val => {
+          val.label = val.name;
+          val.value = val.id;
         });
-      }
+        this.shopTypeData = data;
+        if (!this.isOpenShop) {
+          _getData("/store/selectAllStore", {}).then(data => {
+            console.log("获取已填写的店铺信息：", data);
+            _.each(data.defaultProvinceData, val => {
+              val.id = val.provinceId;
+            });
+            this.submitData = data;
+          });
+        }
+      });
     }
   };
 </script>

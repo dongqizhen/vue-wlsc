@@ -1,15 +1,15 @@
 <template>
   <div class="orderTitle">
     <div class="left-box">
-      <div class="checkedBox" v-if="isOrder">
+      <div class="checkedBox" v-if="isTrue">
         <a-checkbox
-          @change="onChange(data.id)"
-          :checked="checkedChange(data.id)"
+          @change="onChange(data.enquirySn)"
+          :checked="checkedChange(data.enquirySn)"
         ></a-checkbox>
       </div>
       <div class="common orderNumber">
         <span>{{ isOrder ? "订单" : "询价单" }}编号：</span>
-        <span>WLTX20181203-Z01</span>
+        <span>{{ data.enquirySn }}</span>
       </div>
       <div class="common orderSubmitTime">
         <span class="svgBox">
@@ -26,19 +26,33 @@
             src="http://file.haoyigong.com/server/upload/1554429391594.jpg"
           />
         </span>
-        <span>询价人：</span>
-        <span>周磊</span>
+        <!-- <span v-if="isShow">询价人：</span> -->
+        <span>{{ data.shopName }}</span>
       </div>
     </div>
     <div class="right-box">
       <div class="common orderStatus">
         <span class="svgBox">
           <svg class="icon" aria-hidden="true">
-            <use xlink:href="#iconbaojiazhong"></use>
+            <use
+              v-bind:xlink:href="
+                isShowInfo.current == 1
+                  ? '#iconbaojiazhong'
+                  : isShowInfo.current == 2
+                  ? '#iconyibaojia'
+                  : '#iconyiguanbi'
+              "
+            ></use>
           </svg>
         </span>
         <span>{{ isOrder ? "订单" : "询价单" }}状态：</span>
-        <span>待接单</span>
+        <span>{{
+          isShowInfo.current == 1
+            ? "报价中"
+            : isShowInfo.current == 2
+            ? "已报价"
+            : "已关闭"
+        }}</span>
       </div>
     </div>
   </div>
@@ -61,6 +75,15 @@
       checkedList: {
         type: Array,
         required: false
+      },
+      isTrue: {
+        type: Boolean
+      },
+      isShow: {
+        type: Boolean
+      },
+      isShowInfo: {
+        type: Object
       }
     },
     watch: {

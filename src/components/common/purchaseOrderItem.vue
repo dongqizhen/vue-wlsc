@@ -1,47 +1,30 @@
 <template>
   <div class="itemOrder">
     <div class="shopName">
-      <a-checkbox @change="onChange"></a-checkbox>
+      <a-checkbox @change="itemAllChange" :checked="checkAll"></a-checkbox>
       <img src="http://file.haoyigong.com/server/upload/1554429391594.jpg" />
-      <span>北京华脉诚信科技有限公司</span>
+      <span>{{ val.shopName }}</span>
     </div>
     <div class="productList">
       <ul>
-        <li>
+        <li v-for="item in val.list" :key="item.id">
           <span>
-            <a-checkbox @change="onChange"> </a-checkbox>
-          </span>
-          <span
-            ><img
-              src="http://file.haoyigong.com/server/upload/1554429391594.jpg"
-          /></span>
-          <span>普利生全自动血凝分析仪C2000-A1BKKKLL</span>
-          <span>普利生C2000-A</span>
-          <span>¥198988282.00</span>
-          <span>10</span>
-          <span>¥198988282.00</span>
-          <span>
-            <div>删除</div>
-            <div>添加到我的收藏</div>
-          </span>
-        </li>
-        <li>
-          <span>
-            <a-checkbox @change="onChange"> </a-checkbox>
+            <a-checkbox
+              @change="onChange(item.id)"
+              :checked="checkedChange(item.id)"
+            ></a-checkbox>
           </span>
           <span>
-            <img
-              src="http://file.haoyigong.com/server/upload/1554429391594.jpg"
-            />
+            <img :src="item.list_pic_url" />
           </span>
-          <span>普利生全自动血凝分析仪C2000-A1BKKKLL</span>
-          <span>普利生C2000-A</span>
-          <span>¥198988282.00</span>
-          <span>10</span>
-          <span>¥198988282.00</span>
+          <span>{{ item.goods_name }}</span>
+          <span>{{ item.brand_name }}/{{ item.model_name }}</span>
+          <span>¥{{ item.retail_price }}</span>
+          <span>{{ item.number }}</span>
+          <span>¥{{ item.retail_price * item.number }}</span>
           <span>
-            <div>删除</div>
-            <div>添加到我的收藏</div>
+            <div @click="deleteProduct(item.id)">删除</div>
+            <div @click="addMyStore(item.id)">添加到我的收藏</div>
           </span>
         </li>
       </ul>
@@ -49,12 +32,94 @@
   </div>
 </template>
 <script>
+  import _ from "lodash";
+  import { _getData } from "../../config/getData";
   export default {
     data() {
-      return {};
+      return {
+        checkAll: false,
+        checkedList: []
+      };
+    },
+    props: {
+      val: {
+        type: Object
+      },
+      isCheckAll: {
+        type: Boolean
+      }
+    },
+    watch: {
+      isCheckAll(newVal) {
+        console.log(newVal);
+        this.checkAll = newVal;
+        if (this.checkAll) {
+          this.checkAll = true;
+          this.checkedList = [];
+          for (const val of this.val.list) {
+            this.checkedList.push(val.id);
+          }
+        } else {
+          this.checkAll = false;
+          this.checkedList = [];
+        }
+      }
     },
     methods: {
-      onChange() {}
+      deleteProduct(id) {
+        _getData("/cart/delete", { goodIds: [id] }).then(data => {
+          console.log(data);
+        });
+      },
+      addMyStore(id) {
+        _getData("/collect/addordelete", { typeId: 0, valueId: id }).then(
+          data => {
+            console.log("收藏接口：", data);
+          }
+        );
+      },
+      onChange(id) {
+        if (_.indexOf(this.checkedList, id) == -1) {
+          this.checkedList.push(id);
+        } else {
+          this.checkedList = _.without(this.checkedList, id);
+        }
+        if (this.checkedList.length == this.val.list.length) {
+          this.checkAll = true;
+        } else {
+          this.checkAll = false;
+        }
+        this.$emit("getIsCheckAll", {
+          isCheckAll: this.checkAll,
+          shopId: this.val.sid
+        });
+      },
+      checkedChange(id) {
+        console.log(id);
+        console.log(this.checkedList);
+        for (const val of this.checkedList) {
+          if (val == id) {
+            return true;
+          }
+        }
+      },
+      itemAllChange(e) {
+        console.log(e.target.checked);
+        if (!this.checkAll) {
+          this.checkAll = true;
+          this.checkedList = [];
+          for (const val of this.val.list) {
+            this.checkedList.push(val.id);
+          }
+        } else {
+          this.checkAll = false;
+          this.checkedList = [];
+        }
+        this.$emit("getIsCheckAll", {
+          isCheckAll: this.checkAll,
+          shopId: this.val.sid
+        });
+      }
     }
   };
 </script>
@@ -85,6 +150,8 @@
           border: 1px solid #ddd;
           padding-top: 10px;
           border-top: none;
+          color: #333;
+          font-size: 12px;
           &:first-child {
             border-top: $border-style;
           }
@@ -121,6 +188,15 @@
             &:nth-child(7) {
               width: 137px;
               margin-right: 30px;
+            }
+            &:last-child {
+              div {
+                margin-bottom: 8px;
+                &:hover {
+                  color: $theme-color;
+                  cursor: pointer;
+                }
+              }
             }
           }
         }

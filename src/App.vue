@@ -104,4 +104,49 @@
   .ant-select-dropdown-menu-item-active {
     background-color: #fff;
   }
+  .el-select,
+  .el-cascader {
+    height: 33px;
+    line-height: 33px;
+    .el-input {
+      height: 100%;
+      .el-input__inner {
+        height: 100%;
+        padding-left: 10px;
+        color: #333;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        &:focus {
+          border-color: #f10215;
+          box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
+        }
+        &:hover {
+          border-color: #f10215;
+        }
+      }
+      .el-input__suffix {
+        .el-input__suffix-inner {
+          height: 12px;
+          .el-input__icon {
+            line-height: 33px;
+          }
+        }
+      }
+    }
+    .el-cascader__label {
+      padding-left: 13px;
+    }
+  }
+  .el-select-dropdown__item {
+    &.selected {
+      color: #f10215;
+    }
+  }
+  .el-cascader-menu {
+    .el-cascader-menu__item {
+      &.is-active {
+        color: #f10215;
+      }
+    }
+  }
 </style>
