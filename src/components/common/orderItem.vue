@@ -1,7 +1,7 @@
 <template>
   <div class="orderItem">
     <order-title
-      :isOrder="true"
+      :isShowInfo="isShowInfo"
       :checkedList="checkedList"
       v-on:getChecked="getChecked"
       :data="data"
@@ -50,6 +50,9 @@
       checkedList: {
         type: Array,
         required: true
+      },
+      isShowInfo: {
+        tyep: Object
       }
     },
     methods: {

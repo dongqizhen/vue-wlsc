@@ -82,12 +82,12 @@
         this.changeLoginState(false);
         this.changeUserInfoState({});
         this.$router.push("/login");
-        this.changeDefaultSelectedKeys(["0"]);
+        this.changeUserShopInfoState({});
       },
       ...mapMutations([
         "changeLoginState",
         "changeUserInfoState",
-        "changeDefaultSelectedKeys"
+        "changeUserShopInfoState"
       ])
     },
     computed: {

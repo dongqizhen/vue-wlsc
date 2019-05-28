@@ -49,7 +49,6 @@
 </template>
 <script>
   import Footer from "../footer/footer";
-  import { mapMutations } from "vuex";
   export default {
     data() {
       return {
@@ -74,10 +73,7 @@
       }
     },
     methods: {
-      ...mapMutations(["changeDefaultSelectedKeys"]),
-      handleClick(e) {
-        this.changeDefaultSelectedKeys([e.key]);
-      }
+      handleClick(e) {}
     },
     components: {
       Footer

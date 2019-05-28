@@ -18,6 +18,7 @@
   export default {
     data() {
       return {
+        defaultSelectedKeys: ["0"],
         dataArr: [
           {
             id: 1,
@@ -57,25 +58,54 @@
       };
     },
     computed: {
-      ...mapState(["isLogin", "defaultSelectedKeys"])
+      ...mapState(["isLogin", "userShopInfo"])
     },
-    methods: {
-      ...mapMutations(["changeDefaultSelectedKeys"])
-    },
-    created() {
-      if (!this.isLogin) {
-        this.$router.push({ path: "/login" });
+    methods: {},
+    beforeMount() {
+      if (this.userShopInfo.audit_status == 2) {
+        if (this.$route.path.indexOf("shopInfo") != -1) {
+          this.defaultSelectedKeys = ["2"];
+          this.$router.replace({ path: "/merchant/shopInfo" });
+        } else if (this.$route.path.indexOf("shopCertification") != -1) {
+          this.defaultSelectedKeys = ["3"];
+          this.$router.replace({ path: "/merchant/shopCertification" });
+        }
+        if (this.$route.path.indexOf("publishGoods") != -1) {
+          this.defaultSelectedKeys = ["4"];
+          this.$router.replace({ path: "/merchant/publishGoods" });
+        }
+        if (this.$route.path.indexOf("productManage") != -1) {
+          this.defaultSelectedKeys = ["5"];
+          this.$router.replace({ path: "/merchant/productManage" });
+        }
+        if (this.$route.path.indexOf("inquiryManage") != -1) {
+          this.defaultSelectedKeys = ["6"];
+          this.$router.replace({ path: "/merchant/inquiryManage" });
+        }
+        if (this.$route.path.indexOf("orderManage") != -1) {
+          this.defaultSelectedKeys = ["7"];
+          this.$router.replace({ path: "/merchant/orderManage" });
+        }
+        if (this.$route.path.indexOf("accountSecurity") != -1) {
+          this.defaultSelectedKeys = ["8"];
+          this.$router.replace({ path: "/merchant/accountSecurity" });
+        }
+        if (this.$route.path.indexOf("messageCenter") != -1) {
+          this.defaultSelectedKeys = ["10"];
+          this.$router.replace({ path: "/merchant/messageCenter" });
+        }
+        if (this.$route.path.indexOf("shopIndex") != -1) {
+          this.defaultSelectedKeys = ["1"];
+          this.$router.replace({ path: "/merchant/shopIndex" });
+        } else {
+          this.defaultSelectedKeys = ["1"];
+          this.$router.replace({ path: "/merchant/shopIndex" });
+        }
       } else {
-        _getData("/user/getUser", {}).then(data => {
-          console.log("用户信息：", data);
-          // if (data.audit_status == 2) {
-          //   this.$router.replace({ path: "/merchant/shopIndex" });
-          // } else {
-          //   this.$router.replace({
-          //     path: "/merchant/openShop",
-          //     query: { shopStatus: data.audit_status }
-          //   });
-          // }
+        this.defaultSelectedKeys = ["0"];
+        this.$router.replace({
+          path: "/merchant/openShop",
+          query: { shopStatus: this.userShopInfo.audit_status }
         });
       }
     },

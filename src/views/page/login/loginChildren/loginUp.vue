@@ -209,7 +209,11 @@
     mixins: [timer, FormValidator],
 
     methods: {
-      ...mapMutations(["changeLoginState", "changeUserInfoState"]),
+      ...mapMutations([
+        "changeLoginState",
+        "changeUserInfoState",
+        "changeUserShopInfoState"
+      ]),
       callback() {},
       passwordLogin() {},
       handleSubmitOne(e) {
@@ -240,6 +244,10 @@
             this.changeLoginState(true);
             this.changeUserInfoState(data.data.result);
             this.$router.back();
+            _getData("/user/getUser", {}).then(data => {
+              console.log("获取用户的店铺开店信息：", data);
+              this.changeUserShopInfoState(data);
+            });
           } else if (data.data.status.code == 1116) {
             this.seccode_err = true;
           }
@@ -279,6 +287,10 @@
             //成功
             this.changeLoginState(true);
             this.changeUserInfoState(data.data.result);
+            _getData("/user/getUser", {}).then(data => {
+              console.log("获取用户的店铺开店信息：", data);
+              this.changeUserShopInfoState(data);
+            });
             this.$router.back();
           } else if (data.data.status.code == 1102) {
             this.phone2isRegister = false;

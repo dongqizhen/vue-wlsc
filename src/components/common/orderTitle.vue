@@ -1,14 +1,14 @@
 <template>
   <div class="orderTitle">
     <div class="left-box">
-      <div class="checkedBox" v-if="isTrue">
+      <div class="checkedBox" v-if="isShowInfo.isTrue">
         <a-checkbox
           @change="onChange(data.enquirySn)"
           :checked="checkedChange(data.enquirySn)"
         ></a-checkbox>
       </div>
       <div class="common orderNumber">
-        <span>{{ isOrder ? "订单" : "询价单" }}编号：</span>
+        <span>{{ isShowInfo.isOrder ? "订单" : "询价单" }}编号：</span>
         <span>{{ data.enquirySn }}</span>
       </div>
       <div class="common orderSubmitTime">
@@ -17,16 +17,15 @@
             <use xlink:href="#icontijiaoshijian"></use>
           </svg>
         </span>
-        <span>{{ isOrder ? "订单" : "询价单" }}提交时间：</span>
+        <span>{{ isShowInfo.isOrder ? "订单" : "询价单" }}提交时间：</span>
         <span>2019-09-12 18:30</span>
       </div>
-      <div class="common userName" v-if="isOrder == false">
+      <div class="common userName" v-if="!isShowInfo.isDetail">
         <span>
           <img
             src="http://file.haoyigong.com/server/upload/1554429391594.jpg"
           />
         </span>
-        <!-- <span v-if="isShow">询价人：</span> -->
         <span>{{ data.shopName }}</span>
       </div>
     </div>
@@ -45,7 +44,7 @@
             ></use>
           </svg>
         </span>
-        <span>{{ isOrder ? "订单" : "询价单" }}状态：</span>
+        <span>{{ isShowInfo.isOrder ? "订单" : "询价单" }}状态：</span>
         <span>{{
           isShowInfo.current == 1
             ? "报价中"
@@ -68,19 +67,9 @@
         type: Object,
         required: false
       },
-      isOrder: {
-        type: Boolean,
-        required: true
-      },
       checkedList: {
         type: Array,
         required: false
-      },
-      isTrue: {
-        type: Boolean
-      },
-      isShow: {
-        type: Boolean
       },
       isShowInfo: {
         type: Object

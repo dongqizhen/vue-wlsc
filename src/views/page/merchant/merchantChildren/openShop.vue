@@ -69,7 +69,6 @@
   </div>
 </template>
 <script>
-  import { mapMutations } from "vuex";
   import shopInfo from "./shopInfo";
   import shopCertification from "./shopCertification";
   export default {
@@ -82,7 +81,6 @@
       };
     },
     methods: {
-      ...mapMutations(["changeDefaultSelectedKeys"]),
       getShopInfo(val) {
         this.current = val.current + 1;
         this.shopInfo = val;
@@ -100,9 +98,6 @@
     components: {
       shopInfo,
       shopCertification
-    },
-    created() {
-      this.changeDefaultSelectedKeys(["0"]);
     },
     mounted() {
       if (this.$route.query.shopStatus == 1) {

@@ -71,7 +71,7 @@ const router = new Router({
                     path: "inquiryDetail",
                     name: "询价单详情",
                     component: () =>
-                        import ("../views/page/merchant/merchantChildren/inquiryOrderDetail")
+                        import ("../views/page/merchant/merchantChildren/inquiryDetail")
                 },
                 {
                     path: "orderManage",
@@ -252,7 +252,7 @@ const router = new Router({
                         import ("../views/page/shop/userCenterChildren/myInquiry")
                 },
                 {
-                    path: "inquiryOrderDetail",
+                    path: "inquiryOrderDetail/:id",
                     name: "询价单",
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/inquiryOrderDetail")

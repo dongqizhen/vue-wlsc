@@ -1,7 +1,7 @@
 interface StateType {
     isLogin:Boolean,
     userInfo:Object,
-    defaultSelectedKeys:Array<any>
+    userShopInfo: Object
 }
 
  let state:StateType={
@@ -9,7 +9,7 @@ interface StateType {
     userInfo:{
 
     },
-    defaultSelectedKeys:["0"]
+     userShopInfo:{}
 }
 
 export default state;

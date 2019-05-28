@@ -37,20 +37,9 @@
         <div class="common companyAddress">
           <div class="left-box"><span class="red">*</span>公司地址</div>
           <div class="right-box">
-            <!-- <a-cascader
-              :options="options"
-              @change="onChange"
-              placeholder="请选择省/市/区"
-              :defaultValue="defaultCascaderValue"
-              style="width: 390px"
-            >
-              <a-icon slot="suffixIcon" class="icon">
-                <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-              </a-icon>
-            </a-cascader> -->
             <el-cascader
               :options="options"
-              v-model="defaultCascaderValue"
+              v-model="submitData.address"
               placeholder="请选择省/市/区"
               style="width: 390px"
             ></el-cascader>
@@ -271,13 +260,11 @@
           alert("请上传营业执照");
           return;
         }
+
         if (this.isOpenShop) {
           this.submitData = {
             ...this.submitData,
-            ...this.shopInfo,
-            companyProvinceId: 1,
-            companyCityId: 1,
-            companyCountryId: 13
+            ...this.shopInfo
           };
           console.log(this.submitData);
           _getData("/store/addStore", this.submitData).then(data => {
@@ -285,7 +272,12 @@
             this.$emit("sure", this.current);
           });
         } else {
-          // _getData("/store/addStore");
+          console.log(this.submitData);
+          _getData("/store/updateShopCertification", this.submitData).then(
+            data => {
+              console.log(data);
+            }
+          );
           // this.addCarSuccess();
         }
       },
@@ -356,8 +348,23 @@
       if (!this.isOpenShop) {
         _getData("/store/selectAllStore", {}).then(data => {
           console.log("获取已填写的店铺信息：", data);
-          this.submitData = data;
-          this.defaultCascaderValue = [
+          this.submitData.storeId = data.sid;
+          this.submitData.companyName = data.companyName;
+          this.submitData.companyIntroduction = data.companyIntroduction;
+          this.submitData.checking = data.checking;
+          this.submitData.linkName = data.linkName;
+          this.submitData.mobile = data.mobile;
+          this.submitData.workPhone = data.workPhone;
+          this.submitData.email = data.email;
+          this.submitData.fax = data.fax;
+          this.submitData.bank = data.bank;
+          this.submitData.bankNum = data.bankNum;
+          this.submitData.qqCode = data.qqCode;
+          this.submitData.weiXinCode = data.weiXinCode;
+          this.submitData.yyimage = data.yyimage;
+          this.submitData.swimage = data.swimage;
+          this.submitData.zzjgimage = data.zzjgimage;
+          this.submitData.address = [
             data.provinceId,
             data.cityId,
             data.countryId

@@ -17,6 +17,7 @@
     data() {
       return {
         a: 1,
+        defaultSelectedKeys: ["0"],
         dataArr: [
           {
             id: 1,
@@ -113,15 +114,10 @@
         ]
       };
     },
-    computed: {
-      defaultSelectedKeys() {
-        console.log(this.a++);
-        console.log(
-          JSON.parse(window.localStorage["vuex-along"])["vuex-along"]
-            .defaultSelectedKeys
-        );
-        return JSON.parse(window.localStorage["vuex-along"])["vuex-along"]
-          .defaultSelectedKeys;
+    beforeMount() {
+      console.log(this.$route);
+      if (this.$route.path.indexOf("howToPurchase") != -1) {
+        this.defaultSelectedKeys = ["7"];
       }
     },
     components: {

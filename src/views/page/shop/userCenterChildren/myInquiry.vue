@@ -50,8 +50,6 @@
               :data="item"
               :checkedList="checkedList"
               v-on:getChecked="getChecked"
-              :isDetail="false"
-              :isShow="isShow"
               :isShowInfo="isShowInfo"
             ></inquiry-item>
           </li>
@@ -84,10 +82,11 @@
         isShowInfo: {
           isDetail: false,
           isShow: false,
-          current: 1
+          current: 1,
+          isOrder: false,
+          isTrue: true
         },
         data: [],
-        isShow: false,
         checkAll: false,
         checkedList: [],
         titleArr: [

@@ -1,11 +1,9 @@
 <template>
   <div class="inquiryItem">
     <order-title
-      :isOrder="isOrder"
       :checkedList="checkedList"
       v-on:getChecked="getChecked"
       :data="data"
-      :isTrue="isTrue"
       :isShowInfo="isShowInfo"
     ></order-title>
     <div class="inquiryProduct">
@@ -19,7 +17,14 @@
       </div>
       <div class="operating">
         <div>
-          <router-link to="inquiryOrderDetail">查看详情</router-link>
+          <router-link
+            :to="{
+              path: `inquiryOrderDetail/${data.enquirySn}`,
+              query: { isShowInfo: isShowInfo }
+            }"
+          >
+            查看详情
+          </router-link>
         </div>
         <div @click="deleteInquiryOrder(data.enquirySn)">删除询价单</div>
       </div>
@@ -32,7 +37,7 @@
   import { _getData } from "../../config/getData";
   export default {
     data() {
-      return { isOrder: false, isTrue: true };
+      return {};
     },
     props: {
       data: {

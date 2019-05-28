@@ -2,7 +2,7 @@
   <div class="inquiryOrderDetail">
     <common-title title="询价单"></common-title>
     <div class="inquiryContainer">
-      <order-title :isOrder="false"></order-title>
+      <order-title :isShowInfo="isShowInfo"></order-title>
       <div class="inquiryContent">
         <list-title :titleArr="titleArr"></list-title>
         <div class="listContent">
@@ -33,6 +33,13 @@
   export default {
     data() {
       return {
+        isShowInfo: {
+          isDetail: true,
+          isShow: false,
+          current: 1,
+          isOrder: false,
+          isTrue: true
+        },
         checkedList: [],
         checkAll: false,
         titleArr: [
