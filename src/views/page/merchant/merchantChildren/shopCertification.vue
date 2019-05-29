@@ -181,7 +181,7 @@
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import upload from "../../../../components/common/upload";
   import submitSuccessModal from "../../../../components/modal/submitSuccessModal";
-  import { mapState } from "vuex";
+  import { mapState, mapMutations } from "vuex";
   import { _getData } from "../../../../config/getData";
   import _ from "lodash";
   export default {
@@ -194,6 +194,9 @@
         submitData: {
           companyName: "",
           address: [],
+          provinceId: "",
+          cityId: "",
+          countryId: "",
           companyIntroduction: "",
           checking: "",
           linkName: "",
@@ -201,8 +204,6 @@
           workPhone: "",
           email: "",
           fax: "",
-          bank: "",
-          bankNum: "",
           qqCode: "",
           weiXinCode: "",
           yyimage: "",
@@ -224,6 +225,7 @@
       }
     },
     methods: {
+      ...mapMutations(["changeUserShopInfoState"]),
       submit() {
         console.log(this.shopInfo);
         console.log(this.submitData);
@@ -234,6 +236,10 @@
         if (this.submitData.address.length == 0) {
           alert("请选择公司地址");
           return;
+        } else {
+          this.submitData.provinceId = this.submitData.address[0];
+          this.submitData.cityId = this.submitData.address[1];
+          this.submitData.countryId = this.submitData.address[2];
         }
         if (this.submitData.companyIntroduction == "") {
           alert("请输入公司介绍");
@@ -270,6 +276,10 @@
           _getData("/store/addStore", this.submitData).then(data => {
             console.log(data);
             this.$emit("sure", this.current);
+            _getData("/user/getUser", {}).then(data => {
+              console.log("获取用户的店铺开店信息：", data);
+              this.changeUserShopInfoState(data);
+            });
           });
         } else {
           console.log(this.submitData);
@@ -348,7 +358,7 @@
       if (!this.isOpenShop) {
         _getData("/store/selectAllStore", {}).then(data => {
           console.log("获取已填写的店铺信息：", data);
-          this.submitData.storeId = data.sid;
+          this.submitData.sid = data.sid;
           this.submitData.companyName = data.companyName;
           this.submitData.companyIntroduction = data.companyIntroduction;
           this.submitData.checking = data.checking;
@@ -357,8 +367,6 @@
           this.submitData.workPhone = data.workPhone;
           this.submitData.email = data.email;
           this.submitData.fax = data.fax;
-          this.submitData.bank = data.bank;
-          this.submitData.bankNum = data.bankNum;
           this.submitData.qqCode = data.qqCode;
           this.submitData.weiXinCode = data.weiXinCode;
           this.submitData.yyimage = data.yyimage;

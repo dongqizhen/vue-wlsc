@@ -40,7 +40,7 @@
             我的选购单
           </a>
         </router-link>
-        <router-link tag="li" to="/merchant"><a>商家中心</a></router-link>
+        <li><a @click="openMerchant">商家中心</a></li>
         <router-link
           tag="li"
           to="#"
@@ -70,6 +70,7 @@
 
 <script>
   import { mapState, mapMutations } from "vuex";
+  import { _getData } from "../../config/getData";
   export default {
     data() {
       return {
@@ -88,7 +89,21 @@
         "changeLoginState",
         "changeUserInfoState",
         "changeUserShopInfoState"
-      ])
+      ]),
+      openMerchant() {
+        _getData("/user/getUser", {}).then(data => {
+          console.log("获取用户的店铺开店信息：", data);
+          // if (data.data.errno) {
+          //   this.$router.replace({
+          //     path: "/login",
+          //     query: { redirect: "/merchant" }
+          //   });
+          // } else {
+          this.changeUserShopInfoState(data);
+          this.$router.push({ path: "/merchant" });
+          // }
+        });
+      }
     },
     computed: {
       ...mapState(["isLogin", "userInfo"])

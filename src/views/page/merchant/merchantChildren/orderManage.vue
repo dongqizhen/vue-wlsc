@@ -134,10 +134,11 @@
 <style lang="scss" scoped>
   @import "../../../../assets/scss/_commonScss";
   .orderManage {
-    padding: 0 20px;
+    padding: 0 20px 20px 20px;
     background-color: #fff;
     min-height: 693px;
     box-shadow: $base-box-shadow;
+    margin-bottom: 100px;
     .orderContainer {
       margin-top: 24px;
       .listContent {
