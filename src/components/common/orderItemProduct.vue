@@ -1,14 +1,18 @@
 <template>
   <div class="productInfoBox">
     <div class="productInfo">
-      <div class="itemProduct" v-for="product in productArr" :key="product.id">
-        <span><img :src="product.imgUrl"/></span>
+      <div
+        class="itemProduct"
+        v-for="product in data.goodsList"
+        :key="product.id"
+      >
+        <span><img :src="product.list_pic_url"/></span>
         <span>{{ product.name }}</span>
-        <span>{{ product.price }}</span>
-        <span>{{ product.amount }}</span>
+        <span>{{ product.retail_price }}</span>
+        <span>{{ product.number }}</span>
       </div>
     </div>
-    <div class="actualPrice">￥2600.00</div>
+    <div class="actualPrice">￥{{ data.actual_price }}</div>
     <div class="operating">
       <div class="lookPay" @click="addModal">查看支付证明</div>
       <div class="sure" @click="confirmDelivery">确认发货</div>
@@ -55,6 +59,11 @@
           }
         ]
       };
+    },
+    props: {
+      data: {
+        type: Object
+      }
     },
     methods: {
       addModal() {

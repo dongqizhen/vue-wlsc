@@ -6,8 +6,8 @@
       v-on:getChecked="getChecked"
       :data="data"
     ></order-title>
-    <order-item-product></order-item-product>
-    <delivery-info></delivery-info>
+    <order-item-product :data="data"></order-item-product>
+    <delivery-info :data="data"></delivery-info>
   </div>
 </template>
 <script>
@@ -16,31 +16,7 @@
   import orderItemProduct from "./orderItemProduct";
   export default {
     data() {
-      return {
-        productArr: [
-          {
-            id: 1,
-            imgUrl: "http://file.haoyigong.com/server/upload/1533522814856.jpg",
-            name: "John Brown",
-            price: "￥1000",
-            amount: 12
-          },
-          {
-            id: 2,
-            imgUrl: "http://file.haoyigong.com/server/upload/1554081863934.jpg",
-            name: "John test",
-            price: "￥1000",
-            amount: 11
-          },
-          {
-            id: 3,
-            imgUrl: "http://file.haoyigong.com/server/upload/1533522814856.jpg",
-            name: "John Brown",
-            price: "￥1000",
-            amount: 10
-          }
-        ]
-      };
+      return {};
     },
     props: {
       data: {

@@ -62,6 +62,17 @@
             width: 121px;
             height: 27px;
           }
+          /deep/.ant-calendar-picker-input {
+            padding: 0;
+            height: 27px;
+            line-height: 27px;
+            .ant-calendar-range-picker-input {
+              height: 100%;
+            }
+            .ant-calendar-picker-clear {
+              right: 6px;
+            }
+          }
         }
       }
     }

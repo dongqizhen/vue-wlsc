@@ -3,13 +3,17 @@
     <div class="left-box">
       <div class="checkedBox" v-if="isShowInfo.isTrue">
         <a-checkbox
-          @change="onChange(data.enquirySn)"
-          :checked="checkedChange(data.enquirySn)"
+          @change="
+            onChange(isShowInfo.isOrder ? data.order_sn : data.enquirySn)
+          "
+          :checked="
+            checkedChange(isShowInfo.isOrder ? data.order_sn : data.enquirySn)
+          "
         ></a-checkbox>
       </div>
       <div class="common orderNumber">
         <span>{{ isShowInfo.isOrder ? "订单" : "询价单" }}编号：</span>
-        <span>{{ data.enquirySn }}</span>
+        <span>{{ isShowInfo.isOrder ? data.order_sn : data.enquirySn }}</span>
       </div>
       <div class="common orderSubmitTime">
         <span class="svgBox">
@@ -46,7 +50,21 @@
         </span>
         <span>{{ isShowInfo.isOrder ? "订单" : "询价单" }}状态：</span>
         <span>{{
-          isShowInfo.current == 1
+          isShowInfo.isOrder
+            ? data.order_status == 1
+              ? "待接单"
+              : data.order_status == 2
+              ? "待发货"
+              : data.order_status == 3
+              ? "待收货"
+              : data.order_status == 4
+              ? "待评价"
+              : data.order_status == 5
+              ? "已完成"
+              : data.order_status == 6
+              ? "退货"
+              : "已关闭"
+            : isShowInfo.current == 1
             ? "报价中"
             : isShowInfo.current == 2
             ? "已报价"

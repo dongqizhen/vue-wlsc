@@ -34,25 +34,11 @@
   import checkAll from "../../../../components/common/checkAll";
   import listTitle from "../../../../components/common/listTitle";
   import filterSearch from "../../../../components/common/filterSearch";
+  import { _getData } from "../../../../config/getData";
   export default {
     data() {
       return {
-        data: [
-          {
-            id: 1,
-            title: "卖家申请店铺审核通过提示",
-            createOn: "2018-11-18",
-            introduce:
-              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
-          },
-          {
-            id: 2,
-            title: "卖家申请店铺审核未通过提示",
-            createOn: "2018-11-19",
-            introduce:
-              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
-          }
-        ],
+        data: [],
         checkedList: [],
         checkAll: false,
         tabs: [
@@ -117,13 +103,29 @@
           this.checkAll = true;
           this.checkedList = [];
           for (const val of this.data) {
-            this.checkedList.push(val.id);
+            this.checkedList.push(val.order_sn);
           }
         } else {
           this.checkAll = false;
           this.checkedList = [];
         }
+      },
+      getOrderList() {
+        _getData("/order/orderList", {
+          currentPage: "1",
+          countPerPage: "10",
+          name: "",
+          orderStatus: "",
+          startTime: "",
+          endTime: ""
+        }).then(data => {
+          console.log("获取订单列表：", data);
+          this.data = data.data;
+        });
       }
+    },
+    mounted() {
+      this.getOrderList();
     },
     components: {
       manageNumberNav,
@@ -137,10 +139,11 @@
 <style lang="scss" scoped>
   @import "../../../../assets/scss/_commonScss";
   .myOrder {
-    padding: 0 20px;
+    padding: 0 20px 20px 20px;
     background-color: #fff;
     min-height: 693px;
     box-shadow: $base-box-shadow;
+    margin-bottom: 100px;
     .orderContainer {
       margin-top: 24px;
       .listContent {

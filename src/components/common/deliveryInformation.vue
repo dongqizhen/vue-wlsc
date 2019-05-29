@@ -3,10 +3,10 @@
     <div class="left-box">收货信息</div>
     <div class="right-box">
       <div>
-        <span>收货人：李先生</span>
-        <span>联系方式：18611110000</span>
+        <span>收货人：{{ data.consignee }}</span>
+        <span>联系方式：{{ data.mobile }}</span>
       </div>
-      <div>收货地址：北京市顺义区天竺保税区</div>
+      <div>收货地址：{{ data.address }}</div>
     </div>
   </div>
 </template>
@@ -14,6 +14,11 @@
   export default {
     data() {
       return {};
+    },
+    props: {
+      data: {
+        type: Object
+      }
     }
   };
 </script>
