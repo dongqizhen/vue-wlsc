@@ -464,6 +464,7 @@ router.beforeEach((to, from, next) => {
         isLogin = true;
     }
     if (to.meta.requireAuth) {
+        console.log(1111111111111111111111111111)
         if (!isLogin) {
             router.push({ name: "login" });
         }
