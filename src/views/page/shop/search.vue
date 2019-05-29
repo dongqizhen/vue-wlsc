@@ -70,6 +70,7 @@
   import articleItem from "../../../components/common/item/articleItem.vue";
   import caseItem from "../../../components/common/item/caseItem.vue";
   import videoItem from "../../../components/common/item/videoItem.vue";
+  import { _getData } from "../../../config/getData";
 
   export default {
     data() {
@@ -91,6 +92,11 @@
       articleItem,
       caseItem,
       videoItem
+    },
+    mounted() {
+      _getData("common/search", {
+        name: this.$route.query.val
+      });
     },
     methods: {
       categoryClick(item) {
