@@ -14,54 +14,70 @@
     </div>
     <div class="actualPrice">￥{{ data.actual_price }}</div>
     <div class="operating">
-      <div class="lookPay" @click="addModal">查看支付证明</div>
-      <div class="sure" @click="confirmDelivery">确认发货</div>
-      <div class="lookOrderDetail">
-        <router-link to="orderDetail">查看订单详情</router-link>
+      <div class="lookPay" @click="addModal" v-if="data.order_status != 1">
+        {{ data.isPayProve == 0 ? "提交" : "查看" }}支付证明
       </div>
-      <div class="deleteOrder">删除订单</div>
+      <div class="sure" @click="confirmDelivery" v-if="data.order_status == 3">
+        确认发货
+      </div>
+      <div
+        class="sure"
+        @click="commentModal"
+        v-if="
+          (data.order_status == 4 || data.order_status == 5) &&
+            !isShowInfo.isDetail
+        "
+      >
+        评价
+      </div>
+      <div class="lookOrderDetail" v-if="!isShowInfo.isDetail">
+        <router-link :to="`orderDetail/${data.order_sn}`">
+          查看订单详情
+        </router-link>
+      </div>
+      <div class="deleteOrder" v-if="!isShowInfo.isDetail" @click="deleteModal">
+        删除
+      </div>
     </div>
-    <pay-img-modal :Visible="visible" :type="type"></pay-img-modal>
+    <pay-img-modal
+      :Visible="visible"
+      :type="type"
+      :imgUrl="data.payProve"
+    ></pay-img-modal>
     <confirm-delivery :Visible="sureVisible" :type="type"></confirm-delivery>
+    <submit-comment
+      :Visible="commentVisible"
+      :type="type"
+      :data="data.goodsList"
+    ></submit-comment>
+    <submit-pay :Visible="payVisible" :type="type"></submit-pay>
+    <delete-order :Visible="deleteVisible" :type="type"></delete-order>
   </div>
 </template>
 <script>
   import payImgModal from "../modal/payImgModal";
   import confirmDelivery from "../modal/confirmDelivery";
+  import submitComment from "../modal/submitComment";
+  import submitPay from "../modal/submitPayImg";
+  import deleteOrder from "../modal/deleteOrderModal";
+
   import { mapState } from "vuex";
   export default {
     data() {
       return {
         visible: false,
         sureVisible: false,
-        type: "",
-        productArr: [
-          {
-            id: 1,
-            imgUrl: "http://file.haoyigong.com/server/upload/1533522814856.jpg",
-            name: "John Brown",
-            price: "￥1000",
-            amount: 12
-          },
-          {
-            id: 2,
-            imgUrl: "http://file.haoyigong.com/server/upload/1554081863934.jpg",
-            name: "John test",
-            price: "￥1000",
-            amount: 11
-          },
-          {
-            id: 3,
-            imgUrl: "http://file.haoyigong.com/server/upload/1533522814856.jpg",
-            name: "John Brown",
-            price: "￥1000",
-            amount: 100
-          }
-        ]
+        commentVisible: false,
+        payVisible: false,
+        deleteVisible: false,
+        type: ""
       };
     },
     props: {
       data: {
+        type: Object
+      },
+      isShowInfo: {
         type: Object
       }
     },
@@ -69,14 +85,31 @@
       addModal() {
         if (!this.isLogin) {
           this.type = "login";
+        } else {
+          if (this.data.isPayProve == 1) {
+            this.visible = true;
+          } else {
+            this.payVisible = true;
+          }
         }
-        this.visible = true;
       },
       confirmDelivery() {
         if (!this.isLogin) {
           this.type = "login";
         }
         this.sureVisible = true;
+      },
+      commentModal() {
+        if (!this.isLogin) {
+          this.type = "login";
+        }
+        this.commentVisible = true;
+      },
+      deleteModal() {
+        if (!this.isLogin) {
+          this.type = "login";
+        }
+        this.deleteVisible = true;
       }
     },
     computed: {
@@ -84,7 +117,10 @@
     },
     components: {
       payImgModal,
-      confirmDelivery
+      confirmDelivery,
+      submitComment,
+      submitPay,
+      deleteOrder
     }
   };
 </script>
@@ -140,6 +176,21 @@
       align-items: center;
       justify-content: center;
       border-left: $border-style;
+      div {
+        margin-bottom: 10px;
+        font-size: 12px;
+        color: #333;
+        &:hover {
+          color: $theme-color;
+          cursor: pointer;
+        }
+        a {
+          color: #333;
+          &:hover {
+            color: $theme-color;
+          }
+        }
+      }
     }
   }
 </style>

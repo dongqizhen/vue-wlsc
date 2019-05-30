@@ -2,7 +2,14 @@
   <div class="login-modal">
     <modal :isShow="visible" :options="options">
       <div slot="content" v-if="type != 'login'">
-        <img :src="imgUrl" />
+        <div class="alertContent">
+          <upload v-on:getVal="getImgUrl"></upload>
+        </div>
+        <p>支持格式：jpg/png</p>
+        <div class="btn">
+          <a-button @click="sure">确定</a-button>
+          <a-button @click="cancel">取消</a-button>
+        </div>
       </div>
       <div slot="content" v-else>
         <p>
@@ -22,17 +29,20 @@
 
 <script>
   import modal from "./modal.vue";
-
+  import upload from "../common/upload";
   export default {
     data() {
       return {
         visible: false,
         options: {
-          title: "查看支付证明",
+          title: "上传支付证明",
           closable: true,
           maskClosable: false,
-          wrapClassName: "lookPay",
+          wrapClassName: "submitPay",
           centered: false
+        },
+        submitData: {
+          imgUrl: ""
         }
       };
     },
@@ -50,13 +60,11 @@
         type: String,
         default: "提交成功",
         required: false
-      },
-      imgUrl: {
-        type: String
       }
     },
     components: {
-      modal
+      modal,
+      upload
     },
     methods: {
       toLogin() {
@@ -65,6 +73,16 @@
         });
         this.visible = false;
         window.open(href, "_blank");
+      },
+      getImgUrl(val) {
+        console.log(val);
+        this.submitData.imgUrl = val[0].url;
+      },
+      sure() {
+        //上传后台接口
+      },
+      cancel() {
+        this.visible = false;
       }
     },
     watch: {
@@ -74,6 +92,10 @@
       visible(newVal) {
         if (!newVal) {
           this.$parent.visible = false;
+          this.$parent.payVisible = false;
+          this.$parent.sureVisible = false;
+          this.$parent.commentVisible = false;
+          this.$parent.deleteVisible = false;
         }
       }
     }

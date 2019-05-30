@@ -335,6 +335,7 @@
           return;
         }
         if (this.uploadList.length > 0) {
+          this.submitData.listPicUrl = [];
           _.map(this.uploadList, val => {
             this.submitData.listPicUrl.push(val.url);
           });

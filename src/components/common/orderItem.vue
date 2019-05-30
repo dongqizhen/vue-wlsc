@@ -6,7 +6,10 @@
       v-on:getChecked="getChecked"
       :data="data"
     ></order-title>
-    <order-item-product :data="data"></order-item-product>
+    <order-item-product
+      :data="data"
+      :isShowInfo="isShowInfo"
+    ></order-item-product>
     <delivery-info :data="data"></delivery-info>
   </div>
 </template>
