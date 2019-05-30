@@ -2,7 +2,14 @@
   <div class="nav">
     <div class="top_nav">
       <ul class="commonWidth">
-        <router-link
+        <li
+          v-for="(item, i) in nav_title"
+          :key="`nav-${i}`"
+          @click="nav_change(item, i)"
+        >
+          <a :class="i == defaultNav && 'active'">{{ item.name }}</a>
+        </li>
+        <!-- <router-link
           v-for="(item, i) in nav_title"
           :key="`nav-${i}`"
           tag="li"
@@ -10,12 +17,13 @@
             path: item.path,
             query: { nav_index: i }
           }"
-          @click="nav_change"
+          @click.native="nav_change(i)"
         >
-          <a target="_blank" :class="i == defaultNav ? 'active' : ''">{{
+          <a target="_blank" :class="i == defaultNav ? 'active' : ''">
+            {{
             item.name
           }}</a>
-        </router-link>
+        </router-link> -->
       </ul>
     </div>
   </div>
@@ -57,8 +65,13 @@
       }
     },
     methods: {
-      nav_change(i) {
+      nav_change(item, i) {
         console.log(i);
+        const { href } = this.$router.resolve({
+          path: item.path,
+          query: { nav_index: i }
+        });
+        window.open(href, "_blank");
       }
     },
     created() {}

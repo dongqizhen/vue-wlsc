@@ -5,7 +5,7 @@
       :tabs="['型号列表(4)', '文章(9)', '视频(8)', '案例(8)']"
       v-on:tabClick="tabClick"
     >
-      <!-- <a-button slot="btn" >
+      <a-button slot="btn">
         <router-link
           :to="{
             path: '/comparisonOfParameters',
@@ -22,7 +22,7 @@
             <use xlink:href="#iconcanshuduibi"></use>
           </svg>
           参数对比
-        </router-link> -->
+        </router-link>
       </a-button>
     </recommends-tab-vue>
     <div class="main-content">

@@ -10,6 +10,10 @@
       alt=""
       v-else-if="type == 'no-comment'"
     />
+    <img
+      src="../../assets/images/no_data/no-search.png"
+      v-else-if="type == 'no-search'"
+    />
     <span>{{ text }}</span>
   </div>
 </template>

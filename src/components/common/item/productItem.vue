@@ -83,6 +83,7 @@
       /*your style here*/
       background: url("../../../assets/images/loading.gif") no-repeat center;
       background-size: 100px;
+      display: none;
       // background-color: #f7f9fa;
     }
     width: 253px;
