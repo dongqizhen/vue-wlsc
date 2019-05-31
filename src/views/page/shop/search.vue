@@ -22,32 +22,54 @@
             ></recommends-tab-vue>
             <div class="recommend_page">
               <div class="recommend_content_box">
-                <div class="left">
-                  <ul
-                    class="recommend_article"
-                    v-if="recommend_tabs_index == 1"
-                  >
-                    <article-item
-                      v-for="item in articleList"
-                      :key="item.id"
-                      :item="item"
-                    ></article-item>
-                  </ul>
-                  <ul class="recommond_video" v-if="recommend_tabs_index == 2">
-                    <video-item
-                      v-for="item in videoList"
-                      :key="item.id"
-                      :item="item"
-                    ></video-item>
-                  </ul>
-                  <ul class="recommond_case" v-if="recommend_tabs_index == 3">
-                    <case-item
-                      v-for="item in maintenanceList"
-                      :key="item.id"
-                      :item="item"
-                    ></case-item>
-                  </ul>
+                <div class="left" v-if="!isLoading">
+                  <div v-if="recommend_tabs_index == 0">
+                    <ul v-if="list.storeList && list.storeList.length">
+                      <shop-item-vue
+                        v-for="item in list.storeList"
+                        :key="item.id"
+                        :item="item"
+                      ></shop-item-vue>
+                    </ul>
+                    <no-data
+                      v-else
+                      type="no-search"
+                      text="暂无搜索内容"
+                    ></no-data>
+                  </div>
+                  <div v-if="recommend_tabs_index == 1">
+                    <ul v-if="list.goodList && list.goodList.length">
+                      <product-item-vue
+                        v-for="item in list.goodList"
+                        :key="item.id"
+                        :list="item"
+                      ></product-item-vue>
+                    </ul>
+                    <no-data
+                      v-else
+                      type="no-search"
+                      text="暂无搜索内容"
+                    ></no-data>
+                  </div>
+                  <div v-if="recommend_tabs_index == 2">
+                    <ul
+                      v-if="list.modelList && list.modelList.length"
+                      class="model"
+                    >
+                      <model-item-vue
+                        v-for="item in list.modelList"
+                        :key="item.id"
+                        :item="item"
+                      ></model-item-vue>
+                    </ul>
+                    <no-data
+                      v-else
+                      type="no-search"
+                      text="暂无搜索内容"
+                    ></no-data>
+                  </div>
                 </div>
+                <loading v-else></loading>
               </div>
             </div>
           </div>
@@ -71,13 +93,18 @@
   import caseItem from "../../../components/common/item/caseItem.vue";
   import videoItem from "../../../components/common/item/videoItem.vue";
   import { _getData } from "../../../config/getData";
+  import shopItemVue from "../../../components/common/item/shopItem.vue";
+  import productItemVue from "../../../components/common/item/productItem.vue";
+  import modelItemVue from "../../../components/common/item/modelItem.vue";
 
   export default {
     data() {
       return {
         routes: [],
         recommend_tabs_index: 0, //推荐nav标识
-        nav: ["型号(65)", "文章(65)", "视频(65)", "案例(65)"]
+        nav: ["店铺", "产品", "型号"],
+        list: "",
+        isLoading: false
       };
     },
     components: {
@@ -91,13 +118,15 @@
       recommendsTabVue,
       articleItem,
       caseItem,
-      videoItem
+      videoItem,
+      shopItemVue,
+      productItemVue,
+      modelItemVue
     },
     mounted() {
-      _getData("common/search", {
-        name: this.$route.query.val
-      });
+      this.getSearchList(this.$route.query.val);
     },
+
     methods: {
       categoryClick(item) {
         console.log(item);
@@ -105,9 +134,25 @@
       },
       tabClick(i) {
         this.recommend_tabs_index = i;
+      },
+      async getSearchList(val) {
+        this.isLoading = true;
+        return await _getData("common/search", {
+          name: val
+        })
+          .then(data => {
+            console.log("搜索内容", data);
+            this.list = data;
+          })
+          .then(() => {
+            this.$nextTick().then(() => {
+              this.isLoading = false;
+            });
+          });
       }
     },
     created() {
+      console.log(this);
       this.routes = [
         {
           name: "首页",
@@ -118,6 +163,12 @@
           path: "/search"
         }
       ];
+    },
+    beforeRouteUpdate(to, from, next) {
+      console.log(to, from);
+      this.getSearchList(to.query.val);
+      this.$children[1].value = to.query.val;
+      next();
     }
   };
 </script>
@@ -137,7 +188,7 @@
         display: flex;
         justify-content: flex-start;
         position: relative;
-        .left {
+        > .left {
           width: 187px;
           margin-right: 30px;
           background: #fff;
@@ -146,13 +197,47 @@
           //position: absolute;
           align-self: flex-start;
         }
-        .right {
-          width: $content-left;
+        > .right {
+          //width: $content-left;
           display: flex;
+          flex: 1;
           flex-direction: column;
           /deep/ .recommend_tabs {
             margin: 0;
+            width: 100%;
             margin-bottom: 24px;
+          }
+          .recommend_page {
+            .recommend_content_box {
+              width: 100%;
+              display: flex;
+
+              .left {
+                display: flex;
+                width: 100%;
+                > div {
+                  margin-right: -25px;
+                  // width: 100%;
+                  display: flex;
+                  > ul {
+                    width: 100%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    &.model {
+                      width: 807px;
+                      li {
+                        width: 100%;
+                      }
+                    }
+                  }
+                  /deep/ .no-data {
+                    height: 500px;
+                    background: #fff;
+                    width: 807px;
+                  }
+                }
+              }
+            }
           }
         }
       }

@@ -66,14 +66,23 @@
     },
     methods: {
       handClick() {
+        // if (this.$route.name == "搜索") {
+        //   console.log(this.value);
+        //   this.$parent.getSearchList(this.value);
+
+        // } else {
         if (this.value != "") {
-          const { href } = this.$router.resolve({
+          // const { href } = this.$router.resolve({
+          //   path: "/search",
+          //   query: { val: this.value }
+          // });
+          // window.open(href, "_blank");
+          this.$router.push({
             path: "/search",
             query: { val: this.value }
           });
-
-          window.open(href, "_blank");
         }
+        // }
       }
     },
     created() {

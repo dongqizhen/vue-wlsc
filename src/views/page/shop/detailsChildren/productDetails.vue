@@ -329,7 +329,9 @@
                     <li
                       v-for="(item, i) in imgarr"
                       :key="i"
-                      :class="i == defaultIndex ? 'active' : ''"
+                      :class="
+                        i == defaultIndex && bigImageIsShow ? 'active' : ''
+                      "
                       @click="changeImage(i, $event)"
                     >
                       <div class="img_box">

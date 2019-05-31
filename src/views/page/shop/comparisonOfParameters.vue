@@ -5,7 +5,62 @@
     <Nav :defaultNav="defaultNav"></Nav>
     <div class="container">
       <div class="commonWidth">
-        <h2><span></span>参数对比</h2>
+        <h2>
+          <span></span>参数对比
+          <p>
+            (注：参数对比必须为同类型号，如更换对比分类请选择“更换分类”后添加型号，更换分类后原有添加商品则清空)
+          </p>
+        </h2>
+
+        <div class="currentCategory">
+          当前分类：
+          <div class="select-box" @click.stop="categoryBoxClick">
+            {{ currentCategory }}
+            <svg
+              class="icon"
+              aria-hidden="true"
+              :class="categoryShow && 'active'"
+            >
+              <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+            </svg>
+            <transition name="slide-fade">
+              <div class="modal-content" @click.stop="" v-if="categoryShow">
+                <h2>
+                  <span @click.stop="categoryTitleClick">大类</span>
+                  <svg
+                    class="icon"
+                    aria-hidden="true"
+                    v-if="isShowSmallCategory"
+                  >
+                    <use xlink:href="#iconwangyelujing"></use>
+                  </svg>
+                  <span v-if="isShowSmallCategory">小类</span>
+                </h2>
+                <div>
+                  <ul class="index-list" v-if="!isShowSmallCategory">
+                    <li
+                      v-for="item in categoryList"
+                      :key="item.id"
+                      @click="categoryListClick(item)"
+                    >
+                      {{ item.name }}
+                    </li>
+                  </ul>
+                  <ul class="index-list" v-else>
+                    <li
+                      v-for="item in smallCategory"
+                      :key="item.id"
+                      @click="smallCategoryClick(item)"
+                    >
+                      {{ item.name }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </transition>
+          </div>
+        </div>
+
         <transition-group name="list-complete" tag="div" class="content">
           <div class="col" key="first">
             <div class="header">
@@ -18,7 +73,7 @@
             </div>
             <ul>
               <li v-for="item in paramas" :key="item.specificationId">
-                {{ item.specificationName }}
+                {{ item.specificationName || "--" }}
               </li>
             </ul>
           </div>
@@ -42,21 +97,17 @@
 
               <span
                 class="del-btn"
-                v-if="item.modelName && i != 0"
+                v-if="item.modelName && !$route.query.modelId"
                 @click="delbtnClick(i)"
               >
                 <svg class="icon" aria-hidden="true">
                   <use xlink:href="#icontianjiaduibichanpinshanchu"></use>
                 </svg>
               </span>
-              <a-button
-                type="primary"
-                @click.self.stop="changeModel(i)"
-                v-if="i != 0"
-              >
-                选择型号
+              <a-button type="primary" @click.self.stop="changeModel(i)">
+                {{ item.modelName ? "更改" : "选择" }}型号
               </a-button>
-              <transition name="bounce">
+              <transition name="slide-fade">
                 <div
                   class="modal-content"
                   v-if="defaultShowIndex == i"
@@ -142,12 +193,18 @@
     data() {
       return {
         arr: [],
-        paramas: [],
+        currentCategory: "",
+        categoryId: "",
+        paramas: [1, 2],
         brandList: [], //全部品牌
         defaultShowIndex: null, //显示的modal层index
         isShowModel: false, //是否展示型号层
         modelList: [], //型号列表
-        isModelLoading: false
+        isModelLoading: false,
+        categoryShow: false, //是否分类层
+        isShowSmallCategory: false,
+        categoryList: [], //大类
+        smallCategory: [] //小类
       };
     },
     mixins: [mixin],
@@ -159,16 +216,29 @@
       sideBar
     },
     created() {
+      //默认四个对比框
       this.arr = _.fill(Array(4), {
         categoryId: this.$route.query.categoryId,
         categoryName: this.$route.query.categoryName
       });
+
+      this.currentCategory = this.$route.query.categoryName;
+      this.categoryId = this.$route.query.categoryId;
     },
     mounted() {
       //参数对比
-      this.getModelspecification(this.$route.query.modelId);
+      if (this.$route.query.modelId) {
+        this.getModelspecification(this.$route.query.modelId);
+      }
+
+      //获取当前分类
+      _getData("catalog/listAll", {}).then(data => {
+        console.log("分类", data);
+        //this.navArr = [...this.navArr, ...data.currentCategory];
+        this.categoryList = data.currentCategory;
+      });
       //根据分类获取品牌
-      _getData("brand/merge", { id: this.$route.query.categoryId })
+      _getData("brand/merge", { id: this.categoryId })
         .then(data => {
           this.brandList = _.groupBy(
             _.orderBy(
@@ -196,6 +266,11 @@
         });
     },
     methods: {
+      //点击选择分类
+      categoryBoxClick() {
+        this.categoryShow = !this.categoryShow;
+        this.isShowSmallCategory = false;
+      },
       //参数对比
       async getModelspecification(modelId) {
         return await _getData("modelspecification/query", {
@@ -209,6 +284,29 @@
           console.log(this.arr);
         });
       },
+      //点击大类
+      categoryListClick(item) {
+        this.isShowSmallCategory = true;
+        _getData("catalog/second", {
+          id: item.id
+        }).then(data => {
+          this.smallCategory = data.subCategory;
+        });
+      },
+      //点击小类
+      smallCategoryClick(item) {
+        this.categoryShow = false;
+
+        if (this.currentCategory != item.name) {
+          this.currentCategory == item.name;
+          this.categoryId = item.id;
+          this.arr = _.fill(Array(4), {
+            categoryId: this.$route.query.categoryId,
+            categoryName: this.$route.query.categoryName
+          });
+        }
+      },
+      //选择品牌
       selectBrand(val) {
         console.log(val);
         this.isShowModel = true;
@@ -224,6 +322,7 @@
           this.modelList = data.brandModelList;
         });
       },
+      //选择型号
       selectModel(val) {
         console.log(val);
         this.arr[this.defaultShowIndex]["modelName"] = val.name;
@@ -235,6 +334,10 @@
       //点击品牌按钮
       brandTitleClick() {
         this.isShowModel = false;
+      },
+      //点击大类按钮
+      categoryTitleClick() {
+        this.isShowSmallCategory = false;
       },
       //点击删除按钮
       delbtnClick(i) {
@@ -279,6 +382,7 @@
       hideClick() {
         this.defaultShowIndex = null;
         this.isShowModel = false;
+        this.categoryShow = false;
       }
     }
   };
@@ -301,8 +405,42 @@
       transform: scale(1);
     }
   }
+
+  .slide-fade-enter-active {
+    transition: all 0.3s;
+  }
+  .slide-fade-leave-active {
+    transition: all 0.3s;
+  }
+  .slide-fade-enter,
+  .slide-fade-leave-to {
+    transform: translateY(2px);
+    opacity: 0;
+  }
+
   .container {
     .commonWidth {
+      position: relative;
+      > .btn {
+        border: 1px solid #f10215;
+        border-radius: 4px;
+        width: 108px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        color: #f10215;
+        font-weight: 600;
+        position: absolute;
+        right: 0;
+        top: 35px;
+        cursor: pointer;
+        &:hover {
+          background: #f10215;
+          color: #fff;
+        }
+      }
       > h2 {
         height: 66px;
         padding-top: 9px;
@@ -312,13 +450,120 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        margin-bottom: 8px;
+        // margin-bottom: 8px;
         span {
           display: flex;
           height: 20px;
           width: 4px;
           background: #f5a623;
           margin-right: 8px;
+        }
+        p {
+          font-size: 14px;
+          color: #999999;
+          font-weight: normal;
+          height: 66px;
+          display: flex;
+          align-items: center;
+          margin-left: 8px;
+        }
+      }
+      .currentCategory {
+        display: flex;
+        align-items: center;
+        margin-bottom: 25px;
+        margin-top: 10px;
+        font-size: 14px;
+        color: #222222;
+        font-weight: 600;
+        .select-box {
+          height: 35px;
+          width: 240px;
+          background: #ffffff;
+          border: 1px solid #dddddd;
+          border-radius: 3px;
+          display: flex;
+          align-items: center;
+          font-size: 14px;
+          color: #333333;
+          padding-left: 12px;
+          padding-right: 10px;
+          justify-content: space-between;
+          font-weight: normal;
+          cursor: pointer;
+          position: relative;
+          > .icon {
+            width: 13px;
+            height: 7px;
+            transition: transform 0.3s;
+            &.active {
+              transform: rotate(180deg);
+            }
+          }
+          &:hover {
+            > .icon {
+              opacity: 0.7;
+            }
+          }
+          .modal-content {
+            position: absolute;
+            top: 34px;
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid #dddddd;
+            border-radius: 3px;
+            left: 0;
+            z-index: 1000;
+            min-height: 300px;
+            h2 {
+              height: 30px;
+              border-bottom: 1px solid #dddddd;
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+              font-size: 12px;
+              color: #666666;
+              padding-left: 12px;
+              font-weight: 600;
+              .icon {
+                height: 8px;
+                width: 8px;
+                margin: 0 7px;
+                margin-top: 2px;
+              }
+              span {
+                &:first-child {
+                  cursor: pointer;
+                  &:hover {
+                    color: $theme-color;
+                  }
+                }
+              }
+            }
+            > div {
+              background: #fff;
+              ul {
+                display: flex;
+                flex-direction: column;
+                li {
+                  height: 36px;
+                  display: flex;
+                  align-items: center;
+                  font-size: 12px;
+                  color: #999999;
+                  padding-left: 15px;
+                  border-bottom: 1px solid #dddddd;
+                  &:last-child {
+                    border-bottom: 0;
+                  }
+                  &:hover {
+                    color: $theme-color;
+                    background: rgba(245, 166, 35, 0.03);
+                  }
+                }
+              }
+            }
+          }
         }
       }
       .content {

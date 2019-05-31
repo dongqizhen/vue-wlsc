@@ -5,11 +5,10 @@
       <span>{{ text }}</span>
     </div>
     <div v-else class="skeleton">
-      <a-skeleton active />
-      <br />
-      <a-skeleton active />
-      <br />
-      <a-skeleton active />
+      <div v-for="i in rowNumber" :key="i">
+        <a-skeleton :avatar="avatar" active :paragraph="{ rows: rows }" />
+        <br />
+      </div>
     </div>
   </div>
 </template>
@@ -17,19 +16,34 @@
 <script>
   export default {
     data() {
-      return {};
+      return {
+        rowNumber: []
+      };
     },
     created() {
       //console.log(this.loading != undefined);
+      this.rowNumber = Array(4);
     },
     props: {
       text: {
+        //加载文案
         type: String,
         default: "加载中,请稍后..."
       },
       loading: {
         type: String
-      }
+      },
+      number: {
+        //显示数量
+        type: Number,
+        default: 4
+      },
+      rows: {
+        //段落行数
+        type: Number,
+        default: 3
+      },
+      avatar: {} //是否显示头像
     }
   };
 </script>

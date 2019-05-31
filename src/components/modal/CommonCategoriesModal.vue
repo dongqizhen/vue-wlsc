@@ -9,7 +9,7 @@
             v-model="myArray2"
             v-bind="dragOptions"
             @start="drag = true"
-            @end="drag = false"
+            @end="end"
           >
             <transition-group
               tag="ul"
@@ -162,6 +162,11 @@
               // let navActiveSlideLeft = this.slides[this.clickedIndex].offsetLeft; //activeSlide距左边的距离
               this.setTransition(300);
 
+              if (this.navWidth <= this.clientWidth) {
+                this.setTranslate(0);
+                return;
+              }
+
               if (
                 activeSlidePosition <
                 (this.clientWidth - parseInt(this.navSlideWidth)) / 2
@@ -206,6 +211,10 @@
       draggable
     },
     methods: {
+      end(e) {
+        this.drag = false;
+        this.saveCategory();
+      },
       handleOk() {
         this.visible = false;
       },
@@ -213,6 +222,7 @@
       delHandleClick(item) {
         this.myArray2 = _.without(this.myArray2, item);
         console.log(this.myArray2);
+        this.saveCategory();
       },
       handleClick(item) {
         let commonArr = _.intersectionBy(this.myArray, this.myArray2, "name");
@@ -222,13 +232,17 @@
         } else {
           this.myArray2.push(item);
         }
-        //保存常用分类
-        _getData("ucatalog/custom", {
-          categoryStr: item.id
+        this.saveCategory();
+      },
+      //保存常用分类
+      async saveCategory() {
+        return await _getData("ucatalog/custom", {
+          categoryStr: _.join(_.map(this.myArray2, "id"), ",")
         }).then(data => {
           this.$emit("success");
         });
       },
+
       async getSecond(id) {
         //获取二级分类
         await _getData("catalog/second", {
