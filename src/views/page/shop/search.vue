@@ -5,14 +5,40 @@
     <Nav></Nav>
     <div class="container">
       <div class="commonWidth">
-        <breadcrumb-vue :routes="routes"></breadcrumb-vue>
+        <breadcrumb-vue :routes="routes">
+          <ul slot="search-type" class="search-type">
+            <li
+              v-for="(item, i) in searchParamas"
+              :key="`key-${i}`"
+              class="search-type-item"
+            >
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconwangyelujing"></use>
+              </svg>
+              <span>
+                {{ item.name }}
+
+                <svg
+                  class="icon del"
+                  aria-hidden="true"
+                  v-if="i != 0"
+                  @click="delHandleClick(i, item.key)"
+                >
+                  <use xlink:href="#icontianjiaduibichanpinshanchu"></use>
+                </svg>
+              </span>
+            </li>
+          </ul>
+        </breadcrumb-vue>
         <product-category-vue
           :canSkip="false"
           v-on:categoryClick="categoryClick"
         ></product-category-vue>
         <div class="main-content">
           <div class="left">
-            <shop-left-side-vue></shop-left-side-vue>
+            <shop-left-side-vue
+              v-on:brandClick="brandClick"
+            ></shop-left-side-vue>
           </div>
           <div class="right">
             <recommends-tab-vue
@@ -96,6 +122,7 @@
   import shopItemVue from "../../../components/common/item/shopItem.vue";
   import productItemVue from "../../../components/common/item/productItem.vue";
   import modelItemVue from "../../../components/common/item/modelItem.vue";
+  import _ from "lodash";
 
   export default {
     data() {
@@ -104,7 +131,10 @@
         recommend_tabs_index: 0, //推荐nav标识
         nav: ["店铺", "产品", "型号"],
         list: "",
-        isLoading: false
+        isLoading: false,
+        categoryId: "", //分类id
+        brandId: "", //品牌id
+        searchParamas: [] //搜素条件集合
       };
     },
     components: {
@@ -123,14 +153,65 @@
       productItemVue,
       modelItemVue
     },
+    created() {
+      this.searchParamas.push({
+        name: "关键词：" + this.$route.query.val,
+        key: "keyword"
+      });
+      console.log(this.searchParamas);
+      this.routes = [
+        {
+          name: "首页",
+          path: "/"
+        },
+        {
+          name: "搜索结果",
+          path: "/search"
+        }
+      ];
+    },
     mounted() {
       this.getSearchList(this.$route.query.val);
     },
 
     methods: {
-      categoryClick(item) {
-        console.log(item);
+      categoryClick(item, val) {
+        console.log(item, val);
         this.categoryId = item.id;
+
+        this.searchParamas = _.take(this.searchParamas, 1);
+        this.searchParamas.push({
+          name: val.name + "：" + item.name,
+          key: "category"
+        });
+      },
+      delHandleClick(i, key) {
+        this.searchParamas.splice(i, 1);
+        if (key == "brand") {
+          this.brandId = "";
+        } else if (key == "category") {
+          this.categoryId = "";
+        }
+      },
+      brandClick(item) {
+        console.log(item);
+        this.brandId = item.id;
+        let obj = _.keyBy(this.searchParamas, "key");
+
+        if (!_.has(obj, "brand")) {
+          //this.searchParamas = _.dropRight(this.searchParamas);
+          this.searchParamas.push({
+            name: "品牌：" + item.name,
+            key: "brand"
+          });
+        } else {
+          let index = _.indexOf(_.keys(obj), "brand");
+
+          this.searchParamas.splice(index, 1, {
+            name: "品牌：" + item.name,
+            key: "brand"
+          });
+        }
       },
       tabClick(i) {
         this.recommend_tabs_index = i;
@@ -151,21 +232,13 @@
           });
       }
     },
-    created() {
-      console.log(this);
-      this.routes = [
-        {
-          name: "首页",
-          path: "/"
-        },
-        {
-          name: "搜索结果",
-          path: "/search"
-        }
-      ];
-    },
+
     beforeRouteUpdate(to, from, next) {
-      console.log(to, from);
+      this.searchParamas = [];
+      this.searchParamas.push({
+        name: "关键词：" + to.query.val,
+        key: "keyword"
+      });
       this.getSearchList(to.query.val);
       this.$children[1].value = to.query.val;
       next();

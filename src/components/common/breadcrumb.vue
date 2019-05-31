@@ -16,6 +16,8 @@
         </router-link>
       </template>
     </a-breadcrumb>
+
+    <slot name="search-type"></slot>
   </div>
 </template>
 
@@ -45,39 +47,79 @@
 
 <style lang="scss" scoped>
   @import "../../assets/scss/_commonScss";
-  /deep/ .ant-breadcrumb {
-    height: 57px;
-    padding-top: 8px;
+  .bread-crumb {
     display: flex;
     align-items: center;
-    > span {
+    /deep/ .ant-breadcrumb {
+      height: 57px;
+      padding-top: 8px;
       display: flex;
-      justify-content: flex-start;
       align-items: center;
+      > span {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
 
-      height: 17px;
-
-      .ant-breadcrumb-link {
-        font-family: PingFangSC-Regular;
-        font-size: 12px;
-        color: #999999;
         height: 17px;
-        > a {
-          text-decoration: none;
-          &:hover {
-            color: $theme-color;
+
+        .ant-breadcrumb-link {
+          font-family: PingFangSC-Regular;
+          font-size: 12px;
+          color: #999999;
+          height: 17px;
+          > a {
+            text-decoration: none;
+            &:hover {
+              color: $theme-color;
+            }
+          }
+        }
+        .ant-breadcrumb-separator {
+          margin: 0 10px;
+          > span {
+            display: flex;
+            align-items: center;
+          }
+          .icon {
+            width: 10px;
+            height: 18px;
           }
         }
       }
-      .ant-breadcrumb-separator {
-        margin: 0 10px;
-        > span {
-          display: flex;
-          align-items: center;
-        }
-        .icon {
+    }
+    .search-type {
+      display: flex;
+      align-items: center;
+      height: 57px;
+      padding-top: 8px;
+      .search-type-item {
+        font-size: 12px;
+        color: #666666;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        > .icon {
           width: 10px;
           height: 18px;
+          margin: 0 10px;
+        }
+        span {
+          height: 100%;
+          padding: 0 10px;
+          border: 1px solid #999999;
+          display: flex;
+          align-items: center;
+          line-height: 23px;
+          border-radius: 4px;
+          .icon {
+            width: 8px;
+            height: 8px;
+            cursor: pointer;
+            margin-left: 18px;
+            &:hover {
+              opacity: 0.7;
+            }
+          }
         }
       }
     }

@@ -98,7 +98,7 @@
       width: 224px;
       background: #f7f9fa;
       margin-bottom: 8.6px;
-
+      overflow: hidden;
       img {
         height: 100%;
         width: 100%;

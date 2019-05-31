@@ -30,18 +30,22 @@
       <div class="main-content-box">
         <div class="left">
           <shop-nav-vue
-            :navArr="['发布时间', '按价格', '按好评']"
+            :navArr="['发布时间', '按点击量', '按好评']"
+            v-on:tabClick="shopTabClick"
           ></shop-nav-vue>
           <div class="main-content">
-            <ul>
-              <shop-item-vue
-                v-for="item in shopList"
-                :key="item.id"
-                :item="item"
-              ></shop-item-vue>
-              <!-- <bid-info-item-vue /> -->
-            </ul>
-            <pagination-vue></pagination-vue>
+            <div v-if="!shopIsloading">
+              <ul>
+                <shop-item-vue
+                  v-for="item in shopList"
+                  :key="item.id"
+                  :item="item"
+                ></shop-item-vue>
+                <!-- <bid-info-item-vue /> -->
+              </ul>
+              <pagination-vue></pagination-vue>
+            </div>
+            <loading-vue v-else></loading-vue>
           </div>
         </div>
         <div class="right">
@@ -73,7 +77,9 @@
         isLoading: true,
         tabs: [],
         shopList: "",
-        defaultVal: 0
+        defaultVal: 0,
+        sort: "",
+        shopIsloading: false
       };
     },
     components: {
@@ -88,22 +94,31 @@
       bidInfoItemVue
     },
     methods: {
+      shopTabClick(i) {
+        this.getShopList(i == 0 ? "createOn" : i == 1 ? "hit" : "rate");
+      },
       tabClick(i, val) {
         console.log(val);
         this.defaultVal = i;
       },
       //获取商铺列表
-      async getShopList() {
+      async getShopList(sort = "createOn") {
+        this.shopIsloading = true;
         return await _getData("queryStore", {
           modelId: this.$route.query.modelId,
           currentPage: 1,
           countPerPage: 6,
-          sort: "createOn",
+          sort,
           order: "asc"
         })
           .then(data => {
             console.log("店铺", data);
             this.shopList = data.data;
+          })
+          .then(() => {
+            this.$nextTick().then(() => {
+              this.shopIsloading = false;
+            });
           })
           .catch(err => {
             console.log(err);
@@ -319,13 +334,16 @@
         }
         .main-content {
           margin-right: -7.5px;
-          > ul {
+          > div > ul {
             display: flex;
             flex-wrap: wrap;
             > li {
               margin-right: 7.5px;
               margin-bottom: 10px;
             }
+          }
+          /deep/ .loading {
+            width: $content-left;
           }
         }
       }

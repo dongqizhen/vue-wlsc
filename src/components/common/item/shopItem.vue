@@ -20,6 +20,7 @@
           }"
         >
           <img :data-src="item.image" alt="" v-if="item.image" />
+          <span></span>
         </div>
         <h2>{{ item.shopName }}</h2>
         <p>
@@ -101,10 +102,21 @@
         width: 224px;
         background: $base-background;
         overflow: hidden;
-        img {
+        position: relative;
+        > img {
           height: 100%;
           width: 100%;
           transition: transform 0.5s ease;
+        }
+        span {
+          position: absolute;
+          display: flex;
+          position: absolute;
+          right: 0;
+          top: 0;
+          width: 42px;
+          height: 22px;
+          background: url("../../../assets/images/shop.svg") no-repeat center;
         }
       }
       h2 {

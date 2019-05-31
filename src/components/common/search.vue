@@ -1,7 +1,9 @@
 <template>
   <div class="search">
     <div class="commonWidth">
-      <h1><img src="../../assets/images/logo.png" alt="" /></h1>
+      <router-link tag="h1" to="/">
+        <img src="../../assets/images/logo.png" alt="" />
+      </router-link>
       <div class="ipt_box">
         <div class="search_box">
           <i>
@@ -103,6 +105,7 @@
       h1 {
         margin-right: 41px;
         width: 160px;
+        cursor: pointer;
       }
       .ipt_box {
         > div.search_box {
