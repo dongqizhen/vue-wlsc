@@ -99,12 +99,12 @@
                   :checked="checkedChange(item.id)"
                 ></a-checkbox>
               </span>
-              <span><img :src="item.img"/></span>
+              <span><img :src="item.list_pic_url"/></span>
               <span>{{ item.name }}</span>
               <span>{{ item.productLine }}</span>
               <span>{{ item.brandOrmodel }}</span>
-              <span>{{ item.status }}</span>
-              <span>{{ item.number }}</span>
+              <span>{{ item.is_on_sale == 1 ? "上架" : "未上架" }}</span>
+              <span>{{ item.goods_number }}</span>
               <span>{{ item.createOn }}</span>
               <span>
                 <div>编辑</div>
@@ -131,54 +131,20 @@
 
 <script>
   import { mapState } from "vuex";
-  const data = [
-    {
-      id: "1",
-      name: "John Brown",
-      img: "http://file.haoyigong.com/server/upload/1533522814856.jpg",
-      productLine: "配件/CT类",
-      brandOrmodel: "GE/GE-101",
-      status: "未上架",
-      number: 111,
-      createOn: "2019-03-28"
-    },
-    {
-      id: "2",
-      img: "http://file.haoyigong.com/server/upload/1554081863934.jpg",
-      name: "Jim Green",
-      productLine: "配件/CT类",
-      brandOrmodel: "GE/GE-102",
-      status: "未上架",
-      number: 111,
-      createOn: "2019-03-28"
-    },
-    {
-      id: "3",
-      img: "http://file.haoyigong.com/server/upload/1553495655746.png",
-      name: "Joe Black",
-      productLine: "配件/CT类",
-      brandOrmodel: "GE/GE-103",
-      status: "未上架",
-      number: 111,
-      createOn: "2019-03-28"
-    }
-  ];
-  const defaultCheckedList = [];
   import _ from "lodash";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import pagination from "../../../../components/common/pagination";
   import checkAll from "../../../../components/common/checkAll";
   import { _getData } from "../../../../config/getData";
-  import { setTimeout } from "timers";
   export default {
     data() {
       return {
-        data,
+        data: [],
         bigOptions: [],
         smallOptions: [],
         statusOptions: [],
         checkAll: false,
-        checkedList: defaultCheckedList,
+        checkedList: [],
         totalCount: 60,
         submitData: {
           value: ""
@@ -187,12 +153,6 @@
     },
     computed: {
       ...mapState(["userShopInfo"])
-    },
-    mounted() {
-      this.getProductList();
-      setTimeout(function() {
-        this.submitData.value = "Zhejiang";
-      }, 1000);
     },
     methods: {
       isCheckAllMethod(val) {
@@ -246,12 +206,21 @@
       },
       handleStatusChange() {},
       handleProductBigTypeChange(value) {
-        this.cities = cityData[value];
-        console.log(this.cities);
-        this.secondCity = cityData[value][0];
+        this.submitData.bigCategoryId = value;
+        this.getSmallType(value);
       },
       handleProductSmallTypeChange(value) {
         console.log(value);
+      },
+      getSmallType(id) {
+        _getData("/catalog/second", { id: id }).then(data => {
+          console.log(data);
+          _.each(data.subCategory, val => {
+            val.label = val.name;
+            val.value = val.id;
+          });
+          this.smallOptions = data.subCategory;
+        });
       },
       getProductList() {
         _getData("/goods/sjGoodsList", {
@@ -264,8 +233,20 @@
           countPerPage: "1000000"
         }).then(data => {
           console.log("获取产品列表：", data);
+          this.data = data.data;
         });
       }
+    },
+    mounted() {
+      this.getProductList();
+      _getData("/catalog/first", {}).then(data => {
+        console.log("一级", data);
+        _.each(data.categoryList, val => {
+          val.label = val.name;
+          val.value = val.id;
+        });
+        this.bigOptions = data.categoryList;
+      });
     },
     components: {
       commonTitle,

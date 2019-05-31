@@ -68,10 +68,16 @@ const router = new Router({
                         import ("../views/page/merchant/merchantChildren/inquiryManage")
                 },
                 {
-                    path: "inquiryDetail",
+                    path: "inquiryOrderDetail/:id",
                     name: "询价单详情",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/inquiryDetail")
+                },
+                {
+                    path: "editInquiry/:id",
+                    name: "编辑询价单",
+                    component: () =>
+                        import ("../views/page/merchant/merchantChildren/editInquiry")
                 },
                 {
                     path: "orderManage",

@@ -20,7 +20,7 @@
               :class="isShowInfo.current == 3 ? 'active' : ''"
               @click="tab(3)"
             >
-              已关闭(1)
+              已关闭(3)
             </li>
           </ul>
         </div>
@@ -64,7 +64,8 @@
         isShowInfo: {
           isDetail: false,
           isShow: false,
-          current: 1
+          current: 1,
+          isShop: 1
         },
         data: [],
         checkAll: false,
@@ -112,7 +113,15 @@
         }
       },
       getInquiryList() {
-        _getData("/enquiry/enquiryList", {
+        // _getData("/enquiry/enquiryList", {
+        //   page: 1,
+        //   size: 10,
+        //   status: this.isShowInfo.current
+        // }).then(data => {
+        //   console.log("获取询价管理的列表：", data);
+        //   this.data = data.data;
+        // });
+        _getData("/enquiry/merchantsEnquiryList", {
           page: 1,
           size: 10,
           status: this.isShowInfo.current

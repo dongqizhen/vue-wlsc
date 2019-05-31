@@ -53,7 +53,7 @@
           </div>
         </div>
         <div class="common">
-          <div class="left-box">产品类型</div>
+          <div class="left-box"><span class="red">*</span>产品类型</div>
           <div class="right-box">
             <el-select
               style="width: 136px;margin-right:10px;"
