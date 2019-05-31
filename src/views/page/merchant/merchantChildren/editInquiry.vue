@@ -14,6 +14,8 @@
             v-for="item in data.list"
             :key="item.id"
             :itemData="item"
+            v-on:getIsCheck="getIsCheck"
+            :checkedList="checkedList"
           ></edit-inquiry-product>
         </div>
         <div class="list-footer">
@@ -62,7 +64,24 @@
         data: {}
       };
     },
-    methods: { onChange() {}, isCheckAllMethod() {} },
+    methods: {
+      getIsCheck(val) {
+        console.log(val);
+      },
+      onChange() {},
+      isCheckAllMethod(val) {
+        if (val) {
+          this.checkAll = true;
+          this.checkedList = [];
+          for (const val of this.data.list) {
+            this.checkedList.push(val.id);
+          }
+        } else {
+          this.checkAll = false;
+          this.checkedList = [];
+        }
+      }
+    },
     mounted() {
       _getData("/enquiry/getEnquiry", { enquirySn: this.$route.params.id }).then(
         data => {
@@ -111,10 +130,10 @@
               width: 90px;
             }
             &:nth-child(6) {
-              width: 97px;
+              width: 102px;
             }
             &:nth-child(7) {
-              width: 120px;
+              width: 115px;
             }
           }
         }

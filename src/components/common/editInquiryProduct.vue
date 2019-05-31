@@ -1,7 +1,10 @@
 <template>
-  <div class="inquiryProductItem">
+  <div class="inquiryProductItem" :class="addClass(itemData.id)">
     <span>
-      <a-checkbox @change="onChange(itemData.id)"></a-checkbox>
+      <a-checkbox
+        @change="onChange(itemData.id)"
+        :checked="checkedChange(itemData.id)"
+      ></a-checkbox>
     </span>
     <span>
       <img :src="itemData.list_pic_url" />
@@ -9,14 +12,14 @@
     <span>{{ itemData.name }}</span>
     <span>{{ itemData.brand_name }}/{{ itemData.brand_model_name }}</span>
     <span>
-      <a-input placeholder="输入单价" v-model="itemData.unit_price"> </a-input>
+      <a-input placeholder="输入单价" v-model="itemData.unit_price"></a-input>
     </span>
-    <span>{{ itemData.number }}</span>
+    <span><van-stepper v-model="itemData.number"/></span>
     <span> <a-date-picker @change="onChange"/></span>
     <span
       ><a-textarea
         placeholder="输入备注"
-        v-model="itemData.introduce"
+        v-model="itemData.buyerDescription"
       ></a-textarea
     ></span>
   </div>
@@ -24,15 +27,40 @@
 <script>
   export default {
     data() {
-      return {};
+      return { list: this.checkedList };
     },
     props: {
       itemData: {
         type: Object
+      },
+      checkedList: {
+        type: Array
       }
     },
     methods: {
-      onChange(id) {}
+      onChange(id) {
+        if (_.indexOf(this.list, id) == -1) {
+          this.list.push(id);
+          this.$emit("getIsCheck", this.list);
+        } else {
+          this.list = _.without(this.list, id);
+          this.$emit("getIsCheck", id);
+        }
+      },
+      checkedChange(id) {
+        for (const val of this.list) {
+          if (val == id) {
+            return true;
+          }
+        }
+      },
+      addClass(id) {
+        for (const val of this.list) {
+          if (val == id) {
+            return "active";
+          }
+        }
+      }
     }
   };
 </script>
@@ -68,20 +96,48 @@
       }
       &:nth-child(5) {
         width: 98px;
+        .ant-input {
+          width: 98px;
+          height: 21px;
+          font-size: 12px;
+        }
       }
       &:nth-child(6) {
         width: 90px;
+        /deep/.van-stepper {
+          .van-stepper__minus,
+          .van-stepper__plus {
+            width: 20px;
+            height: 20px;
+          }
+          .van-stepper__input {
+            width: 38px;
+            height: 18px;
+          }
+        }
       }
       &:nth-child(7) {
-        width: 100px;
-        .ant-calendar-picker {
-          width: 98px;
+        width: 110px;
+        margin-right: 20px;
+        /deep/.ant-calendar-picker {
+          width: 110px;
           height: 21px;
           margin-left: 0;
+          > div {
+            height: 21px;
+          }
+          .ant-input {
+            height: 21px;
+            line-height: 21px;
+            padding: 4px 8px;
+          }
         }
       }
       &:nth-child(8) {
-        width: 120px;
+        width: 115px;
+        .ant-input {
+          resize: none;
+        }
       }
     }
   }

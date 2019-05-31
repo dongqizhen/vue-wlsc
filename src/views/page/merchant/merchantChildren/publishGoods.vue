@@ -136,7 +136,9 @@
               class="priceMax"
               v-model="submitData.maxPrice"
             />
-            <a-checkbox @change="onChange">询价</a-checkbox>
+            <a-checkbox @change="onChange" :checked="isEnquiry"
+              >询价</a-checkbox
+            >
           </div>
         </div>
         <div class="common" v-if="isSparePart">
@@ -266,6 +268,7 @@
         brandId: -1,
         isSparePart: 0,
         uploadList: [],
+        isEnquiry: false,
         submitData: {
           name: "",
           goodsSn: "",
@@ -298,6 +301,10 @@
         }
         if (this.submitData.categoryId == "") {
           alert("请选择小类");
+          return;
+        }
+        if (this.submitData.goodsType == "") {
+          alert("请选择类型");
           return;
         }
         if (this.submitData.brandId == "") {
@@ -344,8 +351,13 @@
         }
         _getData("/goods/addGoods", this.submitData).then(data => {
           console.log(data);
-          alert("产品发布成功");
-          return;
+          if (this.$route.query.id) {
+            alert("产品编辑成功");
+            this.$router.replace({ path: "/merchant/productManage" });
+          } else {
+            alert("产品发布成功");
+            return;
+          }
         });
       },
       save() {},
@@ -369,8 +381,10 @@
           this.submitData.minPrice = "";
           this.submitData.maxPrice = "";
           this.submitData.isEnquiry = 1;
+          this.isEnquiry = true;
         } else {
           this.submitData.isEnquiry = 0;
+          this.isEnquiry = false;
         }
       },
       handleProductBigTypeChange(value) {
@@ -465,6 +479,58 @@
         });
         this.brandOptions = data.brandList;
       });
+      if (this.$route.query.id) {
+        _getData("/goods/gooddetail", { id: this.$route.query.id }).then(data => {
+          console.log("获取产品详情：", data);
+          this.submitData.id = data.productInfo.id;
+          this.getSmallType(data.productInfo.bigCategoryId);
+          this.getModelData(
+            data.productInfo.category_id,
+            data.productInfo.brand_id
+          );
+          this.submitData.name = data.productInfo.name;
+          this.submitData.goodsSn = data.productInfo.goods_sn;
+          this.submitData.bigCategoryId = data.productInfo.bigCategoryId;
+          this.submitData.categoryId = data.productInfo.category_id;
+          this.submitData.goodsType = data.productInfo.goods_brief;
+          this.submitData.brandId = data.productInfo.brand_id;
+          this.submitData.modelId = data.productInfo.model_id;
+
+          this.submitData.sparePart = data.productInfo.sparePart;
+          this.submitData.goodsNumber = data.productInfo.goods_number;
+          this.submitData.origin = data.productInfo.origin;
+          this.submitData.goodsDesc = data.productInfo.goods_desc;
+          this.submitData.isOnSale = data.productInfo.is_on_sale;
+          if (data.productInfo.isEnquiry) {
+            this.isEnquiry = true;
+            this.submitData.minPrice = "";
+            this.submitData.maxPrice = "";
+          } else {
+            this.isEnquiry = false;
+            this.submitData.minPrice = data.productInfo.minPrice;
+            this.submitData.maxPrice = data.productInfo.maxPrice;
+          }
+          if (data.productInfo.list_pic_url) {
+            this.uploadList.push({ uid: 1, url: data.productInfo.list_pic_url });
+          }
+          if (data.productInfo.image1) {
+            this.uploadList.push({ uid: 2, url: data.productInfo.image1 });
+          }
+          if (data.productInfo.image2) {
+            this.uploadList.push({ uid: 3, url: data.productInfo.image2 });
+          }
+          if (data.productInfo.image3) {
+            this.uploadList.push({ uid: 4, url: data.productInfo.image3 });
+          }
+          if (data.productInfo.image4) {
+            this.uploadList.push({ uid: 5, url: data.productInfo.image4 });
+          }
+          if (data.productInfo.image5) {
+            this.uploadList.push({ uid: 6, url: data.productInfo.image5 });
+          }
+          console.log(this.uploadList);
+        });
+      }
     }
   };
 </script>

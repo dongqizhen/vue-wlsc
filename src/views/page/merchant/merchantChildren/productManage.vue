@@ -17,7 +17,10 @@
             <div class="common productName">
               <div class="left-box">产品名称</div>
               <div class="right-box">
-                <a-input placeholder="请输入产品名称" />
+                <a-input
+                  placeholder="请输入产品名称"
+                  v-model="submitData.name"
+                />
               </div>
             </div>
             <div class="common productStatus">
@@ -25,15 +28,15 @@
               <div class="right-box">
                 <el-select
                   style="width: 112px;margin-right:10px;"
-                  v-model="submitData.bigCategoryId"
+                  v-model="submitData.isOnSale"
                   placeholder="请选择状态"
                   @change="handleStatusChange"
                 >
                   <el-option
                     v-for="item in statusOptions"
                     :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
+                    :label="item.label"
+                    :value="item.value"
                   >
                   </el-option>
                 </el-select>
@@ -74,8 +77,8 @@
             </div>
           </div>
           <div class="selectBtn">
-            <button class="search">搜索</button>
-            <button class="clear">清除</button>
+            <button class="search" @click="searchData">搜索</button>
+            <button class="clear" @click="clearData">清除</button>
             <button class="export">导出</button>
           </div>
         </div>
@@ -101,14 +104,14 @@
               </span>
               <span><img :src="item.list_pic_url"/></span>
               <span>{{ item.name }}</span>
-              <span>{{ item.productLine }}</span>
-              <span>{{ item.brandOrmodel }}</span>
+              <span>{{ item.category_name }}/{{ item.category_name }}</span>
+              <span>{{ item.brand_name }}/{{ item.brand_model_name }}</span>
               <span>{{ item.is_on_sale == 1 ? "上架" : "未上架" }}</span>
               <span>{{ item.goods_number }}</span>
-              <span>{{ item.createOn }}</span>
+              <span>{{ item.add_time.substring(0, 16) }}</span>
               <span>
-                <div>编辑</div>
-                <div>下架</div>
+                <div @click="editProduct(item.id)">编辑</div>
+                <div @click="Obtained(item.id)">下架</div>
               </span>
             </li>
           </ul>
@@ -122,7 +125,10 @@
               <button class="obtained">下架</button>
             </div>
           </check-all>
-          <pagination :data="data"></pagination>
+          <pagination
+            :data="totalCount"
+            v-on:onPaginationChange="getPaginationChange"
+          ></pagination>
         </div>
       </div>
     </div>
@@ -142,12 +148,21 @@
         data: [],
         bigOptions: [],
         smallOptions: [],
-        statusOptions: [],
+        statusOptions: [
+          { label: "全部", value: 0 },
+          { label: "上架", value: 1 },
+          { label: "下架", value: 2 }
+        ],
         checkAll: false,
         checkedList: [],
-        totalCount: 60,
+        totalCount: { amount: 0 },
         submitData: {
-          value: ""
+          isOnSale: 0,
+          name: "",
+          bigCategoryId: "",
+          categoryId: "",
+          currentPage: 1,
+          countPerPage: "10"
         }
       };
     },
@@ -155,6 +170,29 @@
       ...mapState(["userShopInfo"])
     },
     methods: {
+      editProduct(id) {
+        this.$router.replace({
+          path: "/merchant/publishGoods",
+          query: { id: id }
+        });
+      },
+      Obtained(id) {
+        _getData("/goods/goodsIsOnSale", { id: id, isOnSale: "" }).then(data => {
+          console.log(data);
+        });
+      },
+      searchData() {
+        console.log(this.submitData);
+      },
+      clearData() {
+        this.submitData.isOnSale = 0;
+        this.submitData.name = "";
+        this.submitData.bigCategoryId = "";
+        this.submitData.categoryId = "";
+      },
+      getPaginationChange(val) {
+        console.log(val);
+      },
       isCheckAllMethod(val) {
         if (val) {
           this.checkAll = true;
@@ -173,7 +211,7 @@
         } else {
           this.checkedList = _.without(this.checkedList, id);
         }
-        if (this.checkedList.length == data.length) {
+        if (this.checkedList.length == this.data.length) {
           this.checkAll = true;
         } else {
           this.checkAll = false;
@@ -196,7 +234,7 @@
       onCheckAllChange() {
         if (!this.checkAll) {
           this.checkAll = true;
-          for (const val of data) {
+          for (const val of this.data) {
             this.checkedList.push(val.id);
           }
         } else {
@@ -204,13 +242,17 @@
           this.checkedList = [];
         }
       },
-      handleStatusChange() {},
+      handleStatusChange(value) {
+        this.isOnSale = value;
+      },
       handleProductBigTypeChange(value) {
         this.submitData.bigCategoryId = value;
+        this.submitData.categoryId = "";
         this.getSmallType(value);
       },
       handleProductSmallTypeChange(value) {
         console.log(value);
+        this.submitData.categoryId = value;
       },
       getSmallType(id) {
         _getData("/catalog/second", { id: id }).then(data => {
@@ -223,17 +265,14 @@
         });
       },
       getProductList() {
-        _getData("/goods/sjGoodsList", {
-          storeId: this.userShopInfo.store_id,
-          name: "",
-          isOnSale: "",
-          bigCategoryId: "",
-          categoryId: "",
-          currentPage: 1,
-          countPerPage: "1000000"
-        }).then(data => {
+        this.submitData = {
+          ...this.submitData,
+          storeId: this.userShopInfo.store_id
+        };
+        _getData("/goods/sjGoodsList", this.submitData).then(data => {
           console.log("获取产品列表：", data);
           this.data = data.data;
+          this.totalCount.amount = data.count;
         });
       }
     },
