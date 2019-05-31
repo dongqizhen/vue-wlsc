@@ -23,7 +23,19 @@
           ></recommends-tab-vue>
           <div class="recommend_page">
             <ul class="floor" v-if="recommend_tabs_index == 0">
-              <li v-for="(item, i) in goodList" :key="item.id">
+              <li
+                v-for="(item, i) in goodList"
+                :key="item.id"
+                :class="
+                  i % 4 == 0
+                    ? 'one'
+                    : i % 4 == 1
+                    ? 'two'
+                    : i % 4 == 2
+                    ? 'three'
+                    : 'four'
+                "
+              >
                 <h2>
                   <p>{{ i + 1 }}F {{ item.name }}</p>
                   <ul>
@@ -48,11 +60,11 @@
                       <svg class="icon" aria-hidden="true">
                         <use
                           :xlink:href="
-                            i == 0
+                            i % 4 == 0
                               ? '#iconhuangsegengduo'
-                              : i == 1
+                              : i % 4 == 1
                               ? '#iconlvsegengduo'
-                              : i == 2
+                              : i % 4 == 2
                               ? '#iconzisegengduo'
                               : '#iconlansegengduo'
                           "
@@ -343,6 +355,9 @@
                         margin-left: 7px;
                         margin-bottom: 3px;
                       }
+                      &:hover {
+                        opacity: 0.7;
+                      }
                     }
                   }
                 }
@@ -363,7 +378,7 @@
                     padding-top: 4px;
                   }
                 }
-                &:nth-child(2) {
+                &.two {
                   h2 {
                     p {
                       background: #43d480;
@@ -378,7 +393,7 @@
                     }
                   }
                 }
-                &:nth-child(3) {
+                &.three {
                   h2 {
                     p {
                       background: #8880fe;
@@ -393,7 +408,7 @@
                     }
                   }
                 }
-                &:nth-child(4) {
+                &.four {
                   h2 {
                     p {
                       background: #0283ff;

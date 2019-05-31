@@ -154,77 +154,78 @@
     },
     mounted() {
       this.getCommonCategory();
-      _getData("catalog/listAll", {}).then(data => {
-        console.log(data);
-        this.navArr = [...this.navArr, ...data.currentCategory];
-      });
+      _getData("catalog/listAll", {})
+        .then(data => {
+          console.log(data);
+          this.navArr = [...this.navArr, ...data.currentCategory];
+        })
+        .then(() => {
+          this.$nextTick().then(() => {
+            new Swiper(".product-category .swiper-container.nav_slide", {
+              slidesPerView: "auto",
+              // freeMode: true,
+              direction: "horizontal",
+              slideToClickedSlide: true,
+              on: {
+                init: function() {
+                  this.navSlideWidth = this.slides[0].clientWidth; //导航字数需要统一,每个导航宽度一致
 
-      new Swiper(".product-category .swiper-container.nav_slide", {
-        slidesPerView: "auto",
-        // freeMode: true,
-        direction: "horizontal",
-        slideToClickedSlide: true,
-        on: {
-          init: function() {
-            this.navSlideWidth = this.slides[0].clientWidth; //导航字数需要统一,每个导航宽度一致
+                  this.bar = this.$el.find(".bar");
 
-            this.bar = this.$el.find(".bar");
+                  this.bar.transition(300);
+                  this.navSum = this.slides[this.slides.length - 1].offsetLeft; //最后一个slide的位置
 
-            this.bar.transition(300);
-            this.navSum = this.slides[this.slides.length - 1].offsetLeft; //最后一个slide的位置
+                  this.clientWidth = parseInt(this.$wrapperEl[0].clientWidth); //Nav的可视宽度
 
-            this.clientWidth = parseInt(this.$wrapperEl[0].clientWidth); //Nav的可视宽度
+                  this.navWidth = this.navSlideWidth * this.slides.length;
+                },
+                touchStart: function() {
+                  this.updateSlides();
+                  this.updateSize();
+                },
+                tap: function(e) {
+                  //console.log(this);
+                  if (this.clickedIndex == undefined) return;
+                  // mySwiper.slideTo(this.clickIndex, 0);
+                  const activeSlidePosition = this.slides[this.clickedIndex]
+                    .offsetLeft;
 
-            this.navWidth = this.navSlideWidth * this.slides.length;
-          },
-          touchStart: function() {
-            this.updateSlides();
-          },
-          tap: function(e) {
-            //console.log(this);
-            if (this.clickedIndex == undefined) return;
-            // mySwiper.slideTo(this.clickIndex, 0);
-            const activeSlidePosition = this.slides[this.clickedIndex].offsetLeft;
+                  this.bar.transform("translateX(" + activeSlidePosition + "px)");
 
-            this.bar.transform("translateX(" + activeSlidePosition + "px)");
+                  // console.log(this.slides[this.clickedIndex]);
+                  // this.slides[this.clickedIndex].classList.add("active");
+                  //导航居中
+                  // let navActiveSlideLeft = this.slides[this.clickedIndex].offsetLeft; //activeSlide距左边的距离
+                  this.setTransition(300);
 
-            // console.log(this.slides[this.clickedIndex]);
-            // this.slides[this.clickedIndex].classList.add("active");
-            //导航居中
-            // let navActiveSlideLeft = this.slides[this.clickedIndex].offsetLeft; //activeSlide距左边的距离
-            this.setTransition(300);
+                  if (this.navWidth <= this.clientWidth) {
+                    this.setTranslate(0);
+                    return;
+                  }
 
-            if (this.navWidth <= this.clientWidth) {
-              this.setTranslate(0);
-              return;
-            }
-
-            if (
-              activeSlidePosition <
-              (this.clientWidth - parseInt(this.navSlideWidth)) / 2
-            ) {
-              this.setTranslate(0);
-            } else if (
-              activeSlidePosition >
-              this.navWidth -
-                (parseInt(this.navSlideWidth) + this.clientWidth) / 2
-            ) {
-              console.log(
-                activeSlidePosition,
-                this.navSlideWidth,
-                this.clientWidth
-              );
-              this.setTranslate(this.clientWidth - this.navWidth);
-            } else {
-              this.setTranslate(
-                (this.clientWidth - parseInt(this.navSlideWidth)) / 2 -
-                  activeSlidePosition +
-                  parseInt(this.marginLeft)
-              );
-            }
-          }
-        }
-      });
+                  if (
+                    activeSlidePosition <
+                    (this.clientWidth - parseInt(this.navSlideWidth)) / 2
+                  ) {
+                    this.setTranslate(0);
+                  } else if (
+                    activeSlidePosition >
+                    this.navWidth -
+                      (parseInt(this.navSlideWidth) + this.clientWidth) / 2
+                  ) {
+                    this.setTranslate(this.clientWidth - this.navWidth);
+                  } else {
+                    this.setTranslate(
+                      (this.clientWidth - parseInt(this.navSlideWidth)) / 2 -
+                        activeSlidePosition +
+                        parseInt(this.marginLeft)
+                    );
+                  }
+                }
+              }
+            });
+          });
+        });
     },
     watch: {
       navArr(newVal, oldVal) {
@@ -268,6 +269,9 @@
         height: 14px;
         margin-right: 5px;
         margin-top: 1px;
+      }
+      &:hover {
+        opacity: 0.7;
       }
     }
   }

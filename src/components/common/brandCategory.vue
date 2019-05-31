@@ -148,10 +148,7 @@
     components: { CommonBrandsModalVue },
     mounted() {
       this.getCommonBrandCategory();
-      //   _getData("brand/merge", {}).then(data => {
-      //     console.log("aaaaa", data);
-      //     this.arr = data;
-      //   });
+
       new Swiper(".brand-category .swiper-container.nav_slide", {
         slidesPerView: "auto",
         // freeMode: true,
@@ -256,6 +253,9 @@
         height: 14px;
         margin-right: 5px;
         margin-top: 1px;
+      }
+      &:hover {
+        opacity: 0.7;
       }
     }
   }

@@ -225,7 +225,8 @@
         this.saveCategory();
       },
       handleClick(item) {
-        let commonArr = _.intersectionBy(this.myArray, this.myArray2, "name");
+        console.log(item);
+        let commonArr = _.intersectionBy(this.myArray2, [item], "name");
         if (commonArr.length) {
           this.$message.warning("已添加至常用分类", 1);
           return;
