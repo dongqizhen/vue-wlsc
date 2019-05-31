@@ -34,7 +34,7 @@
     methods: {
       callback(key) {},
       tabClcik(key, val) {
-        this.$emit("tabClick", key);
+        this.$emit("tabClick", key, val);
       }
     }
   };

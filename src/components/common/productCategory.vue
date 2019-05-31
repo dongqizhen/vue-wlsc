@@ -92,7 +92,7 @@
     data() {
       return {
         visible: false, //控制modal层弹出
-        defaultsVal: 0, //默认高量nav下标
+        defaultsVal: 0, //默认高亮nav下标
         isShow: true, //是否显示管理常用分类按钮
         navArr: [],
         pageArr: []
@@ -111,7 +111,7 @@
     methods: {
       //点击某一类
       categoryClick(item) {
-        this.$emit("categoryClick", item);
+        this.$emit("categoryClick", item, this.navArr[this.defaultsVal]);
       },
       //控制弹出层显示
       handleClick() {

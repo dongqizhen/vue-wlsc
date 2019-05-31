@@ -80,20 +80,32 @@
     mixins: [mixin],
 
     created() {
-      this.routes = [
-        {
-          name: "首页",
-          path: "/"
-        },
-        {
-          name: "找店铺",
-          path: "/lookingShop?nav_index=3"
-        },
-        {
-          name: this.$route.query.shopName,
-          path: "#"
-        }
-      ];
+      this.routes = this.$route.query.nav_index
+        ? [
+            {
+              name: "首页",
+              path: "/"
+            },
+            {
+              name: "找店铺",
+              path: "/lookingShop?nav_index=3"
+            },
+            {
+              name: this.$route.query.shopName,
+              path: "#"
+            }
+          ]
+        : [
+            {
+              name: "首页",
+              path: "/"
+            },
+
+            {
+              name: this.$route.query.shopName,
+              path: "#"
+            }
+          ];
     },
     methods: {
       categoryClick(item) {
