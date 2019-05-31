@@ -2,7 +2,16 @@
   <div class="login-modal">
     <modal :isShow="visible" :options="options">
       <div slot="content" v-if="type != 'login'">
-        <img :src="imgUrl" />
+        <div class="alertContent">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icondingdanshanchu"></use>
+          </svg>
+          订单删除后无法恢复
+        </div>
+        <div class="btn">
+          <a-button @click="sure">确定删除</a-button>
+          <a-button @click="visible = false">取消</a-button>
+        </div>
       </div>
       <div slot="content" v-else>
         <p>
@@ -28,10 +37,10 @@
       return {
         visible: false,
         options: {
-          title: "查看支付证明",
+          title: "提示",
           closable: true,
           maskClosable: false,
-          wrapClassName: "lookPay",
+          wrapClassName: "deleteOrder",
           centered: false
         }
       };
@@ -50,9 +59,6 @@
         type: String,
         default: "提交成功",
         required: false
-      },
-      imgUrl: {
-        type: String
       }
     },
     components: {
@@ -65,7 +71,8 @@
         });
         this.visible = false;
         window.open(href, "_blank");
-      }
+      },
+      sure() {}
     },
     watch: {
       Visible(newVal) {
@@ -74,6 +81,10 @@
       visible(newVal) {
         if (!newVal) {
           this.$parent.visible = false;
+          this.$parent.payVisible = false;
+          this.$parent.sureVisible = false;
+          this.$parent.commentVisible = false;
+          this.$parent.deleteVisible = false;
         }
       }
     }

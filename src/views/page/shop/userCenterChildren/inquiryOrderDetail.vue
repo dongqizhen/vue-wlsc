@@ -51,8 +51,10 @@
           >
             <div class="totalInfo">
               <span class="totalPrice"> 报价总金额：<i>¥5982827.00</i> </span>
-              <span class="download">转为我的报价</span>
-              <span class="edit">提交订单</span>
+              <span class="download" @click="turnMyQuote">转为我的报价</span>
+              <span class="edit">
+                <router-link to="/userCenter/submitOrder">提交订单</router-link>
+              </span>
             </div>
           </div>
         </check-all>
@@ -122,6 +124,7 @@
       };
     },
     methods: {
+      turnMyQuote() {},
       tab(tabVal) {
         this.current = tabVal;
       },

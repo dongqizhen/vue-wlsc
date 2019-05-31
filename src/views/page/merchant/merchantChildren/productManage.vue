@@ -130,6 +130,7 @@
 </template>
 
 <script>
+  import { mapState } from "vuex";
   const data = [
     {
       id: "1",
@@ -183,6 +184,9 @@
           value: ""
         }
       };
+    },
+    computed: {
+      ...mapState(["userShopInfo"])
     },
     mounted() {
       this.getProductList();
@@ -251,6 +255,7 @@
       },
       getProductList() {
         _getData("/goods/sjGoodsList", {
+          storeId: this.userShopInfo.store_id,
           name: "",
           isOnSale: "",
           bigCategoryId: "",

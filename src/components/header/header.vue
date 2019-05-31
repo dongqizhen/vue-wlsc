@@ -93,15 +93,15 @@
       openMerchant() {
         _getData("/user/getUser", {}).then(data => {
           console.log("获取用户的店铺开店信息：", data);
-          // if (data.data.errno) {
-          //   this.$router.replace({
-          //     path: "/login",
-          //     query: { redirect: "/merchant" }
-          //   });
-          // } else {
-          this.changeUserShopInfoState(data);
-          this.$router.push({ path: "/merchant" });
-          // }
+          if (data.data) {
+            this.$router.replace({
+              path: "/login",
+              query: { redirect: "/merchant" }
+            });
+          } else {
+            this.changeUserShopInfoState(data);
+            this.$router.push({ path: "/merchant" });
+          }
         });
       }
     },
