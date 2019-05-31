@@ -91,7 +91,22 @@
           }
         }
       },
-      remarkRead() {}
+      remarkRead() {
+        _getData("/enquiry/addEnquiry", {
+          param: [
+            {
+              storeId: "店铺id",
+              goodsList: [
+                {
+                  goodsId: "商品id",
+                  number: "商品数量",
+                  buyerDescription: "商品买家描述"
+                }
+              ]
+            }
+          ]
+        });
+      }
     },
     mounted() {
       _getData("/cart/getCarts", {}).then(data => {

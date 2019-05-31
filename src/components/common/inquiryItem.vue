@@ -16,7 +16,17 @@
         ></inquiry-product-item>
       </div>
       <div class="operating">
-        <div>
+        <div v-if="isShowInfo.current == 1 && isShowInfo.isShop == 1">
+          <router-link
+            :to="{
+              path: `editInquiry/${data.enquirySn}`,
+              query: { isShowInfo: isShowInfo }
+            }"
+          >
+            编辑报价
+          </router-link>
+        </div>
+        <div v-else>
           <router-link
             :to="{
               path: `inquiryOrderDetail/${data.enquirySn}`,

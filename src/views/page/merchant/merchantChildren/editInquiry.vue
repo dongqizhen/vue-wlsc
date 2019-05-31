@@ -1,6 +1,6 @@
 <template>
   <div class="inquiryOrderDetail">
-    <common-title title="询价单"></common-title>
+    <common-title title="编辑询价单"></common-title>
     <div class="inquiryContainer">
       <order-title
         :isShowInfo="isShowInfo"
@@ -10,11 +10,11 @@
       <div class="inquiryContent">
         <list-title :titleArr="titleArr"></list-title>
         <div class="listContent">
-          <inquiry-detail-item-product
+          <edit-inquiry-product
             v-for="item in data.list"
             :key="item.id"
             :itemData="item"
-          ></inquiry-detail-item-product>
+          ></edit-inquiry-product>
         </div>
         <div class="list-footer">
           <check-all
@@ -36,7 +36,7 @@
   import orderTitle from "../../../../components/common/orderTitle";
   import listTitle from "../../../../components/common/listTitle";
   import checkAll from "../../../../components/common/checkAll";
-  import inquiryDetailItemProduct from "../../../../components/common/inquiryDetailItemProduct";
+  import editInquiryProduct from "../../../../components/common/editInquiryProduct";
   import { _getData } from "../../../../config/getData";
   export default {
     data() {
@@ -76,7 +76,7 @@
       orderTitle,
       listTitle,
       checkAll,
-      inquiryDetailItemProduct
+      editInquiryProduct
     }
   };
 </script>
@@ -148,3 +148,4 @@
     }
   }
 </style>
+
