@@ -12,6 +12,7 @@
                 :data="item"
                 :checkedList="checkedList"
                 v-on:getChecked="getChecked"
+                :isShowInfo="isShowInfo"
               ></order-item>
             </li>
           </ul>
@@ -36,22 +37,14 @@
   export default {
     data() {
       return {
-        data: [
-          {
-            id: 1,
-            title: "卖家申请店铺审核通过提示",
-            createOn: "2018-11-18",
-            introduce:
-              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
-          },
-          {
-            id: 2,
-            title: "卖家申请店铺审核未通过提示",
-            createOn: "2018-11-19",
-            introduce:
-              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
-          }
-        ],
+        isShowInfo: {
+          isDetail: false,
+          isShow: false,
+          current: 1,
+          isOrder: true,
+          isTrue: true
+        },
+        data: [],
         checkedList: [],
         checkAll: false,
         tabs: [

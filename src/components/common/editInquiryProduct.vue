@@ -15,7 +15,12 @@
       <a-input placeholder="输入单价" v-model="itemData.unit_price"></a-input>
     </span>
     <span><van-stepper v-model="itemData.number"/></span>
-    <span> <a-date-picker @change="onChange"/></span>
+    <span
+      ><a-date-picker
+        :format="'YYYY-MM-DD'"
+        @change="onDateChange"
+        :defaultValue="moment('2015-01-01', 'YYYY-MM-DD')"
+    /></span>
     <span
       ><a-textarea
         placeholder="输入备注"
@@ -25,6 +30,7 @@
   </div>
 </template>
 <script>
+  import moment from "moment";
   export default {
     data() {
       return { list: this.checkedList };
@@ -38,13 +44,19 @@
       }
     },
     methods: {
+      moment,
+      onDateChange(date, dataString) {
+        console.log(date, dataString);
+        this.itemData.arrivalTime = dataString;
+      },
       onChange(id) {
         if (_.indexOf(this.list, id) == -1) {
           this.list.push(id);
-          this.$emit("getIsCheck", this.list);
+          this.$emit("getChecked", this.list);
+          this.$emit("getData", { id: id, data: this.itemData });
         } else {
           this.list = _.without(this.list, id);
-          this.$emit("getIsCheck", id);
+          this.$emit("getChecked", id);
         }
       },
       checkedChange(id) {

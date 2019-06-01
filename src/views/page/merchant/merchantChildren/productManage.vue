@@ -111,7 +111,9 @@
               <span>{{ item.add_time.substring(0, 16) }}</span>
               <span>
                 <div @click="editProduct(item.id)">编辑</div>
-                <div @click="Obtained(item.id)">下架</div>
+                <div @click="obtained(item.id, item.is_on_sale)">
+                  {{ item.is_on_sale == 1 ? "下架" : "上架" }}
+                </div>
               </span>
             </li>
           </ul>
@@ -176,13 +178,18 @@
           query: { id: id }
         });
       },
-      Obtained(id) {
-        _getData("/goods/goodsIsOnSale", { id: id, isOnSale: "" }).then(data => {
-          console.log(data);
-        });
+      obtained(id, is_on_sale) {
+        console.log(id);
+        console.log(is_on_sale);
+        _getData("/goods/goodsIsOnSale", { id: id, isOnSale: is_on_sale }).then(
+          data => {
+            console.log(data);
+          }
+        );
       },
       searchData() {
         console.log(this.submitData);
+        this.getProductList(this.submitData);
       },
       clearData() {
         this.submitData.isOnSale = 0;
@@ -264,12 +271,8 @@
           this.smallOptions = data.subCategory;
         });
       },
-      getProductList() {
-        this.submitData = {
-          ...this.submitData,
-          storeId: this.userShopInfo.store_id
-        };
-        _getData("/goods/sjGoodsList", this.submitData).then(data => {
+      getProductList(params) {
+        _getData("/goods/sjGoodsList", params).then(data => {
           console.log("获取产品列表：", data);
           this.data = data.data;
           this.totalCount.amount = data.count;
@@ -277,7 +280,11 @@
       }
     },
     mounted() {
-      this.getProductList();
+      this.submitData = {
+        ...this.submitData,
+        storeId: this.userShopInfo.store_id
+      };
+      this.getProductList(this.submitData);
       _getData("/catalog/first", {}).then(data => {
         console.log("一级", data);
         _.each(data.categoryList, val => {
@@ -343,6 +350,8 @@
                 .ant-input {
                   width: 121px;
                   height: 27px;
+                  line-height: 27px;
+                  font-size: 12px;
                 }
                 /deep/.el-select {
                   height: 27px;

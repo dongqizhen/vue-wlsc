@@ -14,8 +14,9 @@
             v-for="item in data.list"
             :key="item.id"
             :itemData="item"
-            v-on:getIsCheck="getIsCheck"
+            v-on:getChecked="getChecked"
             :checkedList="checkedList"
+            v-on:getData="getData"
           ></edit-inquiry-product>
         </div>
         <div class="list-footer">
@@ -25,7 +26,7 @@
             v-on:isCheckAll="isCheckAllMethod"
           >
             <div slot="right-box" class="right-box">
-              <button class="submit">提交报价</button>
+              <button class="submit" @click="submitQuote">提交报价</button>
             </div>
           </check-all>
         </div>
@@ -65,8 +66,24 @@
       };
     },
     methods: {
-      getIsCheck(val) {
+      submitQuote() {},
+      getData(val) {
+        console.log("获取所填的数据：", val);
+      },
+      getChecked(val) {
         console.log(val);
+        if (typeof val == "object") {
+          this.checkedList = val;
+        } else {
+          if (_.indexOf(this.checkedList, val) != -1) {
+            this.checkedList = _.without(this.checkedList, val);
+          }
+        }
+        if (this.checkedList.length == this.data.list.length) {
+          this.checkAll = true;
+        } else {
+          this.checkAll = false;
+        }
       },
       onChange() {},
       isCheckAllMethod(val) {
