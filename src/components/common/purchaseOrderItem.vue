@@ -3,15 +3,15 @@
     <div class="shopName">
       <a-checkbox @change="itemAllChange" :checked="checkAll"></a-checkbox>
       <img src="http://file.haoyigong.com/server/upload/1554429391594.jpg" />
-      <span>{{ val.shopName }}</span>
+      <span>{{ data.shopName }}</span>
     </div>
     <div class="productList">
       <ul>
-        <li v-for="item in val.list" :key="item.id">
+        <li v-for="item in data.list" :key="item.id">
           <span>
             <a-checkbox
-              @change="onChange(item.id)"
-              :checked="checkedChange(item.id)"
+              @change="onChange(item.goods_id)"
+              :checked="checkedChange(item.goods_id)"
             ></a-checkbox>
           </span>
           <span>
@@ -42,7 +42,7 @@
       };
     },
     props: {
-      val: {
+      data: {
         type: Object
       },
       isCheckAll: {
@@ -56,8 +56,8 @@
         if (this.checkAll) {
           this.checkAll = true;
           this.checkedList = [];
-          for (const val of this.val.list) {
-            this.checkedList.push(val.id);
+          for (const val of this.data.list) {
+            this.checkedList.push(val.goods_id);
           }
         } else {
           this.checkAll = false;
@@ -84,19 +84,18 @@
         } else {
           this.checkedList = _.without(this.checkedList, id);
         }
-        if (this.checkedList.length == this.val.list.length) {
+        if (this.checkedList.length == this.data.list.length) {
           this.checkAll = true;
         } else {
           this.checkAll = false;
         }
         this.$emit("getIsCheckAll", {
           isCheckAll: this.checkAll,
-          shopId: this.val.sid
+          shopId: this.data.sid,
+          products: this.checkedList
         });
       },
       checkedChange(id) {
-        console.log(id);
-        console.log(this.checkedList);
         for (const val of this.checkedList) {
           if (val == id) {
             return true;
@@ -104,12 +103,11 @@
         }
       },
       itemAllChange(e) {
-        console.log(e.target.checked);
         if (!this.checkAll) {
           this.checkAll = true;
           this.checkedList = [];
-          for (const val of this.val.list) {
-            this.checkedList.push(val.id);
+          for (const val of this.data.list) {
+            this.checkedList.push(val.goods_id);
           }
         } else {
           this.checkAll = false;
@@ -117,7 +115,8 @@
         }
         this.$emit("getIsCheckAll", {
           isCheckAll: this.checkAll,
-          shopId: this.val.sid
+          shopId: this.data.sid,
+          products: this.checkedList
         });
       }
     }

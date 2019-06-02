@@ -13,7 +13,9 @@
     <span>{{ itemData.brand_name }}/{{ itemData.brand_model_name }}</span>
     <span>{{ itemData.unit_price }}</span>
     <span>{{ itemData.number }}</span>
-    <span>{{ itemData.arrivalTime }}</span>
+    <span>{{
+      itemData.arrivalTime ? itemData.arrivalTime.substring(0, 16) : ""
+    }}</span>
     <span>{{ itemData.goods_desc }}</span>
   </div>
 </template>
@@ -104,7 +106,8 @@
         width: 90px;
       }
       &:nth-child(7) {
-        width: 97px;
+        width: 68px;
+        margin-right: 59px;
       }
       &:nth-child(8) {
         width: 120px;

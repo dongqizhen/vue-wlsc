@@ -135,7 +135,11 @@
         _getData("/enquiry/enquiryList", {
           page: 1,
           size: 10,
-          status: this.isShowInfo.current
+          status: this.isShowInfo.current,
+          enquirySn: "",
+          goodsName: "",
+          startTime: "",
+          endTime: ""
         }).then(data => {
           console.log("获取询价管理的列表：", data);
           this.data = data.data;

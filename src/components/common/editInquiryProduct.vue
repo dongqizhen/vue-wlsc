@@ -19,7 +19,7 @@
       ><a-date-picker
         :format="'YYYY-MM-DD'"
         @change="onDateChange"
-        :defaultValue="moment('2015-01-01', 'YYYY-MM-DD')"
+        :defaultValue="moment(`${itemData.arrivalTime}`, 'YYYY-MM-DD')"
     /></span>
     <span
       ><a-textarea
@@ -41,6 +41,26 @@
       },
       checkedList: {
         type: Array
+      },
+      checkAll: {
+        type: Boolean
+      }
+    },
+    watch: {
+      checkedList(newVal) {
+        this.list = newVal;
+      },
+      checkAll(newVal) {
+        console.log(newVal);
+        if (newVal) {
+          for (const val of this.list) {
+            if (val == this.itemData.id) {
+              this.$emit("getData", {
+                data: this.itemData
+              });
+            }
+          }
+        }
       }
     },
     methods: {
@@ -53,10 +73,11 @@
         if (_.indexOf(this.list, id) == -1) {
           this.list.push(id);
           this.$emit("getChecked", this.list);
-          this.$emit("getData", { id: id, data: this.itemData });
+          this.$emit("getData", { data: this.itemData });
         } else {
           this.list = _.without(this.list, id);
           this.$emit("getChecked", id);
+          this.$emit("getData", id);
         }
       },
       checkedChange(id) {
@@ -83,6 +104,9 @@
     height: 90px;
     border: $border-style;
     padding-top: 10px;
+    &.active {
+      background: rgba(245, 166, 35, 0.06);
+    }
     span {
       font-size: 12px;
       color: #666;

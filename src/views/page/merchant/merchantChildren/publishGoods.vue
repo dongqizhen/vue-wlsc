@@ -390,6 +390,7 @@
       handleProductBigTypeChange(value) {
         console.log(`selected ${value}`);
         this.submitData.bigCategoryId = value;
+        this.submitData.categoryId = "";
         this.getSmallType(value);
       },
       handleProductSmallTypeChange(value) {

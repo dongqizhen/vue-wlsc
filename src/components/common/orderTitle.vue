@@ -22,7 +22,9 @@
           </svg>
         </span>
         <span>{{ isShowInfo.isOrder ? "订单" : "询价单" }}提交时间：</span>
-        <span>2019-09-12 18:30</span>
+        <span>{{
+          data.createTime ? data.createTime.substring(0, 16) : ""
+        }}</span>
       </div>
       <div class="common userName" v-if="!isShowInfo.isDetail">
         <span>

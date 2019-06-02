@@ -1,5 +1,5 @@
 <template>
-  <div class="messageCenter">
+  <div class="shoppingCart">
     <common-title title="选购单"></common-title>
     <div class="listContainer">
       <list-title :titleArr="titleArr"></list-title>
@@ -7,21 +7,21 @@
         <purchase-order-item
           v-for="item in data"
           :key="item.id"
-          :val="item"
+          :data="item"
           :isCheckAll="isCheckAll(item.sid)"
           v-on:getIsCheckAll="getIsCheckAll"
         ></purchase-order-item>
       </div>
       <div class="tfooter">
         <check-all
-          :amount="checkedList.length"
+          :amount="products.length"
           :checkAll="checkAll"
           v-on:isCheckAll="isCheckAllMethod"
         >
           <div slot="right-box">
             <div
-              v-bind:class="['remark', checkedList.length > 0 ? 'active' : '']"
-              @click="remarkRead"
+              v-bind:class="['remark', products.length > 0 ? 'active' : '']"
+              @click="addInquiry"
             >
               一键获取报价
             </div>
@@ -53,24 +53,73 @@
           "数量",
           "小计",
           "操作"
-        ]
+        ],
+        products: []
       };
     },
     methods: {
+      addInquiry() {
+        param: [
+          {
+            storeId: "398",
+            goodsList: [
+              {
+                goodsId: "1181020",
+                number: "4",
+                buyerDescription: "商品买家描述"
+              }
+            ]
+          }
+        ];
+        console.log(this.checkedList);
+        _getData("/enquiry/addEnquiry", {
+          param: [
+            {
+              storeId: "398",
+              goodsList: [
+                {
+                  goodsId: "1181020",
+                  number: "4",
+                  buyerDescription: "商品买家描述"
+                },
+                {
+                  goodsId: "1181019",
+                  number: "4",
+                  buyerDescription: "商品买家描述"
+                }
+              ]
+            }
+          ]
+        }).then(data => {
+          console.log("一键获取报价：", data);
+        });
+      },
       getIsCheckAll(val) {
         console.log(val);
         if (val.isCheckAll) {
           if (_.indexOf(this.checkedList, val.shopId) == -1) {
             this.checkedList.push(val.shopId);
           }
+          // this.products
         } else {
           this.checkedList = _.without(this.checkedList, val.shopId);
         }
-        if (this.checkedList.length == this.data.length) {
-          this.checkAll = true;
-        } else {
-          this.checkAll = false;
+        if (_.indexOf(this.checkedList, val.shopId) == -1) {
+          this.checkedList.push(val.shopId);
         }
+        // console.log(this.checkedList);
+        // _.map(this.checkedList, value => {
+        //   console.log(value);
+        //   _.map(val.products, data => {
+        //     this.products.push(data);
+        //   });
+        // });
+        // console.log(this.products);
+        // if (this.checkedList.length == this.data.length) {
+        //   this.checkAll = true;
+        // } else {
+        //   this.checkAll = false;
+        // }
       },
       isCheckAllMethod(val) {
         if (val) {
@@ -90,25 +139,6 @@
             return true;
           }
         }
-      },
-      remarkRead() {
-        console.log(this.checkedList);
-        _getData("/enquiry/addEnquiry", {
-          param: [
-            {
-              storeId: "398",
-              goodsList: [
-                {
-                  goodsId: "179",
-                  number: "4",
-                  buyerDescription: "商品买家描述"
-                }
-              ]
-            }
-          ]
-        }).then(data=>{
-          console.log(data)
-        });
       }
     },
     mounted() {
@@ -128,10 +158,10 @@
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
-  .messageCenter {
+  .shoppingCart {
     min-height: 666px;
     background-color: #fff;
-    padding: 4px 20px;
+    padding: 4px 20px 20px 20px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
     margin-bottom: 110px;
     .listContainer {

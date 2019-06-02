@@ -13,7 +13,7 @@ let alpha = { // 开发
     HYGLOGINURL: 'http://60.195.252.86:8080',
     HYGINFOURL: "http://60.195.252.86:8082",
     HYGPROURL: "http://60.195.252.86:8083",
-    HYGFILEURL: "http://60.195.252.86:8080",
+    HYGFILEURL: "http://60.195.252.91:8091",
 }
 let beta = { // 测试
     URL: "https://www.api/code",
