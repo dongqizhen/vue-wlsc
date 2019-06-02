@@ -1,5 +1,5 @@
 <template>
-  <div class="share-menu share">
+  <div class="share-menu share" id="shareMenu">
     分享到：
     <!-- <vshare :vshareConfig="vshareConfig"> </vshare> -->
     <div class="social-share" data-initialized="true">
@@ -59,6 +59,11 @@
       };
     },
     components: {},
+    methods: {
+      getShareOffsetTop() {
+        let top = this.$refs.share.offsetTop;
+      }
+    },
     mounted() {
       // url                 : '', // 网址，默认使用 window.location.href
       // source              : '', // 来源（QQ空间会用到）, 默认读取head标签：<meta name="site" content="http://overtrue" />

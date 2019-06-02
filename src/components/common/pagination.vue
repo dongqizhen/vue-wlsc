@@ -2,9 +2,9 @@
   <div class="paginationBox">
     <a-pagination
       showQuickJumper
-      :total="data.amount"
+      :total="data.amount || data.count"
       @change="onPaginationChange"
-      :defaultPageSize="20"
+      :defaultPageSize="defaultPageSize"
     />
     <div class="sureBtn">确定</div>
   </div>
@@ -17,6 +17,10 @@
     props: {
       data: {
         type: [Object]
+      },
+      defaultPageSize: {
+        type: Number,
+        default: 20
       }
     },
     methods: {

@@ -1,7 +1,7 @@
 <template>
   <div class="article-details">
-    <div v-if="!isLoading">
-      <div class="left">
+    <div class="left">
+      <div v-if="!isLoading">
         <div class="article_box">
           <h2>
             {{ detail.topic }}
@@ -40,15 +40,9 @@
         ></comment-vue>
         <menu-vue :item="detail" type="article"></menu-vue>
       </div>
-      <div class="right"></div>
+      <loading v-else></loading>
     </div>
-    <div v-else>
-      <a-skeleton active />
-      <br />
-      <a-skeleton active />
-      <br />
-      <a-skeleton active />
-    </div>
+    <div class="right"></div>
   </div>
 </template>
 
@@ -219,40 +213,11 @@
       }
     }
     /deep/ .menu {
-      border-top: 0;
       position: absolute;
-      width: 50px;
-      height: 240px;
       left: -60px;
       top: 0;
-      flex-direction: column;
-      padding: 0;
-      background: #fff;
-      // justify-content: space-between;
-      box-shadow: $base-box-shadow;
-      span {
-        display: flex;
-        flex-direction: column;
-        height: auto;
-        width: 100%;
-        position: relative;
-        justify-content: center;
-        align-items: center;
-        flex: 1;
-        margin-top: 0;
-        line-height: 18px;
-        // margin-bottom: 24px;
-        cursor: pointer;
-        i {
-          margin-right: 0;
-        }
 
-        &:hover {
-          &::after {
-            display: flex;
-          }
-        }
-      }
+      // justify-content: space-between;
     }
   }
   .right {

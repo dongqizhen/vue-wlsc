@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="write-review-container">
-      <div class="write-review" v-if="isLogin">
+      <div class="write-review" id="writeReview" v-if="isLogin">
         <div class="top">
           <div class="img-box">
             <svg class="icon" aria-hidden="true" v-if="!userInfo.imageUrl">

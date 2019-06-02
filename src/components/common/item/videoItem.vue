@@ -45,7 +45,40 @@
           </ul>
         </div>
       </div>
-      <menu-vue :item="item"></menu-vue>
+      <ul class="menu">
+        <li>
+          <i>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconpinglun"></use>
+            </svg>
+          </i>
+          {{ item.commentNum }}
+        </li>
+        <li>
+          <i>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconshoucang"></use>
+            </svg>
+          </i>
+          {{ item.favoriteNum }}
+        </li>
+        <li>
+          <i>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconzan"></use>
+            </svg>
+          </i>
+          {{ item.amount }}
+        </li>
+        <li>
+          <i>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconfenxiang"></use>
+            </svg>
+          </i>
+          {{ item.shareNum }}
+        </li>
+      </ul>
     </a>
   </router-link>
 </template>
@@ -184,11 +217,11 @@
             overflow: hidden;
           }
         }
-        ul {
+        > ul {
           display: flex;
           flex: 1;
           justify-content: flex-start;
-          li {
+          > li {
             margin-right: 4px;
             height: 25px;
             padding: 0 10px;
@@ -205,6 +238,27 @@
               margin-right: 0;
             }
           }
+        }
+      }
+    }
+    .menu {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      border-top: 1px solid #e0e7ea;
+      li {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: #999999;
+        font-weight: 600;
+        .icon {
+          width: 16px;
+          height: 16px;
+          margin-right: 4px;
+          margin-top: 3px;
         }
       }
     }

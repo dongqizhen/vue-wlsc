@@ -1,40 +1,81 @@
 <template>
-  <div class="toolMenu menu">
-    <span @click="toolMenuClick(1)">
-      <i>
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconpinglun"></use>
-        </svg>
-      </i>
-      {{ item.commentNum }}
-    </span>
-    <span @click="toolMenuClick(2)">
-      <i>
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconshoucang" v-if="!isCollect"></use>
-          <use xlink:href="#iconpingjiashixinwujiaoxing" v-else></use>
-        </svg>
-      </i>
-      {{ item.favoriteNum }}
+  <a-anchor class="toolMenu menu" :affix="false">
+    <a-anchor-link href="#writeReview">
+      <span slot="title">
+        <i>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconpinglun"></use>
+          </svg>
+        </i>
+        {{ item.commentNum }}
+      </span>
+    </a-anchor-link>
+    <a-anchor-link href="#a">
+      <span slot="title" @click="toolMenuClick(2)">
+        <i>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconshoucang" v-if="!isCollect"></use>
+            <use xlink:href="#iconpingjiashixinwujiaoxing" v-else></use>
+          </svg>
+        </i>
+        {{ item.favoriteNum }}
+      </span>
+    </a-anchor-link>
+    <a-anchor-link href="#a">
+      <span slot="title" @click="toolMenuClick(3)">
+        <i>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconzan" v-if="!isThumpUp"></use>
+            <use xlink:href="#iconzanx" v-else></use>
+          </svg>
+        </i>
+        {{ thumpUpNumber }}
+      </span>
+    </a-anchor-link>
+    <a-anchor-link href="#shareMenu">
+      <span slot="title">
+        <i>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconfenxiang"></use>
+          </svg>
+        </i>
+        {{ item.shareNum }}
+      </span>
+    </a-anchor-link>
+  </a-anchor>
+
+  <!-- <span @click="toolMenuClick(2)">
+      <a>
+        <i>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconshoucang" v-if="!isCollect"></use>
+            <use xlink:href="#iconpingjiashixinwujiaoxing" v-else></use>
+          </svg>
+        </i>
+        {{ item.favoriteNum }}
+      </a>
     </span>
     <span @click="toolMenuClick(3)">
-      <i>
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconzan" v-if="!isThumpUp"></use>
-          <use xlink:href="#iconzanx" v-else></use>
-        </svg>
-      </i>
-      {{ thumpUpNumber }}
+      <a>
+        <i>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconzan" v-if="!isThumpUp"></use>
+            <use xlink:href="#iconzanx" v-else></use>
+          </svg>
+        </i>
+        {{ thumpUpNumber }}
+      </a>
     </span>
     <span @click="toolMenuClick(4)">
-      <i>
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconfenxiang"></use>
-        </svg>
-      </i>
-      {{ item.shareNum }}
-    </span>
-  </div>
+      <a href="#writeReview">
+        <i>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconfenxiang"></use>
+          </svg>
+        </i>
+        {{ item.shareNum }}
+      </a>
+    </span> -->
 </template>
 
 <script>
@@ -64,7 +105,7 @@
         return await _getData(
           `${this.$API_URL.HYGPROURL}/server_pro/dianzan!request.action`,
           {
-            method: "addOrDeleteFavorite_v27",
+            method: "addOrDeleteFavorite",
             token: "",
             version: 2.0,
             source: "iso",
@@ -133,57 +174,90 @@
 
 <style scoped lang="scss">
   @import "../../../assets/scss/_commonScss";
-  .toolMenu {
-    border-top: 0.5px solid #e0e7ea;
+
+  .ant-anchor-wrapper {
+    padding: 0;
+    width: 50px;
+    height: 240px;
+    margin: 0;
     display: flex;
-    padding: 0 20px;
-    justify-content: space-between;
-    align-items: center;
-    height: 40px;
-    line-height: 40px;
-    span {
-      font-family: PingFangSC-Medium;
-      font-size: 14px;
-      color: #999999;
+    box-shadow: $base-box-shadow;
+    /deep/ .ant-anchor {
+      padding: 0;
+      height: 100%;
       display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      margin-top: 1px;
-      height: 21px;
-      line-height: 21px;
-      i {
-        margin-right: 4px;
-        .icon {
-          width: 16px;
-          height: 16px;
-        }
-      }
-      &::after {
-        content: "回复";
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 15px;
-        color: #ffffff;
-        background: $theme-color;
+      flex-direction: column;
+      width: 100%;
+      > .ant-anchor-ink {
         display: none;
       }
-      &:nth-child(2) {
-        &::after {
-          content: "收藏";
+      .ant-anchor-link {
+        padding: 0;
+        flex: 1;
+        display: flex;
+
+        a {
+          text-decoration: none;
+          display: flex;
+          height: 100%;
+          width: 100%;
+          font-size: 14px;
+          color: #7e8c8d;
+
+          font-weight: 600;
+          span {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            i {
+              margin: 0;
+              .icon {
+                width: 16px;
+                height: 16px;
+              }
+            }
+            &::after {
+              content: "回复";
+              width: 100%;
+              height: 100%;
+              position: absolute;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              font-size: 15px;
+              color: #ffffff;
+              background: $theme-color;
+              display: none;
+            }
+            &:hover {
+              &::after {
+                display: flex;
+              }
+            }
+          }
         }
-      }
-      &:nth-child(3) {
-        &::after {
-          content: "点赞";
+        &:nth-child(3) {
+          > a > span::after {
+            content: "收藏";
+          }
         }
-      }
-      &:nth-child(4) {
-        &::after {
-          content: "分享";
+        &:nth-child(4) {
+          a > span::after {
+            content: "点赞";
+          }
+        }
+        &:nth-child(5) {
+          a > span::after {
+            content: "分享";
+          }
+        }
+        &:hover {
+          a > span::after {
+            display: flex;
+          }
         }
       }
     }

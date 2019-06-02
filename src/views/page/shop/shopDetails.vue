@@ -22,13 +22,21 @@
               v-on:tabClick="tabClick"
             ></shop-nav-vue>
             <div v-if="!isLoading">
-              <ul class="shopItem" v-if="arr.length">
-                <product-item-vue
-                  v-for="item in arr"
-                  :key="item.id"
-                  :list="item"
-                ></product-item-vue>
-              </ul>
+              <div v-if="arr.length">
+                <ul class="shopItem">
+                  <product-item-vue
+                    v-for="item in arr"
+                    :key="item.id"
+                    :list="item"
+                  ></product-item-vue>
+                </ul>
+                <pagination
+                  :data="data"
+                  :defaultPageSize="18"
+                  v-on:onPaginationChange="onPaginationChange"
+                ></pagination>
+              </div>
+
               <no-data text="暂无数据" v-else></no-data>
             </div>
             <loading v-else></loading>
@@ -63,10 +71,12 @@
   import productItemVue from "../../../components/common/item/productItem.vue";
   import shopCardVue from "../../../components/common/shopCard.vue";
   import { _getData } from "../../../config/getData";
+  import pagination from "../../../components/common/pagination";
 
   export default {
     data() {
       return {
+        data: "",
         arr: [],
         routes: [],
         categoryId: "", //分类id
@@ -108,6 +118,9 @@
           ];
     },
     methods: {
+      onPaginationChange(page) {
+        this.getGoodsList(page);
+      },
       categoryClick(item) {
         console.log(item);
         this.categoryId = item.id;
@@ -122,25 +135,22 @@
         this.getGoodsList();
       },
       //获取商品列表
-      async getGoodsList(
-        categoryId = this.categoryId,
-        brandId = this.brandId,
-        sort = this.sort
-      ) {
+      async getGoodsList(page = 1) {
         this.isLoading = true;
         return await _getData("/goods/getGoods", {
           storeId: this.$route.query.shopId,
           attributeCategoryId: "",
-          currentPage: 1,
-          countPerPage: 10,
-          sort,
+          currentPage: page,
+          countPerPage: 16,
+          sort: this.sort,
           order: "asc",
           bigCategoryId: "",
-          categoryId,
-          brandId
+          categoryId: this.categoryId,
+          brandId: this.brandId
         })
           .then(data => {
             console.log("产品列表", data);
+            this.data = data;
             this.arr = data.data;
           })
           .then(() => {
@@ -170,7 +180,8 @@
       shopLeftSideVue,
       shopNavVue,
       productItemVue,
-      shopCardVue
+      shopCardVue,
+      pagination
     }
   };
 </script>
