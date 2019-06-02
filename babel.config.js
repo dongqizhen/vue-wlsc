@@ -13,6 +13,12 @@ module.exports = {
             },
             'element-ui'
         ],
+        ["import", {
+            "libraryName": "vant",
+            "libraryDirectory": "es",
+            "style": true
+        }, 'vant']
+
         // [
         //     'import',
         //     {

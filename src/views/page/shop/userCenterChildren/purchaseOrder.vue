@@ -92,19 +92,22 @@
         }
       },
       remarkRead() {
+        console.log(this.checkedList);
         _getData("/enquiry/addEnquiry", {
           param: [
             {
-              storeId: "店铺id",
+              storeId: "398",
               goodsList: [
                 {
-                  goodsId: "商品id",
-                  number: "商品数量",
+                  goodsId: "179",
+                  number: "4",
                   buyerDescription: "商品买家描述"
                 }
               ]
             }
           ]
+        }).then(data=>{
+          console.log(data)
         });
       }
     },

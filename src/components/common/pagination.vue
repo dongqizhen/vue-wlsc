@@ -12,9 +12,7 @@
 <script>
   export default {
     data() {
-      return {
-        totalCount: 50
-      };
+      return {};
     },
     props: {
       data: {

@@ -14,6 +14,9 @@
             v-for="item in data.list"
             :key="item.id"
             :itemData="item"
+            v-on:getChecked="getChecked"
+            :checkedList="checkedList"
+            v-on:getData="getData"
           ></edit-inquiry-product>
         </div>
         <div class="list-footer">
@@ -23,7 +26,7 @@
             v-on:isCheckAll="isCheckAllMethod"
           >
             <div slot="right-box" class="right-box">
-              <button class="submit">提交报价</button>
+              <button class="submit" @click="submitQuote">提交报价</button>
             </div>
           </check-all>
         </div>
@@ -62,7 +65,40 @@
         data: {}
       };
     },
-    methods: { onChange() {}, isCheckAllMethod() {} },
+    methods: {
+      submitQuote() {},
+      getData(val) {
+        console.log("获取所填的数据：", val);
+      },
+      getChecked(val) {
+        console.log(val);
+        if (typeof val == "object") {
+          this.checkedList = val;
+        } else {
+          if (_.indexOf(this.checkedList, val) != -1) {
+            this.checkedList = _.without(this.checkedList, val);
+          }
+        }
+        if (this.checkedList.length == this.data.list.length) {
+          this.checkAll = true;
+        } else {
+          this.checkAll = false;
+        }
+      },
+      onChange() {},
+      isCheckAllMethod(val) {
+        if (val) {
+          this.checkAll = true;
+          this.checkedList = [];
+          for (const val of this.data.list) {
+            this.checkedList.push(val.id);
+          }
+        } else {
+          this.checkAll = false;
+          this.checkedList = [];
+        }
+      }
+    },
     mounted() {
       _getData("/enquiry/getEnquiry", { enquirySn: this.$route.params.id }).then(
         data => {
@@ -111,10 +147,10 @@
               width: 90px;
             }
             &:nth-child(6) {
-              width: 97px;
+              width: 102px;
             }
             &:nth-child(7) {
-              width: 120px;
+              width: 115px;
             }
           }
         }

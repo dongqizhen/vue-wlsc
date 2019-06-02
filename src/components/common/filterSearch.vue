@@ -4,19 +4,22 @@
       <div class="common">
         <div class="left-box">关键词</div>
         <div class="right-box">
-          <a-input placeholder="请输入关键词" v-model="val" />
+          <a-input placeholder="请输入关键词" v-model="submitData.value" />
         </div>
       </div>
       <div class="common">
         <div class="left-box">下单日期</div>
         <div class="right-box">
-          <calendar-range></calendar-range>
+          <calendar-range
+            :dateRange="submitData.dateRange"
+            v-on:getDateRange="getDateRange"
+          ></calendar-range>
         </div>
       </div>
     </div>
     <div class="selectBtn">
-      <a-button class="search">搜索</a-button>
-      <a-button class="clear">清空</a-button>
+      <a-button class="search" @click="searchData">搜索</a-button>
+      <a-button class="clear" @click="clearData">清空</a-button>
     </div>
   </div>
 </template>
@@ -25,11 +28,23 @@
   export default {
     data() {
       return {
-        val: ""
+        submitData: {
+          value: "",
+          dateRange: []
+        }
       };
     },
     methods: {
-      changeDate() {}
+      searchData() {},
+      clearData() {
+        this.submitData = {
+          value: "",
+          dateRange: []
+        };
+      },
+      getDateRange(val) {
+        console.log(val);
+      }
     },
     components: {
       calendarRange
@@ -61,6 +76,8 @@
           .ant-input {
             width: 121px;
             height: 27px;
+            line-height: 27px;
+            font-size: 12px;
           }
           /deep/.ant-calendar-picker-input {
             padding: 0;

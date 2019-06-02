@@ -62,6 +62,7 @@
     },
     methods: {},
     beforeMount() {
+      console.log(111111);
       if (this.userShopInfo.audit_status == 2) {
         if (this.$route.path.indexOf("shopInfo") != -1) {
           this.defaultSelectedKeys = ["2"];

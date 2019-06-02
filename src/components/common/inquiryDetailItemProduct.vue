@@ -1,7 +1,10 @@
 <template>
-  <div class="inquiryProductItem">
+  <div class="inquiryProductItem" :class="addClass(itemData.id)">
     <span>
-      <a-checkbox @change="onChange(itemData.id)"></a-checkbox>
+      <a-checkbox
+        @change="onChange(itemData.id)"
+        :checked="checkedChange(itemData.id)"
+      ></a-checkbox>
     </span>
     <span>
       <img :src="itemData.list_pic_url" />
@@ -10,22 +13,54 @@
     <span>{{ itemData.brand_name }}/{{ itemData.brand_model_name }}</span>
     <span>{{ itemData.unit_price }}</span>
     <span>{{ itemData.number }}</span>
-    <span>2019-08-13</span>
-    <span>这里有一段文本显示备注</span>
+    <span>{{ itemData.arrivalTime }}</span>
+    <span>{{ itemData.goods_desc }}</span>
   </div>
 </template>
 <script>
   export default {
     data() {
-      return {};
+      return {
+        list: this.checkedList
+      };
     },
     props: {
       itemData: {
         type: Object
+      },
+      checkedList: {
+        type: Array
+      }
+    },
+    watch: {
+      checkedList(newVal) {
+        this.list = newVal;
       }
     },
     methods: {
-      onChange(id) {}
+      onChange(id) {
+        if (_.indexOf(this.list, id) == -1) {
+          this.list.push(id);
+          this.$emit("getChecked", this.list);
+        } else {
+          this.list = _.without(this.list, id);
+          this.$emit("getChecked", id);
+        }
+      },
+      checkedChange(id) {
+        for (const val of this.list) {
+          if (val == id) {
+            return true;
+          }
+        }
+      },
+      addClass(id) {
+        for (const val of this.list) {
+          if (val == id) {
+            return "active";
+          }
+        }
+      }
     }
   };
 </script>
@@ -36,6 +71,9 @@
     height: 90px;
     border: $border-style;
     padding-top: 10px;
+    &.active {
+      background: rgba(245, 166, 35, 0.06);
+    }
     span {
       font-size: 12px;
       color: #666;

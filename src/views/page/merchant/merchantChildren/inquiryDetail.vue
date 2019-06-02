@@ -14,16 +14,18 @@
             v-for="item in data.list"
             :key="item.id"
             :itemData="item"
+            :checkedList="checkedList"
+            v-on:getChecked="getChecked"
           ></inquiry-detail-item-product>
         </div>
-        <div class="list-footer">
+        <div class="list-footer" style="display:none">
           <check-all
             :amount="checkedList.length"
             :checkAll="checkAll"
             v-on:isCheckAll="isCheckAllMethod"
           >
             <div slot="right-box" class="right-box">
-              <button class="submit">提交报价</button>
+              <button class="submit" @click="submitQuote">提交报价</button>
             </div>
           </check-all>
         </div>
@@ -62,7 +64,39 @@
         data: {}
       };
     },
-    methods: { onChange() {}, isCheckAllMethod() {} },
+    methods: {
+      submitQuote() {
+        console.log(this.checkedList);
+      },
+      getChecked(val) {
+        console.log(val);
+        if (typeof val == "object") {
+          this.checkedList = val;
+        } else {
+          if (_.indexOf(this.checkedList, val) != -1) {
+            this.checkedList = _.without(this.checkedList, val);
+          }
+        }
+        if (this.checkedList.length == this.data.list.length) {
+          this.checkAll = true;
+        } else {
+          this.checkAll = false;
+        }
+      },
+      isCheckAllMethod(val) {
+        if (val) {
+          this.checkAll = true;
+          this.checkedList = [];
+          for (const val of this.data.list) {
+            this.checkedList.push(val.id);
+          }
+        } else {
+          this.checkAll = false;
+          this.checkedList = [];
+        }
+        console.log(this.checkedList);
+      }
+    },
     mounted() {
       _getData("/enquiry/getEnquiry", { enquirySn: this.$route.params.id }).then(
         data => {
