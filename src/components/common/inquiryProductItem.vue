@@ -7,11 +7,13 @@
       <img :src="itemData.list_pic_url" />
     </span>
     <span>{{ itemData.name }}</span>
-    <span>{{ itemData.unit_price }}</span>
+    <span>{{ itemData.unitPrice }}</span>
     <span v-if="isShowInfo.isDetail">¥198988282.00</span>
     <span>{{ itemData.number }}</span>
-    <span>2019-08-13</span>
-    <span>这里有一段文本显示备注</span>
+    <span>{{
+      itemData.arrivalTime ? itemData.arrivalTime.substring(0, 16) : ""
+    }}</span>
+    <span>{{ itemData.buyerDescription }}</span>
   </div>
 </template>
 <script>

@@ -67,9 +67,12 @@
         this.$emit("getChecked", val);
       },
       deleteInquiryOrder(enquirySn) {
-        // _getData("").then(data => {
-        //   console.log(data);
-        // });
+        _getData("/enquiry/deleteEnquiry", { enquirySns: enquirySn }).then(
+          data => {
+            console.log("删除询价单：", data);
+            this.$emit("getIsDelete", data);
+          }
+        );
       }
     },
     components: {

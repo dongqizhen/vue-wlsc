@@ -33,7 +33,7 @@
     data() {
       return {
         uploadList: [],
-        actionURL: this.$API_URL.HYGFILEURL + "/server/imageupload"
+        actionURL: this.$API_URL.HYGFILEURL + "/api/upload"
       };
     },
     props: {

@@ -17,6 +17,7 @@
             v-on:getChecked="getChecked"
             :checkedList="checkedList"
             v-on:getData="getData"
+            :checkAll="checkAll"
           ></edit-inquiry-product>
         </div>
         <div class="list-footer">
@@ -26,7 +27,12 @@
             v-on:isCheckAll="isCheckAllMethod"
           >
             <div slot="right-box" class="right-box">
-              <button class="submit" @click="submitQuote">提交报价</button>
+              <button
+                :class="['submit', checkedList.length > 0 ? 'active' : '']"
+                @click="submitQuote"
+              >
+                提交报价
+              </button>
             </div>
           </check-all>
         </div>
@@ -62,16 +68,45 @@
           "到货时间",
           "询价备注"
         ],
-        data: {}
+        data: {},
+        goodsList: []
       };
     },
     methods: {
-      submitQuote() {},
+      submitQuote() {
+        console.log(this.goodsList);
+        _getData("/enquiry/updateEnquiry", {
+          param: [{ enquirySn: this.$route.params.id, goodsList: this.goodsList }]
+        }).then(data => {
+          console.log(data);
+        });
+      },
       getData(val) {
         console.log("获取所填的数据：", val);
+        console.log(typeof val == "object");
+        if (typeof val == "object") {
+          _.map(this.goodsList, value => {
+            if (value.goodsId == val.data.id) {
+              this.goodsList = _.without(this.goodsList, value);
+            }
+          });
+          this.goodsList.push({
+            goodsId: val.data.id,
+            unitPrice: val.data.unit_price,
+            arrivalTime: val.data.arrivalTime,
+            sellerDescription: val.data.buyerDescription,
+            number: val.data.number
+          });
+        } else {
+          _.map(this.goodsList, value => {
+            if (value.goodsId == val) {
+              this.goodsList = _.without(this.goodsList, value);
+            }
+          });
+        }
+        console.log(this.goodsList);
       },
       getChecked(val) {
-        console.log(val);
         if (typeof val == "object") {
           this.checkedList = val;
         } else {
@@ -85,7 +120,6 @@
           this.checkAll = false;
         }
       },
-      onChange() {},
       isCheckAllMethod(val) {
         if (val) {
           this.checkAll = true;
@@ -96,6 +130,7 @@
         } else {
           this.checkAll = false;
           this.checkedList = [];
+          this.goodsList = [];
         }
       }
     },
@@ -176,8 +211,11 @@
             outline: none;
             color: #fff;
             font-size: 14px;
-            background-color: #f5a623;
+            background-color: #ccc;
             cursor: pointer;
+            &.active {
+              background-color: #f5a623;
+            }
           }
         }
       }

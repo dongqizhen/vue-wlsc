@@ -36,6 +36,7 @@
                   :checkedList="checkedList"
                   v-on:getChecked="getChecked"
                   :isShowInfo="isShowInfo"
+                  v-on:getIsDelete="getIsDelete"
                 ></inquiry-item>
               </li>
             </ul>
@@ -82,6 +83,12 @@
       };
     },
     methods: {
+      getIsDelete(val) {
+        console.log(val);
+        if (val == "删除成功！") {
+          this.getInquiryList();
+        }
+      },
       tab(tabVal) {
         this.isShowInfo.current = tabVal;
         this.getInquiryList();
@@ -113,14 +120,6 @@
         }
       },
       getInquiryList() {
-        // _getData("/enquiry/enquiryList", {
-        //   page: 1,
-        //   size: 10,
-        //   status: this.isShowInfo.current
-        // }).then(data => {
-        //   console.log("获取询价管理的列表：", data);
-        //   this.data = data.data;
-        // });
         _getData("/enquiry/merchantsEnquiryList", {
           page: 1,
           size: 10,
@@ -150,9 +149,9 @@
     .inquiryContainer {
       min-height: 693px;
       background-color: #fff;
-      padding: 4px 20px;
+      padding: 4px 20px 20px 20px;
       box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
-      margin-bottom: 10px;
+      margin-bottom: 100px;
       .common-title {
         .right-box {
           ul {

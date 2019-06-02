@@ -159,12 +159,12 @@
         checkedList: [],
         totalCount: { amount: 0 },
         submitData: {
-          isOnSale: 0,
+          isOnSale: 1,
           name: "",
           bigCategoryId: "",
           categoryId: "",
           currentPage: 1,
-          countPerPage: "10"
+          countPerPage: 1
         }
       };
     },
@@ -308,9 +308,9 @@
   .productManage {
     .productContainer {
       background-color: #fff;
-      padding: 4px 20px;
+      padding: 4px 20px 20px 20px;
       box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
-      margin-bottom: 10px;
+      margin-bottom: 100px;
       .publishGood {
         font-family: PingFangSC-Regular;
         font-size: 16px;

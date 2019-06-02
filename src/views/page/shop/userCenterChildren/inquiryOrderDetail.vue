@@ -193,7 +193,7 @@
       }
     },
     mounted() {
-      // this.getInquiryList();
+      this.getInquiryList();
       console.log(this.$route.query.isShowInfo);
       this.isShowInfo = this.$route.query.isShowInfo;
       this.isShowInfo.isTrue = false;
