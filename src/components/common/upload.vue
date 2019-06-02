@@ -3,6 +3,7 @@
     <a-upload
       listType="picture-card"
       class="avatar-uploader"
+      :headers="{ 'Content-Type': 'multipart/form-data' }"
       :showUploadList="false"
       :action="actionURL"
       :beforeUpload="beforeUpload"

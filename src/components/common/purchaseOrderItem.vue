@@ -79,6 +79,7 @@
         );
       },
       onChange(id) {
+        console.log(id);
         if (_.indexOf(this.checkedList, id) == -1) {
           this.checkedList.push(id);
         } else {
@@ -91,8 +92,8 @@
         }
         this.$emit("getIsCheckAll", {
           isCheckAll: this.checkAll,
-          shopId: this.data.sid,
-          products: this.checkedList
+          storeId: this.data.sid,
+          goodsList: this.checkedList
         });
       },
       checkedChange(id) {
@@ -115,8 +116,8 @@
         }
         this.$emit("getIsCheckAll", {
           isCheckAll: this.checkAll,
-          shopId: this.data.sid,
-          products: this.checkedList
+          storeId: this.data.sid,
+          goodsList: this.checkedList
         });
       }
     }

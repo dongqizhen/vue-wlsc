@@ -1,7 +1,7 @@
 <template>
   <div class="publishGoods">
     <div class="commonBoxStyle basicInformation">
-      <commonTitle title="发布商品"></commonTitle>
+      <commonTitle :title="title"></commonTitle>
       <div class="informationContent">
         <div class="title">基本信息</div>
         <div class="common ">
@@ -57,7 +57,7 @@
           <div class="right-box">
             <el-select
               style="width: 136px;margin-right:10px;"
-              v-model="submitData.goodsType"
+              v-model="submitData.attribute_category"
               placeholder="请选择类型"
               @change="handleProductTypeChange"
             >
@@ -256,6 +256,7 @@
   export default {
     data() {
       return {
+        title: "发布商品",
         titleArr: ["参数类型", "参数名称", "参数值", "操作"],
         params: [{}],
         defaultCascaderValue: [],
@@ -274,7 +275,7 @@
           goodsSn: "",
           bigCategoryId: "", //大类
           categoryId: "", //小类
-          goodsType: "", //产品类型
+          attribute_category: "", //产品类型
           brandId: "",
           modelId: "",
           minPrice: "",
@@ -303,7 +304,7 @@
           alert("请选择小类");
           return;
         }
-        if (this.submitData.goodsType == "") {
+        if (this.submitData.attribute_category == "") {
           alert("请选择类型");
           return;
         }
@@ -349,16 +350,17 @@
         } else {
           this.submitData.listPicUrl = [];
         }
-        _getData("/goods/addGoods", this.submitData).then(data => {
-          console.log(data);
-          if (this.$route.query.id) {
+        if (this.$route.query.id) {
+          _getData("/goods/updateGoods", this.submitData).then(data => {
             alert("产品编辑成功");
             this.$router.replace({ path: "/merchant/productManage" });
-          } else {
+          });
+        } else {
+          _getData("/goods/addGoods", this.submitData).then(data => {
             alert("产品发布成功");
             return;
-          }
-        });
+          });
+        }
       },
       save() {},
       reset() {},
@@ -400,7 +402,7 @@
       },
       handleProductTypeChange(value) {
         console.log(`selected ${value}`);
-        this.submitData.goodsType = value;
+        this.submitData.attribute_category = value;
         console.log(this.typeOptions);
         _.map(this.typeOptions, val => {
           if (val.id == value) {
@@ -481,9 +483,10 @@
         this.brandOptions = data.brandList;
       });
       if (this.$route.query.id) {
+        this.title = "编辑商品";
         _getData("/goods/gooddetail", { id: this.$route.query.id }).then(data => {
           console.log("获取产品详情：", data);
-          this.submitData.id = data.productInfo.id;
+          this.submitData.goodsId = data.productInfo.id;
           this.getSmallType(data.productInfo.bigCategoryId);
           this.getModelData(
             data.productInfo.category_id,
@@ -493,7 +496,8 @@
           this.submitData.goodsSn = data.productInfo.goods_sn;
           this.submitData.bigCategoryId = data.productInfo.bigCategoryId;
           this.submitData.categoryId = data.productInfo.category_id;
-          this.submitData.goodsType = data.productInfo.goods_brief;
+          this.submitData.attribute_category =
+            data.productInfo.attribute_category;
           this.submitData.brandId = data.productInfo.brand_id;
           this.submitData.modelId = data.productInfo.model_id;
 

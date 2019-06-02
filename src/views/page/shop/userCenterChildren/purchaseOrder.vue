@@ -54,11 +54,31 @@
           "小计",
           "操作"
         ],
-        products: []
+        selectDatas: [],
+        products: [],
+        allProducts: []
       };
     },
     methods: {
       addInquiry() {
+        console.log(this.selectDatas);
+        if (this.selectDatas.length == 0) {
+          alert("请先选择产品");
+          return;
+        } else {
+          _.map(this.data, o => {
+            _.map(this.selectDatas, val => {
+              if (o.sid == val.storeId) {
+                _.map(val.goodsList, item => {
+                  _.map(o.list, value => {
+                    if (item == value.id) {
+                    }
+                  });
+                });
+              }
+            });
+          });
+        }
         param: [
           {
             storeId: "398",
@@ -97,40 +117,80 @@
       getIsCheckAll(val) {
         console.log(val);
         if (val.isCheckAll) {
-          if (_.indexOf(this.checkedList, val.shopId) == -1) {
-            this.checkedList.push(val.shopId);
+          if (
+            _.find(this.selectDatas, o => {
+              return o.storeId == val.storeId;
+            })
+          ) {
+            _.each(this.selectDatas, value => {
+              if (value.storeId == val.storeId) {
+                value.goodsList = val.goodsList;
+              }
+            });
+          } else {
+            this.selectDatas.push({
+              storeId: val.storeId,
+              goodsList: val.goodsList
+            });
           }
-          // this.products
         } else {
-          this.checkedList = _.without(this.checkedList, val.shopId);
+          if (val.goodsList.length == 0) {
+            _.each(this.selectDatas, value => {
+              if (value.storeId == val.storeId) {
+                this.selectDatas = _.without(this.selectDatas, value);
+              }
+            });
+          } else {
+            if (
+              _.find(this.selectDatas, o => {
+                return o.storeId == val.storeId;
+              })
+            ) {
+              _.each(this.selectDatas, item => {
+                if (item.storeId == val.storeId) {
+                  item.goodsList = val.goodsList;
+                }
+              });
+            } else {
+              this.selectDatas.push({
+                storeId: val.storeId,
+                goodsList: val.goodsList
+              });
+            }
+          }
         }
-        if (_.indexOf(this.checkedList, val.shopId) == -1) {
-          this.checkedList.push(val.shopId);
+        this.products = [];
+        _.map(this.selectDatas, o => {
+          for (const item of o.goodsList) {
+            this.products.push(item);
+          }
+        });
+        if (this.products.length == this.allProducts.length) {
+          this.checkAll = true;
+        } else {
+          this.checkAll = false;
         }
-        // console.log(this.checkedList);
-        // _.map(this.checkedList, value => {
-        //   console.log(value);
-        //   _.map(val.products, data => {
-        //     this.products.push(data);
-        //   });
-        // });
-        // console.log(this.products);
-        // if (this.checkedList.length == this.data.length) {
-        //   this.checkAll = true;
-        // } else {
-        //   this.checkAll = false;
-        // }
       },
       isCheckAllMethod(val) {
         if (val) {
           this.checkAll = true;
           this.checkedList = [];
+          this.products = [];
           for (const val of this.data) {
             this.checkedList.push(val.sid);
           }
+          this.products = this.allProducts;
+          _.map(this.data, o => {
+            let goodsIds = [];
+            for (const item of o.list) {
+              goodsIds.push(item.goods_id);
+            }
+            this.selectDatas.push({ storeId: o.sid, goodsList: goodsIds });
+          });
         } else {
           this.checkAll = false;
           this.checkedList = [];
+          this.products = [];
         }
       },
       isCheckAll(id) {
@@ -145,6 +205,11 @@
       _getData("/cart/getCarts", {}).then(data => {
         console.log("获取选购单：", data);
         this.data = data.list;
+        _.map(data.list, o => {
+          for (const item of o.list) {
+            this.allProducts.push(item);
+          }
+        });
       });
     },
     components: {

@@ -4,9 +4,9 @@
       showQuickJumper
       :total="data.amount"
       @change="onPaginationChange"
-      :defaultPageSize="20"
+      :pageSize="data.pageSize"
     />
-    <div class="sureBtn">确定</div>
+    <!-- <div class="sureBtn" @click="sureFun">确定</div> -->
   </div>
 </template>
 <script>
@@ -23,6 +23,27 @@
       onPaginationChange(page, pageSize) {
         this.$emit("onPaginationChange", page);
       }
+      // sureFun() {
+      //   let keyCoke = 13;
+      //   let keyboardEvent = document.createEvent("KeyboardEvent");
+      //   let initMethod =
+      //     typeof keyboardEvent.initKeyboardEvent !== "undefined"
+      //       ? "initKeyboardEvent"
+      //       : "initKeyEvent";
+      //   keyboardEvent[initMethod](
+      //     "keydown",
+      //     true,
+      //     true,
+      //     window,
+      //     false,
+      //     false,
+      //     false,
+      //     false,
+      //     keyCoke,
+      //     0
+      //   );
+      //   document.dispatchEvent(keyboardEvent);
+      // }
     },
     mounted() {
       console.log(this.data);
