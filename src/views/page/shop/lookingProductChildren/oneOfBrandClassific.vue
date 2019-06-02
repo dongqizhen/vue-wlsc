@@ -34,6 +34,7 @@
       管理常用品牌
       <common-brands-modal-vue
         :brandVisible="brandVisible"
+        v-on:success="success"
       ></common-brands-modal-vue>
     </span>
     <div class="content">
@@ -147,19 +148,7 @@
       CommonBrandsModalVue
     },
     mounted() {
-      _getData("brand/merge", { id: this.$route.query.categoryId })
-        .then(data => {
-          this.navArr = data;
-        })
-        .then(() => {
-          console.log(this.navArr);
-          this.arr = this.navArr.listAll;
-          this.letterArr = _.groupBy(this.arr, val => {
-            return _.upperFirst(val.pinyin).substring(0, 1);
-          });
-          //console.log(this.letterArr, _.keys(this.letterArr));
-          this.letter = _.orderBy(_.keys(this.letterArr), val => val, ["asc"]);
-        });
+      this.getCommonBrandCategory();
     },
     methods: {
       letterClick(item) {
@@ -169,6 +158,24 @@
         [...this.$refs.search.childNodes].map((val, i) => {
           val.classList.remove("active");
         });
+      },
+      async getCommonBrandCategory() {
+        return await _getData("brand/merge", { id: this.$route.query.categoryId })
+          .then(data => {
+            this.navArr = data;
+          })
+          .then(() => {
+            console.log(this.navArr);
+            this.arr = this.navArr.listAll;
+            this.letterArr = _.groupBy(this.arr, val => {
+              return _.upperFirst(val.pinyin).substring(0, 1);
+            });
+            //console.log(this.letterArr, _.keys(this.letterArr));
+            this.letter = _.orderBy(_.keys(this.letterArr), val => val, ["asc"]);
+          });
+      },
+      success() {
+        this.getCommonBrandCategory();
       },
       handleClick(item, i) {},
       navClick(val, i) {

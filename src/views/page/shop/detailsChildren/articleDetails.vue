@@ -38,7 +38,7 @@
           v-if="commentData"
           type="article"
         ></comment-vue>
-        <menu-vue :item="detail"></menu-vue>
+        <menu-vue :item="detail" type="article"></menu-vue>
       </div>
       <div class="right"></div>
     </div>

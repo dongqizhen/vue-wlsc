@@ -158,7 +158,7 @@
         articleList: [], //案列,
         videoList: [], //视频
         maintenanceList: [],
-        nav: []
+        nav: ["推荐产品(0)", "文章(0)", "视频(0)", "案例(0)"]
         // background: ["#F5A623", "#43D480", "#8880FE", "#0283FF"]
       };
     },

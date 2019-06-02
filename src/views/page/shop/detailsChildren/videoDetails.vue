@@ -109,7 +109,7 @@
           type="video"
         ></comment-vue>
 
-        <menu-vue :item="detail"></menu-vue>
+        <menu-vue :item="detail" type="video"></menu-vue>
       </div>
       <div class="right"></div>
     </div>

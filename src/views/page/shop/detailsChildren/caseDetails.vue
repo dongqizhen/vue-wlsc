@@ -68,7 +68,7 @@
           v-if="commentData"
           type="case"
         ></comment-vue>
-        <menu-vue :item="detail"></menu-vue>
+        <menu-vue :item="detail" type="case"></menu-vue>
       </div>
       <div class="right"></div>
     </div>
@@ -126,7 +126,7 @@
         `${this.$API_URL.HYGPROURL}/server_pro/maintenance!request.action`,
         {
           method: "getMaintenanceByIdV29",
-          userid: "",
+          userid: this.$userid,
           token: "",
           params: {
             id: this.$route.query.id //维修宝id
