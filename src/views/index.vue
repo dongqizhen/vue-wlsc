@@ -39,15 +39,33 @@
                 <h2>
                   <p>{{ i + 1 }}F {{ item.name }}</p>
                   <ul>
-                    <li>心电图机</li>
-                    <li>心电图工作站</li>
-                    <li>心电工作站</li>
-                    <li>心电工作站</li>
+                    <router-link
+                      tag="li"
+                      :to="{
+                        path: '/lookingProduct/oneOfBrandClassificne',
+                        query: {
+                          nav_index: 1,
+                          categoryId: v.id,
+                          categoryName: v.name
+                        }
+                      }"
+                      v-for="v in item.categoryList"
+                      :key="v.id"
+                    >
+                      <a target="_blank"> {{ v.name }}</a>
+                    </router-link>
+
+                    <!-- path: '/lookingProduct/oneOfBrandClassificne',
+                      query: {
+                        nav_index: 1,
+                        categoryId: item.id,
+                        categoryName: item.name
+                      } -->
                   </ul>
                   <router-link
                     tag="span"
                     :to="{
-                      path: '/lookingProduct/oneOfBrandClassificne',
+                      path: '/lookingProduct',
                       query: {
                         nav_index: 1,
                         categoryId: item.id,
@@ -328,11 +346,15 @@
                     li {
                       // font-family: PingFangSC-Regular;
                       font-size: 14px;
-                      color: #333333;
+
                       margin-right: 30px;
                       cursor: pointer;
-                      &:hover {
-                        color: $theme-color;
+                      a {
+                        color: #333333;
+                        text-decoration: none;
+                        &:hover {
+                          color: $theme-color;
+                        }
                       }
                     }
                   }

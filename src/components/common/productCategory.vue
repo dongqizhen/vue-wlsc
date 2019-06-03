@@ -32,6 +32,8 @@
                 :key="item.id"
                 :class="i == defaultsVal && 'active'"
                 @click="navHandleClick(item.id, i, $event)"
+                @mouseenter="activeVal = i"
+                @mouseleave="activeVal = 0"
               >
                 {{ item.name }}
               </div>
@@ -95,6 +97,7 @@
         defaultsVal: 0, //默认高亮nav下标
         isShow: true, //是否显示管理常用分类按钮
         navArr: [],
+        activeVal: 0,
         pageArr: []
       };
     },

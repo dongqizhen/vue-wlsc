@@ -1,6 +1,6 @@
 <template>
   <div class="Common-Brands-Modal">
-    <modal :isShow="visible" :options="options">
+    <modal :isShow="visible" :options="options" v-on:afterClose="afterClose">
       <div slot="content">
         <div class="common_brand">
           <h2>常用品牌<span>鼠标拖拽可排序，点击“x”取消</span></h2>
@@ -43,7 +43,7 @@
           <no-data v-else></no-data>
         </div>
         <div class="all_brand">
-          <h2>全部分类<span>点击即可设为常用分类</span></h2>
+          <h2>全部品牌<span>点击即可设为常用品牌</span></h2>
           <div class="word_nav" ref="search">
             <span
               :class="defaultsNav == '全部' && 'active'"
@@ -61,8 +61,13 @@
               </li>
             </ul>
             <div class="inp_box">
-              <input type="text" placeholder="请输入品牌名称" />
-              <span>搜索</span>
+              <input
+                type="text"
+                placeholder="请输入品牌名称"
+                v-model="val"
+                @keyup.enter="search"
+              />
+              <span @click="search">搜索</span>
             </div>
           </div>
 
@@ -79,7 +84,7 @@
               :name="!drag ? 'flip-list' : null"
             > -->
           <div>
-            <ul class="common">
+            <ul class="common" v-if="myArray.length">
               <li
                 v-for="(item, i) in myArray"
                 :key="i"
@@ -96,6 +101,7 @@
                 </i>
               </li>
             </ul>
+            <no-data v-else type="no-search"></no-data>
           </div>
 
           <!--  </transition-group>
@@ -123,6 +129,7 @@
   export default {
     data() {
       return {
+        val: "",
         visible: false,
         letterArr: "",
         options: {
@@ -130,7 +137,8 @@
           closable: true,
           maskClosable: true,
           wrapClassName: "commonBrand",
-          centered: true
+          centered: true,
+          destroyOnClose: true
         },
         navArr: "",
         drag: false,
@@ -147,26 +155,55 @@
       }
     },
     mounted() {
-      _getData("brand/merge", { id: this.$route.query.categoryId })
-        .then(data => {
-          this.navArr = data;
-        })
-        .then(() => {
-          console.log(this.navArr);
-          this.myArray2 = this.navArr.userbrandList;
-          this.myArray = this.navArr.listAll;
-          this.letterArr = _.groupBy(this.myArray, val => {
-            return _.upperFirst(val.pinyin).substring(0, 1);
-          });
-          //console.log(this.letterArr, _.keys(this.letterArr));
-          this.letter = _.orderBy(_.keys(this.letterArr), val => val, ["asc"]);
-        });
+      this.getAllBrand();
     },
     components: {
       modal,
       draggable
     },
     methods: {
+      afterClose() {
+        this.defaultsNav = "全部";
+        this.getAllBrand();
+      },
+      async getAllBrand() {
+        return await _getData("brand/merge", { id: this.$route.query.categoryId })
+          .then(data => {
+            this.navArr = data;
+          })
+          .then(() => {
+            console.log(this.navArr);
+            this.myArray2 = this.navArr.userbrandList;
+            this.myArray = this.navArr.listAll;
+            this.letterArr = _.groupBy(this.myArray, val => {
+              return _.upperFirst(val.pinyin).substring(0, 1);
+            });
+            //console.log(this.letterArr, _.keys(this.letterArr));
+            this.letter = _.orderBy(_.keys(this.letterArr), val => val, ["asc"]);
+          });
+      },
+      //搜索
+      search() {
+        if (this.val == "") return;
+
+        _getData("brand/getBrand", {
+          brandName: this.val.trim()
+        })
+          .then(data => {
+            this.myArray = data;
+          })
+          .then(() => {
+            this.val = "";
+          })
+          .then(() => {
+            // this.$nextTick().then(() => {
+            //   this.isLoading = false;
+            // });
+          });
+      },
+      cancel() {
+        this.getAllBrand();
+      },
       end(e) {
         this.drag = false;
         this.saveBrand();
@@ -246,4 +283,8 @@
 </script>
 
 <style lang="scss" scoped>
+  /deep/ .no-data {
+    height: 260px;
+    background: #f5f5f5;
+  }
 </style>

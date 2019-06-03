@@ -25,10 +25,16 @@
                 :key="item.id"
                 :class="i == defaultsVal && 'active'"
                 @click="navHandleClick(item.id, i, $event)"
+                @mouseenter="activeVal = i"
+                @mouseleave="activeVal = null"
               >
                 <svg class="icon" aria-hidden="true">
                   <use
-                    :xlink:href="i == defaultsVal ? item.iconActive : item.icon"
+                    :xlink:href="
+                      i == defaultsVal || activeVal == i
+                        ? item.iconActive
+                        : item.icon
+                    "
                   ></use>
                 </svg>
                 {{ item.name }}
@@ -97,6 +103,7 @@
           }
         ],
         pageArr: [],
+        activeVal: 0,
         isShow: true, //是否显示管理常用分类按钮
         defaultsVal: 0, //默认高量nav下标
         brandVisible: false //控制modal层弹出

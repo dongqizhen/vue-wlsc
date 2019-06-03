@@ -68,6 +68,7 @@
       afterClose() {
         this.visible = false;
         this.$parent.visible = false;
+        this.$emit("afterClose");
       }
     },
     mounted() {

@@ -2,8 +2,9 @@
   <div class="brand">
     <breadcrumb-vue :routes="routes"></breadcrumb-vue>
     <recommends-tab-vue
-      :tabs="['型号列表(4)', '文章(9)', '视频(8)', '案例(8)']"
+      :tabs="tabs"
       v-on:tabClick="tabClick"
+      v-if="tabs.length"
     >
       <a-button slot="btn">
         <router-link
@@ -27,15 +28,45 @@
     </recommends-tab-vue>
     <div class="main-content">
       <div class="left">
-        <shop-nav-vue :navArr="['按首字母排序', '按点击量排序']"></shop-nav-vue>
+        <shop-nav-vue
+          :navArr="['按首字母排序', '按点击量排序']"
+          v-on:tabClick="shopTabClick"
+        ></shop-nav-vue>
+        <div v-if="!isLoading">
+          <div v-if="arr.length">
+            <ul v-if="defaultVal == 0">
+              <model-item-vue
+                v-for="item in arr"
+                :key="item.id"
+                :item="item"
+              ></model-item-vue>
+            </ul>
+            <ul class="recommend_article" v-if="defaultVal == 1">
+              <article-item-vue
+                v-for="item in arr"
+                :key="item.id"
+                :item="item"
+              ></article-item-vue>
+            </ul>
+            <ul class="recommond_video" v-if="defaultVal == 2">
+              <video-item-vue
+                v-for="item in arr"
+                :key="item.id"
+                :item="item"
+              ></video-item-vue>
+            </ul>
+            <ul class="recommond_case" v-if="defaultVal == 3">
+              <case-item-vue
+                v-for="item in arr"
+                :key="item.id"
+                :item="item"
+              ></case-item-vue>
+            </ul>
+            <!-- <pagination :data=""></pagination> -->
+          </div>
+          <no-data v-else></no-data>
+        </div>
 
-        <ul v-if="!isLoading">
-          <model-item-vue
-            v-for="item in arr"
-            :key="item.id"
-            :item="item"
-          ></model-item-vue>
-        </ul>
         <loading-vue v-else></loading-vue>
       </div>
       <div class="right">
@@ -53,12 +84,22 @@
   import breadcrumbVue from "../../../../components/common/breadcrumb.vue";
   import { _getData } from "../../../../config/getData";
   import loadingVue from "../../../../components/common/loading.vue";
+  import videoItemVue from "../../../../components/common/item/videoItem.vue";
+  import articleItemVue from "../../../../components/common/item/articleItem.vue";
+  import caseItemVue from "../../../../components/common/item/caseItem.vue";
+  import pagination from "../../../../components/common/pagination";
 
   export default {
     data() {
       return {
         arr: [],
+        articleList: [],
+        caseList: [],
+        videoList: [],
         routes: [],
+        defaultVal: 0,
+        sort: 1,
+        tabs: [],
         isLoading: true
       };
     },
@@ -68,9 +109,143 @@
       brandCardVue,
       recommendsTabVue,
       breadcrumbVue,
-      loadingVue
+      loadingVue,
+      videoItemVue,
+      articleItemVue,
+      caseItemVue,
+      pagination
     },
+    methods: {
+      shopTabClick(key, val) {
+        this.sort = key ? 0 : 1;
+        this.getList();
+      },
+      tabClick(i) {
+        this.defaultVal = i;
+        this.getList();
+      },
 
+      async getList() {
+        this.arr = [];
+        switch (this.defaultVal) {
+          case 0:
+            return await this.getModelList();
+          case 1:
+            return await this.getArticleList();
+
+          case 2:
+            return await this.getVideoList();
+
+          case 3:
+            return await this.getCaseList();
+        }
+      },
+      async getModelList() {
+        this.isLoading = true;
+        return await _getData("brandmodel/list", {
+          categoryId: this.$route.query.categoryId,
+          brandId: this.$route.query.brandId,
+          sortOrder: this.sort
+        })
+          .then(data => {
+            console.log(data);
+            this.arr = data.brandModelList;
+          })
+          .then(() => {
+            //this.$nextTick().then(() => {});
+            setTimeout(() => {
+              this.isLoading = false;
+            }, 300);
+          });
+      },
+      //获取文章列表
+      async getArticleList() {
+        this.isLoading = true;
+        return await _getData(
+          `${this.$API_URL.HYGLOGINURL}/server/article!request.action`,
+          {
+            method: "getListWithShoping",
+            version: "3.0.0",
+            deviceId: "",
+            source: "",
+            params: {
+              currentPage: 1,
+              countPerPage: 20,
+              classifyId: this.$route.query.brandId,
+              sortType: this.sort,
+              sortFlag: 1
+            }
+          }
+        )
+          .then(data => {
+            this.arr = data.data.result.articlelist;
+          })
+          .then(() => {
+            setTimeout(() => {
+              this.isLoading = false;
+            }, 300);
+          });
+      },
+      //获取视频列表
+      async getVideoList() {
+        this.isLoading = true;
+        return await _getData(
+          `${this.$API_URL.HYGPROURL}/server_pro/video!request.action`,
+          {
+            method: "getListWithShoping",
+            version: "",
+            deviceId: "",
+            source: "",
+            params: {
+              currentPage: 1,
+              countPerPage: 20,
+              vBigCategoryId: "",
+              vCategoryId: this.$route.query.categoryId,
+              sortType: this.sort,
+              sortFlag: 1
+            }
+          }
+        )
+          .then(data => {
+            this.arr = data.data.result.videolist;
+          })
+          .then(() => {
+            setTimeout(() => {
+              this.isLoading = false;
+            }, 300);
+          });
+      },
+      //获取维修宝列表
+      async getCaseList() {
+        this.isLoading = true;
+        return await _getData(
+          `${this.$API_URL.HYGPROURL}/server_pro/maintenance!request.action`,
+          {
+            method: "getListWithShoping",
+            version: "3.0.0",
+            deviceId: "",
+            source: "",
+            params: {
+              currentPage: 1,
+              countPerPage: 20,
+              mCatogoryId: this.$route.query.categoryId,
+              mBrandId: this.$route.query.brandId,
+              sortType: this.sort,
+              sortFlag: 1,
+              searchType: 0
+            }
+          }
+        )
+          .then(data => {
+            this.arr = data.data.result.articlelist;
+          })
+          .then(() => {
+            setTimeout(() => {
+              this.isLoading = false;
+            }, 300);
+          });
+      }
+    },
     beforeRouteEnter(to, from, next) {
       console.log(to, from);
       next(vm => {
@@ -131,16 +306,21 @@
       });
     },
     mounted() {
-      this.getModelList()
-        .then(data => {
-          console.log(data);
-          this.arr = data.brandModelList;
-        })
-        .then(() => {
-          this.isLoading = false;
-        });
+      this.getList();
     },
     created() {
+      _getData("brandmodel/count", {
+        categoryId: this.$route.query.categoryId,
+        brandId: this.$route.query.brandId
+      }).then(data => {
+        console.log("数量", data);
+        this.tabs = [
+          `型号列表(${data.count || 0})`,
+          `文章(${data.articleNum || 0})`,
+          `视频(${data.videoNum || 0})`,
+          `案例(${data.maintenanceNum || 0})`
+        ];
+      });
       // this.routes =
       //   this.$route.query.nav_index == 2
       //     ? [
@@ -184,18 +364,6 @@
       //             "/lookingProduct/brand?nav_index=" + this.$route.query.nav_index
       //         }
       //       ];
-    },
-    methods: {
-      tabClick(i) {
-        console.log(i);
-      },
-      async getModelList(sort = 1) {
-        return await _getData("brandmodel/list", {
-          categoryId: this.$route.query.categoryId,
-          brandId: this.$route.query.brandId,
-          sortOrder: sort
-        });
-      }
     }
   };
 </script>
@@ -272,6 +440,10 @@
         /deep/ .recommend_tabs {
           margin-bottom: 20px;
           margin-top: 4px;
+        }
+        /deep/ .no-data {
+          height: 600px;
+          background: #ffffff;
         }
         ul {
         }

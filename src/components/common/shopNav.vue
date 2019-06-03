@@ -4,7 +4,7 @@
       <a-tabs
         :defaultActiveKey="defaultActiveKey"
         @change="callback"
-        @tabClick="tabClcik"
+        @tabClick="tabClick"
       >
         <a-tab-pane
           :tab="item"
@@ -33,7 +33,7 @@
     },
     methods: {
       callback(key) {},
-      tabClcik(key, val) {
+      tabClick(key, val) {
         this.$emit("tabClick", key, val);
       }
     }

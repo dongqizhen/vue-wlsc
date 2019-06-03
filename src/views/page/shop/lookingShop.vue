@@ -81,7 +81,7 @@
                     :item="item"
                   ></shop-item-vue>
                 </ul>
-                <pagination></pagination>
+                <pagination :data="data"></pagination>
               </div>
 
               <no-data v-else text="暂无店铺"></no-data>
@@ -114,6 +114,7 @@
   export default {
     data() {
       return {
+        data: "",
         arr: [], //店铺列表
         areaIsShow: false, //控制选择地区弹层是否显示
         area: [], //省份列表
@@ -126,6 +127,7 @@
         cityName: "北京市",
         categoryId: "", //分类id
         isLoading: true,
+        brandId: "",
         routes: [
           {
             name: "首页",
@@ -170,13 +172,14 @@
       categoryClick(item) {
         console.log(item);
         this.categoryId = item.id;
-        this.getShop(item.id).then(data => {
+        this.getShop().then(data => {
           // console.log(data);
         });
       },
       brandClick(item) {
         console.log(item);
-        this.getShop(this.categoryId, item.id);
+        this.brandId = item.id;
+        this.getShop();
       },
       selectArea() {
         this.areaIsShow = !this.areaIsShow;
@@ -184,17 +187,18 @@
         this.province = "选择省/直辖市";
       },
       //异步获取店铺
-      async getShop(categoryId = "", brandId = "") {
+      async getShop() {
         this.isLoading = true;
         return await _getData("queryEnquiry", {
-          brandId: brandId,
+          brandId: this.brandId,
           provinceName: this.provinceName,
           cityName: this.cityName,
-          categoryId: categoryId,
+          categoryId: this.categoryId,
           page: 1,
           size: 20
         })
           .then(data => {
+            this.data = data;
             this.arr = data.data;
           })
           .then(() => {
