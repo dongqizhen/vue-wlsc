@@ -30,16 +30,16 @@
                     :list="item"
                   ></product-item-vue>
                 </ul>
-                <pagination
-                  :data="data"
-                  :defaultPageSize="18"
-                  v-on:onPaginationChange="onPaginationChange"
-                ></pagination>
               </div>
-
               <no-data text="暂无数据" v-else></no-data>
             </div>
             <loading v-else></loading>
+            <pagination
+              v-if="arr.length"
+              :data="data"
+              :defaultPageSize="18"
+              v-on:onPaginationChange="onPaginationChange"
+            ></pagination>
           </div>
           <div class="shop">
             <shop-card-vue

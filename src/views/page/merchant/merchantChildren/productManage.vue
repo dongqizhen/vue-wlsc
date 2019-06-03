@@ -151,15 +151,15 @@
         bigOptions: [],
         smallOptions: [],
         statusOptions: [
-          { label: "全部", value: 0 },
+          { label: "全部", value: "" },
           { label: "上架", value: 1 },
-          { label: "下架", value: 2 }
+          { label: "下架", value: 0 }
         ],
         checkAll: false,
         checkedList: [],
-        totalCount: { amount: 0 },
+        totalCount: { amount: 0, pageSize: 10 },
         submitData: {
-          isOnSale: 1,
+          isOnSale: "",
           name: "",
           bigCategoryId: "",
           categoryId: "",
@@ -199,6 +199,8 @@
       },
       getPaginationChange(val) {
         console.log(val);
+        this.submitData.currentPage = val;
+        this.getProductList(this.submitData);
       },
       isCheckAllMethod(val) {
         if (val) {
@@ -250,7 +252,7 @@
         }
       },
       handleStatusChange(value) {
-        this.isOnSale = value;
+        this.submitData.isOnSale = value;
       },
       handleProductBigTypeChange(value) {
         this.submitData.bigCategoryId = value;
@@ -276,6 +278,7 @@
           console.log("获取产品列表：", data);
           this.data = data.data;
           this.totalCount.amount = data.count;
+          this.totalCount.pageSize = params.countPerPage;
         });
       }
     },
