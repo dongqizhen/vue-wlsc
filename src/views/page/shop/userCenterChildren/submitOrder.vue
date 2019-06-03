@@ -4,7 +4,7 @@
     <div class="receiptAddress">
       <div class="addAddress">
         <span>收货地址:</span>
-        <span class="addNewAddress">使用新地址</span>
+        <span class="addNewAddress" @click="addCarSuccess">使用新地址</span>
       </div>
       <div class="addressInfo">
         <ul class="clearfix">
@@ -32,7 +32,7 @@
             <div
               class="editAddress"
               v-show="current == item.id"
-              @click="editAddress(item.id)"
+              @click="addCarSuccess(item.id)"
             >
               修改
             </div>
@@ -43,15 +43,25 @@
     <div class="listContainer">
       <list-title :titleArr="titleArr"></list-title>
       <div class="listContent">
-        <purchase-order-item
-          v-for="item in data"
-          :key="item.id"
-          :val="item"
-          :isCheckAll="isCheckAll(item.sid)"
-          v-on:getIsCheckAll="getIsCheckAll"
-        ></purchase-order-item>
+        <order-sure-item :data="data"></order-sure-item>
+      </div>
+      <div class="totalInfo">
+        <span>
+          共计
+          <i>{{ data.list ? data.list.length : "" }}</i>
+          件商品
+        </span>
+        <span>
+          总额<i>￥{{ data.subtotal }}</i>
+        </span>
+        <a-button @click="sureSubmit">确认</a-button>
       </div>
     </div>
+    <add-address-modal
+      :Visible="visible"
+      :type="type"
+      :editId="editId"
+    ></add-address-modal>
   </div>
 </template>
 
@@ -59,12 +69,17 @@
   import _ from "lodash";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import listTitle from "../../../../components/common/listTitle";
-  import purchaseOrderItem from "../../../../components/common/purchaseOrderItem";
+  import orderSureItem from "../../../../components/common/orderSureItem";
   import { _getData } from "../../../../config/getData";
+  import addAddressModal from "../../../../components/modal/addAddressModal";
+  import { mapState } from "vuex";
   export default {
     data() {
       return {
-        data: [],
+        visible: false,
+        type: "",
+        editId: 0,
+        data: {},
         userAddressList: [],
         checkAll: false,
         checkedList: [],
@@ -72,75 +87,97 @@
           "产品图片",
           "产品名称",
           "品牌型号",
-          "单价",
           "数量",
+          "单位",
           "小计",
+          "报价日期",
           "操作"
         ],
-        current: -1
+        current: -1,
+        submitAddressData: {},
+        submitData: {
+          storeList: []
+        }
       };
     },
+    computed: {
+      ...mapState(["isLogin", "userInfo"])
+    },
+    watch: {
+      visible(newVal) {
+        if (!newVal) {
+          this.getAddress();
+        }
+      }
+    },
     methods: {
+      sureSubmit() {
+        _.map(this.userAddressList, val => {
+          if (this.current == val.id) {
+            this.submitAddressData.consignee = val.userName;
+            this.submitAddressData.mobile = val.phone;
+            this.submitAddressData.address = val.address;
+            this.submitAddressData.postCode = val.postalCode;
+            this.submitAddressData.postCode = val.postalCode;
+          }
+        });
+        this.submitData.storeList.push({
+          storeId: this.data.storeId,
+          goodsList: this.data.list
+        });
+        this.submitData = {
+          ...this.submitAddressData,
+          storeList: this.submitData.storeList
+        };
+        console.log(this.submitData);
+        _getData("/order/addOrder", { params: this.submitData }).then(data => {
+          console.log(data);
+        });
+      },
+      addCarSuccess(id) {
+        if (!this.isLogin) {
+          this.type = "login";
+        }
+        this.visible = true;
+        this.editId = id;
+      },
       selectAddress(id) {
         this.current = id;
       },
-
-      getIsCheckAll(val) {
-        console.log(val);
-        if (val.isCheckAll) {
-          if (_.indexOf(this.checkedList, val.shopId) == -1) {
-            this.checkedList.push(val.shopId);
+      getAddress() {
+        _getData(
+          `${this.$API_URL.HYGLOGINURL}/server/userAddress!request.action`,
+          {
+            method: "appPageList",
+            userid: this.userInfo,
+            token: "",
+            params: { currentPage: 1, countPerPage: 10 }
           }
-        } else {
-          this.checkedList = _.without(this.checkedList, val.shopId);
-        }
-        if (this.checkedList.length == this.data.length) {
-          this.checkAll = true;
-        } else {
-          this.checkAll = false;
-        }
-      },
-      isCheckAllMethod(val) {
-        if (val) {
-          this.checkAll = true;
-          this.checkedList = [];
-          for (const val of this.data) {
-            this.checkedList.push(val.sid);
-          }
-        } else {
-          this.checkAll = false;
-          this.checkedList = [];
-        }
-      },
-      isCheckAll(id) {
-        for (const val of this.checkedList) {
-          if (val == id) {
-            return true;
-          }
-        }
-      },
-      remarkRead() {}
+        ).then(data => {
+          console.log(data);
+          this.userAddressList = data.data.result.UserAddressList;
+          _.map(data.data.result.UserAddressList, val => {
+            if (val.status == 1) {
+              this.current = val.id;
+            }
+          });
+        });
+      }
     },
     mounted() {
-      _getData(`${this.$API_URL.HYGLOGINURL}/server/userAddress!request.action`, {
-        method: "appPageList",
-        userid: "15301",
-        token: "09a52ead-ef25-411d-8ac2-e3384fceed68",
-        params: { currentPage: 1, countPerPage: 10 }
+      this.getAddress();
+      _getData("/enquiry/getEnquiry", {
+        enquirySn: this.$route.params.id
       }).then(data => {
-        console.log(data);
-        this.userAddressList = data.data.result.UserAddressList;
-        _.map(data.data.result.UserAddressList, val => {
-          if (val.status == 1) {
-            this.current = val.id;
-          }
-        });
+        console.log("获取询价单详情：", data);
+        this.data = data;
       });
     },
     components: {
       commonTitle,
       listTitle,
-      purchaseOrderItem
+      orderSureItem,
+      addAddressModal
     }
   };
 </script>
@@ -230,23 +267,58 @@
       }
     }
     .listContainer {
+      /deep/.listTitle {
+        ul {
+          li {
+            &:first-child {
+              margin-left: 20px;
+            }
+            &:nth-child(4) {
+              width: 66px;
+            }
+            &:nth-child(5) {
+              width: 50px;
+            }
+            &:nth-child(6) {
+              width: 100px;
+            }
+            &:nth-child(7) {
+              width: 68px;
+              margin-right: 67px;
+            }
+          }
+        }
+      }
       .listContent {
         margin-top: 24px;
       }
-      .tfooter {
-        .remark {
-          padding: 0 22px;
-          height: 42px;
-          background-color: #ccc;
-          color: #fff;
+      .totalInfo {
+        height: 40px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        border: $border-style;
+        span {
+          margin-right: 40px;
+          font-size: 12px;
+          color: #666666;
+          i {
+            color: $theme-color;
+            font-style: normal;
+            font-size: 16px;
+            font-weight: 600;
+          }
+        }
+        .ant-btn {
+          width: 76px;
+          border: none;
+          border-radius: 0;
+          height: 40px;
+          background: #f5a623;
           font-size: 14px;
-          line-height: 42px;
-          text-align: center;
+          color: #ffffff;
           font-weight: 600;
           cursor: pointer;
-          &.active {
-            background-image: linear-gradient(90deg, #f10000 0%, #ff4e1a 100%);
-          }
         }
       }
     }

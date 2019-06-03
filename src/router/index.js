@@ -110,7 +110,7 @@ const router = new Router({
                         import ("../views/page/merchant/merchantChildren/messageCenter"),
                 },
                 {
-                    path: "messageDetail",
+                    path: "messageDetail/:id",
                     name: '信息详情',
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/messageDetail")
@@ -269,7 +269,7 @@ const router = new Router({
                         import ("../views/page/shop/userCenterChildren/inquiryOrderDetail")
                 },
                 {
-                    path: "submitOrder",
+                    path: "submitOrder/:id",
                     name: "提交订单",
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/submitOrder")
@@ -294,13 +294,13 @@ const router = new Router({
                 },
                 {
                     path: "lookQuote/:id",
-                    name: "产品报价单",
+                    name: "查看报价单",
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/lookQuote")
                 },
                 {
                     path: "editQuote/:id",
-                    name: "产品报价单",
+                    name: "编辑报价单",
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/editQuote")
                 },
@@ -332,7 +332,7 @@ const router = new Router({
                     path: "myCenter",
                     name: "个人信息中心",
                     component: () =>
-                        import ("../views/page/shop/userCenterChildren/messageCenter"),
+                        import ("../views/page/shop/userCenterChildren/myCenter"),
                 },
                 {
                     path: "userSecurity",
@@ -341,7 +341,7 @@ const router = new Router({
                         import ("../views/page/shop/userCenterChildren/accountSecurity")
                 },
                 {
-                    path: "messageDetail",
+                    path: "messageDetail/:id",
                     name: '消息详情',
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/messageDetails")

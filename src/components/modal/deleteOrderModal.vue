@@ -6,7 +6,7 @@
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#icondingdanshanchu"></use>
           </svg>
-          订单删除后无法恢复
+          {{ deleteObj.isOrder ? "订单" : "" }}删除后无法恢复
         </div>
         <div class="btn">
           <a-button @click="sure">确定删除</a-button>
@@ -31,7 +31,8 @@
 
 <script>
   import modal from "./modal.vue";
-
+  import { _getData } from "../../config/getData";
+  import { mapState } from "vuex";
   export default {
     data() {
       return {
@@ -59,7 +60,13 @@
         type: String,
         default: "提交成功",
         required: false
+      },
+      deleteObj: {
+        type: Object
       }
+    },
+    computed: {
+      ...mapState(["userInfo"])
     },
     components: {
       modal
@@ -72,13 +79,31 @@
         this.visible = false;
         window.open(href, "_blank");
       },
-      sure() {}
+      sure() {
+        if (this.deleteObj.isOrder) {
+        } else {
+          _getData(
+            `${this.$API_URL.HYGLOGINURL}/server/userAddress!request.action`,
+            {
+              method: "deleteUserAddressList",
+              userid: this.userInfo.id,
+              token: "",
+              params: { userAddressList: [this.deleteObj.deleteId] }
+            }
+          ).then(data => {
+            console.log(data);
+            this.visible = false;
+          });
+        }
+      }
     },
     watch: {
       Visible(newVal) {
         this.visible = newVal;
       },
       visible(newVal) {
+        console.log(newVal);
+        console.log(this.$parent);
         if (!newVal) {
           this.$parent.visible = false;
           this.$parent.payVisible = false;

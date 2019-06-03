@@ -3,9 +3,12 @@
     <common-title title="我的收藏">
       <div slot="titleRight" class="right-box">
         <div class="search-box">
-          <a-input placeholder="请输入搜索内容"></a-input>
-          <a-button class="searchBtn">搜索</a-button>
-          <a-button class="clearBtn">清空</a-button>
+          <a-input
+            placeholder="请输入搜索内容"
+            v-model="searchParams.name"
+          ></a-input>
+          <a-button class="searchBtn" @click="search">搜索</a-button>
+          <a-button class="clearBtn" @click="clear">清空</a-button>
         </div>
         <div class="tab-box">
           <div :class="current == 0 ? 'active' : ''" @click="getTab(0)">
@@ -48,20 +51,29 @@
     data() {
       return {
         data: [],
-        current: 0
+        current: 0,
+        searchParams: {
+          name: "",
+          typeId: 0, //收藏类型 0 商品 1 店铺
+          currentPage: 1,
+          countPerPage: 1000000
+        }
       };
     },
     methods: {
+      search() {
+        this.getList();
+      },
+      clear() {
+        this.searchParams.name = "";
+      },
       getTab(val) {
         this.current = val;
+        this.searchParams.typeId = val;
         this.getList(val);
       },
-      getList(typeId) {
-        _getData("/collect/list", {
-          typeId: typeId,
-          currentPage: 1,
-          countPerPage: 1000000
-        }).then(data => {
+      getList() {
+        _getData("/collect/list", this.searchParams).then(data => {
           console.log("获取收藏数据：", data);
           this.data = data.data;
         });
@@ -73,7 +85,7 @@
       shopItem
     },
     mounted() {
-      this.getList(0);
+      this.getList();
     }
   };
 </script>

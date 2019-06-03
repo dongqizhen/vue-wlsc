@@ -14,14 +14,17 @@
           <use xlink:href="#iconxingzhuang1"></use>
         </svg>
         <span class="titleText">{{ data.title }}</span>
-        <span class="createOn">{{ data.createOn }}</span>
+        <span class="createOn">{{
+          data.createdOn ? data.createdOn.substring(0, 10) : ""
+        }}</span>
       </div>
       <div class="introduce">
-        <!-- 您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好... -->
         {{
-          data.introduce.length > 130
-            ? data.introduce.substr(0, 130) + "......"
-            : data.introduce
+          data.detail
+            ? data.detail.length > 130
+              ? data.detail.substr(0, 130) + "......"
+              : data.detail
+            : ""
         }}
       </div>
     </div>

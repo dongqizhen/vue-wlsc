@@ -700,6 +700,12 @@
     }
   }
   .addAddress {
+    .ant-modal {
+      width: 696px !important;
+      .ant-modal-body {
+        padding-left: 44px;
+      }
+    }
     .alertContent {
       .common {
         display: flex;
@@ -711,12 +717,136 @@
           color: #666666;
         }
         .right-box {
+          display: flex;
           .ant-input {
             width: 240px;
             height: 30px;
             line-height: 30px;
             font-size: 12px;
             color: #333;
+          }
+          .testTrue {
+            font-size: 12px;
+            color: #f11f1f;
+            margin-left: 14px;
+            height: 30px;
+            line-height: 30px;
+            i {
+              font-style: normal;
+              margin-right: 5px;
+            }
+          }
+        }
+        .select-area {
+          font-size: 14px;
+          color: #999999;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          position: relative;
+          border: $border-style;
+          border-radius: 4px;
+          width: 240px;
+          padding-left: 10px;
+          height: 30px;
+          > span {
+            font-size: 12px;
+            color: #333333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            width: 100%;
+            padding-right: 9px;
+            span.space {
+              color: #ccc;
+            }
+            .area {
+              height: 24px;
+              width: 18px;
+              margin-right: 6px;
+            }
+            .icon:not(.area) {
+              width: 13px;
+              height: 7px;
+              margin-left: 3px;
+              transition: all 0.3s;
+              &.active {
+                transform: rotate(180deg);
+              }
+            }
+          }
+          .area-container {
+            position: absolute;
+            background: #fff;
+            box-shadow: $base-box-shadow;
+            padding: 18px 20px;
+            width: 785px;
+            top: 40px;
+            left: -118px;
+            z-index: 100;
+            opacity: 1;
+            h2 {
+              border-bottom: 1px solid #dddddd;
+              display: flex;
+              justify-content: flex-start;
+              span {
+                display: flex;
+                width: 126px;
+                height: 38px;
+                font-weight: 600;
+                font-size: 15px;
+
+                align-items: center;
+                justify-content: center;
+                color: #333333;
+                &.active {
+                  background: #019ddd;
+                  color: #ffffff;
+                }
+              }
+            }
+            i {
+              display: flex;
+              position: absolute;
+              top: -6px;
+              width: 0px;
+              left: 200px;
+              margin-left: -5.5px;
+              height: 0px;
+
+              border-left: 25px solid transparent;
+              border-right: 25px solid transparent;
+
+              border-bottom: 12px solid #fff;
+            }
+            ul {
+              display: flex;
+              justify-content: flex-start;
+              flex-wrap: wrap;
+              padding-top: 20px;
+              li {
+                width: 25%;
+                display: flex;
+                justify-content: center;
+                line-height: 36px;
+                cursor: pointer;
+                &:hover {
+                  color: #019ddd;
+                }
+              }
+            }
+          }
+          .slide-fade-enter-active {
+            transition: all 0.3s ease;
+          }
+          .slide-fade-leave-active {
+            transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+          }
+          .slide-fade-enter,
+          .slide-fade-leave-to {
+            transform: translateY(10px);
+            opacity: 0;
           }
         }
       }

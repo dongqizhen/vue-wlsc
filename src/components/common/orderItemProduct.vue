@@ -17,8 +17,26 @@
       <div class="lookPay" @click="addModal" v-if="data.order_status != 1">
         {{ data.isPayProve == 0 ? "提交" : "查看" }}支付证明
       </div>
-      <div class="sure" @click="confirmDelivery" v-if="data.order_status == 3">
+      <div
+        class="sure"
+        @click="confirmDelivery"
+        v-if="data.order_status == 3 && isShowInfo.isMerchant"
+      >
         确认发货
+      </div>
+      <div
+        class="sure"
+        @click="confirmDelivery"
+        v-if="data.order_status == 3 && !isShowInfo.isMerchant"
+      >
+        确认收货
+      </div>
+      <div
+        class="sure"
+        @click="confirmOrder(data.id)"
+        v-if="data.order_status == 1 && isShowInfo.isMerchant"
+      >
+        确认接单
       </div>
       <div
         class="sure"
@@ -62,6 +80,7 @@
   import deleteOrder from "../modal/deleteOrderModal";
 
   import { mapState } from "vuex";
+  import { _getData } from "../../config/getData";
   export default {
     data() {
       return {
@@ -82,6 +101,15 @@
       }
     },
     methods: {
+      confirmOrder(order_sn) {
+        _getData("/order/updateOrderStatus", {
+          orderId: order_sn,
+          orderStatus: "connect",
+          payProve: ""
+        }).then(data => {
+          console.log(data);
+        });
+      },
       addModal() {
         if (!this.isLogin) {
           this.type = "login";

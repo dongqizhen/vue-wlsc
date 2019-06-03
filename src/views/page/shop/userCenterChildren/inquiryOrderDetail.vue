@@ -4,7 +4,7 @@
     <div class="listContainer">
       <order-title
         :isShowInfo="isShowInfo"
-        :data="item"
+        :data="data"
         :checkedList="checkedList"
         v-on:getChecked="getChecked"
       ></order-title>
@@ -13,7 +13,7 @@
           <img
             src="http://file.haoyigong.com/server/upload/1554429391594.jpg"
           />
-          北京华脉诚信科技有限公司
+          {{ data.shopName }}
         </div>
         <div class="linkName">联系人：张三</div>
         <div class="phone">联系方式：188100000299 400-121-1212</div>
@@ -21,20 +21,26 @@
       <div class="listContent">
         <list-title :titleArr="titleArr"></list-title>
         <ul>
-          <li v-for="item in data" :key="item.id" :class="addClass(item.id)">
+          <li
+            v-for="item in data.list"
+            :key="item.id"
+            :class="addClass(item.id)"
+          >
             <span>
               <a-checkbox
                 @change="onChange(item.id)"
                 :checked="checkedChange(item.id)"
               ></a-checkbox>
             </span>
-            <span><img :src="item.img"/></span>
+            <span><img :src="item.list_pic_url"/></span>
             <span>{{ item.name }}</span>
-            <span>{{ item.productLine }}</span>
-            <span>{{ item.brandOrmodel }}</span>
+            <span>{{ item.brand_name }}/{{ item.brand_model_name }}</span>
+            <span>{{ item.unitPrice }}</span>
             <span>{{ item.number }}</span>
-            <span>{{ item.createOn }}</span>
-            <span>这里是一段备注</span>
+            <span>{{
+              item.arrivalTime ? item.arrivalTime.substring(0, 16) : ""
+            }}</span>
+            <span>{{ item.buyerDescription }}</span>
           </li>
         </ul>
       </div>
@@ -50,10 +56,16 @@
             v-if="isShowInfo.current == 2"
           >
             <div class="totalInfo">
-              <span class="totalPrice"> 报价总金额：<i>¥5982827.00</i> </span>
+              <span class="totalPrice">
+                报价总金额：<i>¥{{ data.subtotal }}</i>
+              </span>
               <span class="download" @click="turnMyQuote">转为我的报价</span>
               <span class="edit">
-                <router-link to="/userCenter/submitOrder">提交订单</router-link>
+                <router-link
+                  :to="`/userCenter/submitOrder/${$route.params.id}`"
+                >
+                  提交订单
+                </router-link>
               </span>
             </div>
           </div>
@@ -73,42 +85,14 @@
   export default {
     data() {
       return {
-        isShowInfo: {},
-        item: {
-          enquirySn: "sn2019052015475145961000"
+        isShowInfo: {
+          isDetail: true,
+          isShow: false,
+          current: 1,
+          isOrder: false,
+          isTrue: false
         },
-        data: [
-          {
-            id: "1",
-            name: "John Brown",
-            img: "http://file.haoyigong.com/server/upload/1533522814856.jpg",
-            productLine: "配件/CT类",
-            brandOrmodel: "GE/GE-101",
-            status: "未上架",
-            number: 111,
-            createOn: "2019-03-28"
-          },
-          {
-            id: "2",
-            img: "http://file.haoyigong.com/server/upload/1554081863934.jpg",
-            name: "Jim Green",
-            productLine: "配件/CT类",
-            brandOrmodel: "GE/GE-102",
-            status: "未上架",
-            number: 111,
-            createOn: "2019-03-28"
-          },
-          {
-            id: "3",
-            img: "http://file.haoyigong.com/server/upload/1553495655746.png",
-            name: "Joe Black",
-            productLine: "配件/CT类",
-            brandOrmodel: "GE/GE-103",
-            status: "未上架",
-            number: 111,
-            createOn: "2019-03-28"
-          }
-        ],
+        data: {},
         current: 1,
         checkAll: false,
         checkedList: [],
@@ -120,11 +104,38 @@
           "数量",
           "到货时间",
           "询价备注"
-        ]
+        ],
+        goodsList: []
       };
     },
     methods: {
-      turnMyQuote() {},
+      turnMyQuote() {
+        console.log(this.checkedList);
+        this.goodsList = [];
+        _.map(this.checkedList, val => {
+          _.map(this.data.list, value => {
+            if (val == value.id) {
+              this.goodsList.push({
+                goodsId: val,
+                number: value.number,
+                unitPrice: value.unit_price
+              });
+            }
+          });
+        });
+        console.log(this.goodsList);
+        _getData("/enquiry/myEnquiry", {
+          param: [
+            {
+              enquirySn: this.$route.params.id,
+              goodsList: this.goodsList
+            }
+          ]
+        }).then(data => {
+          console.log(data);
+          this.$router.replace({ path: "/userCenter/myQuote" });
+        });
+      },
       tab(tabVal) {
         this.current = tabVal;
       },
@@ -134,7 +145,7 @@
         } else {
           this.checkedList = _.without(this.checkedList, id);
         }
-        if (this.checkedList.length == this.data.length) {
+        if (this.checkedList.length == this.data.list.length) {
           this.checkAll = true;
         } else {
           this.checkAll = false;
@@ -162,7 +173,7 @@
             this.checkedList = _.without(this.checkedList, val);
           }
         }
-        if (this.checkedList.length == this.data.length) {
+        if (this.checkedList.length == this.data.list.length) {
           this.checkAll = true;
         } else {
           this.checkAll = false;
@@ -172,7 +183,7 @@
         if (val) {
           this.checkAll = true;
           this.checkedList = [];
-          for (const val of this.data) {
+          for (const val of this.data.list) {
             this.checkedList.push(val.id);
           }
         } else {
@@ -180,20 +191,17 @@
           this.checkedList = [];
         }
       },
-
-      getInquiryList() {
-        _getData("/enquiry/enquiryList", {
-          page: 1,
-          size: 10,
-          status: this.current
+      getInquiryDetail() {
+        _getData("/enquiry/getEnquiry", {
+          enquirySn: this.$route.params.id
         }).then(data => {
-          console.log("获取询价管理的列表：", data);
-          this.data = data.data;
+          console.log("获取询价单详情：", data);
+          this.data = data;
         });
       }
     },
     mounted() {
-      this.getInquiryList();
+      this.getInquiryDetail();
       console.log(this.$route.query.isShowInfo);
       this.isShowInfo = this.$route.query.isShowInfo;
       this.isShowInfo.isTrue = false;

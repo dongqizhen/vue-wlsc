@@ -79,8 +79,8 @@
   import _ from "lodash";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import manageNumberNav from "../../../../components/common/manageNumberNav";
-  import systemNotice from "../../../../components/common/systemNoticeItem";
-  import privateMessage from "../../../../components/common/privateMessageItem";
+  import systemNotice from "../../../../components/messageCenter/systemNoticeItem";
+  import privateMessage from "../../../../components/messageCenter/privateMessageItem";
   import checkAll from "../../../../components/common/checkAll";
   import pagination from "../../../../components/common/pagination";
   export default {

@@ -23,12 +23,11 @@
               </svg>
               编辑
             </div>
-            <div>
-              <a-checkbox
-                @change="onChange(item.id)"
-                :checked="item.status != 0"
-                >{{ item.status ? "默认地址" : "设为默认地址" }}</a-checkbox
-              >
+            <div class="delete" @click="deleteModal(item.id)">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconShape1"></use>
+              </svg>
+              删除
             </div>
           </div>
         </li>
@@ -39,6 +38,11 @@
       :type="type"
       :editId="editId"
     ></add-address-modal>
+    <delete-order-modal
+      :Visible="deleteVisible"
+      :type="type"
+      :deleteObj="deleteObj"
+    ></delete-order-modal>
   </div>
 </template>
 
@@ -48,17 +52,23 @@
   import { _getData } from "../../../../config/getData";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import addAddressModal from "../../../../components/modal/addAddressModal";
+  import deleteOrderModal from "../../../../components/modal/deleteOrderModal";
   export default {
     data() {
       return {
         visible: false,
+        deleteVisible: false,
         type: "",
         userAddressList: [],
-        editId: 0
+        editId: 0,
+        deleteObj: {
+          deleteId: 0,
+          isOrder: false
+        }
       };
     },
     computed: {
-      ...mapState(["isLogin"])
+      ...mapState(["isLogin", "userInfo"])
     },
     methods: {
       onChange(id) {
@@ -83,13 +93,20 @@
         this.visible = true;
         this.editId = id;
       },
+      deleteModal(id) {
+        if (!this.isLogin) {
+          this.type = "login";
+        }
+        this.deleteVisible = true;
+        this.deleteObj.deleteId = id;
+      },
       getAddressList() {
         _getData(
           `${this.$API_URL.HYGLOGINURL}/server/userAddress!request.action`,
           {
             method: "appPageList",
-            userid: "15301",
-            token: "09a52ead-ef25-411d-8ac2-e3384fceed68",
+            userid: this.userInfo.id,
+            token: "",
             params: { currentPage: 1, countPerPage: 10 }
           }
         ).then(data => {
@@ -99,14 +116,21 @@
       }
     },
     mounted() {
+      console.log(this.userInfo);
       this.getAddressList();
     },
     components: {
       commonTitle,
-      addAddressModal
+      addAddressModal,
+      deleteOrderModal
     },
     watch: {
       visible(newVal) {
+        if (!newVal) {
+          this.getAddressList();
+        }
+      },
+      deleteVisible(newVal) {
         if (!newVal) {
           this.getAddressList();
         }
@@ -118,11 +142,11 @@
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
   .addressManage {
-    min-height: 693px;
+    min-height: 460px;
     background-color: #fff;
-    padding: 4px 20px;
+    padding: 4px 20px 20px 20px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
-    margin-bottom: 10px;
+    margin-bottom: 100px;
     .addAddress {
       cursor: pointer;
     }
@@ -166,6 +190,12 @@
             justify-content: center;
             font-size: 12px;
             color: #666666;
+            > div {
+              &:hover {
+                cursor: pointer;
+                color: $theme-color;
+              }
+            }
             .edit {
               margin-bottom: 10px;
             }

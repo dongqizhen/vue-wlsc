@@ -30,7 +30,7 @@
           <router-link
             :to="{
               path: `inquiryOrderDetail/${data.enquirySn}`,
-              query: { isShowInfo: isShowInfo }
+              query: { isShowInfo: this.isShowInfo }
             }"
           >
             查看详情

@@ -1,5 +1,5 @@
 <template>
-  <div class="messageCenter">
+  <div class="myInquiry">
     <common-title title="我的询价">
       <div slot="titleRight" class="right-box">
         <ul>
@@ -21,13 +21,19 @@
           <div class="common productName">
             <div class="left-box">询价单号</div>
             <div class="right-box">
-              <a-input placeholder="请输入询价单号" />
+              <a-input
+                placeholder="请输入询价单号"
+                v-model="searchParams.enquirySn"
+              />
             </div>
           </div>
           <div class="common productStatus">
             <div class="left-box">产品名称</div>
             <div class="right-box">
-              <a-input placeholder="请输入产品名称" />
+              <a-input
+                placeholder="请输入产品名称"
+                v-model="searchParams.goodsName"
+              />
             </div>
           </div>
         </div>
@@ -35,11 +41,14 @@
           <div class="common">
             <div class="left-box">询价日期</div>
             <div class="right-box">
-              <calendar-range></calendar-range>
+              <calendar-range
+                v-on:getDateRange="getDateTime"
+                :dateRange="dateRange"
+              ></calendar-range>
             </div>
           </div>
-          <button class="search">搜索</button>
-          <button class="clear">清除</button>
+          <a-button class="search" @click="searchData">搜索</a-button>
+          <a-button class="clear" @click="clearData">清除</a-button>
         </div>
       </div>
       <div class="listContent">
@@ -87,6 +96,7 @@
           isTrue: true
         },
         data: [],
+        dateRange: [],
         checkAll: false,
         checkedList: [],
         titleArr: [
@@ -97,12 +107,36 @@
           "到货时间",
           "备注",
           "操作"
-        ]
+        ],
+        searchParams: {
+          page: 1,
+          size: 10,
+          status: 1,
+          enquirySn: "",
+          goodsName: "",
+          startTime: "",
+          endTime: ""
+        }
       };
     },
     methods: {
+      searchData() {
+        console.log(this.searchParams);
+        this.getInquiryList();
+      },
+      clearData() {
+        this.searchParams.enquirySn = "";
+        this.searchParams.goodsName = "";
+        this.dateRange = [];
+      },
+      getDateTime(val) {
+        console.log(val);
+        this.searchParams.startTime = val[0];
+        this.searchParams.endTime = val[1];
+      },
       tab(tabVal) {
         this.isShowInfo.current = tabVal;
+        this.searchParams.status = tabVal;
         this.getInquiryList();
       },
       getChecked(val) {
@@ -131,16 +165,8 @@
           this.checkedList = [];
         }
       },
-      getInquiryList(currentStatus) {
-        _getData("/enquiry/enquiryList", {
-          page: 1,
-          size: 10,
-          status: this.isShowInfo.current,
-          enquirySn: "",
-          goodsName: "",
-          startTime: "",
-          endTime: ""
-        }).then(data => {
+      getInquiryList() {
+        _getData("/enquiry/enquiryList", this.searchParams).then(data => {
           console.log("获取询价管理的列表：", data);
           this.data = data.data;
         });
@@ -162,12 +188,12 @@
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
-  .messageCenter {
+  .myInquiry {
     min-height: 693px;
     background-color: #fff;
-    padding: 4px 20px;
+    padding: 4px 20px 20px 20px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
-    margin-bottom: 10px;
+    margin-bottom: 100px;
     .common-title {
       .right-box {
         ul {
@@ -223,6 +249,8 @@
             .ant-input {
               width: 121px;
               height: 27px;
+              line-height: 27px;
+              font-size: 12px;
             }
             /deep/.el-select {
               height: 27px;
@@ -255,8 +283,8 @@
               right: 6px;
             }
           }
-          button {
-            border: 0;
+          .ant-btn {
+            border: none;
             outline: none;
             background-color: transparent;
             color: #fff;
@@ -264,13 +292,13 @@
             margin-right: 10px;
             padding: 0 18px;
             height: 27px;
-            line-height: 27px;
             cursor: pointer;
             &:last-child {
               margin-right: 0;
             }
           }
           .search {
+            border: 1px solid #f10215;
             background-color: $theme-color;
           }
           .clear {

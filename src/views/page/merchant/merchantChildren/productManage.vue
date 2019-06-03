@@ -104,7 +104,7 @@
               </span>
               <span><img :src="item.list_pic_url"/></span>
               <span>{{ item.name }}</span>
-              <span>{{ item.category_name }}/{{ item.category_name }}</span>
+              <span>{{ item.big_category_name }}/{{ item.category_name }}</span>
               <span>{{ item.brand_name }}/{{ item.brand_model_name }}</span>
               <span>{{ item.is_on_sale == 1 ? "上架" : "未上架" }}</span>
               <span>{{ item.goods_number }}</span>

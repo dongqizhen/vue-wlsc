@@ -34,6 +34,7 @@
   import checkAll from "../../../../components/common/checkAll";
   import listTitle from "../../../../components/common/listTitle";
   import filterSearch from "../../../../components/common/filterSearch";
+  import { _getData } from "../../../../config/getData";
   export default {
     data() {
       return {
@@ -42,7 +43,8 @@
           isShow: false,
           current: 1,
           isOrder: true,
-          isTrue: true
+          isTrue: true,
+          isMerchant: true
         },
         data: [],
         checkedList: [],
@@ -113,7 +115,23 @@
           this.checkAll = false;
           this.checkedList = [];
         }
+      },
+      getOrderList() {
+        _getData("/order/orderList", {
+          currentPage: "1",
+          countPerPage: "10",
+          name: "",
+          orderStatus: "", //类型：String  可有字段  备注：订单状态：1：待接单，2：待发货，3：待收货，4：待评价，5：已完成，6：退货，7：已关闭
+          startTime: "",
+          endTime: ""
+        }).then(data => {
+          console.log("获取订单列表：", data);
+          this.data = data.data;
+        });
       }
+    },
+    mounted() {
+      this.getOrderList();
     },
     components: {
       manageNumberNav,

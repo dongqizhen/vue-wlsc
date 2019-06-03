@@ -1,22 +1,16 @@
 <template>
   <div class="messageDetail">
-    <div class="content">
-      <div class="title">买家申请店铺审核通过提示</div>
-      <div class="subTitle">2018-11-18 19:02</div>
-      <div class="introduce">
-        您好，您在网来商城的开店已审核通过，快去发布商品吧！您好，您在网来商城的开店已审核通过，快去发布商品吧！您好，您在网来商城的开店已审核通过，快去发布商品吧！您好，您在网来商城的开店已审核通过，快去发布商品吧！您好，您在网来商城的开店已审核通过，快去发布商品吧！您好，您在网来商城的开店已审核通过，快去发布商品吧！您好，您在网来商城的开店已审核通过，快去发布商品吧！您好，您在网来商城的开店已审核通过，快去发布商品吧！您好，您在网来商城的开店已审核通过，快去发布商品吧！您好，您在网来商城的开店已审核通过，快去发布商品吧！
-      </div>
-    </div>
+    <message-detail-common :detailId="$route.params.id"></message-detail-common>
   </div>
 </template>
 <script>
+  import messageDetailCommon from "../../../../components/messageCenter/messageDetailCommon";
   export default {
     data() {
       return {};
     },
-    created() {
-      console.log(this.$route.query.id);
-      //根据id获取相应的信息内容
+    components: {
+      messageDetailCommon
     }
   };
 </script>
@@ -27,7 +21,7 @@
     background-color: #fff;
     padding: 20px 70px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
-    margin-bottom: 10px;
+    margin-bottom: 100px;
     .content {
       .title {
         text-align: center;

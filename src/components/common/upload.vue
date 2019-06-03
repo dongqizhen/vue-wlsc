@@ -3,9 +3,8 @@
     <a-upload
       listType="picture-card"
       class="avatar-uploader"
-      :headers="{ 'Content-Type': 'multipart/form-data' }"
       :showUploadList="false"
-      :action="actionURL"
+      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
       :beforeUpload="beforeUpload"
       @change="handleChange"
     >
@@ -105,12 +104,18 @@
         width: 118px;
         height: 118px;
         position: relative;
+        &:hover {
+          .icon {
+            display: block;
+          }
+        }
         .icon {
           width: 23px;
           height: 23px;
           position: absolute;
           right: 4px;
           top: 4px;
+          display: none;
         }
       }
       .anticon {

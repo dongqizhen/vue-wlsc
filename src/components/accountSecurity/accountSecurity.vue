@@ -87,11 +87,6 @@
 <style scoped lang="scss">
   @import "../../assets/scss/_commonScss";
   .commonBoxStyle {
-    height: 100%;
-    padding: 4px 20px;
-    background: #ffffff;
-    box-shadow: $base-box-shadow;
-    margin-bottom: 10px;
     .informationContent {
       margin-top: 44px;
       .common {

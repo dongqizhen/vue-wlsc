@@ -66,53 +66,31 @@
           alert("请先选择产品");
           return;
         } else {
-          // _.map(this.data, o => {
-          //   _.map(this.selectDatas, val => {
-          //     if (o.sid == val.storeId) {
-          //       _.map(val.goodsList, item => {
-          //         _.map(o.list, value => {
-          //           if (item == value.id) {
-          //           }
-          //         });
-          //       });
-          //     }
-          //   });
-          // });
-        }
-        param: [
-          {
-            storeId: "398",
-            goodsList: [
-              {
-                goodsId: "1181020",
-                number: "4",
-                buyerDescription: "商品买家描述"
-              }
-            ]
-          }
-        ];
-        // console.log(this.checkedList);
-        _getData("/enquiry/addEnquiry", {
-          param: [
-            {
-              storeId: "398",
-              goodsList: [
-                {
-                  goodsId: "1181020",
-                  number: "4",
-                  buyerDescription: "商品买家描述"
-                },
-                {
-                  goodsId: "1181019",
-                  number: "4",
-                  buyerDescription: "商品买家描述"
+          console.log(this.products);
+          _.map(this.selectDatas, o => {
+            let selectProducts = [];
+            _.map(o.goodsList, value => {
+              _.map(this.allProducts, val => {
+                if (value == val.goods_id) {
+                  selectProducts.push({
+                    goodsId: value,
+                    number: val.number,
+                    buyerDescription: ""
+                  });
                 }
-              ]
-            }
-          ]
-        }).then(data => {
-          console.log("一键获取报价：", data);
-        });
+              });
+            });
+            console.log(selectProducts);
+            o.goodsList = selectProducts;
+          });
+          console.log(this.selectDatas);
+        }
+        _getData("/enquiry/addEnquiry", { param: this.selectDatas }).then(
+          data => {
+            console.log("一键获取报价：", data);
+            this.$router.replace({ path: "/userCenter/myInquiry" });
+          }
+        );
       },
       getIsCheckAll(val) {
         console.log(val);
@@ -180,7 +158,6 @@
         this.products = [];
         this.selectDatas = [];
         if (val) {
-          console.log("前：", this.selectDatas);
           this.checkAll = true;
           this.products = this.allProducts;
           _.map(this.data, o => {
@@ -199,9 +176,7 @@
         }
       },
       isCheckAll(id) {
-        console.log(this.selectDatas);
         for (const val of this.selectDatas) {
-          console.log(val.isCheckAll);
           if (val.storeId == id) {
             return val.isCheckAll;
           }

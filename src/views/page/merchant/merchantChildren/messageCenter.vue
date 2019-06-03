@@ -6,24 +6,23 @@
         <manage-number-nav :navArr="tabs" v-on:tab="getTab"></manage-number-nav>
       </div>
       <div class="right-box">
-        <div :class="current == 1 ? 'active' : ''" @click="system(1)">
-          系统通知(24)
+        <div :class="current == 0 ? 'active' : ''" @click="system(0)">
+          系统通知({{ systemNumber }})
         </div>
-        <div :class="current == 2 ? 'active' : ''" @click="system(2)">
-          私信消息(12)
+        <div :class="current == 1 ? 'active' : ''" @click="system(1)">
+          私信消息({{ personalNumber }})
         </div>
       </div>
     </div>
     <div class="listContainer">
       <div class="listContent">
-        <ul v-if="current == 1">
+        <ul v-if="current == 0">
           <router-link
             tag="li"
             v-for="item in data"
             :key="item.id"
             :to="{
-              path: 'messageDetail',
-              query: { id: item.id }
+              path: `messageDetail/${item.id}`
             }"
           >
             <system-notice
@@ -41,8 +40,7 @@
             v-for="item in data"
             :key="item.id"
             :to="{
-              path: 'messageDetail',
-              query: { id: item.id }
+              path: `messageDetail/${item.id}`
             }"
           >
             <private-message
@@ -71,7 +69,10 @@
         </check-all>
       </div>
     </div>
-    <pagination></pagination>
+    <pagination
+      :data="totalCount"
+      v-on:onPaginationChange="getPaginationChange"
+    ></pagination>
   </div>
 </template>
 
@@ -79,62 +80,68 @@
   import _ from "lodash";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import manageNumberNav from "../../../../components/common/manageNumberNav";
-  import systemNotice from "../../../../components/common/systemNoticeItem";
-  import privateMessage from "../../../../components/common/privateMessageItem";
+  import systemNotice from "../../../../components/messageCenter/systemNoticeItem";
+  import privateMessage from "../../../../components/messageCenter/privateMessageItem";
   import checkAll from "../../../../components/common/checkAll";
   import pagination from "../../../../components/common/pagination";
+  import { _getData } from "../../../../config/getData";
   export default {
     data() {
       return {
-        data: [
+        systemNumber: 0,
+        personalNumber: 0,
+        totalCount: { amount: 0, pageSize: 10 },
+        data: [],
+        tabs: [
           {
-            id: 1,
-            title: "卖家申请店铺审核通过提示",
-            createOn: "2018-11-18",
-            introduce:
-              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
+            id: 0,
+            name: "未读消息",
+            amount: 0
           },
           {
-            id: 2,
-            title: "卖家申请店铺审核未通过提示",
-            createOn: "2018-11-19",
-            introduce:
-              "您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发布商品吧您好，您在网来商城的开店申请已通过，快去发…您好，您在网来商城的开店，您在网来商城的开店申请已通过，快去发…您好..."
+            id: 1,
+            name: "已读消息",
+            amount: 0
           }
         ],
-        tabs: [],
         checkAll: false,
         checkedList: [],
-        current: 1,
-        unRead: true
+        current: 0,
+        unRead: true,
+        params: {
+          currentPage: "1", //类型：String  必有字段  备注：当前页
+          countPerPage: "10", //类型：String  必有字段  备注：每页显示条数
+          messageType: 0, //类型：String  可有字段  备注：消息类型 0系统消息，1私信，空字符串查询全部
+          readType: 0 //类型：String  可有字段  备注：消息状态 0未读，1已读，空字符串查询全部
+        },
+        getMessageNumberParams: {
+          messageType: 0, //类型：String  可有字段  备注：消息类型 0系统消息，1私信，空字符串查询全部
+          readType: 0 //类型：String  可有字段  备注：消息状态 0未读，1已读，空字符串查询全部
+        }
       };
     },
-    beforeMount() {
-      this.tabs = [
-        {
-          id: 2,
-          name: "未读消息",
-          amount: 24
-        },
-        {
-          id: 3,
-          name: "已读消息",
-          amount: 12
-        }
-      ];
-    },
+
     methods: {
       getTab(val) {
+        console.log(val);
         if (this.tabs[0].id == val) {
           this.unRead = true;
         } else {
           this.unRead = false;
         }
+        this.params.readType = val;
+        this.getMessageNumberParams.readType = val;
+        this.getMessageList();
+        this.getMessageNumber();
       },
       system(val) {
         this.current = val;
         this.checkedList = [];
         this.checkAll = false;
+        this.params.messageType = val;
+        this.getMessageNumberParams.messageType = val;
+        this.getMessageList();
+        this.getMessageNumber();
       },
       getChecked(val) {
         if (typeof val == "object") {
@@ -167,7 +174,32 @@
           //向后台发送请求，标记为已读，成功后将刷新数据
         }
       },
-      onPaginationChange() {}
+      getPaginationChange(val) {
+        console.log(val);
+      },
+      getMessageList() {
+        _getData("/message/list", this.params).then(data => {
+          console.log("获取到的信息列表：", data);
+          this.totalCount.amount = data.count;
+          this.totalCount.pageSize = data.numsPerPage;
+          this.data = data.data;
+        });
+      },
+      getMessageNumber() {
+        _getData("/message/messageNum", this.getMessageNumberParams).then(
+          data => {
+            console.log("私信消息数量：", data);
+            this.tabs[0].amount = data.unread;
+            this.tabs[1].amount = data.read;
+            this.systemNumber = data.system;
+            this.personalNumber = data.personal;
+          }
+        );
+      }
+    },
+    mounted() {
+      this.getMessageList();
+      this.getMessageNumber();
     },
     components: {
       commonTitle,

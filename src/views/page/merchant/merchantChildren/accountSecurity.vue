@@ -23,6 +23,10 @@
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
   .accountSecurity {
-    height: 609px;
+    min-height: 693px;
+    padding: 4px 20px;
+    background: #ffffff;
+    box-shadow: $base-box-shadow;
+    margin-bottom: 100px;
   }
 </style>
