@@ -66,18 +66,18 @@
           alert("请先选择产品");
           return;
         } else {
-          _.map(this.data, o => {
-            _.map(this.selectDatas, val => {
-              if (o.sid == val.storeId) {
-                _.map(val.goodsList, item => {
-                  _.map(o.list, value => {
-                    if (item == value.id) {
-                    }
-                  });
-                });
-              }
-            });
-          });
+          // _.map(this.data, o => {
+          //   _.map(this.selectDatas, val => {
+          //     if (o.sid == val.storeId) {
+          //       _.map(val.goodsList, item => {
+          //         _.map(o.list, value => {
+          //           if (item == value.id) {
+          //           }
+          //         });
+          //       });
+          //     }
+          //   });
+          // });
         }
         param: [
           {
@@ -91,7 +91,7 @@
             ]
           }
         ];
-        console.log(this.checkedList);
+        // console.log(this.checkedList);
         _getData("/enquiry/addEnquiry", {
           param: [
             {
@@ -125,12 +125,14 @@
             _.each(this.selectDatas, value => {
               if (value.storeId == val.storeId) {
                 value.goodsList = val.goodsList;
+                value.isCheckAll = val.isCheckAll;
               }
             });
           } else {
             this.selectDatas.push({
               storeId: val.storeId,
-              goodsList: val.goodsList
+              goodsList: val.goodsList,
+              isCheckAll: val.isCheckAll
             });
           }
         } else {
@@ -149,16 +151,19 @@
               _.each(this.selectDatas, item => {
                 if (item.storeId == val.storeId) {
                   item.goodsList = val.goodsList;
+                  item.isCheckAll = val.isCheckAll;
                 }
               });
             } else {
               this.selectDatas.push({
                 storeId: val.storeId,
-                goodsList: val.goodsList
+                goodsList: val.goodsList,
+                isCheckAll: val.isCheckAll
               });
             }
           }
         }
+        console.log(this.selectDatas);
         this.products = [];
         _.map(this.selectDatas, o => {
           for (const item of o.goodsList) {
@@ -172,31 +177,33 @@
         }
       },
       isCheckAllMethod(val) {
+        this.products = [];
+        this.selectDatas = [];
         if (val) {
+          console.log("前：", this.selectDatas);
           this.checkAll = true;
-          this.checkedList = [];
-          this.products = [];
-          for (const val of this.data) {
-            this.checkedList.push(val.sid);
-          }
           this.products = this.allProducts;
           _.map(this.data, o => {
             let goodsIds = [];
             for (const item of o.list) {
               goodsIds.push(item.goods_id);
             }
-            this.selectDatas.push({ storeId: o.sid, goodsList: goodsIds });
+            this.selectDatas.push({
+              storeId: o.sid,
+              goodsList: goodsIds,
+              isCheckAll: true
+            });
           });
         } else {
           this.checkAll = false;
-          this.checkedList = [];
-          this.products = [];
         }
       },
       isCheckAll(id) {
-        for (const val of this.checkedList) {
-          if (val == id) {
-            return true;
+        console.log(this.selectDatas);
+        for (const val of this.selectDatas) {
+          console.log(val.isCheckAll);
+          if (val.storeId == id) {
+            return val.isCheckAll;
           }
         }
       }

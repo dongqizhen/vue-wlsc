@@ -61,7 +61,6 @@
           }
         } else {
           this.checkAll = false;
-          this.checkedList = [];
         }
       }
     },
