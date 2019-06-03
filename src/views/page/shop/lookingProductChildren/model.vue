@@ -43,7 +43,7 @@
                 ></shop-item-vue>
                 <!-- <bid-info-item-vue /> -->
               </ul>
-              <pagination-vue></pagination-vue>
+              <pagination-vue :data="data"></pagination-vue>
             </div>
             <loading-vue v-else></loading-vue>
           </div>
@@ -74,6 +74,7 @@
     data() {
       return {
         routes: [],
+        data: "",
         isLoading: true,
         tabs: [],
         shopList: "",
@@ -113,6 +114,7 @@
         })
           .then(data => {
             console.log("店铺", data);
+            this.data = data;
             this.shopList = data.data;
           })
           .then(() => {
@@ -278,6 +280,9 @@
       margin-bottom: 20px;
       margin-top: 4px;
       overflow: initial;
+      .swiper-slide {
+        margin-right: 30px;
+      }
       /deep/ .ant-btn-default {
         height: 40px;
         width: 120px;

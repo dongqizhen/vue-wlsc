@@ -23,19 +23,49 @@
           ></recommends-tab-vue>
           <div class="recommend_page">
             <ul class="floor" v-if="recommend_tabs_index == 0">
-              <li v-for="(item, i) in goodList" :key="item.id">
+              <li
+                v-for="(item, i) in goodList"
+                :key="item.id"
+                :class="
+                  i % 4 == 0
+                    ? 'one'
+                    : i % 4 == 1
+                    ? 'two'
+                    : i % 4 == 2
+                    ? 'three'
+                    : 'four'
+                "
+              >
                 <h2>
                   <p>{{ i + 1 }}F {{ item.name }}</p>
                   <ul>
-                    <li>心电图机</li>
-                    <li>心电图工作站</li>
-                    <li>心电工作站</li>
-                    <li>心电工作站</li>
+                    <router-link
+                      tag="li"
+                      :to="{
+                        path: '/lookingProduct/oneOfBrandClassificne',
+                        query: {
+                          nav_index: 1,
+                          categoryId: v.id,
+                          categoryName: v.name
+                        }
+                      }"
+                      v-for="v in item.categoryList"
+                      :key="v.id"
+                    >
+                      <a target="_blank"> {{ v.name }}</a>
+                    </router-link>
+
+                    <!-- path: '/lookingProduct/oneOfBrandClassificne',
+                      query: {
+                        nav_index: 1,
+                        categoryId: item.id,
+                        categoryName: item.name
+                      } -->
                   </ul>
                   <router-link
                     tag="span"
                     :to="{
-                      path: '/lookingProduct/oneOfBrandClassificne',
+                      path: '/lookingProduct',
                       query: {
                         nav_index: 1,
                         categoryId: item.id,
@@ -48,11 +78,11 @@
                       <svg class="icon" aria-hidden="true">
                         <use
                           :xlink:href="
-                            i == 0
+                            i % 4 == 0
                               ? '#iconhuangsegengduo'
-                              : i == 1
+                              : i % 4 == 1
                               ? '#iconlvsegengduo'
-                              : i == 2
+                              : i % 4 == 2
                               ? '#iconzisegengduo'
                               : '#iconlansegengduo'
                           "
@@ -146,7 +176,7 @@
         articleList: [], //案列,
         videoList: [], //视频
         maintenanceList: [],
-        nav: []
+        nav: ["推荐产品(0)", "文章(0)", "视频(0)", "案例(0)"]
         // background: ["#F5A623", "#43D480", "#8880FE", "#0283FF"]
       };
     },
@@ -316,11 +346,15 @@
                     li {
                       // font-family: PingFangSC-Regular;
                       font-size: 14px;
-                      color: #333333;
+
                       margin-right: 30px;
                       cursor: pointer;
-                      &:hover {
-                        color: $theme-color;
+                      a {
+                        color: #333333;
+                        text-decoration: none;
+                        &:hover {
+                          color: $theme-color;
+                        }
                       }
                     }
                   }
@@ -343,6 +377,9 @@
                         margin-left: 7px;
                         margin-bottom: 3px;
                       }
+                      &:hover {
+                        opacity: 0.7;
+                      }
                     }
                   }
                 }
@@ -363,7 +400,7 @@
                     padding-top: 4px;
                   }
                 }
-                &:nth-child(2) {
+                &.two {
                   h2 {
                     p {
                       background: #43d480;
@@ -378,7 +415,7 @@
                     }
                   }
                 }
-                &:nth-child(3) {
+                &.three {
                   h2 {
                     p {
                       background: #8880fe;
@@ -393,7 +430,7 @@
                     }
                   }
                 }
-                &:nth-child(4) {
+                &.four {
                   h2 {
                     p {
                       background: #0283ff;

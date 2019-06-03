@@ -1,49 +1,55 @@
 <template>
   <div class="paginationBox">
     <a-pagination
+      ref="page"
       showQuickJumper
-      :total="data.amount"
+      :total="data.amount || data.count"
       @change="onPaginationChange"
-      :pageSize="data.pageSize"
+      :defaultPageSize="defaultPageSize"
+      :pageSize="data.pageSize || data.countPerPage || data.numsPerPage"
     />
-    <!-- <div class="sureBtn" @click="sureFun">确定</div> -->
+    <div class="sureBtn" @click="sureFun($event)">确定</div>
   </div>
 </template>
 <script>
   export default {
     data() {
-      return {};
+      return {
+        current: 1
+      };
+    },
+    created() {
+      //this.current = this.data.currentPage;
     },
     props: {
       data: {
         type: [Object]
+      },
+      defaultPageSize: {
+        type: Number,
+        default: 20
       }
     },
     methods: {
       onPaginationChange(page, pageSize) {
         this.$emit("onPaginationChange", page);
+      },
+      isNumber(val) {
+        var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+        var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+        if (regPos.test(val) || regNeg.test(val)) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      sureFun(e) {
+        let childrenNodeArr = this.$refs.page.$children[0].$children[0].$children;
+        let inputChildNode = childrenNodeArr[childrenNodeArr.length - 1];
+        let val = inputChildNode.goInputText;
+
+        inputChildNode.go(e);
       }
-      // sureFun() {
-      //   let keyCoke = 13;
-      //   let keyboardEvent = document.createEvent("KeyboardEvent");
-      //   let initMethod =
-      //     typeof keyboardEvent.initKeyboardEvent !== "undefined"
-      //       ? "initKeyboardEvent"
-      //       : "initKeyEvent";
-      //   keyboardEvent[initMethod](
-      //     "keydown",
-      //     true,
-      //     true,
-      //     window,
-      //     false,
-      //     false,
-      //     false,
-      //     false,
-      //     keyCoke,
-      //     0
-      //   );
-      //   document.dispatchEvent(keyboardEvent);
-      // }
     },
     mounted() {
       console.log(this.data);
@@ -114,6 +120,9 @@
       text-align: center;
       margin-left: 20px;
       cursor: pointer;
+      &:hover {
+        opacity: 0.7;
+      }
     }
   }
 </style>

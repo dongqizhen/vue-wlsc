@@ -97,7 +97,7 @@
 
               <span
                 class="del-btn"
-                v-if="item.modelName && !$route.query.modelId"
+                v-if="item.modelName && $route.query.modelId != 'undefined'"
                 @click="delbtnClick(i)"
               >
                 <svg class="icon" aria-hidden="true">
@@ -188,6 +188,7 @@
   import { mixin } from "../../../components/mixin/mixin";
   import _ from "lodash";
   import { _getData } from "../../../config/getData";
+  import { async } from "q";
 
   export default {
     data() {
@@ -237,39 +238,43 @@
         //this.navArr = [...this.navArr, ...data.currentCategory];
         this.categoryList = data.currentCategory;
       });
-      //根据分类获取品牌
-      _getData("brand/merge", { id: this.categoryId })
-        .then(data => {
-          this.brandList = _.groupBy(
-            _.orderBy(
-              data.listAll,
-              val => {
-                return _.upperFirst(val.pinyin).substring(0, 1);
-              },
-              ["asc"]
-            ),
-            val => {
-              return _.upperFirst(val.pinyin).substring(0, 1);
-            }
-          );
 
-          console.log(this.brandList);
-        })
-        .then(() => {
-          // console.log(this.navArr);
-          // this.arr = this.navArr.listAll;
-          // this.letterArr = _.groupBy(this.arr, val => {
-          //   return _.upperFirst(val.pinyin).substring(0, 1);
-          // });
-          // //console.log(this.letterArr, _.keys(this.letterArr));
-          // this.letter = _.orderBy(_.keys(this.letterArr), val => val, ["asc"]);
-        });
+      this.getBrandByCategory();
     },
     methods: {
       //点击选择分类
       categoryBoxClick() {
         this.categoryShow = !this.categoryShow;
         this.isShowSmallCategory = false;
+      },
+      async getBrandByCategory() {
+        //根据分类获取品牌
+        return await _getData("brand/merge", { id: this.categoryId })
+          .then(data => {
+            this.brandList = _.groupBy(
+              _.orderBy(
+                data.listAll,
+                val => {
+                  return _.upperFirst(val.pinyin).substring(0, 1);
+                },
+                ["asc"]
+              ),
+              val => {
+                return _.upperFirst(val.pinyin).substring(0, 1);
+              }
+            );
+
+            console.log(this.brandList);
+          })
+          .then(() => {
+            // console.log(this.navArr);
+            // this.arr = this.navArr.listAll;
+            // this.letterArr = _.groupBy(this.arr, val => {
+            //   return _.upperFirst(val.pinyin).substring(0, 1);
+            // });
+            // //console.log(this.letterArr, _.keys(this.letterArr));
+            // this.letter = _.orderBy(_.keys(this.letterArr), val => val, ["asc"]);
+          });
       },
       //参数对比
       async getModelspecification(modelId) {
@@ -298,12 +303,15 @@
         this.categoryShow = false;
 
         if (this.currentCategory != item.name) {
-          this.currentCategory == item.name;
+          this.currentCategory = item.name;
+
           this.categoryId = item.id;
           this.arr = _.fill(Array(4), {
             categoryId: this.$route.query.categoryId,
             categoryName: this.$route.query.categoryName
           });
+          this.getBrandByCategory();
+          this.paramas = [1, 2];
         }
       },
       //选择品牌
@@ -318,6 +326,7 @@
         });
         // this.arr[this.defaultShowIndex]["brandName"] = val.name;
         console.log(this.defaultShowIndex, this.arr);
+
         this.getModelListByBrand(val.id).then(data => {
           this.modelList = data.brandModelList;
         });
@@ -327,6 +336,7 @@
         console.log(val);
         this.arr[this.defaultShowIndex]["modelName"] = val.name;
         //;
+
         this.getModelspecification(val.id).then(data => {
           this.defaultShowIndex = null;
         });

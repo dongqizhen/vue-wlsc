@@ -21,13 +21,14 @@
                   </svg>
                   {{ item.name }}
                 </span>
-                <span class="btn" @click="visible = !visible" v-if="!item.id">
+                <span class="btn" @click="handleClick" v-if="!item.id">
                   <svg class="icon" aria-hidden="true">
                     <use xlink:href="#iconguanlichangyongfenlei"></use>
                   </svg>
                   管理常用分类
                   <common-categories-modal-vue
                     :Visible="visible"
+                    v-on:success="success"
                   ></common-categories-modal-vue>
                 </span>
               </h2>
@@ -192,6 +193,12 @@
       ...mapState(["isLogin"])
     },
     methods: {
+      handleClick() {
+        this.visible = !this.visible;
+      },
+      success() {
+        this.getCommonCategory();
+      },
       LeftMoreBtnClick(i) {
         if (this.left_show_arr[i]) {
           this.left_show_arr.splice(i, 1, false);
@@ -206,16 +213,19 @@
           return;
         }
         this.right_show_arr.splice(i, 1, true);
+      },
+      //获取常用分类
+      async getCommonCategory() {
+        return await _getData("ucatalog/list", {}).then(data => {
+          console.log("289data", data);
+          if (this.isLogin) {
+            this.left[0].subCategoryList = data.userCategoryList;
+          }
+        });
       }
     },
     mounted() {
-      //获取常用分类
-      _getData("ucatalog/list", {}).then(data => {
-        console.log("289data", data);
-        if (this.isLogin) {
-          this.left[0].subCategoryList = data.userCategoryList;
-        }
-      });
+      this.getCommonCategory();
 
       //获取所有分类
       _getData("catalog/listAll", {})
@@ -387,10 +397,10 @@
               }
             }
             ul {
-              display: flex;
-              justify-content: flex-start;
+              // display: flex;
+              // justify-content: flex-start;
               padding: 20px;
-              flex-wrap: wrap;
+              // flex-wrap: wrap;
               padding-right: 10px;
               margin-right: -30px;
               padding-bottom: 4px;
@@ -403,10 +413,13 @@
               }
               li {
                 font-size: 13px;
-
+                height: auto;
                 margin-right: 30px;
                 margin-bottom: 16px;
                 cursor: pointer;
+                display: flex;
+                height: 18px;
+                float: left;
                 a {
                   color: #666666;
                   text-decoration: none;

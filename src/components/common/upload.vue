@@ -9,7 +9,7 @@
       @change="handleChange"
     >
       <div v-for="item in uploadList" :key="item.uid" class="uploadPreview">
-        <img :src="item.url" />
+        <img :src="item.response.url" />
         <svg
           class="icon"
           aria-hidden="true"
@@ -33,7 +33,7 @@
     data() {
       return {
         uploadList: [],
-        actionURL: this.$API_URL.HYGFILEURL + "/api/upload"
+        actionURL: this.$API_URL.HYGFILEURL + "/platform/api/upload"
       };
     },
     props: {
@@ -54,9 +54,10 @@
         this.$emit("getVal", this.uploadList);
       },
       handleChange({ fileList }) {
+        console.log(fileList);
         fileList.splice(0, fileList.length - 1);
-        fileList[0].url =
-          "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
+        // fileList[0].url =
+        //   "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
         this.uploadList = fileList;
         this.$emit("getVal", this.uploadList);
       },

@@ -23,8 +23,13 @@
         </li>
       </ul>
       <div class="ipt">
-        <input type="text" placeholder="请输入品牌名称" />
-        <span>搜索</span>
+        <input
+          type="text"
+          placeholder="请输入品牌名称"
+          v-model="val"
+          @keyup.enter="search"
+        />
+        <span @click="search">搜索</span>
       </div>
     </div>
     <span class="manageBtn" @click="brandVisible = !brandVisible">
@@ -34,47 +39,57 @@
       管理常用品牌
       <common-brands-modal-vue
         :brandVisible="brandVisible"
+        v-on:success="success"
       ></common-brands-modal-vue>
     </span>
     <div class="content">
       <div class="left">
-        <ul>
-          <router-link
-            v-for="(item, i) in arr"
-            :key="item.id"
-            tag="li"
-            :to="
-              $route.query.nav_index == 2
-                ? {
-                    path: '/lookingProduct',
-                    query: {
-                      nav_index: 2,
-                      brandId: item.id,
-                      brandName: item.name
-                    }
-                  }
-                : $route.query.nav_index == 1
-                ? {
-                    path: 'brand',
-                    query: {
-                      nav_index: 1,
-                      categoryId: $route.query.categoryId,
-                      categoryName: $route.query.categoryName,
-                      brandId: item.id,
-                      brandName: item.name
-                    }
-                  }
-                : ''
-            "
-          >
-            <a>
-              <div class="img_box">
-                <img :src="item.list_pic_url || item.app_list_pic_url" alt="" />
-              </div>
-              {{ item.name }}
-            </a>
-          </router-link>
-        </ul>
+        <div v-if="!isLoading">
+          <div v-if="arr.length">
+            <ul>
+              <router-link
+                v-for="(item, i) in arr"
+                :key="item.id"
+                tag="li"
+                :to="
+                  $route.query.nav_index == 2
+                    ? {
+                        path: '/lookingProduct',
+                        query: {
+                          nav_index: 2,
+                          brandId: item.id,
+                          brandName: item.name
+                        }
+                      }
+                    : $route.query.nav_index == 1
+                    ? {
+                        path: 'brand',
+                        query: {
+                          nav_index: 1,
+                          categoryId: $route.query.categoryId,
+                          categoryName: $route.query.categoryName,
+                          brandId: item.id,
+                          brandName: item.name
+                        }
+                      }
+                    : ''
+                "
+              >
+                <a>
+                  <div class="img_box">
+                    <img
+                      :src="item.list_pic_url || item.app_list_pic_url"
+                      alt=""
+                    />
+                  </div>
+                  {{ item.name }}
+                </a>
+              </router-link>
+            </ul>
+          </div>
+          <no-data v-else text="暂无数据"></no-data>
+        </div>
+        <loading v-else></loading>
       </div>
 
       <div class="right">
@@ -96,11 +111,13 @@
   export default {
     data() {
       return {
-        arr: [],
+        val: "",
+        arr: "",
         navArr: "", //全部类型小类
         routes: "",
         letterArr: "",
         letterVal: "",
+        isLoading: false,
         letter: [], //字母索引
         nav: ["一线品牌", "全部"],
         defaultsNav: "全部", //默认高亮的nav
@@ -147,21 +164,30 @@
       CommonBrandsModalVue
     },
     mounted() {
-      _getData("brand/merge", { id: this.$route.query.categoryId })
-        .then(data => {
-          this.navArr = data;
-        })
-        .then(() => {
-          console.log(this.navArr);
-          this.arr = this.navArr.listAll;
-          this.letterArr = _.groupBy(this.arr, val => {
-            return _.upperFirst(val.pinyin).substring(0, 1);
-          });
-          //console.log(this.letterArr, _.keys(this.letterArr));
-          this.letter = _.orderBy(_.keys(this.letterArr), val => val, ["asc"]);
-        });
+      this.getCommonBrandCategory();
     },
     methods: {
+      search() {
+        if (this.val == "") return;
+        this.isLoading = true;
+        _getData("brand/getBrand", {
+          brandName: this.val.trim()
+        })
+          .then(data => {
+            this.arr = data;
+          })
+          .then(() => {
+            this.val = "";
+          })
+          .then(() => {
+            // this.$nextTick().then(() => {
+            //   this.isLoading = false;
+            // });
+            setTimeout(() => {
+              this.isLoading = false;
+            }, 300);
+          });
+      },
       letterClick(item) {
         this.defaultsNav = item;
         this.arr = _.pick(this.letterArr, [item])[item];
@@ -169,6 +195,30 @@
         [...this.$refs.search.childNodes].map((val, i) => {
           val.classList.remove("active");
         });
+      },
+      async getCommonBrandCategory() {
+        this.isLoading = true;
+        return await _getData("brand/merge", { id: this.$route.query.categoryId })
+          .then(data => {
+            this.navArr = data;
+          })
+          .then(() => {
+            console.log(this.navArr);
+            this.arr = this.navArr.listAll;
+            this.letterArr = _.groupBy(this.arr, val => {
+              return _.upperFirst(val.pinyin).substring(0, 1);
+            });
+            //console.log(this.letterArr, _.keys(this.letterArr));
+            this.letter = _.orderBy(_.keys(this.letterArr), val => val, ["asc"]);
+          })
+          .then(() => {
+            this.$nextTick().then(() => {
+              this.isLoading = false;
+            });
+          });
+      },
+      success() {
+        this.getCommonBrandCategory();
       },
       handleClick(item, i) {},
       navClick(val, i) {
@@ -333,6 +383,11 @@
               }
             }
           }
+        }
+
+        /deep/ .no-data {
+          height: 620px;
+          background: #fff;
         }
       }
       .right {

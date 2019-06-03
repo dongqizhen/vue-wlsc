@@ -1,7 +1,7 @@
 <template>
   <div class="video-details">
-    <div v-if="!isLoading">
-      <div class="left">
+    <div class="left">
+      <div v-if="!isLoading">
         <div class="video_box">
           <h2>
             {{ detail.title }}
@@ -109,17 +109,11 @@
           type="video"
         ></comment-vue>
 
-        <menu-vue :item="detail"></menu-vue>
+        <menu-vue :item="detail" type="video"></menu-vue>
       </div>
-      <div class="right"></div>
+      <loading v-else></loading>
     </div>
-    <div v-else>
-      <a-skeleton active />
-      <br />
-      <a-skeleton active />
-      <br />
-      <a-skeleton active />
-    </div>
+    <div class="right"></div>
   </div>
 </template>
 

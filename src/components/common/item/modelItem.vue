@@ -53,6 +53,19 @@
     cursor: pointer;
     margin-bottom: 12px;
     box-shadow: $base-box-shadow;
+    /deep/ img[lazy="loading"] {
+      /*your style here*/
+      background: url("../../../assets/images/loading.gif") no-repeat center;
+      background-size: 100px;
+      background-color: #f7f9fa;
+    }
+    /deep/ img[lazy="error"] {
+      /*your style here*/
+      background: url("../../../assets/images/loading.gif") no-repeat center;
+      background-size: 100px;
+      display: none;
+      // background-color: #f7f9fa;
+    }
     a {
       text-decoration: none;
       display: flex;
@@ -62,9 +75,16 @@
         width: 130px;
         background: $base-background;
         margin-right: 20px;
+        overflow: hidden;
         img {
           height: 100%;
           width: 100%;
+          transition: transform 0.5s ease;
+        }
+      }
+      &:hover {
+        img {
+          transform: scale(1.1);
         }
       }
       .introduce {

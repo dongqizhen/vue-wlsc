@@ -4,7 +4,7 @@
       <swiper ref="mySwiper" :options="swiperOption" v-if="banner.length">
         <!-- slides -->
         <swiper-slide v-for="item in banner" :key="item.id">
-          <img :src="item.image_url" />
+          <a target="_blank" :href="item.link"><img :src="item.image_url"/></a>
         </swiper-slide>
         <!-- Optional controls -->
         <ul class="swiper-pagination" slot="pagination"></ul>
@@ -134,6 +134,7 @@
       });
 
       _getData("ad/banner", {}).then(data => {
+        console.log("轮播", data);
         this.banner = data.banner;
       });
     }
