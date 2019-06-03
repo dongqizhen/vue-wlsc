@@ -164,7 +164,7 @@
           bigCategoryId: "",
           categoryId: "",
           currentPage: 1,
-          countPerPage: 1
+          countPerPage: 10
         }
       };
     },
