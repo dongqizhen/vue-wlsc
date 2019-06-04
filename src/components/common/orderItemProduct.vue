@@ -31,7 +31,7 @@
       </div>
       <div
         class="sure"
-        @click="confirmDelivery"
+        @click="confirmDelivery(data.id)"
         v-if="
           data.order_status == 2 &&
             isShowInfo.isMerchant &&
@@ -113,7 +113,12 @@
       :type="type"
       :imgUrl="data.payProve"
     ></pay-img-modal>
-    <confirm-delivery :Visible="sureVisible" :type="type"></confirm-delivery>
+    <confirm-delivery
+      :Visible="sureVisible"
+      :type="type"
+      :orderId="orderId"
+      v-on:returnValue="getReturnStatus"
+    ></confirm-delivery>
     <submit-comment
       :Visible="commentVisible"
       :type="type"
@@ -148,7 +153,8 @@
         deleteObj: {
           isOrder: true,
           deleteId: ""
-        }
+        },
+        orderId: -1
       };
     },
     props: {
@@ -160,14 +166,20 @@
       }
     },
     methods: {
-      confirmOrder(order_sn) {
-        _getData("/order/updateOrderStatus", {
-          orderId: order_sn,
-          orderStatus: "connect",
-          payProve: ""
-        }).then(data => {
-          console.log(data);
-        });
+      confirmOrder(orderId) {
+        console.log(orderId);
+        // _getData("/order/updateOrderStatus", {
+        //   orderId: orderId,
+        //   orderStatus: "connect",
+        //   payProve: ""
+        // }).then(data => {
+        //   console.log(data);
+        this.$emit("returnValue", 2); //2表示已经接单，进入待发货状态
+        // });
+      },
+      getReturnStatus(val) {
+        console.log(val);
+        this.$emit("returnValue", val);
       },
       confirmReceipt() {},
       confirmReceiptOrReturn() {},
@@ -183,11 +195,12 @@
           }
         }
       },
-      confirmDelivery() {
+      confirmDelivery(id) {
         if (!this.isLogin) {
           this.type = "login";
         }
         this.sureVisible = true;
+        this.orderId = id;
       },
       commentModal() {
         if (!this.isLogin) {

@@ -27,8 +27,8 @@
           </div>
         </div>
         <div class="btn">
-          <a-button>确认发货</a-button>
-          <a-button>取消</a-button>
+          <a-button @click="sureOrder">确认发货</a-button>
+          <a-button @click="visible = false">取消</a-button>
         </div>
       </div>
       <div slot="content" v-else>
@@ -49,6 +49,7 @@
 
 <script>
   import modal from "./modal.vue";
+  import { _getData } from "../../config/getData";
 
   export default {
     data() {
@@ -79,6 +80,9 @@
         type: String,
         default: "提交成功",
         required: false
+      },
+      orderId: {
+        type: Number
       }
     },
     components: {
@@ -91,6 +95,25 @@
         });
         this.visible = false;
         window.open(href, "_blank");
+      },
+      sureOrder() {
+        if (!this.courierCompany) {
+          alert("请输入快递公司");
+          return;
+        }
+        if (!this.courierNumber) {
+          alert("请输入快递单号");
+          return;
+        }
+        _getData("/order/affirmOrder", {
+          orderId: this.orderId,
+          shippingName: this.courierCompany,
+          shippingNo: this.courierNumber
+        }).then(data => {
+          console.log(data);
+          this.$emit("returnValue", 3); //3表示已发货，进入待收货状态
+          this.visible = false;
+        });
       }
     },
     watch: {
@@ -100,6 +123,7 @@
       visible(newVal) {
         if (!newVal) {
           this.$parent.visible = false;
+          this.$parent.sureVisible = false;
         }
       }
     }

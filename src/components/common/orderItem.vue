@@ -9,6 +9,7 @@
     <order-item-product
       :data="data"
       :isShowInfo="isShowInfo"
+      v-on:returnValue="getReturnValue"
     ></order-item-product>
     <delivery-info :data="data"></delivery-info>
   </div>
@@ -37,6 +38,10 @@
     methods: {
       getChecked(val) {
         this.$emit("getChecked", val);
+      },
+      getReturnValue(val) {
+        console.log("fghhfffffffffffffg", val);
+        this.$emit("returnValue", val);
       }
     },
     components: {
