@@ -3,7 +3,11 @@
     <common-title title="消息中心"></common-title>
     <div class="tabBar">
       <div class="left-box">
-        <manage-number-nav :navArr="tabs" v-on:tab="getTab"></manage-number-nav>
+        <manage-number-nav
+          :navArr="tabs"
+          v-on:tab="getTab"
+          :defaultActiveKey="defaultActiveKey"
+        ></manage-number-nav>
       </div>
       <div class="right-box">
         <div :class="current == 0 ? 'active' : ''" @click="system(0)">
@@ -90,6 +94,7 @@
       return {
         systemNumber: 0,
         personalNumber: 0,
+        defaultActiveKey: 0,
         totalCount: { amount: 0, pageSize: 10 },
         data: [],
         tabs: [
@@ -172,6 +177,20 @@
       remarkRead() {
         if (this.checkedList.length > 0) {
           //向后台发送请求，标记为已读，成功后将刷新数据
+          console.log(this.checkedList);
+          console.log(this.checkedList.join(","));
+          _getData("/message/updateStatus", {
+            ids: this.checkedList.join(","),
+            flag: "read"
+          }).then(data => {
+            console.log(data);
+            //移动到已读列表
+            this.defaultActiveKey = 1;
+            this.params.readType = 1;
+            this.getMessageNumberParams.readType = 1;
+            this.getMessageList();
+            this.getMessageNumber();
+          });
         }
       },
       getPaginationChange(val) {

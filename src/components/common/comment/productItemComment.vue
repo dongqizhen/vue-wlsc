@@ -109,13 +109,14 @@
 </script>
 <style lang="scss" scoped>
   .itemProductComment {
-    border: 5px solid #f5f5f5;
+    border-bottom: 5px solid #f5f5f5;
     .productInfo {
       height: 50px;
       padding-left: 44px;
       background: rgba(245, 166, 35, 0.05);
       display: flex;
       align-items: center;
+      margin-bottom: 20px;
       img {
         width: 30px;
         height: 30px;
@@ -130,6 +131,7 @@
     .common {
       display: flex;
       margin-bottom: 24px;
+      padding-left: 44px;
       .left-box {
         width: 88px;
         font-size: 14px;

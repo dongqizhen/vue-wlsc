@@ -52,15 +52,14 @@
     watch: {
       isCheckAll(newVal) {
         console.log(newVal);
-        this.checkAll = newVal;
-        if (this.checkAll) {
-          this.checkAll = true;
+        if (newVal) {
+          this.checkAll = newVal;
           this.checkedList = [];
           for (const val of this.data.list) {
             this.checkedList.push(val.goods_id);
           }
         } else {
-          this.checkAll = false;
+          this.checkAll = newVal;
         }
       }
     },

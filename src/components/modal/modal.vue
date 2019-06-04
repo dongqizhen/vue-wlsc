@@ -921,7 +921,8 @@
     .ant-modal {
       width: 696px !important;
       .ant-modal-body {
-        padding-left: 44px;
+        padding: 0;
+        padding-bottom: 28px;
       }
       .btn {
         .ant-btn {
