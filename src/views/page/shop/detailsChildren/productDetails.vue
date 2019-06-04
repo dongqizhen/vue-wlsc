@@ -146,13 +146,13 @@
             ></p>
           </a-tab-pane>
           <a-tab-pane tab="产品规格/参数" key="2" :forceRender="true">
-            <ul class="specification">
-              <li><span>商品名称</span><span>超声手术设备</span></li>
-              <li><span>品牌名称</span><span>普利生</span></li>
-              <li><span>型号</span><span>C2000-A</span></li>
-              <li><span>单位</span><span>台</span></li>
-              <li><span>生产厂家</span><span>北京普利生仪器有限公司</span></li>
+            <ul class="specification" v-if="specificationInfo.length">
+              <li v-for="item in specificationInfo" :key="item.id">
+                <span>{{ item.specificationName }}</span
+                ><span>{{ item.value }}</span>
+              </li>
             </ul>
+            <no-data text="暂无规格参数"></no-data>
           </a-tab-pane>
           <a-tab-pane tab="产品评价(36)" key="3" :forceRender="true">
             <ul class="evaluate">
@@ -403,6 +403,7 @@
     data() {
       return {
         productInfo: "", //产品详情
+        specificationInfo: "",
         imgarr: [img, img],
         defaultIndex: null,
         visible: false,
@@ -488,13 +489,14 @@
     },
     mounted() {
       window.addEventListener("scroll", this.handleScroll);
-
+      //获取产品详情
       _getData("goods/gooddetail", {
         id: this.$route.params.id
       })
         .then(data => {
-          console.log(data);
+          console.log("产品详情", data);
           this.productInfo = data.productInfo;
+          this.specificationInfo = data.specificationInfo;
         })
         .then(() => {
           const evt = new Event(),
@@ -891,6 +893,9 @@
                     }
                   }
                 }
+              }
+              /deep/ .no-data {
+                height: 500px;
               }
               .evaluate {
                 display: flex;

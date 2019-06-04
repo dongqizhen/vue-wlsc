@@ -92,7 +92,9 @@
                   </router-link>
                 </h2>
                 <div class="content">
-                  <div class="left"></div>
+                  <div class="left">
+                    <img :src="item.banner_url" alt="" />
+                  </div>
                   <ul class="right">
                     <product-item
                       v-for="val in item.goodsList"
@@ -391,13 +393,23 @@
                     width: 224px;
                     background: #fff;
                     box-shadow: $base-box-shadow;
+                    img {
+                      height: 100%;
+                      width: 100%;
+                    }
                   }
                   .right {
                     flex: 1;
                     padding-left: 17px;
                     display: flex;
-                    justify-content: space-between;
+                    justify-content: flex-start;
                     padding-top: 4px;
+                    li {
+                      margin-right: 12px;
+                      &:last-child {
+                        margin-right: 0;
+                      }
+                    }
                   }
                 }
                 &.two {

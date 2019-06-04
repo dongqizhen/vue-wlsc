@@ -48,12 +48,12 @@
           <div class="con1 swiper-container">
             <ul ref="con1" class="swiper-wrapper">
               <li
-                v-for="(item, i) in items"
+                v-for="(item, i) in noteList"
                 :key="`item-${i}`"
                 class="swiper-slide"
               >
                 <span>【公告】</span>
-                <p>{{ item }}</p>
+                <p>{{ item.title }}</p>
               </li>
             </ul>
           </div>
@@ -104,15 +104,9 @@
             clickable: true
           }
         },
-        items: [
-          "2018十一假期暂停什么…",
-          "2019十一假期暂停什么…",
-          "2020十一假期暂停什么…",
-          "2021十一假期暂停什么…",
-          "2022十一假期暂停什么…",
-          "2023十一假期暂停什么…"
-        ],
-        banner: []
+
+        banner: [],
+        noteList: []
       };
     },
     components: { swiper, swiperSlide },
@@ -122,21 +116,33 @@
     },
     created() {},
     mounted() {
-      var myswiper = new Swiper(".notice .swiper-container", {
-        slidesPerView: 4,
-        spaceBetween: 0,
-        direction: "vertical",
-        autoplay: {
-          disableOnInteraction: false,
-          delay: 2000
-        },
-        loop: true
-      });
-
       _getData("ad/banner", {}).then(data => {
         console.log("轮播", data);
         this.banner = data.banner;
       });
+
+      _getData("topic/getTopic", {
+        currentPage: "1", //类型：String  必有字段  备注：当前页
+        numsPerPage: "10" //类型：String  必有字段  备注：每页显示条数
+      })
+        .then(data => {
+          console.log("公告", data);
+          this.noteList = data.data;
+        })
+        .then(() => {
+          this.$nextTick().then(() => {
+            var myswiper = new Swiper(".notice .swiper-container", {
+              slidesPerView: 4,
+              spaceBetween: 0,
+              direction: "vertical",
+              autoplay: {
+                disableOnInteraction: false,
+                delay: 2000
+              },
+              loop: true
+            });
+          });
+        });
     }
   };
 </script>
