@@ -30,7 +30,7 @@
           {{ list.name }}
         </p>
         <div class="brand_small">
-          <span>品牌：GE</span>
+          <span>品牌：{{ list.brand_name }}</span>
           <span>型号：DR UPGRADE…</span>
         </div>
         <div class="address">
@@ -148,6 +148,19 @@
         font-family: PingFangSC-Regular;
         font-size: 12px;
         color: #999999;
+        &:first-child {
+          flex: 1;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        &:last-child {
+          width: 133px;
+          margin-left: 10px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
       }
     }
     .address {

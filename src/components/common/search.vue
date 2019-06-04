@@ -22,29 +22,16 @@
         <div class="nav">
           <h2>热门产品：</h2>
           <ul>
-            <router-link tag="li" to="#">
-              <a>血压仪</a>
-            </router-link>
-            <router-link tag="li" to="#">
-              <a>呼吸机</a>
-            </router-link>
-            <router-link tag="li" to="#">
-              <a>CT</a>
-            </router-link>
-            <router-link tag="li" to="#">
-              <a>B超</a>
-            </router-link>
-            <router-link tag="li" to="#">
-              <a>手术钳</a>
-            </router-link>
-            <router-link tag="li" to="#">
-              <a>缝合器</a>
-            </router-link>
-            <router-link tag="li" to="#">
-              <a>血压仪</a>
-            </router-link>
-            <router-link tag="li" to="#">
-              <a>血压仪</a>
+            <router-link
+              tag="li"
+              :to="{
+                path: `/search`,
+                query: { val: item.keyword }
+              }"
+              v-for="(item, i) in hotKeys"
+              :key="i"
+            >
+              <a>{{ item.keyword }}</a>
             </router-link>
           </ul>
         </div>
@@ -60,10 +47,12 @@
 </template>
 
 <script>
+  import { _getData } from "../../config/getData";
   export default {
     data() {
       return {
-        value: ""
+        value: "",
+        hotKeys: []
       };
     },
     methods: {
@@ -89,6 +78,12 @@
     },
     created() {
       if (this.$route.query.val) this.value = this.$route.query.val;
+    },
+    mounted() {
+      _getData("search/queryClearHistory", {}).then(data => {
+        console.log("热门产品", data);
+        this.hotKeys = data;
+      });
     }
   };
 </script>
