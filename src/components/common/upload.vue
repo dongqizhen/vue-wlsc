@@ -4,12 +4,17 @@
       listType="picture-card"
       class="avatar-uploader"
       :showUploadList="false"
-      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+      :action="actionURL"
+      :headers="{ 'X-Nideshop-Token': `${userInfo.token}` }"
       :beforeUpload="beforeUpload"
       @change="handleChange"
     >
-      <div v-for="item in uploadList" :key="item.uid" class="uploadPreview">
-        <img :src="item.response.url" />
+      <div
+        v-for="(item, index) in uploadList"
+        :key="index"
+        class="uploadPreview"
+      >
+        <img :src="item" />
         <svg
           class="icon"
           aria-hidden="true"
@@ -25,16 +30,24 @@
         </a-icon>
         <div class="ant-upload-text">点击添加图片</div>
       </div>
+      <div class="imgLoading" v-show="loading">
+        <a-icon type="loading" class="icon"></a-icon>
+      </div>
     </a-upload>
   </div>
 </template>
 <script>
+  import { mapState } from "vuex";
   export default {
     data() {
       return {
         uploadList: [],
-        actionURL: this.$API_URL.HYGFILEURL + "/platform/api/upload"
+        actionURL: this.$API_URL.HYGFILEURL + "/api/upload/imageUpload",
+        loading: false
       };
+    },
+    computed: {
+      ...mapState(["userInfo"])
     },
     props: {
       imgUrl: {}
@@ -42,9 +55,10 @@
     watch: {
       imgUrl(newVal) {
         console.log(newVal);
-        this.uploadList = [];
         if (typeof newVal == "string" && newVal) {
-          this.uploadList.push({ uid: -1, url: newVal });
+          console.log(newVal);
+          this.uploadList = [];
+          this.uploadList.push(newVal);
         }
       }
     },
@@ -54,12 +68,15 @@
         this.$emit("getVal", this.uploadList);
       },
       handleChange({ fileList }) {
-        console.log(fileList);
         fileList.splice(0, fileList.length - 1);
-        // fileList[0].url =
-        //   "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
-        this.uploadList = fileList;
-        this.$emit("getVal", this.uploadList);
+        if (fileList[0].status == "done") {
+          this.loading = false;
+          this.uploadList = [];
+          this.uploadList.push(fileList[0].response.result.imageurl);
+          this.$emit("getVal", this.uploadList);
+        } else {
+          this.loading = true;
+        }
       },
       beforeUpload(file) {
         // const isJPG = file.type === "image/jpeg";
@@ -79,6 +96,7 @@
 <style lang="scss" scoped>
   /deep/.avatar-uploader {
     display: flex;
+    position: relative;
     .ant-upload-list-item {
       width: 118px;
       height: 118px;
@@ -118,6 +136,18 @@
           top: 4px;
           display: none;
         }
+      }
+      .imgLoading {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        position: absolute;
+        top: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        display: none;
       }
       .anticon {
         width: 18px;

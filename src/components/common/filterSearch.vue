@@ -35,7 +35,9 @@
       };
     },
     methods: {
-      searchData() {},
+      searchData() {
+        this.$emit("getSearchData", this.submitData);
+      },
       clearData() {
         this.submitData = {
           value: "",
@@ -44,6 +46,7 @@
       },
       getDateRange(val) {
         console.log(val);
+        this.submitData.dateRange = val;
       }
     },
     components: {

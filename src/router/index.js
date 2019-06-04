@@ -86,7 +86,7 @@ const router = new Router({
                         import ("../views/page/merchant/merchantChildren/orderManage")
                 },
                 {
-                    path: "orderDetail",
+                    path: "orderDetail/:id",
                     name: "订单详情",
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/orderDetail")

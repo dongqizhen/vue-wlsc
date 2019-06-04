@@ -23,10 +23,19 @@
         </span>
         <span>{{ isShowInfo.isOrder ? "订单" : "询价单" }}提交时间：</span>
         <span>{{
-          data.createTime ? data.createTime.substring(0, 16) : ""
+          isShowInfo.isOrder
+            ? data.add_time
+              ? data.add_time.substring(0, 16)
+              : ""
+            : data.createTime
+            ? data.createTime.substring(0, 16)
+            : ""
         }}</span>
       </div>
-      <div class="common userName" v-if="!isShowInfo.isDetail">
+      <div
+        class="common userName"
+        v-if="isShowInfo.isMerchant || !isShowInfo.isDetail"
+      >
         <span>
           <img
             src="http://file.haoyigong.com/server/upload/1554429391594.jpg"

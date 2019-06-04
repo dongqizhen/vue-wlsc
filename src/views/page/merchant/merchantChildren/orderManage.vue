@@ -1,8 +1,11 @@
 <template>
   <div class="orderManage">
-    <manage-number-nav :navArr="tabs"></manage-number-nav>
+    <manage-number-nav
+      :navArr="tabs"
+      v-on:tab="getOrderStatus"
+    ></manage-number-nav>
     <div class="orderContainer">
-      <filter-search></filter-search>
+      <filter-search v-on:getSearchData="getSearchData"></filter-search>
       <div class="listContent">
         <list-title :titleArr="titleArr"></list-title>
         <div class="tbody">
@@ -51,45 +54,75 @@
         checkAll: false,
         tabs: [
           {
-            id: 1,
+            id: "",
             name: "全部订单",
             amount: 6
           },
           {
-            id: 2,
+            id: 1,
             name: "待接单",
             amount: 1
           },
           {
-            id: 3,
+            id: 2,
             name: "待发货",
             amount: 1
           },
           {
-            id: 4,
+            id: 3,
             name: "待收货",
             amount: 1
           },
           {
-            id: 5,
+            id: 4,
             name: "待评价",
             amount: 1
           },
+          // {
+          //   id: 5,
+          //   name: "已完成",
+          //   amount: 1
+          // },
           {
             id: 6,
-            name: "已完成",
-            amount: 1
-          },
-          {
-            id: 7,
-            name: "待发货",
+            name: "退货",
             amount: 1
           }
+          // {
+          //   id: 7,
+          //   name: "关闭",
+          //   amount: 1
+          // }
         ],
-        titleArr: ["产品图片", "产品名称", "单价", "数量", "实付金额", "操作"]
+        titleArr: ["产品图片", "产品名称", "单价", "数量", "实付金额", "操作"],
+        getOrderData: {
+          currentPage: "1",
+          countPerPage: "10",
+          name: "",
+          orderStatus: "", //类型：String  可有字段  备注：订单状态：1：待接单，2：待发货，3：待收货，4：待评价，5：已完成，6：退货，7：已关闭
+          startTime: "",
+          endTime: ""
+        }
       };
     },
     methods: {
+      getSearchData(val) {
+        console.log(val);
+        this.getOrderData.name = val.value;
+        if (val.dateRange.length > 0) {
+          this.getOrderData.startTime = val.dateRange[0];
+          this.getOrderData.endTime = val.dateRange[1];
+        } else {
+          this.getOrderData.startTime = "";
+          this.getOrderData.endTime = "";
+        }
+        this.getOrderList();
+      },
+      getOrderStatus(val) {
+        console.log("获取订单状态：", val);
+        this.getOrderData.orderStatus = val;
+        this.getOrderList();
+      },
       getChecked(val) {
         if (typeof val == "object") {
           this.checkedList = val;
@@ -117,14 +150,7 @@
         }
       },
       getOrderList() {
-        _getData("/order/orderList", {
-          currentPage: "1",
-          countPerPage: "10",
-          name: "",
-          orderStatus: "", //类型：String  可有字段  备注：订单状态：1：待接单，2：待发货，3：待收货，4：待评价，5：已完成，6：退货，7：已关闭
-          startTime: "",
-          endTime: ""
-        }).then(data => {
+        _getData("/order/orderList", this.getOrderData).then(data => {
           console.log("获取订单列表：", data);
           this.data = data.data;
         });
