@@ -1,5 +1,5 @@
 <template>
-  <a-range-picker @change="changeDate" v-model="value">
+  <a-range-picker @change="changeDate" v-model="dateValue">
     <svg class="icon" aria-hidden="true" slot="suffixIcon">
       <use xlink:href="#iconriqi1"></use>
     </svg>
@@ -9,7 +9,7 @@
   export default {
     data() {
       return {
-        value: this.dateRange
+        dateValue: this.dateRange
       };
     },
     props: {
@@ -20,7 +20,10 @@
     watch: {
       dateRange(newVal) {
         console.log(newVal);
-        this.value = newVal;
+        // this.dateValue = newVal;
+        if (newVal.length == 0) {
+          this.dateValue = newVal;
+        }
       }
     },
     methods: {

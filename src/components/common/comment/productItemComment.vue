@@ -1,5 +1,9 @@
 <template>
   <div class="itemProductComment">
+    <div class="productInfo">
+      <img src="http://file.haoyigong.com/server/upload/1554429391594.jpg" />
+      <div class="productName">普利生全自动血凝分析仪C2000-A1BKKKLL</div>
+    </div>
     <div class="common">
       <div class="left-box">评价商品</div>
       <div class="right-box">
@@ -105,6 +109,24 @@
 </script>
 <style lang="scss" scoped>
   .itemProductComment {
+    border: 5px solid #f5f5f5;
+    .productInfo {
+      height: 50px;
+      padding-left: 44px;
+      background: rgba(245, 166, 35, 0.05);
+      display: flex;
+      align-items: center;
+      img {
+        width: 30px;
+        height: 30px;
+      }
+      .productName {
+        font-size: 15px;
+        color: #333333;
+        font-weight: 600;
+        margin-left: 8px;
+      }
+    }
     .common {
       display: flex;
       margin-bottom: 24px;

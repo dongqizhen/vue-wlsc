@@ -2,10 +2,13 @@
   <div class="orderDetail">
     <common-title title="订单详情"></common-title>
     <div class="orderContainer">
-      <order-title :isOrder="true"></order-title>
-      <delivery-info></delivery-info>
+      <order-title :isShowInfo="isShowInfo" :data="data"></order-title>
+      <delivery-info :data="data"></delivery-info>
       <list-title :titleArr="titleArr"></list-title>
-      <order-item-product></order-item-product>
+      <order-item-product
+        :data="data"
+        :isShowInfo="isShowInfo"
+      ></order-item-product>
     </div>
   </div>
 </template>
@@ -15,11 +18,30 @@
   import deliveryInfo from "../../../../components/common/deliveryInformation";
   import listTitle from "../../../../components/common/listTitle";
   import orderItemProduct from "../../../../components/common/orderItemProduct";
+  import { _getData } from "../../../../config/getData";
   export default {
     data() {
       return {
-        titleArr: ["产品图片", "产品名称", "单价", "数量", "实付金额", "操作"]
+        titleArr: ["产品图片", "产品名称", "单价", "数量", "实付金额", "操作"],
+        isShowInfo: {
+          isDetail: true,
+          isShow: false,
+          current: -1,
+          isOrder: true,
+          isTrue: false,
+          isMerchant: true
+        },
+        data: {}
       };
+    },
+    methods: {},
+    mounted() {
+      _getData("/order/orderDetails", { orderSn: this.$route.params.id }).then(
+        data => {
+          console.log("获取订单详情：", data);
+          this.data = data;
+        }
+      );
     },
     components: {
       commonTitle,
@@ -33,10 +55,11 @@
 <style lang="scss" scoped>
   @import "../../../../assets/scss/_commonScss";
   .orderDetail {
-    min-height: 609px;
+    min-height: 645px;
     background-color: #fff;
-    padding: 4px 20px;
+    padding: 4px 20px 20px 20px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
+    margin-bottom: 100px;
     .orderContainer {
       /deep/.orderTitle {
         margin: 9px 0 12px;

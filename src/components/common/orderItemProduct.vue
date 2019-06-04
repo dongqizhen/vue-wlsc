@@ -14,27 +14,51 @@
     </div>
     <div class="actualPrice">￥{{ data.actual_price }}</div>
     <div class="operating">
-      <div class="lookPay" @click="addModal" v-if="data.order_status != 1">
-        {{ data.isPayProve == 0 ? "提交" : "查看" }}支付证明
+      <div class="lookPay" @click="addModal">
+        {{
+          data.order_status == 1
+            ? isShowInfo.isDetail
+              ? "----"
+              : ""
+            : data.isPayProve == 0
+            ? isShowInfo.isMerchant
+              ? isShowInfo.isDetail
+                ? "----"
+                : ""
+              : "提交支付证明"
+            : "查看支付证明"
+        }}
       </div>
       <div
         class="sure"
         @click="confirmDelivery"
-        v-if="data.order_status == 3 && isShowInfo.isMerchant"
+        v-if="
+          data.order_status == 2 &&
+            isShowInfo.isMerchant &&
+            !isShowInfo.isDetail
+        "
       >
         确认发货
       </div>
       <div
         class="sure"
-        @click="confirmDelivery"
-        v-if="data.order_status == 3 && !isShowInfo.isMerchant"
+        @click="confirmReceipt"
+        v-if="
+          data.order_status == 3 &&
+            !isShowInfo.isMerchant &&
+            !isShowInfo.isDetail
+        "
       >
         确认收货
       </div>
       <div
         class="sure"
         @click="confirmOrder(data.id)"
-        v-if="data.order_status == 1 && isShowInfo.isMerchant"
+        v-if="
+          data.order_status == 1 &&
+            isShowInfo.isMerchant &&
+            !isShowInfo.isDetail
+        "
       >
         确认接单
       </div>
@@ -43,17 +67,44 @@
         @click="commentModal"
         v-if="
           (data.order_status == 4 || data.order_status == 5) &&
+            !isShowInfo.isMerchant &&
             !isShowInfo.isDetail
         "
       >
         评价
+      </div>
+      <div
+        class="sure"
+        @click="confirmReceiptOrReturn"
+        v-if="
+          data.order_status == 6 &&
+            isShowInfo.isMerchant &&
+            !isShowInfo.isDetail
+        "
+      >
+        确认收货/已退货
+      </div>
+      <div
+        class="sure"
+        @click="lookComment"
+        v-if="
+          data.order_status == 5 &&
+            isShowInfo.isMerchant &&
+            !isShowInfo.isDetail
+        "
+      >
+        查看评价
       </div>
       <div class="lookOrderDetail" v-if="!isShowInfo.isDetail">
         <router-link :to="`orderDetail/${data.order_sn}`">
           查看订单详情
         </router-link>
       </div>
-      <div class="deleteOrder" v-if="!isShowInfo.isDetail" @click="deleteModal">
+      <div
+        class="deleteOrder"
+        v-if="!isShowInfo.isDetail"
+        @click="deleteModal(data.order_sn)"
+      >
         删除
       </div>
     </div>
@@ -69,7 +120,11 @@
       :data="data.goodsList"
     ></submit-comment>
     <submit-pay :Visible="payVisible" :type="type"></submit-pay>
-    <delete-order :Visible="deleteVisible" :type="type"></delete-order>
+    <delete-order
+      :Visible="deleteVisible"
+      :type="type"
+      :deleteObj="deleteObj"
+    ></delete-order>
   </div>
 </template>
 <script>
@@ -89,7 +144,11 @@
         commentVisible: false,
         payVisible: false,
         deleteVisible: false,
-        type: ""
+        type: "",
+        deleteObj: {
+          isOrder: true,
+          deleteId: ""
+        }
       };
     },
     props: {
@@ -110,6 +169,9 @@
           console.log(data);
         });
       },
+      confirmReceipt() {},
+      confirmReceiptOrReturn() {},
+      lookComment() {},
       addModal() {
         if (!this.isLogin) {
           this.type = "login";
@@ -133,11 +195,12 @@
         }
         this.commentVisible = true;
       },
-      deleteModal() {
+      deleteModal(id) {
         if (!this.isLogin) {
           this.type = "login";
         }
         this.deleteVisible = true;
+        this.deleteObj.deleteId = id;
       }
     },
     computed: {

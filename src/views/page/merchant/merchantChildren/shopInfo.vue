@@ -89,7 +89,6 @@
   import upload from "../../../../components/common/upload";
   import cascadeSelect from "../../../../components/common/casadeSelect/cascadeSelect";
   import { _getData } from "../../../../config/getData";
-  import { mapState, mapMutations } from "vuex";
   export default {
     data() {
       return {
@@ -113,7 +112,6 @@
         type: Number
       }
     },
-
     methods: {
       save() {
         console.log(this.submitData);
@@ -156,11 +154,11 @@
         }
       },
       getImgUrl(val) {
-        // console.log(val);
+        console.log(val);
         if (val.length == 0) {
           this.submitData.image = "";
         } else {
-          this.submitData.image = val[0].url;
+          this.submitData.image = val[0];
         }
       },
       handleShopTypeChange(value) {

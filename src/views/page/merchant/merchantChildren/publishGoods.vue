@@ -209,7 +209,8 @@
           listType="picture-card"
           class="avatar-uploader"
           :showUploadList="false"
-          action="//jsonplaceholder.typicode.com/posts/"
+          :headers="{ 'X-Nideshop-Token': `${userInfo.token}` }"
+          :action="actionURL"
           :beforeUpload="beforeUpload"
           @change="handleChange"
         >
@@ -218,6 +219,9 @@
               <use xlink:href="#icontianjiatupian1"></use>
             </a-icon>
             <div class="ant-upload-text">点击添加图片</div>
+          </div>
+          <div class="imgLoading" v-show="loading">
+            <a-icon type="loading" class="icon"></a-icon>
           </div>
         </a-upload>
       </div>
@@ -253,10 +257,13 @@
   import paramItem from "../../../../components/common/productParams/paramItem";
   import newParam from "../../../../components/common/productParams/newParam";
   import { _getData } from "../../../../config/getData";
+  import { mapState } from "vuex";
   export default {
     data() {
       return {
         title: "发布商品",
+        loading: true,
+        actionURL: this.$API_URL.HYGFILEURL + "/api/upload/imageUpload",
         titleArr: ["参数类型", "参数名称", "参数值", "操作"],
         params: [{}],
         defaultCascaderValue: [],
@@ -269,6 +276,7 @@
         brandId: -1,
         isSparePart: 0,
         uploadList: [],
+        tempUploadList: [],
         isEnquiry: false,
         submitData: {
           name: "",
@@ -290,6 +298,7 @@
         }
       };
     },
+
     methods: {
       release() {
         if (this.submitData.name == "") {
@@ -368,14 +377,28 @@
         this.params.push({});
       },
       handleRemove(file) {
+        const fileList = this.$refs.upload.sFileList;
+        // console.log(this.$refs);
+        // console.log(this.$refs.upload);
+        console.log(fileList);
+        if (fileList.indexOf(file) != -1) {
+          this.$refs.upload.sFileList.splice(fileList.indexOf(file), 1);
+        } else {
+          this.tempUploadList.splice(this.tempUploadList.indexOf(file), 1);
+        }
         this.uploadList.splice(this.uploadList.indexOf(file), 1);
       },
       handleChange(info) {
-        for (const val of info.fileList) {
-          val.url =
-            "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
+        console.log(info);
+        if (info.file.status == "done") {
+          this.loading = false;
+          for (const val of info.fileList) {
+            val.url = val.response.result.imageurl;
+          }
+          this.uploadList = this.tempUploadList.concat(info.fileList);
+        } else {
+          this.loading = true;
         }
-        this.uploadList = info.fileList;
       },
       onChange(e) {
         console.log(`checked = ${e.target.checked}`);
@@ -450,12 +473,9 @@
         });
       }
     },
-    components: {
-      commonTitle,
-      listTitle,
-      addBtn,
-      newParam,
-      paramItem
+
+    computed: {
+      ...mapState(["userInfo"])
     },
     mounted() {
       _getData("/catalog/first", {}).then(data => {
@@ -516,26 +536,37 @@
             this.submitData.maxPrice = data.productInfo.maxPrice;
           }
           if (data.productInfo.list_pic_url) {
-            this.uploadList.push({ uid: 1, url: data.productInfo.list_pic_url });
+            this.tempUploadList.push({
+              uid: 1,
+              url: data.productInfo.list_pic_url
+            });
           }
           if (data.productInfo.image1) {
-            this.uploadList.push({ uid: 2, url: data.productInfo.image1 });
+            this.tempUploadList.push({ uid: 2, url: data.productInfo.image1 });
           }
           if (data.productInfo.image2) {
-            this.uploadList.push({ uid: 3, url: data.productInfo.image2 });
+            this.tempUploadList.push({ uid: 3, url: data.productInfo.image2 });
           }
           if (data.productInfo.image3) {
-            this.uploadList.push({ uid: 4, url: data.productInfo.image3 });
+            this.tempUploadList.push({ uid: 4, url: data.productInfo.image3 });
           }
           if (data.productInfo.image4) {
-            this.uploadList.push({ uid: 5, url: data.productInfo.image4 });
+            this.tempUploadList.push({ uid: 5, url: data.productInfo.image4 });
           }
           if (data.productInfo.image5) {
-            this.uploadList.push({ uid: 6, url: data.productInfo.image5 });
+            this.tempUploadList.push({ uid: 6, url: data.productInfo.image5 });
           }
+          this.uploadList = this.tempUploadList;
           console.log(this.uploadList);
         });
       }
+    },
+    components: {
+      commonTitle,
+      listTitle,
+      addBtn,
+      newParam,
+      paramItem
     }
   };
 </script>
@@ -736,6 +767,7 @@
           }
         }
         /deep/.avatar-uploader {
+          position: relative;
           .ant-upload.ant-upload-select-picture-card {
             width: 118px;
             height: 118px;
@@ -747,6 +779,19 @@
                 width: 100%;
                 height: 100%;
               }
+            }
+            .imgLoading {
+              width: 118px;
+              height: 118px;
+              background-color: rgba(0, 0, 0, 0.5);
+              position: absolute;
+              top: 0;
+              left: 0;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              z-index: 100;
+              display: none;
             }
             .ant-upload-text {
               font-family: PingFangSC-Regular;

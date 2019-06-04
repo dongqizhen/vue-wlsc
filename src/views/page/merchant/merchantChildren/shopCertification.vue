@@ -306,21 +306,21 @@
       },
       getLicenseUrl(val) {
         if (val.length) {
-          this.submitData.yyimage = val[0].url;
+          this.submitData.yyimage = val[0];
         } else {
           this.submitData.yyimage = "";
         }
       },
       getTaxRegistrationUrl(val) {
         if (val.length) {
-          this.submitData.swimage = val[0].url;
+          this.submitData.swimage = val[0];
         } else {
           this.submitData.swimage = "";
         }
       },
       getProductionLicenseUrl(val) {
         if (val.length) {
-          this.submitData.zzjgimage = val[0].url;
+          this.submitData.zzjgimage = val[0];
         } else {
           this.submitData.zzjgimage = "";
         }
