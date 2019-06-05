@@ -32,14 +32,15 @@
           isShow: false,
           isTrue: false,
           isOrder: true,
-          current: 0
+          current: 0,
+          isMerchant: false
         },
         data: {}
       };
     },
     methods: {},
     mounted() {
-      _getData("/order/orderDetails", { orderId: this.$route.params.id }).then(
+      _getData("/order/orderDetails", { orderSn: this.$route.params.id }).then(
         data => {
           console.log("获取订单详情：", data);
           this.data = data;

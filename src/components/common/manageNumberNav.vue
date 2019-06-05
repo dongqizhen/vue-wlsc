@@ -3,8 +3,9 @@
     <div class="nav">
       <a-tabs
         v-if="typeof navArr[0] === 'object'"
-        :defaultActiveKey="navArr[0].id"
+        :defaultActiveKey="defaultActiveKey"
         @change="callBack"
+        v-model="activeKey"
       >
         <a-tab-pane
           v-for="item in navArr"
@@ -26,16 +27,19 @@
 <script>
   export default {
     data() {
-      return {};
+      return { activeKey: this.defaultActiveKey };
     },
     props: {
       navArr: {
         type: Array,
         required: true
       },
-      defaultActiveKey: {
-        type: Number,
-        default: 0
+      defaultActiveKey: {}
+    },
+    watch: {
+      defaultActiveKey(newVal) {
+        console.log(newVal);
+        this.activeKey = newVal;
       }
     },
     methods: {

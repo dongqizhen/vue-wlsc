@@ -9,7 +9,7 @@
     <div class="inquiryProduct">
       <div class="leftInfoBox">
         <inquiry-product-item
-          v-for="item in data.list"
+          v-for="item in data.goodList"
           :key="item.id"
           :itemData="item"
           :isShowInfo="isShowInfo"
@@ -36,7 +36,7 @@
             查看详情
           </router-link>
         </div>
-        <div @click="deleteInquiryOrder(data.enquirySn)">删除询价单</div>
+        <div @click="deleteInquiryOrder(data.id)">删除询价单</div>
       </div>
     </div>
   </div>
@@ -66,13 +66,12 @@
       getChecked(val) {
         this.$emit("getChecked", val);
       },
-      deleteInquiryOrder(enquirySn) {
-        _getData("/enquiry/deleteEnquiry", { enquirySns: enquirySn }).then(
-          data => {
-            console.log("删除询价单：", data);
-            this.$emit("getIsDelete", data);
-          }
-        );
+      deleteInquiryOrder(id) {
+        console.log(id);
+        _getData("/enquiryPlus/deleteEnquiry", { ids: id }).then(data => {
+          console.log("删除询价单：", data);
+          this.$emit("getIsDelete", data);
+        });
       }
     },
     components: {

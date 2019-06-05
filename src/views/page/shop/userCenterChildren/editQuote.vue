@@ -27,7 +27,9 @@
             <span>{{ item.brandName }}/{{ item.modelName }}</span>
             <span>{{ item.number }}</span>
             <span>¥{{ item.number * item.unitPrice }}</span>
-            <span>2019-02-12</span>
+            <span>
+              {{ item.arrivalTime ? item.arrivalTime.substring(0, 16) : "" }}
+            </span>
             <span>{{ item.introduce }}</span>
             <span>
               <div @click="addCarSuccess(item.id)">编辑</div>

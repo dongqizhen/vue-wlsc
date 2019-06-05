@@ -167,7 +167,7 @@
     mounted() {
       this.getAddress();
       _getData("/enquiry/getEnquiry", {
-        enquirySn: this.$route.params.id
+        enquirySn: this.$route.params.id.split("|")[0]
       }).then(data => {
         console.log("获取询价单详情：", data);
         this.data = data;

@@ -3,6 +3,7 @@
     <manage-number-nav
       :navArr="tabs"
       v-on:tab="getOrderStatus"
+      :defaultActiveKey="defaultActiveKey"
     ></manage-number-nav>
     <div class="orderContainer">
       <filter-search v-on:getSearchData="getSearchData"></filter-search>
@@ -16,6 +17,7 @@
                 :checkedList="checkedList"
                 v-on:getChecked="getChecked"
                 :isShowInfo="isShowInfo"
+                v-on:returnValue="getReturnStatus"
               ></order-item>
             </li>
           </ul>
@@ -52,6 +54,7 @@
         data: [],
         checkedList: [],
         checkAll: false,
+        defaultActiveKey: "",
         tabs: [
           {
             id: "",
@@ -117,6 +120,10 @@
           this.getOrderData.endTime = "";
         }
         this.getOrderList();
+      },
+      getReturnStatus(val) {
+        this.defaultActiveKey = val;
+        this.getOrderStatus(val);
       },
       getOrderStatus(val) {
         console.log("获取订单状态：", val);

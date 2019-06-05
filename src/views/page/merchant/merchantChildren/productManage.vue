@@ -192,7 +192,7 @@
         this.getProductList(this.submitData);
       },
       clearData() {
-        this.submitData.isOnSale = 0;
+        this.submitData.isOnSale = "";
         this.submitData.name = "";
         this.submitData.bigCategoryId = "";
         this.submitData.categoryId = "";

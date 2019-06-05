@@ -10,6 +10,7 @@
           :data="item"
           :isCheckAll="isCheckAll(item.sid)"
           v-on:getIsCheckAll="getIsCheckAll"
+          :selectDatas="selectDatas"
         ></purchase-order-item>
       </div>
       <div class="tfooter">
@@ -52,6 +53,7 @@
           "单价",
           "数量",
           "小计",
+          "备注",
           "操作"
         ],
         selectDatas: [],
@@ -75,7 +77,11 @@
                   selectProducts.push({
                     goodsId: value,
                     number: val.number,
-                    buyerDescription: ""
+                    buyerDescription: val.goods_specifition_name_value,
+                    goodsName: val.goods_name,
+                    goodsImage: val.list_pic_url,
+                    goodsBrand: val.brand_name,
+                    goodsModel: val.model_name
                   });
                 }
               });
@@ -85,7 +91,7 @@
           });
           console.log(this.selectDatas);
         }
-        _getData("/enquiry/addEnquiry", { param: this.selectDatas }).then(
+        _getData("/enquiryPlus/addEnquiry", { param: this.selectDatas }).then(
           data => {
             console.log("一键获取报价：", data);
             this.$router.replace({ path: "/userCenter/myInquiry" });
@@ -213,6 +219,25 @@
     margin-bottom: 110px;
     .listContainer {
       margin-top: 12px;
+      /deep/.listTitle {
+        ul {
+          li {
+            &:nth-child(4) {
+              width: 60px;
+            }
+            &:nth-child(5) {
+              width: 80px;
+            }
+            &:nth-child(6) {
+              width: 50px;
+            }
+            &:nth-child(7) {
+              width: 116px;
+              margin-right: 30px;
+            }
+          }
+        }
+      }
       .listContent {
         margin-top: 24px;
       }

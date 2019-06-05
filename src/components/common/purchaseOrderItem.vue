@@ -20,8 +20,17 @@
           <span>{{ item.goods_name }}</span>
           <span>{{ item.brand_name }}/{{ item.model_name }}</span>
           <span>¥{{ item.retail_price }}</span>
-          <span>{{ item.number }}</span>
-          <span>¥{{ item.retail_price * item.number }}</span>
+          <span>
+            <van-stepper v-model="item.number" :max="item.goods_number" />
+            <i class="stockNumber">库存{{ item.goods_number }}件</i>
+          </span>
+          <span>¥{{ (item.retail_price * item.number).toFixed(2) }}</span>
+          <span
+            ><a-textarea
+              placeholder="请输入备注"
+              v-model="item.goods_specifition_name_value"
+            ></a-textarea
+          ></span>
           <span>
             <div @click="deleteProduct(item.id)">删除</div>
             <div @click="addMyStore(item.id)">添加到我的收藏</div>
@@ -47,20 +56,24 @@
       },
       isCheckAll: {
         type: Boolean
-      }
+      },
+      selectDatas: {}
     },
     watch: {
       isCheckAll(newVal) {
         console.log(newVal);
-        this.checkAll = newVal;
-        if (this.checkAll) {
-          this.checkAll = true;
+        console.log(this.selectDatas);
+        if (newVal) {
+          this.checkAll = newVal;
           this.checkedList = [];
           for (const val of this.data.list) {
             this.checkedList.push(val.goods_id);
           }
         } else {
-          this.checkAll = false;
+          this.checkAll = newVal;
+          if (this.selectDatas.length == 0) {
+            this.checkedList = [];
+          }
         }
       }
     },
@@ -177,16 +190,55 @@
               margin-right: 30px;
             }
             &:nth-child(5) {
-              width: 83px;
+              width: 60px;
               margin-right: 30px;
             }
             &:nth-child(6) {
-              width: 113px;
+              width: 80px;
               margin-right: 30px;
+              text-align: center;
+              /deep/.van-stepper {
+                .van-stepper__minus,
+                .van-stepper__plus {
+                  width: 20px;
+                  height: 20px;
+                  border-radius: 0;
+                  border: $border-style;
+                  background: #f6f6f6;
+                  margin: 0;
+                  &:hover {
+                    cursor: pointer;
+                  }
+                }
+                .van-stepper__input {
+                  width: 38px;
+                  height: 16px;
+                  margin: 0;
+                  border-top: $border-style;
+                  border-bottom: $border-style;
+                }
+              }
+              .stockNumber {
+                font-style: normal;
+                font-size: 10px;
+                color: #ccc;
+                margin-top: 4px;
+              }
             }
             &:nth-child(7) {
-              width: 137px;
+              width: 50px;
+              overflow: hidden;
+              white-space: wrap;
               margin-right: 30px;
+            }
+            &:nth-child(8) {
+              width: 116px;
+              margin-right: 30px;
+              .ant-input {
+                font-size: 12px;
+                resize: none;
+                height: 65px;
+              }
             }
             &:last-child {
               div {

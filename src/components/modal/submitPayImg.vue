@@ -76,7 +76,7 @@
       },
       getImgUrl(val) {
         console.log(val);
-        this.submitData.imgUrl = val[0].url;
+        this.submitData.imgUrl = val[0];
       },
       sure() {
         //上传后台接口

@@ -6,7 +6,7 @@
         </a-checkbox>
       </span>
       <span>全选</span>
-      <span>
+      <span @click="deleteData">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#iconshanchu"></use>
         </svg>
@@ -40,6 +40,9 @@
       onCheckAllChange(e) {
         // console.log(e);
         this.$emit("isCheckAll", e.target.checked);
+      },
+      deleteData() {
+        this.$emit("isDelete", true);
       }
     }
   };

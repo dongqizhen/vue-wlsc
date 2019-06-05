@@ -54,12 +54,13 @@
       <div class="listContent">
         <list-title :titleArr="titleArr"></list-title>
         <ul>
-          <li v-for="item in data" :key="item.enquirySn">
+          <li v-for="item in data" :key="item.id">
             <inquiry-item
               :data="item"
               :checkedList="checkedList"
               v-on:getChecked="getChecked"
               :isShowInfo="isShowInfo"
+              v-on:getIsDelete="getIsDelete"
             ></inquiry-item>
           </li>
         </ul>
@@ -69,7 +70,17 @@
           :amount="checkedList.length"
           :checkAll="checkAll"
           v-on:isCheckAll="isCheckAllMethod"
+          v-on:isDelete="getCheckDelete"
         >
+          <div slot="right-box">
+            <div
+              :class="['submit', checkedList.length > 0 ? 'active' : '']"
+              v-if="isShowInfo.current != 1"
+              @click="submitOrder"
+            >
+              提交订单
+            </div>
+          </div>
         </check-all>
       </div>
     </div>
@@ -113,13 +124,38 @@
           size: 10,
           status: 1,
           enquirySn: "",
-          goodsName: "",
-          startTime: "",
-          endTime: ""
+          storeId: ""
         }
       };
     },
     methods: {
+      //批量删除
+      getCheckDelete(val) {
+        console.log(val);
+        if (val) {
+          _getData("/enquiryPlus/deleteEnquiry", {
+            ids: this.checkedList.join(",")
+          }).then(data => {
+            console.log("删除询价单：", data);
+            alert("删除成功");
+            this.getInquiryList();
+          });
+        }
+      },
+      //单个删除
+      getIsDelete(val) {
+        console.log(val);
+        this.getInquiryList();
+      },
+      //提交订单（已报价、已关闭）
+      submitOrder() {
+        console.log(this.checkedList);
+        if (this.checkedList.length > 0) {
+          this.$router.replace({
+            path: `submitOrder/${this.checkedList.join("|")}`
+          });
+        }
+      },
       searchData() {
         console.log(this.searchParams);
         this.getInquiryList();
@@ -154,20 +190,20 @@
         }
       },
       isCheckAllMethod(val) {
+        this.checkedList = [];
         if (val) {
           this.checkAll = true;
-          this.checkedList = [];
           for (const val of this.data) {
-            this.checkedList.push(val.enquirySn);
+            this.checkedList.push(val.id);
           }
         } else {
           this.checkAll = false;
-          this.checkedList = [];
         }
       },
       getInquiryList() {
-        _getData("/enquiry/enquiryList", this.searchParams).then(data => {
+        _getData("/enquiryPlus/enquiryList", this.searchParams).then(data => {
           console.log("获取询价管理的列表：", data);
+          this.checkedList = [];
           this.data = data.data;
         });
       }
@@ -319,6 +355,19 @@
               width: 166px;
             }
           }
+        }
+      }
+      .submit {
+        width: 104px;
+        height: 42px;
+        line-height: 42px;
+        text-align: center;
+        background: #ccc;
+        font-size: 600;
+        font-size: 14px;
+        color: #ffffff;
+        &.active {
+          background: #f5a623;
         }
       }
     }
