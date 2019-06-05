@@ -3,7 +3,10 @@
     <div class="shop">
       <span class="leftTopIcon">
         <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconyirenzhengjiaobiao"></use>
+          <use
+            xlink:href="#iconyirenzhengjiaobiao"
+            v-if="detail.auditStatus == 1"
+          ></use>
         </svg>
       </span>
       <div class="img_box">
@@ -42,10 +45,21 @@
           </router-link>
         </a-button>
         <a-button v-else>
-          进店看看
+          <router-link
+            :to="{
+              path: '/shopDetails',
+              query: {
+                nav_index: 3,
+                shopId: $route.query.shopId
+              }
+            }"
+            target="_blank"
+          >
+            进店看看
+          </router-link>
         </a-button>
         <a-button @click="collect">{{
-          detail.collectId ? "已收藏" : "收藏店铺"
+          isCollection ? "已收藏" : "收藏店铺"
         }}</a-button>
       </div>
       <div class="service">
@@ -65,13 +79,13 @@
   import { _getData } from "../../config/getData";
   export default {
     data() {
-      return {};
+      return {
+        isCollection: 0
+      };
     },
     props: ["type", "detail"],
-    computed: {
-      isCollect() {
-        return;
-      }
+    created() {
+      this.isCollection = this.detail.collectId;
     },
     methods: {
       collect() {
@@ -79,7 +93,14 @@
           valueId: this.detail.sid,
           typeId: 1 //收藏类型 0 产品 1 店铺
         }).then(data => {
-          if (data.code == 0) this.$message.success("店铺收藏成功");
+          console.log(data);
+          if (this.isCollection) {
+            this.isCollection = 0;
+            this.$message.success("取消收藏成功");
+          } else {
+            this.isCollection = 1;
+            this.$message.success("店铺收藏成功");
+          }
         });
       }
     }
@@ -102,8 +123,8 @@
       top: 0;
       left: 0;
       .icon {
-        height: 42px;
-        width: 42px;
+        height: 50px;
+        width: 50px;
       }
     }
     .img_box {

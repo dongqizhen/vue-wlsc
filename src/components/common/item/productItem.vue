@@ -31,13 +31,13 @@
         </p>
         <div class="brand_small">
           <span>品牌：{{ list.brand_name }}</span>
-          <span>型号：DR UPGRADE…</span>
+          <span>型号：{{ list.brand_model_name }}</span>
         </div>
         <div class="address">
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#icondianpu"></use>
           </svg>
-          北京华脉诚信科技有限公司
+          {{ list.shopName }}
         </div>
       </li>
     </a>
@@ -155,6 +155,7 @@
           white-space: nowrap;
         }
         &:last-child {
+          text-align: right;
           width: 133px;
           margin-left: 10px;
           overflow: hidden;

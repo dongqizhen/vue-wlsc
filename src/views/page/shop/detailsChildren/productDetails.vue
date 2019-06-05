@@ -1,359 +1,363 @@
 <template>
   <div class="product-details">
     <div class="left">
-      <div class="magnifying">
-        <div class="img_box">
-          <a class="magnifier-thumb-wrapper">
-            <img
-              id="thumb"
-              :src="productInfo.list_pic_url"
-              v-if="productInfo.list_pic_url"
-            />
-          </a>
-          <div class="magnifier-preview" id="preview"></div>
-          <div class="swiper-container">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                <img src="../../../../assets/images/demo.jpg" alt="" />
+      <div v-if="!isLoading">
+        <div class="magnifying">
+          <div class="img_box">
+            <a class="magnifier-thumb-wrapper">
+              <img
+                id="thumb"
+                :src="productInfo.list_pic_url"
+                v-if="productInfo.list_pic_url"
+              />
+            </a>
+            <div class="magnifier-preview" id="preview"></div>
+            <div class="swiper-container">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                  <img src="../../../../assets/images/demo.jpg" alt="" />
+                </div>
+                <div class="swiper-slide">
+                  <img src="../../../../assets/images/demo.jpg" alt="" />
+                </div>
+                <div class="swiper-slide">
+                  <img src="../../../../assets/images/demo.jpg" alt="" />
+                </div>
+                <div class="swiper-slide">
+                  <img src="../../../../assets/images/demo.jpg" alt="" />
+                </div>
+                <div class="swiper-slide">
+                  <img src="../../../../assets/images/demo.jpg" alt="" />
+                </div>
+                <div class="swiper-slide">
+                  <img src="../../../../assets/images/demo.jpg" alt="" />
+                </div>
+                <div class="swiper-slide">
+                  <img src="../../../../assets/images/demo.jpg" alt="" />
+                </div>
+                <div class="swiper-slide">
+                  <img src="../../../../assets/images/demo.jpg" alt="" />
+                </div>
+                <div class="swiper-slide">
+                  <img src="../../../../assets/images/demo.jpg" alt="" />
+                </div>
+                <div class="swiper-slide">
+                  <img src="../../../../assets/images/demo.jpg" alt="" />
+                </div>
+                <div class="swiper-slide">
+                  <img src="../../../../assets/images/demo.jpg" alt="" />
+                </div>
+                <div class="swiper-slide">
+                  <img src="../../../../assets/images/demo.jpg" alt="" />
+                </div>
               </div>
-              <div class="swiper-slide">
-                <img src="../../../../assets/images/demo.jpg" alt="" />
-              </div>
-              <div class="swiper-slide">
-                <img src="../../../../assets/images/demo.jpg" alt="" />
-              </div>
-              <div class="swiper-slide">
-                <img src="../../../../assets/images/demo.jpg" alt="" />
-              </div>
-              <div class="swiper-slide">
-                <img src="../../../../assets/images/demo.jpg" alt="" />
-              </div>
-              <div class="swiper-slide">
-                <img src="../../../../assets/images/demo.jpg" alt="" />
-              </div>
-              <div class="swiper-slide">
-                <img src="../../../../assets/images/demo.jpg" alt="" />
-              </div>
-              <div class="swiper-slide">
-                <img src="../../../../assets/images/demo.jpg" alt="" />
-              </div>
-              <div class="swiper-slide">
-                <img src="../../../../assets/images/demo.jpg" alt="" />
-              </div>
-              <div class="swiper-slide">
-                <img src="../../../../assets/images/demo.jpg" alt="" />
-              </div>
-              <div class="swiper-slide">
-                <img src="../../../../assets/images/demo.jpg" alt="" />
-              </div>
-              <div class="swiper-slide">
-                <img src="../../../../assets/images/demo.jpg" alt="" />
-              </div>
-            </div>
-            <!-- 如果需要分页器 -->
-            <!-- <div class="swiper-pagination"></div> -->
+              <!-- 如果需要分页器 -->
+              <!-- <div class="swiper-pagination"></div> -->
 
-            <!-- 如果需要导航按钮 -->
-            <div class="swiper-button-prev">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconhoufankedianji"></use>
-              </svg>
-            </div>
-            <div class="swiper-button-next">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconxiangqianfan"></use>
-              </svg>
-            </div>
+              <!-- 如果需要导航按钮 -->
+              <div class="swiper-button-prev">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconhoufankedianji"></use>
+                </svg>
+              </div>
+              <div class="swiper-button-next">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconxiangqianfan"></use>
+                </svg>
+              </div>
 
-            <!-- 如果需要滚动条 -->
-            <!-- <div class="swiper-scrollbar"></div> -->
+              <!-- 如果需要滚动条 -->
+              <!-- <div class="swiper-scrollbar"></div> -->
+            </div>
+          </div>
+          <div class="main">
+            <h2>{{ productInfo.name }}</h2>
+            <div class="price">
+              <span>指导价：</span>
+              <span>¥{{ productInfo.market_price }}</span>
+              <span>询价</span>
+            </div>
+            <ul class="params">
+              <li>
+                <span>
+                  <span>产品分类：</span>
+                  <a>{{ productInfo.category_name }}</a>
+                </span>
+                <span>
+                  <span>品牌：</span>
+                  <a>{{ productInfo.brand_name }}</a>
+                </span>
+              </li>
+              <li>
+                <span>
+                  <span>产品类型：</span>
+                  <a>整机/备件/人工</a>
+                </span>
+                <span>
+                  <span>销售范围：</span>
+                  <a>全国</a>
+                </span>
+              </li>
+              <li>
+                <span>
+                  <span>型号：</span>
+                  <a>{{ productInfo.brand_model_name }}</a>
+                </span>
+                <span>
+                  <span>数量 库存：</span>
+                  <a>{{ productInfo.goods_number }}</a>
+                </span>
+              </li>
+              <li>
+                <span>
+                  <span>备件号：</span>
+                  <a>XCV111122333939932222</a>
+                </span>
+                <span>
+                  <span>产地：</span>
+                  <a>{{ productInfo.origin }}</a>
+                </span>
+              </li>
+            </ul>
+            <div class="btn">
+              <a-button @click="addCarSuccess">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconbaisegouwuche"></use>
+                </svg>
+                加入选购单
+              </a-button>
+              <a-button
+                @click.self="storeProduct"
+                v-text="isCollection ? '已收藏' : '收藏商品'"
+              >
+              </a-button>
+            </div>
           </div>
         </div>
-        <div class="main">
-          <h2>{{ productInfo.name }}</h2>
-          <div class="price">
-            <span>指导价：</span>
-            <span>¥{{ productInfo.market_price }}</span>
-            <span>询价</span>
-          </div>
-          <ul class="params">
-            <li>
-              <span>
-                <span>产品分类：</span>
-                <a>{{ productInfo.category_name }}</a>
-              </span>
-              <span>
-                <span>品牌：</span>
-                <a>普利生</a>
-              </span>
-            </li>
-            <li>
-              <span>
-                <span>产品类型：</span>
-                <a>整机/备件/人工</a>
-              </span>
-              <span>
-                <span>销售范围：</span>
-                <a>全国</a>
-              </span>
-            </li>
-            <li>
-              <span>
-                <span>型号：</span>
-                <a>C2000-A</a>
-              </span>
-              <span>
-                <span>数量 库存：</span>
-                <a>{{ productInfo.goods_number }}</a>
-              </span>
-            </li>
-            <li>
-              <span>
-                <span>备件号：</span>
-                <a>XCV111122333939932222</a>
-              </span>
-              <span>
-                <span>产地：</span>
-                <a>国产</a>
-              </span>
-            </li>
-          </ul>
-          <div class="btn">
-            <a-button @click="addCarSuccess">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconbaisegouwuche"></use>
-              </svg>
-              加入选购单
-            </a-button>
-            <a-button @click="storeProduct">收藏商品</a-button>
-          </div>
-        </div>
-      </div>
 
-      <div class="introduce-tabs">
-        <!-- <a-affix :offsetTop="0">
+        <div class="introduce-tabs">
+          <!-- <a-affix :offsetTop="0">
           <a-button type="primary">Affix top</a-button>
         </a-affix> -->
-        <a-tabs defaultActiveKey="1">
-          <a-tab-pane tab="产品介绍" key="1" :forceRender="true">
-            <p
-              class="introduce"
-              v-html="convertStr"
-              v-if="productInfo"
-              v-lazy-container="{
-                selector: 'img'
-              }"
-            ></p>
-          </a-tab-pane>
-          <a-tab-pane tab="产品规格/参数" key="2" :forceRender="true">
-            <ul class="specification" v-if="specificationInfo.length">
-              <li v-for="item in specificationInfo" :key="item.id">
-                <span>{{ item.specificationName }}</span
-                ><span>{{ item.value }}</span>
-              </li>
-            </ul>
-            <no-data text="暂无规格参数"></no-data>
-          </a-tab-pane>
-          <a-tab-pane tab="产品评价(36)" key="3" :forceRender="true">
-            <ul class="evaluate">
-              <li>
-                <div class="img_box"></div>
-                <div class="evaluate-container">
-                  <div class="name">孟世和<span>2019-02-18 16:20</span></div>
-                  <ul class="rate-container">
-                    <li>
-                      性能评价
-                      <div class="rate">
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiashixinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiashixinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiashixinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiakongxinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiakongxinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                      </div>
-                    </li>
-                    <li>
-                      售后评价
-                      <div class="rate">
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiashixinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiashixinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiashixinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiakongxinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiakongxinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                      </div>
-                    </li>
-                    <li>
-                      质量评价
-                      <div class="rate">
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiashixinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiashixinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiashixinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiakongxinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiakongxinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                      </div>
-                    </li>
-                    <li>
-                      培训评价
-                      <div class="rate">
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiashixinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiashixinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiashixinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiakongxinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                        <span>
-                          <svg class="icon" aria-hidden="true">
-                            <use
-                              xlink:href="#iconpingjiakongxinwujiaoxing"
-                            ></use>
-                          </svg>
-                        </span>
-                      </div>
-                    </li>
-                  </ul>
-                  <p>
-                    产品很不错。我下次会再来的！产品很不错。我下次会再来的！产品很不错。我下次会再来的！产品很不错。我下次会再来的！产品很不错。我下次会再来的！产品很不错。我下次会再来的！
-                  </p>
-                  <ul class="evaluate-img">
-                    <li
-                      v-for="(item, i) in imgarr"
-                      :key="i"
-                      :class="
-                        i == defaultIndex && bigImageIsShow ? 'active' : ''
-                      "
-                      @click="changeImage(i, $event)"
-                    >
-                      <div class="img_box">
-                        <img :src="item" alt="" />
-                      </div>
-                      <i></i>
-                    </li>
-                  </ul>
+          <a-tabs defaultActiveKey="1">
+            <a-tab-pane tab="产品介绍" key="1" :forceRender="true">
+              <p
+                class="introduce"
+                v-html="productInfo.goods_desc"
+                v-if="productInfo"
+              ></p>
+            </a-tab-pane>
+            <a-tab-pane tab="产品规格/参数" key="2" :forceRender="true">
+              <ul class="specification" v-if="specificationInfo.length">
+                <li v-for="item in specificationInfo" :key="item.id">
+                  <span>{{ item.specificationName }}</span
+                  ><span>{{ item.value }}</span>
+                </li>
+              </ul>
+              <no-data text="暂无规格参数" v-else></no-data>
+            </a-tab-pane>
+            <a-tab-pane tab="产品评价(36)" key="3" :forceRender="true">
+              <ul class="evaluate">
+                <li>
+                  <div class="img_box"></div>
+                  <div class="evaluate-container">
+                    <div class="name">孟世和<span>2019-02-18 16:20</span></div>
+                    <ul class="rate-container">
+                      <li>
+                        性能评价
+                        <div class="rate">
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiashixinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiashixinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiashixinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiakongxinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiakongxinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                        </div>
+                      </li>
+                      <li>
+                        售后评价
+                        <div class="rate">
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiashixinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiashixinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiashixinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiakongxinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiakongxinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                        </div>
+                      </li>
+                      <li>
+                        质量评价
+                        <div class="rate">
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiashixinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiashixinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiashixinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiakongxinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiakongxinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                        </div>
+                      </li>
+                      <li>
+                        培训评价
+                        <div class="rate">
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiashixinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiashixinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiashixinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiakongxinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                          <span>
+                            <svg class="icon" aria-hidden="true">
+                              <use
+                                xlink:href="#iconpingjiakongxinwujiaoxing"
+                              ></use>
+                            </svg>
+                          </span>
+                        </div>
+                      </li>
+                    </ul>
+                    <p>
+                      产品很不错。我下次会再来的！产品很不错。我下次会再来的！产品很不错。我下次会再来的！产品很不错。我下次会再来的！产品很不错。我下次会再来的！产品很不错。我下次会再来的！
+                    </p>
+                    <ul class="evaluate-img">
+                      <li
+                        v-for="(item, i) in imgarr"
+                        :key="i"
+                        :class="
+                          i == defaultIndex && bigImageIsShow ? 'active' : ''
+                        "
+                        @click="changeImage(i, $event)"
+                      >
+                        <div class="img_box">
+                          <img :src="item" alt="" />
+                        </div>
+                        <i></i>
+                      </li>
+                    </ul>
 
-                  <div class="big-image" :class="bigImageIsShow && 'active'">
-                    <img src="../../../../assets/images/demo.jpg" alt="" />
+                    <div class="big-image" :class="bigImageIsShow && 'active'">
+                      <img src="../../../../assets/images/demo.jpg" alt="" />
+                    </div>
                   </div>
-                </div>
-              </li>
-            </ul>
-          </a-tab-pane>
+                </li>
+              </ul>
+            </a-tab-pane>
 
-          <template slot="renderTabBar" slot-scope="props, DefaultTabBar">
-            <component :is="DefaultTabBar" {...props} class="tab-affix" />
-          </template>
-        </a-tabs>
+            <template slot="renderTabBar" slot-scope="props, DefaultTabBar">
+              <component :is="DefaultTabBar" {...props} class="tab-affix" />
+            </template>
+          </a-tabs>
+        </div>
       </div>
+      <loading v-else></loading>
     </div>
     <div class="right">
       <a-button>
@@ -410,7 +414,9 @@
         title: "",
         imgUrl: "",
         type: "",
+        isCollection: 0, //是否收藏产品
         shopdetails: "",
+        isLoading: true,
         bigImageIsShow: false
       };
     },
@@ -427,6 +433,14 @@
           typeId: 0
         }).then(data => {
           console.log(data);
+
+          if (this.isCollection) {
+            this.isCollection = 0;
+            this.$message.success("取消收藏成功");
+          } else {
+            this.isCollection = 1;
+            this.$message.success("商品收藏成功");
+          }
         });
       },
       changeImage(i, e) {
@@ -488,7 +502,6 @@
       window.removeEventListener("scroll", this.handleScroll);
     },
     mounted() {
-      window.addEventListener("scroll", this.handleScroll);
       //获取产品详情
       _getData("goods/gooddetail", {
         id: this.$route.params.id
@@ -497,6 +510,7 @@
           console.log("产品详情", data);
           this.productInfo = data.productInfo;
           this.specificationInfo = data.specificationInfo;
+          this.isCollection = data.isCollection;
         })
         .then(() => {
           const evt = new Event(),
@@ -512,27 +526,33 @@
 
       _getData("/store/homeStore", {
         storeId: this.$route.query.shopId
-      }).then(data => {
-        console.log("店铺详情", data);
-        this.shopdetails = data;
-      });
-
-      const swiper = new Swiper(".swiper-container", {
-        slidesPerView: 5,
-        spaceBetween: 16,
-        slidesPerGroup: 5,
-        loop: false,
-        loopFillGroupWithBlank: true,
-        allowTouchMove: false,
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true
-        },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
-        }
-      });
+      })
+        .then(data => {
+          console.log("店铺详情", data);
+          this.shopdetails = data;
+        })
+        .then(() => {
+          this.isLoading = false;
+        })
+        .then(() => {
+          window.addEventListener("scroll", this.handleScroll);
+          const swiper = new Swiper(".swiper-container", {
+            slidesPerView: 5,
+            spaceBetween: 16,
+            slidesPerGroup: 5,
+            loop: false,
+            loopFillGroupWithBlank: true,
+            allowTouchMove: false,
+            pagination: {
+              el: ".swiper-pagination",
+              clickable: true
+            },
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev"
+            }
+          });
+        });
     }
   };
 </script>

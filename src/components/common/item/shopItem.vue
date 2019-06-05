@@ -20,21 +20,38 @@
           }"
         >
           <img :data-src="item.image" alt="" v-if="item.image" />
-          <span></span>
+          <span
+            :class="
+              item.type == 3
+                ? 'self'
+                : item.type == 2
+                ? 'agency'
+                : item.type == 4
+                ? 'rest'
+                : item.type == 5
+                ? 'serve'
+                : ''
+            "
+          ></span>
         </div>
         <h2>{{ item.shopName }}</h2>
         <p>
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#iconzhaodianpuweizhi"></use>
           </svg>
-          销售地区：北京市;天津市
+          销售地区：<span
+            v-for="(val, i) in item.defaultProvinceData"
+            :key="val.provinceId"
+          >
+            {{ val.provinceName + (i < item.defaultProvinceData ? "," : "") }}
+          </span>
         </p>
       </div>
       <div class="bottom">
         <ul>
           <li>访问量<span>2321</span></li>
           <li>咨询数<span>987</span></li>
-          <li>成交数<span>-</span></li>
+          <li>成交数<span>--</span></li>
           <li>好评率<span>98%</span></li>
         </ul>
       </div>
@@ -47,7 +64,9 @@
     data() {
       return {};
     },
-    props: ["item"]
+
+    props: ["item"],
+    computed: {}
   };
 </script>
 
@@ -117,6 +136,19 @@
           width: 42px;
           height: 22px;
           background: url("../../../assets/images/shop.svg") no-repeat center;
+          &.self {
+            background-image: url("../../../assets/images/self.svg");
+          }
+          &.agency {
+            background-image: url("../../../assets/images/agency.svg");
+          }
+          &.rest {
+            background-image: url("../../../assets/images/rest.svg");
+          }
+          &.serve {
+            width: 55px;
+            background-image: url("../../../assets/images/serve.svg");
+          }
         }
       }
       h2 {

@@ -11,148 +11,155 @@
     </h2> -->
     <div class="main-content">
       <div class="left">
-        <div class="left-L">
-          <ul class="clearfix">
-            <li v-for="(item, i) in left" :key="`item-${i}`">
-              <h2>
-                <span class="title">
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#iconpingjiashixinwujiaoxing"></use>
-                  </svg>
-                  {{ item.name }}
-                </span>
-                <span class="btn" @click="handleClick" v-if="!item.id">
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#iconguanlichangyongfenlei"></use>
-                  </svg>
-                  管理常用分类
-                  <common-categories-modal-vue
-                    :Visible="visible"
-                    v-on:success="success"
-                  ></common-categories-modal-vue>
-                </span>
-              </h2>
-              <ul :class="left_show_arr[i] && 'active'" class="box_com">
-                <router-link
-                  :to="
-                    $route.query.nav_index == 1
-                      ? {
-                          path: 'oneOfBrandClassificne',
-                          query: {
-                            nav_index: $route.query.nav_index,
-                            categoryId: val.id,
-                            categoryName: val.name
-                          }
-                        }
-                      : $route.query.nav_index == 2
-                      ? {
-                          path: 'brand',
-                          query: {
-                            nav_index: $route.query.nav_index,
-                            categoryId: val.id,
-                            categoryName: val.name,
-                            brandId: $route.query.brandId,
-                            brandName: $route.query.brandName
-                          }
-                        }
-                      : ''
-                  "
-                  append
-                  tag="li"
-                  v-for="val in item.subCategoryList"
-                  :key="val.id"
-                >
-                  <a>
-                    {{ val.name }}
-                  </a>
-                </router-link>
-              </ul>
+        <div v-if="!isLoading">
+          <div class="left-L">
+            <ul class="clearfix">
+              <li v-for="(item, i) in left" :key="`item-${i}`">
+                <h2>
+                  <span class="title">
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#iconpingjiashixinwujiaoxing"></use>
+                    </svg>
+                    {{ item.name }}
+                  </span>
+                  <span class="btn" @click="handleClick" v-if="!item.id">
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#iconguanlichangyongfenlei"></use>
+                    </svg>
+                    管理常用分类
+                    <common-categories-modal-vue
+                      :Visible="visible"
+                      v-on:success="success"
+                    ></common-categories-modal-vue>
+                  </span>
+                </h2>
+                <div class="brand-box" :class="left_show_arr[i] && 'active'">
+                  <ul class="box_com">
+                    <router-link
+                      :to="
+                        $route.query.nav_index == 1
+                          ? {
+                              path: 'oneOfBrandClassificne',
+                              query: {
+                                nav_index: $route.query.nav_index,
+                                categoryId: val.id,
+                                categoryName: val.name
+                              }
+                            }
+                          : $route.query.nav_index == 2
+                          ? {
+                              path: 'brand',
+                              query: {
+                                nav_index: $route.query.nav_index,
+                                categoryId: val.id,
+                                categoryName: val.name,
+                                brandId: $route.query.brandId,
+                                brandName: $route.query.brandName
+                              }
+                            }
+                          : ''
+                      "
+                      append
+                      tag="li"
+                      v-for="val in item.subCategoryList"
+                      :key="val.id"
+                    >
+                      <a>
+                        {{ val.name }}
+                      </a>
+                    </router-link>
+                  </ul>
+                </div>
 
-              <span
-                @click="LeftMoreBtnClick(i)"
-                v-if="left_show_arr[i]"
-                class="active"
-              >
-                收起
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-                </svg>
-              </span>
-              <span @click="LeftMoreBtnClick(i)" v-else>
-                更多
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icongengduoxialajiantou"></use>
-                </svg>
-              </span>
-            </li>
-          </ul>
-        </div>
-        <div class="left-R">
-          <ul class="clearfix">
-            <li v-for="(item, i) in right" :key="`item_right-${i}`">
-              <h2>
-                <span class="title">
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#iconpingjiashixinwujiaoxing"></use>
-                  </svg>
-                  {{ item.name }}
-                </span>
-              </h2>
-
-              <ul :class="right_show_arr[i] && 'active'" class="box_com">
-                <router-link
-                  :to="
-                    $route.query.nav_index == 1
-                      ? {
-                          path: 'oneOfBrandClassificne',
-                          query: {
-                            nav_index: $route.query.nav_index,
-                            categoryId: val.id,
-                            categoryName: val.name
-                          }
-                        }
-                      : $route.query.nav_index == 2
-                      ? {
-                          path: 'brand',
-                          query: {
-                            nav_index: $route.query.nav_index,
-                            categoryId: val.id,
-                            categoryName: val.name,
-                            brandId: $route.query.brandId,
-                            brandName: $route.query.brandName
-                          }
-                        }
-                      : ''
-                  "
-                  append
-                  tag="li"
-                  v-for="val in item.subCategoryList"
-                  :key="val.id"
+                <span
+                  @click="LeftMoreBtnClick(i)"
+                  v-if="left_show_arr[i]"
+                  class="active"
                 >
-                  <a>
-                    {{ val.name }}
-                  </a>
-                </router-link>
-              </ul>
-              <span
-                @click="rightMoreBtnClick(i)"
-                v-if="right_show_arr[i]"
-                class="active"
-              >
-                收起
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icontianjiaduibichanpinxiala"></use>
-                </svg>
-              </span>
-              <span @click="rightMoreBtnClick(i)" v-else>
-                更多
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icongengduoxialajiantou"></use>
-                </svg>
-              </span>
-            </li>
-          </ul>
+                  收起
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+                  </svg>
+                </span>
+                <span @click="LeftMoreBtnClick(i)" v-else>
+                  更多
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icongengduoxialajiantou"></use>
+                  </svg>
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div class="left-R">
+            <ul class="clearfix">
+              <li v-for="(item, i) in right" :key="`item_right-${i}`">
+                <h2>
+                  <span class="title">
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#iconpingjiashixinwujiaoxing"></use>
+                    </svg>
+                    {{ item.name }}
+                  </span>
+                </h2>
+                <div class="brand-box" :class="right_show_arr[i] && 'active'">
+                  <ul class="box_com">
+                    <router-link
+                      :to="
+                        $route.query.nav_index == 1
+                          ? {
+                              path: 'oneOfBrandClassificne',
+                              query: {
+                                nav_index: $route.query.nav_index,
+                                categoryId: val.id,
+                                categoryName: val.name
+                              }
+                            }
+                          : $route.query.nav_index == 2
+                          ? {
+                              path: 'brand',
+                              query: {
+                                nav_index: $route.query.nav_index,
+                                categoryId: val.id,
+                                categoryName: val.name,
+                                brandId: $route.query.brandId,
+                                brandName: $route.query.brandName
+                              }
+                            }
+                          : ''
+                      "
+                      append
+                      tag="li"
+                      v-for="val in item.subCategoryList"
+                      :key="val.id"
+                    >
+                      <a>
+                        {{ val.name }}
+                      </a>
+                    </router-link>
+                  </ul>
+                </div>
+
+                <span
+                  @click="rightMoreBtnClick(i)"
+                  v-if="right_show_arr[i]"
+                  class="active"
+                >
+                  收起
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+                  </svg>
+                </span>
+                <span @click="rightMoreBtnClick(i)" v-else>
+                  更多
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icongengduoxialajiantou"></use>
+                  </svg>
+                </span>
+              </li>
+            </ul>
+          </div>
         </div>
+        <loading v-else></loading>
       </div>
 
       <div class="right">
@@ -166,7 +173,7 @@
   import brandCardVue from "../../../../components/common/brandCard.vue";
   import breadcrumbVue from "../../../../components/common/breadcrumb.vue";
   import CommonCategoriesModalVue from "../../../../components/modal/CommonCategoriesModal.vue";
-  import { _getData } from "../../../../config/getData";
+  import { _getData, _getDataAll } from "../../../../config/getData";
   import { mapState, mapMutations } from "vuex";
   import _ from "lodash";
 
@@ -181,7 +188,8 @@
         right_show_arr: [], //右侧点击更多是否展开控制数组
         left: [], //左侧渲染数组
         right: [], //右侧渲染数组
-        commonCategorie: []
+        commonCategorie: [],
+        isLoading: true
       };
     },
     components: {
@@ -217,48 +225,54 @@
       //获取常用分类
       async getCommonCategory() {
         return await _getData("ucatalog/list", {}).then(data => {
-          console.log("289data", data);
+          console.log("常用分类", data);
           if (this.isLogin) {
             this.left[0].subCategoryList = data.userCategoryList;
           }
         });
+      },
+      async getAllCategory() {
+        return await _getData("catalog/listAll", {})
+          .then(data => {
+            console.log("所有", data);
+            console.log(this.left);
+            _.map(data.currentCategory, (val, i) => {
+              if ((i + 1) % 2 == 1) {
+                if (this.isLogin) {
+                  this.right.push(val);
+                } else {
+                  this.left.push(val);
+                }
+              } else {
+                if (this.isLogin) {
+                  this.left.push(val);
+                } else {
+                  this.right.push(val);
+                }
+              }
+            });
+            console.log(this.left, this.right);
+          })
+          .then(() => {
+            this.$nextTick().then(() => {});
+          });
       }
     },
     mounted() {
-      this.getCommonCategory();
-
-      //获取所有分类
-      _getData("catalog/listAll", {})
-        .then(data => {
-          console.log("所有", data);
-          console.log(this.left);
-          _.map(data.currentCategory, (val, i) => {
-            if ((i + 1) % 2 == 1) {
-              if (this.isLogin) {
-                this.right.push(val);
-              } else {
-                this.left.push(val);
-              }
-            } else {
-              if (this.isLogin) {
-                this.left.push(val);
-              } else {
-                this.right.push(val);
-              }
-            }
-          });
-          console.log(this.left, this.right);
+      _getDataAll([this.getCommonCategory(), this.getAllCategory()])
+        .then(() => {
+          this.isLoading = false;
         })
         .then(() => {
-          this.$nextTick().then(() => {
-            document.querySelectorAll(".box_com").forEach((val, i) => {
-              console.log(val.offsetHeight);
-              if (val.offsetHeight <= 162) {
-                val.nextElementSibling.style.display = "none";
-              }
-            });
+          document.querySelectorAll(".box_com").forEach((val, i) => {
+            console.log(val.offsetHeight);
+            if (val.offsetHeight <= 160) {
+              val.parentElement.nextElementSibling.style.display = "none";
+            }
           });
         });
+
+      //获取所有分类
     },
     created() {
       if (this.isLogin) {
@@ -351,6 +365,11 @@
       width: $content-left;
       display: flex;
       justify-content: space-between;
+      > div {
+        width: $content-left;
+        display: flex;
+        justify-content: space-between;
+      }
       .left-L,
       .left-R {
         width: 374px;
@@ -396,37 +415,41 @@
                 cursor: pointer;
               }
             }
-            ul {
-              // display: flex;
-              // justify-content: flex-start;
-              padding: 20px;
-              // flex-wrap: wrap;
-              padding-right: 10px;
-              margin-right: -30px;
-              padding-bottom: 4px;
+            .brand-box {
               //width: 100%;
-              height: 162px;
+              height: 160px;
               overflow: hidden;
-              transition: all 0.3s;
               &.active {
                 height: auto;
               }
-              li {
-                font-size: 13px;
-                height: auto;
-                margin-right: 30px;
-                margin-bottom: 16px;
-                cursor: pointer;
-                display: flex;
-                height: 18px;
-                float: left;
-                a {
-                  color: #666666;
-                  text-decoration: none;
-                }
-                &:hover {
+              ul {
+                // display: flex;
+                // justify-content: flex-start;
+                overflow: hidden;
+                transition: all 0.3s;
+                padding: 20px;
+                // flex-wrap: wrap;
+                padding-right: 10px;
+                margin-right: -30px;
+                padding-bottom: 4px;
+
+                li {
+                  font-size: 13px;
+                  height: auto;
+                  margin-right: 30px;
+                  margin-bottom: 16px;
+                  cursor: pointer;
+                  display: flex;
+                  height: 18px;
+                  float: left;
                   a {
-                    color: $theme-color;
+                    color: #666666;
+                    text-decoration: none;
+                  }
+                  &:hover {
+                    a {
+                      color: $theme-color;
+                    }
                   }
                 }
               }
@@ -434,7 +457,7 @@
 
             > span {
               position: absolute;
-              right: 20px;
+              right: 18px;
               bottom: 20px;
               font-size: 12px;
               color: #019ddd;
@@ -442,6 +465,8 @@
               display: flex;
               align-items: center;
               justify-content: flex-start;
+              padding: 0 5px;
+              background: #fff;
               &.active {
                 color: #999999;
                 .icon {
@@ -459,7 +484,7 @@
                 }
               }
               &:hover {
-                opacity: 0.7;
+                // opacity: 0.7;
               }
             }
           }

@@ -431,7 +431,7 @@
             padding-top: 6px;
 
             > li {
-              margin-bottom: 0px;
+              margin-bottom: 9px;
               font-size: 14px;
               color: #333333;
               height: 28px;
@@ -446,9 +446,11 @@
               line-height: 26px;
               margin-right: 12px;
               position: relative;
+              min-width: 98px;
               span {
                 display: flex;
-                justify-content: flex-start;
+                justify-content: space-between;
+                width: 100%;
               }
               i {
                 position: static;

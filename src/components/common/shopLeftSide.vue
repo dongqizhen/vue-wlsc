@@ -271,7 +271,7 @@
         display: flex;
         height: 21px;
         bottom: 20px;
-        right: 20px;
+        right: 15px;
         line-height: 21px;
         align-items: center;
         display: flex;

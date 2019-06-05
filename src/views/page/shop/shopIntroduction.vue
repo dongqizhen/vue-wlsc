@@ -140,7 +140,7 @@
       _getData("/store/homeStore", {
         storeId: this.$route.query.shopId
       }).then(data => {
-        console.log(2222222, data);
+        console.log("店铺详情", data);
         this.shopdetails = data;
       });
     }

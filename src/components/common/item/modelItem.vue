@@ -16,14 +16,19 @@
     }"
   >
     <a>
-      <div class="img_box">
-        <img src="../../../assets/images/demo.jpg" alt="" />
+      <div
+        class="img_box"
+        v-lazy-container="{
+          selector: 'img'
+        }"
+      >
+        <img :data-src="item.pic_url" alt="" v-if="item.pic_url" />
       </div>
       <div class="introduce">
         <h2>{{ item.name }}</h2>
-        <p>参考价格：<span>10～100万</span></p>
+        <!-- <p>参考价格：<span>10～100万</span></p> -->
         <span>
-          {{ item.brand_name }}/{{ item.category_name }}/型号
+          {{ item.brand_name }}/{{ item.category_name }}
           <span>
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
@@ -56,7 +61,7 @@
     /deep/ img[lazy="loading"] {
       /*your style here*/
       background: url("../../../assets/images/loading.gif") no-repeat center;
-      background-size: 100px;
+      background-size: 70px;
       background-color: #f7f9fa;
     }
     /deep/ img[lazy="error"] {

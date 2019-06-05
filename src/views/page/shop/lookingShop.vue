@@ -122,7 +122,7 @@
         province: "选择省/直辖市", //省头部显示名称
         city: "选择市",
         isActive: 0, //是否显示市弹出层
-        selectMainArea: "北京市西城区", //默认显示地址
+        selectMainArea: "", //默认显示地址
         provinceName: "北京市",
         cityName: "北京市",
         categoryId: "", //分类id
@@ -158,6 +158,9 @@
       //this.routes = JSON.parse(this.$route.query.routes);
     },
     mounted() {
+      _getData("address/getRemortIP", {}).then(data => {
+        this.selectMainArea = data.content.address;
+      });
       _getData("address/getProvince", {})
         .then(data => {
           console.log("data", data);
@@ -198,6 +201,7 @@
           size: 20
         })
           .then(data => {
+            console.log("店铺列表", data);
             this.data = data;
             this.arr = data.data;
           })
