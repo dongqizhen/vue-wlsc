@@ -9,7 +9,7 @@
       <div class="right-box">
         <a-textarea
           placeholder="其他买家需要你的建议哦！"
-          v-model="submitData.introduce"
+          v-model="submitData.content"
         ></a-textarea>
       </div>
     </div>
@@ -35,7 +35,8 @@
             listType="picture-card"
             class="avatar-uploader"
             :showUploadList="false"
-            action="//jsonplaceholder.typicode.com/posts/"
+            :headers="{ 'X-Nideshop-Token': `${userInfo.token}` }"
+            :action="actionURL"
             :beforeUpload="beforeUpload"
             @change="handleChange"
           >
@@ -44,6 +45,9 @@
                 <use xlink:href="#icontianjiatupian1"></use>
               </a-icon>
               <div class="ant-upload-text">点击添加图片</div>
+            </div>
+            <div class="imgLoading" v-show="loading">
+              <a-icon type="loading" class="icon"></a-icon>
             </div>
           </a-upload>
         </div>
@@ -62,40 +66,64 @@
         </div>
         <div class="commentItem">
           <span>售后评价</span
-          ><span><a-rate v-model="submitData.afterSale"></a-rate></span>
+          ><span><a-rate v-model="submitData.aftersale"></a-rate></span>
         </div>
         <div class="commentItem">
           <span>培训评价</span
-          ><span><a-rate v-model="submitData.training"></a-rate></span>
+          ><span><a-rate v-model="submitData.train"></a-rate></span>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+  import { mapState } from "vuex";
   export default {
     data() {
       return {
+        actionURL: this.$API_URL.HYGFILEURL + "/api/upload/imageUpload",
+        loading: false,
+        productId: this.data.id,
         uploadList: [],
+        tempUploadList: [],
         submitData: {
-          introduce: "",
+          content: "",
           performance: 0,
           quality: 0,
-          afterSale: 0,
-          Training: 0
+          aftersale: 0,
+          train: 0
         }
       };
     },
+    computed: {
+      ...mapState(["userInfo"])
+    },
+    props: {
+      data: {
+        type: Object
+      }
+    },
     methods: {
       handleRemove(file) {
+        const fileList = this.$refs.upload.sFileList;
+        console.log(fileList);
+        if (fileList.indexOf(file) != -1) {
+          this.$refs.upload.sFileList.splice(fileList.indexOf(file), 1);
+        } else {
+          this.tempUploadList.splice(this.tempUploadList.indexOf(file), 1);
+        }
         this.uploadList.splice(this.uploadList.indexOf(file), 1);
       },
       handleChange(info) {
-        for (const val of info.fileList) {
-          val.url =
-            "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
+        if (info.file.status == "done") {
+          this.loading = false;
+          for (const val of info.fileList) {
+            val.url = val.response.result.imageurl;
+          }
+          this.uploadList = this.tempUploadList.concat(info.fileList);
+        } else {
+          this.loading = true;
         }
-        this.uploadList = info.fileList;
       },
       beforeUpload(file) {
         const isLt2M = file.size / 1024 / 1024 < 1;
@@ -201,6 +229,7 @@
             }
           }
           /deep/.avatar-uploader {
+            position: relative;
             .ant-upload.ant-upload-select-picture-card {
               width: 118px;
               height: 118px;
@@ -212,6 +241,19 @@
                   width: 100%;
                   height: 100%;
                 }
+              }
+              .imgLoading {
+                width: 118px;
+                height: 118px;
+                background-color: rgba(0, 0, 0, 0.5);
+                position: absolute;
+                top: 0;
+                left: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 100;
+                display: none;
               }
               .ant-upload-text {
                 font-family: PingFangSC-Regular;

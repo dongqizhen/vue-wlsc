@@ -162,7 +162,7 @@
       getImgUrl(val) {
         console.log(val);
         if (val.length > 0) {
-          this.submitData.goodsImage = val[0].url;
+          this.submitData.goodsImage = val[0];
         } else {
           this.submitData.goodsImage = "";
         }
@@ -203,6 +203,7 @@
         this.visible = newVal;
         console.log(this.editId);
         if (typeof this.editId == "number") {
+          this.options.title = "编辑商品";
           _getData("/enquiry/getEnquiryGoods", {
             goodsEnquirySn: this.$route.params.id,
             goodsId: this.editId
@@ -224,6 +225,8 @@
             arrivalTime: "",
             introduce: ""
           };
+          this.submitData.goodsImage = "initial";
+          this.options.title = "添加商品";
         }
       },
       visible(newVal) {

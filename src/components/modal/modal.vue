@@ -917,7 +917,7 @@
       }
     }
   }
-  .submitCommont {
+  .submitComment {
     .ant-modal {
       width: 696px !important;
       .ant-modal-body {
@@ -933,8 +933,9 @@
             color: #ffffff;
             font-weight: 600;
             border: 1px solid #f5a623;
-            margin-left: 73px;
+            margin-left: 131px;
             margin-right: 7px;
+            margin-top: 24px;
           }
         }
       }

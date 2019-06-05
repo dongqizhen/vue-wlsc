@@ -55,10 +55,14 @@
     watch: {
       imgUrl(newVal) {
         console.log(newVal);
-        if (typeof newVal == "string" && newVal) {
-          console.log(newVal);
+        if (newVal == "initial") {
           this.uploadList = [];
-          this.uploadList.push(newVal);
+        } else {
+          if (typeof newVal == "string" && newVal) {
+            console.log(newVal);
+            this.uploadList = [];
+            this.uploadList.push(newVal);
+          }
         }
       }
     },

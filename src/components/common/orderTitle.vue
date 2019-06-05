@@ -3,12 +3,8 @@
     <div class="left-box">
       <div class="checkedBox" v-if="isShowInfo.isTrue">
         <a-checkbox
-          @change="
-            onChange(isShowInfo.isOrder ? data.order_sn : data.enquirySn)
-          "
-          :checked="
-            checkedChange(isShowInfo.isOrder ? data.order_sn : data.enquirySn)
-          "
+          @change="onChange(isShowInfo.isOrder ? data.order_sn : data.id)"
+          :checked="checkedChange(isShowInfo.isOrder ? data.order_sn : data.id)"
         ></a-checkbox>
       </div>
       <div class="common orderNumber">

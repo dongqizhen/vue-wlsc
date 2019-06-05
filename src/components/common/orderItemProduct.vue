@@ -18,12 +18,12 @@
         {{
           data.order_status == 1
             ? isShowInfo.isDetail
-              ? "----"
+              ? "--"
               : ""
             : data.isPayProve == 0
             ? isShowInfo.isMerchant
               ? isShowInfo.isDetail
-                ? "----"
+                ? "--"
                 : ""
               : "提交支付证明"
             : "查看支付证明"

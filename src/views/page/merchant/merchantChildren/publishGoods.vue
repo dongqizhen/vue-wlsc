@@ -262,7 +262,7 @@
     data() {
       return {
         title: "发布商品",
-        loading: true,
+        loading: false,
         actionURL: this.$API_URL.HYGFILEURL + "/api/upload/imageUpload",
         titleArr: ["参数类型", "参数名称", "参数值", "操作"],
         params: [{}],

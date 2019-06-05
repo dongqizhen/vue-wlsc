@@ -1,25 +1,37 @@
 <template>
   <div class="inquiryProductItem">
-    <span v-if="isShowInfo.isDetail">
-      <a-checkbox @change="onChange"></a-checkbox>
+    <span
+      v-if="
+        isShowInfo.isDetail ||
+          isShowInfo.current == 2 ||
+          isShowInfo.current == 3
+      "
+    >
+      <a-checkbox
+        @change="onChange(itemData.id)"
+        :checked="checkedChange(itemData.id)"
+      ></a-checkbox>
     </span>
     <span>
-      <img :src="itemData.list_pic_url" />
+      <img :src="itemData.goodsImage" />
     </span>
-    <span>{{ itemData.name }}</span>
+    <span>{{ itemData.goodsName }}</span>
     <span>{{ itemData.unitPrice }}</span>
     <span v-if="isShowInfo.isDetail">¥198988282.00</span>
     <span>{{ itemData.number }}</span>
     <span>{{
       itemData.arrivalTime ? itemData.arrivalTime.substring(0, 16) : ""
     }}</span>
-    <span>{{ itemData.buyerDescription }}</span>
+    <span>{{ itemData.introduce }}</span>
   </div>
 </template>
 <script>
+  import _ from "lodash";
   export default {
     data() {
-      return {};
+      return {
+        checkedList: []
+      };
     },
     props: {
       itemData: {
@@ -30,7 +42,26 @@
       }
     },
     methods: {
-      onChange() {}
+      onChange(id) {
+        console.log(id);
+        if (_.indexOf(this.checkedList, id) == -1) {
+          this.checkedList.push(id);
+        } else {
+          this.checkedList = _.without(this.checkedList, id);
+        }
+        if (this.checkedList.length == this.data.goodList.length) {
+          this.checkAll = true;
+        } else {
+          this.checkAll = false;
+        }
+      },
+      checkedChange(id) {
+        for (const val of this.checkedList) {
+          if (val == id) {
+            return true;
+          }
+        }
+      }
     }
   };
 </script>

@@ -6,6 +6,8 @@
           <product-item-comment
             v-for="item in data"
             :key="item.id"
+            :data="item"
+            ref="commentInfo"
           ></product-item-comment>
         </div>
         <div class="btn">
@@ -31,6 +33,7 @@
 <script>
   import modal from "./modal.vue";
   import productItemComment from "../common/comment/productItemComment";
+  import { _getData } from "../../config/getData";
   export default {
     data() {
       return {
@@ -39,7 +42,7 @@
           title: "评价",
           closable: true,
           maskClosable: false,
-          wrapClassName: "submitCommont",
+          wrapClassName: "submitComment",
           centered: false
         }
       };
@@ -76,7 +79,30 @@
         window.open(href, "_blank");
       },
       submitComment() {
-        this.visible = false;
+        console.log(this.$refs.commentInfo);
+        const commentList = [];
+        _.map(this.$refs.commentInfo, val => {
+          let obj = {};
+          obj.typeId = 0;
+          obj.valueId = val.productId;
+          let imagesList = [];
+          _.map(val.uploadList, o => {
+            imagesList.push(o.url);
+          });
+          obj.imagesList = imagesList;
+          obj.performance = val.submitData.performance;
+          obj.content = val.submitData.content;
+          obj.quality = val.submitData.quality;
+          obj.aftersale = val.submitData.aftersale;
+          obj.train = val.submitData.train;
+          commentList.push(obj);
+        });
+        // console.log(commentList);
+        _getData("/comment/comment", { commentList: commentList }).then(data => {
+          // console.log("评价是否成功：", data);
+          alert("评论成功");
+          this.visible = false;
+        });
       }
     },
     watch: {
