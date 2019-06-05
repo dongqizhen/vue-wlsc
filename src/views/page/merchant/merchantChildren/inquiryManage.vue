@@ -59,6 +59,7 @@
   import orderTitle from "../../../../components/common/orderTitle";
   import inquiryItem from "../../../../components/common/inquiryItem";
   import { _getData } from "../../../../config/getData";
+  import { mapState } from "vuex";
   export default {
     data() {
       return {
@@ -66,7 +67,10 @@
           isDetail: false,
           isShow: false,
           current: 1,
-          isShop: 1
+          isShop: 1,
+          isTrue: true,
+          isMerchant: true,
+          isOrder: false
         },
         data: [],
         checkAll: false,
@@ -81,13 +85,16 @@
           "操作"
         ],
         getInquiryListParams: {
-          page: 1, //	文本	必填	当前页
-          size: 10, //	文本	必填	每页显示条数
-          status: 1, //	文本	选填	询价状态:1：报价中，2：已报价，3：已关闭。',
-          enquirySn: "", //	文本	选填	询价单号
-          storeId: "" //	文本	选填	商铺id，商铺id为空时，查询当前用户的询价单。
+          page: 1, //当前页
+          size: 10, //每页显示条数
+          status: 1, //询价状态:1：报价中，2：已报价，3：已关闭。',
+          enquirySn: "", //询价单号
+          storeId: "" //商铺id，商铺id为空时，查询当前用户的询价单。
         }
       };
+    },
+    computed: {
+      ...mapState(["userShopInfo"])
     },
     methods: {
       getIsDelete(val) {
@@ -98,6 +105,7 @@
       },
       tab(tabVal) {
         this.isShowInfo.current = tabVal;
+        this.getInquiryListParams.status = tabVal;
         this.getInquiryList();
       },
       getChecked(val) {
@@ -127,14 +135,13 @@
         }
       },
       getInquiryList() {
-        _getData("/enquiry/merchantsEnquiryList", {
-          page: 1,
-          size: 10,
-          status: this.isShowInfo.current
-        }).then(data => {
-          console.log("获取询价管理的列表：", data);
-          this.data = data.data;
-        });
+        this.getInquiryListParams.storeId = this.userShopInfo.store_id;
+        _getData("/enquiryPlus/enquiryList", this.getInquiryListParams).then(
+          data => {
+            console.log("获取询价管理的列表：", data);
+            this.data = data.data;
+          }
+        );
       }
     },
     mounted() {

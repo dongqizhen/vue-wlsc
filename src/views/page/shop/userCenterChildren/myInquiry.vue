@@ -125,7 +125,9 @@
           status: 1,
           enquirySn: "",
           storeId: ""
-        }
+        },
+        products: [],
+        allProducts: []
       };
     },
     methods: {
@@ -199,12 +201,35 @@
         } else {
           this.checkAll = false;
         }
+
+        if (val) {
+          // this.checkAll = true;
+          // this.products = this.allProducts;
+          // _.map(this.data, o => {
+          //   let goodsIds = [];
+          //   for (const item of o.list) {
+          //     goodsIds.push(item.goods_id);
+          //   }
+          //   this.selectDatas.push({
+          //     storeId: o.sid,
+          //     goodsList: goodsIds,
+          //     isCheckAll: true
+          //   });
+          // });
+        } else {
+          this.checkAll = false;
+        }
       },
       getInquiryList() {
         _getData("/enquiryPlus/enquiryList", this.searchParams).then(data => {
           console.log("获取询价管理的列表：", data);
           this.checkedList = [];
           this.data = data.data;
+          _.map(this.data, o => {
+            for (const val of o.goodList) {
+              this.allProducts.push(val.id);
+            }
+          });
         });
       }
     },

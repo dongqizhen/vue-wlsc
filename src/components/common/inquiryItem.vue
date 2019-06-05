@@ -1,7 +1,7 @@
 <template>
   <div class="inquiryItem">
     <order-title
-      :checkedList="checkedList"
+      :checkedList="list"
       v-on:getChecked="getChecked"
       :data="data"
       :isShowInfo="isShowInfo"
@@ -13,13 +13,15 @@
           :key="item.id"
           :itemData="item"
           :isShowInfo="isShowInfo"
+          :checkedList="list"
+          v-on:getCheckedList="getCheckedList"
         ></inquiry-product-item>
       </div>
       <div class="operating">
         <div v-if="isShowInfo.current == 1 && isShowInfo.isShop == 1">
           <router-link
             :to="{
-              path: `editInquiry/${data.enquirySn}`,
+              path: `editInquiry/${data.id}`,
               query: { isShowInfo: isShowInfo }
             }"
           >
@@ -47,7 +49,7 @@
   import { _getData } from "../../config/getData";
   export default {
     data() {
-      return {};
+      return { list: this.checkedList };
     },
     props: {
       data: {
@@ -62,7 +64,17 @@
         type: Object
       }
     },
+    watch: {
+      checkedList(newVal) {
+        this.list = newVal;
+      }
+    },
     methods: {
+      getCheckedList(val) {
+        console.log("选择的值：", val);
+        // this.list = val;
+        this.list = val;
+      },
       getChecked(val) {
         this.$emit("getChecked", val);
       },
@@ -93,35 +105,6 @@
         border-bottom: 1px solid #ddd;
         &:last-child {
           border-bottom: none;
-        }
-        span {
-          font-size: 12px;
-          color: #666;
-          margin-right: 30px;
-          &:nth-child(1) {
-            width: 70px;
-            margin-left: 46px;
-            margin-right: 12px;
-            img {
-              width: 70px;
-              height: 70px;
-            }
-          }
-          &:nth-child(2) {
-            width: 155px;
-          }
-          &:nth-child(3) {
-            width: 100px;
-          }
-          &:nth-child(4) {
-            width: 60px;
-          }
-          &:nth-child(5) {
-            width: 113px;
-          }
-          &:nth-child(6) {
-            flex: 1;
-          }
         }
       }
     }

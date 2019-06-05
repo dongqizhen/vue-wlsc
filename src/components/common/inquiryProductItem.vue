@@ -1,12 +1,6 @@
 <template>
   <div class="inquiryProductItem">
-    <span
-      v-if="
-        isShowInfo.isDetail ||
-          isShowInfo.current == 2 ||
-          isShowInfo.current == 3
-      "
-    >
+    <span :class="isShowInfo.isMerchant ? 'boxHidden' : ''">
       <a-checkbox
         @change="onChange(itemData.id)"
         :checked="checkedChange(itemData.id)"
@@ -19,9 +13,9 @@
     <span>{{ itemData.unitPrice }}</span>
     <span v-if="isShowInfo.isDetail">¥198988282.00</span>
     <span>{{ itemData.number }}</span>
-    <span>{{
-      itemData.arrivalTime ? itemData.arrivalTime.substring(0, 16) : ""
-    }}</span>
+    <span>
+      {{ itemData.arrivalTime ? itemData.arrivalTime.substring(0, 16) : "" }}
+    </span>
     <span>{{ itemData.introduce }}</span>
   </div>
 </template>
@@ -30,7 +24,7 @@
   export default {
     data() {
       return {
-        checkedList: []
+        list: this.checkedList
       };
     },
     props: {
@@ -39,24 +33,28 @@
       },
       isShowInfo: {
         type: Object
+      },
+      checkedList: {
+        type: Array
+      }
+    },
+    watch: {
+      checkedChange(newVal) {
+        this.list = newVal;
       }
     },
     methods: {
       onChange(id) {
-        console.log(id);
-        if (_.indexOf(this.checkedList, id) == -1) {
-          this.checkedList.push(id);
+        // console.log(id);
+        if (_.indexOf(this.list, id) == -1) {
+          this.list.push(id);
         } else {
-          this.checkedList = _.without(this.checkedList, id);
+          this.list = _.without(this.list, id);
         }
-        if (this.checkedList.length == this.data.goodList.length) {
-          this.checkAll = true;
-        } else {
-          this.checkAll = false;
-        }
+        this.$emit("getCheckedList", this.list);
       },
       checkedChange(id) {
-        for (const val of this.checkedList) {
+        for (const val of this.list) {
           if (val == id) {
             return true;
           }
@@ -72,10 +70,13 @@
     height: 90px;
     border: $border-style;
     padding-top: 10px;
-    span {
+    > span {
       font-size: 12px;
       color: #666;
       margin-right: 30px;
+      &.boxHidden {
+        visibility: hidden;
+      }
       img {
         width: 70px;
         height: 70px;
@@ -96,13 +97,14 @@
         width: 98px;
       }
       &:nth-child(5) {
-        width: 98px;
+        width: 60px;
       }
       &:nth-child(6) {
-        width: 90px;
+        width: 68px;
+        margin-right: 75px;
       }
       &:nth-child(7) {
-        width: 97px;
+        width: 157px;
       }
       &:nth-child(8) {
         width: 120px;

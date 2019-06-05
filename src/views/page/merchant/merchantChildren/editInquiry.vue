@@ -11,7 +11,7 @@
         <list-title :titleArr="titleArr"></list-title>
         <div class="listContent">
           <edit-inquiry-product
-            v-for="item in data.list"
+            v-for="item in data.goodList"
             :key="item.id"
             :itemData="item"
             v-on:getChecked="getChecked"
@@ -75,8 +75,8 @@
     methods: {
       submitQuote() {
         console.log(this.goodsList);
-        _getData("/enquiry/updateEnquiry", {
-          param: [{ enquirySn: this.$route.params.id, goodsList: this.goodsList }]
+        _getData("/enquiryPlus/updateEnquiry", {
+          param: [{ id: this.$route.params.id, goodsList: this.goodsList }]
         }).then(data => {
           console.log(data);
         });
@@ -92,9 +92,9 @@
           });
           this.goodsList.push({
             goodsId: val.data.id,
-            unitPrice: val.data.unit_price,
+            unitPrice: val.data.unitPrice,
             arrivalTime: val.data.arrivalTime,
-            sellerDescription: val.data.buyerDescription,
+            sellerDescription: val.data.introduce,
             number: val.data.number
           });
         } else {
@@ -114,7 +114,7 @@
             this.checkedList = _.without(this.checkedList, val);
           }
         }
-        if (this.checkedList.length == this.data.list.length) {
+        if (this.checkedList.length == this.data.goodList.length) {
           this.checkAll = true;
         } else {
           this.checkAll = false;
@@ -124,8 +124,8 @@
         if (val) {
           this.checkAll = true;
           this.checkedList = [];
-          for (const val of this.data.list) {
-            this.checkedList.push(val.id);
+          for (const val of this.data.goodList) {
+            this.checkedList.push(val.goodsId);
           }
         } else {
           this.checkAll = false;
@@ -135,7 +135,7 @@
       }
     },
     mounted() {
-      _getData("/enquiry/getEnquiry", { enquirySn: this.$route.params.id }).then(
+      _getData("/enquiryPlus/enquiryDetail", { id: this.$route.params.id }).then(
         data => {
           console.log("获取询价单详情：", data);
           this.data = data;

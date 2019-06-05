@@ -1,5 +1,6 @@
 <template>
   <div class="orderManage">
+    <common-title title="订单管理"></common-title>
     <manage-number-nav
       :navArr="tabs"
       v-on:tab="getOrderStatus"
@@ -36,6 +37,7 @@
 <script>
   import manageNumberNav from "../../../../components/common/manageNumberNav";
   import orderItem from "../../../../components/common/orderItem";
+  import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import checkAll from "../../../../components/common/checkAll";
   import listTitle from "../../../../components/common/listTitle";
   import filterSearch from "../../../../components/common/filterSearch";
@@ -171,7 +173,8 @@
       orderItem,
       checkAll,
       listTitle,
-      filterSearch
+      filterSearch,
+      commonTitle
     }
   };
 </script>

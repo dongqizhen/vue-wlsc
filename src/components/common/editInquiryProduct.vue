@@ -7,33 +7,34 @@
       ></a-checkbox>
     </span>
     <span>
-      <img :src="itemData.list_pic_url" />
+      <img :src="itemData.goodsImage" />
     </span>
-    <span>{{ itemData.name }}</span>
-    <span>{{ itemData.brand_name }}/{{ itemData.brand_model_name }}</span>
+    <span>{{ itemData.goodsName }}</span>
+    <span>{{ itemData.goodsBrand }}/{{ itemData.goodsModel }}</span>
     <span>
-      <a-input placeholder="输入单价" v-model="itemData.unit_price"></a-input>
+      <a-input placeholder="输入单价" v-model="itemData.unitPrice"></a-input>
     </span>
     <span><van-stepper v-model="itemData.number"/></span>
     <span
       ><a-date-picker
         :format="'YYYY-MM-DD'"
         @change="onDateChange"
-        :defaultValue="moment(`${itemData.arrivalTime}`, 'YYYY-MM-DD')"
+        :defaultValue="moment(`${initialArrivalTime}`, 'YYYY-MM-DD')"
     /></span>
     <span
       ><a-textarea
         placeholder="输入备注"
-        v-model="itemData.buyerDescription"
+        v-model="itemData.introduce"
       ></a-textarea
     ></span>
   </div>
 </template>
 <script>
   import moment from "moment";
+  const initialArrivalTime = new Date().toLocaleDateString().replace(/\//g, "-");
   export default {
     data() {
-      return { list: this.checkedList };
+      return { list: this.checkedList, initialArrivalTime: initialArrivalTime };
     },
     props: {
       itemData: {
@@ -62,6 +63,9 @@
           }
         }
       }
+    },
+    mounted() {
+      this.itemData.arrivalTime = this.initialArrivalTime;
     },
     methods: {
       moment,

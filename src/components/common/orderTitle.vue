@@ -37,7 +37,7 @@
             src="http://file.haoyigong.com/server/upload/1554429391594.jpg"
           />
         </span>
-        <span>{{ data.shopName }}</span>
+        <span>{{ isShowInfo.isOrder ? data.shopName : data.username }}</span>
       </div>
     </div>
     <div class="right-box">
@@ -116,6 +116,7 @@
         }
       },
       checkedChange(id) {
+        console.log(this.list);
         for (const val of this.list) {
           if (val == id) {
             return true;

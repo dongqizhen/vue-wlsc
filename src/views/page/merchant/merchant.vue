@@ -98,9 +98,6 @@
         if (this.$route.path.indexOf("shopIndex") != -1) {
           this.defaultSelectedKeys = ["1"];
           this.$router.replace({ path: "/merchant/shopIndex" });
-        } else {
-          this.defaultSelectedKeys = ["1"];
-          this.$router.replace({ path: "/merchant/shopIndex" });
         }
       } else {
         this.defaultSelectedKeys = ["0"];
