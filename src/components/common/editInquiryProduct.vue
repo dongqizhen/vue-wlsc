@@ -149,10 +149,20 @@
           .van-stepper__plus {
             width: 20px;
             height: 20px;
+            border-radius: 0;
+            border: $border-style;
+            background: #f6f6f6;
+            margin: 0;
+            &:hover {
+              cursor: pointer;
+            }
           }
           .van-stepper__input {
             width: 38px;
-            height: 18px;
+            height: 16px;
+            margin: 0;
+            border-top: $border-style;
+            border-bottom: $border-style;
           }
         }
       }
@@ -174,9 +184,14 @@
         }
       }
       &:nth-child(8) {
-        width: 115px;
+        width: 135px;
+        margin-right: 10px;
         .ant-input {
+          width: 130px;
+          height: 66px;
           resize: none;
+          font-size: 12px;
+          padding: 4px 6px;
         }
       }
     }

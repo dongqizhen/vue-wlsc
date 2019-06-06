@@ -57,7 +57,7 @@
           <li v-for="item in data" :key="item.id">
             <inquiry-item
               :data="item"
-              :checkedList="checkedList"
+              :checkedList="selectDatas"
               v-on:getChecked="getChecked"
               :isShowInfo="isShowInfo"
               v-on:getIsDelete="getIsDelete"
@@ -67,18 +67,32 @@
       </div>
       <div class="tfooter">
         <check-all
-          :amount="checkedList.length"
+          :amount="products.length"
           :checkAll="checkAll"
           v-on:isCheckAll="isCheckAllMethod"
           v-on:isDelete="getCheckDelete"
         >
-          <div slot="right-box">
+          <div slot="right-box" class="right-box">
             <div
-              :class="['submit', checkedList.length > 0 ? 'active' : '']"
-              v-if="isShowInfo.current != 1"
+              class="turnMyQuote"
+              v-if="isShowInfo.current == 2"
+              @click="turnMyQuote"
+            >
+              转为我的报价
+            </div>
+            <div
+              class="submitOrder"
+              v-if="isShowInfo.current == 2"
               @click="submitOrder"
             >
               提交订单
+            </div>
+            <div
+              :class="['submit', products.length > 0 ? 'active' : '']"
+              v-if="isShowInfo.current == 3"
+              @click="getQuote"
+            >
+              一键获取报价
             </div>
           </div>
         </check-all>
@@ -127,23 +141,35 @@
           storeId: ""
         },
         products: [],
-        allProducts: []
+        allProducts: [],
+        selectDatas: []
       };
+    },
+    watch: {
+      selectDatas(newVal) {
+        console.log("监控选择的值：：：：", newVal);
+      }
     },
     methods: {
       //批量删除
       getCheckDelete(val) {
         console.log(val);
         if (val) {
-          _getData("/enquiryPlus/deleteEnquiry", {
-            ids: this.checkedList.join(",")
-          }).then(data => {
-            console.log("删除询价单：", data);
-            alert("删除成功");
-            this.getInquiryList();
-          });
+          // _getData("/enquiryPlus/deleteEnquiry", {
+          //   ids: this.checkedList.join(",")
+          // }).then(data => {
+          //   console.log("删除询价单：", data);
+          //   alert("删除成功");
+          //   this.getInquiryList();
+          // });
         }
       },
+      //转为我的报价
+      turnMyQuote() {
+        console.log(this.selectDatas);
+      },
+      //一键获取报价
+      getQuote() {},
       //单个删除
       getIsDelete(val) {
         console.log(val);
@@ -151,10 +177,10 @@
       },
       //提交订单（已报价、已关闭）
       submitOrder() {
-        console.log(this.checkedList);
-        if (this.checkedList.length > 0) {
+        console.log(this.products);
+        if (this.products.length > 0) {
           this.$router.replace({
-            path: `submitOrder/${this.checkedList.join("|")}`
+            path: `submitOrder/${this.products.join(",")}`
           });
         }
       },
@@ -178,44 +204,38 @@
         this.getInquiryList();
       },
       getChecked(val) {
-        if (typeof val == "object") {
-          this.checkedList = val;
-        } else {
-          if (_.indexOf(this.checkedList, val) != -1) {
-            this.checkedList = _.without(this.checkedList, val);
-          }
-        }
-        if (this.checkedList.length == this.data.length) {
+        console.log(val);
+        this.selectDatas = val;
+        this.products = [];
+        _.map(val, o => {
+          _.map(o.goodList, value => {
+            this.products.push(value);
+          });
+        });
+        if (this.products.length == this.allProducts.length) {
           this.checkAll = true;
         } else {
           this.checkAll = false;
         }
       },
       isCheckAllMethod(val) {
-        this.checkedList = [];
+        this.products = [];
+        this.selectDatas = [];
         if (val) {
           this.checkAll = true;
-          for (const val of this.data) {
-            this.checkedList.push(val.id);
-          }
-        } else {
-          this.checkAll = false;
-        }
-
-        if (val) {
-          // this.checkAll = true;
-          // this.products = this.allProducts;
-          // _.map(this.data, o => {
-          //   let goodsIds = [];
-          //   for (const item of o.list) {
-          //     goodsIds.push(item.goods_id);
-          //   }
-          //   this.selectDatas.push({
-          //     storeId: o.sid,
-          //     goodsList: goodsIds,
-          //     isCheckAll: true
-          //   });
-          // });
+          this.products = this.allProducts;
+          _.map(this.data, o => {
+            let goodsIds = [];
+            for (const item of o.goodList) {
+              goodsIds.push(item.id);
+            }
+            this.selectDatas.push({
+              id: o.id,
+              goodList: goodsIds,
+              isCheckAll: true
+            });
+          });
+          //console.log(this.selectDatas);
         } else {
           this.checkAll = false;
         }
@@ -223,7 +243,10 @@
       getInquiryList() {
         _getData("/enquiryPlus/enquiryList", this.searchParams).then(data => {
           console.log("获取询价管理的列表：", data);
-          this.checkedList = [];
+          this.products = [];
+          this.allProducts = [];
+          this.selectDatas = [];
+          this.checkAll = false;
           this.data = data.data;
           _.map(this.data, o => {
             for (const val of o.goodList) {
@@ -380,6 +403,28 @@
               width: 166px;
             }
           }
+        }
+      }
+      .right-box {
+        display: flex;
+        font-weight: 600;
+        font-size: 14px;
+        color: #ffffff;
+        .turnMyQuote {
+          width: 132px;
+          height: 42px;
+          line-height: 42px;
+          text-align: center;
+          background-image: linear-gradient(-90deg, #ff4e1a 0%, #f10000 100%);
+          cursor: pointer;
+        }
+        .submitOrder {
+          width: 104px;
+          height: 42px;
+          line-height: 42px;
+          text-align: center;
+          background: #f5a623;
+          cursor: pointer;
         }
       }
       .submit {

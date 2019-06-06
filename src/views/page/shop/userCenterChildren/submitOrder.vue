@@ -43,16 +43,20 @@
     <div class="listContainer">
       <list-title :titleArr="titleArr"></list-title>
       <div class="listContent">
-        <order-sure-item :data="data"></order-sure-item>
+        <order-sure-item
+          v-for="item in data"
+          :data="item"
+          :key="item.storeId"
+        ></order-sure-item>
       </div>
       <div class="totalInfo">
         <span>
           共计
-          <i>{{ data.list ? data.list.length : "" }}</i>
+          <i>{{ amount }}</i>
           件商品
         </span>
         <span>
-          总额<i>￥{{ data.subtotal }}</i>
+          总额<i>￥{{ sumPrice }}</i>
         </span>
         <a-button @click="sureSubmit">确认</a-button>
       </div>
@@ -81,23 +85,22 @@
         editId: 0,
         data: {},
         userAddressList: [],
-        checkAll: false,
-        checkedList: [],
         titleArr: [
           "产品图片",
           "产品名称",
           "品牌型号",
+          "单价",
           "数量",
-          "单位",
           "小计",
-          "报价日期",
-          "操作"
+          "报价日期"
         ],
         current: -1,
         submitAddressData: {},
         submitData: {
           storeList: []
-        }
+        },
+        amount: 0, //总共产品数量
+        sumPrice: 0 //总额
       };
     },
     computed: {
@@ -106,7 +109,7 @@
     watch: {
       visible(newVal) {
         if (!newVal) {
-          this.getAddress();
+          this.getAddress(this.current);
         }
       }
     },
@@ -118,20 +121,32 @@
             this.submitAddressData.mobile = val.phone;
             this.submitAddressData.address = val.address;
             this.submitAddressData.postCode = val.postalCode;
-            this.submitAddressData.postCode = val.postalCode;
           }
         });
-        this.submitData.storeList.push({
-          storeId: this.data.storeId,
-          goodsList: this.data.list
+        _.map(this.data, o => {
+          let goods = [];
+          _.map(o.goodsList, val => {
+            goods.push({
+              id: val.id,
+              number: val.number,
+              retailPrice: val.unitPrice,
+              enquirySn: val.goodsEnquirySn
+            });
+          });
+          this.submitData.storeList.push({
+            storeId: o.storeId,
+            goodsList: goods
+          });
         });
+        console.log(this.submitData.storeList);
         this.submitData = {
           ...this.submitAddressData,
           storeList: this.submitData.storeList
         };
         console.log(this.submitData);
-        _getData("/order/addOrder", { params: this.submitData }).then(data => {
+        _getData("/order/addOrder", { param: this.submitData }).then(data => {
           console.log(data);
+          this.$router.replace({ path: "/userCenter/myOrder" });
         });
       },
       addCarSuccess(id) {
@@ -140,25 +155,40 @@
         }
         this.visible = true;
         this.editId = id;
+        if (typeof id != "number") {
+          this.current = -2;
+        }
       },
       selectAddress(id) {
         this.current = id;
       },
-      getAddress() {
+      sortNumber(a, b) {
+        return b - a;
+      },
+      getAddress(current) {
         _getData(
           `${this.$API_URL.HYGLOGINURL}/server/userAddress!request.action`,
           {
             method: "appPageList",
-            userid: this.userInfo,
+            userid: this.userInfo.id,
             token: "",
-            params: { currentPage: 1, countPerPage: 10 }
+            params: { currentPage: 1, countPerPage: "" }
           }
         ).then(data => {
           console.log(data);
           this.userAddressList = data.data.result.UserAddressList;
+          let ids = [];
           _.map(data.data.result.UserAddressList, val => {
-            if (val.status == 1) {
-              this.current = val.id;
+            if (current == -1 || !current) {
+              if (val.status == 1) {
+                this.current = val.id;
+              }
+            } else if (current == -2) {
+              ids.push(val.id);
+              ids.sort(this.sortNumber);
+              this.current = ids[0];
+            } else {
+              this.current = current;
             }
           });
         });
@@ -166,11 +196,17 @@
     },
     mounted() {
       this.getAddress();
-      _getData("/enquiry/getEnquiry", {
-        enquirySn: this.$route.params.id.split("|")[0]
+      _getData("/order/submitOrder", {
+        ids: this.$route.params.id
       }).then(data => {
         console.log("获取询价单详情：", data);
         this.data = data;
+        _.map(this.data, o => {
+          _.map(o.goodsList, value => {
+            this.amount = this.amount + value.number;
+            this.sumPrice = this.sumPrice + value.number * value.unitPrice;
+          });
+        });
       });
     },
     components: {
@@ -209,6 +245,7 @@
           border-radius: 2px;
           font-size: 12px;
           color: #666666;
+          cursor: pointer;
         }
       }
       .addressInfo {
@@ -271,20 +308,26 @@
         ul {
           li {
             &:first-child {
-              margin-left: 20px;
+              width: 70px;
+              margin-left: 30px;
+              margin-right: 30px;
+            }
+            &:nth-child(2) {
+              width: 155px;
+            }
+            &:nth-child(3) {
+              width: 125px;
+              margin-right: 60px;
             }
             &:nth-child(4) {
-              width: 66px;
+              width: 80px;
+              margin-right: 30px;
             }
             &:nth-child(5) {
-              width: 50px;
+              width: 70px;
             }
             &:nth-child(6) {
               width: 100px;
-            }
-            &:nth-child(7) {
-              width: 68px;
-              margin-right: 67px;
             }
           }
         }

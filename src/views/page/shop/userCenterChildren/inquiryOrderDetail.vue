@@ -15,14 +15,14 @@
           />
           {{ data.shopName }}
         </div>
-        <div class="linkName">联系人：张三</div>
+        <div class="linkName">联系人：{{ data.username }}</div>
         <div class="phone">联系方式：188100000299 400-121-1212</div>
       </div>
       <div class="listContent">
         <list-title :titleArr="titleArr"></list-title>
         <ul>
           <li
-            v-for="item in data.list"
+            v-for="item in data.goodList"
             :key="item.id"
             :class="addClass(item.id)"
           >
@@ -32,15 +32,15 @@
                 :checked="checkedChange(item.id)"
               ></a-checkbox>
             </span>
-            <span><img :src="item.list_pic_url"/></span>
-            <span>{{ item.name }}</span>
-            <span>{{ item.brand_name }}/{{ item.brand_model_name }}</span>
+            <span><img :src="item.goodsImage"/></span>
+            <span>{{ item.goodsName }}</span>
+            <span>{{ item.goodsBrand }}/{{ item.goodsModel }}</span>
             <span>{{ item.unitPrice }}</span>
             <span>{{ item.number }}</span>
             <span>{{
               item.arrivalTime ? item.arrivalTime.substring(0, 16) : ""
             }}</span>
-            <span>{{ item.buyerDescription }}</span>
+            <span>{{ item.introduce }}</span>
           </li>
         </ul>
       </div>
@@ -50,12 +50,18 @@
           :checkAll="checkAll"
           v-on:isCheckAll="isCheckAllMethod"
         >
-          <div
-            slot="right-box"
-            class="right-box"
-            v-if="isShowInfo.current == 2"
-          >
-            <div class="totalInfo">
+          <div slot="right-box" class="right-box">
+            <div
+              :class="[
+                'commonStyle',
+                data.remind == 1 ? 'disabledStyle' : 'remind'
+              ]"
+              v-if="isShowInfo.current == 1"
+              @click="remindQuote(data.storeId, data.id)"
+            >
+              {{ data.remind == 1 ? "已" : "" }}提醒商家报价
+            </div>
+            <div class="totalInfo" v-if="isShowInfo.current == 2">
               <span class="totalPrice">
                 报价总金额：<i>¥{{ data.subtotal }}</i>
               </span>
@@ -67,6 +73,16 @@
                   提交订单
                 </router-link>
               </span>
+            </div>
+            <div
+              :class="[
+                'commonStyle',
+                checkedList.length > 0 ? 'remind' : 'disabledStyle'
+              ]"
+              v-if="isShowInfo.current == 3"
+              @click="getQuote"
+            >
+              一键获取报价
             </div>
           </div>
         </check-all>
@@ -136,6 +152,44 @@
           this.$router.replace({ path: "/userCenter/myQuote" });
         });
       },
+      remindQuote(storeId, enquiryId) {
+        if (this.data.remind == 0) {
+          _getData("/message/enquiryRemind", {
+            param: {
+              storeId: storeId, //备注：商铺id
+              enquiryId: enquiryId //备注：询价单id
+            }
+          }).then(data => {
+            console.log("提醒商家报价：", data);
+            this.data.remind = 1;
+          });
+        } else {
+          alert("已提醒商家报价");
+          return;
+        }
+      },
+      getQuote() {
+        if (this.checkedList.length > 0) {
+          let goodsList = [];
+          _.map(this.checkedList, val => {
+            _.map(this.data.goodList, o => {
+              if (o.id == val) {
+                goodsList.push({
+                  goodsId: o.goodsId,
+                  number: o.number,
+                  buyerDescription: o.introduce
+                });
+              }
+            });
+          });
+          _getData("/enquiryPlus/addEnquiry", {
+            param: { storeId: this.data.storeId, goodsList: goodsList }
+          }).then(data => {
+            console.log("一键获取报价：", data);
+            this.$router.replace({ path: "/userCenter/myInquiry" });
+          });
+        }
+      },
       tab(tabVal) {
         this.current = tabVal;
       },
@@ -145,7 +199,7 @@
         } else {
           this.checkedList = _.without(this.checkedList, id);
         }
-        if (this.checkedList.length == this.data.list.length) {
+        if (this.checkedList.length == this.data.goodList.length) {
           this.checkAll = true;
         } else {
           this.checkAll = false;
@@ -173,7 +227,7 @@
             this.checkedList = _.without(this.checkedList, val);
           }
         }
-        if (this.checkedList.length == this.data.list.length) {
+        if (this.checkedList.length == this.data.goodList.length) {
           this.checkAll = true;
         } else {
           this.checkAll = false;
@@ -183,7 +237,7 @@
         if (val) {
           this.checkAll = true;
           this.checkedList = [];
-          for (const val of this.data.list) {
+          for (const val of this.data.goodList) {
             this.checkedList.push(val.id);
           }
         } else {
@@ -192,8 +246,8 @@
         }
       },
       getInquiryDetail() {
-        _getData("/enquiry/getEnquiry", {
-          enquirySn: this.$route.params.id
+        _getData("/enquiryPlus/enquiryDetail", {
+          id: this.$route.params.id
         }).then(data => {
           console.log("获取询价单详情：", data);
           this.data = data;
@@ -203,7 +257,7 @@
     mounted() {
       this.getInquiryDetail();
       console.log(this.$route.query.isShowInfo);
-      this.isShowInfo = this.$route.query.isShowInfo;
+      this.isShowInfo = JSON.parse(this.$route.query.isShowInfo);
       this.isShowInfo.isTrue = false;
       this.isShowInfo.isDetail = true;
     },
@@ -362,6 +416,22 @@
       }
       .tfooter {
         .right-box {
+          .commonStyle {
+            width: 132px;
+            height: 42px;
+            line-height: 42px;
+            font-size: 14px;
+            color: #ffffff;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+          }
+          .remind {
+            background-image: linear-gradient(-90deg, #ff4e1a 0%, #f10000 100%);
+          }
+          .disabledStyle {
+            background-image: linear-gradient(-90deg, #ccc 0%, #ccc 100%);
+          }
           .totalInfo {
             height: 42px;
             display: flex;

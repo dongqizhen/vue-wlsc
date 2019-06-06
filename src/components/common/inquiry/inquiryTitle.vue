@@ -155,7 +155,7 @@
   };
 </script>
 <style lang="scss" scoped>
-  @import "../../assets/scss/_commonScss";
+  @import "../../../assets/scss/_commonScss";
   .orderTitle {
     display: flex;
     justify-content: space-between;

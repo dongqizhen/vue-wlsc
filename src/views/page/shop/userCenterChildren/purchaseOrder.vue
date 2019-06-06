@@ -79,11 +79,11 @@
                     number: val.number,
                     buyerDescription: val.goods_specifition_name_value
                       ? val.goods_specifition_name_value
-                      : "",
-                    goodsName: val.goods_name,
-                    goodsImage: val.list_pic_url,
-                    goodsBrand: val.brand_name,
-                    goodsModel: val.model_name
+                      : ""
+                    // goodsName: val.goods_name,
+                    // goodsImage: val.list_pic_url,
+                    // goodsBrand: val.brand_name,
+                    // goodsModel: val.model_name
                   });
                 }
               });

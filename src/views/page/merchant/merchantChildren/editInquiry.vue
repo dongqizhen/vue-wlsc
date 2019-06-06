@@ -125,7 +125,7 @@
           this.checkAll = true;
           this.checkedList = [];
           for (const val of this.data.goodList) {
-            this.checkedList.push(val.goodsId);
+            this.checkedList.push(val.id);
           }
         } else {
           this.checkAll = false;

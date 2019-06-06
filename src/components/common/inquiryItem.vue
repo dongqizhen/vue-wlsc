@@ -1,11 +1,17 @@
 <template>
   <div class="inquiryItem">
-    <order-title
-      :checkedList="list"
+    <inquiry-title
+      :checkedList="selectDatas"
       v-on:getChecked="getChecked"
       :data="data"
       :isShowInfo="isShowInfo"
-    ></order-title>
+    ></inquiry-title>
+    <!-- <order-title
+      :checkedList="selectDatas"
+      v-on:getChecked="getChecked"
+      :data="data"
+      :isShowInfo="isShowInfo"
+    ></order-title> -->
     <div class="inquiryProduct">
       <div class="leftInfoBox">
         <inquiry-product-item
@@ -13,7 +19,7 @@
           :key="item.id"
           :itemData="item"
           :isShowInfo="isShowInfo"
-          :checkedList="list"
+          :checkedList="goodList"
           v-on:getCheckedList="getCheckedList"
         ></inquiry-product-item>
       </div>
@@ -31,25 +37,33 @@
         <div v-else>
           <router-link
             :to="{
-              path: `inquiryOrderDetail/${data.enquirySn}`,
-              query: { isShowInfo: this.isShowInfo }
+              path: `inquiryOrderDetail/${data.id}`,
+              query: { isShowInfo: JSON.stringify(this.isShowInfo) }
             }"
           >
             查看详情
           </router-link>
         </div>
         <div @click="deleteInquiryOrder(data.id)">删除询价单</div>
+        <div
+          v-if="isShowInfo.current == 1"
+          @click="remindQuote(data.storeId, data.id)"
+          class="remind"
+        >
+          {{ data.remind == 1 ? "已" : "" }}提醒商家报价
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
   import orderTitle from "./orderTitle";
+  import inquiryTitle from "./inquiry/inquiryTitle";
   import inquiryProductItem from "./inquiryProductItem";
   import { _getData } from "../../config/getData";
   export default {
     data() {
-      return { list: this.checkedList };
+      return { selectDatas: this.checkedList, goodList: [] };
     },
     props: {
       data: {
@@ -66,16 +80,74 @@
     },
     watch: {
       checkedList(newVal) {
-        this.list = newVal;
+        console.log("变化的值：：：：", newVal);
+        this.selectDatas = newVal;
+        if (newVal.length > 0) {
+          _.map(newVal, o => {
+            if (o.id == this.data.id) {
+              this.goodList = o.goodList;
+            }
+          });
+        } else {
+          this.goodList = [];
+        }
       }
     },
     methods: {
       getCheckedList(val) {
+        // console.log(this.data.id);
         console.log("选择的值：", val);
-        // this.list = val;
-        this.list = val;
+        this.goodList = val;
+        // console.log(this.selectDatas);
+        let itemIsCheckAll;
+        if (this.data.goodList.length == val.length) {
+          itemIsCheckAll = true;
+        } else {
+          itemIsCheckAll = false;
+        }
+        // console.log(itemIsCheckAll);
+        if (this.selectDatas.length == 0) {
+          this.selectDatas.push({
+            id: this.data.id,
+            goodList: val,
+            isCheckAll: itemIsCheckAll
+          });
+        } else {
+          if (
+            _.find(this.selectDatas, o => {
+              return o.id == this.data.id;
+            })
+          ) {
+            _.map(this.selectDatas, o => {
+              if (o.id == this.data.id) {
+                o.goodList = val;
+                o.isCheckAll = itemIsCheckAll;
+              }
+            });
+          } else {
+            this.selectDatas.push({
+              id: this.data.id,
+              goodList: val,
+              isCheckAll: itemIsCheckAll
+            });
+          }
+        }
+        // console.log(this.selectDatas);
+        this.$emit("getChecked", this.selectDatas);
       },
       getChecked(val) {
+        if (
+          _.find(val, o => {
+            return o.id == this.data.id;
+          })
+        ) {
+          this.goodList = _.find(val, o => {
+            return o.id == this.data.id;
+          }).goodList;
+        } else {
+          this.goodList = [];
+        }
+        this.selectDatas = val;
         this.$emit("getChecked", val);
       },
       deleteInquiryOrder(id) {
@@ -84,11 +156,28 @@
           console.log("删除询价单：", data);
           this.$emit("getIsDelete", data);
         });
+      },
+      remindQuote(storeId, enquiryId) {
+        if (this.data.remind == 0) {
+          _getData("/message/enquiryRemind", {
+            param: {
+              storeId: storeId, //备注：商铺id
+              enquiryId: enquiryId //备注：询价单id
+            }
+          }).then(data => {
+            console.log("提醒商家报价：", data);
+            this.data.remind = 1;
+          });
+        } else {
+          alert("已提醒商家报价");
+          return;
+        }
       }
     },
     components: {
       orderTitle,
-      inquiryProductItem
+      inquiryProductItem,
+      inquiryTitle
     }
   };
 </script>
@@ -130,6 +219,11 @@
           color: #f10215;
         }
       }
+      // .remind {
+      //   color: #f10215;
+      //   font-size: 14px;
+      //   font-weight: 600;
+      // }
     }
   }
 </style>

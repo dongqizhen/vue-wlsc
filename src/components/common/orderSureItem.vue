@@ -2,32 +2,28 @@
   <div class="orderSureItemproduct">
     <div class="shopName">
       <img src="http://file.haoyigong.com/server/upload/1554429391594.jpg" />
-      <span>{{ data.shopName }}</span>
+      <span>{{ data.storeName }}</span>
     </div>
     <div class="productList">
       <ul>
-        <li v-for="item in data.list" :key="item.id">
+        <li v-for="item in data.goodsList" :key="item.id">
           <span>
-            <img :src="item.list_pic_url" />
+            <img :src="item.goodsImage" />
           </span>
-          <span>{{ item.name }}</span>
-          <span>{{ item.brand_name }}/{{ item.brand_model_name }}</span>
+          <span>{{ item.goodsName }}</span>
+          <span>{{ item.goodsBrand }}/{{ item.goodsModel }}</span>
+          <span>{{ item.unitPrice }}</span>
           <span>{{ item.number }}</span>
-          <span>{{ item.goodsUnit }}</span>
-          <span>¥{{ item.retail_price * item.number }}</span>
-          <span>{{ item.createTime }}</span>
-          <span>
-            <div @click="deleteProduct(item.id)">删除</div>
-            <div @click="addMyStore(item.id)">添加到我的收藏</div>
-          </span>
+          <span>¥{{ item.unitPrice * item.number }}</span>
+          <span>{{
+            item.arrivalTime ? item.arrivalTime.substring(0, 16) : ""
+          }}</span>
         </li>
       </ul>
     </div>
   </div>
 </template>
 <script>
-  import _ from "lodash";
-  import { _getData } from "../../config/getData";
   export default {
     data() {
       return {};
@@ -35,20 +31,6 @@
     props: {
       data: {
         type: Object
-      }
-    },
-    methods: {
-      deleteProduct(id) {
-        _getData("/cart/delete", { goodIds: [id] }).then(data => {
-          console.log(data);
-        });
-      },
-      addMyStore(id) {
-        _getData("/collect/addordelete", { typeId: 0, valueId: id }).then(
-          data => {
-            console.log("收藏接口：", data);
-          }
-        );
       }
     }
   };
@@ -62,7 +44,7 @@
     .shopName {
       display: flex;
       align-items: center;
-      margin-left: 21px;
+      margin-left: 20px;
       margin-bottom: 12px;
       img {
         width: 18px;
@@ -91,8 +73,8 @@
           span {
             margin-right: 30px;
             &:first-child {
-              margin-left: 20px;
-              margin-right: 12px;
+              margin-left: 30px;
+              margin-right: 30px;
               width: 70px;
               height: 70px;
             }
@@ -100,31 +82,18 @@
               width: 155px;
             }
             &:nth-child(3) {
-              width: 100px;
+              width: 125px;
+              margin-right: 60px;
             }
             &:nth-child(4) {
-              width: 66px;
+              width: 80px;
+              margin-right: 30px;
             }
             &:nth-child(5) {
-              width: 50px;
+              width: 70px;
             }
             &:nth-child(6) {
               width: 100px;
-            }
-            &:nth-child(7) {
-              width: 68px;
-              margin-right: 67px;
-            }
-            &:last-child {
-              width: 85px;
-              margin-right: 10px;
-              div {
-                margin-bottom: 8px;
-                &:hover {
-                  color: $theme-color;
-                  cursor: pointer;
-                }
-              }
             }
           }
         }

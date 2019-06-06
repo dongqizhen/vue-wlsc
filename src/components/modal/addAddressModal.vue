@@ -124,7 +124,7 @@
         </div>
         <div class="btn">
           <a-button @click="saveAddress">保存收货地址</a-button>
-          <a-button @click="cancelAddress">取消</a-button>
+          <a-button @click="visible = false">取消</a-button>
         </div>
       </div>
       <div slot="content" v-else>
@@ -176,7 +176,7 @@
         selectMainArea: "请选择省/市", //默认显示地址
         provinceName: "",
         cityName: "",
-        isSpace: true,
+        isSpace: false,
         selectAreaIsShow: false,
         addressDetailIsShow: false,
         nameIsShow: false,
@@ -273,6 +273,7 @@
           return;
         } else {
           this.selectAreaIsShow = false;
+          this.submitData.userLocation = this.selectMainArea;
         }
         if (!this.submitData.address) {
           this.addressDetailIsShow = true;
@@ -317,13 +318,8 @@
           ).then(data => {
             console.log(data);
             this.visible = false;
-            this.$parent.visible = false;
           });
         }
-      },
-      cancelAddress() {
-        this.visible = false;
-        this.$parent.visible = false;
       }
     },
     mounted() {

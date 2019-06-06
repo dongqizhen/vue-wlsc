@@ -24,7 +24,7 @@
   export default {
     data() {
       return {
-        list: this.checkedList
+        goodList: this.checkedList
       };
     },
     props: {
@@ -39,22 +39,24 @@
       }
     },
     watch: {
-      checkedChange(newVal) {
-        this.list = newVal;
+      checkedList(newVal) {
+        console.log(newVal);
+        this.goodList = newVal;
       }
     },
     methods: {
       onChange(id) {
         // console.log(id);
-        if (_.indexOf(this.list, id) == -1) {
-          this.list.push(id);
+        if (_.indexOf(this.goodList, id) == -1) {
+          this.goodList.push(id);
         } else {
-          this.list = _.without(this.list, id);
+          this.goodList = _.without(this.goodList, id);
         }
-        this.$emit("getCheckedList", this.list);
+        // console.log(this.goodList);
+        this.$emit("getCheckedList", this.goodList);
       },
       checkedChange(id) {
-        for (const val of this.list) {
+        for (const val of this.goodList) {
           if (val == id) {
             return true;
           }
