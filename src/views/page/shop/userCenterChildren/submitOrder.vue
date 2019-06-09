@@ -73,7 +73,7 @@
   import _ from "lodash";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import listTitle from "../../../../components/common/listTitle";
-  import orderSureItem from "../../../../components/common/orderSureItem";
+  import orderSureItem from "../../../../components/common/order/orderSureItem";
   import { _getData } from "../../../../config/getData";
   import addAddressModal from "../../../../components/modal/addAddressModal";
   import { mapState } from "vuex";

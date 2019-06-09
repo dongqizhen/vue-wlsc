@@ -102,7 +102,7 @@
   };
 </script>
 <style lang="scss" scoped>
-  @import "../../assets/scss/_commonScss";
+  @import "../../../assets/scss/_commonScss";
   .inquiryProductItem {
     display: flex;
     height: 90px;

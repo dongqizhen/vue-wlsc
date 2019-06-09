@@ -57,10 +57,10 @@
   </div>
 </template>
 <script>
-  import orderTitle from "./orderTitle";
-  import inquiryTitle from "./inquiry/inquiryTitle";
+  import orderTitle from "../order/orderTitle";
+  import inquiryTitle from "./inquiryTitle";
   import inquiryProductItem from "./inquiryProductItem";
-  import { _getData } from "../../config/getData";
+  import { _getData } from "../../../config/getData";
   export default {
     data() {
       return { selectDatas: this.checkedList, goodList: [] };

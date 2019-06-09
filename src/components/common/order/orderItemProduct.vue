@@ -7,7 +7,7 @@
         :key="product.id"
       >
         <span><img :src="product.list_pic_url"/></span>
-        <span>{{ product.name }}</span>
+        <span>{{ product.goods_name }}</span>
         <span>{{ product.retail_price }}</span>
         <span>{{ product.number }}</span>
       </div>
@@ -133,14 +133,14 @@
   </div>
 </template>
 <script>
-  import payImgModal from "../modal/payImgModal";
-  import confirmDelivery from "../modal/confirmDelivery";
-  import submitComment from "../modal/submitComment";
-  import submitPay from "../modal/submitPayImg";
-  import deleteOrder from "../modal/deleteOrderModal";
+  import payImgModal from "../../modal/payImgModal";
+  import confirmDelivery from "../../modal/confirmDelivery";
+  import submitComment from "../../modal/submitComment";
+  import submitPay from "../../modal/submitPayImg";
+  import deleteOrder from "../../modal/deleteOrderModal";
 
   import { mapState } from "vuex";
-  import { _getData } from "../../config/getData";
+  import { _getData } from "../../../config/getData";
   export default {
     data() {
       return {
@@ -229,7 +229,7 @@
   };
 </script>
 <style lang="scss" scoped>
-  @import "../../assets/scss/_commonScss";
+  @import "../../../assets/scss/_commonScss";
   .productInfoBox {
     display: flex;
     border: $border-style;
@@ -280,6 +280,7 @@
       align-items: center;
       justify-content: center;
       border-left: $border-style;
+      padding-top: 10px;
       div {
         margin-bottom: 10px;
         font-size: 12px;

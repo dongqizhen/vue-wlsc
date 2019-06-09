@@ -105,9 +105,8 @@
   import _ from "lodash";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import checkAll from "../../../../components/common/checkAll";
-  import orderTitle from "../../../../components/common/orderTitle";
   import listTitle from "../../../../components/common/listTitle";
-  import inquiryItem from "../../../../components/common/inquiryItem";
+  import inquiryItem from "../../../../components/common/inquiry/inquiryItem";
   import calendarRange from "../../../../components/common/calendarRange";
   import { _getData } from "../../../../config/getData";
   export default {
@@ -262,7 +261,6 @@
     components: {
       commonTitle,
       checkAll,
-      orderTitle,
       calendarRange,
       listTitle,
       inquiryItem

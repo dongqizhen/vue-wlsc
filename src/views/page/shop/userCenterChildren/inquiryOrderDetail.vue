@@ -95,7 +95,7 @@
   import _ from "lodash";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import checkAll from "../../../../components/common/checkAll";
-  import orderTitle from "../../../../components/common/orderTitle";
+  import orderTitle from "../../../../components/common/order/orderTitle";
   import listTitle from "../../../../components/common/listTitle";
   import { _getData } from "../../../../config/getData";
   export default {

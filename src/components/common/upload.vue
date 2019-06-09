@@ -72,6 +72,7 @@
         this.$emit("getVal", this.uploadList);
       },
       handleChange({ fileList }) {
+        console.log(fileList);
         fileList.splice(0, fileList.length - 1);
         if (fileList[0].status == "done") {
           this.loading = false;

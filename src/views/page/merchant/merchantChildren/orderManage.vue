@@ -36,7 +36,7 @@
 </template>
 <script>
   import manageNumberNav from "../../../../components/common/manageNumberNav";
-  import orderItem from "../../../../components/common/orderItem";
+  import orderItem from "../../../../components/common/order/orderItem";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import checkAll from "../../../../components/common/checkAll";
   import listTitle from "../../../../components/common/listTitle";

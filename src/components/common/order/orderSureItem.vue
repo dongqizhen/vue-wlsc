@@ -37,7 +37,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "../../assets/scss/_commonScss";
+  @import "../../../assets/scss/_commonScss";
   .orderSureItemproduct {
     margin-top: 24px;
     margin-bottom: 12px;

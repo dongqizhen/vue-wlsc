@@ -1,3 +1,4 @@
+
 <template>
   <div class="orderTitle">
     <div class="left-box">
@@ -46,7 +47,13 @@
           <svg class="icon" aria-hidden="true">
             <use
               v-bind:xlink:href="
-                isShowInfo.current == 1
+                isShowInfo.isOrder
+                  ? data.order_status == 6 || data.order_status == 5
+                    ? '#iconyibaojia'
+                    : data.order_status == 7
+                    ? '#iconyiguanbi'
+                    : '#iconbaojiazhong'
+                  : isShowInfo.current == 1
                   ? '#iconbaojiazhong'
                   : isShowInfo.current == 2
                   ? '#iconyibaojia'
@@ -107,46 +114,17 @@
     },
     methods: {
       onChange(id) {
-        if (
-          _.find(this.list, o => {
-            return o.id == id;
-          })
-        ) {
-          if (
-            _.find(this.list, o => {
-              return o.id == id;
-            }).isCheckAll
-          ) {
-            this.list = _.without(
-              this.list,
-              _.find(this.list, o => {
-                return o.id == id;
-              })
-            );
-          } else {
-            let goodListIds = [];
-            _.map(this.data.goodList, o => {
-              goodListIds.push(o.id);
-            });
-            _.map(this.list, o => {
-              if (o.id == id) {
-                o.goodList = goodListIds;
-                o.isCheckAll = true;
-              }
-            });
-          }
+        if (_.indexOf(this.list, id) == -1) {
+          this.list.push(id);
+          this.$emit("getChecked", this.list);
         } else {
-          let goodListIds = [];
-          _.map(this.data.goodList, o => {
-            goodListIds.push(o.id);
-          });
-          this.list.push({ id: id, goodList: goodListIds, isCheckAll: true });
+          this.list = _.without(this.list, id);
+          this.$emit("getChecked", id);
         }
-        this.$emit("getChecked", this.list);
       },
       checkedChange(id) {
         for (const val of this.list) {
-          if (val.id == id && val.isCheckAll) {
+          if (val == id) {
             return true;
           }
         }
@@ -155,7 +133,7 @@
   };
 </script>
 <style lang="scss" scoped>
-  @import "../../assets/scss/_commonScss";
+  @import "../../../assets/scss/_commonScss";
   .orderTitle {
     display: flex;
     justify-content: space-between;

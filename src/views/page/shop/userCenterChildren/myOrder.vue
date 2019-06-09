@@ -35,19 +35,18 @@
   </div>
 </template>
 <script>
-  import manageNumberNav from "../../../../components/common/manageNumberNav";
-  import orderItem from "../../../../components/common/orderItem";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
-  import checkAll from "../../../../components/common/checkAll";
-  import listTitle from "../../../../components/common/listTitle";
+  import manageNumberNav from "../../../../components/common/manageNumberNav";
   import filterSearch from "../../../../components/common/filterSearch";
+  import listTitle from "../../../../components/common/listTitle";
+  import orderItem from "../../../../components/common/order/orderItem";
+  import checkAll from "../../../../components/common/checkAll";
   import { _getData } from "../../../../config/getData";
   export default {
     data() {
       return {
         isShowInfo: {
           isDetail: false,
-          isShow: false,
           current: -1,
           isOrder: true,
           isTrue: true,
@@ -103,10 +102,11 @@
         getOrderData: {
           currentPage: "1",
           countPerPage: "10",
-          name: "",
-          orderStatus: "", //类型：String  可有字段  备注：订单状态：1：待接单，2：待发货，3：待收货，4：待评价，5：已完成，6：退货，7：已关闭
-          startTime: "",
-          endTime: ""
+          storeId: "", //类型：String 备注：商铺id，不传时默认查询用户的
+          name: "", //类型：String 备注：商品名称（搜索）
+          orderStatus: "", //类型：String 备注：订单状态：1：待接单，2：待发货，3：待收货，4：待评价，5：已完成，6：退货，7：已关闭
+          startTime: "", //类型：String 备注：开始时间（搜索）
+          endTime: "" //类型：String 备注：结束时间（搜索）
         }
       };
     },

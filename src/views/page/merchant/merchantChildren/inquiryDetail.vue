@@ -35,10 +35,10 @@
 </template>
 <script>
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
-  import orderTitle from "../../../../components/common/orderTitle";
+  import orderTitle from "../../../../components/common/order/orderTitle";
   import listTitle from "../../../../components/common/listTitle";
   import checkAll from "../../../../components/common/checkAll";
-  import inquiryDetailItemProduct from "../../../../components/common/inquiryDetailItemProduct";
+  import inquiryDetailItemProduct from "../../../../components/common/inquiry/inquiryDetailItemProduct";
   import { _getData } from "../../../../config/getData";
   export default {
     data() {

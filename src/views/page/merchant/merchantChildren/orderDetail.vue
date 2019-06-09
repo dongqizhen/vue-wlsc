@@ -14,10 +14,10 @@
 </template>
 <script>
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
-  import orderTitle from "../../../../components/common/orderTitle";
-  import deliveryInfo from "../../../../components/common/deliveryInformation";
+  import orderTitle from "../../../../components/common/order/orderTitle";
+  import deliveryInfo from "../../../../components/common/order/deliveryInformation";
   import listTitle from "../../../../components/common/listTitle";
-  import orderItemProduct from "../../../../components/common/orderItemProduct";
+  import orderItemProduct from "../../../../components/common/order/orderItemProduct";
   import { _getData } from "../../../../config/getData";
   export default {
     data() {

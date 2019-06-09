@@ -23,7 +23,7 @@
   };
 </script>
 <style lang="scss" scoped>
-  @import "../../assets/scss/_commonScss";
+  @import "../../../assets/scss/_commonScss";
   .shippingAddress {
     display: flex;
     border: $border-style;

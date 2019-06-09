@@ -1,5 +1,6 @@
 <template>
   <div class="shopIndex">
+    <common-title title="店铺首页"></common-title>
     <div class="container-box">
       <div class="header">
         <ul>
@@ -95,6 +96,7 @@
 </template>
 
 <script>
+  import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import manageNumberNav from "../../../../components/common/manageNumberNav";
   import calendarRange from "../../../../components/common/calendarRange";
   import ECharts from "vue-echarts";
@@ -476,13 +478,24 @@
         this.currentTab = -1;
       }
     },
-    components: { "v-chart": ECharts, manageNumberNav, calendarRange }
+    components: {
+      "v-chart": ECharts,
+      manageNumberNav,
+      calendarRange,
+      commonTitle
+    }
   };
 </script>
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
   .shopIndex {
+    .common-title {
+      background-color: #fff;
+      padding-left: 20px;
+      margin-bottom: 12px;
+      border-bottom: none;
+    }
     .container-box {
       .header {
         margin-bottom: 16px;

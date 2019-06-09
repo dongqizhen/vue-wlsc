@@ -56,8 +56,8 @@
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import checkAll from "../../../../components/common/checkAll";
   import listTitle from "../../../../components/common/listTitle";
-  import orderTitle from "../../../../components/common/orderTitle";
-  import inquiryItem from "../../../../components/common/inquiryItem";
+  // import orderTitle from "../../../../components/common/order/orderTitle";
+  import inquiryItem from "../../../../components/common/inquiry/inquiryItem";
   import { _getData } from "../../../../config/getData";
   import { mapState } from "vuex";
   export default {
@@ -151,7 +151,7 @@
       commonTitle,
       checkAll,
       listTitle,
-      orderTitle,
+      // orderTitle,
       inquiryItem
     }
   };
