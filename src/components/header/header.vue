@@ -94,7 +94,7 @@
         _getData("/user/getUser", {}).then(data => {
           console.log("获取用户的店铺开店信息：", data);
           if (data.data) {
-            this.$router.replace({ path: "/login" });
+            this.$router.push({ path: "/login" });
           } else {
             this.changeUserShopInfoState(data);
             this.$router.push({ path: "/merchant" });
