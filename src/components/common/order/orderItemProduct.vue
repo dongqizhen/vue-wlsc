@@ -101,8 +101,22 @@
         </router-link>
       </div>
       <div
+        class="lookOrderDetail"
+        v-if="
+          !isShowInfo.isDetail &&
+            !isShowInfo.isMerchant &&
+            (data.order_status == 1 || data.order_status == 2)
+        "
+        @click="cancelOrder(data.id)"
+      >
+        取消订单
+      </div>
+      <div
         class="deleteOrder"
-        v-if="!isShowInfo.isDetail"
+        v-if="
+          !isShowInfo.isDetail &&
+            (data.order_status == 5 || data.order_status == 7)
+        "
         @click="deleteModal(data.order_sn)"
       >
         删除
@@ -175,6 +189,16 @@
         }).then(data => {
           console.log(data);
           this.$emit("returnValue", 2); //2表示已经接单，进入待发货状态
+        });
+      },
+      cancelOrder(orderId) {
+        _getData("/order/updateOrderStatus", {
+          orderId: orderId,
+          orderStatus: "cancel",
+          payProve: ""
+        }).then(data => {
+          console.log(data);
+          this.$emit("returnValue", 7); //2表示已经接单，进入待发货状态
         });
       },
       getReturnStatus(val) {
