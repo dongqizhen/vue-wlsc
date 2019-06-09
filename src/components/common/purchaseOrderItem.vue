@@ -32,8 +32,8 @@
             ></a-textarea
           ></span>
           <span>
-            <div @click="deleteProduct(item.id)">删除</div>
-            <div @click="addMyStore(item.id)">添加到我的收藏</div>
+            <div @click="deleteProduct(item.goods_id)">删除</div>
+            <div @click="addMyStore(item.goods_id)">添加到我的收藏</div>
           </span>
         </li>
       </ul>
@@ -79,14 +79,16 @@
     },
     methods: {
       deleteProduct(id) {
-        _getData("/cart/delete", { goodIds: [id] }).then(data => {
+        _getData("/cart/delete", { goodIds: id }).then(data => {
           console.log(data);
+          this.$emit("getIsDelete", true);
         });
       },
       addMyStore(id) {
         _getData("/collect/addordelete", { typeId: 0, valueId: id }).then(
           data => {
             console.log("收藏接口：", data);
+            this.$message.success("收藏成功");
           }
         );
       },

@@ -11,6 +11,7 @@
           :isCheckAll="isCheckAll(item.sid)"
           v-on:getIsCheckAll="getIsCheckAll"
           :selectDatas="selectDatas"
+          v-on:getIsDelete="getIsDelete"
         ></purchase-order-item>
       </div>
       <div class="tfooter">
@@ -18,6 +19,7 @@
           :amount="products.length"
           :checkAll="checkAll"
           v-on:isCheckAll="isCheckAllMethod"
+          v-on:isDelete="batchDeleteData"
         >
           <div slot="right-box">
             <div
@@ -65,7 +67,7 @@
       addInquiry() {
         console.log(this.selectDatas);
         if (this.selectDatas.length == 0) {
-          alert("请先选择产品");
+          this.$message.warning("请先选择产品", 1);
           return;
         } else {
           console.log(this.products);
@@ -80,10 +82,6 @@
                     buyerDescription: val.goods_specifition_name_value
                       ? val.goods_specifition_name_value
                       : ""
-                    // goodsName: val.goods_name,
-                    // goodsImage: val.list_pic_url,
-                    // goodsBrand: val.brand_name,
-                    // goodsModel: val.model_name
                   });
                 }
               });
@@ -189,18 +187,46 @@
             return val.isCheckAll;
           }
         }
+      },
+      getIsDelete(val) {
+        console.log(val);
+        this.$message.success("删除成功");
+        this.getCart();
+      },
+      batchDeleteData() {
+        // console.log(this.selectDatas);
+        if (this.selectDatas.length > 0) {
+          let selectProduct = [];
+          _.map(this.selectDatas, o => {
+            _.map(o.goodsList, val => {
+              selectProduct.push(val);
+            });
+          });
+          console.log(selectProduct);
+          _getData("/cart/delete", { goodIds: selectProduct.join(",") }).then(
+            data => {
+              console.log(data);
+              this.$message.success("删除成功");
+            }
+          );
+        } else {
+          this.$message.warning("请先选择产品", 1);
+        }
+      },
+      getCart() {
+        _getData("/cart/getCarts", {}).then(data => {
+          console.log("获取选购单：", data);
+          this.data = data.list;
+          _.map(data.list, o => {
+            for (const item of o.list) {
+              this.allProducts.push(item);
+            }
+          });
+        });
       }
     },
     mounted() {
-      _getData("/cart/getCarts", {}).then(data => {
-        console.log("获取选购单：", data);
-        this.data = data.list;
-        _.map(data.list, o => {
-          for (const item of o.list) {
-            this.allProducts.push(item);
-          }
-        });
-      });
+      this.getCart();
     },
     components: {
       commonTitle,

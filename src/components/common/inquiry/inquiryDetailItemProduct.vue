@@ -7,16 +7,16 @@
       ></a-checkbox>
     </span>
     <span>
-      <img :src="itemData.list_pic_url" />
+      <img :src="itemData.goodsImage" />
     </span>
-    <span>{{ itemData.name }}</span>
-    <span>{{ itemData.brand_name }}/{{ itemData.brand_model_name }}</span>
-    <span>{{ itemData.unit_price }}</span>
+    <span>{{ itemData.goodsName }}</span>
+    <span>{{ itemData.goodsBrand }}/{{ itemData.goodsModel }}</span>
+    <span>{{ itemData.unitPrice }}</span>
     <span>{{ itemData.number }}</span>
-    <span>{{
-      itemData.arrivalTime ? itemData.arrivalTime.substring(0, 16) : ""
-    }}</span>
-    <span>{{ itemData.goods_desc }}</span>
+    <span>
+      {{ itemData.arrivalTime ? itemData.arrivalTime.substring(0, 10) : "" }}
+    </span>
+    <span>{{ itemData.introduce }}</span>
   </div>
 </template>
 <script>

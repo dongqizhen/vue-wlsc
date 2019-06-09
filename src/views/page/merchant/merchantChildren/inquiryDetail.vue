@@ -11,7 +11,7 @@
         <list-title :titleArr="titleArr"></list-title>
         <div class="listContent">
           <inquiry-detail-item-product
-            v-for="item in data.list"
+            v-for="item in data.goodList"
             :key="item.id"
             :itemData="item"
             :checkedList="checkedList"
@@ -43,13 +43,7 @@
   export default {
     data() {
       return {
-        isShowInfo: {
-          isDetail: true,
-          isShow: false,
-          current: 1,
-          isOrder: false,
-          isTrue: true
-        },
+        isShowInfo: {},
         checkedList: [],
         checkAll: false,
         titleArr: [
@@ -77,7 +71,7 @@
             this.checkedList = _.without(this.checkedList, val);
           }
         }
-        if (this.checkedList.length == this.data.list.length) {
+        if (this.checkedList.length == this.data.goodList.length) {
           this.checkAll = true;
         } else {
           this.checkAll = false;
@@ -87,7 +81,7 @@
         if (val) {
           this.checkAll = true;
           this.checkedList = [];
-          for (const val of this.data.list) {
+          for (const val of this.data.goodList) {
             this.checkedList.push(val.id);
           }
         } else {
@@ -98,12 +92,17 @@
       }
     },
     mounted() {
-      _getData("/enquiry/getEnquiry", { enquirySn: this.$route.params.id }).then(
-        data => {
-          console.log("获取询价单详情：", data);
-          this.data = data;
-        }
-      );
+      console.log(this.$route.query.isShowInfo);
+      let isShowInfo = JSON.parse(this.$route.query.isShowInfo);
+      isShowInfo.isDetail = true;
+      this.isShowInfo = isShowInfo;
+      console.log(this.isShowInfo);
+      _getData("/enquiryPlus/enquiryDetail", {
+        id: this.$route.params.id
+      }).then(data => {
+        console.log("获取询价单详情：", data);
+        this.data = data;
+      });
     },
     components: {
       commonTitle,

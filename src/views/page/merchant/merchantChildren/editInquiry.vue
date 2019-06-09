@@ -79,6 +79,11 @@
           param: [{ id: this.$route.params.id, goodsList: this.goodsList }]
         }).then(data => {
           console.log(data);
+          alert("报价成功");
+          this.$router.replace({
+            path: "/merchant/inquiryManage",
+            query: { status: 2 }
+          });
         });
       },
       getData(val) {

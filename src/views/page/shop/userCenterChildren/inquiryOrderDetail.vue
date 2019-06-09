@@ -68,7 +68,7 @@
               <span class="download" @click="turnMyQuote">转为我的报价</span>
               <span class="edit">
                 <router-link
-                  :to="`/userCenter/submitOrder/${$route.params.id}`"
+                  :to="`/userCenter/submitOrder/${checkedList.join(',')}`"
                 >
                   提交订单
                 </router-link>

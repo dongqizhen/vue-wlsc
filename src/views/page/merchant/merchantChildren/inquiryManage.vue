@@ -30,14 +30,14 @@
           <list-title :titleArr="titleArr"></list-title>
           <div class="tbody">
             <ul>
-              <li v-for="item in data" :key="item.enquirySn">
-                <inquiry-item
+              <li v-for="item in data" :key="item.id">
+                <inquiry-manage-item
                   :data="item"
                   :checkedList="checkedList"
                   v-on:getChecked="getChecked"
                   :isShowInfo="isShowInfo"
                   v-on:getIsDelete="getIsDelete"
-                ></inquiry-item>
+                ></inquiry-manage-item>
               </li>
             </ul>
           </div>
@@ -56,8 +56,7 @@
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import checkAll from "../../../../components/common/checkAll";
   import listTitle from "../../../../components/common/listTitle";
-  // import orderTitle from "../../../../components/common/order/orderTitle";
-  import inquiryItem from "../../../../components/common/inquiry/inquiryItem";
+  import inquiryManageItem from "../../../../components/common/inquiry/inquiryManageItem";
   import { _getData } from "../../../../config/getData";
   import { mapState } from "vuex";
   export default {
@@ -65,9 +64,7 @@
       return {
         isShowInfo: {
           isDetail: false,
-          isShow: false,
           current: 1,
-          isShop: 1,
           isTrue: true,
           isMerchant: true,
           isOrder: false
@@ -127,7 +124,7 @@
           this.checkAll = true;
           this.checkedList = [];
           for (const val of this.data) {
-            this.checkedList.push(val.enquirySn);
+            this.checkedList.push(val.id);
           }
         } else {
           this.checkAll = false;
@@ -145,14 +142,17 @@
       }
     },
     mounted() {
+      if (this.$route.query.status) {
+        this.getInquiryListParams.status = this.$route.query.status;
+        this.isShowInfo.current = this.$route.query.status;
+      }
       this.getInquiryList();
     },
     components: {
       commonTitle,
       checkAll,
       listTitle,
-      // orderTitle,
-      inquiryItem
+      inquiryManageItem
     }
   };
 </script>

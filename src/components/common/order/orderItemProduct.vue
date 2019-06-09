@@ -42,7 +42,7 @@
       </div>
       <div
         class="sure"
-        @click="confirmReceipt"
+        @click="confirmReceipt(data.id)"
         v-if="
           data.order_status == 3 &&
             !isShowInfo.isMerchant &&
@@ -168,20 +168,29 @@
     methods: {
       confirmOrder(orderId) {
         console.log(orderId);
-        // _getData("/order/updateOrderStatus", {
-        //   orderId: orderId,
-        //   orderStatus: "connect",
-        //   payProve: ""
-        // }).then(data => {
-        //   console.log(data);
-        this.$emit("returnValue", 2); //2表示已经接单，进入待发货状态
-        // });
+        _getData("/order/updateOrderStatus", {
+          orderId: orderId,
+          orderStatus: "connect",
+          payProve: ""
+        }).then(data => {
+          console.log(data);
+          this.$emit("returnValue", 2); //2表示已经接单，进入待发货状态
+        });
       },
       getReturnStatus(val) {
         console.log(val);
         this.$emit("returnValue", val);
       },
-      confirmReceipt() {},
+      confirmReceipt(orderId) {
+        _getData("/order/updateOrderStatus", {
+          orderId: orderId,
+          orderStatus: "affirm",
+          payProve: ""
+        }).then(data => {
+          console.log(data);
+          this.$emit("returnValue", 4); //2表示已经接单，进入待发货状态
+        });
+      },
       confirmReceiptOrReturn() {},
       lookComment() {},
       addModal() {

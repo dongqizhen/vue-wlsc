@@ -4,8 +4,8 @@
     <div class="left-box">
       <div class="checkedBox" v-if="isShowInfo.isTrue">
         <a-checkbox
-          @change="onChange(isShowInfo.isOrder ? data.order_sn : data.id)"
-          :checked="checkedChange(isShowInfo.isOrder ? data.order_sn : data.id)"
+          @change="onChange(data.id)"
+          :checked="checkedChange(data.id)"
         ></a-checkbox>
       </div>
       <div class="common orderNumber">
@@ -24,8 +24,8 @@
             ? data.add_time
               ? data.add_time.substring(0, 16)
               : ""
-            : data.createTime
-            ? data.createTime.substring(0, 16)
+            : data.createdOn
+            ? data.createdOn.substring(0, 16)
             : ""
         }}</span>
       </div>
