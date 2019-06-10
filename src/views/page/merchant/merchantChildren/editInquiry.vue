@@ -74,17 +74,22 @@
     },
     methods: {
       submitQuote() {
-        console.log(this.goodsList);
-        _getData("/enquiryPlus/updateEnquiry", {
-          param: [{ id: this.$route.params.id, goodsList: this.goodsList }]
-        }).then(data => {
-          console.log(data);
-          alert("报价成功");
-          this.$router.replace({
-            path: "/merchant/inquiryManage",
-            query: { status: 2 }
+        //console.log(this.goodsList);
+        if (this.goodsList.length == 0) {
+          this.$message.warning("请选择产品", 1);
+          return;
+        } else {
+          _getData("/enquiryPlus/updateEnquiry", {
+            param: [{ id: this.$route.params.id, goodsList: this.goodsList }]
+          }).then(data => {
+            //console.log(data);
+            this.$message.success("报价成功", 1);
+            this.$router.replace({
+              path: "/merchant/inquiryManage",
+              query: { status: 2 }
+            });
           });
-        });
+        }
       },
       getData(val) {
         console.log("获取所填的数据：", val);

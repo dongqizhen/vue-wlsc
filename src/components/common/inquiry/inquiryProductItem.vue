@@ -1,6 +1,10 @@
 <template>
   <div class="inquiryProductItem">
-    <span :class="isShowInfo.isMerchant ? 'boxHidden' : ''">
+    <span
+      :class="
+        isShowInfo.isMerchant || isShowInfo.current == 1 ? 'boxHidden' : ''
+      "
+    >
       <a-checkbox
         @change="onChange(itemData.id)"
         :checked="checkedChange(itemData.id)"
@@ -12,11 +16,23 @@
     <span>{{ itemData.goodsName }}</span>
     <span>{{ itemData.unitPrice }}</span>
     <span v-if="isShowInfo.isDetail">¥198988282.00</span>
-    <span>{{ itemData.number }}</span>
+    <span v-if="isShowInfo.current != 3">
+      {{ itemData.number }}
+    </span>
+    <span v-if="isShowInfo.current == 3">
+      <van-stepper v-model="itemData.number" :max="itemData.goods_number" />
+      <i class="stockNumber">库存{{ itemData.goods_number }}件</i>
+    </span>
     <span>
       {{ itemData.arrivalTime ? itemData.arrivalTime.substring(0, 16) : "" }}
     </span>
-    <span>{{ itemData.introduce }}</span>
+    <span v-if="isShowInfo.current != 3">{{ itemData.introduce }}</span>
+    <span v-if="isShowInfo.current == 3">
+      <a-textarea
+        placeholder="请输入备注"
+        v-model="itemData.introduce"
+      ></a-textarea>
+    </span>
   </div>
 </template>
 <script>
@@ -24,7 +40,8 @@
   export default {
     data() {
       return {
-        goodList: this.checkedList
+        goodList: this.checkedList,
+        checkedProductInfo: this.checkProductInfo
       };
     },
     props: {
@@ -36,11 +53,12 @@
       },
       checkedList: {
         type: Array
-      }
+      },
+      checkProductInfo: { type: Array }
     },
     watch: {
       checkedList(newVal) {
-        console.log(newVal);
+        //console.log(newVal);
         this.goodList = newVal;
       }
     },
@@ -49,11 +67,21 @@
         // console.log(id);
         if (_.indexOf(this.goodList, id) == -1) {
           this.goodList.push(id);
+          this.checkedProductInfo.push(this.itemData);
         } else {
           this.goodList = _.without(this.goodList, id);
+          this.checkedProductInfo = _.without(
+            this.checkedProductInfo,
+            this.itemData
+          );
         }
         // console.log(this.goodList);
-        this.$emit("getCheckedList", this.goodList);
+        //console.log("产品信息：：：", this.checkedProductInfo);
+        this.$emit("getCheckedList", {
+          goodList: this.goodList,
+          productInfo: this.checkedProductInfo
+        });
+        // this.$emit("getCheckedProductInfo", );
       },
       checkedChange(id) {
         for (const val of this.goodList) {
@@ -96,10 +124,37 @@
         width: 155px;
       }
       &:nth-child(4) {
-        width: 98px;
+        width: 78px;
       }
       &:nth-child(5) {
-        width: 60px;
+        width: 80px;
+        /deep/.van-stepper {
+          .van-stepper__minus,
+          .van-stepper__plus {
+            width: 20px;
+            height: 20px;
+            border-radius: 0;
+            border: $border-style;
+            background: #f6f6f6;
+            margin: 0;
+            &:hover {
+              cursor: pointer;
+            }
+          }
+          .van-stepper__input {
+            width: 38px;
+            height: 16px;
+            margin: 0;
+            border-top: $border-style;
+            border-bottom: $border-style;
+          }
+        }
+        .stockNumber {
+          font-style: normal;
+          font-size: 10px;
+          color: #ccc;
+          margin-top: 4px;
+        }
       }
       &:nth-child(6) {
         width: 68px;
@@ -107,6 +162,11 @@
       }
       &:nth-child(7) {
         width: 157px;
+        .ant-input {
+          font-size: 12px;
+          resize: none;
+          height: 65px;
+        }
       }
       &:nth-child(8) {
         width: 120px;

@@ -1,5 +1,5 @@
 <template>
-  <div class="orderTitle">
+  <div class="inquiryTitle">
     <div class="left-box">
       <div class="checkedBox" v-if="isShowInfo.isTrue">
         <a-checkbox
@@ -8,8 +8,8 @@
         ></a-checkbox>
       </div>
       <div class="common orderNumber">
-        <span>{{ isShowInfo.isOrder ? "订单" : "询价单" }}编号：</span>
-        <span>{{ isShowInfo.isOrder ? data.order_sn : data.enquirySn }}</span>
+        <span>询价单编号：</span>
+        <span>{{ data.enquirySn }}</span>
       </div>
       <div class="common orderSubmitTime">
         <span class="svgBox">
@@ -17,16 +17,10 @@
             <use xlink:href="#icontijiaoshijian"></use>
           </svg>
         </span>
-        <span>{{ isShowInfo.isOrder ? "订单" : "询价单" }}提交时间：</span>
-        <span>{{
-          isShowInfo.isOrder
-            ? data.add_time
-              ? data.add_time.substring(0, 16)
-              : ""
-            : data.createdOn
-            ? data.createdOn.substring(0, 16)
-            : ""
-        }}</span>
+        <span>询价单提交时间：</span>
+        <span>
+          {{ data.createdOn ? data.createdOn.substring(0, 16) : "" }}
+        </span>
       </div>
       <div
         class="common userName"
@@ -37,7 +31,7 @@
             src="http://file.haoyigong.com/server/upload/1554429391594.jpg"
           />
         </span>
-        <span>{{ isShowInfo.isOrder ? data.shopName : data.username }}</span>
+        <span>{{ isShowInfo.isMerchant ? data.userName : data.shopName }}</span>
       </div>
     </div>
     <div class="right-box">
@@ -125,22 +119,32 @@
             );
           } else {
             let goodListIds = [];
+            let productInfo = [];
             _.map(this.data.goodList, o => {
               goodListIds.push(o.id);
+              productInfo.push(o);
             });
             _.map(this.list, o => {
               if (o.id == id) {
                 o.goodList = goodListIds;
                 o.isCheckAll = true;
+                o.productInfo = productInfo;
               }
             });
           }
         } else {
           let goodListIds = [];
+          let productInfo = [];
           _.map(this.data.goodList, o => {
             goodListIds.push(o.id);
+            productInfo.push(o);
           });
-          this.list.push({ id: id, goodList: goodListIds, isCheckAll: true });
+          this.list.push({
+            id: id,
+            goodList: goodListIds,
+            isCheckAll: true,
+            productInfo: productInfo
+          });
         }
         this.$emit("getChecked", this.list);
       },
@@ -156,7 +160,7 @@
 </script>
 <style lang="scss" scoped>
   @import "../../../assets/scss/_commonScss";
-  .orderTitle {
+  .inquiryTitle {
     display: flex;
     justify-content: space-between;
     align-items: center;

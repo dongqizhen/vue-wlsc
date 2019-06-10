@@ -8,9 +8,10 @@
       <span>全选</span>
       <span @click="deleteData">
         <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconshanchu"></use>
+          <use xlink:href="#iconguanbi" v-if="deleteText == 1"></use>
+          <use xlink:href="#iconshanchu" v-else></use>
         </svg>
-        删除
+        {{ deleteText == 1 ? "关闭" : "删除" }}
       </span>
       <span>
         共
@@ -34,6 +35,10 @@
       amount: {
         type: [String, Number],
         required: true
+      },
+      deleteText: {
+        type: Number,
+        default: 2
       }
     },
     methods: {

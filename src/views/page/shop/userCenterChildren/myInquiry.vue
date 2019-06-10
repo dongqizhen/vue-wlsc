@@ -67,10 +67,12 @@
       </div>
       <div class="tfooter">
         <check-all
-          :amount="products.length"
+          :amount="selectArr.length"
           :checkAll="checkAll"
+          :deleteText="isShowInfo.current"
           v-on:isCheckAll="isCheckAllMethod"
           v-on:isDelete="getCheckDelete"
+          :class="isShowInfo.current != 1 ? 'checkAllStyle' : ''"
         >
           <div slot="right-box" class="right-box">
             <div
@@ -107,6 +109,7 @@
   import checkAll from "../../../../components/common/checkAll";
   import listTitle from "../../../../components/common/listTitle";
   import inquiryItem from "../../../../components/common/inquiry/inquiryItem";
+  import inquiryManageItem from "../../../../components/common/inquiry/inquiryManageItem";
   import calendarRange from "../../../../components/common/calendarRange";
   import { _getData } from "../../../../config/getData";
   export default {
@@ -141,7 +144,8 @@
         },
         products: [],
         allProducts: [],
-        selectDatas: []
+        selectDatas: [],
+        selectArr: []
       };
     },
     watch: {
@@ -153,7 +157,11 @@
       //批量删除
       getCheckDelete(val) {
         console.log(val);
-        if (val) {
+        console.log(this.selectArr);
+        if (this.isShowInfo.current == 1) {
+          //批量关闭
+        } else if (this.isShowInfo.current == 3) {
+          //批量删除
           // _getData("/enquiryPlus/deleteEnquiry", {
           //   ids: this.checkedList.join(",")
           // }).then(data => {
@@ -168,7 +176,46 @@
         console.log(this.selectDatas);
       },
       //一键获取报价
-      getQuote() {},
+      getQuote() {
+        console.log(this.selectDatas);
+        if (this.selectDatas.length == 0) {
+          this.$message.warning("请选择产品", 1);
+          return;
+        } else {
+          let params = [];
+          _.map(this.selectDatas, o => {
+            let selectProducts = [];
+            let storeId = "";
+            _.map(this.data, item => {
+              if (item.id == o.id) {
+                _.map(o.goodList, value => {
+                  _.map(o.productInfo, val => {
+                    if (value == val.id) {
+                      selectProducts.push({
+                        goodsId: val.goodsId,
+                        number: val.number,
+                        buyerDescription: val.introduce ? val.introduce : ""
+                      });
+                    }
+                  });
+                });
+                storeId = item.storeId;
+              }
+            });
+            params.push({ storeId: storeId, goodsList: selectProducts });
+          });
+          console.log(params);
+          console.log(this.selectDatas);
+          _getData("/enquiryPlus/addEnquiry", { param: params }).then(data => {
+            console.log("一键获取报价：", data);
+            // if (data.data.code == 0) {
+            this.isShowInfo.current = 1;
+            this.searchParams.status = 1;
+            this.getInquiryList();
+            // }
+          });
+        }
+      },
       //单个删除
       getIsDelete(val) {
         console.log(val);
@@ -203,9 +250,10 @@
         this.getInquiryList();
       },
       getChecked(val) {
-        console.log(val);
+        console.log("订单复选框做选择的值：", val);
         this.selectDatas = val;
         this.products = [];
+        this.selectArr = [];
         _.map(val, o => {
           _.map(o.goodList, value => {
             this.products.push(value);
@@ -216,23 +264,39 @@
         } else {
           this.checkAll = false;
         }
+        if (this.isShowInfo.current == 1) {
+          _.map(val, o => {
+            this.selectArr.push(o.id);
+          });
+        } else if (this.isShowInfo.current == 2) {
+          this.selectArr = this.products;
+        }
       },
       isCheckAllMethod(val) {
         this.products = [];
         this.selectDatas = [];
+        this.selectArr = [];
         if (val) {
           this.checkAll = true;
           this.products = this.allProducts;
           _.map(this.data, o => {
             let goodsIds = [];
+            let productInfo = [];
             for (const item of o.goodList) {
               goodsIds.push(item.id);
+              productInfo.push(item);
             }
             this.selectDatas.push({
               id: o.id,
               goodList: goodsIds,
-              isCheckAll: true
+              isCheckAll: true,
+              productInfo: productInfo
             });
+            if (this.isShowInfo.current == 1) {
+              this.selectArr.push(o.id);
+            } else if (this.isShowInfo.current == 2) {
+              this.selectArr = this.products;
+            }
           });
           //console.log(this.selectDatas);
         } else {
@@ -263,7 +327,8 @@
       checkAll,
       calendarRange,
       listTitle,
-      inquiryItem
+      inquiryItem,
+      inquiryManageItem
     }
   };
 </script>
@@ -394,13 +459,21 @@
       /deep/.listTitle {
         ul {
           li {
+            &:nth-child(3) {
+              width: 78px;
+            }
             &:nth-child(4) {
-              width: 60px;
+              width: 80px;
             }
             &:nth-child(6) {
               width: 166px;
             }
           }
+        }
+      }
+      .checkAllStyle {
+        /deep/.left-box {
+          visibility: hidden;
         }
       }
       .right-box {

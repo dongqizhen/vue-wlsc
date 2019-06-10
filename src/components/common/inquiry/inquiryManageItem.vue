@@ -1,5 +1,5 @@
 <template>
-  <div class="inquiryItem">
+  <div class="inquiryManageItem">
     <order-title
       :checkedList="checkedList"
       v-on:getChecked="getChecked"

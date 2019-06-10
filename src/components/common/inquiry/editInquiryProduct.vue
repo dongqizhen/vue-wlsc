@@ -14,7 +14,7 @@
     <span>
       <a-input placeholder="输入单价" v-model="itemData.unitPrice"></a-input>
     </span>
-    <span><van-stepper v-model="itemData.number"/></span>
+    <span>{{ itemData.number }}</span>
     <span
       ><a-date-picker
         :format="'YYYY-MM-DD'"

@@ -2,7 +2,7 @@
   <div class="itemProductComment">
     <div class="productInfo">
       <img src="http://file.haoyigong.com/server/upload/1554429391594.jpg" />
-      <div class="productName">普利生全自动血凝分析仪C2000-A1BKKKLL</div>
+      <div class="productName">{{ data.goods_name }}</div>
     </div>
     <div class="common">
       <div class="left-box">评价商品</div>
@@ -118,7 +118,7 @@
         if (info.file.status == "done") {
           this.loading = false;
           for (const val of info.fileList) {
-            val.url = val.response.result.imageurl;
+            val.url = val.response.result.imageList[0].imageurl;
           }
           this.uploadList = this.tempUploadList.concat(info.fileList);
         } else {

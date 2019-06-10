@@ -2,7 +2,7 @@
   <div class="itemOrder">
     <div class="shopName">
       <a-checkbox @change="itemAllChange" :checked="checkAll"></a-checkbox>
-      <img src="http://file.haoyigong.com/server/upload/1554429391594.jpg" />
+      <img :src="data.image" />
       <span>{{ data.shopName }}</span>
     </div>
     <div class="productList">
@@ -25,15 +25,20 @@
             <i class="stockNumber">库存{{ item.goods_number }}件</i>
           </span>
           <span>¥{{ (item.retail_price * item.number).toFixed(2) }}</span>
-          <span
-            ><a-textarea
+          <span>
+            <a-textarea
               placeholder="请输入备注"
               v-model="item.goods_specifition_name_value"
-            ></a-textarea
-          ></span>
+            ></a-textarea>
+          </span>
           <span>
             <div @click="deleteProduct(item.goods_id)">删除</div>
-            <div @click="addMyStore(item.goods_id)">添加到我的收藏</div>
+            <div
+              @click="addMyStore(item.goods_id)"
+              v-if="item.isCollection == 0"
+            >
+              添加到我的收藏
+            </div>
           </span>
         </li>
       </ul>
@@ -88,7 +93,12 @@
         _getData("/collect/addordelete", { typeId: 0, valueId: id }).then(
           data => {
             console.log("收藏接口：", data);
-            this.$message.success("收藏成功");
+            _.each(this.data.list, o => {
+              if (o.goods_id == id) {
+                o.isCollection = 1;
+              }
+            });
+            this.$message.success("商品收藏成功", 1);
           }
         );
       },

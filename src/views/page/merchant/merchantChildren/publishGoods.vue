@@ -393,7 +393,7 @@
         if (info.file.status == "done") {
           this.loading = false;
           for (const val of info.fileList) {
-            val.url = val.response.result.imageurl;
+            val.url = val.response.result.imageList[0].imageurl;
           }
           this.uploadList = this.tempUploadList.concat(info.fileList);
         } else {

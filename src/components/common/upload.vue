@@ -77,7 +77,7 @@
         if (fileList[0].status == "done") {
           this.loading = false;
           this.uploadList = [];
-          this.uploadList.push(fileList[0].response.result.imageurl);
+          this.uploadList.push(fileList[0].response.result.imageList[0].imageurl);
           this.$emit("getVal", this.uploadList);
         } else {
           this.loading = true;
