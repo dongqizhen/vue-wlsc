@@ -155,6 +155,7 @@
       }
     },
     mounted() {
+      this.getCommonBrand();
       this.getAllBrand();
     },
     components: {
@@ -166,6 +167,14 @@
         this.defaultsNav = "全部";
         this.getAllBrand();
       },
+      async getCommonBrand() {
+        return await _getData("ubrand/list", {})
+          .then(data => {
+            console.log("常用品牌", data);
+            this.myArray2 = data.userBrandList;
+          })
+          .then(() => {});
+      },
       async getAllBrand() {
         return await _getData("brand/merge", { id: this.$route.query.categoryId })
           .then(data => {
@@ -173,7 +182,7 @@
           })
           .then(() => {
             console.log(this.navArr);
-            this.myArray2 = this.navArr.userbrandList;
+            // this.myArray2 = this.navArr.userbrandList;
             this.myArray = this.navArr.listAll;
             this.letterArr = _.groupBy(this.myArray, val => {
               return _.upperFirst(val.pinyin).substring(0, 1);

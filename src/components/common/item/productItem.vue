@@ -15,10 +15,14 @@
             selector: 'img'
           }"
         >
-          <img :data-src="list.list_pic_url" alt="" v-if="list.list_pic_url" />
+          <img
+            :data-src="JSON.parse(list.list_pic_url)[0]"
+            alt=""
+            v-if="list.list_pic_url"
+          />
         </div>
         <div class="price">
-          ¥{{ list.market_price }}
+          ¥{{ list.retail_price }}
           <span>
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconxiaoliang"></use>

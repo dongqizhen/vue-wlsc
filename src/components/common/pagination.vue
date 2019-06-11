@@ -12,6 +12,7 @@
   </div>
 </template>
 <script>
+  import _ from "lodash";
   export default {
     data() {
       return {
@@ -45,7 +46,12 @@
       },
       sureFun(e) {
         let childrenNodeArr = this.$refs.page.$children[0].$children[0].$children;
-        let inputChildNode = childrenNodeArr[childrenNodeArr.length - 1];
+        console.log(childrenNodeArr);
+        let index = _.findIndex(
+          childrenNodeArr,
+          o => o.$el.classList == "ant-pagination-options"
+        );
+        let inputChildNode = childrenNodeArr[index];
         let val = inputChildNode.goInputText;
 
         inputChildNode.go(e);

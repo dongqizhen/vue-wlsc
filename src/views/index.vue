@@ -194,7 +194,7 @@
         ];
       });
       _getData("goods/homePagelist", {}).then(data => {
-        console.log("goods", data);
+        console.log("推荐产品", data);
         this.goodList = data.list;
       });
       //文章

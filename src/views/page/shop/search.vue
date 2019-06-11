@@ -302,6 +302,10 @@
                         width: 100%;
                       }
                     }
+                    > .product-item {
+                      margin-right: 10px;
+                      margin-bottom: 10px;
+                    }
                   }
                   /deep/ .no-data {
                     height: 500px;

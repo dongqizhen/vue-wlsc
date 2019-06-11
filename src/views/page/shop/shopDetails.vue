@@ -229,6 +229,11 @@
         /deep/ .no-data {
           height: 500px;
         }
+        /deep/ .paginationBox {
+          .sureBtn {
+            margin-left: 10px;
+          }
+        }
       }
       .shop {
         width: 236px;

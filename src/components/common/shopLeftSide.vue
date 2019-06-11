@@ -14,7 +14,7 @@
       <div class="item-box" :class="commonMore && 'active'">
         <ul class="item_container">
           <li
-            v-for="item in brandList.userbrandList"
+            v-for="item in commonBrand"
             :key="item.id"
             @click="$emit('brandClick', item)"
           >
@@ -107,6 +107,7 @@
     data() {
       return {
         brandList: [],
+        commonBrand: [],
         letterArr: [],
         arr: [],
         brandVisible: false,
@@ -136,7 +137,14 @@
         this.brandVisible = true;
       },
       success() {
-        this.getBrandList();
+        this.getCommonBrand();
+      },
+      async getCommonBrand() {
+        return await _getData("ubrand/list", {})
+          .then(data => {
+            this.commonBrand = data.userBrandList;
+          })
+          .then(() => {});
       },
       async getBrandList() {
         return await _getData("brand/merge", { id: this.categoryId })
@@ -172,6 +180,10 @@
       }
     },
     mounted() {
+      if (this.isLogin) {
+        this.getCommonBrand();
+      }
+
       this.getBrandList().then(() => {
         this.listMore = [...Array(_.keys(this.letterArr).length)];
       });
