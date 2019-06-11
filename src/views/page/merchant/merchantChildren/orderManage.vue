@@ -57,13 +57,8 @@
         data: [],
         checkedList: [],
         checkAll: false,
-        defaultActiveKey: "",
+        defaultActiveKey: 1,
         tabs: [
-          {
-            id: "",
-            name: "全部订单",
-            amount: 6
-          },
           {
             id: 1,
             name: "待接单",
@@ -84,21 +79,21 @@
             name: "待评价",
             amount: 1
           },
-          // {
-          //   id: 5,
-          //   name: "已完成",
-          //   amount: 1
-          // },
+          {
+            id: 5,
+            name: "已完成",
+            amount: 1
+          },
           {
             id: 6,
             name: "退货",
             amount: 1
+          },
+          {
+            id: 7,
+            name: "关闭",
+            amount: 1
           }
-          // {
-          //   id: 7,
-          //   name: "关闭",
-          //   amount: 1
-          // }
         ],
         titleArr: ["产品图片", "产品名称", "单价", "数量", "实付金额", "操作"],
         getOrderData: {
@@ -106,7 +101,7 @@
           countPerPage: "10",
           storeId: "",
           name: "",
-          orderStatus: "", //类型：String  可有字段  备注：订单状态：1：待接单，2：待发货，3：待收货，4：待评价，5：已完成，6：退货，7：已关闭
+          orderStatus: 1, //类型：String  可有字段  备注：订单状态：1：待接单，2：待发货，3：待收货，4：待评价，5：已完成，6：退货，7：已关闭
           startTime: "",
           endTime: ""
         }

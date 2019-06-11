@@ -16,18 +16,30 @@
     <span>{{ itemData.goodsName }}</span>
     <span>{{ itemData.unitPrice }}</span>
     <span v-if="isShowInfo.isDetail">¥198988282.00</span>
-    <span v-if="isShowInfo.current != 3">
+    <span
+      v-if="
+        isShowInfo.current != 3 ||
+          (isShowInfo.current == 3 && isShowInfo.isMerchant)
+      "
+    >
       {{ itemData.number }}
     </span>
-    <span v-if="isShowInfo.current == 3">
+    <span v-if="isShowInfo.current == 3 && !isShowInfo.isMerchant">
       <van-stepper v-model="itemData.number" :max="itemData.goods_number" />
       <i class="stockNumber">库存{{ itemData.goods_number }}件</i>
     </span>
     <span>
       {{ itemData.arrivalTime ? itemData.arrivalTime.substring(0, 16) : "" }}
     </span>
-    <span v-if="isShowInfo.current != 3">{{ itemData.introduce }}</span>
-    <span v-if="isShowInfo.current == 3">
+    <span
+      v-if="
+        isShowInfo.current != 3 ||
+          (isShowInfo.current == 3 && isShowInfo.isMerchant)
+      "
+    >
+      {{ itemData.introduce }}
+    </span>
+    <span v-if="isShowInfo.current == 3 && !isShowInfo.isMerchant">
       <a-textarea
         placeholder="请输入备注"
         v-model="itemData.introduce"

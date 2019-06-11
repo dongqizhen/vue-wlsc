@@ -32,6 +32,11 @@
         </div>
       </div>
     </div>
+    <pagination
+      :data="paginationData"
+      v-on:onPaginationChange="getPaginationChange"
+      v-if="paginationData.count != 0"
+    ></pagination>
   </div>
 </template>
 <script>
@@ -41,6 +46,7 @@
   import listTitle from "../../../../components/common/listTitle";
   import orderItem from "../../../../components/common/order/orderItem";
   import checkAll from "../../../../components/common/checkAll";
+  import pagination from "../../../../components/common/pagination";
   import { _getData } from "../../../../config/getData";
   export default {
     data() {
@@ -55,13 +61,8 @@
         data: [],
         checkedList: [],
         checkAll: false,
-        defaultActiveKey: "",
+        defaultActiveKey: 1,
         tabs: [
-          {
-            id: "",
-            name: "全部订单",
-            amount: 6
-          },
           {
             id: 1,
             name: "待接单",
@@ -82,21 +83,21 @@
             name: "待评价",
             amount: 1
           },
-          // {
-          //   id: 5,
-          //   name: "已完成",
-          //   amount: 1
-          // },
+          {
+            id: 5,
+            name: "已完成",
+            amount: 1
+          },
           {
             id: 6,
             name: "退货",
             amount: 1
+          },
+          {
+            id: 7,
+            name: "关闭",
+            amount: 1
           }
-          // {
-          //   id: 7,
-          //   name: "关闭",
-          //   amount: 1
-          // }
         ],
         titleArr: ["产品图片", "产品名称", "单价", "数量", "实付金额", "操作"],
         getOrderData: {
@@ -104,10 +105,11 @@
           countPerPage: "10",
           storeId: "", //类型：String 备注：商铺id，不传时默认查询用户的
           name: "", //类型：String 备注：商品名称（搜索）
-          orderStatus: "", //类型：String 备注：订单状态：1：待接单，2：待发货，3：待收货，4：待评价，5：已完成，6：退货，7：已关闭
+          orderStatus: 1, //类型：String 备注：订单状态：1：待接单，2：待发货，3：待收货，4：待评价，5：已完成，6：退货，7：已关闭
           startTime: "", //类型：String 备注：开始时间（搜索）
           endTime: "" //类型：String 备注：结束时间（搜索）
-        }
+        },
+        paginationData: {}
       };
     },
     methods: {
@@ -158,10 +160,18 @@
           this.checkedList = [];
         }
       },
+      getPaginationChange(val) {
+        console.log(val);
+        this.getOrderData.currentPage = val;
+        this.getOrderList();
+      },
       getOrderList() {
         _getData("/order/orderList", this.getOrderData).then(data => {
           console.log("获取订单列表：", data);
+          this.checkAll = false;
+          this.checkedList = [];
           this.data = data.data;
+          this.paginationData = data;
         });
       }
     },
@@ -174,7 +184,8 @@
       checkAll,
       listTitle,
       filterSearch,
-      commonTitle
+      commonTitle,
+      pagination
     }
   };
 </script>

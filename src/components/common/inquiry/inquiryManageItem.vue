@@ -20,25 +20,32 @@
       <div class="operating">
         <div v-if="isShowInfo.current == 1">
           <router-link
+            tag="li"
             :to="{
               path: `editInquiry/${data.id}`,
               query: { isShowInfo: isShowInfo }
             }"
           >
-            编辑报价
+            <a target="_blank">编辑报价</a>
           </router-link>
         </div>
         <div v-else>
           <router-link
+            tag="li"
             :to="{
               path: `inquiryOrderDetail/${data.id}`,
               query: { isShowInfo: JSON.stringify(this.isShowInfo) }
             }"
           >
-            查看详情
+            <a target="_blank">查看详情</a>
           </router-link>
         </div>
-        <div @click="deleteInquiryOrder(data.id)">删除询价单</div>
+        <div
+          @click="deleteInquiryOrder(data.id)"
+          v-if="isShowInfo.current != 1"
+        >
+          删除询价单
+        </div>
       </div>
     </div>
   </div>
@@ -147,41 +154,43 @@
   };
 </script>
 <style lang="scss" scoped>
-  .inquiryProduct {
-    display: flex;
-    border: 1px solid #ddd;
-    border-top: none;
-    margin-bottom: 10px;
-    .leftInfoBox {
-      flex: 1;
-      /deep/.inquiryProductItem {
-        border: none;
-        border-bottom: 1px solid #ddd;
-        &:last-child {
-          border-bottom: none;
+  .inquiryManageItem {
+    .inquiryProduct {
+      display: flex;
+      border: 1px solid #ddd;
+      border-top: none;
+      margin-bottom: 10px;
+      .leftInfoBox {
+        flex: 1;
+        /deep/.inquiryProductItem {
+          border: none;
+          border-bottom: 1px solid #ddd;
+          &:last-child {
+            border-bottom: none;
+          }
         }
       }
-    }
-    .operating {
-      width: 96px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border-left: 1px solid #ddd;
-      color: #333;
-      font-size: 12px;
-      div {
-        margin-bottom: 10px;
-        cursor: pointer;
-        a {
-          color: #333;
+      .operating {
+        width: 96px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-left: 1px solid #ddd;
+        color: #333;
+        font-size: 12px;
+        div {
+          margin-bottom: 10px;
+          cursor: pointer;
+          a {
+            color: #333;
+            &:hover {
+              color: #f10215;
+            }
+          }
           &:hover {
             color: #f10215;
           }
-        }
-        &:hover {
-          color: #f10215;
         }
       }
     }

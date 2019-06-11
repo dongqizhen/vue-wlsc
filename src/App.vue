@@ -67,6 +67,9 @@
   #app {
     height: 100%;
   }
+  a {
+    text-decoration: none !important;
+  }
   .icon {
     width: 1em;
     height: 1em;
@@ -157,5 +160,22 @@
   .ant-checkbox:hover .ant-checkbox-inner,
   .ant-checkbox-input:focus + .ant-checkbox-inner {
     border-color: #f10215;
+  }
+  .ant-calendar-selected-date .ant-calendar-date,
+  .ant-calendar-selected-start-date .ant-calendar-date,
+  .ant-calendar-selected-end-date .ant-calendar-date {
+    background: #f10215;
+  }
+  .ant-calendar-cell {
+    .ant-calendar-date {
+      &:hover {
+        background: #f10215;
+        color: #fff;
+      }
+    }
+  }
+  .ant-calendar-today .ant-calendar-date {
+    border-color: #f10215;
+    color: #f10215;
   }
 </style>

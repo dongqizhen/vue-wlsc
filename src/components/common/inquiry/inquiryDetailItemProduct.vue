@@ -88,6 +88,7 @@
         width: 14px;
         margin-left: 20px;
         margin-right: 12px;
+        visibility: hidden;
       }
       &:nth-child(2) {
         width: 70px;

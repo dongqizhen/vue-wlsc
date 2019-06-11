@@ -2,7 +2,10 @@
 <template>
   <div class="orderTitle">
     <div class="left-box">
-      <div class="checkedBox" v-if="isShowInfo.isTrue">
+      <div
+        :class="['checkedBox', isShowInfo.current == 1 ? 'boxHidden' : '']"
+        v-if="isShowInfo.isTrue"
+      >
         <a-checkbox
           @change="onChange(data.id)"
           :checked="checkedChange(data.id)"
@@ -19,15 +22,7 @@
           </svg>
         </span>
         <span>{{ isShowInfo.isOrder ? "订单" : "询价单" }}提交时间：</span>
-        <span>{{
-          isShowInfo.isOrder
-            ? data.add_time
-              ? data.add_time.substring(0, 16)
-              : ""
-            : data.createdOn
-            ? data.createdOn.substring(0, 16)
-            : ""
-        }}</span>
+        <span>{{ data.createdOn ? data.createdOn.substring(0, 16) : "" }}</span>
       </div>
       <div
         class="common userName"
@@ -162,6 +157,9 @@
       align-items: center;
       .checkedBox {
         margin-right: 12px;
+        &.boxHidden {
+          visibility: hidden;
+        }
       }
     }
     .right-box {

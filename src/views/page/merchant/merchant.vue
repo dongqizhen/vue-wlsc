@@ -79,6 +79,10 @@
         } else if (this.$route.path.indexOf("inquiryManage") != -1) {
           this.defaultSelectedKeys = ["6"];
           this.$router.replace({ path: "/merchant/inquiryManage" });
+        } else if (this.$route.path.indexOf("editInquiry") != -1) {
+          this.defaultSelectedKeys = ["6"];
+        } else if (this.$route.path.indexOf("inquiryOrderDetail") != -1) {
+          this.defaultSelectedKeys = ["6"];
         } else if (this.$route.path.indexOf("orderManage") != -1) {
           this.defaultSelectedKeys = ["7"];
           this.$router.replace({ path: "/merchant/orderManage" });
