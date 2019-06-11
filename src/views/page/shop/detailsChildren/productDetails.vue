@@ -7,7 +7,7 @@
             <a class="magnifier-thumb-wrapper">
               <img id="thumb" :src="imgUrl" v-if="imgUrl" />
             </a>
-            <div class="magnifier-preview" id="preview"></div>
+            <div class="magnifier-preview" id="preview" ref="preview"></div>
             <div class="swiper-container">
               <div class="swiper-wrapper">
                 <div
@@ -436,6 +436,7 @@
       handleClick(img, i) {
         this.bannerIndex = i;
         this.imgUrl = img;
+        this.$refs.preview.firstChild.setAttribute("src", img);
       },
       addCarSuccess() {
         _getData("cart/addCart", {
@@ -466,6 +467,18 @@
         } else {
           dom.style.position = "static";
         }
+      },
+      initMagnifier() {
+        //console.log(this.$refs.preview.removeChild());
+        const evt = new Event(),
+          m = new Magnifier(evt);
+        m.attach({
+          thumb: "#thumb",
+          large: this.imgUrl,
+          largeWrapper: "preview",
+          zoom: 2,
+          zoomable: true
+        });
       }
     },
     computed: {
@@ -494,15 +507,7 @@
           this.imgUrl = JSON.parse(this.productInfo.list_pic_url)[0];
         })
         .then(() => {
-          const evt = new Event(),
-            m = new Magnifier(evt);
-          m.attach({
-            thumb: "#thumb",
-            large: this.imgUrl,
-            largeWrapper: "preview",
-            zoom: 2,
-            zoomable: true
-          });
+          this.initMagnifier();
         })
         .then(() => {
           const swiper = new Swiper(".swiper-container", {

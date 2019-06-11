@@ -13,7 +13,13 @@
             {{ notice.title }}
             <span>2017-08-22 19:32</span>
           </h2>
-          <div class="content" v-html="notice.content"></div>
+          <div
+            class="content"
+            v-lazy-container="{
+              selector: 'img'
+            }"
+            v-html="convertStr"
+          ></div>
         </div>
         <loading v-else></loading>
       </div>
@@ -39,6 +45,14 @@
         notice: "",
         isLoading: true
       };
+    },
+    computed: {
+      convertStr() {
+        return this.notice.content.replace(
+          /(?<=\<img [^>]*src=['"])([^'"]+)(?=[^>]*>)/gi,
+          '"data-src="$1'
+        );
+      }
     },
     created() {
       _getData("/topic/queryTopic", {
@@ -93,6 +107,19 @@
       }
       .content {
         padding: 10px 0 50px;
+        /deep/ img[lazy="loading"] {
+          /*your style here*/
+          background: url("../../../assets/images/loading.gif") no-repeat center;
+          background-size: 200px;
+          // background-color: #f7f9fa;
+        }
+        /deep/ img[lazy="error"] {
+          /*your style here*/
+          background: url("../../../assets/images/loading.gif") no-repeat center;
+          background-size: 200px;
+          display: none;
+          // background-color: #f7f9fa;
+        }
         /deep/ img {
           width: 100%;
         }

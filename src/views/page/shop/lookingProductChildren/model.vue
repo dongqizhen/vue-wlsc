@@ -34,13 +34,13 @@
             v-on:tabClick="shopTabClick"
           ></shop-nav-vue>
           <div class="main-content">
-            <div v-if="!shopIsloading">
+            <div v-if="!shopIsloading && shopList.length">
               <ul>
-                <shop-item-vue
+                <!-- <shop-item-vue
                   v-for="item in shopList"
                   :key="item.id"
                   :item="item"
-                ></shop-item-vue>
+                ></shop-item-vue> -->
                 <!-- <bid-info-item-vue /> -->
               </ul>
               <pagination-vue :data="data"></pagination-vue>
@@ -69,12 +69,14 @@
   import _ from "lodash";
   import shopItemVue from "../../../../components/common/item/shopItem.vue";
   import bidInfoItemVue from "../../../../components/common/item/bidInfoItem.vue";
+  import { async } from "q";
 
   export default {
     data() {
       return {
         routes: [],
         data: "",
+        navList: "",
         isLoading: true,
         tabs: [],
         shopList: "",
@@ -128,36 +130,12 @@
       }
     },
     mounted() {
-      //获取nav数量
-      // _getData("goods/productCount", {
-      //   modelId: this.$route.query.modelId
-      // }).then(data => {
-      //   this.tabs = [
-      //     ..._.map(data.list, val => {
-      //       return `${val.name}(${val.count})`;
-      //     }),
-      //     ...[
-      //       `文章(${data.articleNum})`,
-      //       `视频(${data.videoNum})`,
-      //       `案例(${data.maintenanceNum})`
-      //     ]
-      //   ];
-      // });
-      // //获取店铺
-      // _getData("queryStore", { modelId: this.$route.query.modelId })
-      //   .then(data => {
-      //     this.isLoading = false;
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   });
-
-      _getDataAll([
-        //获取nav数量
-        _getData("goods/productCount", {
-          modelId: this.$route.query.modelId
-        }).then(data => {
+      _getData("goods/productCount", {
+        modelId: this.$route.query.modelId
+      })
+        .then(data => {
           console.log("nav", data);
+          this.navList = data.list;
           this.tabs = [
             ..._.map(data.list, val => {
               return `${val.name}(${val.count})`;
@@ -169,14 +147,35 @@
               `案例(${data.maintenanceNum || 0})`
             ]
           ];
-        }),
-        //获取店铺
-        this.getShopList()
-      ]).then(() => {
-        this.$nextTick().then(() => {
-          this.isLoading = false;
+        })
+        .then(() => {
+          _getData("goods/goodslist", {
+            attributeCategoryId: this.navList[0].id,
+            currentPage: 1,
+            countPerPage: 6,
+            sort: "createOn",
+            order: "asc"
+          })
+            .then(data => {
+              console.log("产品列表", data);
+            })
+            .then(() => {
+              this.$nextTick().then(() => {
+                this.isLoading = false;
+                this.shopIsloading = false;
+              });
+            });
         });
-      });
+      // _getDataAll([
+      //   //获取nav数量
+
+      //   //获取店铺
+      //   this.getShopList()
+      // ]).then(() => {
+      //   this.$nextTick().then(() => {
+      //     this.isLoading = false;
+      //   });
+      // });
     },
     beforeRouteEnter(to, from, next) {
       console.log(to, from);
@@ -281,7 +280,7 @@
       margin-top: 4px;
       overflow: initial;
       .swiper-slide {
-        margin-right: 30px;
+        margin-right: 15px;
       }
       /deep/ .ant-btn-default {
         height: 40px;
