@@ -19,6 +19,7 @@
                 v-on:getChecked="getChecked"
                 :isShowInfo="isShowInfo"
                 v-on:returnValue="getReturnStatus"
+                v-on:deleteOrder="deleteSingleOrder"
               ></order-item>
             </li>
           </ul>
@@ -28,6 +29,10 @@
             :amount="checkedList.length"
             :checkAll="checkAll"
             v-on:isCheckAll="isCheckAllMethod"
+            v-on:isDelete="getCheckDelete"
+            v-if="
+              getOrderData.orderStatus == 5 || getOrderData.orderStatus == 7
+            "
           ></checkAll>
         </div>
       </div>
@@ -95,7 +100,7 @@
           },
           {
             id: 7,
-            name: "关闭",
+            name: "已关闭",
             amount: 1
           }
         ],
@@ -113,6 +118,24 @@
       };
     },
     methods: {
+      //批量删除
+      getCheckDelete(val) {
+        console.log(val);
+        console.log(this.checkedList);
+        if (this.isShowInfo.current == 5 || this.isShowInfo.current == 7) {
+          //批量删除
+          // _getData("/enquiryPlus/enquiryClose", {
+          //   ids: this.selectArr.join(",")
+          // }).then(data => {
+          //   console.log("批量删除订单：", data);
+          //   this.$message.success("批量删除订单成功", 1);
+          //   this.getOrderList();
+          // });
+        }
+      },
+      deleteSingleOrder(val) {
+        this.getOrderList();
+      },
       getSearchData(val) {
         console.log(val);
         this.getOrderData.name = val.value;
@@ -127,11 +150,17 @@
       },
       getReturnStatus(val) {
         this.defaultActiveKey = val;
+        console.log(this.defaultActiveKey);
         this.getOrderStatus(val);
       },
       getOrderStatus(val) {
         console.log("获取订单状态：", val);
         this.getOrderData.orderStatus = val;
+        if (val == 5 || val == 7) {
+          this.isShowInfo.current = -1;
+        } else {
+          this.isShowInfo.current = 1;
+        }
         this.getOrderList();
       },
       getChecked(val) {
@@ -175,6 +204,7 @@
         });
       }
     },
+
     mounted() {
       this.getOrderList();
     },

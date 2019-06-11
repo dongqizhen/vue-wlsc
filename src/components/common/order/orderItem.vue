@@ -10,6 +10,7 @@
       :data="data"
       :isShowInfo="isShowInfo"
       v-on:returnValue="getReturnValue"
+      v-on:deleteOperation="getDelete"
     ></order-item-product>
     <delivery-info :data="data"></delivery-info>
   </div>
@@ -42,6 +43,9 @@
       getReturnValue(val) {
         console.log("fghhfffffffffffffg", val);
         this.$emit("returnValue", val);
+      },
+      getDelete(val) {
+        this.$emit("deleteOrder", val);
       }
     },
     components: {

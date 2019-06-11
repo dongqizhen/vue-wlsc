@@ -30,6 +30,7 @@
 <script>
   import modal from "./modal.vue";
   import upload from "../common/upload";
+  import { _getData } from "../../config/getData";
   export default {
     data() {
       return {
@@ -43,7 +44,8 @@
         },
         submitData: {
           imgUrl: ""
-        }
+        },
+        success: false
       };
     },
     props: {
@@ -60,6 +62,10 @@
         type: String,
         default: "提交成功",
         required: false
+      },
+      orderId: {
+        type: [String, Number],
+        required: true
       }
     },
     components: {
@@ -80,9 +86,23 @@
       },
       sure() {
         //上传后台接口
+        if (this.submitData.imgUrl == "") {
+          this.$message.warning("请先添加图片", 1);
+          return;
+        }
+        _getData("/order/addPayProve", {
+          orderId: this.orderId,
+          payProve: this.submitData.imgUrl
+        }).then(data => {
+          console.log("上传支付证明成功：：：", data);
+          this.$message.success("上传支付证明成功", 1);
+          this.visible = false;
+          this.success = true;
+        });
       },
       cancel() {
         this.visible = false;
+        this.success = false;
       }
     },
     watch: {
@@ -96,6 +116,11 @@
           this.$parent.sureVisible = false;
           this.$parent.commentVisible = false;
           this.$parent.deleteVisible = false;
+          if (this.success) {
+            console.log(this.$parent);
+            this.$parent.data.isPayProve = 1;
+            this.$parent.data.payProve = this.submitData.imgUrl;
+          }
         }
       }
     }

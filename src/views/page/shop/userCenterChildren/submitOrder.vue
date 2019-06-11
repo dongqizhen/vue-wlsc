@@ -123,6 +123,10 @@
             this.submitAddressData.postCode = val.postalCode;
           }
         });
+        if (!this.submitAddressData.mobile) {
+          this.$message.warning("请选择地址", 1);
+          return;
+        }
         _.map(this.data, o => {
           let goods = [];
           _.map(o.goodsList, val => {
@@ -269,11 +273,15 @@
                 no-repeat center center / 100% 100%;
             }
             .receiptName {
-              padding-bottom: 5px;
+              padding-bottom: 4px;
               border-bottom: $border-style;
+              height: 24px;
+              overflow: hidden;
               span {
                 &:first-child {
-                  margin-right: 9px;
+                  width: 114px;
+                  margin-right: 7px;
+                  overflow: hidden;
                 }
               }
             }

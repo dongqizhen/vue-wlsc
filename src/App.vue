@@ -86,6 +86,14 @@
     padding-bottom: 110px;
     background: #f7f9fa;
   }
+  .ant-input:hover {
+    border-color: #f10215 !important;
+  }
+
+  .ant-input:focus {
+    border-color: #f10215 !important;
+    box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2) !important;
+  }
   .el-picker-panel {
     .el-date-table {
       td.today {
@@ -160,6 +168,16 @@
   .ant-checkbox:hover .ant-checkbox-inner,
   .ant-checkbox-input:focus + .ant-checkbox-inner {
     border-color: #f10215;
+  }
+  .ant-calendar-picker:focus .ant-calendar-picker-input:not(.ant-input-disabled) {
+    border-color: #f10215;
+    outline: 0;
+    -webkit-box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
+    box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
+    border-right-width: 1px !important;
+  }
+  .ant-calendar-range .ant-calendar-in-range-cell:before {
+    background: rgba(241, 2, 21, 0.05);
   }
   .ant-calendar-selected-date .ant-calendar-date,
   .ant-calendar-selected-start-date .ant-calendar-date,

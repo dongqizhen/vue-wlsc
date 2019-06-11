@@ -636,20 +636,16 @@
   }
   .lookPay {
     .ant-modal {
-      width: 696px !important;
-      height: 828px !important;
+      max-width: 800px;
       padding-bottom: 0;
       .ant-modal-content {
         .ant-modal-body {
-          height: 790px;
           padding: 0;
           > div {
             width: 100%;
-            height: 100%;
           }
           img {
             width: 100%;
-            height: 100%;
           }
         }
       }
