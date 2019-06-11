@@ -81,6 +81,14 @@
       },
       sure() {
         if (this.deleteObj.isOrder) {
+          console.log(this.deleteObj.deleteId);
+          _getData("/order/deleteOrder", { ids: this.deleteObj.deleteId }).then(
+            data => {
+              console.log(data);
+              this.$message.success("订单删除成功", 1);
+              this.visible = false;
+            }
+          );
         } else {
           _getData(
             `${this.$API_URL.HYGLOGINURL}/server/userAddress!request.action`,
@@ -102,8 +110,8 @@
         this.visible = newVal;
       },
       visible(newVal) {
-        console.log(newVal);
-        console.log(this.$parent);
+        // console.log(newVal);
+        // console.log(this.$parent);
         if (!newVal) {
           this.$parent.visible = false;
           this.$parent.payVisible = false;

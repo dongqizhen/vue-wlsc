@@ -14,7 +14,7 @@
     </div>
     <div class="actualPrice">￥{{ data.actual_price }}</div>
     <div class="operating">
-      <div class="lookPay" @click="addModal">
+      <div class="lookPay" @click="addModal(data.id)">
         {{
           data.order_status == 1
             ? isShowInfo.isDetail
@@ -28,6 +28,28 @@
               : "提交支付证明"
             : "查看支付证明"
         }}
+      </div>
+      <div
+        class="sure"
+        @click="confirmOrder(data.id)"
+        v-if="
+          data.order_status == 1 &&
+            isShowInfo.isMerchant &&
+            !isShowInfo.isDetail
+        "
+      >
+        确认接单
+      </div>
+      <div
+        class="lookOrderDetail"
+        v-if="
+          !isShowInfo.isDetail &&
+            !isShowInfo.isMerchant &&
+            (data.order_status == 1 || data.order_status == 2)
+        "
+        @click="cancelOrder(data.id)"
+      >
+        取消订单
       </div>
       <div
         class="sure"
@@ -53,17 +75,6 @@
       </div>
       <div
         class="sure"
-        @click="confirmOrder(data.id)"
-        v-if="
-          data.order_status == 1 &&
-            isShowInfo.isMerchant &&
-            !isShowInfo.isDetail
-        "
-      >
-        确认接单
-      </div>
-      <div
-        class="sure"
         @click="commentModal"
         v-if="
           (data.order_status == 4 || data.order_status == 5) &&
@@ -82,9 +93,17 @@
             !isShowInfo.isDetail
         "
       >
-        确认收货/已退货
+        确认退货
       </div>
       <div
+        class="sure"
+        v-if="
+          data.order_status == 6 && isShowInfo.isMerchant && isShowInfo.isDetail
+        "
+      >
+        退货中
+      </div>
+      <!-- <div
         class="sure"
         @click="lookComment"
         v-if="
@@ -94,30 +113,24 @@
         "
       >
         查看评价
-      </div>
+      </div> -->
       <div class="lookOrderDetail" v-if="!isShowInfo.isDetail">
-        <router-link :to="`orderDetail/${data.order_sn}`">
+        <router-link
+          tag="a"
+          target="_blank"
+          :to="`orderDetail/${data.order_sn}`"
+        >
           查看订单详情
         </router-link>
       </div>
-      <div
-        class="lookOrderDetail"
-        v-if="
-          !isShowInfo.isDetail &&
-            !isShowInfo.isMerchant &&
-            (data.order_status == 1 || data.order_status == 2)
-        "
-        @click="cancelOrder(data.id)"
-      >
-        取消订单
-      </div>
+
       <div
         class="deleteOrder"
         v-if="
           !isShowInfo.isDetail &&
             (data.order_status == 5 || data.order_status == 7)
         "
-        @click="deleteModal(data.order_sn)"
+        @click="deleteModal(data.id)"
       >
         删除
       </div>
@@ -138,7 +151,11 @@
       :type="type"
       :data="data.goodsList"
     ></submit-comment>
-    <submit-pay :Visible="payVisible" :type="type"></submit-pay>
+    <submit-pay
+      :Visible="payVisible"
+      :type="type"
+      :orderId="orderId"
+    ></submit-pay>
     <delete-order
       :Visible="deleteVisible"
       :type="type"
@@ -179,13 +196,19 @@
         type: Object
       }
     },
+    watch: {
+      deleteVisible(newVal) {
+        if (!newVal) {
+          this.$emit("deleteOperation", true);
+        }
+      }
+    },
     methods: {
       confirmOrder(orderId) {
         console.log(orderId);
         _getData("/order/updateOrderStatus", {
           orderId: orderId,
-          orderStatus: "connect",
-          payProve: ""
+          orderStatus: "connect"
         }).then(data => {
           console.log(data);
           this.$emit("returnValue", 2); //2表示已经接单，进入待发货状态
@@ -194,11 +217,10 @@
       cancelOrder(orderId) {
         _getData("/order/updateOrderStatus", {
           orderId: orderId,
-          orderStatus: "cancel",
-          payProve: ""
+          orderStatus: "cancel"
         }).then(data => {
           console.log(data);
-          this.$emit("returnValue", 7); //2表示已经接单，进入待发货状态
+          this.$emit("returnValue", 7); //7表示关闭接单
         });
       },
       getReturnStatus(val) {
@@ -208,16 +230,15 @@
       confirmReceipt(orderId) {
         _getData("/order/updateOrderStatus", {
           orderId: orderId,
-          orderStatus: "affirm",
-          payProve: ""
+          orderStatus: "affirm"
         }).then(data => {
           console.log(data);
-          this.$emit("returnValue", 4); //2表示已经接单，进入待发货状态
+          this.$emit("returnValue", 4); //4表示已经收货，进入待评价状态
         });
       },
       confirmReceiptOrReturn() {},
       lookComment() {},
-      addModal() {
+      addModal(id) {
         if (!this.isLogin) {
           this.type = "login";
         } else {
@@ -225,6 +246,7 @@
             this.visible = true;
           } else {
             this.payVisible = true;
+            this.orderId = id;
           }
         }
       },

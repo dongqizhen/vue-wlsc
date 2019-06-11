@@ -28,10 +28,19 @@
             :amount="checkedList.length"
             :checkAll="checkAll"
             v-on:isCheckAll="isCheckAllMethod"
+            v-on:isDelete="getCheckDelete"
+            v-if="
+              getOrderData.orderStatus == 5 || getOrderData.orderStatus == 7
+            "
           ></checkAll>
         </div>
       </div>
     </div>
+    <pagination
+      :data="paginationData"
+      v-on:onPaginationChange="getPaginationChange"
+      v-if="paginationData.count != 0"
+    ></pagination>
   </div>
 </template>
 <script>
@@ -41,6 +50,7 @@
   import checkAll from "../../../../components/common/checkAll";
   import listTitle from "../../../../components/common/listTitle";
   import filterSearch from "../../../../components/common/filterSearch";
+  import pagination from "../../../../components/common/pagination";
   import { _getData } from "../../../../config/getData";
   import { mapState } from "vuex";
   export default {
@@ -91,7 +101,7 @@
           },
           {
             id: 7,
-            name: "关闭",
+            name: "已关闭",
             amount: 1
           }
         ],
@@ -104,13 +114,29 @@
           orderStatus: 1, //类型：String  可有字段  备注：订单状态：1：待接单，2：待发货，3：待收货，4：待评价，5：已完成，6：退货，7：已关闭
           startTime: "",
           endTime: ""
-        }
+        },
+        paginationData: {}
       };
     },
     computed: {
       ...mapState(["userShopInfo"])
     },
     methods: {
+      //批量删除
+      getCheckDelete(val) {
+        console.log(val);
+        console.log(this.checkedList);
+        if (this.isShowInfo.current == 5 || this.isShowInfo.current == 7) {
+          //批量删除
+          // _getData("/enquiryPlus/enquiryClose", {
+          //   ids: this.selectArr.join(",")
+          // }).then(data => {
+          //   console.log("批量删除订单：", data);
+          //   this.$message.success("批量删除订单成功", 1);
+          //   this.getOrderList();
+          // });
+        }
+      },
       getSearchData(val) {
         console.log(val);
         this.getOrderData.name = val.value;
@@ -130,6 +156,11 @@
       getOrderStatus(val) {
         console.log("获取订单状态：", val);
         this.getOrderData.orderStatus = val;
+        if (val == 5 || val == 7) {
+          this.isShowInfo.current = -1;
+        } else {
+          this.isShowInfo.current = 1;
+        }
         this.getOrderList();
       },
       getChecked(val) {
@@ -158,11 +189,19 @@
           this.checkedList = [];
         }
       },
+      getPaginationChange(val) {
+        console.log(val);
+        this.getOrderData.currentPage = val;
+        this.getOrderList();
+      },
       getOrderList() {
         this.getOrderData.storeId = this.userShopInfo.store_id;
         _getData("/order/orderList", this.getOrderData).then(data => {
           console.log("获取订单列表：", data);
+          this.checkAll = false;
+          this.checkedList = [];
           this.data = data.data;
+          this.paginationData = data;
         });
       }
     },
@@ -175,7 +214,8 @@
       checkAll,
       listTitle,
       filterSearch,
-      commonTitle
+      commonTitle,
+      pagination
     }
   };
 </script>

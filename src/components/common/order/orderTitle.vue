@@ -33,7 +33,7 @@
             src="http://file.haoyigong.com/server/upload/1554429391594.jpg"
           />
         </span>
-        <span>{{ isShowInfo.isOrder ? data.shopName : data.username }}</span>
+        <span>{{ isShowInfo.isMerchant ? data.username : data.shopName }}</span>
       </div>
     </div>
     <div class="right-box">

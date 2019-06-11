@@ -230,13 +230,16 @@
         console.log(val);
         this.getInquiryList();
       },
-      //提交订单（已报价、已关闭）
+      //提交订单（已报价）
       submitOrder() {
         console.log(this.products);
         if (this.products.length > 0) {
           this.$router.replace({
             path: `submitOrder/${this.products.join(",")}`
           });
+        } else {
+          this.$message.warning("请选择产品", 1);
+          return;
         }
       },
       searchData() {
