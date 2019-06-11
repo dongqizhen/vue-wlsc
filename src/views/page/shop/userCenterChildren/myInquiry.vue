@@ -100,18 +100,23 @@
         </check-all>
       </div>
     </div>
+    <pagination
+      :data="paginationData"
+      v-on:onPaginationChange="getPaginationChange"
+      v-if="paginationData.count != 0"
+    ></pagination>
   </div>
 </template>
 
 <script>
-  import _ from "lodash";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
-  import checkAll from "../../../../components/common/checkAll";
   import listTitle from "../../../../components/common/listTitle";
   import inquiryItem from "../../../../components/common/inquiry/inquiryItem";
-  import inquiryManageItem from "../../../../components/common/inquiry/inquiryManageItem";
+  import checkAll from "../../../../components/common/checkAll";
   import calendarRange from "../../../../components/common/calendarRange";
+  import pagination from "../../../../components/common/pagination";
   import { _getData } from "../../../../config/getData";
+  import _ from "lodash";
   export default {
     data() {
       return {
@@ -145,7 +150,8 @@
         products: [],
         allProducts: [],
         selectDatas: [],
-        selectArr: []
+        selectArr: [],
+        paginationData: {}
       };
     },
     watch: {
@@ -160,15 +166,13 @@
         console.log(this.selectArr);
         if (this.isShowInfo.current == 1) {
           //批量关闭
-        } else if (this.isShowInfo.current == 3) {
-          //批量删除
-          // _getData("/enquiryPlus/deleteEnquiry", {
-          //   ids: this.checkedList.join(",")
-          // }).then(data => {
-          //   console.log("删除询价单：", data);
-          //   alert("删除成功");
-          //   this.getInquiryList();
-          // });
+          _getData("/enquiryPlus/enquiryClose", {
+            ids: this.selectArr.join(",")
+          }).then(data => {
+            console.log("批量关闭询价单：", data);
+            this.$message.success("批量关闭询价单成功", 1);
+            this.getInquiryList();
+          });
         }
       },
       //转为我的报价
@@ -215,6 +219,11 @@
             // }
           });
         }
+      },
+      getPaginationChange(val) {
+        console.log(val);
+        this.searchParams.page = val;
+        this.getInquiryList();
       },
       //单个删除
       getIsDelete(val) {
@@ -311,6 +320,7 @@
           this.selectDatas = [];
           this.checkAll = false;
           this.data = data.data;
+          this.paginationData = data;
           _.map(this.data, o => {
             for (const val of o.goodList) {
               this.allProducts.push(val.id);
@@ -328,7 +338,7 @@
       calendarRange,
       listTitle,
       inquiryItem,
-      inquiryManageItem
+      pagination
     }
   };
 </script>
@@ -398,6 +408,7 @@
               height: 27px;
               line-height: 27px;
               font-size: 12px;
+              font-weight: 400;
             }
             /deep/.el-select {
               height: 27px;
@@ -423,6 +434,7 @@
             padding: 0;
             height: 27px;
             line-height: 27px;
+            font-weight: 400;
             .ant-calendar-range-picker-input {
               height: 100%;
             }

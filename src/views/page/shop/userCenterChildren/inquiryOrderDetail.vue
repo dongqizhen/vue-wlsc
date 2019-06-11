@@ -36,11 +36,23 @@
             <span>{{ item.goodsName }}</span>
             <span>{{ item.goodsBrand }}/{{ item.goodsModel }}</span>
             <span>{{ item.unitPrice }}</span>
-            <span>{{ item.number }}</span>
+            <span v-if="isShowInfo.current != 3">
+              {{ item.number }}
+            </span>
+            <span v-if="isShowInfo.current == 3">
+              <van-stepper v-model="item.number" :max="item.goods_number" />
+              <i class="stockNumber">库存{{ item.goods_number }}件</i>
+            </span>
             <span>{{
               item.arrivalTime ? item.arrivalTime.substring(0, 16) : ""
             }}</span>
-            <span>{{ item.introduce }}</span>
+            <span v-if="isShowInfo.current != 3">{{ item.introduce }}</span>
+            <span v-if="isShowInfo.current == 3">
+              <a-textarea
+                placeholder="请输入备注"
+                v-model="item.introduce"
+              ></a-textarea>
+            </span>
           </li>
         </ul>
       </div>
@@ -161,10 +173,11 @@
             }
           }).then(data => {
             console.log("提醒商家报价：", data);
+            this.$message.success("已提醒商家报价", 1);
             this.data.remind = 1;
           });
         } else {
-          alert("已提醒商家报价");
+          this.$message.warning("已提醒商家报价", 1);
           return;
         }
       },
@@ -182,8 +195,9 @@
               }
             });
           });
+          console.log(goodsList);
           _getData("/enquiryPlus/addEnquiry", {
-            param: { storeId: this.data.storeId, goodsList: goodsList }
+            param: [{ storeId: this.data.storeId, goodsList: goodsList }]
           }).then(data => {
             console.log("一键获取报价：", data);
             this.$router.replace({ path: "/userCenter/myInquiry" });
@@ -389,6 +403,33 @@
             }
             &:nth-child(6) {
               width: 92px;
+              /deep/.van-stepper {
+                .van-stepper__minus,
+                .van-stepper__plus {
+                  width: 20px;
+                  height: 20px;
+                  border-radius: 0;
+                  border: $border-style;
+                  background: #f6f6f6;
+                  margin: 0;
+                  &:hover {
+                    cursor: pointer;
+                  }
+                }
+                .van-stepper__input {
+                  width: 38px;
+                  height: 16px;
+                  margin: 0;
+                  border-top: $border-style;
+                  border-bottom: $border-style;
+                }
+              }
+              .stockNumber {
+                font-style: normal;
+                font-size: 10px;
+                color: #ccc;
+                margin-top: 4px;
+              }
             }
             &:nth-child(7) {
               width: 72px;
@@ -397,6 +438,11 @@
             &:nth-child(8) {
               width: 160px;
               margin-right: 0;
+              .ant-input {
+                font-size: 12px;
+                resize: none;
+                height: 65px;
+              }
             }
           }
           li {

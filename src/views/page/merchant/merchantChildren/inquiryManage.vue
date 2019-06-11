@@ -45,18 +45,26 @@
             :amount="checkedList.length"
             :checkAll="checkAll"
             v-on:isCheckAll="isCheckAllMethod"
+            v-on:isDelete="getCheckDelete"
+            v-if="isShowInfo.current != 1"
           ></checkAll>
         </div>
       </div>
+      <pagination
+        :data="paginationData"
+        v-on:onPaginationChange="getPaginationChange"
+        v-if="paginationData.count != 0"
+      ></pagination>
     </div>
   </div>
 </template>
 
 <script>
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
-  import checkAll from "../../../../components/common/checkAll";
   import listTitle from "../../../../components/common/listTitle";
   import inquiryManageItem from "../../../../components/common/inquiry/inquiryManageItem";
+  import checkAll from "../../../../components/common/checkAll";
+  import pagination from "../../../../components/common/pagination";
   import { _getData } from "../../../../config/getData";
   import { mapState } from "vuex";
   export default {
@@ -87,18 +95,33 @@
           status: 1, //询价状态:1：报价中，2：已报价，3：已关闭。',
           enquirySn: "", //询价单号
           storeId: "" //商铺id，商铺id为空时，查询当前用户的询价单。
-        }
+        },
+        paginationData: {}
       };
     },
     computed: {
       ...mapState(["userShopInfo"])
     },
     methods: {
+      //批量删除
+      getCheckDelete(val) {
+        console.log(this.checkedList);
+        if (this.checkedList.length > 0) {
+          _getData("/enquiryPlus/deleteEnquiry", {
+            ids: this.checkedList.join(",")
+          }).then(data => {
+            console.log("批量删除询价单：", data);
+            this.$message.success("批量删除询价单成功", 1);
+            this.getInquiryList();
+          });
+        } else {
+          this.$message.warning("请选择询价单", 1);
+          return;
+        }
+      },
       getIsDelete(val) {
         console.log(val);
-        if (val == "删除成功！") {
-          this.getInquiryList();
-        }
+        this.getInquiryList();
       },
       tab(tabVal) {
         this.isShowInfo.current = tabVal;
@@ -131,12 +154,24 @@
           this.checkedList = [];
         }
       },
+      getPaginationChange(val) {
+        console.log(val);
+        this.getInquiryListParams.page = val;
+        this.getInquiryList();
+      },
       getInquiryList() {
         this.getInquiryListParams.storeId = this.userShopInfo.store_id;
         _getData("/enquiryPlus/enquiryList", this.getInquiryListParams).then(
           data => {
             console.log("获取询价管理的列表：", data);
+            this.checkedList = [];
+            this.checkAll = false;
             this.data = data.data;
+            // if (data.count != 0) {
+            this.paginationData = data;
+            // }else{
+
+            // }
           }
         );
       }
@@ -145,6 +180,7 @@
       if (this.$route.query.status) {
         this.getInquiryListParams.status = this.$route.query.status;
         this.isShowInfo.current = this.$route.query.status;
+        this.$router.replace({ path: "/merchant/inquiryManage" });
       }
       this.getInquiryList();
     },
@@ -152,7 +188,8 @@
       commonTitle,
       checkAll,
       listTitle,
-      inquiryManageItem
+      inquiryManageItem,
+      pagination
     }
   };
 </script>
@@ -200,8 +237,11 @@
             margin-bottom: 12px;
             ul {
               li {
+                &:nth-child(3) {
+                  width: 78px;
+                }
                 &:nth-child(4) {
-                  width: 60px;
+                  width: 80px;
                 }
                 &:nth-child(6) {
                   width: 157px;

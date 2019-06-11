@@ -19,7 +19,7 @@
         ></inquiry-product-item>
       </div>
       <div class="operating">
-        <div v-if="isShowInfo.current == 1 && isShowInfo.isMerchant">
+        <!-- <div v-if="isShowInfo.current == 1 && isShowInfo.isMerchant">
           <router-link
             :to="{
               path: `editInquiry/${data.id}`,
@@ -28,15 +28,16 @@
           >
             编辑报价
           </router-link>
-        </div>
-        <div v-else>
+        </div> -->
+        <div>
           <router-link
+            tag="li"
             :to="{
               path: `inquiryOrderDetail/${data.id}`,
               query: { isShowInfo: JSON.stringify(this.isShowInfo) }
             }"
           >
-            查看详情
+            <a target="_blank">查看详情</a>
           </router-link>
         </div>
         <div @click="deleteInquiryOrder(data.id)">
@@ -164,6 +165,13 @@
         console.log(id);
         if (this.isShowInfo.current == 1) {
           //关闭询价单
+          _getData("/enquiryPlus/enquiryClose", {
+            ids: id
+          }).then(data => {
+            console.log("关闭询价单：", data);
+            this.$message.success("关闭询价单成功", 1);
+            this.$emit("getIsDelete", data);
+          });
         } else {
           _getData("/enquiryPlus/deleteEnquiry", { ids: id }).then(data => {
             console.log("删除询价单：", data);

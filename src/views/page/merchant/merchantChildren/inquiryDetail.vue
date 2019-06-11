@@ -18,17 +18,14 @@
             v-on:getChecked="getChecked"
           ></inquiry-detail-item-product>
         </div>
-        <div class="list-footer">
+        <!-- <div class="list-footer">
           <check-all
             :amount="checkedList.length"
             :checkAll="checkAll"
             v-on:isCheckAll="isCheckAllMethod"
           >
-            <!-- <div slot="right-box" class="right-box">
-              <button class="submit" @click="submitQuote">提交报价</button>
-            </div> -->
           </check-all>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
