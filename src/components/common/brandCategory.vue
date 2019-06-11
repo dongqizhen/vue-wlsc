@@ -9,7 +9,7 @@
             </svg>
             品牌分类
           </span>
-          <span class="btn" @click="handleClick" v-if="isShow">
+          <span class="btn" @click="handleClick" v-if="isShow && isLogin">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconguanlichangyongfenlei"></use>
             </svg>
@@ -115,7 +115,7 @@
         this.brandVisible = true;
       },
       success() {
-        this.getCommonBrandCategory();
+        this.getCommonBrand();
       },
       //点击nav
       navHandleClick(id, i, e) {
@@ -125,15 +125,27 @@
           this.pageArr = this.arr.firstLineList;
         } else {
           this.isShow = true;
-          this.getCommonBrandCategory();
+          this.getCommonBrand();
         }
         this.defaultsVal = i;
+      },
+      async getCommonBrand() {
+        return await _getData("ubrand/list", {})
+          .then(data => {
+            this.pageArr = data.userBrandList;
+          })
+          .then(() => {});
       },
       //获取常用分类
       async getCommonBrandCategory() {
         _getData("brand/merge", {}).then(data => {
-          console.log("userBrandList", data);
-          this.pageArr = data.userbrandList;
+          console.log("品牌分类", data);
+          if (this.isLogin) {
+            // this.pageArr = data.userbrandList;
+          } else {
+            this.pageArr = data.firstLineList;
+          }
+
           this.arr = data;
         });
       }
@@ -154,6 +166,9 @@
     },
     components: { CommonBrandsModalVue },
     mounted() {
+      if (this.isLogin) {
+        this.getCommonBrand();
+      }
       this.getCommonBrandCategory();
 
       new Swiper(".brand-category .swiper-container.nav_slide", {

@@ -162,6 +162,10 @@
       p {
         font-size: 12px;
         color: #666666;
+        width: 224px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
     .bottom {
@@ -185,6 +189,9 @@
           span {
             color: #f10215;
             margin-left: 6px;
+          }
+          &:nth-child(2n) {
+            padding-left: 20px;
           }
         }
       }

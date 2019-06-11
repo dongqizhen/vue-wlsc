@@ -5,50 +5,19 @@
         <div class="magnifying">
           <div class="img_box">
             <a class="magnifier-thumb-wrapper">
-              <img
-                id="thumb"
-                :src="productInfo.list_pic_url"
-                v-if="productInfo.list_pic_url"
-              />
+              <img id="thumb" :src="imgUrl" v-if="imgUrl" />
             </a>
             <div class="magnifier-preview" id="preview"></div>
             <div class="swiper-container">
               <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                  <img src="../../../../assets/images/demo.jpg" alt="" />
-                </div>
-                <div class="swiper-slide">
-                  <img src="../../../../assets/images/demo.jpg" alt="" />
-                </div>
-                <div class="swiper-slide">
-                  <img src="../../../../assets/images/demo.jpg" alt="" />
-                </div>
-                <div class="swiper-slide">
-                  <img src="../../../../assets/images/demo.jpg" alt="" />
-                </div>
-                <div class="swiper-slide">
-                  <img src="../../../../assets/images/demo.jpg" alt="" />
-                </div>
-                <div class="swiper-slide">
-                  <img src="../../../../assets/images/demo.jpg" alt="" />
-                </div>
-                <div class="swiper-slide">
-                  <img src="../../../../assets/images/demo.jpg" alt="" />
-                </div>
-                <div class="swiper-slide">
-                  <img src="../../../../assets/images/demo.jpg" alt="" />
-                </div>
-                <div class="swiper-slide">
-                  <img src="../../../../assets/images/demo.jpg" alt="" />
-                </div>
-                <div class="swiper-slide">
-                  <img src="../../../../assets/images/demo.jpg" alt="" />
-                </div>
-                <div class="swiper-slide">
-                  <img src="../../../../assets/images/demo.jpg" alt="" />
-                </div>
-                <div class="swiper-slide">
-                  <img src="../../../../assets/images/demo.jpg" alt="" />
+                <div
+                  class="swiper-slide"
+                  v-for="(item, i) in imgarr"
+                  :key="i"
+                  @click="handleClick(item, i)"
+                  :class="bannerIndex == i && 'active'"
+                >
+                  <img :src="item" alt="" />
                 </div>
               </div>
               <!-- 如果需要分页器 -->
@@ -391,7 +360,7 @@
 
 <script>
   import shareMenuVue from "../../../../components/common/share/shareMenu.vue";
-  import img from "../../../../assets/images/demo.jpg";
+
   import { Icon } from "ant-design-vue";
   import modal from "../../../../components/modal/modal.vue";
   const IconFont = Icon.createFromIconfontCN({
@@ -408,8 +377,9 @@
       return {
         productInfo: "", //产品详情
         specificationInfo: "",
-        imgarr: [img, img],
+        imgarr: [],
         defaultIndex: null,
+        bannerIndex: 0,
         visible: false,
         title: "",
         imgUrl: "",
@@ -428,20 +398,25 @@
     },
     methods: {
       storeProduct() {
-        _getData("/collect/addordelete", {
-          valueId: this.$route.params.id,
-          typeId: 0
-        }).then(data => {
-          console.log(data);
+        if (this.isLogin) {
+          _getData("/collect/addordelete", {
+            valueId: this.$route.params.id,
+            typeId: 0
+          }).then(data => {
+            console.log(data);
 
-          if (this.isCollection) {
-            this.isCollection = 0;
-            this.$message.success("取消收藏成功");
-          } else {
-            this.isCollection = 1;
-            this.$message.success("商品收藏成功");
-          }
-        });
+            if (this.isCollection) {
+              this.isCollection = 0;
+              this.$message.success("取消收藏成功");
+            } else {
+              this.isCollection = 1;
+              this.$message.success("商品收藏成功");
+            }
+          });
+        } else {
+          this.type = "login";
+          this.visible = true;
+        }
       },
       changeImage(i, e) {
         if (this.defaultIndex == i) {
@@ -457,6 +432,10 @@
       toggle(tabIndex) {
         this.whichTab = tabIndex;
         window.location.href = "#searchBar"; // 锚点
+      },
+      handleClick(img, i) {
+        this.bannerIndex = i;
+        this.imgUrl = img;
       },
       addCarSuccess() {
         _getData("cart/addCart", {
@@ -511,31 +490,21 @@
           this.productInfo = data.productInfo;
           this.specificationInfo = data.specificationInfo;
           this.isCollection = data.isCollection;
+          this.imgarr = JSON.parse(this.productInfo.list_pic_url);
+          this.imgUrl = JSON.parse(this.productInfo.list_pic_url)[0];
         })
         .then(() => {
           const evt = new Event(),
             m = new Magnifier(evt);
           m.attach({
             thumb: "#thumb",
-            large: this.productInfo.list_pic_url,
+            large: this.imgUrl,
             largeWrapper: "preview",
             zoom: 2,
             zoomable: true
           });
-        });
-
-      _getData("/store/homeStore", {
-        storeId: this.$route.query.shopId
-      })
-        .then(data => {
-          console.log("店铺详情", data);
-          this.shopdetails = data;
         })
         .then(() => {
-          this.isLoading = false;
-        })
-        .then(() => {
-          window.addEventListener("scroll", this.handleScroll);
           const swiper = new Swiper(".swiper-container", {
             slidesPerView: 5,
             spaceBetween: 16,
@@ -552,6 +521,20 @@
               prevEl: ".swiper-button-prev"
             }
           });
+        });
+
+      _getData("/store/homeStore", {
+        storeId: this.$route.query.shopId
+      })
+        .then(data => {
+          console.log("店铺详情", data);
+          this.shopdetails = data;
+        })
+        .then(() => {
+          this.isLoading = false;
+        })
+        .then(() => {
+          window.addEventListener("scroll", this.handleScroll);
         });
     }
   };
@@ -636,9 +619,13 @@
                 box-sizing: border-box;
                 cursor: pointer;
                 border: 2px solid #fff;
+                width: 45px;
                 img {
                   height: 100%;
                   width: 100%;
+                }
+                &.active {
+                  border: 2px solid $theme-color;
                 }
                 &:hover {
                   border: 2px solid $theme-color;

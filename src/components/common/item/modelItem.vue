@@ -3,13 +3,13 @@
     class="model-item"
     tag="li"
     :to="{
-      path: 'model',
+      path: '/lookingProduct/model',
       query: {
         nav_index: $route.query.nav_index,
-        categoryId: $route.query.categoryId,
-        categoryName: $route.query.categoryName,
-        brandId: $route.query.brandId,
-        brandName: $route.query.brandName,
+        categoryId: $route.query.categoryId || item.category_id,
+        categoryName: $route.query.categoryName || item.category_name,
+        brandId: $route.query.brandId || item.brand_id,
+        brandName: $route.query.brandName || item.brand_name,
         modelId: item.id,
         modelName: item.name
       }

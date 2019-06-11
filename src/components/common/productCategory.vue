@@ -9,7 +9,7 @@
             </svg>
             产品分类
           </span>
-          <span class="btn" @click="handleClick" v-if="isShow">
+          <span class="btn" @click="handleClick" v-if="isShow && isLogin">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconguanlichangyongfenlei"></use>
             </svg>
@@ -126,7 +126,7 @@
       //获取常用分类
       async getCommonCategory() {
         _getData("ucatalog/list", {}).then(data => {
-          console.log("data", data);
+          console.log("产品分类", data);
           this.pageArr = data.userCategoryList;
         });
       },
@@ -156,11 +156,17 @@
       }
     },
     mounted() {
-      this.getCommonCategory();
+      if (this.isLogin) {
+        this.getCommonCategory();
+      }
+
       _getData("catalog/listAll", {})
         .then(data => {
-          console.log(data);
+          console.log("全部产品分类", data);
           this.navArr = [...this.navArr, ...data.currentCategory];
+          if (!this.isLogin) {
+            this.pageArr = data.currentCategory[0].subCategoryList;
+          }
         })
         .then(() => {
           this.$nextTick().then(() => {

@@ -72,7 +72,7 @@
             </a-input>
           </a-form-item>
           <div class="register-box">
-            <router-link to="register" class="register" replace>
+            <router-link to="register" class="register">
               立即注册
             </router-link>
           </div>

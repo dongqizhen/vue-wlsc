@@ -71,37 +71,51 @@
         </a-button>
       </div>
       <div class="shop-bottom-shadow"></div>
+      <login-modal-vue :Visible="visible" :type="modeltype"></login-modal-vue>
     </div>
   </div>
 </template>
 
 <script>
   import { _getData } from "../../config/getData";
+
+  import { mapState, mapMutations } from "vuex";
+  import loginModalVue from "../modal/loginModal.vue";
   export default {
     data() {
       return {
-        isCollection: 0
+        isCollection: 0,
+        visible: false,
+        modeltype: "login"
       };
     },
+    components: { loginModalVue },
     props: ["type", "detail"],
+    computed: {
+      ...mapState(["isLogin"])
+    },
     created() {
       this.isCollection = this.detail.collectId;
     },
     methods: {
       collect() {
-        _getData("collect/addordelete", {
-          valueId: this.detail.sid,
-          typeId: 1 //收藏类型 0 产品 1 店铺
-        }).then(data => {
-          console.log(data);
-          if (this.isCollection) {
-            this.isCollection = 0;
-            this.$message.success("取消收藏成功");
-          } else {
-            this.isCollection = 1;
-            this.$message.success("店铺收藏成功");
-          }
-        });
+        if (this.isLogin) {
+          _getData("collect/addordelete", {
+            valueId: this.detail.sid,
+            typeId: 1 //收藏类型 0 产品 1 店铺
+          }).then(data => {
+            console.log(data);
+            if (this.isCollection) {
+              this.isCollection = 0;
+              this.$message.success("取消收藏成功");
+            } else {
+              this.isCollection = 1;
+              this.$message.success("店铺收藏成功");
+            }
+          });
+        } else {
+          this.visible = true;
+        }
       }
     }
   };
