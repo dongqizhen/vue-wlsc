@@ -47,14 +47,16 @@
           </h2>
           <div class="con1 swiper-container">
             <ul ref="con1" class="swiper-wrapper">
-              <li
+              <router-link
                 v-for="(item, i) in noteList"
                 :key="`item-${i}`"
                 class="swiper-slide"
+                :to="{ path: '/notice', query: { id: item.id } }"
+                tag="li"
               >
                 <span>【公告】</span>
                 <p>{{ item.title }}</p>
-              </li>
+              </router-link>
             </ul>
           </div>
         </div>

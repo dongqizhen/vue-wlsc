@@ -398,20 +398,25 @@
     },
     methods: {
       storeProduct() {
-        _getData("/collect/addordelete", {
-          valueId: this.$route.params.id,
-          typeId: 0
-        }).then(data => {
-          console.log(data);
+        if (this.isLogin) {
+          _getData("/collect/addordelete", {
+            valueId: this.$route.params.id,
+            typeId: 0
+          }).then(data => {
+            console.log(data);
 
-          if (this.isCollection) {
-            this.isCollection = 0;
-            this.$message.success("取消收藏成功");
-          } else {
-            this.isCollection = 1;
-            this.$message.success("商品收藏成功");
-          }
-        });
+            if (this.isCollection) {
+              this.isCollection = 0;
+              this.$message.success("取消收藏成功");
+            } else {
+              this.isCollection = 1;
+              this.$message.success("商品收藏成功");
+            }
+          });
+        } else {
+          this.type = "login";
+          this.visible = true;
+        }
       },
       changeImage(i, e) {
         if (this.defaultIndex == i) {

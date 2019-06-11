@@ -464,6 +464,14 @@ const router = new Router({
                         import ("../views/page/guide/guideChildren/shopRules.vue")
                 },
             ]
+        }, {
+            path: '/notice',
+            name: '公告',
+            component: () =>
+                import ("../views/page/shop/notice"),
+            meta: {
+                title: '系统公告'
+            },
         }
 
     ]

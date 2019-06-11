@@ -125,7 +125,7 @@
   import modal from "./modal.vue";
   import _ from "lodash";
   import { _getData } from "../../config/getData";
-
+  import { mapState, mapMutations } from "vuex";
   export default {
     data() {
       return {
@@ -155,7 +155,10 @@
       }
     },
     mounted() {
-      this.getCommonBrand();
+      if (this.isLogin) {
+        this.getCommonBrand();
+      }
+
       this.getAllBrand();
     },
     components: {
@@ -276,7 +279,8 @@
           disabled: false,
           ghostClass: "ghost"
         };
-      }
+      },
+      ...mapState(["isLogin"])
     },
     watch: {
       brandVisible(newVal) {

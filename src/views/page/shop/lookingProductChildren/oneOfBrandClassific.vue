@@ -171,7 +171,8 @@
         if (this.val == "") return;
         this.isLoading = true;
         _getData("brand/getBrand", {
-          brandName: this.val.trim()
+          brandName: this.val.trim(),
+          categoryId: this.$route.query.categoryId || ""
         })
           .then(data => {
             this.arr = data;

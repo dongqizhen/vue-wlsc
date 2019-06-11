@@ -230,6 +230,14 @@
           height: 500px;
         }
         /deep/ .paginationBox {
+          .ant-pagination {
+            li {
+              margin-right: 2px;
+              input {
+                width: 27px;
+              }
+            }
+          }
           .sureBtn {
             margin-left: 10px;
           }
