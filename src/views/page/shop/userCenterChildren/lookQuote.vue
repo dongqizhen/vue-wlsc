@@ -3,22 +3,28 @@
     <common-title title="产品报价单"></common-title>
     <div class="quoteOrderInfo">
       <div class="infoBar">
-        <span>报价公司：默认用户自己单位</span>
+        <span>报价公司：{{ data.offerCompany }}</span>
         <span>客户名称：{{ data.clienteleName }}</span>
       </div>
       <list-title :titleArr="titleArr"></list-title>
       <div class="listContent">
         <ul>
-          <li v-for="item in data.goodsList" :key="item.id">
-            <span><img :src="item.listPicUrl"/></span>
-            <span>{{ item.name }}</span>
-            <span>{{ item.brandName }}/{{ item.modelName }}</span>
+          <li v-for="item in data.goodList" :key="item.id">
+            <span><img :src="item.goodsImage"/></span>
+            <span>{{ item.goodsName }}</span>
+            <span>{{ item.goodsBrand }}/{{ item.goodsModel }}</span>
             <span>¥{{ item.unitPrice }}</span>
             <span>{{ item.number }}</span>
-            <span>{{ item.goodsUnit }}</span>
+            <span>{{ item.unit }}</span>
             <span>¥{{ item.number * item.unitPrice }}</span>
             <span>{{ item.arrivalTime }}</span>
-            <span>{{ item.introduce }}</span>
+            <span>{{
+              item.remark
+                ? item.remark.length > 33
+                  ? item.remark.substring(0, 30) + "..."
+                  : item.remark
+                : ""
+            }}</span>
           </li>
         </ul>
       </div>
@@ -28,11 +34,12 @@
       </div>
       <div class="totalInfo">
         <span class="totalPrice">
-          报价总金额：<i>¥{{ data.subtotal }}</i>
+          报价总金额：<i>¥{{ sumPrice }}</i>
         </span>
         <span class="download">下载报价</span>
         <span class="edit">
           <router-link
+            target="_blank"
             :to="{ path: `/userCenter/editQuote/${$route.params.id}` }"
           >
             修改报价
@@ -60,7 +67,8 @@
           "到货时间",
           "备注"
         ],
-        data: []
+        data: [],
+        sumPrice: 0
       };
     },
     components: {
@@ -68,11 +76,16 @@
       listTitle
     },
     mounted() {
-      _getData("/enquiry/getGoodsEnquiry", {
-        goodsEnquirySn: this.$route.params.id
+      _getData("/quotation/detail", {
+        param: {
+          id: this.$route.params.id //类型：String  必有字段  备注：报价单id
+        }
       }).then(data => {
         console.log("获取的商品报价单详情：", data);
         this.data = data;
+        _.map(data.goodList, value => {
+          this.sumPrice = this.sumPrice + value.number * value.unitPrice;
+        });
       });
     }
   };

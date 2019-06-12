@@ -167,6 +167,9 @@
   .ant-checkbox-wrapper:hover .ant-checkbox-inner,
   .ant-checkbox:hover .ant-checkbox-inner,
   .ant-checkbox-input:focus + .ant-checkbox-inner {
+    border-color: #f10215 !important;
+  }
+  .ant-calendar-picker:hover .ant-calendar-picker-input:not(.ant-input-disabled) {
     border-color: #f10215;
   }
   .ant-calendar-picker:focus .ant-calendar-picker-input:not(.ant-input-disabled) {
@@ -179,10 +182,15 @@
   .ant-calendar-range .ant-calendar-in-range-cell:before {
     background: rgba(241, 2, 21, 0.05);
   }
+  .ant-calendar-today .ant-calendar-date {
+    border-color: #f10215;
+    color: #f10215;
+  }
   .ant-calendar-selected-date .ant-calendar-date,
   .ant-calendar-selected-start-date .ant-calendar-date,
   .ant-calendar-selected-end-date .ant-calendar-date {
     background: #f10215;
+    color: #fff;
   }
   .ant-calendar-cell {
     .ant-calendar-date {
@@ -191,9 +199,5 @@
         color: #fff;
       }
     }
-  }
-  .ant-calendar-today .ant-calendar-date {
-    border-color: #f10215;
-    color: #fff;
   }
 </style>

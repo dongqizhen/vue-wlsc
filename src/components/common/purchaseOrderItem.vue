@@ -15,7 +15,7 @@
             ></a-checkbox>
           </span>
           <span>
-            <img :src="item.list_pic_url" />
+            <img :src="JSON.parse(item.list_pic_url)[0]" />
           </span>
           <span>{{ item.goods_name }}</span>
           <span>{{ item.brand_name }}/{{ item.model_name }}</span>
@@ -202,7 +202,7 @@
               margin-right: 30px;
             }
             &:nth-child(5) {
-              width: 60px;
+              width: 45px;
               margin-right: 30px;
             }
             &:nth-child(6) {
@@ -238,7 +238,7 @@
               }
             }
             &:nth-child(7) {
-              width: 50px;
+              width: 65px;
               overflow: hidden;
               white-space: wrap;
               margin-right: 30px;

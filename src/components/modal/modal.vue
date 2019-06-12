@@ -888,9 +888,17 @@
               line-height: 30px;
               font-size: 12px;
               color: #333;
+              &:hover {
+                border-color: $theme-color !important;
+              }
+              &:focus {
+                border-color: $theme-color !important;
+                box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2) !important;
+              }
             }
             .textArea {
               height: 94px;
+              line-height: 22px;
               resize: none;
             }
           }

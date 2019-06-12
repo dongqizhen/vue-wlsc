@@ -7,14 +7,14 @@
           报价公司
           <a-input
             placeholder="请输入报价公司"
-            v-model="data.clienteleName"
+            v-model="param.clienteleName"
           ></a-input>
         </span>
         <span>
           客户名称
           <a-input
             placeholder="请输入客户名称"
-            v-model="data.clienteleName"
+            v-model="param.offerCompany"
           ></a-input>
         </span>
       </div>
@@ -30,10 +30,16 @@
             <span>
               {{ item.arrivalTime ? item.arrivalTime.substring(0, 16) : "" }}
             </span>
-            <span>{{ item.introduce }}</span>
+            <span>{{
+              item.remark
+                ? item.remark.length > 40
+                  ? item.remark.substring(0, 40) + "..."
+                  : item.remark
+                : ""
+            }}</span>
             <span>
               <div @click="addCarSuccess(item.id)">编辑</div>
-              <div>删除</div>
+              <div @click="deleteProduct(item.id)">删除</div>
             </span>
           </li>
         </ul>
@@ -49,7 +55,7 @@
         <span>
           <a-textarea
             placeholder="请输入报价备注"
-            v-model="data.remark"
+            v-model="param.remark"
           ></a-textarea>
         </span>
       </div>
@@ -57,7 +63,7 @@
         <span class="totalPrice">
           报价总金额：<i>¥{{ sumPrice }}</i>
         </span>
-        <span class="save">保存</span>
+        <span class="save" @click="save">保存</span>
       </div>
     </div>
     <edit-quote-modal
@@ -91,24 +97,44 @@
           "操作"
         ],
         data: [],
-        sumPrice: 0
+        sumPrice: 0,
+        param: {
+          id: this.$route.params.id,
+          clienteleName: "",
+          offerCompany: "",
+          remark: ""
+        }
       };
     },
     computed: {
       ...mapState(["isLogin"])
     },
     methods: {
+      save() {
+        _getData("/quotation/save", { param: this.param }).then(data => {
+          console.log(data);
+          this.$router.replace({ path: "/userCenter/myQuote" });
+        });
+      },
       addCarSuccess(id) {
         if (!this.isLogin) {
           this.type = "login";
         }
         this.visible = true;
-        this.editId = id;
+        if (typeof id == "number") {
+          this.editId = id;
+        } else {
+          this.editId = "";
+        }
+      },
+      deleteProduct(id) {
+        _getData("/quotation/deleteGoods", { param: { id: id } }).then(data => {
+          console.log(data);
+          this.getQuoteOrderDetail();
+        });
       },
       getIsUpdate(val) {
-        if (val) {
-          this.getQuoteOrderDetail();
-        }
+        this.getQuoteOrderDetail();
       },
       getQuoteOrderDetail() {
         _getData("/quotation/detail", {
@@ -118,6 +144,9 @@
         }).then(data => {
           console.log("获取的商品报价单详情：", data);
           this.data = data;
+          this.param.clienteleName = data.clienteleName;
+          this.param.offerCompany = data.offerCompany;
+          this.param.remark = data.remark;
           _.map(data.goodList, value => {
             this.sumPrice = this.sumPrice + value.number * value.unitPrice;
           });
@@ -159,6 +188,13 @@
             font-size: 12px;
             border-radius: 0%;
             margin-left: 6px;
+            &:hover {
+              border-color: $theme-color !important;
+            }
+            &:focus {
+              border-color: $theme-color !important;
+              box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2) !important;
+            }
           }
         }
       }

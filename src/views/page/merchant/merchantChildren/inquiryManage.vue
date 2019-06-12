@@ -29,7 +29,7 @@
         <div class="listContent">
           <list-title :titleArr="titleArr"></list-title>
           <div class="tbody">
-            <ul>
+            <ul v-if="data.length != 0">
               <li v-for="item in data" :key="item.id">
                 <inquiry-manage-item
                   :data="item"
@@ -40,6 +40,7 @@
                 ></inquiry-manage-item>
               </li>
             </ul>
+            <no-data v-else text="暂无数据"></no-data>
           </div>
           <checkAll
             :amount="checkedList.length"
@@ -254,6 +255,9 @@
             }
           }
           .tbody {
+            /deep/.no-data {
+              height: 552px;
+            }
             > ul {
               > li {
                 margin-bottom: 12px;

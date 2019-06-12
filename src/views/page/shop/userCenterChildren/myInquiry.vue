@@ -53,7 +53,7 @@
       </div>
       <div class="listContent">
         <list-title :titleArr="titleArr"></list-title>
-        <ul>
+        <ul v-if="data.length > 0">
           <li v-for="item in data" :key="item.id">
             <inquiry-item
               :data="item"
@@ -64,6 +64,7 @@
             ></inquiry-item>
           </li>
         </ul>
+        <no-data v-else text="暂无数据"></no-data>
       </div>
       <div class="tfooter">
         <check-all
@@ -72,6 +73,7 @@
           :deleteText="isShowInfo.current"
           v-on:isCheckAll="isCheckAllMethod"
           v-on:isDelete="getCheckDelete"
+          v-if="data.length > 0"
           :class="isShowInfo.current != 1 ? 'checkAllStyle' : ''"
         >
           <div slot="right-box" class="right-box">
@@ -429,6 +431,13 @@
               line-height: 27px;
               font-size: 12px;
               font-weight: 400;
+              &:hover {
+                border-color: $theme-color !important;
+              }
+              &:focus {
+                border-color: $theme-color !important;
+                box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2) !important;
+              }
             }
             /deep/.el-select {
               height: 27px;
@@ -502,6 +511,9 @@
             }
           }
         }
+      }
+      /deep/.no-data {
+        height: 500px;
       }
       .checkAllStyle {
         /deep/.left-box {

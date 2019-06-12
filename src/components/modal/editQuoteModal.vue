@@ -66,27 +66,32 @@
               ></a-input>
             </div>
           </div>
-          <div class="common ">
+          <!-- <div class="common ">
             <div class="left-box">到货时间</div>
             <div class="right-box">
-              <!-- <a-input
+              <a-input
                 placeholder="请输入到货时间"
                 v-model="submitData.arrivalTime"
-              ></a-input> -->
+              ></a-input>
               <a-date-picker
                 :format="'YYYY-MM-DD'"
                 @change="onDateChange"
-                :defaultValue="moment(`${initialArrivalTime}`, 'YYYY-MM-DD')"
+                :defaultValue="
+                  moment(
+                    `${defaultTime ? defaultTime : initialArrivalTime}`,
+                    'YYYY-MM-DD'
+                  )
+                "
               />
             </div>
-          </div>
+          </div> -->
           <div class="common remark">
             <div class="left-box">备注</div>
             <div class="right-box">
               <a-textarea
                 class="textArea"
                 placeholder="请输入备注"
-                v-model="submitData.introduce"
+                v-model="submitData.remark"
               ></a-textarea>
             </div>
           </div>
@@ -117,7 +122,6 @@
   import { _getData } from "../../config/getData";
   import upload from "../common/upload";
   import moment from "moment";
-  const initialArrivalTime = new Date().toLocaleDateString().replace(/\//g, "-");
   export default {
     data() {
       return {
@@ -130,6 +134,8 @@
           centered: false
         },
         submitData: {
+          id: "",
+          quotationId: this.$route.params.id,
           goodsName: "",
           goodsImage: "",
           goodsBrand: "",
@@ -138,11 +144,11 @@
           unit: "",
           number: "",
           arrivalTime: "",
-          introduce: ""
-        },
-        initialArrivalTime: initialArrivalTime
+          remark: ""
+        }
       };
     },
+
     props: {
       Visible: {
         type: Boolean,
@@ -158,7 +164,7 @@
         default: "提交成功",
         required: false
       },
-      editId: {}
+      editId: { type: [String, Number] }
     },
     components: {
       modal,
@@ -187,22 +193,13 @@
       },
       saveAddress() {
         console.log(this.submitData);
-        if (this.submitData.goodsId) {
-          this.submitData.goodsId = this.editId;
-          _getData("/enquiry/updateEnquiryGoods", this.submitData).then(data => {
+        _getData("/quotation/saveOrUpdateGoods", { param: this.submitData }).then(
+          data => {
             console.log(data);
             this.visible = false;
-            this.$parent.visible = false;
             this.$emit("getIsUpdate", true);
-          });
-        } else {
-          _getData("/enquiry/addEnquiryGoods", this.submitData).then(data => {
-            console.log(data);
-            this.visible = false;
-            this.$parent.visible = false;
-            this.$emit("getIsUpdate", true);
-          });
-        }
+          }
+        );
       },
       cancelAddress() {
         this.visible = false;
@@ -221,18 +218,23 @@
             }
           }).then(data => {
             console.log("获取产品详情：", data);
-            this.submitData = data;
-            console.log(this.submitData);
-            console.log(this.initialArrivalTime);
-            console.log(this.submitData.arrivalTime);
-            if (data.arrivalTime) {
-              this.initialArrivalTime = data.arrivalTime;
-            } else {
-              this.initialArrivalTime = this.initialArrivalTime;
-            }
+            this.submitData = {
+              id: data.id,
+              quotationId: data.quotationId,
+              goodsName: data.goodsName,
+              goodsImage: data.goodsImage,
+              goodsBrand: data.goodsBrand,
+              goodsModel: data.goodsModel,
+              unitPrice: data.unitPrice,
+              unit: data.unit,
+              number: data.number,
+              remark: data.remark
+            };
           });
         } else {
           this.submitData = {
+            id: "",
+            quotationId: this.$route.params.id,
             goodsName: "",
             goodsImage: "",
             goodsBrand: "",
@@ -240,8 +242,7 @@
             unitPrice: "",
             unit: "",
             number: "",
-            arrivalTime: "",
-            introduce: ""
+            remark: ""
           };
           this.submitData.goodsImage = "initial";
           this.options.title = "添加商品";
@@ -273,9 +274,6 @@
         //   };
         // }
       }
-    },
-    mounted() {
-      this.submitData.arrivalTime = this.initialArrivalTime;
     }
   };
 </script>
