@@ -69,10 +69,15 @@
           <div class="common ">
             <div class="left-box">到货时间</div>
             <div class="right-box">
-              <a-input
+              <!-- <a-input
                 placeholder="请输入到货时间"
                 v-model="submitData.arrivalTime"
-              ></a-input>
+              ></a-input> -->
+              <a-date-picker
+                :format="'YYYY-MM-DD'"
+                @change="onDateChange"
+                :defaultValue="moment(`${initialArrivalTime}`, 'YYYY-MM-DD')"
+              />
             </div>
           </div>
           <div class="common remark">
@@ -111,6 +116,8 @@
   import modal from "./modal.vue";
   import { _getData } from "../../config/getData";
   import upload from "../common/upload";
+  import moment from "moment";
+  const initialArrivalTime = new Date().toLocaleDateString().replace(/\//g, "-");
   export default {
     data() {
       return {
@@ -123,7 +130,6 @@
           centered: false
         },
         submitData: {
-          goodsEnquirySn: this.goodsEnquirySn,
           goodsName: "",
           goodsImage: "",
           goodsBrand: "",
@@ -133,7 +139,8 @@
           number: "",
           arrivalTime: "",
           introduce: ""
-        }
+        },
+        initialArrivalTime: initialArrivalTime
       };
     },
     props: {
@@ -151,14 +158,18 @@
         default: "提交成功",
         required: false
       },
-      editId: {},
-      goodsEnquirySn: {}
+      editId: {}
     },
     components: {
       modal,
       upload
     },
     methods: {
+      moment,
+      onDateChange(date, dataString) {
+        console.log(date, dataString);
+        this.submitData.arrivalTime = dataString;
+      },
       getImgUrl(val) {
         console.log(val);
         if (val.length > 0) {
@@ -204,17 +215,24 @@
         console.log(this.editId);
         if (typeof this.editId == "number") {
           this.options.title = "编辑商品";
-          _getData("/enquiry/getEnquiryGoods", {
-            goodsEnquirySn: this.$route.params.id,
-            goodsId: this.editId
+          _getData("/quotation/goodsDetail", {
+            param: {
+              id: this.editId
+            }
           }).then(data => {
             console.log("获取产品详情：", data);
             this.submitData = data;
             console.log(this.submitData);
+            console.log(this.initialArrivalTime);
+            console.log(this.submitData.arrivalTime);
+            if (data.arrivalTime) {
+              this.initialArrivalTime = data.arrivalTime;
+            } else {
+              this.initialArrivalTime = this.initialArrivalTime;
+            }
           });
         } else {
           this.submitData = {
-            goodsEnquirySn: this.$route.params.id,
             goodsName: "",
             goodsImage: "",
             goodsBrand: "",
@@ -255,6 +273,9 @@
         //   };
         // }
       }
+    },
+    mounted() {
+      this.submitData.arrivalTime = this.initialArrivalTime;
     }
   };
 </script>

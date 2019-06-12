@@ -36,7 +36,7 @@
                 <use xlink:href="#iconjiangshi"></use>
               </svg>
             </i>
-            讲师：{{ item.speaker }}
+            <span> 讲师：{{ item.speaker }} </span>
           </p>
           <ul>
             <li v-for="label in item.labelList" :key="label.id">
@@ -197,14 +197,19 @@
           display: flex;
           justify-content: flex-start;
           align-items: center;
+
           width: 130px;
           font-family: PingFangSC-Regular;
           font-size: 13px;
           color: #333333;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
           i {
             display: flex;
             margin-right: 3px;
             margin-top: 1px;
+            height: 100%;
             .icon {
               width: 7px;
               height: 7px;

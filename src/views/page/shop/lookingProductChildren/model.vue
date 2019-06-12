@@ -52,9 +52,13 @@
                     :list="item"
                   ></product-item-vue>
                 </ul>
-                <pagination-vue :data="data"></pagination-vue>
               </div>
               <loading-vue v-else></loading-vue>
+              <pagination-vue
+                :data="data"
+                v-on:onPaginationChange="onPaginationChange"
+                ref="pagination"
+              ></pagination-vue>
             </div>
             <no-data v-else text="暂无数据"></no-data>
           </div>
@@ -115,6 +119,13 @@
     },
     computed: {},
     methods: {
+      onPaginationChange(page) {
+        if (this.index < this.navList.length) {
+          this.getGoodsList(page);
+        } else if (_.startsWith(this.defaultVal, "店铺")) {
+          this.getShopList(page);
+        }
+      },
       startWith(val) {
         return _.startsWith(this.defaultVal, val);
       },
@@ -136,19 +147,24 @@
         if (i < this.navList.length) {
           this.navArr = goodsort;
           this.attributeCategoryId = this.navList[i].id;
-          this.getGoodsList();
+          this.getGoodsList().then(() => {});
         }
         if (_.startsWith(this.defaultVal, "店铺")) {
           this.navArr = shopsort;
-          this.getShopList();
+          this.getShopList().then(() => {});
         }
+        this.$nextTick(() => {
+          if (this.$refs.pagination) {
+            this.$refs.pagination.$data.current = 1;
+          }
+        });
       },
       //获取商铺列表
-      async getShopList() {
+      async getShopList(currentPage = 1) {
         this.shopIsloading = true;
         return await _getData("queryStore", {
           modelId: this.$route.query.modelId,
-          currentPage: 1,
+          currentPage,
           countPerPage: 6,
           sort: this.shopSort,
           order: "asc"
@@ -168,11 +184,11 @@
           });
       },
       //获取产品列表
-      async getGoodsList() {
+      async getGoodsList(currentPage = 1) {
         this.shopIsloading = true;
         return await _getData("goods/goodslist", {
           attributeCategoryId: this.attributeCategoryId,
-          currentPage: 1,
+          currentPage,
           modelId: this.$route.query.modelId,
           countPerPage: 6,
           sort: this.goodSort,
@@ -389,9 +405,10 @@
         }
         .main-content {
           margin-right: -7.5px;
-          > div > ul {
+          > div > div > ul {
             display: flex;
             flex-wrap: wrap;
+            justify-content: flex-start;
             > li {
               margin-right: 7.5px;
               margin-bottom: 10px;

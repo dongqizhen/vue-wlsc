@@ -287,6 +287,12 @@ const router = new Router({
                         import ("../views/page/shop/userCenterChildren/orderDetails")
                 },
                 {
+                    path: "comment/:id",
+                    name: "评价",
+                    component: () =>
+                        import ("../views/page/shop/userCenterChildren/comment")
+                },
+                {
                     path: "myQuote",
                     name: "我的报价",
                     component: () =>
@@ -336,7 +342,7 @@ const router = new Router({
                 },
                 {
                     path: "userSecurity",
-                    name: "用户安全",
+                    name: "账号安全",
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/accountSecurity")
                 },

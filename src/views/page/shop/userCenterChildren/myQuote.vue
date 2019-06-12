@@ -7,19 +7,22 @@
           <div class="common productName">
             <div class="left-box">客户名称</div>
             <div class="right-box">
-              <a-input placeholder="请输入客户名称" />
+              <a-input
+                placeholder="请输入客户名称"
+                v-model="param.clenteleName"
+              />
             </div>
           </div>
           <div class="common productName">
             <div class="left-box">商品名称</div>
             <div class="right-box">
-              <a-input placeholder="请输入商品名称" />
+              <a-input placeholder="请输入商品名称" v-model="param.goodsName" />
             </div>
           </div>
         </div>
         <div class="selectBtn">
-          <button class="search">搜索</button>
-          <button class="clear">清空</button>
+          <button class="search" @click="search">搜索</button>
+          <button class="clear" @click="clearData">清空</button>
         </div>
       </div>
       <div class="listContent">
@@ -100,10 +103,24 @@
         ],
         checkAll: false,
         checkedList: [],
-        data: []
+        data: [],
+        param: {
+          currentPage: 1, //类型：Number
+          countPerPage: 5, //类型：Number
+          clenteleName: "", //类型：String  备注：客户名称
+          goodsName: "", //类型：String 备注：商品名
+          date: "" //类型：String  备注：时间
+        }
       };
     },
     methods: {
+      search() {
+        this.getList();
+      },
+      clearData() {
+        this.param.clenteleName = "";
+        this.param.goodsName = "";
+      },
       deleteItem(val) {
         _getData("/enquiry/deleteEnquiry", {
           ids: val
@@ -148,25 +165,21 @@
         }
       },
       isCheckAllMethod(val) {
+        this.checkedList = [];
         if (val) {
           this.checkAll = true;
-          this.checkedList = [];
           for (const val of this.data) {
             this.checkedList.push(val.goodsEnquirySn);
           }
         } else {
           this.checkAll = false;
-          this.checkedList = [];
         }
       },
       getList() {
-        _getData("/enquiry/goodsEnquiryList", {
-          page: 1,
-          size: 10,
-          order: "",
-          price: ""
-        }).then(data => {
+        _getData("/quotation/list", { param: this.param }).then(data => {
           console.log("获取我的报价列表:", data);
+          this.checkedList = [];
+          this.checkAll = false;
           this.data = data.data;
         });
       }

@@ -13,8 +13,8 @@
           {{ title }}
         </p>
         <div class="btn">
-          <a-button>去询价</a-button>
-          <a-button>继续选购</a-button>
+          <a-button @click="toEnquiry">去询价</a-button>
+          <a-button @click="visible = false">继续选购</a-button>
         </div>
       </div>
       <div slot="content" v-else>
@@ -75,6 +75,10 @@
         });
         this.visible = false;
         window.open(href, "_blank");
+      },
+      //去询价
+      toEnquiry() {
+        this.$router.push("/userCenter");
       }
     },
     watch: {

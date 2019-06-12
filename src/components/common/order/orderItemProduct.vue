@@ -75,18 +75,19 @@
       </div>
       <div
         class="sure"
-        @click="commentModal"
         v-if="
           (data.order_status == 4 || data.order_status == 5) &&
             !isShowInfo.isMerchant &&
             !isShowInfo.isDetail
         "
       >
-        评价
+        <router-link tag="a" target="_blank" :to="`comment/${data.id}`">
+          评价
+        </router-link>
       </div>
       <div
         class="sure"
-        @click="confirmReceiptOrReturn"
+        @click="confirmReturn"
         v-if="
           data.order_status == 6 &&
             isShowInfo.isMerchant &&
@@ -97,33 +98,30 @@
       </div>
       <div
         class="sure"
+        @click="applicationReturn"
+        v-if="
+          (data.order_status == 3 ||
+            data.order_status == 4 ||
+            data.order_status == 5) &&
+            !isShowInfo.isMerchant &&
+            isShowInfo.isDetail
+        "
+      >
+        申请退货
+      </div>
+      <div
+        class="sure"
         v-if="
           data.order_status == 6 && isShowInfo.isMerchant && isShowInfo.isDetail
         "
       >
         退货中
       </div>
-      <!-- <div
-        class="sure"
-        @click="lookComment"
-        v-if="
-          data.order_status == 5 &&
-            isShowInfo.isMerchant &&
-            !isShowInfo.isDetail
-        "
-      >
-        查看评价
-      </div> -->
       <div class="lookOrderDetail" v-if="!isShowInfo.isDetail">
-        <router-link
-          tag="a"
-          target="_blank"
-          :to="`orderDetail/${data.order_sn}`"
-        >
+        <router-link tag="a" target="_blank" :to="`orderDetail/${data.id}`">
           查看订单详情
         </router-link>
       </div>
-
       <div
         class="deleteOrder"
         v-if="
@@ -204,6 +202,7 @@
       }
     },
     methods: {
+      //确认订单
       confirmOrder(orderId) {
         console.log(orderId);
         _getData("/order/updateOrderStatus", {
@@ -214,6 +213,7 @@
           this.$emit("returnValue", 2); //2表示已经接单，进入待发货状态
         });
       },
+      //取消订单
       cancelOrder(orderId) {
         _getData("/order/updateOrderStatus", {
           orderId: orderId,
@@ -227,6 +227,7 @@
         console.log(val);
         this.$emit("returnValue", val);
       },
+      //确认收货
       confirmReceipt(orderId) {
         _getData("/order/updateOrderStatus", {
           orderId: orderId,
@@ -236,8 +237,25 @@
           this.$emit("returnValue", 4); //4表示已经收货，进入待评价状态
         });
       },
-      confirmReceiptOrReturn() {},
-      lookComment() {},
+      //申请退货
+      applicationReturn() {
+        _getData("/order/updateOrderStatus", {
+          orderId: this.$route.params.id,
+          orderStatus: "retreat"
+        }).then(data => {
+          console.log(data);
+          this.$message.success("申请成功", 1);
+          this.data.order_status = 6;
+          //this.$emit("returnValue", 4); //4表示已经收货，进入待评价状态
+        });
+      },
+      //确认退货
+      confirmReturn() {},
+      getReturnStatus(val) {
+        console.log(val);
+        this.$emit("returnValue", val);
+      },
+      //支付证明弹框
       addModal(id) {
         if (!this.isLogin) {
           this.type = "login";
@@ -250,6 +268,7 @@
           }
         }
       },
+      //确认发货弹框
       confirmDelivery(id) {
         if (!this.isLogin) {
           this.type = "login";
@@ -257,12 +276,14 @@
         this.sureVisible = true;
         this.orderId = id;
       },
+      //评论弹框
       commentModal() {
         if (!this.isLogin) {
           this.type = "login";
         }
         this.commentVisible = true;
       },
+      //删除弹框
       deleteModal(id) {
         if (!this.isLogin) {
           this.type = "login";

@@ -383,7 +383,7 @@
         visible: false,
         title: "",
         imgUrl: "",
-        type: "",
+        type: "", //控制弹出框的类型
         isCollection: 0, //是否收藏产品
         shopdetails: "",
         isLoading: true,
@@ -507,7 +507,9 @@
           this.imgUrl = JSON.parse(this.productInfo.list_pic_url)[0];
         })
         .then(() => {
-          this.initMagnifier();
+          this.$nextTick().then(() => {
+            this.initMagnifier();
+          });
         })
         .then(() => {
           const swiper = new Swiper(".swiper-container", {

@@ -61,6 +61,7 @@
           :amount="checkedList.length"
           :checkAll="checkAll"
           v-on:isCheckAll="isCheckAllMethod"
+          @isDelete="batchDeleteData"
         >
           <div slot="right-box">
             <div
@@ -74,8 +75,9 @@
       </div>
     </div>
     <pagination
-      :data="totalCount"
+      :data="paginationData"
       v-on:onPaginationChange="getPaginationChange"
+      v-if="paginationData.count != 0"
     ></pagination>
   </div>
 </template>
@@ -94,7 +96,6 @@
       return {
         systemNumber: 0,
         personalNumber: 0,
-        totalCount: { amount: 0, pageSize: 10 },
         data: [],
         tabs: [
           {
@@ -122,7 +123,8 @@
         getMessageNumberParams: {
           messageType: 0, //类型：String  可有字段  备注：消息类型 0系统消息，1私信，空字符串查询全部
           readType: 0 //类型：String  可有字段  备注：消息状态 0未读，1已读，空字符串查询全部
-        }
+        },
+        paginationData: {}
       };
     },
 
@@ -176,6 +178,27 @@
           this.checkedList = [];
         }
       },
+      //批量删除
+      batchDeleteData() {
+        if (this.checkedList.length > 0) {
+          //向后台发送请求，标记为已读，成功后将刷新数据
+          console.log(this.checkedList);
+          console.log(this.checkedList.join(","));
+          _getData("/message/updateStatus", {
+            ids: this.checkedList.join(","),
+            flag: "delete"
+          }).then(data => {
+            console.log(data);
+            this.$message.success("批量删除成功", 1);
+            this.getMessageList();
+            this.getMessageNumber();
+          });
+        } else {
+          this.$message.warning("请选择信息", 1);
+          return;
+        }
+      },
+      //批量已读
       remarkRead() {
         if (this.checkedList.length > 0) {
           //向后台发送请求，标记为已读，成功后将刷新数据
@@ -187,23 +210,29 @@
           }).then(data => {
             console.log(data);
             //移动到已读列表
+            this.unRead = false;
             this.defaultActiveKey = 1;
             this.params.readType = 1;
             this.getMessageNumberParams.readType = 1;
             this.getMessageList();
             this.getMessageNumber();
           });
+        } else {
+          this.$message.warning("请选择信息", 1);
+          return;
         }
       },
       getPaginationChange(val) {
         console.log(val);
+        this.params.currentPage = val;
+        this.getMessageList();
       },
       getMessageList() {
         _getData("/message/list", this.params).then(data => {
           console.log("获取到的信息列表：", data);
-          this.totalCount.amount = data.count;
-          this.totalCount.pageSize = data.numsPerPage;
+          this.checkedList = [];
           this.data = data.data;
+          this.paginationData = data;
         });
       },
       getMessageNumber() {

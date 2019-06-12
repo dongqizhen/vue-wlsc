@@ -9,7 +9,7 @@
               <use xlink:href="#iconzhanghaoanquanduigou"></use>
             </svg>
           </span>
-          <span class="title">登录密码</span>
+          <span class="title">更改密码</span>
           <span class="description">
             安全性高的密码可以使账户更安全，建议您定期更换密码。
           </span>
@@ -25,10 +25,12 @@
           <span>
             <svg class="icon" aria-hidden="true">
               <use
-                xlink:href="#iconzhanghaoanquanduigou"
-                v-if="isAlready"
+                v-bind:xlink:href="
+                  userInfo.email
+                    ? '#iconzhanghaoanquanduigou'
+                    : '#iconzhanghaoanquancuowu'
+                "
               ></use>
-              <use xlink:href="#iconzhanghaoanquancuowu" v-else></use>
             </svg>
           </span>
           <span class="title">绑定邮箱</span>
@@ -38,7 +40,9 @@
         </div>
         <div class="right-box">
           <a-button>
-            <router-link to="changeEmail">修改</router-link>
+            <router-link to="changeEmail">{{
+              userInfo.email ? "修改" : "绑定"
+            }}</router-link>
           </a-button>
         </div>
       </div>
@@ -49,9 +53,9 @@
               <use xlink:href="#iconzhanghaoanquanduigou"></use>
             </svg>
           </span>
-          <span class="title">绑定手机</span>
+          <span class="title">更改手机号</span>
           <span class="description">
-            绑定后可用于手机找回密码、接受手机动态验证码等，使您的账户更加安全。
+            更改后可用于手机找回密码、接受手机动态验证码等，使您的账户更加安全。
           </span>
         </div>
         <div class="right-box">
@@ -66,7 +70,7 @@
 
 <script>
   import commonTitle from "../../components/common/merchantRightCommonTitle";
-
+  import { mapState } from "vuex";
   export default {
     data() {
       return {};
@@ -76,6 +80,9 @@
         type: Boolean,
         required: true
       }
+    },
+    computed: {
+      ...mapState(["userInfo"])
     },
     methods: {},
     components: {
@@ -132,5 +139,8 @@
     margin-right: 60px;
     padding: 0 24px;
     letter-spacing: 0;
+    &:hover {
+      opacity: 0.7;
+    }
   }
 </style>

@@ -12,10 +12,10 @@
         </div>
         <div class="tab-box">
           <div :class="current == 0 ? 'active' : ''" @click="getTab(0)">
-            产品(1)
+            产品({{ goodsCount }})
           </div>
           <div :class="current == 1 ? 'active' : ''" @click="getTab(1)">
-            店铺(2)
+            店铺({{ shopCount }})
           </div>
         </div>
       </div>
@@ -38,31 +38,46 @@
         </ul>
       </div>
     </div>
+    <pagination
+      :data="paginationData"
+      v-on:onPaginationChange="getPaginationChange"
+      v-if="paginationData.count != 0"
+    ></pagination>
   </div>
 </template>
 
 <script>
-  import _ from "lodash";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
-  import { _getData } from "../../../../config/getData";
   import productItem from "../../../../components/common/item/productItem";
   import shopItem from "../../../../components/common/item/shopItem";
+  import pagination from "../../../../components/common/pagination";
+  import { _getData } from "../../../../config/getData";
+  import _ from "lodash";
   export default {
     data() {
       return {
         data: [],
         current: 0,
+        goodsCount: 0,
+        shopCount: 0,
         searchParams: {
           name: "",
           typeId: 0, //收藏类型 0 商品 1 店铺
           currentPage: 1,
-          countPerPage: 1000000
-        }
+          countPerPage: 8
+        },
+        paginationData: {}
       };
     },
     methods: {
+      getPaginationChange(val) {
+        console.log(val);
+        this.searchParams.currentPage = val;
+        this.getList();
+      },
       search() {
         this.getList();
+        this.getStoreNumber();
       },
       clear() {
         this.searchParams.name = "";
@@ -76,16 +91,28 @@
         _getData("/collect/list", this.searchParams).then(data => {
           console.log("获取收藏数据：", data);
           this.data = data.data;
+          this.paginationData = data;
         });
+      },
+      getStoreNumber() {
+        _getData("/collect/count", { name: this.searchParams.name }).then(
+          data => {
+            console.log("获取的收藏的数量：：：", data);
+            this.goodsCount = data.goodsCount;
+            this.shopCount = data.shopCount;
+          }
+        );
       }
     },
     components: {
       commonTitle,
       productItem,
-      shopItem
+      shopItem,
+      pagination
     },
     mounted() {
       this.getList();
+      this.getStoreNumber();
     }
   };
 </script>
@@ -93,9 +120,9 @@
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
   .myStore {
-    width: 1036px;
+    width: 1040px;
     min-height: 693px;
-    margin-bottom: 10px;
+    margin-bottom: 100px;
     .common-title {
       height: 59px;
       background-color: #fff;
@@ -112,6 +139,7 @@
             height: 27px;
             line-height: 27px;
             font-size: 12px;
+            font-weight: normal;
             &:hover {
               border-color: $theme-color;
             }
@@ -172,6 +200,7 @@
           width: 254px;
           margin-right: 8px;
           float: left;
+          margin-bottom: 8px;
         }
       }
     }

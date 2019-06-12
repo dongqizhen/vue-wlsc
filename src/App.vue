@@ -194,6 +194,6 @@
   }
   .ant-calendar-today .ant-calendar-date {
     border-color: #f10215;
-    color: #f10215;
+    color: #fff;
   }
 </style>

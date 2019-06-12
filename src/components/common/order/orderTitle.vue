@@ -35,6 +35,13 @@
         </span>
         <span>{{ isShowInfo.isMerchant ? data.username : data.shopName }}</span>
       </div>
+      <div
+        class="common userName"
+        v-if="isShowInfo.isDetail && data.order_status == 7"
+      >
+        <span>订单关闭原因：</span>
+        <span>{{ isShowInfo.isMerchant ? data.username : data.shopName }}</span>
+      </div>
     </div>
     <div class="right-box">
       <div class="common orderStatus">

@@ -206,6 +206,12 @@
     },
 
     mounted() {
+      if (this.$route.query.status) {
+        this.getOrderData.orderStatus = 5;
+        this.defaultActiveKey = 5;
+        this.isShowInfo.current = -1;
+        this.$router.replace({ path: "/userCenter/myOrder" });
+      }
       this.getOrderList();
     },
     components: {

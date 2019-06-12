@@ -123,7 +123,11 @@
               确定
             </a-button>
             <!-- <div class="btn submit" @click="sure">确定</div> -->
-            <a-button type="primary" class="login-form-button btn cancel">
+            <a-button
+              type="primary"
+              class="login-form-button btn cancel"
+              @click="$router.go(-1)"
+            >
               取消
             </a-button>
             <!-- <div class="btn cancel" @click="cancel">取消</div> -->
@@ -182,14 +186,8 @@
             //this.$message.success("注册成功", 1);
           })
           .then(() => {
-            //this.$router.go(-1);
+            this.$router.go(-1);
           });
-      },
-      sure() {
-        console.log();
-      },
-      cancel() {
-        this.$router.go(-1);
       },
       compareToFirstPassword(rule, value, callback) {
         const form = this.form;
@@ -293,6 +291,7 @@
                 padding-right: 18px;
                 display: flex;
                 height: 34px;
+                color: $theme-color;
                 align-items: center;
                 background: url("../../assets/images/err.svg") no-repeat right
                   center;

@@ -7,11 +7,27 @@
       @change="onPaginationChange"
       :defaultPageSize="defaultPageSize"
       :pageSize="data.pageSize || data.countPerPage || data.numsPerPage"
+      v-model="current"
     />
     <div class="sureBtn" @click="sureFun($event)">确定</div>
   </div>
 </template>
 <script>
+  /**
+   * @name 分页组件
+   *
+   * @description 依赖 Ant Design Vue 中 Pagination 组件，实现分页的功能，加入点击确定按钮跳转页面的功能
+   *
+   * 网址= https://vue.ant.design/components/pagination-cn/
+   *
+   * @props 父组件传入的数据
+   * data 分页数据信息，必须包含 *总共页数-当前页-每页条数* 等信息 //!必须
+   * defaultPageSize 每页的条数 默认每页20条 //?非必须
+   *
+   * @events 传递事件函数
+   * 通过 _vm.$emit 向父组件抛出 @onPaginationChange 事件函数，父组件通过v-on:onPaginationChange接受此事件，并传入当前需要跳转的页数（page）参数
+   */
+
   import _ from "lodash";
   export default {
     data() {
@@ -33,6 +49,7 @@
     },
     methods: {
       onPaginationChange(page, pageSize) {
+        this.current = page;
         this.$emit("onPaginationChange", page);
       },
       isNumber(val) {

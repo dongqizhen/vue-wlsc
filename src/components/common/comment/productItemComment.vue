@@ -1,11 +1,11 @@
 <template>
   <div class="itemProductComment">
     <div class="productInfo">
-      <img src="http://file.haoyigong.com/server/upload/1554429391594.jpg" />
+      <img :src="data.list_pic_url" />
       <div class="productName">{{ data.goods_name }}</div>
     </div>
     <div class="common">
-      <div class="left-box">评价商品</div>
+      <div class="left-box commentProduct">评价商品</div>
       <div class="right-box">
         <a-textarea
           placeholder="其他买家需要你的建议哦！"
@@ -39,6 +39,7 @@
             :action="actionURL"
             :beforeUpload="beforeUpload"
             @change="handleChange"
+            v-show="uploadList.length < 6"
           >
             <div v-if="uploadList.length < 6">
               <a-icon class="icon">
@@ -88,10 +89,10 @@
         tempUploadList: [],
         submitData: {
           content: "",
-          performance: 0,
-          quality: 0,
-          aftersale: 0,
-          train: 0
+          performance: 3,
+          quality: 3,
+          aftersale: 3,
+          train: 3
         }
       };
     },
@@ -137,10 +138,10 @@
 </script>
 <style lang="scss" scoped>
   .itemProductComment {
-    border-bottom: 5px solid #f5f5f5;
+    border-bottom: 1px solid #ddd;
     .productInfo {
-      height: 50px;
-      padding-left: 44px;
+      height: 58px;
+      padding-left: 10px;
       background: rgba(245, 166, 35, 0.05);
       display: flex;
       align-items: center;
@@ -159,14 +160,17 @@
     .common {
       display: flex;
       margin-bottom: 24px;
-      padding-left: 44px;
+      padding-left: 10px;
       .left-box {
         width: 88px;
         font-size: 14px;
         color: #666666;
       }
+      .commentProduct {
+        margin-top: 4px;
+      }
       .right-box {
-        width: 530px;
+        // width: 530px;
         .ant-input {
           width: 520px;
           height: 109px;

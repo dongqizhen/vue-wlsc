@@ -38,12 +38,12 @@
       <h2>
         {{ item.name }}
       </h2>
-      <p v-html="item.introduce"></p>
+      <p v-text="convert"></p>
       <div class="tip">
         <ul>
-          <li>{{ item.productline }}</li>
-          <li>{{ item.brandName }}</li>
-          <li>{{ item.modelName }}</li>
+          <li v-if="item.productline">{{ item.productline }}</li>
+          <li v-if="item.brandName">{{ item.brandName }}</li>
+          <li v-if="item.modelName">{{ item.modelName }}</li>
         </ul>
         <div class="toolMenu">
           <span>
@@ -91,6 +91,29 @@
     },
     props: ["item"],
     computed: {
+      convert() {
+        let introduce = "";
+        if (this.item.isNew == 0) {
+          introduce = this.item.introduce.replace(
+            /<(?:(?:\/?[A-Za-z]\w*\b(?:[=\s](['"]?)[\s\S]*?\1)*)|(?:!--[\s\S]*?--))\/?>/g,
+            ""
+          );
+        } else {
+          this.item.failurePhenomenon = window.decodeURIComponent(
+            this.item.failurePhenomenon
+          );
+          introduce = this.item.failurePhenomenon.replace(
+            /<(?:(?:\/?[A-Za-z]\w*\b(?:[=\s](['"]?)[\s\S]*?\1)*)|(?:!--[\s\S]*?--))\/?>/g,
+            ""
+          );
+        }
+
+        if (introduce.length > 100) {
+          return introduce.substr(0, 100) + "...";
+        } else {
+          return introduce;
+        }
+      },
       isPay() {
         if (this.item.tradeType) {
           return;
