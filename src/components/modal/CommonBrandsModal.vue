@@ -197,7 +197,7 @@
       //搜索
       search() {
         if (this.val == "") return;
-
+        this.defaultsNav = "";
         _getData("brand/getBrand", {
           brandName: this.val.trim()
         })

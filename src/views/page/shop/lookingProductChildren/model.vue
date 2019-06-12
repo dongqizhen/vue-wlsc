@@ -30,22 +30,33 @@
       <div class="main-content-box">
         <div class="left">
           <shop-nav-vue
-            :navArr="['发布时间', '按点击量', '按好评']"
+            :navArr="navArr"
             v-on:tabClick="shopTabClick"
+            ref="shopNav"
           ></shop-nav-vue>
           <div class="main-content">
-            <div v-if="!shopIsloading && shopList.length">
-              <ul>
-                <!-- <shop-item-vue
-                  v-for="item in shopList"
-                  :key="item.id"
-                  :item="item"
-                ></shop-item-vue> -->
-                <!-- <bid-info-item-vue /> -->
-              </ul>
-              <pagination-vue :data="data"></pagination-vue>
+            <div v-if="shopList.length">
+              <div v-if="!shopIsloading">
+                <ul v-if="startWith('店铺')">
+                  <shop-item-vue
+                    v-for="item in shopList"
+                    :key="item.id"
+                    :item="item"
+                  ></shop-item-vue>
+                  <!-- <bid-info-item-vue /> -->
+                </ul>
+                <ul v-else-if="index < navList.length">
+                  <product-item-vue
+                    v-for="item in shopList"
+                    :key="item.id"
+                    :list="item"
+                  ></product-item-vue>
+                </ul>
+                <pagination-vue :data="data"></pagination-vue>
+              </div>
+              <loading-vue v-else></loading-vue>
             </div>
-            <loading-vue v-else></loading-vue>
+            <no-data v-else text="暂无数据"></no-data>
           </div>
         </div>
         <div class="right">
@@ -69,19 +80,25 @@
   import _ from "lodash";
   import shopItemVue from "../../../../components/common/item/shopItem.vue";
   import bidInfoItemVue from "../../../../components/common/item/bidInfoItem.vue";
-  import { async } from "q";
+
+  const goodsort = ["发布时间", "按价格", "按好评"],
+    shopsort = ["发布时间", "按点击量", "按好评"];
 
   export default {
     data() {
       return {
         routes: [],
-        data: "",
+        data: "", //带有分页的data数据
         navList: "",
+        attributeCategoryId: "", //属性id
         isLoading: true,
         tabs: [],
+        index: 0,
+        navArr: ["发布时间", "按价格", "按好评"],
         shopList: "",
-        defaultVal: 0,
-        sort: "",
+        defaultVal: "",
+        goodSort: "createOn", //产品排序类型 “createOn”发布时间 ,"price" 价格 ,“rate”//好评率
+        shopSort: "createOn", //店铺排序类型 “createOn”发布时间 ,"hit" 点击量,“rate”//好评率
         shopIsloading: false
       };
     },
@@ -96,22 +113,44 @@
       shopItemVue,
       bidInfoItemVue
     },
+    computed: {},
     methods: {
+      startWith(val) {
+        return _.startsWith(this.defaultVal, val);
+      },
       shopTabClick(i) {
-        this.getShopList(i == 0 ? "createOn" : i == 1 ? "hit" : "rate");
+        if (this.index < this.navList.length) {
+          this.goodSort = i == 0 ? "createOn" : i == 1 ? "price" : "rate";
+          this.getGoodsList();
+        } else if (_.startsWith(this.defaultVal, "店铺")) {
+          this.shopSort = i == 0 ? "createOn" : i == 1 ? "hit" : "rate";
+          this.getShopList();
+        }
       },
       tabClick(i, val) {
         console.log(val);
-        this.defaultVal = i;
+        this.index = i;
+        this.defaultVal = val;
+
+        this.$refs.shopNav.$data.val = 0;
+        if (i < this.navList.length) {
+          this.navArr = goodsort;
+          this.attributeCategoryId = this.navList[i].id;
+          this.getGoodsList();
+        }
+        if (_.startsWith(this.defaultVal, "店铺")) {
+          this.navArr = shopsort;
+          this.getShopList();
+        }
       },
       //获取商铺列表
-      async getShopList(sort = "createOn") {
+      async getShopList() {
         this.shopIsloading = true;
         return await _getData("queryStore", {
           modelId: this.$route.query.modelId,
           currentPage: 1,
           countPerPage: 6,
-          sort,
+          sort: this.shopSort,
           order: "asc"
         })
           .then(data => {
@@ -127,6 +166,28 @@
           .catch(err => {
             console.log(err);
           });
+      },
+      //获取产品列表
+      async getGoodsList() {
+        this.shopIsloading = true;
+        return await _getData("goods/goodslist", {
+          attributeCategoryId: this.attributeCategoryId,
+          currentPage: 1,
+          modelId: this.$route.query.modelId,
+          countPerPage: 6,
+          sort: this.goodSort,
+          order: "asc"
+        })
+          .then(data => {
+            console.log("产品列表", data);
+            this.data = data;
+            this.shopList = data.data;
+          })
+          .then(() => {
+            this.$nextTick().then(() => {
+              this.shopIsloading = false;
+            });
+          });
       }
     },
     mounted() {
@@ -136,6 +197,7 @@
         .then(data => {
           console.log("nav", data);
           this.navList = data.list;
+          this.attributeCategoryId = this.navList[0].id;
           this.tabs = [
             ..._.map(data.list, val => {
               return `${val.name}(${val.count})`;
@@ -149,22 +211,11 @@
           ];
         })
         .then(() => {
-          _getData("goods/goodslist", {
-            attributeCategoryId: this.navList[0].id,
-            currentPage: 1,
-            countPerPage: 6,
-            sort: "createOn",
-            order: "asc"
-          })
-            .then(data => {
-              console.log("产品列表", data);
-            })
-            .then(() => {
-              this.$nextTick().then(() => {
-                this.isLoading = false;
-                this.shopIsloading = false;
-              });
+          this.getGoodsList().then(() => {
+            this.$nextTick().then(() => {
+              this.isLoading = false;
             });
+          });
         });
       // _getDataAll([
       //   //获取nav数量
@@ -348,6 +399,11 @@
           }
           /deep/ .loading {
             width: $content-left;
+          }
+          .no-data {
+            height: 600px;
+            background: #ffffff;
+            width: 776px;
           }
         }
       }

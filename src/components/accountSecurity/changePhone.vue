@@ -54,6 +54,7 @@
 </script>
 <style lang="scss" scoped>
   @import "../../assets/scss/_commonScss";
+  @import "../../assets/scss/_input";
   .commonPhone {
     padding: 0 20px;
     background-color: #fff;
@@ -94,6 +95,9 @@
             height: 34px;
             line-height: 34px;
             cursor: pointer;
+            &:hover {
+              opacity: 0.7;
+            }
           }
         }
       }
@@ -107,6 +111,9 @@
             margin-right: 15px;
             font-size: 14px;
             cursor: pointer;
+            &:hover {
+              opacity: 0.7;
+            }
           }
           .submit {
             background: #f5a623;

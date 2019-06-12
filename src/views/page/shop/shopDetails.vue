@@ -235,6 +235,7 @@
               margin-right: 2px;
               input {
                 width: 27px;
+                padding: 4px;
               }
             }
           }

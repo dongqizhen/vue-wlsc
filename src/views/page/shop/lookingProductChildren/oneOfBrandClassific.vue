@@ -32,7 +32,11 @@
         <span @click="search">搜索</span>
       </div>
     </div>
-    <span class="manageBtn" @click="brandVisible = !brandVisible">
+    <span
+      class="manageBtn"
+      @click="brandVisible = !brandVisible"
+      v-if="isLogin"
+    >
       <svg class="icon" aria-hidden="true">
         <use xlink:href="#iconguanlichangyongfenlei"></use>
       </svg>
@@ -169,6 +173,7 @@
     methods: {
       search() {
         if (this.val == "") return;
+        this.defaultsNav = "";
         this.isLoading = true;
         _getData("brand/getBrand", {
           brandName: this.val.trim(),
@@ -221,6 +226,14 @@
       success() {
         this.getCommonBrandCategory();
       },
+      async getCommonBrand() {
+        return await _getData("ubrand/list", {})
+          .then(data => {
+            console.log("常用品牌", data);
+            this.arr = data.userBrandList;
+          })
+          .then(() => {});
+      },
       handleClick(item, i) {},
       navClick(val, i) {
         this.defaultsNav = val;
@@ -233,7 +246,8 @@
             this.arr = this.navArr.firstLineList;
             break;
           case "常用品牌":
-            this.arr = this.navArr.userbrandList;
+            // this.arr = this.navArr.userbrandList;
+            this.getCommonBrand();
             break;
         }
       }
@@ -345,6 +359,7 @@
     .content {
       display: flex;
       justify-content: space-between;
+      margin-top: 24px;
       .left {
         width: $content-left;
 

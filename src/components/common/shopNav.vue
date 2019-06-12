@@ -5,6 +5,7 @@
         :defaultActiveKey="defaultActiveKey"
         @change="callback"
         @tabClick="tabClick"
+        v-model="val"
       >
         <a-tab-pane
           :tab="item"
@@ -19,7 +20,9 @@
 <script>
   export default {
     data() {
-      return {};
+      return {
+        val: 0
+      };
     },
     props: {
       navArr: {

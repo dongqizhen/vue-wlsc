@@ -29,8 +29,9 @@
     <div class="main-content">
       <div class="left">
         <shop-nav-vue
-          :navArr="['按首字母排序', '按点击量排序']"
+          :navArr="navArr"
           v-on:tabClick="shopTabClick"
+          ref="shopNav"
         ></shop-nav-vue>
         <div v-if="!isLoading">
           <div v-if="arr.length">
@@ -89,6 +90,9 @@
   import caseItemVue from "../../../../components/common/item/caseItem.vue";
   import pagination from "../../../../components/common/pagination";
 
+  const modelArr = ["按首字母排序", "按点击量排序"],
+    otherArr = ["发布时间", "浏览量", "点赞数"];
+
   export default {
     data() {
       return {
@@ -98,9 +102,12 @@
         videoList: [],
         routes: [],
         defaultVal: 0,
-        sort: 1,
+        sort: 1, //型号排序标识 1 首字母 0 点击量
+        othersort: 0, //案例，视频，文章排序标识  0 发布时间 1 浏览量 2 点赞数
         tabs: [],
-        isLoading: true
+        isLoading: true,
+        params: "",
+        navArr: modelArr
       };
     },
     components: {
@@ -117,11 +124,22 @@
     },
     methods: {
       shopTabClick(key, val) {
-        this.sort = key ? 0 : 1;
+        if (this.defaultVal == 0) {
+          this.sort = key ? 0 : 1;
+        } else {
+          this.othersort = key;
+        }
+
         this.getList();
       },
       tabClick(i) {
         this.defaultVal = i;
+        this.$refs.shopNav.$data.val = 0;
+        if (i == 0) {
+          this.navArr = modelArr;
+        } else {
+          this.navArr = otherArr;
+        }
         this.getList();
       },
 
@@ -140,6 +158,7 @@
             return await this.getCaseList();
         }
       },
+      //获取型号列表
       async getModelList() {
         this.isLoading = true;
         return await _getData("brandmodel/list", {
@@ -171,9 +190,9 @@
             params: {
               currentPage: 1,
               countPerPage: 20,
-              classifyId: this.$route.query.brandId,
-              sortType: this.sort,
-              sortFlag: 1
+              classifyId: this.params.a_classify_id || "",
+              sortType: this.othersort,
+              sortFlag: 1 //排序标识0正序1 倒序
             }
           }
         )
@@ -199,9 +218,9 @@
             params: {
               currentPage: 1,
               countPerPage: 20,
-              vBigCategoryId: "",
-              vCategoryId: this.$route.query.categoryId,
-              sortType: this.sort,
+              vBigCategoryId: this.params.v_big_category_id || "",
+              vCategoryId: this.params.v_sub_category_id || "",
+              sortType: this.othersort,
               sortFlag: 1
             }
           }
@@ -228,16 +247,16 @@
             params: {
               currentPage: 1,
               countPerPage: 20,
-              mCatogoryId: this.$route.query.categoryId,
-              mBrandId: this.$route.query.brandId,
-              sortType: this.sort,
+              mCatogoryId: this.params.m_category_id || "",
+              mBrandId: this.params.brand_id || "",
+              sortType: this.othersort,
               sortFlag: 1,
-              searchType: 0
+              searchType: 0 //查询类型0列表1详情
             }
           }
         )
           .then(data => {
-            this.arr = data.data.result.articlelist;
+            this.arr = data.data.result.maintenancelist;
           })
           .then(() => {
             setTimeout(() => {
@@ -314,6 +333,7 @@
         brandId: this.$route.query.brandId
       }).then(data => {
         console.log("数量", data);
+        this.params = data.params;
         this.tabs = [
           `型号列表(${data.count || 0})`,
           `文章(${data.articleNum || 0})`,
@@ -441,6 +461,23 @@
           margin-bottom: 20px;
           margin-top: 4px;
         }
+        > div:not(.shop-nav) {
+          > div {
+            margin-right: -16px;
+          }
+          .recommond_video {
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            li {
+              margin-right: 16px;
+            }
+          }
+          .recommond_case {
+            width: 768px;
+          }
+        }
+
         /deep/ .no-data {
           height: 600px;
           background: #ffffff;

@@ -9,8 +9,13 @@
     append
   >
     <a target="_blank">
-      <div class="img_box">
-        <img :src="item.cover0" alt="" />
+      <div
+        class="img_box"
+        v-lazy-container="{
+          selector: 'img'
+        }"
+      >
+        <img :data-src="item.cover0" alt="" />
       </div>
       <div class="content">
         <h2>
@@ -75,11 +80,25 @@
 <style scoped lang="scss">
   @import "../../../assets/scss/_commonScss.scss";
   li.article-item {
+    /deep/ img[lazy="loading"] {
+      /*your style here*/
+      background: url("../../../assets/images/loading.gif") no-repeat center;
+      background-size: 100px;
+      background-color: #f7f9fa;
+    }
+    /deep/ img[lazy="error"] {
+      /*your style here*/
+      background: url("../../../assets/images/loading.gif") no-repeat center;
+      background-size: 100px;
+      display: none;
+      // background-color: #f7f9fa;
+    }
     a {
       display: flex;
       cursor: pointer;
       justify-content: flex-start;
       text-decoration: none;
+      width: 100%;
     }
     box-shadow: $base-box-shadow;
     width: 768px;
@@ -96,15 +115,23 @@
           color: $theme-color;
         }
       }
+      .img_box {
+        img {
+          transform: scale(1.1);
+        }
+      }
     }
     .img_box {
       height: 160px;
       width: 160px;
+      display: flex;
       background: #f7f9fa;
       margin-right: 20px;
+      overflow: hidden;
       img {
         height: 100%;
         width: 100%;
+        transition: transform 0.5s ease;
       }
     }
     .content {
@@ -116,9 +143,14 @@
         font-size: 18px;
         color: #333333;
         height: 40px;
-        display: flex;
+        // display: flex;
+        line-height: 40px;
         align-items: center;
         font-weight: 500;
+        width: 556px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       p {
         font-family: PingFangSC-Regular;
@@ -130,6 +162,7 @@
         justify-content: flex-start;
         margin-top: 12px;
         margin-bottom: 18px;
+        height: 25px;
         li {
           margin-right: 4px;
           height: 25px;
