@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="listContainer">
-      <div class="listContent">
+      <div class="listContent" v-if="data.length > 0">
         <ul v-if="current == 0">
           <router-link
             tag="li"
@@ -56,23 +56,25 @@
           </router-link>
         </ul>
       </div>
-      <div class="tfooter">
-        <check-all
-          :amount="checkedList.length"
-          :checkAll="checkAll"
-          v-on:isCheckAll="isCheckAllMethod"
-          @isDelete="batchDeleteData"
-        >
-          <div slot="right-box">
-            <div
-              v-bind:class="['remark', checkedList.length > 0 ? 'active' : '']"
-              @click="remarkRead"
-            >
-              标记已读
-            </div>
+      <no-data v-else text="暂无数据"></no-data>
+    </div>
+    <div class="tfooter">
+      <check-all
+        :amount="checkedList.length"
+        :checkAll="checkAll"
+        v-on:isCheckAll="isCheckAllMethod"
+        @isDelete="batchDeleteData"
+        v-show="data.length > 0"
+      >
+        <div slot="right-box">
+          <div
+            v-bind:class="['remark', checkedList.length > 0 ? 'active' : '']"
+            @click="remarkRead"
+          >
+            标记已读
           </div>
-        </check-all>
-      </div>
+        </div>
+      </check-all>
     </div>
     <pagination
       :data="paginationData"
@@ -263,7 +265,7 @@
     background-color: #fff;
     padding: 4px 20px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
-    margin-bottom: 10px;
+    margin-bottom: 100px;
     .tabBar {
       display: flex;
       justify-content: space-between;
@@ -303,6 +305,9 @@
     }
     .listContainer {
       margin-top: 12px;
+      /deep/.no-data {
+        height: 500px;
+      }
       .tfooter {
         .remark {
           width: 104px;

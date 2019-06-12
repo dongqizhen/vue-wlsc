@@ -9,7 +9,7 @@
       </span>
     </common-title>
     <div class="listContainer">
-      <ul>
+      <ul v-if="userAddressList.length > 0">
         <li v-for="item in userAddressList" :key="item.id">
           <div class="left-box">
             <div class="itemTr">{{ item.userName }}<span>收</span></div>
@@ -32,6 +32,7 @@
           </div>
         </li>
       </ul>
+      <no-data v-else text="暂无数据"></no-data>
     </div>
     <add-address-modal
       :Visible="visible"
@@ -221,6 +222,9 @@
             }
           }
         }
+      }
+      /deep/.no-data {
+        height: 500px;
       }
     }
   }

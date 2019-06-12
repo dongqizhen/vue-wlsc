@@ -101,19 +101,19 @@
           this.defaultSelectedKeys = ["7"];
           break;
         case "myMessage":
-          this.defaultSelectedKeys = ["8"];
+          this.defaultSelectedKeys = ["9"];
           break;
         case "changePassword":
-          this.defaultSelectedKeys = ["8"];
+          this.defaultSelectedKeys = ["9"];
           break;
         case "changeEmail":
-          this.defaultSelectedKeys = ["8"];
+          this.defaultSelectedKeys = ["9"];
           break;
         case "changePhone":
-          this.defaultSelectedKeys = ["8"];
+          this.defaultSelectedKeys = ["9"];
           break;
         case "myCenter":
-          this.defaultSelectedKeys = ["9"];
+          this.defaultSelectedKeys = ["8"];
           break;
         case "userSecurity":
           this.defaultSelectedKeys = ["10"];
