@@ -15,18 +15,19 @@
       <a-input placeholder="输入单价" v-model="itemData.unitPrice"></a-input>
     </span>
     <span>{{ itemData.number }}</span>
-    <span
-      ><a-date-picker
+    <span>
+      <a-date-picker
         :format="'YYYY-MM-DD'"
         @change="onDateChange"
         :defaultValue="moment(`${initialArrivalTime}`, 'YYYY-MM-DD')"
-    /></span>
-    <span
-      ><a-textarea
+      />
+    </span>
+    <span>
+      <a-textarea
         placeholder="输入备注"
         v-model="itemData.introduce"
-      ></a-textarea
-    ></span>
+      ></a-textarea>
+    </span>
   </div>
 </template>
 <script>

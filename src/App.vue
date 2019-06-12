@@ -86,14 +86,6 @@
     padding-bottom: 110px;
     background: #f7f9fa;
   }
-  .ant-input:hover {
-    border-color: #f10215 !important;
-  }
-
-  .ant-input:focus {
-    border-color: #f10215 !important;
-    box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2) !important;
-  }
   .el-picker-panel {
     .el-date-table {
       td.today {
@@ -194,6 +186,6 @@
   }
   .ant-calendar-today .ant-calendar-date {
     border-color: #f10215;
-    color: #f10215;
+    color: #fff;
   }
 </style>

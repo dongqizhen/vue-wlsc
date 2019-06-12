@@ -28,7 +28,7 @@
           <div class="btn submit" @click="sure">
             {{ isNew ? "完成" : "下一步" }}
           </div>
-          <div class="btn cancel">取消</div>
+          <div class="btn cancel" @click="$router.go(-1)">取消</div>
         </div>
       </div>
     </div>
@@ -59,6 +59,17 @@
     background-color: #fff;
     min-height: 693px;
     box-shadow: $base-box-shadow;
+    /deep/ .common-title {
+      .titleText {
+        display: flex;
+
+        .icon {
+          width: 16px;
+          height: 14px;
+          margin: 0 3px;
+        }
+      }
+    }
     .contentBox {
       margin-top: 24px;
       .common {

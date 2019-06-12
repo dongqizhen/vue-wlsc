@@ -25,10 +25,12 @@
           <span>
             <svg class="icon" aria-hidden="true">
               <use
-                xlink:href="#iconzhanghaoanquanduigou"
-                v-if="isAlready"
+                v-bind:xlink:href="
+                  userInfo.email
+                    ? '#iconzhanghaoanquanduigou'
+                    : '#iconzhanghaoanquancuowu'
+                "
               ></use>
-              <use xlink:href="#iconzhanghaoanquancuowu" v-else></use>
             </svg>
           </span>
           <span class="title">绑定邮箱</span>
@@ -38,7 +40,9 @@
         </div>
         <div class="right-box">
           <a-button>
-            <router-link to="changeEmail">修改</router-link>
+            <router-link to="changeEmail">{{
+              userInfo.email ? "修改" : "绑定"
+            }}</router-link>
           </a-button>
         </div>
       </div>
@@ -66,7 +70,7 @@
 
 <script>
   import commonTitle from "../../components/common/merchantRightCommonTitle";
-
+  import { mapState } from "vuex";
   export default {
     data() {
       return {};
@@ -76,6 +80,9 @@
         type: Boolean,
         required: true
       }
+    },
+    computed: {
+      ...mapState(["userInfo"])
     },
     methods: {},
     components: {

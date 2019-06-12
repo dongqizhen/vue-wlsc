@@ -67,9 +67,12 @@
           margin-right: 12px;
           padding-left: 20px;
         }
+        &:nth-child(2) {
+          margin-right: 40px;
+        }
         &:nth-child(3) {
           margin-right: 40px;
-          padding-left: 42px;
+          cursor: pointer;
         }
         i {
           font-style: normal;

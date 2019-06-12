@@ -21,10 +21,10 @@
       <list-title :titleArr="titleArr"></list-title>
       <div class="listContent">
         <ul>
-          <li v-for="item in data.goodsList" :key="item.id">
-            <span><img :src="item.listPicUrl"/></span>
-            <span>{{ item.name }}</span>
-            <span>{{ item.brandName }}/{{ item.modelName }}</span>
+          <li v-for="item in data.goodList" :key="item.id">
+            <span><img :src="item.goodsImage"/></span>
+            <span>{{ item.goodsName }}</span>
+            <span>{{ item.goodsBrand }}/{{ item.goodsModel }}</span>
             <span>{{ item.number }}</span>
             <span>¥{{ item.number * item.unitPrice }}</span>
             <span>
@@ -46,16 +46,16 @@
       </div>
       <div class="remark">
         <span>报价备注</span>
-        <span
-          ><a-textarea
+        <span>
+          <a-textarea
             placeholder="请输入报价备注"
             v-model="data.remark"
-          ></a-textarea
-        ></span>
+          ></a-textarea>
+        </span>
       </div>
       <div class="totalInfo">
         <span class="totalPrice">
-          报价总金额：<i>¥{{ data.subtotal }}</i>
+          报价总金额：<i>¥{{ sumPrice }}</i>
         </span>
         <span class="save">保存</span>
       </div>
@@ -64,7 +64,6 @@
       :Visible="visible"
       :type="type"
       :editId="editId"
-      :goodsEnquirySn="$route.params.id"
       v-on:getIsUpdate="getIsUpdate"
     ></edit-quote-modal>
   </div>
@@ -91,7 +90,8 @@
           "备注",
           "操作"
         ],
-        data: []
+        data: [],
+        sumPrice: 0
       };
     },
     computed: {
@@ -111,11 +111,16 @@
         }
       },
       getQuoteOrderDetail() {
-        _getData("/enquiry/getGoodsEnquiry", {
-          goodsEnquirySn: this.$route.params.id
+        _getData("/quotation/detail", {
+          param: {
+            id: this.$route.params.id
+          }
         }).then(data => {
           console.log("获取的商品报价单详情：", data);
           this.data = data;
+          _.map(data.goodList, value => {
+            this.sumPrice = this.sumPrice + value.number * value.unitPrice;
+          });
         });
       }
     },
@@ -275,12 +280,18 @@
           &:last-child {
             width: 100%;
             height: 100%;
-            .ant-input {
+            display: flex;
+            align-items: center;
+            /deep/.ant-input {
               width: 100%;
               height: 100%;
               outline: none;
               resize: none;
               border: none;
+              &:focus {
+                border: none;
+                box-shadow: none;
+              }
             }
           }
         }

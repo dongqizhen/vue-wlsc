@@ -177,7 +177,23 @@
       },
       //转为我的报价
       turnMyQuote() {
-        console.log(this.selectDatas);
+        console.log(this.products);
+        if (this.products.length > 0) {
+          _getData("/quotation/toMyQuotation", {
+            param: {
+              ids: this.products.join(",")
+            }
+          }).then(data => {
+            console.log(data);
+            let { href } = this.$router.resolve({
+              path: `editQuote/${data.id}`
+            });
+            window.open(href, "_blank");
+          });
+        } else {
+          this.$message.warning("请选择产品", 1);
+          return;
+        }
       },
       //一键获取报价
       getQuote() {
@@ -234,9 +250,10 @@
       submitOrder() {
         console.log(this.products);
         if (this.products.length > 0) {
-          this.$router.replace({
+          let { href } = this.$router.resolve({
             path: `submitOrder/${this.products.join(",")}`
           });
+          window.open(href, "_blank");
         } else {
           this.$message.warning("请选择产品", 1);
           return;

@@ -40,7 +40,7 @@
     },
     methods: {},
     mounted() {
-      _getData("/order/orderDetails", { orderSn: this.$route.params.id }).then(
+      _getData("/order/orderDetails", { id: this.$route.params.id }).then(
         data => {
           console.log("获取订单详情：", data);
           this.data = data;
