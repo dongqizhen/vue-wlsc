@@ -66,35 +66,26 @@
       if (this.userShopInfo.audit_status == 2) {
         if (this.$route.path.indexOf("shopInfo") != -1) {
           this.defaultSelectedKeys = ["2"];
-          this.$router.replace({ path: "/merchant/shopInfo" });
         } else if (this.$route.path.indexOf("shopCertification") != -1) {
           this.defaultSelectedKeys = ["3"];
-          this.$router.replace({ path: "/merchant/shopCertification" });
         } else if (this.$route.path.indexOf("publishGoods") != -1) {
           this.defaultSelectedKeys = ["4"];
-          this.$router.replace({ path: "/merchant/publishGoods" });
         } else if (this.$route.path.indexOf("productManage") != -1) {
           this.defaultSelectedKeys = ["5"];
-          this.$router.replace({ path: "/merchant/productManage" });
         } else if (this.$route.path.indexOf("inquiryManage") != -1) {
           this.defaultSelectedKeys = ["6"];
-          this.$router.replace({ path: "/merchant/inquiryManage" });
         } else if (this.$route.path.indexOf("editInquiry") != -1) {
           this.defaultSelectedKeys = ["6"];
         } else if (this.$route.path.indexOf("inquiryOrderDetail") != -1) {
           this.defaultSelectedKeys = ["6"];
         } else if (this.$route.path.indexOf("orderManage") != -1) {
           this.defaultSelectedKeys = ["7"];
-          this.$router.replace({ path: "/merchant/orderManage" });
         } else if (this.$route.path.indexOf("accountSecurity") != -1) {
           this.defaultSelectedKeys = ["8"];
-          this.$router.replace({ path: "/merchant/accountSecurity" });
         } else if (this.$route.path.indexOf("messageCenter") != -1) {
           this.defaultSelectedKeys = ["10"];
-          this.$router.replace({ path: "/merchant/messageCenter" });
         } else if (this.$route.path.indexOf("shopIndex") != -1) {
           this.defaultSelectedKeys = ["1"];
-          this.$router.replace({ path: "/merchant/shopIndex" });
         } else {
           this.defaultSelectedKeys = ["1"];
           this.$router.replace({ path: "/merchant/shopIndex" });

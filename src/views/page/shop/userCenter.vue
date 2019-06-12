@@ -70,10 +70,25 @@
         case "myInquiry":
           this.defaultSelectedKeys = ["2"];
           break;
+        case "inquiryOrderDetail":
+          this.defaultSelectedKeys = ["2"];
+          break;
+        case "submitOrder":
+          this.defaultSelectedKeys = ["2"];
+          break;
         case "myOrder":
           this.defaultSelectedKeys = ["3"];
           break;
+        case "orderDetail":
+          this.defaultSelectedKeys = ["3"];
+          break;
         case "myQuote":
+          this.defaultSelectedKeys = ["4"];
+          break;
+        case "lookQuote":
+          this.defaultSelectedKeys = ["4"];
+          break;
+        case "editQuote":
           this.defaultSelectedKeys = ["4"];
           break;
         case "myStore":

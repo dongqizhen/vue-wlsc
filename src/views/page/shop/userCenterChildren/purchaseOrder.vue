@@ -3,7 +3,7 @@
     <common-title title="选购单"></common-title>
     <div class="listContainer">
       <list-title :titleArr="titleArr"></list-title>
-      <div class="listContent">
+      <div class="listContent" v-if="data.length > 0">
         <purchase-order-item
           v-for="item in data"
           :key="item.id"
@@ -14,12 +14,14 @@
           v-on:getIsDelete="getIsDelete"
         ></purchase-order-item>
       </div>
+      <no-data text="暂无数据" v-else></no-data>
       <div class="tfooter">
         <check-all
           :amount="products.length"
           :checkAll="checkAll"
           v-on:isCheckAll="isCheckAllMethod"
           v-on:isDelete="batchDeleteData"
+          v-if="data.length > 0"
         >
           <div slot="right-box">
             <div
@@ -251,13 +253,13 @@
         ul {
           li {
             &:nth-child(4) {
-              width: 60px;
+              width: 45px;
             }
             &:nth-child(5) {
               width: 80px;
             }
             &:nth-child(6) {
-              width: 50px;
+              width: 65px;
             }
             &:nth-child(7) {
               width: 116px;
@@ -268,6 +270,9 @@
       }
       .listContent {
         margin-top: 24px;
+      }
+      /deep/.no-data {
+        height: 520px;
       }
       .tfooter {
         .remark {

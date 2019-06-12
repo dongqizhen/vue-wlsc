@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="listContainer">
-      <div class="listContent">
+      <div class="listContent" v-if="data.length > 0">
         <ul v-if="current == 0">
           <router-link
             tag="li"
@@ -56,12 +56,14 @@
           </router-link>
         </ul>
       </div>
+      <no-data v-else text="暂无数据"></no-data>
       <div class="tfooter">
         <check-all
           :amount="checkedList.length"
           :checkAll="checkAll"
           v-on:isCheckAll="isCheckAllMethod"
           @isDelete="batchDeleteData"
+          v-if="data.length > 0"
         >
           <div slot="right-box">
             <div
@@ -309,6 +311,9 @@
     }
     .listContainer {
       margin-top: 12px;
+      /deep/.no-data {
+        height: 550px;
+      }
       .tfooter {
         .remark {
           width: 104px;

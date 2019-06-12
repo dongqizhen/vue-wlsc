@@ -11,7 +11,7 @@
       <div class="listContent">
         <list-title :titleArr="titleArr"></list-title>
         <div class="tbody">
-          <ul>
+          <ul v-if="data.length > 0">
             <li v-for="item in data" :key="item.id">
               <order-item
                 :data="item"
@@ -22,6 +22,7 @@
               ></order-item>
             </li>
           </ul>
+          <no-data v-else text="暂无数据"></no-data>
         </div>
         <div class="tfooter">
           <checkAll
@@ -30,7 +31,9 @@
             v-on:isCheckAll="isCheckAllMethod"
             v-on:isDelete="getCheckDelete"
             v-if="
-              getOrderData.orderStatus == 5 || getOrderData.orderStatus == 7
+              (getOrderData.orderStatus == 5 ||
+                getOrderData.orderStatus == 7) &&
+                data.length > 0
             "
           ></checkAll>
         </div>
@@ -222,7 +225,7 @@
 <style lang="scss" scoped>
   @import "../../../../assets/scss/_commonScss";
   .orderManage {
-    padding: 0 20px 20px 20px;
+    padding: 4px 20px 20px;
     background-color: #fff;
     min-height: 693px;
     box-shadow: $base-box-shadow;
@@ -251,6 +254,9 @@
           }
         }
         .tbody {
+          /deep/.no-data {
+            height: 450px;
+          }
           ul {
             li {
               margin-bottom: 12px;

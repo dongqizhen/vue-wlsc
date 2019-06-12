@@ -3,7 +3,7 @@
     <div class="productContainer">
       <commonTitle title="产品列表">
         <span slot="titleRight" class="publishGood">
-          <router-link to="/merchant/publishGoods">
+          <router-link target="_blank" to="/merchant/publishGoods">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icontianjiatupian1"></use>
             </svg>
@@ -94,7 +94,7 @@
             <span>发布时间</span>
             <span>操作</span>
           </h2>
-          <ul>
+          <ul v-if="data.length != 0">
             <li v-for="item in data" :key="item.id" :class="addClass(item.id)">
               <span>
                 <a-checkbox
@@ -102,7 +102,7 @@
                   :checked="checkedChange(item.id)"
                 ></a-checkbox>
               </span>
-              <span><img :src="item.list_pic_url"/></span>
+              <span><img :src="JSON.parse(item.list_pic_url)[0]"/></span>
               <span>{{ item.name }}</span>
               <span>{{ item.big_category_name }}/{{ item.category_name }}</span>
               <span>{{ item.brand_name }}/{{ item.brand_model_name }}</span>
@@ -110,28 +110,42 @@
               <span>{{ item.goods_number }}</span>
               <span>{{ item.add_time.substring(0, 16) }}</span>
               <span>
-                <div @click="editProduct(item.id)">编辑</div>
+                <div>
+                  <router-link
+                    target="_blank"
+                    :to="{
+                      path: '/merchant/publishGoods',
+                      query: { id: `${item.id}` }
+                    }"
+                  >
+                    编辑
+                  </router-link>
+                </div>
                 <div @click="obtained(item.id, item.is_on_sale)">
                   {{ item.is_on_sale == 1 ? "下架" : "上架" }}
                 </div>
               </span>
             </li>
           </ul>
-          <check-all
-            :amount="checkedList.length"
-            :checkAll="checkAll"
-            v-on:isCheckAll="isCheckAllMethod"
-          >
-            <div slot="right-box" class="right-box">
-              <button class="shelf">上架</button>
-              <button class="obtained">下架</button>
-            </div>
-          </check-all>
-          <pagination
-            :data="totalCount"
-            v-on:onPaginationChange="getPaginationChange"
-          ></pagination>
+          <no-data v-else text="暂无数据"></no-data>
         </div>
+        <check-all
+          :amount="checkedList.length"
+          :checkAll="checkAll"
+          v-on:isCheckAll="isCheckAllMethod"
+          @isDelete="batchDeleteData"
+          v-if="data.length > 0"
+        >
+          <div slot="right-box" class="right-box">
+            <button class="shelf" @click="batchShelf">上架</button>
+            <button class="obtained" @click="batchObtained">下架</button>
+          </div>
+        </check-all>
+        <pagination
+          :data="paginationData"
+          v-on:onPaginationChange="getPaginationChange"
+          v-if="paginationData.count != 0"
+        ></pagination>
       </div>
     </div>
   </div>
@@ -157,7 +171,6 @@
         ],
         checkAll: false,
         checkedList: [],
-        totalCount: { amount: 0, pageSize: 10 },
         submitData: {
           isOnSale: "",
           name: "",
@@ -165,31 +178,30 @@
           categoryId: "",
           currentPage: 1,
           countPerPage: 10
-        }
+        },
+        paginationData: {}
       };
     },
     computed: {
       ...mapState(["userShopInfo"])
     },
     methods: {
-      editProduct(id) {
-        this.$router.replace({
-          path: "/merchant/publishGoods",
-          query: { id: id }
-        });
-      },
       obtained(id, is_on_sale) {
-        console.log(id);
-        console.log(is_on_sale);
-        _getData("/goods/goodsIsOnSale", { id: id, isOnSale: is_on_sale }).then(
+        if (is_on_sale == 1) {
+          is_on_sale = 0;
+        } else {
+          is_on_sale = 1;
+        }
+        _getData("/goods/goodsIsOnSale", { ids: id, isOnSale: is_on_sale }).then(
           data => {
             console.log(data);
+            this.getProductList();
           }
         );
       },
       searchData() {
         console.log(this.submitData);
-        this.getProductList(this.submitData);
+        this.getProductList();
       },
       clearData() {
         this.submitData.isOnSale = "";
@@ -200,7 +212,7 @@
       getPaginationChange(val) {
         console.log(val);
         this.submitData.currentPage = val;
-        this.getProductList(this.submitData);
+        this.getProductList();
       },
       isCheckAllMethod(val) {
         if (val) {
@@ -273,12 +285,52 @@
           this.smallOptions = data.subCategory;
         });
       },
-      getProductList(params) {
-        _getData("/goods/sjGoodsList", params).then(data => {
+      //批量上架
+      batchShelf() {
+        // if (this.checkedList.length > 0) {
+        //   //向后台发送请求，标记为已读，成功后将刷新数据
+        //   console.log(this.checkedList);
+        //   console.log(this.checkedList.join(","));
+        //   _getData("/message/updateStatus", {
+        //     ids: this.checkedList.join(","),
+        //     flag: "delete"
+        //   }).then(data => {
+        //     console.log(data);
+        //     this.$message.success("批量删除成功", 1);
+        //     this.getProductList();
+        //   });
+        // } else {
+        //   this.$message.warning("请选择产品", 1);
+        //   return;
+        // }
+      },
+      //批量下架
+      batchObtained() {},
+      //批量删除
+      batchDeleteData() {
+        // if (this.checkedList.length > 0) {
+        //   //向后台发送请求，标记为已读，成功后将刷新数据
+        //   console.log(this.checkedList);
+        //   console.log(this.checkedList.join(","));
+        //   _getData("/message/updateStatus", {
+        //     ids: this.checkedList.join(","),
+        //     flag: "delete"
+        //   }).then(data => {
+        //     console.log(data);
+        //     this.$message.success("批量删除成功", 1);
+        //     this.getProductList();
+        //   });
+        // } else {
+        //   this.$message.warning("请选择产品", 1);
+        //   return;
+        // }
+      },
+      getProductList() {
+        _getData("/goods/sjGoodsList", this.submitData).then(data => {
           console.log("获取产品列表：", data);
+          this.checkedList = [];
           this.data = data.data;
-          this.totalCount.amount = data.count;
-          this.totalCount.pageSize = params.countPerPage;
+          this.paginationData = data;
         });
       }
     },
@@ -287,7 +339,7 @@
         ...this.submitData,
         storeId: this.userShopInfo.store_id
       };
-      this.getProductList(this.submitData);
+      this.getProductList();
       _getData("/catalog/first", {}).then(data => {
         console.log("一级", data);
         _.each(data.categoryList, val => {
@@ -309,6 +361,7 @@
   @import "../../../../assets/scss/_commonScss";
   @import "../../../../assets/scss/_input";
   .productManage {
+    min-height: 693px;
     .productContainer {
       background-color: #fff;
       padding: 4px 20px 20px 20px;
@@ -450,6 +503,15 @@
               div {
                 margin-bottom: 10px;
                 cursor: pointer;
+                &:hover {
+                  color: $theme-color;
+                }
+                a {
+                  color: #333;
+                  &:hover {
+                    color: $theme-color;
+                  }
+                }
               }
             }
           }
@@ -476,6 +538,9 @@
             span {
               @extend %span;
             }
+          }
+          /deep/.no-data {
+            height: 490px;
           }
           .checkedAllBox {
             height: 42px;
@@ -519,6 +584,51 @@
                 &.obtained {
                   background-color: #f5a623;
                 }
+              }
+            }
+          }
+        }
+        .checkedAllBox {
+          height: 42px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border: 1px solid #dddddd;
+          .left-box {
+            span {
+              &:first-child {
+                width: 34px;
+                margin-right: 12px;
+                padding-left: 20px;
+              }
+              &:nth-child(3) {
+                margin-right: 40px;
+                padding-left: 42px;
+              }
+              i {
+                font-style: normal;
+                color: $theme-color;
+                font-size: 16px;
+                font-weight: 600;
+              }
+            }
+          }
+          .right-box {
+            button {
+              width: 76px;
+              height: 42px;
+              line-height: 42px;
+              border: 0;
+              outline: none;
+              background-color: transparent;
+              color: #fff;
+              text-align: center;
+              cursor: pointer;
+              &.shelf {
+                background-color: $theme-color;
+              }
+              &.obtained {
+                background-color: #f5a623;
               }
             }
           }

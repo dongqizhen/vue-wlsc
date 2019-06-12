@@ -28,46 +28,48 @@
       <div class="listContent">
         <list-title :titleArr="titleArr"></list-title>
         <div class="content">
-          <ul>
-            <li
-              v-for="item in data"
-              :key="item.id"
-              :class="addClass(item.goodsEnquirySn)"
-            >
+          <ul v-if="data.length > 0">
+            <li v-for="item in data" :key="item.id" :class="addClass(item.id)">
               <div>
                 <a-checkbox
-                  @change="onChange(item.goodsEnquirySn)"
-                  :checked="checkedChange(item.goodsEnquirySn)"
+                  @change="onChange(item.id)"
+                  :checked="checkedChange(item.id)"
                 ></a-checkbox>
               </div>
               <div>{{ item.clienteleName }}</div>
               <div>
-                <div v-for="goodItem in item.goodsList" :key="goodItem.id">
-                  <span>{{ goodItem.name }}</span>
-                  <span>{{ goodItem.brandName }}/{{ goodItem.modelName }}</span>
+                <div v-for="goodItem in item.goodList" :key="goodItem.id">
+                  <span>{{ goodItem.goodsName }}</span>
+                  <span>
+                    {{ goodItem.goodsBrand }}/{{ goodItem.goodsModel }}
+                  </span>
                   <span>{{ goodItem.number }}</span>
-                  <span>{{ goodItem.goodsUnit }}</span>
+                  <span>{{ goodItem.unit }}</span>
                 </div>
               </div>
               <div>¥{{ item.subtotal }}</div>
-              <div>2019-12-02 16:09</div>
+              <div>
+                {{ item.createdOn ? item.createdOn.substring(0, 16) : "" }}
+              </div>
               <div>
                 <div class="operate">
                   <router-link
+                    target="_blank"
                     :to="{
-                      path: `/userCenter/lookQuote/${item.goodsEnquirySn}`
+                      path: `/userCenter/lookQuote/${item.id}`
                     }"
                   >
                     查看
                   </router-link>
                 </div>
                 <div class="operate">下载</div>
-                <div class="operate" @click="deleteItem(item.goodsEnquirySn)">
+                <div class="operate" @click="deleteItem(item.id)">
                   删除
                 </div>
               </div>
             </li>
           </ul>
+          <no-data text="暂无数据" v-else></no-data>
         </div>
       </div>
       <div class="tfooter">
@@ -75,10 +77,17 @@
           :amount="checkedList.length"
           :checkAll="checkAll"
           v-on:isCheckAll="isCheckAllMethod"
+          @isDelete="batchDeleteData"
+          v-if="data.length > 0"
         >
         </check-all>
       </div>
     </div>
+    <pagination
+      :data="paginationData"
+      v-on:onPaginationChange="getPaginationChange"
+      v-if="paginationData.count != 0"
+    ></pagination>
   </div>
 </template>
 
@@ -88,6 +97,7 @@
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import listTitle from "../../../../components/common/listTitle";
   import checkAll from "../../../../components/common/checkAll";
+  import pagination from "../../../../components/common/pagination";
   export default {
     data() {
       return {
@@ -110,10 +120,31 @@
           clenteleName: "", //类型：String  备注：客户名称
           goodsName: "", //类型：String 备注：商品名
           date: "" //类型：String  备注：时间
-        }
+        },
+        paginationData: {}
       };
     },
     methods: {
+      //批量删除
+      batchDeleteData() {
+        if (this.checkedList.length > 0) {
+          //向后台发送请求，标记为已读，成功后将刷新数据
+          console.log(this.checkedList);
+          console.log(this.checkedList.join(","));
+          _getData("/quotation/delete", {
+            param: {
+              ids: this.checkedList.join(",")
+            }
+          }).then(data => {
+            console.log(data);
+            this.$message.success("批量删除成功", 1);
+            this.getList();
+          });
+        } else {
+          this.$message.warning("请选择删除项", 1);
+          return;
+        }
+      },
       search() {
         this.getList();
       },
@@ -121,9 +152,11 @@
         this.param.clenteleName = "";
         this.param.goodsName = "";
       },
-      deleteItem(val) {
-        _getData("/enquiry/deleteEnquiry", {
-          ids: val
+      deleteItem(id) {
+        _getData("/quotation/delete", {
+          param: {
+            ids: id
+          }
         }).then(data => {
           console.log("删除报价单:", data);
           this.getList();
@@ -169,11 +202,16 @@
         if (val) {
           this.checkAll = true;
           for (const val of this.data) {
-            this.checkedList.push(val.goodsEnquirySn);
+            this.checkedList.push(val.id);
           }
         } else {
           this.checkAll = false;
         }
+      },
+      getPaginationChange(val) {
+        console.log(val);
+        this.param.currentPage = val;
+        this.getList();
       },
       getList() {
         _getData("/quotation/list", { param: this.param }).then(data => {
@@ -181,6 +219,7 @@
           this.checkedList = [];
           this.checkAll = false;
           this.data = data.data;
+          this.paginationData = data;
         });
       }
     },
@@ -190,7 +229,8 @@
     components: {
       commonTitle,
       listTitle,
-      checkAll
+      checkAll,
+      pagination
     }
   };
 </script>
@@ -202,7 +242,7 @@
     background-color: #fff;
     padding: 4px 20px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
-    margin-bottom: 10px;
+    margin-bottom: 100px;
     .listContainer {
       margin-top: 12px;
       .selectInfoBox {
@@ -292,6 +332,7 @@
               display: flex;
               border: $border-style;
               margin-bottom: 10px;
+              padding-bottom: 10px;
               // min-height: 125px;
               > div {
                 display: flex;
@@ -368,6 +409,9 @@
                 background: rgba(245, 166, 35, 0.06);
               }
             }
+          }
+          /deep/.no-data {
+            height: 500px;
           }
         }
       }
