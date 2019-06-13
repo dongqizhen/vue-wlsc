@@ -2,45 +2,42 @@
   <div class="header">
     <div class="content">
       <div class="left">
-        <p>欢迎来到网来商城</p>
+        <p v-if="!isMerchant">欢迎来到网来商城</p>
+        <p v-else>
+          <router-link to="/" replace>返回网来商城首页</router-link>
+        </p>
         <div v-if="!isLogin">
           <router-link to="/login">请登录</router-link>
           <router-link to="/register" tag="span"><a>免费注册</a></router-link>
         </div>
         <div v-else>
-          <a>{{
-            userInfo.accountNo.substr(0, 3) +
-              "****" +
-              userInfo.accountNo.substr(7)
-          }}</a>
+          <a>
+            {{
+              userInfo.accountNo.substr(0, 3) +
+                "****" +
+                userInfo.accountNo.substr(7)
+            }}
+          </a>
           <span @click="exitHandler"><a>退出</a></span>
         </div>
       </div>
       <ul class="right">
-        <router-link tag="li" to="/userCenter" v-if="isLogin">
-          <a>
+        <router-link tag="li" to="/userCenter" v-if="isLogin && !isMerchant">
+          <a target="_blank">
             个人中心
           </a>
         </router-link>
-        <router-link tag="li" to="#" v-if="isLogin">
-          <a>
-            系统通知(24)
-          </a>
-        </router-link>
-        <router-link tag="li" to="/merchant/messageCenter" v-if="isLogin">
-          <a>
-            私信消息(12)
-          </a>
-        </router-link>
-        <router-link tag="li" to="#">
-          <a>
+        <li v-if="isLogin" @click="system"><a>系统通知(24)</a></li>
+        <li v-if="isLogin" @click="privateMessage"><a>私信消息(12)</a></li>
+        <router-link tag="li" to="/userCenter" v-if="!isMerchant">
+          <a target="_blank">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icongouwuche"></use>
             </svg>
             我的选购单
           </a>
         </router-link>
-        <li><a @click="openMerchant">商家中心</a></li>
+        <li v-if="!isMerchant"><a @click="openMerchant">商家中心</a></li>
         <router-link
           tag="li"
           to="#"
@@ -74,7 +71,8 @@
   export default {
     data() {
       return {
-        codeShow: false
+        codeShow: false,
+        isMerchant: false
       };
     },
     methods: {
@@ -82,14 +80,40 @@
         //window.clearVuexAlong();
         this.changeLoginState(false);
         this.changeUserInfoState({});
-        this.$router.push("/login");
         this.changeUserShopInfoState({});
+        this.$router.push("/login");
       },
       ...mapMutations([
         "changeLoginState",
         "changeUserInfoState",
         "changeUserShopInfoState"
       ]),
+      system() {
+        if (this.$route.path.indexOf("merchant") != -1) {
+          this.$router.replace({
+            path: "/merchant/messageCenter",
+            query: { type: "system" }
+          });
+        } else {
+          this.$router.replace({
+            path: "/userCenter/myMessage",
+            query: { type: "system" }
+          });
+        }
+      },
+      privateMessage() {
+        if (this.$route.path.indexOf("merchant") != -1) {
+          this.$router.replace({
+            path: "/merchant/messageCenter",
+            query: { type: "message" }
+          });
+        } else {
+          this.$router.replace({
+            path: "/userCenter/myMessage",
+            query: { type: "message" }
+          });
+        }
+      },
       openMerchant() {
         _getData("/user/getUser", {}).then(data => {
           console.log("获取用户的店铺开店信息：", data);
@@ -97,13 +121,22 @@
             this.$router.push({ path: "/login" });
           } else {
             this.changeUserShopInfoState(data);
-            this.$router.push({ path: "/merchant" });
+            let { href } = this.$router.resolve({ path: "/merchant" });
+            window.open(href, "_blank");
           }
         });
       }
     },
     computed: {
       ...mapState(["isLogin", "userInfo"])
+    },
+    mounted() {
+      console.log(this.$route.path);
+      if (this.$route.path.indexOf("merchant") != -1) {
+        this.isMerchant = true;
+      } else {
+        this.isMerchant = false;
+      }
     }
   };
 </script>

@@ -250,6 +250,9 @@
       }
     },
     mounted() {
+      if (this.$route.query.type == "message") {
+        this.system(1);
+      }
       this.getMessageList();
       this.getMessageNumber();
     },

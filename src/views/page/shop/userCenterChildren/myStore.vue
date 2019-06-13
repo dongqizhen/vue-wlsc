@@ -21,7 +21,7 @@
       </div>
     </common-title>
     <div class="listContainer">
-      <div class="listContent">
+      <div class="listContent" v-if="data.length > 0">
         <ul v-if="current == 0">
           <product-item
             v-for="item in data"
@@ -37,6 +37,7 @@
           ></shop-item>
         </ul>
       </div>
+      <no-data v-else text="暂无数据"></no-data>
     </div>
     <pagination
       :data="paginationData"
@@ -202,6 +203,11 @@
           float: left;
           margin-bottom: 8px;
         }
+      }
+      /deep/.no-data {
+        width: 1040px;
+        height: 500px;
+        background-color: #fff;
       }
     }
   }

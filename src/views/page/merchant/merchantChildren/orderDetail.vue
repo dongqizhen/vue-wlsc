@@ -1,6 +1,10 @@
 <template>
   <div class="orderDetail">
-    <common-title title="订单详情"></common-title>
+    <common-title title="订单详情">
+      <div slot="titleRight" class="orderClose">
+        订单关闭原因：{{ data.closeReason }}
+      </div>
+    </common-title>
     <div class="orderContainer">
       <order-title :isShowInfo="isShowInfo" :data="data"></order-title>
       <delivery-info :data="data"></delivery-info>
@@ -36,7 +40,7 @@
     },
     methods: {},
     mounted() {
-      _getData("/order/orderDetails", { orderSn: this.$route.params.id }).then(
+      _getData("/order/orderDetails", { id: this.$route.params.id }).then(
         data => {
           console.log("获取订单详情：", data);
           this.data = data;
@@ -60,6 +64,15 @@
     padding: 4px 20px 20px 20px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
     margin-bottom: 100px;
+    .orderClose {
+      padding: 0 24px;
+      background: rgba(241, 2, 21, 0.04);
+      border-radius: 14px;
+      font-size: 14px;
+      color: $theme-color;
+      height: 28px;
+      line-height: 28px;
+    }
     .orderContainer {
       /deep/.orderTitle {
         margin: 9px 0 12px;

@@ -173,11 +173,13 @@
             this.$emit("getIsDelete", data);
           });
         } else {
-          _getData("/enquiryPlus/deleteEnquiry", { ids: id }).then(data => {
-            console.log("删除询价单：", data);
-            this.$message.success("删除成功", 1);
-            this.$emit("getIsDelete", data);
-          });
+          _getData("/enquiryPlus/deleteEnquiry", { ids: id, flag: "user" }).then(
+            data => {
+              console.log("删除询价单：", data);
+              this.$message.success("删除成功", 1);
+              this.$emit("getIsDelete", data);
+            }
+          );
         }
       },
       remindQuote(storeId, enquiryId) {

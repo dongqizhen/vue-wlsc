@@ -67,12 +67,12 @@
     },
     methods: {
       addInquiry() {
-        console.log(this.selectDatas);
+        // console.log(this.selectDatas);
         if (this.selectDatas.length == 0) {
           this.$message.warning("请先选择产品", 1);
           return;
         } else {
-          console.log(this.products);
+          // console.log(this.products);
           _.map(this.selectDatas, o => {
             let selectProducts = [];
             _.map(o.goodsList, value => {
@@ -88,20 +88,21 @@
                 }
               });
             });
-            console.log(selectProducts);
             o.goodsList = selectProducts;
           });
-          console.log(this.selectDatas);
         }
         _getData("/enquiryPlus/addEnquiry", { param: this.selectDatas }).then(
           data => {
-            console.log("一键获取报价：", data);
-            this.$router.replace({ path: "/userCenter/myInquiry" });
+            // console.log("一键获取报价：", data);
+            let { href } = this.$router.resolve({
+              path: "/userCenter/myInquiry"
+            });
+            window.open(href, "_blank");
           }
         );
       },
       getIsCheckAll(val) {
-        console.log(val);
+        // console.log(val);
         if (val.isCheckAll) {
           if (
             _.find(this.selectDatas, o => {
@@ -149,7 +150,7 @@
             }
           }
         }
-        console.log(this.selectDatas);
+        // console.log(this.selectDatas);
         this.products = [];
         _.map(this.selectDatas, o => {
           for (const item of o.goodsList) {
@@ -191,7 +192,7 @@
         }
       },
       getIsDelete(val) {
-        console.log(val);
+        // console.log(val);
         this.$message.success("删除成功");
         this.getCart();
       },
@@ -204,15 +205,16 @@
               selectProduct.push(val);
             });
           });
-          console.log(selectProduct);
+          // console.log(selectProduct);
           _getData("/cart/delete", { goodIds: selectProduct.join(",") }).then(
             data => {
-              console.log(data);
+              // console.log(data);
               this.$message.success("删除成功");
             }
           );
         } else {
           this.$message.warning("请先选择产品", 1);
+          return;
         }
       },
       getCart() {

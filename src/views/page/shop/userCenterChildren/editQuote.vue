@@ -170,7 +170,7 @@
     background-color: #fff;
     padding: 4px 20px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
-    margin-bottom: 10px;
+    margin-bottom: 100px;
     .quoteOrderInfo {
       .infoBar {
         height: 40px;

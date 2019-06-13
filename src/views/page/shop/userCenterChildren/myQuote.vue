@@ -47,7 +47,7 @@
                   <span>{{ goodItem.unit }}</span>
                 </div>
               </div>
-              <div>¥{{ item.subtotal }}</div>
+              <div>¥{{ item.totalPrice }}</div>
               <div>
                 {{ item.createdOn ? item.createdOn.substring(0, 16) : "" }}
               </div>

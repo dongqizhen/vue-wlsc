@@ -167,22 +167,13 @@
         </div>
       </div>
     </div>
-    <!-- <div class="commonBoxStyle specification">
+    <div class="commonBoxStyle specification">
       <div class="title">产品规格参数</div>
       <div class="specificationContent">
         <list-title :titleArr="titleArr"></list-title>
-        <div class="table-body">
-          <div v-for="(item, index) in params" :key="index">
-            <div v-if="index < params.length - 1">
-              <new-param></new-param>
-            </div>
-            <div v-else>
-              <add-btn v-on:getParams="addParams"></add-btn>
-            </div>
-          </div>
-        </div>
+        <div class="table-body"></div>
       </div>
-    </div> -->
+    </div>
     <div class="commonBoxStyle productPicture">
       <div class="title">
         商品图片
@@ -246,11 +237,6 @@
 </template>
 
 <script>
-  function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result));
-    reader.readAsDataURL(img);
-  }
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import listTitle from "../../../../components/common/listTitle";
   import addBtn from "../../../../components/common/productParams/addBtn";
@@ -264,7 +250,10 @@
         title: "发布商品",
         loading: false,
         actionURL: this.$API_URL.HYGFILEURL + "/api/upload/imageUpload",
-        titleArr: ["参数类型", "参数名称", "参数值", "操作"],
+        titleArr: [
+          "参数名称",
+          "参数值（默认为系统参数，可根据实际产品修改参数）"
+        ],
         params: [{}],
         defaultCascaderValue: [],
         bigOptions: [],
@@ -298,7 +287,6 @@
         }
       };
     },
-
     methods: {
       release() {
         if (this.submitData.name == "") {
@@ -361,12 +349,12 @@
         }
         if (this.$route.query.id) {
           _getData("/goods/updateGoods", this.submitData).then(data => {
-            alert("产品编辑成功");
+            this.$message.success("产品编辑成功", 1);
             this.$router.replace({ path: "/merchant/productManage" });
           });
         } else {
           _getData("/goods/addGoods", this.submitData).then(data => {
-            alert("产品发布成功");
+            this.$message.success("产品发布成功", 1);
             return;
           });
         }
@@ -535,29 +523,11 @@
             this.submitData.minPrice = data.productInfo.minPrice;
             this.submitData.maxPrice = data.productInfo.maxPrice;
           }
-          if (data.productInfo.list_pic_url) {
-            this.tempUploadList.push({
-              uid: 1,
-              url: data.productInfo.list_pic_url
-            });
-          }
-          if (data.productInfo.image1) {
-            this.tempUploadList.push({ uid: 2, url: data.productInfo.image1 });
-          }
-          if (data.productInfo.image2) {
-            this.tempUploadList.push({ uid: 3, url: data.productInfo.image2 });
-          }
-          if (data.productInfo.image3) {
-            this.tempUploadList.push({ uid: 4, url: data.productInfo.image3 });
-          }
-          if (data.productInfo.image4) {
-            this.tempUploadList.push({ uid: 5, url: data.productInfo.image4 });
-          }
-          if (data.productInfo.image5) {
-            this.tempUploadList.push({ uid: 6, url: data.productInfo.image5 });
-          }
+          let imgArr = JSON.parse(data.productInfo.list_pic_url);
+          _.map(imgArr, (val, index) => {
+            this.tempUploadList.push({ uid: index + 1, url: val });
+          });
           this.uploadList = this.tempUploadList;
-          console.log(this.uploadList);
         });
       }
     },
@@ -689,24 +659,19 @@
         /deep/.listTitle {
           ul {
             li {
+              height: 100%;
               justify-content: center;
               margin: 0;
               &:first-child {
-                width: 144px;
+                width: 244px;
+                border-right: $border-style;
               }
               &:nth-child(2) {
-                width: 173px;
-              }
-              &:nth-child(3) {
-                width: 567px;
-              }
-              &:nth-child(4) {
-                width: 78px;
+                flex: 1;
               }
             }
           }
         }
-
         .table-body {
           border: $border-style;
           margin-top: 10px;
