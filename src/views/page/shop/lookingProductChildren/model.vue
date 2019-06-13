@@ -52,6 +52,13 @@
                     :list="item"
                   ></product-item-vue>
                 </ul>
+                <ul v-else-if="startWith('文章')">
+                  <article-item-vue
+                    v-for="item in shopList"
+                    :key="item.id"
+                    :item="item"
+                  ></article-item-vue>
+                </ul>
               </div>
               <loading-vue v-else></loading-vue>
               <pagination-vue
@@ -64,7 +71,7 @@
           </div>
         </div>
         <div class="right">
-          <brand-card-vue></brand-card-vue>
+          <brand-card-vue :data="modelDetail"></brand-card-vue>
         </div>
       </div>
     </div>
@@ -84,9 +91,13 @@
   import _ from "lodash";
   import shopItemVue from "../../../../components/common/item/shopItem.vue";
   import bidInfoItemVue from "../../../../components/common/item/bidInfoItem.vue";
+  import videoItemVue from "../../../../components/common/item/videoItem.vue";
+  import caseItemVue from "../../../../components/common/item/caseItem.vue";
+  import articleItemVue from "../../../../components/common/item/articleItem.vue";
 
   const goodsort = ["发布时间", "按价格", "按好评"],
-    shopsort = ["发布时间", "按点击量", "按好评"];
+    shopsort = ["发布时间", "按点击量", "按好评"],
+    otherArr = ["发布时间", "浏览量", "点赞数"];
 
   export default {
     data() {
@@ -97,17 +108,20 @@
         attributeCategoryId: "", //属性id
         isLoading: true,
         tabs: [],
+        modelDetail: "",
         index: 0,
         navArr: ["发布时间", "按价格", "按好评"],
         shopList: "",
         defaultVal: "",
         goodSort: "createOn", //产品排序类型 “createOn”发布时间 ,"price" 价格 ,“rate”//好评率
         shopSort: "createOn", //店铺排序类型 “createOn”发布时间 ,"hit" 点击量,“rate”//好评率
+        othersort: 0, //案例，视频，文章排序标识  0 发布时间 1 浏览量 2 点赞数
         shopIsloading: false
       };
     },
     components: {
       shopNavVue,
+      videoItemVue,
       productItemVue,
       brandCardVue,
       recommendsTabVue,
@@ -115,7 +129,9 @@
       breadcrumbVue,
       loadingVue,
       shopItemVue,
-      bidInfoItemVue
+      caseItemVue,
+      bidInfoItemVue,
+      articleItemVue
     },
     computed: {},
     methods: {
@@ -129,6 +145,97 @@
       startWith(val) {
         return _.startsWith(this.defaultVal, val);
       },
+      //获取文章列表
+      async getArticleList() {
+        this.shopIsloading = true;
+        return await _getData(
+          `${this.$API_URL.HYGLOGINURL}/server/article!request.action`,
+          {
+            method: "getListWithShoping",
+            version: "3.0.0",
+            deviceId: "",
+            source: "",
+            params: {
+              currentPage: 1,
+              countPerPage: 20,
+              classifyId: this.modelDetail.a_classify_id || "",
+              sortType: this.othersort,
+              sortFlag: 1 //排序标识0正序1 倒序
+            }
+          }
+        )
+          .then(data => {
+            this.shopList = data.data.result.articlelist;
+          })
+          .then(() => {
+            this.$nextTick().then(() => {
+              this.shopIsloading = false;
+            });
+          });
+      },
+      //获取视频列表
+      async getVideoList() {
+        this.shopIsloading = true;
+        return await _getData(
+          `${this.$API_URL.HYGPROURL}/server_pro/video!request.action`,
+          {
+            method: "getListWithShoping",
+            version: "",
+            deviceId: "",
+            source: "",
+            params: {
+              currentPage: 1,
+              countPerPage: 20,
+              vBigCategoryId: this.modelDetail.v_big_category_id || "",
+              vCategoryId: this.modelDetail.v_sub_category_id || "",
+              sortType: this.othersort,
+              sortFlag: 1
+            }
+          }
+        )
+          .then(data => {
+            this.shopList = data.data.result.videolist;
+          })
+          .then(() => {
+            this.$nextTick().then(() => {
+              this.shopIsloading = false;
+            });
+            // setTimeout(() => {
+            //   this.shopIsloading = false;
+            // }, 0);
+          });
+      },
+      //获取维修宝列表
+      async getCaseList() {
+        this.shopIsloading = true;
+        return await _getData(
+          `${this.$API_URL.HYGPROURL}/server_pro/maintenance!request.action`,
+          {
+            method: "getListWithShoping",
+            version: "3.0.0",
+            deviceId: "",
+            source: "",
+            params: {
+              currentPage: 1,
+              countPerPage: 20,
+              mCatogoryId: this.modelDetail.m_category_id || "",
+              mBrandId: this.modelDetail.brand_id || "",
+              sortType: this.othersort,
+              sortFlag: 1,
+              searchType: 0 //查询类型0列表1详情
+            }
+          }
+        )
+          .then(data => {
+            this.shopList = data.data.result.maintenancelist;
+          })
+          .then(() => {
+            this.$nextTick().then(() => {
+              this.shopIsloading = false;
+            });
+            setTimeout(() => {}, 0);
+          });
+      },
       shopTabClick(i) {
         if (this.index < this.navList.length) {
           this.goodSort = i == 0 ? "createOn" : i == 1 ? "price" : "rate";
@@ -136,13 +243,24 @@
         } else if (_.startsWith(this.defaultVal, "店铺")) {
           this.shopSort = i == 0 ? "createOn" : i == 1 ? "hit" : "rate";
           this.getShopList();
+        } else if (_.startsWith(this.defaultVal, "文章")) {
+          this.othersort = i;
+          this.getArticleList();
+        } else if (_.startsWith(this.defaultVal, "视频")) {
+          this.othersort = i;
+          this.getVideoList();
+        } else if (_.startsWith(this.defaultVal, "案例")) {
+          this.othersort = i;
+          this.getCaseList();
         }
       },
       tabClick(i, val) {
         console.log(val);
         this.index = i;
         this.defaultVal = val;
-
+        this.othersort = 0;
+        this.goodSort = "createOn";
+        this.shopSort = "createOn";
         this.$refs.shopNav.$data.val = 0;
         if (i < this.navList.length) {
           this.navArr = goodsort;
@@ -152,6 +270,15 @@
         if (_.startsWith(this.defaultVal, "店铺")) {
           this.navArr = shopsort;
           this.getShopList().then(() => {});
+        } else if (_.startsWith(this.defaultVal, "文章")) {
+          this.navArr = otherArr;
+          this.getArticleList();
+        } else if (_.startsWith(this.defaultVal, "视频")) {
+          this.navArr = otherArr;
+          this.getVideoList();
+        } else if (_.startsWith(this.defaultVal, "案例")) {
+          this.navArr = otherArr;
+          this.getCaseList();
         }
         this.$nextTick(() => {
           if (this.$refs.pagination) {
@@ -243,6 +370,13 @@
       //     this.isLoading = false;
       //   });
       // });
+
+      _getData("brandmodel/info", {
+        id: this.$route.query.modelId
+      }).then(data => {
+        console.log("型号详情", data);
+        this.modelDetail = data;
+      });
     },
     beforeRouteEnter(to, from, next) {
       console.log(to, from);

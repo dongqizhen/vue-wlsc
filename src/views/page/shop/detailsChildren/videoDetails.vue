@@ -133,7 +133,7 @@
         isLoading: true,
         playerOptions: {
           // videojs options
-          muted: true,
+          muted: false,
           languages: {
             en: {
               Play: "播放",
@@ -214,9 +214,13 @@
           this.playerOptions.sources[0].src = this.detail.videoSubList[0].url;
         })
         .then(() => {
-          this.getCommentList().then(() => {
-            this.isLoading = false;
-          });
+          this.getCommentList()
+            .then(() => {
+              this.isLoading = false;
+            })
+            .then(() => {
+              console.log(this.$refs.videoPlayer);
+            });
         });
     }
   };

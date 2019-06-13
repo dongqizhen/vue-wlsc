@@ -63,7 +63,7 @@
                 :item="item"
               ></case-item-vue>
             </ul>
-            <!-- <pagination :data=""></pagination> -->
+            <!-- <pagination :data="" ref="pagination"></pagination> -->
           </div>
           <no-data v-else></no-data>
         </div>
@@ -141,6 +141,11 @@
           this.navArr = otherArr;
         }
         this.getList();
+        // this.$nextTick(() => {
+        //   if (this.$refs.pagination) {
+        //     this.$refs.pagination.$data.current = 1;
+        //   }
+        // });
       },
 
       async getList() {
@@ -171,10 +176,10 @@
             this.arr = data.brandModelList;
           })
           .then(() => {
-            //this.$nextTick().then(() => {});
-            setTimeout(() => {
+            this.$nextTick().then(() => {
               this.isLoading = false;
-            }, 300);
+            });
+            setTimeout(() => {}, 300);
           });
       },
       //获取文章列表
@@ -200,9 +205,9 @@
             this.arr = data.data.result.articlelist;
           })
           .then(() => {
-            setTimeout(() => {
+            this.$nextTick().then(() => {
               this.isLoading = false;
-            }, 300);
+            });
           });
       },
       //获取视频列表
@@ -229,9 +234,9 @@
             this.arr = data.data.result.videolist;
           })
           .then(() => {
-            setTimeout(() => {
+            this.$nextTick().then(() => {
               this.isLoading = false;
-            }, 300);
+            });
           });
       },
       //获取维修宝列表
@@ -259,9 +264,9 @@
             this.arr = data.data.result.maintenancelist;
           })
           .then(() => {
-            setTimeout(() => {
+            this.$nextTick().then(() => {
               this.isLoading = false;
-            }, 300);
+            });
           });
       }
     },

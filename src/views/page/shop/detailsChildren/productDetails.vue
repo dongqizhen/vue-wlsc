@@ -508,7 +508,9 @@
         })
         .then(() => {
           this.$nextTick().then(() => {
-            this.initMagnifier();
+            setTimeout(() => {
+              this.initMagnifier();
+            }, 30);
           });
         })
         .then(() => {

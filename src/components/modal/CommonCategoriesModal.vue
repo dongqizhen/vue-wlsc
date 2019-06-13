@@ -130,6 +130,7 @@
           // freeMode: true,
           direction: "horizontal",
           slideToClickedSlide: true,
+          touchRatio: 0,
           on: {
             init: function() {
               if (this.slides[0] == undefined) return;

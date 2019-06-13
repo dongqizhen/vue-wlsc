@@ -1,22 +1,27 @@
 <template>
   <div class="brand-card">
     <div class="img_box">
-      <div class="img"></div>
-      监护除颤仪
+      <div class="img">
+        <img :src="data.pic_url" alt="" />
+      </div>
+      {{ data.name }}
     </div>
     <div class="introduce">
-      <p>
-        产品适用范围除颤监护仪临床上主要用于医院或急救车上对病人进行1.
-        生命体征监护(心电、血氧、无创血压)2.
-        体外除颤(电极板、粘性电极、AED除颤)3. 体内除颤(体内除颤电极)4. 起博。
-        产品适用范围除颤监护仪临床上主要用于医院或急救车上对病人进行1.
-        生命体征监护(心电、血氧、无创血压)2.
-        体外除颤(电极板、粘性电极、AED除颤)3. 体内除颤(体内除颤电极)4. 起博…
-      </p>
-      <span>
-        查看更多
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#icongengduoxialajiantou"></use>
+      <div class="desc" :class="isUnwind && 'active'">
+        <p>
+          {{ data.simple_desc }}
+        </p>
+      </div>
+      <span
+        class="more"
+        v-if="isShowMore"
+        @click="rightMoreBtnClick"
+        :class="isUnwind && 'active'"
+      >
+        {{ !isUnwind ? "查看更多" : "收起" }}
+        <svg class="icon" aria-hidden="true" :class="isUnwind && 'active'">
+          <use xlink:href="#icongengduoxialajiantou" v-if="!isUnwind"></use>
+          <use xlink:href="#icontianjiaduibichanpinxiala" v-else></use>
         </svg>
       </span>
       <div class="bottom-shadow"></div>
@@ -25,7 +30,28 @@
 </template>
 
 <script>
-  export default {};
+  export default {
+    data() {
+      return {
+        isShowMore: false, //是否显示更多按钮
+        isUnwind: false //是否展开
+      };
+    },
+    props: ["data"],
+    mounted() {
+      let DOM = document.querySelector(".desc>p");
+      console.log(DOM.offsetHeight);
+      if (DOM.offsetHeight > 324) {
+        //document.querySelector(".more").style.display = "none";
+        this.isShowMore = true;
+      }
+    },
+    methods: {
+      rightMoreBtnClick() {
+        this.isUnwind = !this.isUnwind;
+      }
+    }
+  };
 </script>
 
 <style lang="scss" scoped>
@@ -48,6 +74,10 @@
         height: 113px;
         background: $base-background;
         margin-bottom: 25px;
+        img {
+          height: 100%;
+          width: 100%;
+        }
       }
     }
     .introduce {
@@ -58,12 +88,23 @@
       margin-top: 12px;
       box-shadow: $base-box-shadow;
       position: relative;
-      p {
-        font-size: 14px;
-        color: #666666;
-        letter-spacing: 0;
-        line-height: 27px;
+
+      > div.desc {
+        height: 324px;
+        overflow: hidden;
+        min-height: 150px;
+        p {
+          font-size: 14px;
+          color: #666666;
+          letter-spacing: 0;
+          line-height: 27px;
+          word-break: break-all;
+        }
+        &.active {
+          height: auto;
+        }
       }
+
       span {
         font-size: 12px;
         color: #019ddd;
@@ -72,11 +113,21 @@
         align-items: center;
         margin-top: 6px;
         cursor: pointer;
+        &.active {
+          color: #999999;
+        }
+        &:hover {
+          opacity: 0.7;
+        }
         .icon {
           height: 6px;
           width: 10px;
           margin-left: 4px;
           margin-top: 1px;
+          transition: all 0.3s;
+          &.active {
+            transform: rotate(180deg);
+          }
         }
       }
       .bottom-shadow {
