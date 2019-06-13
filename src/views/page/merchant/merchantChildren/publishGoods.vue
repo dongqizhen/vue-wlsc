@@ -109,19 +109,6 @@
             </el-select>
           </div>
         </div>
-
-        <!-- <div class="common">
-          <div class="left-box"><span class="red">*</span>品牌</div>
-          <div class="right-box">
-            <a-input placeholder="请输入品牌" v-model="submitData.brand" />
-          </div>
-        </div>
-        <div class="common">
-          <div class="left-box"><span class="red">*</span>型号</div>
-          <div class="right-box">
-            <a-input placeholder="请输入型号" v-model="submitData.model" />
-          </div>
-        </div> -->
         <div class="common guidePrice">
           <div class="left-box"><span class="red">*</span>指导价</div>
           <div class="right-box">
@@ -136,9 +123,9 @@
               class="priceMax"
               v-model="submitData.maxPrice"
             />
-            <a-checkbox @change="onChange" :checked="isEnquiry"
-              >询价</a-checkbox
-            >
+            <a-checkbox @change="onChange" :checked="isEnquiry">
+              询价
+            </a-checkbox>
           </div>
         </div>
         <div class="common" v-if="isSparePart">
@@ -171,7 +158,14 @@
       <div class="title">产品规格参数</div>
       <div class="specificationContent">
         <list-title :titleArr="titleArr"></list-title>
-        <div class="table-body"></div>
+        <div class="table-body">
+          <ul>
+            <li v-for="item in specificationParams" :key="item.id">
+              <span>{{ item.specificationName }}</span>
+              <span>{{ item.value }}</span>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="commonBoxStyle productPicture">
@@ -254,7 +248,7 @@
           "参数名称",
           "参数值（默认为系统参数，可根据实际产品修改参数）"
         ],
-        params: [{}],
+        specificationParams: [],
         defaultCascaderValue: [],
         bigOptions: [],
         smallOptions: [],
@@ -429,6 +423,7 @@
       handleModelChange(value) {
         console.log(`selected ${value}`);
         this.submitData.modelId = value;
+        this.getSpecificationParam(value);
       },
       beforeUpload(file) {
         const isLt2M = file.size / 1024 / 1024 < 1;
@@ -458,6 +453,12 @@
             val.value = val.id;
           });
           this.modelOptions = data.brandModelList;
+        });
+      },
+      getSpecificationParam(modelId) {
+        _getData("/modelspecification/query", { modelId: modelId }).then(data => {
+          console.log("规格参数：：：", data);
+          this.specificationParams = data.modelSpecificationInfo;
         });
       }
     },
@@ -663,7 +664,7 @@
               justify-content: center;
               margin: 0;
               &:first-child {
-                width: 244px;
+                width: 234px;
                 border-right: $border-style;
               }
               &:nth-child(2) {
@@ -674,8 +675,30 @@
         }
         .table-body {
           border: $border-style;
-          margin-top: 10px;
+          border-top: none;
           margin-bottom: 57px;
+          ul {
+            li {
+              display: flex;
+              border-bottom: $border-style;
+              &:last-child {
+                border-bottom: none;
+              }
+              span {
+                text-align: center;
+                padding: 16px 20px;
+                color: #333;
+                font-size: 14px;
+                &:first-child {
+                  width: 234px;
+                  border-right: $border-style;
+                }
+                &:nth-child(2) {
+                  flex: 1;
+                }
+              }
+            }
+          }
         }
       }
     }
