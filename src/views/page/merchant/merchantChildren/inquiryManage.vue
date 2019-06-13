@@ -109,7 +109,8 @@
         console.log(this.checkedList);
         if (this.checkedList.length > 0) {
           _getData("/enquiryPlus/deleteEnquiry", {
-            ids: this.checkedList.join(",")
+            ids: this.checkedList.join(","),
+            flag: "shop"
           }).then(data => {
             console.log("批量删除询价单：", data);
             this.$message.success("批量删除询价单成功", 1);

@@ -162,7 +162,6 @@
       }
     },
     methods: {
-      //批量删除
       getCheckDelete(val) {
         console.log(val);
         console.log(this.selectArr);

@@ -30,17 +30,10 @@
       >
         <span>
           <img
-            src="http://file.haoyigong.com/server/upload/1554429391594.jpg"
+            :src="isShowInfo.isMerchant ? data.userAvatar : data.shopImage"
           />
         </span>
-        <span>{{ isShowInfo.isMerchant ? data.username : data.shopName }}</span>
-      </div>
-      <div
-        class="common userName"
-        v-if="isShowInfo.isDetail && data.order_status == 7"
-      >
-        <span>订单关闭原因：</span>
-        <span>{{ isShowInfo.isMerchant ? data.username : data.shopName }}</span>
+        <span>{{ isShowInfo.isMerchant ? data.userName : data.shopName }}</span>
       </div>
     </div>
     <div class="right-box">

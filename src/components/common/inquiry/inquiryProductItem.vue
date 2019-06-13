@@ -25,8 +25,8 @@
       {{ itemData.number }}
     </span>
     <span v-if="isShowInfo.current == 3 && !isShowInfo.isMerchant">
-      <van-stepper v-model="itemData.number" :max="itemData.goods_number" />
-      <i class="stockNumber">库存{{ itemData.goods_number }}件</i>
+      <van-stepper v-model="itemData.number" :max="itemData.repertoryNum" />
+      <i class="stockNumber">库存{{ itemData.repertoryNum }}件</i>
     </span>
     <span>
       {{ itemData.arrivalTime ? itemData.arrivalTime.substring(0, 16) : "" }}

@@ -3,13 +3,10 @@
     <modal :isShow="visible" :options="options">
       <div slot="content" v-if="type != 'login'">
         <div class="alertContent">
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icondingdanshanchu"></use>
-          </svg>
-          {{ deleteObj.isOrder ? "订单" : "" }}删除后无法恢复
+          您是否已经收到该订单？
         </div>
         <div class="btn">
-          <a-button @click="sure">确定删除</a-button>
+          <a-button @click="sure">确认收货</a-button>
           <a-button @click="visible = false">取消</a-button>
         </div>
       </div>
@@ -41,7 +38,7 @@
           title: "提示",
           closable: true,
           maskClosable: false,
-          wrapClassName: "deleteOrder",
+          wrapClassName: "confirmReceipt",
           centered: false
         }
       };
@@ -61,8 +58,8 @@
         default: "提交成功",
         required: false
       },
-      deleteObj: {
-        type: Object
+      orderId: {
+        type: [String, Number]
       }
     },
     computed: {
@@ -80,30 +77,14 @@
         window.open(href, "_blank");
       },
       sure() {
-        if (this.deleteObj.isOrder) {
-          console.log(this.deleteObj.deleteId);
-          _getData("/order/deleteOrder", {
-            ids: this.deleteObj.deleteId,
-            flag: this.deleteObj.isMerchant ? "shop" : "user"
-          }).then(data => {
-            console.log(data);
-            this.$message.success("订单删除成功", 1);
-            this.visible = false;
-          });
-        } else {
-          _getData(
-            `${this.$API_URL.HYGLOGINURL}/server/userAddress!request.action`,
-            {
-              method: "deleteUserAddressList",
-              userid: this.userInfo.id,
-              token: "",
-              params: { userAddressList: [this.deleteObj.deleteId] }
-            }
-          ).then(data => {
-            console.log(data);
-            this.visible = false;
-          });
-        }
+        _getData("/order/updateOrderStatus", {
+          orderId: this.orderId,
+          orderStatus: "affirm"
+        }).then(data => {
+          console.log(data);
+          this.visible = false;
+          this.$emit("returnValue", 4); //4表示已经收货，进入待评价状态
+        });
       }
     },
     watch: {
@@ -111,14 +92,13 @@
         this.visible = newVal;
       },
       visible(newVal) {
-        // console.log(newVal);
-        // console.log(this.$parent);
         if (!newVal) {
           this.$parent.visible = false;
           this.$parent.payVisible = false;
           this.$parent.sureVisible = false;
           this.$parent.commentVisible = false;
           this.$parent.deleteVisible = false;
+          this.$parent.confirmVisible = false;
         }
       }
     }

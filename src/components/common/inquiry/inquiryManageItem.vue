@@ -141,10 +141,12 @@
       },
       deleteInquiryOrder(id) {
         console.log(id);
-        _getData("/enquiryPlus/deleteEnquiry", { ids: id }).then(data => {
-          console.log("删除询价单：", data);
-          this.$emit("getIsDelete", data);
-        });
+        _getData("/enquiryPlus/deleteEnquiry", { ids: id, flag: "shop" }).then(
+          data => {
+            console.log("删除询价单：", data);
+            this.$emit("getIsDelete", data);
+          }
+        );
       }
     },
     components: {

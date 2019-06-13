@@ -159,6 +159,12 @@
       :type="type"
       :deleteObj="deleteObj"
     ></delete-order>
+    <confirm-receipt
+      :Visible="confirmVisible"
+      :type="type"
+      :orderId="orderId"
+      @returnValue="getReturnStatus"
+    ></confirm-receipt>
   </div>
 </template>
 <script>
@@ -167,6 +173,7 @@
   import submitComment from "../../modal/submitComment";
   import submitPay from "../../modal/submitPayImg";
   import deleteOrder from "../../modal/deleteOrderModal";
+  import confirmReceipt from "../../modal/confirmReceipt";
 
   import { mapState } from "vuex";
   import { _getData } from "../../../config/getData";
@@ -178,6 +185,7 @@
         commentVisible: false,
         payVisible: false,
         deleteVisible: false,
+        confirmVisible: false,
         type: "",
         deleteObj: {
           isOrder: true,
@@ -223,19 +231,13 @@
           this.$emit("returnValue", 7); //7表示关闭接单
         });
       },
-      getReturnStatus(val) {
-        console.log(val);
-        this.$emit("returnValue", val);
-      },
       //确认收货
       confirmReceipt(orderId) {
-        _getData("/order/updateOrderStatus", {
-          orderId: orderId,
-          orderStatus: "affirm"
-        }).then(data => {
-          console.log(data);
-          this.$emit("returnValue", 4); //4表示已经收货，进入待评价状态
-        });
+        if (!this.isLogin) {
+          this.type = "login";
+        }
+        this.confirmVisible = true;
+        this.orderId = orderId;
       },
       //申请退货
       applicationReturn() {
@@ -246,11 +248,18 @@
           console.log(data);
           this.$message.success("申请成功", 1);
           this.data.order_status = 6;
-          //this.$emit("returnValue", 4); //4表示已经收货，进入待评价状态
         });
       },
       //确认退货
-      confirmReturn() {},
+      confirmReturn() {
+        _getData("/order/updateOrderStatus", {
+          orderId: this.$route.params.id,
+          orderStatus: "refundConfirm"
+        }).then(data => {
+          console.log(data);
+          this.$message.success("操作成功", 1);
+        });
+      },
       getReturnStatus(val) {
         console.log(val);
         this.$emit("returnValue", val);
@@ -290,6 +299,7 @@
         }
         this.deleteVisible = true;
         this.deleteObj.deleteId = id;
+        this.deleteObj.isMerchant = this.isShowInfo.isMerchant;
       }
     },
     computed: {
@@ -300,7 +310,8 @@
       confirmDelivery,
       submitComment,
       submitPay,
-      deleteOrder
+      deleteOrder,
+      confirmReceipt
     }
   };
 </script>

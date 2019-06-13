@@ -16,8 +16,8 @@
               <order-item
                 :data="item"
                 :checkedList="checkedList"
-                v-on:getChecked="getChecked"
                 :isShowInfo="isShowInfo"
+                v-on:getChecked="getChecked"
                 v-on:returnValue="getReturnStatus"
                 v-on:deleteOrder="deleteSingleOrder"
               ></order-item>
@@ -125,16 +125,15 @@
       getCheckDelete(val) {
         console.log(val);
         console.log(this.checkedList);
-        if (this.isShowInfo.current == 5 || this.isShowInfo.current == 7) {
-          //批量删除
-          // _getData("/enquiryPlus/enquiryClose", {
-          //   ids: this.selectArr.join(",")
-          // }).then(data => {
-          //   console.log("批量删除订单：", data);
-          //   this.$message.success("批量删除订单成功", 1);
-          //   this.getOrderList();
-          // });
-        }
+        //批量删除
+        _getData("/order/deleteOrder", {
+          ids: this.checkedList.join(","),
+          flag: "user"
+        }).then(data => {
+          console.log("批量删除订单：", data);
+          this.$message.success("批量删除订单成功", 1);
+          this.getOrderList();
+        });
       },
       deleteSingleOrder(val) {
         this.getOrderList();

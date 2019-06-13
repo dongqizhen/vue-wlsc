@@ -1060,4 +1060,44 @@
       }
     }
   }
+  .confirmReceipt {
+    .ant-modal {
+      width: 696px !important;
+      .ant-modal-body {
+        padding-top: 40px;
+      }
+      .alertContent {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        color: #333333;
+        font-weight: 600;
+        margin-bottom: 40px;
+      }
+
+      .btn {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 30px;
+        .ant-btn {
+          width: 115px;
+          font-size: 15px;
+          border-radius: 3px;
+          height: 42px;
+          &:first-child {
+            background: #f5a623;
+            color: #ffffff;
+            font-weight: 600;
+            border: 1px solid #f5a623;
+            margin-right: 12px;
+          }
+          &:last-child {
+            color: #666;
+            border: 1px solid #ddd;
+          }
+        }
+      }
+    }
+  }
 </style>

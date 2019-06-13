@@ -66,8 +66,8 @@
     },
     watch: {
       isCheckAll(newVal) {
-        console.log(newVal);
-        console.log(this.selectDatas);
+        // console.log(newVal);
+        // console.log(this.selectDatas);
         if (newVal) {
           this.checkAll = newVal;
           this.checkedList = [];
@@ -85,14 +85,14 @@
     methods: {
       deleteProduct(id) {
         _getData("/cart/delete", { goodIds: id }).then(data => {
-          console.log(data);
+          // console.log(data);
           this.$emit("getIsDelete", true);
         });
       },
       addMyStore(id) {
         _getData("/collect/addordelete", { typeId: 0, valueId: id }).then(
           data => {
-            console.log("收藏接口：", data);
+            // console.log("收藏接口：", data);
             _.each(this.data.list, o => {
               if (o.goods_id == id) {
                 o.isCollection = 1;
@@ -103,7 +103,7 @@
         );
       },
       onChange(id) {
-        console.log(id);
+        // console.log(id);
         if (_.indexOf(this.checkedList, id) == -1) {
           this.checkedList.push(id);
         } else {

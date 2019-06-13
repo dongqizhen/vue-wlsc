@@ -57,10 +57,16 @@
         ]
       };
     },
+    inject: ["reload"],
     computed: {
       ...mapState(["isLogin", "userShopInfo"])
     },
-    methods: {},
+    beforeRouteUpdate(to, from, next) {
+      if (to.path.indexOf("messageCenter") != -1) {
+        this.reload();
+      }
+      next();
+    },
     beforeMount() {
       console.log(111111);
       if (this.userShopInfo.audit_status == 2) {
@@ -79,6 +85,8 @@
         } else if (this.$route.path.indexOf("inquiryOrderDetail") != -1) {
           this.defaultSelectedKeys = ["6"];
         } else if (this.$route.path.indexOf("orderManage") != -1) {
+          this.defaultSelectedKeys = ["7"];
+        } else if (this.$route.path.indexOf("orderDetail") != -1) {
           this.defaultSelectedKeys = ["7"];
         } else if (this.$route.path.indexOf("accountSecurity") != -1) {
           this.defaultSelectedKeys = ["8"];

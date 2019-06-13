@@ -132,7 +132,7 @@
 
     methods: {
       getTab(val) {
-        console.log(val);
+        // console.log(val);
         if (this.tabs[0].id == val) {
           this.unRead = true;
         } else {
@@ -145,8 +145,6 @@
       },
       system(val) {
         this.current = val;
-        this.checkedList = [];
-        this.checkAll = false;
         this.params.messageType = val;
         this.getMessageNumberParams.messageType = val;
         this.getMessageList();
@@ -167,28 +165,27 @@
         }
       },
       isCheckAllMethod(val) {
+        this.checkedList = [];
         if (val) {
           this.checkAll = true;
-          this.checkedList = [];
           for (const val of this.data) {
             this.checkedList.push(val.id);
           }
         } else {
           this.checkAll = false;
-          this.checkedList = [];
         }
       },
       //批量删除
       batchDeleteData() {
         if (this.checkedList.length > 0) {
           //向后台发送请求，标记为已读，成功后将刷新数据
-          console.log(this.checkedList);
-          console.log(this.checkedList.join(","));
+          // console.log(this.checkedList);
+          // console.log(this.checkedList.join(","));
           _getData("/message/updateStatus", {
             ids: this.checkedList.join(","),
             flag: "delete"
           }).then(data => {
-            console.log(data);
+            // console.log(data);
             this.$message.success("批量删除成功", 1);
             this.getMessageList();
             this.getMessageNumber();
@@ -201,13 +198,13 @@
       remarkRead() {
         if (this.checkedList.length > 0) {
           //向后台发送请求，标记为已读，成功后将刷新数据
-          console.log(this.checkedList);
-          console.log(this.checkedList.join(","));
+          // console.log(this.checkedList);
+          // console.log(this.checkedList.join(","));
           _getData("/message/updateStatus", {
             ids: this.checkedList.join(","),
             flag: "read"
           }).then(data => {
-            console.log(data);
+            // console.log(data);
             //移动到已读列表
             this.unRead = false;
             this.defaultActiveKey = 1;
@@ -219,14 +216,15 @@
         }
       },
       getPaginationChange(val) {
-        console.log(val);
+        // console.log(val);
         this.params.currentPage = val;
         this.getMessageList();
       },
       getMessageList() {
         _getData("/message/list", this.params).then(data => {
-          console.log("获取到的信息列表：", data);
+          // console.log("获取到的信息列表：", data);
           this.checkedList = [];
+          this.checkAll = false;
           this.data = data.data;
           this.paginationData = data;
         });
@@ -234,7 +232,7 @@
       getMessageNumber() {
         _getData("/message/messageNum", this.getMessageNumberParams).then(
           data => {
-            console.log("私信消息数量：", data);
+            // console.log("私信消息数量：", data);
             this.tabs[0].amount = data.unread;
             this.tabs[1].amount = data.read;
             this.systemNumber = data.system;
@@ -244,6 +242,9 @@
       }
     },
     mounted() {
+      if (this.$route.query.type == "message") {
+        this.system(1);
+      }
       this.getMessageList();
       this.getMessageNumber();
     },
