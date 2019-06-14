@@ -77,10 +77,10 @@
     },
     methods: {
       exitHandler() {
-        //window.clearVuexAlong();
         this.changeLoginState(false);
         this.changeUserInfoState({});
         this.changeUserShopInfoState({});
+        window.clearVuexAlong();
         this.$router.push("/login");
       },
       ...mapMutations([
@@ -115,16 +115,12 @@
         }
       },
       openMerchant() {
-        _getData("/user/getUser", {}).then(data => {
-          console.log("获取用户的店铺开店信息：", data);
-          if (data.data) {
-            this.$router.push({ path: "/login" });
-          } else {
-            this.changeUserShopInfoState(data);
-            let { href } = this.$router.resolve({ path: "/merchant" });
-            window.open(href, "_blank");
-          }
-        });
+        if (this.$getLocalStorage()) {
+          let { href } = this.$router.resolve({ path: "/merchant" });
+          window.open(href, "_blank");
+        } else {
+          this.$router.push("/login");
+        }
       }
     },
     computed: {

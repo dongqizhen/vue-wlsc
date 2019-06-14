@@ -489,18 +489,8 @@ router.beforeEach((to, from, next) => {
     if (to.meta.title) {
         document.title = to.meta.title
     }
-    let isLogin = JSON.parse(window.localStorage["vuex-along"])["vuex-along"];
-    if (window.localStorage["vuex-along"] == "{}" || JSON.parse(window.localStorage["vuex-along"])["vuex-along"].isLogin == false) {
-        isLogin = false;
-    } else {
-        isLogin = true;
-    }
-    if (to.meta.requireAuth) {
-        console.log(1111111111111111111111111111)
-        if (!isLogin) {
-            router.push({ name: "login" });
-        }
-    }
+    let localStorage = JSON.parse(window.localStorage["vuex-along"])["vuex-along"];
+
     next()
 })
 

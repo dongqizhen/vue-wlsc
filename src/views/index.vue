@@ -182,6 +182,7 @@
         // background: ["#F5A623", "#43D480", "#8880FE", "#0283FF"]
       };
     },
+    beforeCreate() {},
     mounted() {
       //获取推荐数量
       _getData("index/caseCount", {}).then(data => {
@@ -258,6 +259,12 @@
       productCategoryVue,
       recommendsTabVue,
       brandCategoryVue
+    },
+    beforeRouteLeave(to, from, next) {
+      // if (from.name == "登录") {
+      //   window.location.reload();
+      // }
+      next();
     },
     methods: {
       tabClick(i) {

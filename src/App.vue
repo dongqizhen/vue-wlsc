@@ -2,11 +2,14 @@
   <a-locale-provider :locale="locale">
     <div id="app">
       <router-view v-if="isRouterAlive" />
+      <!-- <modal-vue :isShow="visible" :options="options"></modal-vue> -->
     </div>
   </a-locale-provider>
 </template>
 <script>
   import zhCN from "ant-design-vue/lib/locale-provider/zh_CN";
+  import modalVue from "./components/modal/modal.vue";
+  import { mapState, mapMutations } from "vuex";
   export default {
     provide() {
       return { reload: this.reload };
@@ -14,13 +17,37 @@
     data() {
       return {
         locale: zhCN,
+        visible: false,
+        options: {
+          title: "提示"
+        },
         isRouterAlive: true
       };
     },
+    components: { modalVue },
     mounted() {
+      // this.visible = true;
+      //this.showNote();
+      console.log(window.history);
       console.log(this.$API_URL);
     },
     methods: {
+      ...mapMutations([
+        "changeLoginState",
+        "changeUserInfoState",
+        "changeUserShopInfoState"
+      ]),
+      async showNote() {
+        this.visible = true;
+        this.changeLoginState(false);
+        this.changeUserInfoState({});
+        this.changeUserShopInfoState({});
+        window.clearVuexAlong();
+        this.$notification.warn({
+          message: "提示",
+          description: "系统检测到账号异常，请您重新登录"
+        });
+      },
       reload() {
         this.isRouterAlive = false;
         this.$nextTick(function() {

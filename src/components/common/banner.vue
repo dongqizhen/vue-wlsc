@@ -11,7 +11,7 @@
       </swiper>
       <div class="login">
         <div class="avatar">
-          <h2>
+          <h2 @click="toUserCenter">
             <svg class="icon" aria-hidden="true" v-if="!userInfo.imageUrl">
               <use xlink:href="#iconweidenglutouxiang"></use>
             </svg>
@@ -112,7 +112,13 @@
       };
     },
     components: { swiper, swiperSlide },
-    methods: {},
+    methods: {
+      toUserCenter() {
+        if (this.$getLocalStorage()) {
+          this.$router.push("/userCenter");
+        }
+      }
+    },
     computed: {
       ...mapState(["isLogin", "userInfo"])
     },
@@ -232,6 +238,7 @@
             margin-bottom: 10px;
             overflow: hidden;
             opacity: 1;
+            cursor: pointer;
             .icon {
               height: 32px;
               width: 28px;
