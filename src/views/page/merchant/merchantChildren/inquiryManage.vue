@@ -8,19 +8,19 @@
               :class="isShowInfo.current == 1 ? 'active' : ''"
               @click="tab(1)"
             >
-              报价中(1)
+              报价中({{ quoting }})
             </li>
             <li
               :class="isShowInfo.current == 2 ? 'active' : ''"
               @click="tab(2)"
             >
-              已报价(2)
+              已报价({{ quoted }})
             </li>
             <li
               :class="isShowInfo.current == 3 ? 'active' : ''"
               @click="tab(3)"
             >
-              已关闭(3)
+              已关闭({{ closed }})
             </li>
           </ul>
         </div>
@@ -97,7 +97,10 @@
           enquirySn: "", //询价单号
           storeId: "" //商铺id，商铺id为空时，查询当前用户的询价单。
         },
-        paginationData: {}
+        paginationData: {},
+        quoting: 0,
+        quoted: 0,
+        closed: 0
       };
     },
     computed: {
@@ -115,6 +118,7 @@
             console.log("批量删除询价单：", data);
             this.$message.success("批量删除询价单成功", 1);
             this.getInquiryList();
+            this.getInquiryNumber();
           });
         } else {
           this.$message.warning("请选择询价单", 1);
@@ -124,6 +128,7 @@
       getIsDelete(val) {
         console.log(val);
         this.getInquiryList();
+        this.getInquiryNumber();
       },
       tab(tabVal) {
         this.isShowInfo.current = tabVal;
@@ -169,11 +174,23 @@
             this.checkedList = [];
             this.checkAll = false;
             this.data = data.data;
-            // if (data.count != 0) {
             this.paginationData = data;
-            // }else{
-
-            // }
+          }
+        );
+      },
+      getInquiryNumber() {
+        _getData("/enquiryPlus/enquiryCount", { param: { storeId: "" } }).then(
+          data => {
+            console.log("获取的询价数：：：", data);
+            _.map(data.data, o => {
+              if (o.status == 1) {
+                this.quoting = o.num;
+              } else if (o.status == 2) {
+                this.quoted = o.num;
+              } else {
+                this.closed = o.num;
+              }
+            });
           }
         );
       }
@@ -185,6 +202,7 @@
         this.$router.replace({ path: "/merchant/inquiryManage" });
       }
       this.getInquiryList();
+      this.getInquiryNumber();
     },
     components: {
       commonTitle,

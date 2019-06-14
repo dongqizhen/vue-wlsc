@@ -7,7 +7,11 @@
         <div class="common ">
           <div class="left-box"><span class="red">*</span>产品名称</div>
           <div class="right-box">
-            <a-input placeholder="请输入产品名称" v-model="submitData.name" />
+            <a-input
+              ref="name"
+              placeholder="请输入产品名称"
+              v-model="submitData.name"
+            />
           </div>
         </div>
         <div class="common">
@@ -23,7 +27,7 @@
           <div class="left-box"><span class="red">*</span>产品分类</div>
           <div class="right-box">
             <el-select
-              style="width: 136px;margin-right:10px;"
+              style="width: 190px;margin-right:10px;"
               v-model="submitData.bigCategoryId"
               placeholder="请选择大类"
               @change="handleProductBigTypeChange"
@@ -37,7 +41,7 @@
               </el-option>
             </el-select>
             <el-select
-              style="width: 136px;margin-right:10px;"
+              style="width: 190px;margin-right:10px;"
               v-model="submitData.categoryId"
               placeholder="请选择小类"
               @change="handleProductSmallTypeChange"
@@ -56,7 +60,7 @@
           <div class="left-box"><span class="red">*</span>产品类型</div>
           <div class="right-box">
             <el-select
-              style="width: 136px;margin-right:10px;"
+              style="width: 190px;margin-right:10px;"
               v-model="submitData.attribute_category"
               placeholder="请选择类型"
               @change="handleProductTypeChange"
@@ -75,7 +79,7 @@
           <div class="left-box"><span class="red">*</span>品牌</div>
           <div class="right-box">
             <el-select
-              style="width: 136px;margin-right:10px;"
+              style="width: 190px;margin-right:10px;"
               v-model="submitData.brandId"
               placeholder="请选择品牌"
               @change="handleBrandChange"
@@ -94,7 +98,7 @@
           <div class="left-box"><span class="red">*</span>型号</div>
           <div class="right-box">
             <el-select
-              style="width: 136px;margin-right:10px;"
+              style="width: 190px;margin-right:10px;"
               v-model="submitData.modelId"
               placeholder="请选择型号"
               @change="handleModelChange"
@@ -113,12 +117,14 @@
           <div class="left-box"><span class="red">*</span>指导价</div>
           <div class="right-box">
             <a-input
+              ref="min"
               placeholder="区间最低"
               class="priceMin"
               v-model="submitData.minPrice"
             />
             <div class="joiner">一</div>
             <a-input
+              ref="max"
               placeholder="区间最高"
               class="priceMax"
               v-model="submitData.maxPrice"
@@ -132,6 +138,7 @@
           <div class="left-box"><span class="red">*</span>备件号</div>
           <div class="right-box">
             <a-input
+              ref="sparePart"
               placeholder="请输入备件号"
               v-model="submitData.sparePart"
             />
@@ -154,7 +161,10 @@
         </div>
       </div>
     </div>
-    <div class="commonBoxStyle specification">
+    <div
+      class="commonBoxStyle specification"
+      v-show="specificationParams.length > 0"
+    >
       <div class="title">产品规格参数</div>
       <div class="specificationContent">
         <list-title :titleArr="titleArr"></list-title>
@@ -162,7 +172,24 @@
           <ul>
             <li v-for="item in specificationParams" :key="item.id">
               <span>{{ item.specificationName }}</span>
-              <span>{{ item.value }}</span>
+              <span
+                @click="editParam(item.id)"
+                :class="current == item.id ? 'focusStyle' : ''"
+              >
+                <a-textarea
+                  ref="ipt"
+                  :iptId="item.id"
+                  :class="current == item.id ? 'borderStyle' : ''"
+                  placeholder="请输入参数值"
+                  v-model="item.value"
+                  @blur="saveEditValue"
+                  @focus="focusChange(item.id)"
+                  autosize
+                ></a-textarea>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconbianji"></use>
+                </svg>
+              </span>
             </li>
           </ul>
         </div>
@@ -214,12 +241,11 @@
     <div class="commonBoxStyle productIntroduce">
       <div class="title"><i>*</i>商品介绍</div>
       <div class="introduceContent">
-        <a-input
-          type="textarea"
-          placeholder="请输入商品描述"
-          class="noInput"
-          v-model="submitData.goodsDesc"
-        ></a-input>
+        <ueditor
+          :value="submitData.goodsDesc"
+          :config="UEConfig"
+          ref="goodDesc"
+        ></ueditor>
       </div>
     </div>
     <div class="submit">
@@ -236,11 +262,18 @@
   import addBtn from "../../../../components/common/productParams/addBtn";
   import paramItem from "../../../../components/common/productParams/paramItem";
   import newParam from "../../../../components/common/productParams/newParam";
+  import ueditor from "../../../../components/common/ueditor";
   import { _getData } from "../../../../config/getData";
   import { mapState } from "vuex";
   export default {
     data() {
       return {
+        UEConfig: {
+          autoFloatEnabled: false,
+          initialFrameWidth: "100%",
+          initialFrameHeight: 450,
+          initialContent: "请输入商品描述"
+        },
         title: "发布商品",
         loading: false,
         actionURL: this.$API_URL.HYGFILEURL + "/api/upload/imageUpload",
@@ -261,6 +294,7 @@
         uploadList: [],
         tempUploadList: [],
         isEnquiry: false,
+        current: -1,
         submitData: {
           name: "",
           goodsSn: "",
@@ -283,54 +317,62 @@
     },
     methods: {
       release() {
+        console.log(this.$refs.goodDesc);
+        console.log(this.$refs.goodDesc.getUEContent());
+        console.log(this.$refs.goodDesc.getUEContentTxt());
+        console.log(this.specificationParams);
         if (this.submitData.name == "") {
-          alert("请输入商品名称");
+          this.$message.warning("请输入商品名称", 1);
+          this.$refs.name.focus();
           return;
         }
         if (this.submitData.bigCategoryId == "") {
-          alert("请选择大类");
+          this.$message.warning("请选择大类", 1);
           return;
         }
         if (this.submitData.categoryId == "") {
-          alert("请选择小类");
+          this.$message.warning("请选择小类", 1);
           return;
         }
         if (this.submitData.attribute_category == "") {
-          alert("请选择类型");
+          this.$message.warning("请选择类型", 1);
           return;
         }
         if (this.submitData.brandId == "") {
-          alert("请选择品牌");
+          this.$message.warning("请选择品牌", 1);
           return;
         }
         if (this.submitData.modelId == "") {
-          alert("请选择型号");
+          this.$message.warning("请选择型号", 1);
           return;
         }
         if (!this.submitData.isEnquiry) {
           if (this.submitData.minPrice == "") {
-            alert("请输入最小指导价");
+            this.$refs.min.focus();
+            this.$message.warning("请输入最小指导价", 1);
             return;
           }
           if (this.submitData.maxPrice == "") {
-            alert("请输入最大指导价");
+            this.$refs.max.focus();
+            this.$message.warning("请输入最大指导价", 1);
             return;
           }
           if (
             Number(this.submitData.minPrice) > Number(this.submitData.maxPrice)
           ) {
-            alert("最小指导价不能大于最大值");
+            this.$message.warning("最小指导价不能大于最大值", 1);
             return;
           }
         }
         if (this.isSparePart) {
           if (this.submitData.sparePart == "") {
-            alert("请输入备件号");
+            this.$message.warning("请输入备件号", 1);
+            this.$refs.sparePart.focus();
             return;
           }
         }
         if (this.submitData.goodsDesc == "") {
-          alert("请输入商品描述");
+          this.$message.warning("请输入商品描述", 1);
           return;
         }
         if (this.uploadList.length > 0) {
@@ -355,14 +397,22 @@
       },
       save() {},
       reset() {},
-      addParams() {
-        this.params.push({});
+      editParam(id) {
+        _.map(this.$refs.ipt, (o, index) => {
+          if (o.$attrs.iptId == id) {
+            this.$refs.ipt[index].focus();
+          }
+        });
+      },
+      saveEditValue() {
+        this.current = -1;
+      },
+      focusChange(id) {
+        this.current = id;
       },
       handleRemove(file) {
         const fileList = this.$refs.upload.sFileList;
-        // console.log(this.$refs);
-        // console.log(this.$refs.upload);
-        console.log(fileList);
+        // console.log(fileList);
         if (fileList.indexOf(file) != -1) {
           this.$refs.upload.sFileList.splice(fileList.indexOf(file), 1);
         } else {
@@ -371,7 +421,7 @@
         this.uploadList.splice(this.uploadList.indexOf(file), 1);
       },
       handleChange(info) {
-        console.log(info);
+        // console.log(info);
         if (info.file.status == "done") {
           this.loading = false;
           for (const val of info.fileList) {
@@ -383,7 +433,7 @@
         }
       },
       onChange(e) {
-        console.log(`checked = ${e.target.checked}`);
+        // console.log(`checked = ${e.target.checked}`);
         if (e.target.checked) {
           this.submitData.minPrice = "";
           this.submitData.maxPrice = "";
@@ -395,20 +445,20 @@
         }
       },
       handleProductBigTypeChange(value) {
-        console.log(`selected ${value}`);
+        // console.log(`selected ${value}`);
         this.submitData.bigCategoryId = value;
         this.submitData.categoryId = "";
         this.getSmallType(value);
       },
       handleProductSmallTypeChange(value) {
-        console.log(`selected ${value}`);
+        // console.log(`selected ${value}`);
         this.submitData.categoryId = value;
+        this.submitData.modelId = "";
         this.getModelData(value);
       },
       handleProductTypeChange(value) {
-        console.log(`selected ${value}`);
+        // console.log(`selected ${value}`);
         this.submitData.attribute_category = value;
-        console.log(this.typeOptions);
         _.map(this.typeOptions, val => {
           if (val.id == value) {
             this.isSparePart = val.isSparePart;
@@ -416,12 +466,13 @@
         });
       },
       handleBrandChange(value) {
-        console.log(`selected ${value}`);
+        // console.log(`selected ${value}`);
         this.submitData.brandId = value;
+        this.submitData.modelId = "";
         this.getModelData(this.submitData.categoryId, value);
       },
       handleModelChange(value) {
-        console.log(`selected ${value}`);
+        // console.log(`selected ${value}`);
         this.submitData.modelId = value;
         this.getSpecificationParam(value);
       },
@@ -434,7 +485,7 @@
       },
       getSmallType(id) {
         _getData("/catalog/second", { id: id }).then(data => {
-          console.log(data);
+          // console.log(data);
           _.each(data.subCategory, val => {
             val.label = val.name;
             val.value = val.id;
@@ -462,7 +513,6 @@
         });
       }
     },
-
     computed: {
       ...mapState(["userInfo"])
     },
@@ -537,14 +587,14 @@
       listTitle,
       addBtn,
       newParam,
-      paramItem
+      paramItem,
+      ueditor
     }
   };
 </script>
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
-  @import "../../../../assets/scss/_input";
   .publishGoods {
     .commonBoxStyle {
       padding: 4px 20px;
@@ -596,6 +646,14 @@
           line-height: 34px;
           border: 1px solid #cccccc;
           border-radius: 3px;
+          &:hover {
+            border-color: $theme-color !important;
+          }
+
+          &:focus {
+            border-color: $theme-color !important;
+            box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2) !important;
+          }
         }
         .bigType {
           margin-right: 10px;
@@ -656,6 +714,7 @@
       }
     }
     .specification {
+      padding-bottom: 24px;
       .specificationContent {
         /deep/.listTitle {
           ul {
@@ -676,7 +735,6 @@
         .table-body {
           border: $border-style;
           border-top: none;
-          margin-bottom: 57px;
           ul {
             li {
               display: flex;
@@ -689,12 +747,52 @@
                 padding: 16px 20px;
                 color: #333;
                 font-size: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 &:first-child {
                   width: 234px;
                   border-right: $border-style;
                 }
                 &:nth-child(2) {
                   flex: 1;
+                  position: relative;
+                  i {
+                    font-style: normal;
+                  }
+                  .icon {
+                    width: 18px;
+                    height: 18px;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    display: none;
+                  }
+                  /deep/.ant-input {
+                    text-align: center;
+                    resize: none;
+                    border: none;
+                    background-color: rgba(245, 166, 35, 0.01);
+                    &:focus {
+                      background-color: #fff;
+                      border: $border-style !important;
+                      text-align: left;
+                      box-shadow: none !important;
+                    }
+                  }
+                  &:hover {
+                    cursor: pointer;
+                    background-color: rgba(245, 166, 35, 0.06);
+                    .icon {
+                      display: block;
+                    }
+                  }
+                  &.focusStyle {
+                    background-color: #fff;
+                    .icon {
+                      display: none;
+                    }
+                  }
                 }
               }
             }
@@ -806,13 +904,7 @@
     }
     .productIntroduce {
       .introduceContent {
-        .noInput {
-          height: 203px;
-          outline: none;
-          resize: none;
-          line-height: 22px;
-          margin-bottom: 56px;
-        }
+        margin-bottom: 56px;
       }
     }
     .ant-btn {

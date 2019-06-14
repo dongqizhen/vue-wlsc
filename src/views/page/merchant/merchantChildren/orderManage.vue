@@ -137,6 +137,7 @@
           console.log("批量删除订单：", data);
           this.$message.success("批量删除订单成功", 1);
           this.getOrderList();
+          this.getOrderNumber();
         });
       },
       getSearchData(val) {
@@ -164,6 +165,7 @@
           this.isShowInfo.current = 1;
         }
         this.getOrderList();
+        this.getOrderNumber();
       },
       getChecked(val) {
         if (typeof val == "object") {
@@ -205,10 +207,27 @@
           this.data = data.data;
           this.paginationData = data;
         });
+      },
+      getOrderNumber() {
+        _getData("/order/orderCount", {
+          param: {
+            storeId: this.userShopInfo.store_id
+          }
+        }).then(data => {
+          console.log("订单数量：：", data);
+          _.map(data.data, o => {
+            _.each(this.tabs, val => {
+              if (o.status == val.id) {
+                val.amount = o.num;
+              }
+            });
+          });
+        });
       }
     },
     mounted() {
       this.getOrderList();
+      this.getOrderNumber();
     },
     components: {
       manageNumberNav,
