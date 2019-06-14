@@ -36,11 +36,25 @@
 </template>
 
 <script>
+  import { mapState, mapMutations } from "vuex";
   export default {
     data() {
       return {
         isHover: false
       };
+    },
+    methods: {
+      ...mapMutations([
+        "changeLoginState",
+        "changeUserInfoState",
+        "changeUserShopInfoState"
+      ])
+    },
+    mounted() {
+      // this.changeLoginState(false);
+      // this.changeUserInfoState({});
+      // this.changeUserShopInfoState({});
+      // window.clearVuexAlong();
     }
   };
 </script>

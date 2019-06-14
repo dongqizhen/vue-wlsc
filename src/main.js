@@ -36,6 +36,7 @@ import {
     Skeleton,
     Affix,
     Message,
+    Notification,
     Steps
 } from "ant-design-vue";
 import "swiper/dist/css/swiper.css";
@@ -64,7 +65,12 @@ if (window.localStorage["vuex-along"] != "{}") {
 
 Vue.prototype.$API_URL = env.API_HOST;
 Vue.prototype.$message = Message
+Vue.prototype.$notification = Notification
 Vue.prototype.$userid = userid
+Vue.prototype.$getLocalStorage = (key = 'vuex-along', val = 'vuex-along') => {
+    return JSON.parse(window.localStorage[key])[val]
+}
+
 
 Vue.component('no-data', NoData)
 Vue.component('loading', loading)
