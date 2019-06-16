@@ -27,8 +27,12 @@
             个人中心
           </a>
         </router-link>
-        <li v-if="isLogin" @click="system"><a>系统通知(24)</a></li>
-        <li v-if="isLogin" @click="privateMessage"><a>私信消息(12)</a></li>
+        <li v-if="isLogin" @click="system">
+          <a>系统通知({{ userShopInfo.systemCount }})</a>
+        </li>
+        <li v-if="isLogin" @click="privateMessage">
+          <a>私信消息({{ userShopInfo.privateCount }})</a>
+        </li>
         <router-link tag="li" to="/userCenter" v-if="!isMerchant">
           <a target="_blank">
             <svg class="icon" aria-hidden="true">
@@ -124,7 +128,7 @@
       }
     },
     computed: {
-      ...mapState(["isLogin", "userInfo"])
+      ...mapState(["isLogin", "userInfo", "userShopInfo"])
     },
     mounted() {
       console.log(this.$route.path);

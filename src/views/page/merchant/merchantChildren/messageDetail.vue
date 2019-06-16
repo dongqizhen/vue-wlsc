@@ -5,9 +5,20 @@
 </template>
 <script>
   import messageDetailCommon from "../../../../components/messageCenter/messageDetailCommon";
+  import { mapMutations } from "vuex";
+  import { _getData } from "../../../../config/getData";
   export default {
     data() {
       return {};
+    },
+    methods: {
+      ...mapMutations(["changeUserShopInfoState"])
+    },
+    mounted() {
+      _getData("/user/getUser", {}).then(data => {
+        console.log("获取用户的店铺开店信息：", data);
+        this.changeUserShopInfoState(data);
+      });
     },
     components: {
       messageDetailCommon

@@ -21,12 +21,12 @@
      */
     //文件服务器url
     // if (g_server == 1) {
-    window.UEDITOR_COMMIT_URL = "http://file.haoyigong.com/server/backstage/js/ueditor/jsp_web/controller.jsp"; //正式环境
-    window.UEDITOR_CALLBACK_URL = "http://www.haoyigong.com/ueditor/callback.html"; //正式环境
+    // window.UEDITOR_COMMIT_URL = "http://file.haoyigong.com/server/backstage/js/ueditor/jsp_web/controller.jsp"; //正式环境
+    // window.UEDITOR_CALLBACK_URL = "http://www.haoyigong.com/ueditor/callback.html"; //正式环境
     // } else {
-    //     window.UEDITOR_COMMIT_URL = "http://webple.haoyigong.com/server/backstage/js/ueditor/jsp_web/controller.jsp"; //验收环境
-    //     //跨域重定向url
-    //     window.UEDITOR_CALLBACK_URL = "http://wwwple.haoyigong.com/ueditor/callback.html"; //验收环境
+    window.UEDITOR_COMMIT_URL = "http://webple.haoyigong.com/server/backstage/js/ueditor/jsp_web/controller.jsp"; //验收环境
+    //跨域重定向url
+    window.UEDITOR_CALLBACK_URL = "http://wwwple.haoyigong.com/ueditor/callback.html"; //验收环境
     // }
 
     //根目录

@@ -45,7 +45,7 @@
             </ul>
             <calendar-range></calendar-range>
           </div>
-          <v-chart :options="polar" :init-options="initOptions"></v-chart>
+          <e-chart :options="polar" :init-options="initOptions"></e-chart>
         </div>
         <div class="statisticalTable">
           <ul>
@@ -99,7 +99,7 @@
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import manageNumberNav from "../../../../components/common/manageNumberNav";
   import calendarRange from "../../../../components/common/calendarRange";
-  import ECharts from "vue-echarts";
+  import EChart from "vue-echarts";
   import "zrender/lib/svg/svg";
 
   // 手动引入 ECharts 各模块来减小打包体积
@@ -479,7 +479,7 @@
       }
     },
     components: {
-      "v-chart": ECharts,
+      EChart,
       manageNumberNav,
       calendarRange,
       commonTitle
