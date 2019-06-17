@@ -62,29 +62,29 @@
                   <span>产品类型：</span>
                   <a>整机/备件/人工</a>
                 </span>
-                <span>
+                <!-- <span>
                   <span>销售范围：</span>
                   <a>全国</a>
-                </span>
-              </li>
-              <li>
+                </span> -->
                 <span>
                   <span>型号：</span>
                   <a>{{ productInfo.brand_model_name }}</a>
                 </span>
+              </li>
+              <li>
                 <span>
-                  <span>数量 库存：</span>
+                  <span>库存数量：</span>
                   <a>{{ productInfo.goods_number }}</a>
+                </span>
+                <span>
+                  <span>产地：</span>
+                  <a>{{ productInfo.origin }}</a>
                 </span>
               </li>
               <li>
                 <span>
                   <span>备件号：</span>
                   <a>XCV111122333939932222</a>
-                </span>
-                <span>
-                  <span>产地：</span>
-                  <a>{{ productInfo.origin }}</a>
                 </span>
               </li>
             </ul>
@@ -125,7 +125,11 @@
               </ul>
               <no-data text="暂无规格参数" v-else></no-data>
             </a-tab-pane>
-            <a-tab-pane tab="产品评价(36)" key="3" :forceRender="true">
+            <a-tab-pane
+              :tab="`产品评价(${comment.length})`"
+              key="3"
+              :forceRender="true"
+            >
               <ul class="evaluate">
                 <li v-for="(item, i) in comment" :key="i">
                   <div class="img_box"></div>
@@ -141,8 +145,8 @@
                         {{ v.commentName }}
                         <div class="rate">
                           <span
-                            v-for="(rate, i) in new Array(v.value)"
-                            :key="`rate-${i}`"
+                            v-for="(rate, val) in new Array(v.value)"
+                            :key="`rate-${val}`"
                           >
                             <svg class="icon" aria-hidden="true">
                               <use
@@ -150,28 +154,11 @@
                               ></use>
                             </svg>
                           </span>
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiashixinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiashixinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiakongxinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                          <span>
+
+                          <span
+                            v-for="(rate, value) in Array(5 - v.value)"
+                            :key="`rate2-${value}`"
+                          >
                             <svg class="icon" aria-hidden="true">
                               <use
                                 xlink:href="#iconpingjiakongxinwujiaoxing"
