@@ -62,7 +62,7 @@
                     查看
                   </router-link>
                 </div>
-                <div class="operate">下载</div>
+                <div class="operate" @click="download(item.id)">下载</div>
                 <div class="operate" @click="deleteItem(item.id)">
                   删除
                 </div>
@@ -88,6 +88,11 @@
       v-on:onPaginationChange="getPaginationChange"
       v-if="paginationData.count != 0"
     ></pagination>
+    <download-quote
+      :Visible="visible"
+      :type="type"
+      :quoteId="quoteId"
+    ></download-quote>
   </div>
 </template>
 
@@ -98,6 +103,8 @@
   import listTitle from "../../../../components/common/listTitle";
   import checkAll from "../../../../components/common/checkAll";
   import pagination from "../../../../components/common/pagination";
+  import downloadQuote from "../../../../components/modal/downloadQuote";
+  import { mapState } from "vuex";
   export default {
     data() {
       return {
@@ -121,10 +128,23 @@
           goodsName: "", //类型：String 备注：商品名
           date: "" //类型：String  备注：时间
         },
-        paginationData: {}
+        paginationData: {},
+        visible: false,
+        quoteId: -1,
+        type: ""
       };
     },
+    computed: {
+      ...mapState(["isLogin"])
+    },
     methods: {
+      download(id) {
+        if (!this.isLogin) {
+          this.type = "login";
+        }
+        this.visible = true;
+        this.quoteId = id;
+      },
       //批量删除
       batchDeleteData() {
         if (this.checkedList.length > 0) {
@@ -230,7 +250,8 @@
       commonTitle,
       listTitle,
       checkAll,
-      pagination
+      pagination,
+      downloadQuote
     }
   };
 </script>

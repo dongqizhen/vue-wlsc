@@ -4,13 +4,13 @@
       <div slot="titleRight" class="right-box">
         <ul>
           <li :class="isShowInfo.current == 1 ? 'active' : ''" @click="tab(1)">
-            报价中(1)
+            报价中({{ quoting }})
           </li>
           <li :class="isShowInfo.current == 2 ? 'active' : ''" @click="tab(2)">
-            已报价(2)
+            已报价({{ quoted }})
           </li>
           <li :class="isShowInfo.current == 3 ? 'active' : ''" @click="tab(3)">
-            已关闭(1)
+            已关闭({{ closed }})
           </li>
         </ul>
       </div>
@@ -153,7 +153,10 @@
         allProducts: [],
         selectDatas: [],
         selectArr: [],
-        paginationData: {}
+        paginationData: {},
+        quoting: 0,
+        quoted: 0,
+        closed: 0
       };
     },
     watch: {
@@ -173,6 +176,7 @@
             console.log("批量关闭询价单：", data);
             this.$message.success("批量关闭询价单成功", 1);
             this.getInquiryList();
+            this.getInquiryNumber();
           });
         }
       },
@@ -246,6 +250,7 @@
       getIsDelete(val) {
         console.log(val);
         this.getInquiryList();
+        this.getInquiryNumber();
       },
       //提交订单（已报价）
       submitOrder() {
@@ -348,10 +353,27 @@
             }
           });
         });
+      },
+      getInquiryNumber() {
+        _getData("/enquiryPlus/enquiryCount", { param: { storeId: "" } }).then(
+          data => {
+            console.log("获取的询价数：：：", data);
+            _.map(data.data, o => {
+              if (o.status == 1) {
+                this.quoting = o.num;
+              } else if (o.status == 2) {
+                this.quoted = o.num;
+              } else {
+                this.closed = o.num;
+              }
+            });
+          }
+        );
       }
     },
     mounted() {
       this.getInquiryList();
+      this.getInquiryNumber();
     },
     components: {
       commonTitle,

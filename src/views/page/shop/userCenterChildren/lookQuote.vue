@@ -36,7 +36,9 @@
         <span class="totalPrice">
           报价总金额：<i>¥{{ sumPrice }}</i>
         </span>
-        <span class="download">下载报价</span>
+        <span class="download" @click="download(`${$route.params.id}`)"
+          >下载报价</span
+        >
         <span class="edit">
           <router-link
             target="_blank"
@@ -47,12 +49,19 @@
         </span>
       </div>
     </div>
+    <download-quote
+      :Visible="visible"
+      :type="type"
+      :quoteId="quoteId"
+    ></download-quote>
   </div>
 </template>
 <script>
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import listTitle from "../../../../components/common/listTitle";
   import { _getData } from "../../../../config/getData";
+  import downloadQuote from "../../../../components/modal/downloadQuote";
+  import { mapState } from "vuex";
   export default {
     data() {
       return {
@@ -68,12 +77,28 @@
           "备注"
         ],
         data: [],
-        sumPrice: 0
+        sumPrice: 0,
+        visible: false,
+        quoteId: -1,
+        type: ""
       };
+    },
+    computed: {
+      ...mapState(["isLogin"])
+    },
+    methods: {
+      download(id) {
+        if (!this.isLogin) {
+          this.type = "login";
+        }
+        this.visible = true;
+        this.quoteId = id;
+      }
     },
     components: {
       commonTitle,
-      listTitle
+      listTitle,
+      downloadQuote
     },
     mounted() {
       _getData("/quotation/detail", {

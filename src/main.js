@@ -14,12 +14,10 @@ import {
     BackTop,
     Modal,
     Tabs,
-    // Select,
     Input,
     Button,
     Icon,
     breadcrumb,
-    // Cascader,
     Checkbox,
     Radio,
     Layout,
@@ -50,7 +48,6 @@ import {
     Cascader
 } from 'element-ui'
 Vue.config.productionTip = false;
-
 
 Vue.use(vChatTitle).use(VueLazyload, {
     preLoad: 1.3,

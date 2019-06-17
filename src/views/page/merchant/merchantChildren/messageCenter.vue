@@ -93,6 +93,7 @@
   import checkAll from "../../../../components/common/checkAll";
   import pagination from "../../../../components/common/pagination";
   import { _getData } from "../../../../config/getData";
+  import { mapMutations } from "vuex";
   export default {
     data() {
       return {
@@ -131,6 +132,7 @@
     },
 
     methods: {
+      ...mapMutations(["changeUserShopInfoState"]),
       getTab(val) {
         console.log(val);
         if (this.tabs[0].id == val) {
@@ -255,6 +257,10 @@
       }
       this.getMessageList();
       this.getMessageNumber();
+      _getData("/user/getUser", {}).then(data => {
+        console.log("获取用户的店铺开店信息：", data);
+        this.changeUserShopInfoState(data);
+      });
     },
     components: {
       commonTitle,
