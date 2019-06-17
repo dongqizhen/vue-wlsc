@@ -29,104 +29,158 @@ const router = new Router({
                 {
                     path: "openShop",
                     name: '我要开店',
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/openShop")
                 }, {
                     name: '店铺首页',
                     path: "shopIndex",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/shopIndex")
                 },
                 {
                     path: "shopInfo",
                     name: "店铺信息",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/shopInfo")
                 },
                 {
                     path: "shopCertification",
                     name: "店铺认证",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/shopCertification")
                 },
                 {
                     path: "publishGoods",
                     name: "发布商品",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/publishGoods")
                 },
                 {
                     path: "productManage",
                     name: "产品管理",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/productManage")
                 },
                 {
                     path: "inquiryManage",
                     name: "询价管理",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/inquiryManage")
                 },
                 {
                     path: "inquiryOrderDetail/:id",
                     name: "询价单详情",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/inquiryDetail")
                 },
                 {
                     path: "editInquiry/:id",
                     name: "编辑询价单",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/editInquiry")
                 },
                 {
                     path: "orderManage",
                     name: "订单管理",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/orderManage")
                 },
                 {
                     path: "orderDetail/:id",
                     name: "订单详情",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/orderDetail")
                 },
                 {
                     path: "accountSecurity",
                     name: "账户安全",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/accountSecurity")
                 },
                 {
                     path: "personalCenter",
                     name: "个人中心",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/personalCenter")
                 },
                 {
                     path: "messageCenter",
                     name: "信息中心",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/messageCenter"),
                 },
                 {
                     path: "messageDetail/:id",
                     name: '信息详情',
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/messageDetail")
                 }, {
                     path: "changePassword",
                     name: '更改密码',
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/changePassword")
                 }, {
                     path: "changePhone",
                     name: '更改手机号',
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/changePhone")
                 }, {
                     path: "changeEmail",
                     name: '更改邮箱',
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/changeEmail")
                 },
@@ -248,121 +302,185 @@ const router = new Router({
                 import ('../views/page/login/agreement')
         }, {
             path: '/userCenter',
+            meta: {
+                role: 'Administrator'
+            },
             component: () =>
                 import ('../views/page/shop/userCenter'),
+
             children: [{
                     path: "/",
                     name: '选购单',
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/purchaseOrder")
                 },
                 {
                     path: "myInquiry",
                     name: "我的询价",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/myInquiry")
                 },
                 {
                     path: "inquiryOrderDetail/:id",
                     name: "询价单",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/inquiryOrderDetail")
                 },
                 {
                     path: "submitOrder/:id",
                     name: "提交订单",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/submitOrder")
                 },
                 {
                     path: "myOrder",
                     name: "我的订单",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/myOrder")
                 },
                 {
                     path: "orderDetail/:id",
                     name: "我的订单详情",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/orderDetails")
                 },
                 {
                     path: "comment/:id",
                     name: "评价",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/comment")
                 },
                 {
                     path: "myQuote",
                     name: "我的报价",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/myQuote")
                 },
                 {
                     path: "lookQuote/:id",
                     name: "查看报价单",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/lookQuote")
                 },
                 {
                     path: "editQuote/:id",
                     name: "编辑报价单",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/editQuote")
                 },
                 {
                     path: "myStore",
                     name: "我的收藏",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/myStore")
                 },
                 {
                     path: "addressManage",
                     name: "地址管理",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/addressManage")
                 },
                 {
                     path: "invoiceManage",
                     name: "发票管理",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/invoiceManage")
                 },
                 {
                     path: "myMessage",
                     name: "个人信息",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/myMessage")
                 },
                 {
                     path: "myCenter",
                     name: "个人信息中心",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/myCenter"),
                 },
                 {
                     path: "userSecurity",
                     name: "账号安全",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/accountSecurity")
                 },
                 {
                     path: "messageDetail/:id",
                     name: '消息详情',
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/messageDetails")
                 }, {
                     path: "changePassword",
                     name: '修改密码',
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/changePassword")
                 }, {
                     path: "changePhone",
                     name: '修改手机号',
+                    meta: {
+                        role: 'Administrator'
+                    },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/changePhone")
                 }, {
                     path: "changeEmail",
+                    meta: {
+                        role: 'Administrator'
+                    },
                     name: '修改邮箱',
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/changeEmail")
@@ -484,14 +602,24 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-
+    let localStorage = JSON.parse(window.localStorage["vuex-along"])["vuex-along"];
     /* 路由发生变化修改页面title */
     if (to.meta.title) {
         document.title = to.meta.title
     }
-    let localStorage = JSON.parse(window.localStorage["vuex-along"])["vuex-along"];
+    //console.log(to)
+    if (!localStorage && to.meta.role == 'Administrator') {
+        next({
+            path: '/login'
+        })
+    } else {
+        next()
+    }
 
-    next()
+
+
+
+
 })
 
 export default router;

@@ -159,7 +159,12 @@
                 </div>
               </transition>
             </div>
-            <ul v-if="item.modelSpecificationInfo">
+            <ul
+              v-if="
+                item.modelSpecificationInfo &&
+                  item.modelSpecificationInfo.length
+              "
+            >
               <li v-for="val in item.modelSpecificationInfo" :key="val.id">
                 {{ val.value }}
               </li>
@@ -282,7 +287,12 @@
           modelId
         }).then(data => {
           console.log(data);
-          this.paramas = data.modelSpecificationInfo;
+          if (data.modelSpecificationInfo.length) {
+            this.paramas = data.modelSpecificationInfo;
+          } else {
+            this.paramas = [1, 2];
+          }
+
           // this.arr = [data, ..._.drop(this.arr)];
           console.log(this.defaultShowIndex);
           this.arr.splice(this.defaultShowIndex || 0, 1, data);

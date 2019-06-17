@@ -298,7 +298,7 @@
                     vm.$route.query.brandName
                 },
                 {
-                  name: "超声手术设备",
+                  name: vm.$route.query.categoryName,
                   path: "/lookingProduct/brand"
                 }
               ]

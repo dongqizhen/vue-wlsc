@@ -25,7 +25,7 @@
                   "****" +
                   userInfo.accountNo.substr(7)
                 : "Hi"
-            }},下午好
+            }},{{ getCurrTime }}
           </p>
           <div class="btn" v-if="!isLogin">
             <router-link to="/login" tag="span" class="login_in"
@@ -120,7 +120,26 @@
       }
     },
     computed: {
-      ...mapState(["isLogin", "userInfo"])
+      ...mapState(["isLogin", "userInfo"]),
+      getCurrTime() {
+        let now = new Date(),
+          hour = now.getHours();
+        if (hour < 6) {
+          return "凌晨好！";
+        } else if (hour < 9) {
+          return "早上好！";
+        } else if (hour < 12) {
+          return "上午好！";
+        } else if (hour < 14) {
+          return "中午好！";
+        } else if (hour < 17) {
+          return "下午好！";
+        } else if (hour < 19) {
+          return "傍晚好！";
+        } else if (hour < 24) {
+          return "晚上好！";
+        }
+      }
     },
     created() {},
     mounted() {

@@ -43,7 +43,7 @@
             <h2>{{ productInfo.name }}</h2>
             <div class="price">
               <span>指导价：</span>
-              <span>¥{{ productInfo.market_price }}</span>
+              <span>{{ productInfo.retail_price }}</span>
               <span>询价</span>
             </div>
             <ul class="params">
@@ -127,135 +127,23 @@
             </a-tab-pane>
             <a-tab-pane tab="产品评价(36)" key="3" :forceRender="true">
               <ul class="evaluate">
-                <li>
+                <li v-for="(item, i) in comment" :key="i">
                   <div class="img_box"></div>
                   <div class="evaluate-container">
-                    <div class="name">孟世和<span>2019-02-18 16:20</span></div>
+                    <div class="name">
+                      {{ item.nickname }}<span>{{ item.add_time }}</span>
+                    </div>
                     <ul class="rate-container">
-                      <li>
-                        性能评价
+                      <li
+                        v-for="v in item.commentNameValue"
+                        :key="v.icommentNameId"
+                      >
+                        {{ v.commentName }}
                         <div class="rate">
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiashixinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiashixinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiashixinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiakongxinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiakongxinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                        </div>
-                      </li>
-                      <li>
-                        售后评价
-                        <div class="rate">
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiashixinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiashixinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiashixinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiakongxinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiakongxinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                        </div>
-                      </li>
-                      <li>
-                        质量评价
-                        <div class="rate">
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiashixinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiashixinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiashixinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiakongxinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                          <span>
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiakongxinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                        </div>
-                      </li>
-                      <li>
-                        培训评价
-                        <div class="rate">
-                          <span>
+                          <span
+                            v-for="(rate, i) in new Array(v.value)"
+                            :key="`rate-${i}`"
+                          >
                             <svg class="icon" aria-hidden="true">
                               <use
                                 xlink:href="#iconpingjiashixinwujiaoxing"
@@ -294,26 +182,33 @@
                       </li>
                     </ul>
                     <p>
-                      产品很不错。我下次会再来的！产品很不错。我下次会再来的！产品很不错。我下次会再来的！产品很不错。我下次会再来的！产品很不错。我下次会再来的！产品很不错。我下次会再来的！
+                      {{ item.content }}
                     </p>
-                    <ul class="evaluate-img">
-                      <li
-                        v-for="(item, i) in imgarr"
-                        :key="i"
-                        :class="
-                          i == defaultIndex && bigImageIsShow ? 'active' : ''
-                        "
-                        @click="changeImage(i, $event)"
-                      >
-                        <div class="img_box">
-                          <img :src="item" alt="" />
-                        </div>
-                        <i></i>
-                      </li>
-                    </ul>
+                    <div>
+                      <ul class="evaluate-img" v-if="item.pic_list.length">
+                        <li
+                          v-for="(pic, j) in item.pic_list"
+                          :key="pic.id"
+                          :class="
+                            i == defaultIndex && j == elIndex && bigImageIsShow
+                              ? 'active'
+                              : ''
+                          "
+                          @click="changeImage(i, j, pic, $event)"
+                        >
+                          <div class="img_box">
+                            <img :src="pic.pic_url" alt="" />
+                          </div>
+                          <i></i>
+                        </li>
+                      </ul>
 
-                    <div class="big-image" :class="bigImageIsShow && 'active'">
-                      <img src="../../../../assets/images/demo.jpg" alt="" />
+                      <div
+                        class="big-image"
+                        :class="i == defaultIndex && bigImageIsShow && 'active'"
+                      >
+                        <img v-if="showSrc" :src="showSrc" alt="" />
+                      </div>
                     </div>
                   </div>
                 </li>
@@ -376,9 +271,12 @@
     data() {
       return {
         productInfo: "", //产品详情
-        specificationInfo: "",
-        imgarr: [],
-        defaultIndex: null,
+        specificationInfo: "", //规格参数
+        comment: "", //评价
+        imgarr: [], //放大镜轮播
+        elIndex: null, //第几个dom下的图片
+        defaultIndex: null, //显示哪张详情图片
+        showSrc: "",
         bannerIndex: 0,
         visible: false,
         title: "",
@@ -418,12 +316,15 @@
           this.visible = true;
         }
       },
-      changeImage(i, e) {
-        if (this.defaultIndex == i) {
+      changeImage(i, j, pic, e) {
+        //this.defaultIndex = i;
+        if (this.defaultIndex == i && this.elIndex == j) {
           this.bigImageIsShow = !this.bigImageIsShow;
         } else {
           this.defaultIndex = i;
+          this.elIndex = j;
           this.bigImageIsShow = true;
+          this.showSrc = pic.pic_url;
         }
       },
       callback(val) {
@@ -502,6 +403,7 @@
           console.log("产品详情", data);
           this.productInfo = data.productInfo;
           this.specificationInfo = data.specificationInfo;
+          this.comment = data.comment;
           this.isCollection = data.isCollection;
           this.imgarr = JSON.parse(this.productInfo.list_pic_url);
           this.imgUrl = JSON.parse(this.productInfo.list_pic_url)[0];
@@ -510,7 +412,7 @@
           this.$nextTick().then(() => {
             setTimeout(() => {
               this.initMagnifier();
-            }, 30);
+            }, 100);
           });
         })
         .then(() => {
@@ -545,6 +447,8 @@
         .then(() => {
           window.addEventListener("scroll", this.handleScroll);
         });
+
+      //_getData();
     }
   };
 </script>
@@ -916,6 +820,7 @@
               .evaluate {
                 display: flex;
                 justify-content: flex-start;
+                flex-direction: column;
                 > li {
                   display: flex;
                   justify-content: flex-start;

@@ -22,7 +22,7 @@
           />
         </div>
         <div class="price">
-          ¥{{ list.retail_price }}
+          {{ list.retail_price }}
           <span>
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconxiaoliang"></use>
