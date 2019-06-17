@@ -71,6 +71,7 @@
 <script>
   import shopInfo from "./shopInfo";
   import shopCertification from "./shopCertification";
+  import { _getData } from "../../../../config/getData";
   export default {
     data() {
       return {
@@ -82,8 +83,10 @@
     },
     methods: {
       getShopInfo(val) {
+        console.log(val);
         this.current = val.current + 1;
         this.shopInfo = val;
+        //_getData("/store/insertOrUpdateStore");
       },
       cancel(val) {
         this.current = val - 1;
