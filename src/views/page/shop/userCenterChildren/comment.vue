@@ -28,7 +28,7 @@
     },
     methods: {
       submitComment() {
-        // console.log(this.$refs.commentInfo);
+        console.log(this.$refs.commentInfo);
         const commentList = [];
         this.flag = true;
         _.map(this.$refs.commentInfo, val => {
@@ -41,7 +41,6 @@
               imagesList.push(o.url);
             });
             obj.imagesList = imagesList;
-            obj.performance = val.submitData.performance;
             if (!val.submitData.content) {
               this.$message.warning("请输入评价内容", 1);
               this.flag = false;
@@ -49,25 +48,30 @@
             } else {
               obj.content = val.submitData.content;
             }
-            obj.quality = val.submitData.quality;
-            obj.aftersale = val.submitData.aftersale;
-            obj.train = val.submitData.train;
+            let paramsList = [];
+            _.map(val.paramList, o => {
+              paramsList.push({
+                commentNameId: o.commentNameId,
+                commentValue: o.attributeCategoryName
+              });
+            });
+            obj.paramList = paramsList;
             commentList.push(obj);
           }
         });
-        console.log(this.flag);
         console.log(commentList);
         if (this.flag) {
-          _getData("/comment/comment", { commentList: commentList }).then(
-            data => {
-              console.log("评价是否成功：", data);
-              this.$message.success("评论成功", 1);
-              this.$router.replace({
-                path: "/userCenter/myOrder",
-                query: { status: 5 }
-              });
-            }
-          );
+          _getData("/commentPlus/comment", {
+            orderId: this.$route.params.id,
+            commentList: commentList
+          }).then(data => {
+            console.log("评价是否成功：", data);
+            this.$message.success("评论成功", 1);
+            this.$router.replace({
+              path: "/userCenter/myOrder",
+              query: { status: 5 }
+            });
+          });
         }
       },
       getOrderDetail() {

@@ -49,14 +49,13 @@
     },
     methods: {
       checkAll(e) {
+        this.selectArr = [];
         if (e.target.checked) {
-          this.selectArr = [];
           for (const val of this.data) {
             this.selectArr.push(val);
           }
           this.checkedAll = true;
         } else {
-          this.selectArr = [];
           this.checkedAll = false;
         }
         this.$emit("getSelectArr", this.selectArr);

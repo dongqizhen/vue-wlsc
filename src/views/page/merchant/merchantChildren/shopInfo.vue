@@ -117,23 +117,23 @@
         console.log(this.submitData);
         console.log(this.isOpenShop);
         if (this.submitData.shopName == "") {
-          alert("请输入店铺名称");
+          this.$message.warning("请输入店铺名称", 1);
           return;
         }
         if (this.submitData.type == "") {
-          alert("请选择店铺类型");
+          this.$message.warning("请选择店铺类型", 1);
           return;
         }
         if (this.submitData.image == "") {
-          alert("请上传店铺首页图片");
+          this.$message.warning("请上传店铺首页图片", 1);
           return;
         }
         if (this.submitData.shopScope == "") {
-          alert("请输入店铺经营范围");
+          this.$message.warning("请输入店铺经营范围", 1);
           return;
         }
         if (this.submitData.defaultProvinceData.length == 0) {
-          alert("请选择销售地区");
+          this.$message.warning("请选择销售地区", 1);
           return;
         }
         if (this.isOpenShop) {

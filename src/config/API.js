@@ -52,7 +52,6 @@ if (command == "serve:alpha") {
 }
 
 
-
 module.exports = {
     NODE_ENV: JSON.stringify(process.env.NODE_ENV),
     API_HOST: JSON.stringify(API_HOST)

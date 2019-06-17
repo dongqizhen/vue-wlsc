@@ -107,6 +107,7 @@
       v-on:onPaginationChange="getPaginationChange"
       v-if="paginationData.count != 0"
     ></pagination>
+    <side-bar v-show="isShowInfo.current == 1" />
   </div>
 </template>
 
@@ -117,6 +118,7 @@
   import checkAll from "../../../../components/common/checkAll";
   import calendarRange from "../../../../components/common/calendarRange";
   import pagination from "../../../../components/common/pagination";
+  import sideBar from "../../../../components/sideBar/sideBar";
   import { _getData } from "../../../../config/getData";
   import _ from "lodash";
   export default {
@@ -139,7 +141,8 @@
           "单价",
           "数量",
           "到货时间",
-          "备注",
+          "询价备注",
+          "",
           "操作"
         ],
         searchParams: {
@@ -282,6 +285,29 @@
       tab(tabVal) {
         this.isShowInfo.current = tabVal;
         this.searchParams.status = tabVal;
+        if (tabVal == 2) {
+          this.titleArr = [
+            "产品图片",
+            "产品名称",
+            "单价",
+            "数量",
+            "到货时间",
+            "询价备注",
+            "报价备注",
+            "操作"
+          ];
+        } else {
+          this.titleArr = [
+            "产品图片",
+            "产品名称",
+            "单价",
+            "数量",
+            "到货时间",
+            "询价备注",
+            "",
+            "操作"
+          ];
+        }
         this.getInquiryList();
       },
       getChecked(val) {
@@ -381,7 +407,8 @@
       calendarRange,
       listTitle,
       inquiryItem,
-      pagination
+      pagination,
+      sideBar
     }
   };
 </script>
@@ -527,8 +554,19 @@
             &:nth-child(4) {
               width: 80px;
             }
+            &:nth-child(5) {
+              width: 98px;
+            }
             &:nth-child(6) {
-              width: 166px;
+              width: 90px;
+              margin-right: 15px;
+            }
+            &:nth-child(7) {
+              width: 91px;
+              margin-right: 15px;
+            }
+            &:last-child {
+              width: 96px;
             }
           }
         }

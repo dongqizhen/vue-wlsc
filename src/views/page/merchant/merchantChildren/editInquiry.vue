@@ -66,7 +66,8 @@
           "单价",
           "数量",
           "到货时间",
-          "询价备注"
+          "询价备注",
+          "报价备注"
         ],
         data: {},
         goodsList: []
@@ -74,7 +75,7 @@
     },
     methods: {
       submitQuote() {
-        //console.log(this.goodsList);
+        console.log(this.goodsList);
         if (this.goodsList.length == 0) {
           this.$message.warning("请选择产品", 1);
           return;
@@ -104,7 +105,7 @@
             goodsId: val.data.id,
             unitPrice: val.data.unitPrice,
             arrivalTime: val.data.arrivalTime,
-            sellerDescription: val.data.introduce,
+            sellerDescription: val.data.shopRemark,
             number: val.data.number
           });
         } else {
@@ -185,17 +186,27 @@
         margin-bottom: 12px;
         ul {
           li {
+            margin-right: 20px;
+            &:nth-child(1) {
+              margin-right: 12px;
+            }
+            &:nth-child(2) {
+              width: 138px;
+            }
+            &:nth-child(3) {
+              margin-right: 10px;
+            }
             &:nth-child(4) {
               width: 98px;
             }
             &:nth-child(5) {
-              width: 90px;
+              width: 50px;
             }
             &:nth-child(6) {
-              width: 102px;
+              width: 100px;
             }
             &:nth-child(7) {
-              width: 115px;
+              width: 98px;
             }
           }
         }

@@ -12,20 +12,30 @@
     <span>{{ itemData.goodsName }}</span>
     <span>{{ itemData.goodsBrand }}/{{ itemData.goodsModel }}</span>
     <span>
-      <a-input placeholder="输入单价" v-model="itemData.unitPrice"></a-input>
+      <a-input
+        ref="unitPrice"
+        placeholder="输入单价"
+        v-model="itemData.unitPrice"
+      ></a-input>
     </span>
     <span>{{ itemData.number }}</span>
     <span>
       <a-date-picker
         :format="'YYYY-MM-DD'"
         @change="onDateChange"
-        :defaultValue="moment(`${initialArrivalTime}`, 'YYYY-MM-DD')"
+        :defaultValue="
+          moment(
+            `${itemData.arrival ? itemData.arrival : initialArrivalTime}`,
+            'YYYY-MM-DD'
+          )
+        "
       />
     </span>
+    <span>{{ itemData.userRemark }}</span>
     <span>
       <a-textarea
         placeholder="输入备注"
-        v-model="itemData.introduce"
+        v-model="itemData.shopRemark"
       ></a-textarea>
     </span>
   </div>
@@ -66,6 +76,9 @@
       }
     },
     mounted() {
+      if (this.itemData.isEnquiry == 1) {
+        this.itemData.unitPrice = "";
+      }
       this.itemData.arrivalTime = this.initialArrivalTime;
     },
     methods: {
@@ -104,6 +117,7 @@
 </script>
 <style lang="scss" scoped>
   @import "../../../assets/scss/_commonScss";
+  @import "../../../assets/scss/_input";
   .inquiryProductItem {
     display: flex;
     height: 90px;
@@ -115,7 +129,7 @@
     span {
       font-size: 12px;
       color: #666;
-      margin-right: 30px;
+      margin-right: 20px;
       img {
         width: 70px;
         height: 70px;
@@ -130,10 +144,11 @@
         margin-right: 12px;
       }
       &:nth-child(3) {
-        width: 155px;
+        width: 138px;
       }
       &:nth-child(4) {
         width: 98px;
+        margin-right: 10px;
       }
       &:nth-child(5) {
         width: 98px;
@@ -144,34 +159,13 @@
         }
       }
       &:nth-child(6) {
-        width: 90px;
-        /deep/.van-stepper {
-          .van-stepper__minus,
-          .van-stepper__plus {
-            width: 20px;
-            height: 20px;
-            border-radius: 0;
-            border: $border-style;
-            background: #f6f6f6;
-            margin: 0;
-            &:hover {
-              cursor: pointer;
-            }
-          }
-          .van-stepper__input {
-            width: 38px;
-            height: 16px;
-            margin: 0;
-            border-top: $border-style;
-            border-bottom: $border-style;
-          }
-        }
+        width: 50px;
       }
       &:nth-child(7) {
-        width: 110px;
+        width: 100px;
         margin-right: 20px;
         /deep/.ant-calendar-picker {
-          width: 110px;
+          width: 100px;
           height: 21px;
           margin-left: 0;
           > div {
@@ -180,15 +174,22 @@
           .ant-input {
             height: 21px;
             line-height: 21px;
-            padding: 4px 8px;
+            padding: 4px;
+          }
+          .ant-calendar-picker-clear,
+          .ant-calendar-picker-icon {
+            right: 6px;
           }
         }
       }
       &:nth-child(8) {
+        width: 98px;
+      }
+      &:nth-child(9) {
         width: 135px;
         margin-right: 10px;
         .ant-input {
-          width: 130px;
+          width: 135px;
           height: 66px;
           resize: none;
           font-size: 12px;

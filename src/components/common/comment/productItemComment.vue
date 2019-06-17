@@ -57,21 +57,15 @@
     <div class="common">
       <div class="left-box">商品打分</div>
       <div class="right-box">
-        <div class="commentItem">
-          <span>性能评价</span
-          ><span><a-rate v-model="submitData.performance"></a-rate></span>
-        </div>
-        <div class="commentItem">
-          <span>质量评价</span
-          ><span><a-rate v-model="submitData.quality"></a-rate></span>
-        </div>
-        <div class="commentItem">
-          <span>售后评价</span
-          ><span><a-rate v-model="submitData.aftersale"></a-rate></span>
-        </div>
-        <div class="commentItem">
-          <span>培训评价</span
-          ><span><a-rate v-model="submitData.train"></a-rate></span>
+        <div
+          class="commentItem"
+          v-for="item in paramList"
+          :key="item.commentNameId"
+        >
+          <span>{{ item.commentName }}</span>
+          <span>
+            <a-rate v-model="item.attributeCategoryName"> </a-rate>
+          </span>
         </div>
       </div>
     </div>
@@ -79,6 +73,8 @@
 </template>
 <script>
   import { mapState } from "vuex";
+  import { _getData } from "../../../config/getData";
+  import _ from "lodash";
   export default {
     data() {
       return {
@@ -88,12 +84,9 @@
         uploadList: [],
         tempUploadList: [],
         submitData: {
-          content: "",
-          performance: 3,
-          quality: 3,
-          aftersale: 3,
-          train: 3
-        }
+          content: ""
+        },
+        paramList: []
       };
     },
     computed: {
@@ -133,10 +126,23 @@
         }
         return isLt2M;
       }
+    },
+    mounted() {
+      console.log(this.data);
+      _getData("/commentPlus/commentName", { goodsId: this.data.goods_id }).then(
+        data => {
+          console.log("评论字段：：：", data);
+          this.paramList = data.list[0].commentNameList;
+          _.each(this.paramList, o => {
+            return (o.attributeCategoryName = 3);
+          });
+        }
+      );
     }
   };
 </script>
 <style lang="scss" scoped>
+  @import "../../../assets/scss/_input";
   .itemProductComment {
     border-bottom: 1px solid #ddd;
     .productInfo {

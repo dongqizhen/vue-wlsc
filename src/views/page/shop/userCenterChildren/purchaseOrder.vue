@@ -34,6 +34,7 @@
         </check-all>
       </div>
     </div>
+    <side-bar />
   </div>
 </template>
 
@@ -43,6 +44,7 @@
   import checkAll from "../../../../components/common/checkAll";
   import listTitle from "../../../../components/common/listTitle";
   import purchaseOrderItem from "../../../../components/common/purchaseOrderItem";
+  import sideBar from "../../../../components/sideBar/sideBar";
   import { _getData } from "../../../../config/getData";
   export default {
     data() {
@@ -236,7 +238,8 @@
       commonTitle,
       checkAll,
       listTitle,
-      purchaseOrderItem
+      purchaseOrderItem,
+      sideBar
     }
   };
 </script>

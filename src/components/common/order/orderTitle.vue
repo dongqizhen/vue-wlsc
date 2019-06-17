@@ -30,8 +30,12 @@
       >
         <span>
           <img
+            v-if="isShowInfo.isMerchant ? data.userAvatar : data.shopImage"
             :src="isShowInfo.isMerchant ? data.userAvatar : data.shopImage"
           />
+          <svg class="icon" aria-hidden="true" v-else>
+            <use xlink:href="#iconlianxiren"></use>
+          </svg>
         </span>
         <span>{{ isShowInfo.isMerchant ? data.userName : data.shopName }}</span>
       </div>

@@ -43,12 +43,19 @@
               <van-stepper v-model="item.number" :max="item.goods_number" />
               <i class="stockNumber">库存{{ item.goods_number }}件</i>
             </span>
-            <span>{{
-              item.arrivalTime ? item.arrivalTime.substring(0, 16) : ""
-            }}</span>
-            <span v-if="isShowInfo.current != 3">{{ item.introduce }}</span>
-            <span v-if="isShowInfo.current == 3">
+            <span>
+              {{ item.arrivalTime ? item.arrivalTime.substring(0, 16) : "" }}
+            </span>
+            <span
+              v-if="isShowInfo.current != 3"
+              :style="isShowInfo.current == 1 ? 'width:160px' : ''"
+            >
+              {{ item.userRemark }}
+            </span>
+            <span v-if="isShowInfo.current == 2">{{ item.shopRemark }}</span>
+            <span v-if="isShowInfo.current == 3" style="width: 160px;">
               <a-textarea
+                style="width: 157px;"
                 placeholder="请输入备注"
                 v-model="item.introduce"
               ></a-textarea>
@@ -274,6 +281,18 @@
       this.isShowInfo = JSON.parse(this.$route.query.isShowInfo);
       this.isShowInfo.isTrue = false;
       this.isShowInfo.isDetail = true;
+      if (this.isShowInfo.current == 2) {
+        this.titleArr = [
+          "产品图片",
+          "产品名称",
+          "品牌型号",
+          "单价",
+          "数量",
+          "到货时间",
+          "询价备注",
+          "报价备注"
+        ];
+      }
     },
     components: {
       commonTitle,
@@ -286,12 +305,13 @@
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
+  @import "../../../../assets/scss/_input";
   .messageCenter {
     min-height: 693px;
     background-color: #fff;
-    padding: 4px 20px;
+    padding: 4px 20px 20px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
-    margin-bottom: 10px;
+    margin-bottom: 100px;
     .common-title {
       .right-box {
         ul {
@@ -355,18 +375,20 @@
           ul {
             li {
               &:nth-child(4) {
-                width: 92px;
+                width: 60px;
               }
               &:nth-child(5) {
                 width: 92px;
               }
               &:nth-child(6) {
-                width: 72px;
-                margin-right: 46px;
+                width: 68px;
+              }
+              &:nth-child(7) {
+                width: 68px;
+                margin-right: 30px;
               }
               &:last-child {
-                width: 160px;
-                margin-right: 0;
+                width: 68px;
               }
             }
           }
@@ -399,7 +421,7 @@
               width: 98px;
             }
             &:nth-child(5) {
-              width: 92px;
+              width: 60px;
             }
             &:nth-child(6) {
               width: 92px;
@@ -432,11 +454,13 @@
               }
             }
             &:nth-child(7) {
-              width: 72px;
-              margin-right: 46px;
+              width: 68px;
             }
             &:nth-child(8) {
-              width: 160px;
+              width: 68px;
+              overflow: hidden;
+            }
+            &:last-child {
               margin-right: 0;
               .ant-input {
                 font-size: 12px;
