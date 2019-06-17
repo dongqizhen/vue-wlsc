@@ -76,7 +76,7 @@
       <div
         class="sure"
         v-if="
-          (data.order_status == 4 || data.order_status == 5) &&
+          data.order_status == 4 &&
             !isShowInfo.isMerchant &&
             !isShowInfo.isDetail
         "

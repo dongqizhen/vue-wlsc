@@ -37,10 +37,17 @@
           (isShowInfo.current == 3 && isShowInfo.isMerchant)
       "
     >
-      {{ itemData.introduce }}
+      {{ itemData.userRemark ? itemData.userRemark : "暂无备注" }}
     </span>
-    <span v-if="isShowInfo.current == 3 && !isShowInfo.isMerchant">
+    <span v-if="isShowInfo.current == 2">
+      {{ itemData.shopRemark ? itemData.shopRemark : "暂无备注" }}
+    </span>
+    <span
+      v-if="isShowInfo.current == 3 && !isShowInfo.isMerchant"
+      style="width:157px"
+    >
       <a-textarea
+        style="width:157px"
         placeholder="请输入备注"
         v-model="itemData.introduce"
       ></a-textarea>
@@ -170,10 +177,11 @@
       }
       &:nth-child(6) {
         width: 68px;
-        margin-right: 75px;
+        margin-right: 60px;
       }
       &:nth-child(7) {
-        width: 157px;
+        width: 90px;
+        margin-right: 15px;
         .ant-input {
           font-size: 12px;
           resize: none;
@@ -181,7 +189,8 @@
         }
       }
       &:nth-child(8) {
-        width: 120px;
+        width: 91px;
+        margin-right: 15px;
       }
     }
   }

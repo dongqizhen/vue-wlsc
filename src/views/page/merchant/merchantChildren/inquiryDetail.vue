@@ -16,6 +16,7 @@
             :itemData="item"
             :checkedList="checkedList"
             v-on:getChecked="getChecked"
+            :isShowInfo="isShowInfo"
           ></inquiry-detail-item-product>
         </div>
         <!-- <div class="list-footer">
@@ -93,6 +94,18 @@
       let isShowInfo = JSON.parse(this.$route.query.isShowInfo);
       isShowInfo.isDetail = true;
       this.isShowInfo = isShowInfo;
+      if (this.isShowInfo.current == 2) {
+        this.titleArr = [
+          "产品图片",
+          "产品名称",
+          "品牌型号",
+          "单价",
+          "数量",
+          "到货时间",
+          "询价备注",
+          "报价备注"
+        ];
+      }
       console.log(this.isShowInfo);
       _getData("/enquiryPlus/enquiryDetail", {
         id: this.$route.params.id
@@ -135,16 +148,21 @@
         ul {
           li {
             &:nth-child(4) {
-              width: 98px;
+              width: 78px;
             }
             &:nth-child(5) {
-              width: 90px;
+              width: 60px;
             }
             &:nth-child(6) {
-              width: 97px;
+              width: 68px;
+              margin-right: 20px;
             }
             &:nth-child(7) {
-              width: 120px;
+              width: 83px;
+              margin-right: 30px;
+            }
+            &:last-child {
+              width: 83px;
             }
           }
         }

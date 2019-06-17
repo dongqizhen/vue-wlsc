@@ -8,7 +8,7 @@
  * 当升级编辑器时，可直接使用旧版配置文件替换新版配置文件,不用担心旧版配置文件中因缺少新功能所需的参数而导致脚本报错。
  * 提示*************************
  ******************************************************************************/
-
+var g_server = 0; //0测试环境1验收环境2正式环境
 (function() {
 
     /**
@@ -20,13 +20,11 @@
      * window.UEDITOR_HOME_URL = "/xxxx/xxxx/";
      */
     //文件服务器url
-    // if (g_server == 1) {
-    // window.UEDITOR_COMMIT_URL = "http://file.haoyigong.com/server/backstage/js/ueditor/jsp_web/controller.jsp"; //正式环境
-    // window.UEDITOR_CALLBACK_URL = "http://www.haoyigong.com/ueditor/callback.html"; //正式环境
-    // } else {
-    window.UEDITOR_COMMIT_URL = "http://webple.haoyigong.com/server/backstage/js/ueditor/jsp_web/controller.jsp"; //验收环境
+    console.log(g_server)
+        // if (g_server == 0) {
+    window.UEDITOR_COMMIT_URL = "http://file.haoyigong.com/server/backstage/js/ueditor/jsp_server/controller.jsp"; //测试环境
     //跨域重定向url
-    window.UEDITOR_CALLBACK_URL = "http://wwwple.haoyigong.com/ueditor/callback.html"; //验收环境
+    window.UEDITOR_CALLBACK_URL = "http://web.haoyigong.com/server/backstage/js/ueditor/callback.html"; //测试环境
     // }
 
     //根目录

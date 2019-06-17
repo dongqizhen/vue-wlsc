@@ -114,7 +114,7 @@
           </div>
         </div>
         <div class="common guidePrice">
-          <div class="left-box"><span class="red">*</span>指导价</div>
+          <div class="left-box">指导价</div>
           <div class="right-box">
             <a-input
               ref="min"
@@ -129,9 +129,9 @@
               class="priceMax"
               v-model="submitData.maxPrice"
             />
-            <a-checkbox @change="onChange" :checked="isEnquiry">
+            <!-- <a-checkbox @change="onChange" :checked="isEnquiry">
               询价
-            </a-checkbox>
+            </a-checkbox> -->
           </div>
         </div>
         <div class="common" v-if="isSparePart">
@@ -148,6 +148,7 @@
           <div class="left-box">库存数量</div>
           <div class="right-box">
             <a-input
+              ref="goodsNumber"
               placeholder="请输入库存数量"
               v-model="submitData.goodsNumber"
             />
@@ -269,6 +270,7 @@
     data() {
       return {
         UEConfig: {
+          zIndex: 1,
           autoFloatEnabled: false,
           initialFrameWidth: "100%",
           initialFrameHeight: 450,
@@ -317,10 +319,10 @@
     },
     methods: {
       release() {
-        console.log(this.$refs.goodDesc);
-        console.log(this.$refs.goodDesc.getUEContent());
-        console.log(this.$refs.goodDesc.getUEContentTxt());
-        console.log(this.specificationParams);
+        // console.log(this.$refs.goodDesc);
+        // console.log(this.$refs.goodDesc.getUEContent());
+        // console.log(this.$refs.goodDesc.getUEContentTxt());
+        // console.log(this.specificationParams);
         if (this.submitData.name == "") {
           this.$message.warning("请输入商品名称", 1);
           this.$refs.name.focus();
@@ -346,21 +348,17 @@
           this.$message.warning("请选择型号", 1);
           return;
         }
-        if (!this.submitData.isEnquiry) {
-          if (this.submitData.minPrice == "") {
+        if (!this.submitData.minPrice) {
+          if (!/^[1-9]\d*$/.test(this.submitData.minPrice)) {
+            this.$message.warning("指导价只能为数字", 1);
             this.$refs.min.focus();
-            this.$message.warning("请输入最小指导价", 1);
             return;
           }
-          if (this.submitData.maxPrice == "") {
+        }
+        if (!this.submitData.maxPrice) {
+          if (!/^[1-9]\d*$/.test(this.submitData.minPrice)) {
+            this.$message.warning("指导价只能为数字", 1);
             this.$refs.max.focus();
-            this.$message.warning("请输入最大指导价", 1);
-            return;
-          }
-          if (
-            Number(this.submitData.minPrice) > Number(this.submitData.maxPrice)
-          ) {
-            this.$message.warning("最小指导价不能大于最大值", 1);
             return;
           }
         }
@@ -371,6 +369,15 @@
             return;
           }
         }
+
+        if (!this.submitData.goodsNumber) {
+          if (!/^[1-9]\d*$/.test(this.submitData.goodsNumber)) {
+            this.$message.warning("库存数量只能为数字", 1);
+            this.$refs.goodsNumber.focus();
+            return;
+          }
+        }
+        this.submitData.goodsDesc = this.$refs.goodDesc.getUEContent();
         if (this.submitData.goodsDesc == "") {
           this.$message.warning("请输入商品描述", 1);
           return;
@@ -383,6 +390,7 @@
         } else {
           this.submitData.listPicUrl = [];
         }
+        this.submitData.specificationInfo = this.specificationParams;
         if (this.$route.query.id) {
           _getData("/goods/updateGoods", this.submitData).then(data => {
             this.$message.success("产品编辑成功", 1);
@@ -448,11 +456,14 @@
         // console.log(`selected ${value}`);
         this.submitData.bigCategoryId = value;
         this.submitData.categoryId = "";
+        this.submitData.brandId = "";
+        this.submitData.modelId = "";
         this.getSmallType(value);
       },
       handleProductSmallTypeChange(value) {
         // console.log(`selected ${value}`);
         this.submitData.categoryId = value;
+        this.submitData.brandId = "";
         this.submitData.modelId = "";
         this.getModelData(value);
       },
@@ -563,6 +574,10 @@
           this.submitData.sparePart = data.productInfo.sparePart;
           this.submitData.goodsNumber = data.productInfo.goods_number;
           this.submitData.origin = data.productInfo.origin;
+
+          this.specificationParams = data.specificationInfo;
+          this.submitData.specificationInfo = this.specificationParams;
+
           this.submitData.goodsDesc = data.productInfo.goods_desc;
           this.submitData.isOnSale = data.productInfo.is_on_sale;
           if (data.productInfo.isEnquiry) {

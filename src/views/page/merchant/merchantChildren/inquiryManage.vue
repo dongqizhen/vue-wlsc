@@ -87,7 +87,8 @@
           "单价",
           "数量",
           "到货时间",
-          "备注",
+          "询价备注",
+          "",
           "操作"
         ],
         getInquiryListParams: {
@@ -133,6 +134,30 @@
       tab(tabVal) {
         this.isShowInfo.current = tabVal;
         this.getInquiryListParams.status = tabVal;
+        if (tabVal == 2) {
+          this.titleArr = [
+            "产品图片",
+            "产品名称",
+            "单价",
+            "数量",
+            "到货时间",
+            "询价备注",
+            "报价备注",
+            "操作"
+          ];
+        } else {
+          this.titleArr = [
+            "产品图片",
+            "产品名称",
+            "单价",
+            "数量",
+            "到货时间",
+            "询价备注",
+            "",
+            "操作"
+          ];
+        }
+
         this.getInquiryList();
       },
       getChecked(val) {
@@ -197,6 +222,16 @@
     },
     mounted() {
       if (this.$route.query.status) {
+        this.titleArr = [
+          "产品图片",
+          "产品名称",
+          "单价",
+          "数量",
+          "到货时间",
+          "询价备注",
+          "报价备注",
+          "操作"
+        ];
         this.getInquiryListParams.status = this.$route.query.status;
         this.isShowInfo.current = this.$route.query.status;
         this.$router.replace({ path: "/merchant/inquiryManage" });
@@ -263,12 +298,19 @@
                 &:nth-child(4) {
                   width: 80px;
                 }
+                &:nth-child(5) {
+                  width: 98px;
+                }
                 &:nth-child(6) {
-                  width: 157px;
+                  width: 90px;
+                  margin-right: 15px;
                 }
                 &:nth-child(7) {
+                  width: 91px;
+                  margin-right: 15px;
+                }
+                &:last-child {
                   width: 96px;
-                  justify-content: center;
                 }
               }
             }

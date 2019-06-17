@@ -16,7 +16,12 @@
     <span>
       {{ itemData.arrivalTime ? itemData.arrivalTime.substring(0, 10) : "" }}
     </span>
-    <span>{{ itemData.introduce }}</span>
+    <span :style="isShowInfo.current == 2 ? 'width:83px' : ''">
+      {{ itemData.userRemark }}
+    </span>
+    <span v-if="isShowInfo.current == 2" style="width:83px;">
+      {{ itemData.shopRemark }}
+    </span>
   </div>
 </template>
 <script>
@@ -32,7 +37,8 @@
       },
       checkedList: {
         type: Array
-      }
+      },
+      isShowInfo: {}
     },
     watch: {
       checkedList(newVal) {
@@ -101,14 +107,14 @@
         width: 98px;
       }
       &:nth-child(5) {
-        width: 98px;
+        width: 78px;
       }
       &:nth-child(6) {
-        width: 90px;
+        width: 60px;
       }
       &:nth-child(7) {
         width: 68px;
-        margin-right: 59px;
+        margin-right: 20px;
       }
       &:nth-child(8) {
         width: 120px;

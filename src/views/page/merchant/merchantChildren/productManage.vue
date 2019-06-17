@@ -287,25 +287,40 @@
       },
       //批量上架
       batchShelf() {
-        // if (this.checkedList.length > 0) {
-        //   //向后台发送请求，标记为已读，成功后将刷新数据
-        //   console.log(this.checkedList);
-        //   console.log(this.checkedList.join(","));
-        //   _getData("/message/updateStatus", {
-        //     ids: this.checkedList.join(","),
-        //     flag: "delete"
-        //   }).then(data => {
-        //     console.log(data);
-        //     this.$message.success("批量删除成功", 1);
-        //     this.getProductList();
-        //   });
-        // } else {
-        //   this.$message.warning("请选择产品", 1);
-        //   return;
-        // }
+        if (this.checkedList.length > 0) {
+          console.log(this.checkedList);
+          console.log(this.checkedList.join(","));
+          _getData("/goods/goodsIsOnSale", {
+            ids: this.checkedList.join(","),
+            isOnSale: 1
+          }).then(data => {
+            console.log(data);
+            this.$message.success("批量上架成功", 1);
+            this.getProductList();
+          });
+        } else {
+          this.$message.warning("请选择产品", 1);
+          return;
+        }
       },
       //批量下架
-      batchObtained() {},
+      batchObtained() {
+        if (this.checkedList.length > 0) {
+          console.log(this.checkedList);
+          console.log(this.checkedList.join(","));
+          _getData("/goods/goodsIsOnSale", {
+            ids: this.checkedList.join(","),
+            isOnSale: 0
+          }).then(data => {
+            console.log(data);
+            this.$message.success("批量下架成功", 1);
+            this.getProductList();
+          });
+        } else {
+          this.$message.warning("请选择产品", 1);
+          return;
+        }
+      },
       //批量删除
       batchDeleteData() {
         // if (this.checkedList.length > 0) {

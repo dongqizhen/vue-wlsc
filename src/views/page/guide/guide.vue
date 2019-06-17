@@ -16,7 +16,6 @@
   export default {
     data() {
       return {
-        a: 1,
         defaultSelectedKeys: ["0"],
         dataArr: [
           {
@@ -118,6 +117,36 @@
       console.log(this.$route);
       if (this.$route.path.indexOf("howToPurchase") != -1) {
         this.defaultSelectedKeys = ["7"];
+      } else if (this.$route.path.indexOf("aboutUs") != -1) {
+        this.defaultSelectedKeys = ["1"];
+      } else if (this.$route.path.indexOf("howToRegister") != -1) {
+        this.defaultSelectedKeys = ["2"];
+      } else if (this.$route.path.indexOf("sellerEntry") != -1) {
+        this.defaultSelectedKeys = ["3"];
+      } else if (this.$route.path.indexOf("buyerEntry") != -1) {
+        this.defaultSelectedKeys = ["4"];
+      } else if (this.$route.path.indexOf("inquirySystem") != -1) {
+        this.defaultSelectedKeys = ["5"];
+      } else if (this.$route.path.indexOf("quickOrder") != -1) {
+        this.defaultSelectedKeys = ["6"];
+      } else if (this.$route.path.indexOf("complaints") != -1) {
+        this.defaultSelectedKeys = ["8"];
+      } else if (this.$route.path.indexOf("howToOpenShop") != -1) {
+        this.defaultSelectedKeys = ["9"];
+      } else if (this.$route.path.indexOf("marketingCenter") != -1) {
+        this.defaultSelectedKeys = ["10"];
+      } else if (this.$route.path.indexOf("releaseNewProducts") != -1) {
+        this.defaultSelectedKeys = ["11"];
+      } else if (this.$route.path.indexOf("merchantService") != -1) {
+        this.defaultSelectedKeys = ["12"];
+      } else if (this.$route.path.indexOf("paymentMethod") != -1) {
+        this.defaultSelectedKeys = ["13"];
+      } else if (this.$route.path.indexOf("tradingRights") != -1) {
+        this.defaultSelectedKeys = ["14"];
+      } else if (this.$route.path.indexOf("customerService") != -1) {
+        this.defaultSelectedKeys = ["15"];
+      } else if (this.$route.path.indexOf("shopRules") != -1) {
+        this.defaultSelectedKeys = ["16"];
       }
     },
     components: {
