@@ -323,22 +323,21 @@
       },
       //批量删除
       batchDeleteData() {
-        // if (this.checkedList.length > 0) {
-        //   //向后台发送请求，标记为已读，成功后将刷新数据
-        //   console.log(this.checkedList);
-        //   console.log(this.checkedList.join(","));
-        //   _getData("/message/updateStatus", {
-        //     ids: this.checkedList.join(","),
-        //     flag: "delete"
-        //   }).then(data => {
-        //     console.log(data);
-        //     this.$message.success("批量删除成功", 1);
-        //     this.getProductList();
-        //   });
-        // } else {
-        //   this.$message.warning("请选择产品", 1);
-        //   return;
-        // }
+        if (this.checkedList.length > 0) {
+          //向后台发送请求，标记为已读，成功后将刷新数据
+          console.log(this.checkedList);
+          console.log(this.checkedList.join(","));
+          _getData("/goods/deleteGoods", {
+            goodsIds: this.checkedList.join(",")
+          }).then(data => {
+            console.log(data);
+            this.$message.success("批量删除成功", 1);
+            this.getProductList();
+          });
+        } else {
+          this.$message.warning("请选择产品", 1);
+          return;
+        }
       },
       getProductList() {
         _getData("/goods/sjGoodsList", this.submitData).then(data => {

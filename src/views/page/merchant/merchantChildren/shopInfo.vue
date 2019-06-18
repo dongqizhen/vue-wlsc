@@ -7,6 +7,7 @@
           <div class="left-box"><span class="red">*</span>店铺名称</div>
           <div class="right-box">
             <a-input
+              ref="shopName"
               placeholder="请输入店铺名称"
               v-model="submitData.shopName"
             />
@@ -118,6 +119,7 @@
         console.log(this.isOpenShop);
         if (this.submitData.shopName == "") {
           this.$message.warning("请输入店铺名称", 1);
+          this.$refs.shopName.focus();
           return;
         }
         if (this.submitData.type == "") {
@@ -140,7 +142,7 @@
           this.submitData = { ...this.submitData, current: this.current };
           this.$emit("getShopInfo", this.submitData);
         } else {
-          _getData("/store/updateStore", {
+          _getData("/store/insertOrUpdateStore", {
             shopName: this.submitData.shopName,
             type: this.submitData.type,
             image: this.submitData.image,

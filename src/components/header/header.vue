@@ -120,8 +120,12 @@
       },
       openMerchant() {
         if (this.$getLocalStorage()) {
-          let { href } = this.$router.resolve({ path: "/merchant" });
-          window.open(href, "_blank");
+          _getData("/user/getUser", {}).then(data => {
+            console.log("获取用户的店铺开店信息：", data);
+            this.changeUserShopInfoState(data);
+            let { href } = this.$router.resolve({ path: "/merchant" });
+            window.open(href, "_blank");
+          });
         } else {
           this.$router.push("/login");
         }
@@ -131,7 +135,7 @@
       ...mapState(["isLogin", "userInfo", "userShopInfo"])
     },
     mounted() {
-      console.log(this.$route.path);
+      console.log("用户信息", this.userInfo);
       if (this.$route.path.indexOf("merchant") != -1) {
         this.isMerchant = true;
       } else {

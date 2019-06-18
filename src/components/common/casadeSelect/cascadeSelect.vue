@@ -5,9 +5,9 @@
         <div v-if="defaultProvinceData.length == 0">请选择省/市</div>
         <div v-else>
           <i v-for="(item, index) in defaultProvinceData" :key="item.id">
-            {{ item.provinceName }}({{ item.count }}){{
-              index == defaultProvinceData.length - 1 ? "" : "/"
-            }}
+            {{ item.provinceName }}
+            {{ item.provinceName == "全国" ? "" : `(${item.count})` }}
+            {{ index == defaultProvinceData.length - 1 ? "" : "/" }}
           </i>
         </div>
       </span>
@@ -30,7 +30,9 @@
             {{ item.name }}
             <span v-for="dataItem in defaultProvinceData" :key="dataItem.id">
               <span v-show="dataItem.id == item.id">
-                ({{ dataItem.count }})
+                {{
+                  dataItem.provinceName == "全国" ? "" : `(${dataItem.count})`
+                }}
               </span>
             </span>
           </li>
@@ -117,23 +119,45 @@
         });
       },
       getSelectArr(arr) {
-        _.forEach(this.defaultProvinceData, value => {
-          if (value.id == this.currentId) {
-            this.defaultProvinceData = _.without(this.defaultProvinceData, value);
-          }
-        });
-        if (arr.length != 0) {
+        console.log("选择的值：", arr);
+        if (arr.length != 0 && arr[0].name == "全国") {
+          this.defaultProvinceData = [];
           this.defaultProvinceData.push({
             id: this.currentId,
             provinceName: this.activeProvinceName,
-            count: arr.length == this.cityData.length ? "全部" : arr.length,
+            count: "",
             defaultCityData: arr
           });
+        } else {
+          if (
+            this.defaultProvinceData.length == 1 &&
+            this.defaultProvinceData[0].provinceName == "全国"
+          ) {
+            this.defaultProvinceData = [];
+          }
+          _.forEach(this.defaultProvinceData, value => {
+            if (value.id == this.currentId) {
+              this.defaultProvinceData = _.without(
+                this.defaultProvinceData,
+                value
+              );
+            }
+          });
+          if (arr.length != 0) {
+            this.defaultProvinceData.push({
+              id: this.currentId,
+              provinceName: this.activeProvinceName,
+              count: arr.length == this.cityData.length ? "全部" : arr.length,
+              defaultCityData: arr
+            });
+          }
         }
+
         // console.log(this.defaultProvinceData);
         this.$emit("getSaleArea", this.defaultProvinceData);
       },
       getCheckAllMethod(val) {
+        console.log(val);
         this.isCheckAll = val;
       }
     },

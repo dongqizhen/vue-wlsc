@@ -20,8 +20,7 @@ var g_server = 0; //0测试环境1验收环境2正式环境
      * window.UEDITOR_HOME_URL = "/xxxx/xxxx/";
      */
     //文件服务器url
-    console.log(g_server)
-        // if (g_server == 0) {
+    // if (g_server == 0) {
     window.UEDITOR_COMMIT_URL = "http://file.haoyigong.com/server/backstage/js/ueditor/jsp_server/controller.jsp"; //测试环境
     //跨域重定向url
     window.UEDITOR_CALLBACK_URL = "http://web.haoyigong.com/server/backstage/js/ueditor/callback.html"; //测试环境
