@@ -94,38 +94,38 @@
       ]),
       system() {
         if (this.$route.path.indexOf("merchant") != -1) {
-          this.$router.replace({
+          let { href } = this.$router.resolve({
             path: "/merchant/messageCenter",
             query: { type: "system" }
           });
+          window.open(href, "_blank");
         } else {
-          this.$router.replace({
+          let { href } = this.$router.resolve({
             path: "/userCenter/myMessage",
             query: { type: "system" }
           });
+          window.open(href, "_blank");
         }
       },
       privateMessage() {
         if (this.$route.path.indexOf("merchant") != -1) {
-          this.$router.replace({
+          let { href } = this.$router.resolve({
             path: "/merchant/messageCenter",
-            query: { type: "message" }
+            query: { type: "system" }
           });
+          window.open(href, "_blank");
         } else {
-          this.$router.replace({
+          let { href } = this.$router.resolve({
             path: "/userCenter/myMessage",
-            query: { type: "message" }
+            query: { type: "system" }
           });
+          window.open(href, "_blank");
         }
       },
       openMerchant() {
         if (this.$getLocalStorage()) {
-          _getData("/user/getUser", {}).then(data => {
-            console.log("获取用户的店铺开店信息：", data);
-            this.changeUserShopInfoState(data);
-            let { href } = this.$router.resolve({ path: "/merchant" });
-            window.open(href, "_blank");
-          });
+          let { href } = this.$router.resolve({ path: "/merchant" });
+          window.open(href, "_blank");
         } else {
           this.$router.push("/login");
         }
@@ -135,7 +135,7 @@
       ...mapState(["isLogin", "userInfo", "userShopInfo"])
     },
     mounted() {
-      console.log("用户信息", this.userInfo);
+      console.log(this.$route.path);
       if (this.$route.path.indexOf("merchant") != -1) {
         this.isMerchant = true;
       } else {

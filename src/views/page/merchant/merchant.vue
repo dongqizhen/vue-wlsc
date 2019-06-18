@@ -16,7 +16,6 @@
   import { mapState, mapMutations } from "vuex";
   import { _getData } from "../../../config/getData";
   export default {
-    inject: ["reload"],
     data() {
       return {
         defaultSelectedKeys: ["0"],
@@ -58,25 +57,11 @@
         ]
       };
     },
+    inject: ["reload"],
     computed: {
       ...mapState(["isLogin", "userShopInfo"])
     },
-    beforeRouteEnter(to, from, next) {
-      next();
-    },
     beforeRouteUpdate(to, from, next) {
-      // console.log("走：：：：", from);
-      // if (this.userShopInfo.audit_status != 2) {
-      //   this.defaultSelectedKeys = ["0"];
-      //   this.$router.replace({
-      //     path: "/merchant/openShop",
-      //     query: {
-      //       shopStatus: this.userShopInfo.audit_status
-      //         ? this.userShopInfo.audit_status
-      //         : 0
-      //     }
-      //   });
-      // }
       if (to.path.indexOf("messageCenter") != -1) {
         this.reload();
       }
@@ -84,7 +69,6 @@
     },
     beforeMount() {
       console.log(111111);
-      console.log(this.userShopInfo);
       if (this.userShopInfo.audit_status == 2) {
         if (this.$route.path.indexOf("shopInfo") != -1) {
           this.defaultSelectedKeys = ["2"];
@@ -118,11 +102,7 @@
         this.defaultSelectedKeys = ["0"];
         this.$router.replace({
           path: "/merchant/openShop",
-          query: {
-            shopStatus: this.userShopInfo.audit_status
-              ? this.userShopInfo.audit_status
-              : 0
-          }
+          query: { shopStatus: this.userShopInfo.audit_status }
         });
       }
     },

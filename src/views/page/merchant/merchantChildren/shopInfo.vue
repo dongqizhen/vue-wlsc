@@ -139,8 +139,18 @@
           return;
         }
         if (this.isOpenShop) {
-          this.submitData = { ...this.submitData, current: this.current };
-          this.$emit("getShopInfo", this.submitData);
+          console.log(this.$store.state.userShopInfo.store_id);
+          this.submitData = {
+            ...this.submitData,
+            current: this.current,
+            sid: this.$store.state.userShopInfo.store_id
+          };
+
+          console.log(this.submitData);
+          _getData("/store/insertOrUpdateStore", this.submitData).then(data => {
+            console.log(data);
+          });
+          // this.$emit("getShopInfo", this.submitData);
         } else {
           _getData("/store/insertOrUpdateStore", {
             shopName: this.submitData.shopName,
