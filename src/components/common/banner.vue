@@ -46,17 +46,16 @@
             系统公告
           </h2>
           <div class="con1 swiper-container">
-            <ul ref="con1" class="swiper-wrapper">
-              <router-link
+            <ul ref="con1" class="swiper-wrapper" @click="toNotice($event)">
+              <li
                 v-for="(item, i) in noteList"
                 :key="`item-${i}`"
                 class="swiper-slide"
-                :to="{ path: '/notice', query: { id: item.id } }"
-                tag="li"
+                :data-id="item.id"
               >
                 <span>【公告】</span>
                 <p>{{ item.title }}</p>
-              </router-link>
+              </li>
             </ul>
           </div>
         </div>
@@ -117,6 +116,10 @@
         if (this.$getLocalStorage()) {
           this.$router.push("/userCenter");
         }
+      },
+      toNotice(e) {
+        let id = e.target.parentElement.getAttribute("data-id");
+        this.$router.push({ path: "/notice", query: { id } });
       }
     },
     computed: {

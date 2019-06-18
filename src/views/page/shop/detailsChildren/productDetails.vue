@@ -126,80 +126,94 @@
               <no-data text="暂无规格参数" v-else></no-data>
             </a-tab-pane>
             <a-tab-pane
-              :tab="`产品评价(${comment.length})`"
+              :tab="`产品评价(${data.count})`"
               key="3"
               :forceRender="true"
             >
-              <ul class="evaluate">
-                <li v-for="(item, i) in comment" :key="i">
-                  <div class="img_box"></div>
-                  <div class="evaluate-container">
-                    <div class="name">
-                      {{ item.nickname }}<span>{{ item.add_time }}</span>
-                    </div>
-                    <ul class="rate-container">
-                      <li
-                        v-for="v in item.commentNameValue"
-                        :key="v.icommentNameId"
-                      >
-                        {{ v.commentName }}
-                        <div class="rate">
-                          <span
-                            v-for="(rate, val) in new Array(v.value)"
-                            :key="`rate-${val}`"
-                          >
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiashixinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-
-                          <span
-                            v-for="(rate, value) in Array(5 - v.value)"
-                            :key="`rate2-${value}`"
-                          >
-                            <svg class="icon" aria-hidden="true">
-                              <use
-                                xlink:href="#iconpingjiakongxinwujiaoxing"
-                              ></use>
-                            </svg>
-                          </span>
-                        </div>
-                      </li>
-                    </ul>
-                    <p>
-                      {{ item.content }}
-                    </p>
-                    <div>
-                      <ul class="evaluate-img" v-if="item.pic_list.length">
+              <div v-if="comment && comment.length">
+                <ul class="evaluate">
+                  <li v-for="(item, i) in comment" :key="i">
+                    <div class="img_box"></div>
+                    <div class="evaluate-container">
+                      <div class="name">
+                        {{ item.nickname }}<span>{{ item.add_time }}</span>
+                      </div>
+                      <ul class="rate-container">
                         <li
-                          v-for="(pic, j) in item.pic_list"
-                          :key="pic.id"
-                          :class="
-                            i == defaultIndex && j == elIndex && bigImageIsShow
-                              ? 'active'
-                              : ''
-                          "
-                          @click="changeImage(i, j, pic, $event)"
+                          v-for="v in item.commentNameValue"
+                          :key="v.icommentNameId"
                         >
-                          <div class="img_box">
-                            <img :src="pic.pic_url" alt="" />
+                          {{ v.commentName }}
+                          <div class="rate">
+                            <span
+                              v-for="(rate, val) in new Array(v.value)"
+                              :key="`rate-${val}`"
+                            >
+                              <svg class="icon" aria-hidden="true">
+                                <use
+                                  xlink:href="#iconpingjiashixinwujiaoxing"
+                                ></use>
+                              </svg>
+                            </span>
+
+                            <span
+                              v-for="(rate, value) in Array(5 - v.value)"
+                              :key="`rate2-${value}`"
+                            >
+                              <svg class="icon" aria-hidden="true">
+                                <use
+                                  xlink:href="#iconpingjiakongxinwujiaoxing"
+                                ></use>
+                              </svg>
+                            </span>
                           </div>
-                          <i></i>
                         </li>
                       </ul>
+                      <p>
+                        {{ item.content }}
+                      </p>
+                      <div>
+                        <ul class="evaluate-img" v-if="item.pic_list.length">
+                          <li
+                            v-for="(pic, j) in item.pic_list"
+                            :key="pic.id"
+                            :class="
+                              i == defaultIndex &&
+                              j == elIndex &&
+                              bigImageIsShow
+                                ? 'active'
+                                : ''
+                            "
+                            @click="changeImage(i, j, pic, $event)"
+                          >
+                            <div class="img_box">
+                              <img :src="pic.pic_url" alt="" />
+                            </div>
+                            <i></i>
+                          </li>
+                        </ul>
 
-                      <div
-                        class="big-image"
-                        :class="i == defaultIndex && bigImageIsShow && 'active'"
-                      >
-                        <img v-if="showSrc" :src="showSrc" alt="" />
+                        <div
+                          class="big-image"
+                          :class="
+                            i == defaultIndex && bigImageIsShow && 'active'
+                          "
+                        >
+                          <transition name="slide-fade">
+                            <img v-if="showSrc" :src="showSrc" alt="" />
+                          </transition>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </li>
-              </ul>
+                  </li>
+                </ul>
+                <pagination
+                  :data="data"
+                  v-on:onPaginationChange="onPaginationChange"
+                ></pagination>
+              </div>
+
+              <no-data text="暂无评价" type="no-comment" v-else></no-data>
             </a-tab-pane>
 
             <template slot="renderTabBar" slot-scope="props, DefaultTabBar">
@@ -253,6 +267,7 @@
   import loginModalVue from "../../../../components/modal/loginModal.vue";
   import { mapState } from "vuex";
   import { _getData } from "../../../../config/getData";
+  import pagination from "../../../../components/common/pagination";
 
   export default {
     data() {
@@ -264,6 +279,7 @@
         elIndex: null, //第几个dom下的图片
         defaultIndex: null, //显示哪张详情图片
         showSrc: "",
+        data: "",
         bannerIndex: 0,
         visible: false,
         title: "",
@@ -279,9 +295,13 @@
       shareMenuVue,
       IconFont,
       shopCardVue,
-      loginModalVue
+      loginModalVue,
+      pagination
     },
     methods: {
+      onPaginationChange(page) {
+        this.getCommentList(page);
+      },
       storeProduct() {
         if (this.isLogin) {
           _getData("/collect/addordelete", {
@@ -367,6 +387,17 @@
           zoom: 2,
           zoomable: true
         });
+      },
+      async getCommentList(page = 1) {
+        return await _getData("/comment/commentList", {
+          goodId: this.$route.params.id,
+          currentPage: page,
+          countPerPage: 10
+        }).then(data => {
+          console.log("评价", data);
+          this.comment = data.data;
+          this.data = data;
+        });
       }
     },
     computed: {
@@ -390,7 +421,7 @@
           console.log("产品详情", data);
           this.productInfo = data.productInfo;
           this.specificationInfo = data.specificationInfo;
-          this.comment = data.comment;
+          // this.comment = data.comment ? data.comment : [];
           this.isCollection = data.isCollection;
           this.imgarr = JSON.parse(this.productInfo.list_pic_url);
           this.imgUrl = JSON.parse(this.productInfo.list_pic_url)[0];
@@ -435,13 +466,25 @@
           window.addEventListener("scroll", this.handleScroll);
         });
 
-      //_getData();
+      this.getCommentList();
     }
   };
 </script>
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
+
+  .slide-fade-enter-active {
+    transition: all 0.3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  }
+  .slide-fade-enter,
+  .slide-fade-leave-to {
+    transform: translateX(10px);
+    opacity: 0;
+  }
 
   .product-details {
     display: flex;
@@ -938,7 +981,7 @@
                       width: 0;
                       transition: all 0.3s;
                       &.active {
-                        height: 352px;
+                        height: auto;
                         width: 352px;
                       }
                       img {
@@ -948,6 +991,9 @@
                     }
                   }
                 }
+              }
+              .paginationBox {
+                margin-bottom: 40px;
               }
             }
           }
