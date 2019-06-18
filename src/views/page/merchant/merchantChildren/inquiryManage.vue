@@ -204,20 +204,20 @@
         );
       },
       getInquiryNumber() {
-        _getData("/enquiryPlus/enquiryCount", { param: { storeId: "" } }).then(
-          data => {
-            console.log("获取的询价数：：：", data);
-            _.map(data.data, o => {
-              if (o.status == 1) {
-                this.quoting = o.num;
-              } else if (o.status == 2) {
-                this.quoted = o.num;
-              } else {
-                this.closed = o.num;
-              }
-            });
-          }
-        );
+        _getData("/enquiryPlus/enquiryCount", {
+          param: { storeId: this.userShopInfo.store_id }
+        }).then(data => {
+          console.log("获取的询价数：：：", data);
+          _.map(data.data, o => {
+            if (o.status == 1) {
+              this.quoting = o.num;
+            } else if (o.status == 2) {
+              this.quoted = o.num;
+            } else {
+              this.closed = o.num;
+            }
+          });
+        });
       }
     },
     mounted() {
