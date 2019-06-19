@@ -85,9 +85,15 @@
 </template>
 
 <script>
+  import { _getData } from "../../config/getData";
   export default {
     data() {
       return {};
+    },
+    mounted() {
+      _getData("topic/queryTopicList", {}).then(data => {
+        console.log("底部", data);
+      });
     }
   };
 </script>

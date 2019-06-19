@@ -213,6 +213,11 @@
       },
       handleClick(val) {
         console.log(val);
+        if (val.name == "全国") {
+          this.selectMainArea = val.name;
+          this.areaIsShow = false;
+          return;
+        }
         this.province = val.name;
 
         _getData("address/getCity", { provinceId: val.id })

@@ -43,7 +43,7 @@
             <h2>{{ productInfo.name }}</h2>
             <div class="price">
               <span>指导价：</span>
-              <span>{{ productInfo.retail_price }}</span>
+              <span>{{ productInfo.show_price }}</span>
               <span>询价</span>
             </div>
             <ul class="params">
