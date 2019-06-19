@@ -116,13 +116,13 @@
         if (this.$route.path.indexOf("merchant") != -1) {
           let { href } = this.$router.resolve({
             path: "/merchant/messageCenter",
-            query: { type: "system" }
+            query: { type: "private" }
           });
           window.open(href, "_blank");
         } else {
           let { href } = this.$router.resolve({
             path: "/userCenter/myMessage",
-            query: { type: "system" }
+            query: { type: "private" }
           });
           window.open(href, "_blank");
         }

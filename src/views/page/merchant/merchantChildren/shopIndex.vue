@@ -99,6 +99,7 @@
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import manageNumberNav from "../../../../components/common/manageNumberNav";
   import calendarRange from "../../../../components/common/calendarRange";
+  import { _getData } from "../../../../config/getData";
   import EChart from "vue-echarts";
   import "zrender/lib/svg/svg";
 
@@ -338,8 +339,8 @@
         }
       };
     },
-
     mounted() {
+      this.getShopCountInfo();
       this.polar.legend.data = [
         "新增访问店铺数",
         "新增收藏店铺数",
@@ -476,6 +477,11 @@
       changeDate(value) {
         console.log(value);
         this.currentTab = -1;
+      },
+      getShopCountInfo() {
+        _getData("/store/sjHomeStore", {}).then(data => {
+          console.log("头部的统计信息:::", data);
+        });
       }
     },
     components: {

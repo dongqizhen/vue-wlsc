@@ -1,5 +1,5 @@
 <template>
-  <div class="messageCenter">
+  <div class="invoiceManage">
     <common-title title="消息中心"></common-title>
     <div class="tabBar">
       <div class="left-box">
@@ -182,7 +182,7 @@
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
-  .messageCenter {
+  .invoiceManage {
     min-height: 693px;
     background-color: #fff;
     padding: 4px 20px;

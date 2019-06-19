@@ -1,6 +1,6 @@
 <template>
-  <div class="messageCenter">
-    <common-title title="消息中心"></common-title>
+  <div class="personalMessage">
+    <common-title title="个人信息"></common-title>
     <div class="tabBar">
       <div class="left-box">
         <manage-number-nav :navArr="tabs" v-on:tab="getTab"></manage-number-nav>
@@ -217,7 +217,7 @@
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
-  .messageCenter {
+  .personalMessage {
     min-height: 460px;
     background-color: #fff;
     padding: 4px 20px 20px 20px;

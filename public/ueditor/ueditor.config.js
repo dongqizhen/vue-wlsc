@@ -23,15 +23,15 @@ var g_server = 0; //0测试环境1验收环境2正式环境
     // if (g_server == 0) {
     window.UEDITOR_COMMIT_URL = "http://filetest.allbring.com/platform/statics/upeditor/jsp_web/controller.jsp"; //测试环境
     //跨域重定向url
-    window.UEDITOR_CALLBACK_URL = "http://filetest.allbring.com/platform/statics/upeditor/index.html"; //测试环境
+    window.UEDITOR_CALLBACK_URL = "http://wwwtest.allbring.com/ueditor/jsp/callback.html"; //测试环境
     // }
 
     //根目录
     var URL = window.UEDITOR_HOME_URL || getUEBasePath();
-
-    /**
-     * 配置项主体。注意，此处所有涉及到路径的配置别遗漏URL变量。
-     */
+    console.log(URL)
+        /**
+         * 配置项主体。注意，此处所有涉及到路径的配置别遗漏URL变量。
+         */
     window.UEDITOR_CONFIG = {
 
         // 为编辑器实例添加一个路径，这个不能被注释

@@ -243,10 +243,17 @@
     },
     mounted() {
       if (this.$route.query.type == "message") {
+        this.system(0);
+      } else if (this.$route.query.type == "private") {
         this.system(1);
       }
       this.getMessageList();
       this.getMessageNumber();
+      this.$router.replace({ path: this.$route.path });
+      _getData("/user/getUser", {}).then(data => {
+        console.log("获取用户的店铺开店信息：", data);
+        this.changeUserShopInfoState(data);
+      });
     },
     components: {
       commonTitle,

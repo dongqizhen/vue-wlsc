@@ -58,7 +58,6 @@
           "品牌型号",
           "单价",
           "数量",
-          "小计",
           "备注",
           "操作"
         ],
@@ -258,16 +257,13 @@
         ul {
           li {
             &:nth-child(4) {
-              width: 45px;
+              width: 100px;
             }
             &:nth-child(5) {
               width: 80px;
             }
             &:nth-child(6) {
-              width: 65px;
-            }
-            &:nth-child(7) {
-              width: 116px;
+              width: 170px;
               margin-right: 30px;
             }
           }

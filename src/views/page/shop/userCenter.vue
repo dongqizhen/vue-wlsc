@@ -64,9 +64,9 @@
     },
     methods: {},
     beforeRouteUpdate(to, from, next) {
-      if (to.path.indexOf("messageCenter") != -1) {
-        this.reload();
-      }
+      // if (to.path.indexOf("messageCenter") != -1) {
+      //   this.reload();
+      // }
       next();
     },
     beforeMount() {
@@ -108,24 +108,24 @@
           this.defaultSelectedKeys = ["7"];
           break;
         case "myCenter":
+          this.defaultSelectedKeys = ["8"];
+          break;
+        case "myMessage":
+          this.defaultSelectedKeys = ["9"];
+          break;
+        case "messageDetail":
           this.defaultSelectedKeys = ["9"];
           break;
         case "changePassword":
-          this.defaultSelectedKeys = ["9"];
-          break;
-        case "changeEmail":
-          this.defaultSelectedKeys = ["9"];
-          break;
-        case "changePhone":
-          this.defaultSelectedKeys = ["9"];
-          break;
-        case "myCenter":
-          this.defaultSelectedKeys = ["8"];
-          break;
-        case "userSecurity":
           this.defaultSelectedKeys = ["10"];
           break;
-        case "messageDetail":
+        case "changeEmail":
+          this.defaultSelectedKeys = ["10"];
+          break;
+        case "changePhone":
+          this.defaultSelectedKeys = ["10"];
+          break;
+        case "userSecurity":
           this.defaultSelectedKeys = ["10"];
           break;
         default:
