@@ -29,6 +29,7 @@
           <div class="left-box"><span class="red">*</span>公司名称</div>
           <div class="right-box">
             <a-input
+              ref="companyName"
               placeholder="请输入公司名称"
               v-model="submitData.companyName"
             />
@@ -49,6 +50,7 @@
           <div class="left-box"><span class="red">*</span>公司介绍</div>
           <div class="right-box">
             <a-textarea
+              ref="companyIntroduction"
               placeholder="请在这里对公司做一个介绍"
               type="textarea"
               v-model="submitData.companyIntroduction"
@@ -68,19 +70,28 @@
         <div class="common ">
           <div class="left-box"><span class="red">*</span>联系人</div>
           <div class="right-box">
-            <a-input placeholder="请输入联系人" v-model="submitData.linkName" />
+            <a-input
+              ref="linkName"
+              placeholder="请输入联系人"
+              v-model="submitData.linkName"
+            />
           </div>
         </div>
         <div class="common ">
           <div class="left-box"><span class="red">*</span>手机号</div>
           <div class="right-box">
-            <a-input placeholder="请输入手机号" v-model="submitData.mobile" />
+            <a-input
+              ref="mobile"
+              placeholder="请输入手机号"
+              v-model="submitData.mobile"
+            />
           </div>
         </div>
         <div class="common ">
           <div class="left-box"><span class="red">*</span>办公室电话</div>
           <div class="right-box">
             <a-input
+              ref="workPhone"
               placeholder="请输入办公室电话"
               v-model="submitData.workPhone"
             />
@@ -89,7 +100,11 @@
         <div class="common ">
           <div class="left-box"><span class="red">*</span>企业邮箱</div>
           <div class="right-box">
-            <a-input placeholder="请输入企业邮箱" v-model="submitData.email" />
+            <a-input
+              ref="email"
+              placeholder="请输入企业邮箱"
+              v-model="submitData.email"
+            />
           </div>
         </div>
         <div class="common ">
@@ -116,7 +131,11 @@
         <div class="common ">
           <div class="left-box">QQ号</div>
           <div class="right-box">
-            <a-input placeholder="请输入QQ号" v-model="submitData.qqCode" />
+            <a-input
+              ref="qqCode"
+              placeholder="请输入QQ号"
+              v-model="submitData.qqCode"
+            />
           </div>
         </div>
         <div class="common ">
@@ -173,6 +192,7 @@
     <submit-success-modal
       :Visible="visible"
       :type="type"
+      :submitData="submitData"
     ></submit-success-modal>
   </div>
 </template>
@@ -192,6 +212,7 @@
         certificationStatus: 2,
         defaultCascaderValue: [],
         submitData: {
+          sid: "",
           companyName: "",
           address: [],
           provinceId: "",
@@ -224,71 +245,103 @@
         type: Object
       }
     },
+    computed: {
+      ...mapState(["isLogin", "userShopInfo"])
+    },
     methods: {
       ...mapMutations(["changeUserShopInfoState"]),
       submit() {
         console.log(this.shopInfo);
-        console.log(this.submitData);
-        if (this.submitData.companyName == "") {
-          alert("请输入公司名称");
+        if (!this.submitData.companyName) {
+          this.$message.warning("请输入公司名称", 1);
+          this.$refs.companyName.focus();
           return;
         }
         if (this.submitData.address.length == 0) {
-          alert("请选择公司地址");
+          this.$message.warning("请选择公司地址", 1);
           return;
         } else {
           this.submitData.provinceId = this.submitData.address[0];
           this.submitData.cityId = this.submitData.address[1];
           this.submitData.countryId = this.submitData.address[2];
         }
-        if (this.submitData.companyIntroduction == "") {
-          alert("请输入公司介绍");
+        if (!this.submitData.companyIntroduction) {
+          this.$message.warning("请输入公司介绍", 1);
+          this.$refs.companyIntroduction.focus();
           return;
         }
-        if (this.submitData.linkName == "") {
-          alert("请输入联系人");
+        if (!this.submitData.linkName) {
+          this.$message.warning("请输入联系人", 1);
+          this.$refs.linkName.focus();
           return;
         }
-        if (this.submitData.mobile == "") {
-          alert("请输入手机号");
+        if (!this.submitData.mobile) {
+          this.$message.warning("请输入手机号", 1);
+          this.$refs.mobile.focus();
           return;
-        }
-        if (this.submitData.workPhone == "") {
-          alert("请输入办公室电话");
-          return;
-        }
-        if (this.submitData.email == "") {
-          alert("请输入企业邮箱");
-          return;
-        }
-
-        if (this.submitData.yyimage == "") {
-          alert("请上传营业执照");
-          return;
-        }
-
-        if (this.isOpenShop) {
-          this.submitData = {
-            ...this.submitData,
-            ...this.shopInfo
-          };
-          console.log(this.submitData);
-          _getData("/store/addStore", this.submitData).then(data => {
-            console.log(data);
-            this.$emit("sure", this.current);
-            _getData("/user/getUser", {}).then(data => {
-              console.log("获取用户的店铺开店信息：", data);
-              this.changeUserShopInfoState(data);
-            });
-          });
         } else {
-          console.log(this.submitData);
-          _getData("/store/updateShopCertification", this.submitData).then(
-            data => {
+          if (!/^[1][3,4,5,7,8][0-9]{9}$/.test(this.submitData.mobile)) {
+            this.$message.warning("请输入正确的手机号", 1);
+            this.$refs.mobile.focus();
+            return;
+          }
+        }
+        if (!this.submitData.workPhone) {
+          this.$message.warning("请输入办公室电话", 1);
+          this.$refs.workPhone.focus();
+          return;
+        } else {
+          if (
+            !/((\d{3})?-?\d{8}|(\d{4})?-?\{7,8})|(^[1][3,4,5,7,8][0-9]{9}$)/.test(
+              this.submitData.workPhone
+            )
+          ) {
+            this.$message.warning("请输入正确的办公室电话", 1);
+            this.$refs.workPhone.focus();
+            return;
+          }
+        }
+        if (!this.submitData.email) {
+          this.$message.warning("请输入企业邮箱", 1);
+          this.$refs.email.focus();
+          return;
+        } else {
+          if (
+            !/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/.test(
+              this.submitData.email
+            )
+          ) {
+            this.$message.warning("请输入正确的企业邮箱", 1);
+            this.$refs.email.focus();
+            return;
+          }
+        }
+        console.log(this.submitData.qqCode);
+        if (this.submitData.qqCode) {
+          if (!/^[1-9][0-9]{4,}$/.test(this.submitData.qqCode)) {
+            this.$message.warning("请输入正确的QQ号", 1);
+            this.$refs.qqCode.focus();
+            return;
+          }
+        }
+        if (!this.submitData.yyimage) {
+          this.$message.warning("请上传营业执照", 1);
+          return;
+        }
+        if (this.isOpenShop) {
+          console.log(this.shopInfo);
+          this.submitData.sid = this.shopInfo.sid;
+          _getData("/store/updateShopCertification", this.submitData)
+            .then(data => {
               console.log(data);
-            }
-          );
-          // this.addCarSuccess();
+            })
+            .then(() => {
+              if (this.isOpenShop) {
+                this.$emit("sure", 1);
+              }
+            });
+        } else {
+          this.addCarSuccess();
         }
       },
       cancel() {
@@ -324,61 +377,68 @@
         } else {
           this.submitData.zzjgimage = "";
         }
+      },
+      getProvince() {
+        _getData("/address/getAddress", {}).then(data => {
+          console.log("获取省市区：", data);
+          _.map(data, val => {
+            val.value = val.id;
+            val.label = val.name;
+            val.children = val.defaultCityData;
+            _.map(val.children, value => {
+              value.value = value.id;
+              value.label = value.name;
+              value.children = value.defaultCountyData;
+              _.map(value.children, item => {
+                item.value = item.id;
+                item.label = item.name;
+              });
+            });
+          });
+          data.shift();
+          this.options = data;
+        });
       }
     },
-    computed: {
-      ...mapState(["isLogin"])
-    },
+
     components: {
       upload,
       commonTitle,
       submitSuccessModal
     },
     mounted() {
-      _getData("/address/getAddress", {}).then(data => {
-        console.log("获取省市区：", data);
-        // this.options = data;
-        _.map(data, val => {
-          val.value = val.id;
-          val.label = val.name;
-          val.children = val.defaultCityData;
-          _.map(val.children, value => {
-            value.value = value.id;
-            value.label = value.name;
-            value.children = value.defaultCountyData;
-            _.map(value.children, item => {
-              item.value = item.id;
-              item.label = item.name;
-            });
+      console.log("用户的店铺的id值：：：", this.userShopInfo.store_id);
+      if (this.userShopInfo.store_id) {
+        _getData("/store/selectAllStore", {})
+          .then(data => {
+            console.log("获取已填写的店铺信息：", data);
+            this.submitData = {
+              sid: data.sid,
+              companyName: data.companyName,
+              address: [data.provinceId, data.cityId, data.countryId],
+              provinceId: data.provinceId,
+              cityId: data.cityId,
+              countryId: data.countryId,
+              companyIntroduction: data.companyIntroduction,
+              checking: data.checking,
+              linkName: data.linkName,
+              mobile: data.mobile,
+              workPhone: data.workPhone,
+              email: data.email,
+              fax: data.fax,
+              qqCode: data.qqCode,
+              weiXinCode: data.weiXinCode,
+              yyimage: data.yyimage,
+              swimage: data.swimage,
+              zzjgimage: data.zzjgimage
+            };
+            console.log(this.submitData);
+          })
+          .then(() => {
+            this.getProvince();
           });
-        });
-        console.log(data);
-        this.options = data;
-      });
-      if (!this.isOpenShop) {
-        _getData("/store/selectAllStore", {}).then(data => {
-          console.log("获取已填写的店铺信息：", data);
-          this.submitData.sid = data.sid;
-          this.submitData.companyName = data.companyName;
-          this.submitData.companyIntroduction = data.companyIntroduction;
-          this.submitData.checking = data.checking;
-          this.submitData.linkName = data.linkName;
-          this.submitData.mobile = data.mobile;
-          this.submitData.workPhone = data.workPhone;
-          this.submitData.email = data.email;
-          this.submitData.fax = data.fax;
-          this.submitData.qqCode = data.qqCode;
-          this.submitData.weiXinCode = data.weiXinCode;
-          this.submitData.yyimage = data.yyimage;
-          this.submitData.swimage = data.swimage;
-          this.submitData.zzjgimage = data.zzjgimage;
-          this.submitData.address = [
-            data.provinceId,
-            data.cityId,
-            data.countryId
-          ];
-          console.log(this.submitData);
-        });
+      } else {
+        this.getProvince();
       }
     }
   };

@@ -4,6 +4,7 @@
     :dataArr="dataArr"
     :openKeys="['sub1', 'sub2', 'sub3']"
     :defaultSelectedKeys="defaultSelectedKeys"
+    @click="change"
   >
     <div slot="header">
       <Header></Header>
@@ -61,10 +62,13 @@
     computed: {
       ...mapState(["isLogin", "userShopInfo"])
     },
+    methods: {
+      change() {}
+    },
     beforeRouteUpdate(to, from, next) {
-      if (to.path.indexOf("messageCenter") != -1) {
-        this.reload();
-      }
+      // if (to.path.indexOf("messageCenter") != -1) {
+      //   this.reload();
+      // }
       next();
     },
     beforeMount() {
@@ -98,13 +102,14 @@
           this.defaultSelectedKeys = ["1"];
           this.$router.replace({ path: "/merchant/shopIndex" });
         }
-      } else {
-        this.defaultSelectedKeys = ["0"];
-        this.$router.replace({
-          path: "/merchant/openShop",
-          query: { shopStatus: this.userShopInfo.audit_status }
-        });
       }
+      // else {
+      //   this.defaultSelectedKeys = ["0"];
+      //   this.$router.replace({
+      //     path: "/merchant/openShop",
+      //     query: { shopStatus: this.userShopInfo.audit_status }
+      //   });
+      // }
     },
     components: {
       Header,
@@ -129,6 +134,22 @@
               color: #fff;
               a {
                 color: #fff;
+              }
+              p.backIndex {
+                width: 163px;
+                height: 30px;
+                border-radius: 16px;
+                background-color: #fff;
+                justify-content: center;
+                align-items: center;
+                .icon {
+                  margin-right: 3px;
+                }
+                a {
+                  color: $theme-color;
+                  font-weight: 600;
+                  font-size: 14px;
+                }
               }
             }
             .right {

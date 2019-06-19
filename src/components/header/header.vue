@@ -3,8 +3,13 @@
     <div class="content">
       <div class="left">
         <p v-if="!isMerchant">欢迎来到网来商城</p>
-        <p v-else>
-          <router-link to="/" replace>返回网来商城首页</router-link>
+        <p v-else class="backIndex">
+          <router-link to="/" replace>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconfanhuishouye"></use>
+            </svg>
+            返回网来商城首页
+          </router-link>
         </p>
         <div v-if="!isLogin">
           <router-link to="/login">请登录</router-link>
@@ -164,9 +169,9 @@
       align-items: center;
       .left {
         color: #333333;
-
         display: flex;
         justify-content: flex-start;
+        align-items: center;
         p {
           display: flex;
         }

@@ -2,23 +2,10 @@
   <div class="login-modal">
     <modal :isShow="visible" :options="options">
       <div slot="content" v-if="type != 'login'">
-        <p>
-          <svg class="icon" aria-hidden="true">
-            <use
-              v-if="type != 'login'"
-              xlink:href="#iconzhanghaoanquanduigou"
-            ></use>
-            <use v-else xlink:href="#iconweidenglugantanhao"></use>
-          </svg>
-          {{ title }}
-        </p>
-        <div class="alertContent">
-          您的开店申请已经提交成功，请耐心等待7个工作日
-          如果修改，请进入首页再次编辑。
-        </div>
+        <div class="alertContent">{{ contentText }}</div>
         <div class="btn">
-          <a-button>返回首页</a-button>
-          <a-button>联系客服</a-button>
+          <a-button @click="sureSubmit">确定重新认证</a-button>
+          <a-button @click="visible = false">取消</a-button>
         </div>
       </div>
       <div slot="content" v-else>
@@ -39,7 +26,8 @@
 
 <script>
   import modal from "./modal.vue";
-
+  import { _getData } from "../../config/getData";
+  import { mapMutations } from "vuex";
   export default {
     data() {
       return {
@@ -50,7 +38,9 @@
           maskClosable: false,
           wrapClassName: "submitSuccess",
           centered: false
-        }
+        },
+        contentText:
+          "提交信息后将重新认证，您将进入认证中状态，不能进行产品的发布，订单的修改等操作，您确定要进行重新认证吗？"
       };
     },
     props: {
@@ -67,12 +57,47 @@
         type: String,
         default: "提交成功",
         required: false
+      },
+      submitData: {
+        type: Object
       }
     },
     components: {
       modal
     },
     methods: {
+      ...mapMutations(["changeUserShopInfoState"]),
+      sureSubmit() {
+        console.log(this.submitData);
+        if (this.submitData.mobile) {
+          _getData("/store/updateShopCertification", this.submitData)
+            .then(data => {
+              console.log(data);
+            })
+            .then(() => {
+              this.getUserShopInfo();
+            });
+        } else {
+          _getData("/store/insertOrUpdateStore", this.submitData)
+            .then(data => {
+              console.log(data);
+            })
+            .then(() => {
+              this.getUserShopInfo();
+            });
+        }
+      },
+      getUserShopInfo() {
+        _getData("/user/getUser", {})
+          .then(data => {
+            console.log("获取用户的店铺开店信息：", data);
+            this.changeUserShopInfoState(data);
+          })
+          .then(() => {
+            this.$message.success("提交修改成功，请耐心等待审核!");
+            this.visible = false;
+          });
+      },
       toLogin() {
         const { href } = this.$router.resolve({
           path: "/login"
