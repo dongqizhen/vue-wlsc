@@ -10,9 +10,9 @@
       <div class="middleNav">
         <div class="navBox">
           <div class="logo">
-            <a href="#">
-              <img src="../../../assets/images/white-logo.png" />
-            </a>
+            <router-link to="/">
+              <img src="../../../assets/images/white-logo.png" alt="" />
+            </router-link>
           </div>
           <Nav></Nav>
           <div class="telphone">
@@ -36,6 +36,7 @@
   import centerPage from "../../../components/common/centerPage";
   import Nav from "../../../components/common/nav";
   export default {
+    inject: ["reload"],
     data() {
       return {
         defaultSelectedKeys: ["1"],
@@ -62,6 +63,12 @@
       };
     },
     methods: {},
+    beforeRouteUpdate(to, from, next) {
+      if (to.path.indexOf("messageCenter") != -1) {
+        this.reload();
+      }
+      next();
+    },
     beforeMount() {
       switch (this.$route.path.split("/")[2]) {
         case "shopIndex":
@@ -100,7 +107,7 @@
         case "invoiceManage":
           this.defaultSelectedKeys = ["7"];
           break;
-        case "myMessage":
+        case "myCenter":
           this.defaultSelectedKeys = ["9"];
           break;
         case "changePassword":

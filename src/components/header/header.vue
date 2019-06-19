@@ -3,8 +3,13 @@
     <div class="content">
       <div class="left">
         <p v-if="!isMerchant">欢迎来到网来商城</p>
-        <p v-else>
-          <router-link to="/" replace>返回网来商城首页</router-link>
+        <p v-else class="backIndex">
+          <router-link to="/" replace>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconfanhuishouye"></use>
+            </svg>
+            返回网来商城首页
+          </router-link>
         </p>
         <div v-if="!isLogin">
           <router-link to="/login">请登录</router-link>
@@ -94,38 +99,38 @@
       ]),
       system() {
         if (this.$route.path.indexOf("merchant") != -1) {
-          this.$router.replace({
+          let { href } = this.$router.resolve({
             path: "/merchant/messageCenter",
             query: { type: "system" }
           });
+          window.open(href, "_blank");
         } else {
-          this.$router.replace({
+          let { href } = this.$router.resolve({
             path: "/userCenter/myMessage",
             query: { type: "system" }
           });
+          window.open(href, "_blank");
         }
       },
       privateMessage() {
         if (this.$route.path.indexOf("merchant") != -1) {
-          this.$router.replace({
+          let { href } = this.$router.resolve({
             path: "/merchant/messageCenter",
-            query: { type: "message" }
+            query: { type: "system" }
           });
+          window.open(href, "_blank");
         } else {
-          this.$router.replace({
+          let { href } = this.$router.resolve({
             path: "/userCenter/myMessage",
-            query: { type: "message" }
+            query: { type: "system" }
           });
+          window.open(href, "_blank");
         }
       },
       openMerchant() {
         if (this.$getLocalStorage()) {
-          _getData("/user/getUser", {}).then(data => {
-            console.log("获取用户的店铺开店信息：", data);
-            this.changeUserShopInfoState(data);
-            let { href } = this.$router.resolve({ path: "/merchant" });
-            window.open(href, "_blank");
-          });
+          let { href } = this.$router.resolve({ path: "/merchant" });
+          window.open(href, "_blank");
         } else {
           this.$router.push("/login");
         }
@@ -135,7 +140,7 @@
       ...mapState(["isLogin", "userInfo", "userShopInfo"])
     },
     mounted() {
-      console.log("用户信息", this.userInfo);
+      console.log(this.$route.path);
       if (this.$route.path.indexOf("merchant") != -1) {
         this.isMerchant = true;
       } else {
@@ -164,9 +169,9 @@
       align-items: center;
       .left {
         color: #333333;
-
         display: flex;
         justify-content: flex-start;
+        align-items: center;
         p {
           display: flex;
         }

@@ -72,7 +72,7 @@
           <div class="left-box"></div>
           <div class="right-box">
             <a-button @click="save">
-              {{ isOpenShop ? "下一步" : "保存" }}
+              {{ isOpenShop ? "下一步" : "重新认证" }}
             </a-button>
           </div>
         </div>
@@ -82,6 +82,11 @@
       :class="['modal-box', isShow ? 'active' : '']"
       @click="isShowModal"
     ></div>
+    <submit-success-modal
+      :Visible="visible"
+      :type="type"
+      :submitData="submitData"
+    ></submit-success-modal>
   </div>
 </template>
 
@@ -89,10 +94,14 @@
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import upload from "../../../../components/common/upload";
   import cascadeSelect from "../../../../components/common/casadeSelect/cascadeSelect";
+  import submitSuccessModal from "../../../../components/modal/submitSuccessModal";
   import { _getData } from "../../../../config/getData";
+  import { mapState, mapMutations } from "vuex";
   export default {
     data() {
       return {
+        visible: false,
+        type: "",
         isShow: false,
         shopTypeData: [],
         submitData: {
@@ -113,10 +122,12 @@
         type: Number
       }
     },
+    computed: {
+      ...mapState(["isLogin", "userShopInfo"])
+    },
     methods: {
+      ...mapMutations(["changeUserShopInfoState"]),
       save() {
-        console.log(this.submitData);
-        console.log(this.isOpenShop);
         if (this.submitData.shopName == "") {
           this.$message.warning("请输入店铺名称", 1);
           this.$refs.shopName.focus();
@@ -138,22 +149,35 @@
           this.$message.warning("请选择销售地区", 1);
           return;
         }
+        this.submitData = {
+          ...this.submitData,
+          current: this.current,
+          sid: this.$store.state.userShopInfo.store_id
+        };
         if (this.isOpenShop) {
-          this.submitData = { ...this.submitData, current: this.current };
-          this.$emit("getShopInfo", this.submitData);
-        } else {
-          _getData("/store/insertOrUpdateStore", {
-            shopName: this.submitData.shopName,
-            type: this.submitData.type,
-            image: this.submitData.image,
-            shopScope: this.submitData.shopScope,
-            defaultProvinceData: this.submitData.defaultProvinceData,
-            introduce: this.submitData.introduce,
-            sid: this.$store.state.userShopInfo.store_id
-          }).then(data => {
-            console.log("111", data);
+          _getData("/store/insertOrUpdateStore", this.submitData).then(data => {
+            console.log(data);
+            this.submitData.sid = data.sid;
+            _getData("/user/getUser", {})
+              .then(data => {
+                console.log("获取用户的店铺开店信息：", data);
+                this.changeUserShopInfoState(data);
+              })
+              .then(() => {
+                if (this.isOpenShop) {
+                  this.$emit("getShopInfo", this.submitData);
+                }
+              });
           });
+        } else {
+          this.addCarSuccess();
         }
+      },
+      addCarSuccess() {
+        if (!this.isLogin) {
+          this.type = "login";
+        }
+        this.visible = true;
       },
       getImgUrl(val) {
         console.log(val);
@@ -181,7 +205,8 @@
     components: {
       commonTitle,
       upload,
-      cascadeSelect
+      cascadeSelect,
+      submitSuccessModal
     },
 
     mounted() {
@@ -192,13 +217,21 @@
           val.value = val.id;
         });
         this.shopTypeData = data;
-        if (!this.isOpenShop) {
+        if (this.userShopInfo.store_id) {
           _getData("/store/selectAllStore", {}).then(data => {
             console.log("获取已填写的店铺信息：", data);
             _.each(data.defaultProvinceData, val => {
               val.id = val.provinceId;
             });
-            this.submitData = data;
+            this.submitData = {
+              shopName: data.shopName,
+              type: data.type,
+              image: data.image,
+              shopScope: data.shopScope,
+              defaultProvinceData: data.defaultProvinceData,
+              introduce: data.introduce,
+              sid: this.userShopInfo.store_id
+            };
           });
         }
       });

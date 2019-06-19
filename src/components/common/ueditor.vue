@@ -78,10 +78,10 @@
       getUEContentTxt() {
         return this.editor.getContentTxt();
       }
-    },
-    destroyed() {
-      this.editor.destroy();
     }
+    // destroyed() {
+    //   this.editor.destroy();
+    // }
   };
 </script>
 <style lang="scss" scoped></style>

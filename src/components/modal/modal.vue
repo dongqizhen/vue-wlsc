@@ -622,13 +622,16 @@
           height: 291px;
           > div {
             .alertContent {
-              width: 361px;
+              width: 420px;
               height: 44px;
               font-size: 16px;
               color: #333333;
               margin-bottom: 44px;
               text-align: center;
             }
+          }
+          .ant-btn {
+            padding: 0 10px;
           }
         }
       }

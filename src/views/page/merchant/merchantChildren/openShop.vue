@@ -61,9 +61,9 @@
               : "抱歉，您提交的资料有误，请点击“重新审核”进行认证或联系客服。"
           }}
         </div>
-        <a-button class="reset" @click="reset" v-if="certificationStatus == 3"
-          >重新审核</a-button
-        >
+        <a-button class="reset" @click="reset" v-if="certificationStatus == 3">
+          重新审核
+        </a-button>
       </div>
     </div>
   </div>
@@ -72,6 +72,7 @@
   import shopInfo from "./shopInfo";
   import shopCertification from "./shopCertification";
   import { _getData } from "../../../../config/getData";
+  import { mapMutations } from "vuex";
   export default {
     data() {
       return {
@@ -82,17 +83,22 @@
       };
     },
     methods: {
+      ...mapMutations(["changeUserShopInfoState"]),
       getShopInfo(val) {
         console.log(val);
         this.current = val.current + 1;
         this.shopInfo = val;
-        //_getData("/store/insertOrUpdateStore");
       },
       cancel(val) {
         this.current = val - 1;
       },
       sure(val) {
+        console.log(val);
         this.current = val + 1;
+        _getData("/user/getUser", {}).then(data => {
+          console.log("获取用户的店铺开店信息：", data);
+          this.changeUserShopInfoState(data);
+        });
       },
       reset() {
         this.current = 0;

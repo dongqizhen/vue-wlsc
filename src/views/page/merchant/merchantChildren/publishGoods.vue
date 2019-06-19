@@ -129,6 +129,7 @@
               class="priceMax"
               v-model="submitData.maxPrice"
             />
+            <div class="alertText">不填写指导价默认为询价</div>
             <!-- <a-checkbox @change="onChange" :checked="isEnquiry">
               询价
             </a-checkbox> -->
@@ -311,8 +312,9 @@
           goodsNumber: "", //库存
           origin: "", //产地
           goodsDesc: "",
+          goodsDescText: "",
           isOnSale: "1",
-          isEnquiry: 0,
+          isEnquiry: 1,
           listPicUrl: [] //商品图片
         }
       };
@@ -323,64 +325,110 @@
         // console.log(this.$refs.goodDesc.getUEContent());
         // console.log(this.$refs.goodDesc.getUEContentTxt());
         // console.log(this.specificationParams);
-        if (this.submitData.name == "") {
+
+        if (this.infoJudge() !== false) {
+          if (this.submitData.goodsId) {
+            _getData("/goods/updateGoods", this.submitData).then(data => {
+              this.$message.success("产品编辑成功", 1);
+              this.$router.replace({ path: "/merchant/productManage" });
+            });
+          } else {
+            _getData("/goods/addGoods", this.submitData).then(data => {
+              this.$message.success("产品发布成功", 1);
+            });
+          }
+        }
+      },
+      save() {
+        if (this.infoJudge() !== false) {
+          this.submitData.isOnSale = 0;
+          if (this.submitData.goodsId) {
+            _getData("/goods/updateGoods", this.submitData).then(data => {
+              this.$message.success("产品编辑成功", 1);
+              this.$router.replace({ path: "/merchant/productManage" });
+            });
+          } else {
+            _getData("/goods/addGoods", this.submitData).then(data => {
+              this.$message.success("产品发布成功", 1);
+            });
+          }
+        }
+      },
+      reset() {},
+      infoJudge() {
+        if (!this.submitData.name) {
           this.$message.warning("请输入商品名称", 1);
           this.$refs.name.focus();
-          return;
+          return false;
         }
         if (this.submitData.bigCategoryId == "") {
           this.$message.warning("请选择大类", 1);
-          return;
+          return false;
         }
         if (this.submitData.categoryId == "") {
           this.$message.warning("请选择小类", 1);
-          return;
+          return false;
         }
         if (this.submitData.attribute_category == "") {
           this.$message.warning("请选择类型", 1);
-          return;
+          return false;
         }
         if (this.submitData.brandId == "") {
           this.$message.warning("请选择品牌", 1);
-          return;
+          return false;
         }
         if (this.submitData.modelId == "") {
           this.$message.warning("请选择型号", 1);
-          return;
+          return false;
         }
-        if (!this.submitData.minPrice) {
-          if (!/^[1-9]\d*$/.test(this.submitData.minPrice)) {
+        if (this.submitData.minPrice) {
+          if (
+            !/^[1-9]\d*\.?\d*|0\.?\d*[1-9]\d*$/.test(this.submitData.minPrice)
+          ) {
             this.$message.warning("指导价只能为数字", 1);
             this.$refs.min.focus();
-            return;
+            return false;
           }
         }
-        if (!this.submitData.maxPrice) {
-          if (!/^[1-9]\d*$/.test(this.submitData.minPrice)) {
+        if (this.submitData.maxPrice) {
+          if (
+            !/^[1-9]\d*\.?\d*|0\.?\d*[1-9]\d*$/.test(this.submitData.maxPrice)
+          ) {
             this.$message.warning("指导价只能为数字", 1);
             this.$refs.max.focus();
-            return;
+            return false;
+          }
+        }
+        if (this.submitData.minPrice && this.submitData.maxPrice) {
+          if (
+            Number(this.submitData.minPrice) > Number(this.submitData.maxPrice)
+          ) {
+            this.$message.warning("指导价最小值不能高于最大值", 1);
+            this.$refs.max.focus();
+            return false;
           }
         }
         if (this.isSparePart) {
-          if (this.submitData.sparePart == "") {
+          if (!this.submitData.sparePart) {
             this.$message.warning("请输入备件号", 1);
             this.$refs.sparePart.focus();
-            return;
+            return false;
           }
         }
-
-        if (!this.submitData.goodsNumber) {
+        if (this.submitData.goodsNumber) {
           if (!/^[1-9]\d*$/.test(this.submitData.goodsNumber)) {
             this.$message.warning("库存数量只能为数字", 1);
             this.$refs.goodsNumber.focus();
-            return;
+            return false;
           }
         }
+        console.log(this.$refs.goodDesc.getUEContent());
+        console.log(this.$refs.goodDesc.getUEContentTxt());
         this.submitData.goodsDesc = this.$refs.goodDesc.getUEContent();
-        if (this.submitData.goodsDesc == "") {
+        this.submitData.goodsDescText = this.$refs.goodDesc.getUEContentTxt();
+        if (!this.submitData.goodsDesc) {
           this.$message.warning("请输入商品描述", 1);
-          return;
+          return false;
         }
         if (this.uploadList.length > 0) {
           this.submitData.listPicUrl = [];
@@ -391,20 +439,7 @@
           this.submitData.listPicUrl = [];
         }
         this.submitData.specificationInfo = this.specificationParams;
-        if (this.$route.query.id) {
-          _getData("/goods/updateGoods", this.submitData).then(data => {
-            this.$message.success("产品编辑成功", 1);
-            this.$router.replace({ path: "/merchant/productManage" });
-          });
-        } else {
-          _getData("/goods/addGoods", this.submitData).then(data => {
-            this.$message.success("产品发布成功", 1);
-            return;
-          });
-        }
       },
-      save() {},
-      reset() {},
       editParam(id) {
         _.map(this.$refs.ipt, (o, index) => {
           if (o.$attrs.iptId == id) {
@@ -672,6 +707,10 @@
         }
         .bigType {
           margin-right: 10px;
+        }
+        .alertText {
+          margin-left: 20px;
+          color: $theme-color;
         }
       }
     }

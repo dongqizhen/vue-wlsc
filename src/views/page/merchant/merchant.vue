@@ -4,6 +4,7 @@
     :dataArr="dataArr"
     :openKeys="['sub1', 'sub2', 'sub3']"
     :defaultSelectedKeys="defaultSelectedKeys"
+    @click="change"
   >
     <div slot="header">
       <Header></Header>
@@ -16,7 +17,6 @@
   import { mapState, mapMutations } from "vuex";
   import { _getData } from "../../../config/getData";
   export default {
-    inject: ["reload"],
     data() {
       return {
         defaultSelectedKeys: ["0"],
@@ -58,33 +58,21 @@
         ]
       };
     },
+    inject: ["reload"],
     computed: {
       ...mapState(["isLogin", "userShopInfo"])
     },
-    beforeRouteEnter(to, from, next) {
-      next();
+    methods: {
+      change() {}
     },
     beforeRouteUpdate(to, from, next) {
-      // console.log("走：：：：", from);
-      // if (this.userShopInfo.audit_status != 2) {
-      //   this.defaultSelectedKeys = ["0"];
-      //   this.$router.replace({
-      //     path: "/merchant/openShop",
-      //     query: {
-      //       shopStatus: this.userShopInfo.audit_status
-      //         ? this.userShopInfo.audit_status
-      //         : 0
-      //     }
-      //   });
+      // if (to.path.indexOf("messageCenter") != -1) {
+      //   this.reload();
       // }
-      if (to.path.indexOf("messageCenter") != -1) {
-        this.reload();
-      }
       next();
     },
     beforeMount() {
       console.log(111111);
-      console.log(this.userShopInfo);
       if (this.userShopInfo.audit_status == 2) {
         if (this.$route.path.indexOf("shopInfo") != -1) {
           this.defaultSelectedKeys = ["2"];
@@ -114,17 +102,14 @@
           this.defaultSelectedKeys = ["1"];
           this.$router.replace({ path: "/merchant/shopIndex" });
         }
-      } else {
-        this.defaultSelectedKeys = ["0"];
-        this.$router.replace({
-          path: "/merchant/openShop",
-          query: {
-            shopStatus: this.userShopInfo.audit_status
-              ? this.userShopInfo.audit_status
-              : 0
-          }
-        });
       }
+      // else {
+      //   this.defaultSelectedKeys = ["0"];
+      //   this.$router.replace({
+      //     path: "/merchant/openShop",
+      //     query: { shopStatus: this.userShopInfo.audit_status }
+      //   });
+      // }
     },
     components: {
       Header,
@@ -149,6 +134,22 @@
               color: #fff;
               a {
                 color: #fff;
+              }
+              p.backIndex {
+                width: 163px;
+                height: 30px;
+                border-radius: 16px;
+                background-color: #fff;
+                justify-content: center;
+                align-items: center;
+                .icon {
+                  margin-right: 3px;
+                }
+                a {
+                  color: $theme-color;
+                  font-weight: 600;
+                  font-size: 14px;
+                }
               }
             }
             .right {
