@@ -61,14 +61,9 @@
                     :key="item.id"
                   >
                     <a target="_blank">
-                      <div
-                        class="img_box"
-                        v-lazy-container="{
-                          selector: 'img'
-                        }"
-                      >
+                      <div class="img_box">
                         <img
-                          :data-src="item.list_pic_url || item.app_list_pic_url"
+                          :src="item.list_pic_url || item.app_list_pic_url"
                           alt=""
                         />
                       </div>

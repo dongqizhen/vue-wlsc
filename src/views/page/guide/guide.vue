@@ -13,6 +13,7 @@
 <script>
   import Header from "../../../components/header/header";
   import centerPage from "../../../components/common/centerPage";
+  import { _getData } from "../../../config/getData";
   export default {
     data() {
       return {
@@ -112,6 +113,12 @@
           }
         ]
       };
+    },
+    created() {
+      _getData("topic/queryTopicList", {}).then(data => {
+        console.log("底部", data);
+        this.dataArr = data;
+      });
     },
     beforeMount() {
       console.log(this.$route);
