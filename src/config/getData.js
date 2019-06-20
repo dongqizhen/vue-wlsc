@@ -13,10 +13,16 @@ export async function _getData(url = '', data = {}, config = {}) {
         ...data
     }).then(data => {
         console.log(data)
-        if (data.data.code == 0) {
-            return data.data.result
-        } else if (data.data.errno && data.data.errno == 401) {
-            console.log(router)
+        if (data.code == 0 || data.code == 200) {
+            // console.log(router)
+            if (data.code == 200) {
+                return data
+            } else {
+                return data.result
+            }
+
+        } else if (data.errno && data.errno == 401) {
+            // console.log(router)
             const v = router.app.$children[0];
             let localStorage = JSON.parse(window.localStorage["vuex-along"])["vuex-along"];
 
@@ -25,6 +31,12 @@ export async function _getData(url = '', data = {}, config = {}) {
             }
 
         } else {
+            //console.log(router)
+            if (!(data.code == 1116 || data.code == 1106)) {
+                const v = router.app.$children[0];
+                v.$message.error(data.msg)
+            }
+
             return data
         }
 

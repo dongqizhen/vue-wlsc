@@ -184,7 +184,7 @@
             }
           }
         ).then(data => {
-          this.commetArr = _.drop(data.data.result.replyList, 3);
+          this.commetArr = _.drop(data.result.replyList, 3);
         });
       },
       toLogin() {

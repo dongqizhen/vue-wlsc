@@ -112,7 +112,7 @@
           }
         ).then(data => {
           console.log(data);
-          this.userAddressList = data.data.result.UserAddressList;
+          this.userAddressList = data.result.UserAddressList;
         });
       }
     },

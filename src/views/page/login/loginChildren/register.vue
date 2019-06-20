@@ -223,9 +223,9 @@
               this.iconLoading = false;
             }, 300);
             console.log(data);
-            if (data.data.status.code == 1116) {
+            if (data.code == 1116) {
               this.seccode_err = true;
-            } else if (data.data.status.code == 200) {
+            } else if (data.code == 200) {
               this.$message.success("注册成功", 1);
               this.$router.go(-1);
             }

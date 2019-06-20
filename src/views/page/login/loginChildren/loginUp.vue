@@ -239,10 +239,10 @@
           setTimeout(() => {
             this.iconLoading = false;
           }, 300);
-          if (data.data.status.code == 200) {
+          if (data.code == 200) {
             //成功
             this.changeLoginState(true);
-            this.changeUserInfoState(data.data.result);
+            this.changeUserInfoState(data.result);
             _getData("/user/getUser", {})
               .then(data => {
                 console.log("获取用户的店铺开店信息：", data);
@@ -251,7 +251,7 @@
               .then(() => {
                 this.$router.back();
               });
-          } else if (data.data.status.code == 1116) {
+          } else if (data.code == 1116) {
             this.seccode_err = true;
           }
         });
@@ -282,14 +282,14 @@
             this.iconLoading2 = false;
           }, 300);
 
-          if (data.data.status.code == 1106) {
+          if (data.code == 1106) {
             //密码错误
             this.password_err = true;
             return;
-          } else if (data.data.status.code == 200) {
+          } else if (data.code == 200) {
             //成功
             this.changeLoginState(true);
-            this.changeUserInfoState(data.data.result);
+            this.changeUserInfoState(data.result);
             _getData("/user/getUser", {})
               .then(data => {
                 console.log("获取用户的店铺开店信息：", data);
@@ -298,10 +298,10 @@
               .then(() => {
                 this.$router.back();
               });
-          } else if (data.data.status.code == 1102) {
+          } else if (data.code == 1102) {
             this.phone2isRegister = false;
           } else {
-            this.$message.error(data.data.status.message);
+            // this.$message.error(data.data.status.message);
           }
         });
       },

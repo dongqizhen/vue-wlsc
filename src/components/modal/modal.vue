@@ -94,6 +94,7 @@
     border: 5px solid rgba(151, 151, 151, 0.16);
     padding-bottom: 0;
   }
+
   .ant-modal-wrap {
     .ant-modal-content {
       .ant-modal-close {

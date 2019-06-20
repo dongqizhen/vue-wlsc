@@ -165,7 +165,7 @@
           }
         )
           .then(data => {
-            this.shopList = data.data.result.articlelist;
+            this.shopList = data.result.articlelist;
           })
           .then(() => {
             this.$nextTick().then(() => {
@@ -194,7 +194,7 @@
           }
         )
           .then(data => {
-            this.shopList = data.data.result.videolist;
+            this.shopList = data.result.videolist;
           })
           .then(() => {
             this.$nextTick().then(() => {
@@ -227,7 +227,7 @@
           }
         )
           .then(data => {
-            this.shopList = data.data.result.maintenancelist;
+            this.shopList = data.result.maintenancelist;
           })
           .then(() => {
             this.$nextTick().then(() => {

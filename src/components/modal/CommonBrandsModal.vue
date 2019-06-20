@@ -23,9 +23,14 @@
                 :key="`key-${i}`"
                 @click="delHandleClick(item)"
               >
-                <div class="img_box">
+                <div
+                  class="img_box"
+                  v-lazy-container="{
+                    selector: 'img'
+                  }"
+                >
                   <img
-                    :src="item.list_pic_url || item.app_list_pic_url"
+                    :data-src="item.list_pic_url || item.app_list_pic_url"
                     alt=""
                   />
                 </div>
@@ -299,5 +304,18 @@
   /deep/ .no-data {
     height: 260px;
     background: #f5f5f5;
+  }
+  /deep/ img[lazy="loading"] {
+    /*your style here*/
+    background: url("../../assets/images/loading.gif") no-repeat center;
+    background-size: 100px;
+    background-color: #f7f9fa;
+  }
+  /deep/ img[lazy="error"] {
+    /*your style here*/
+    background: url("../../assets/images/loading.gif") no-repeat center;
+    background-size: 100px;
+    display: none;
+    // background-color: #f7f9fa;
   }
 </style>

@@ -48,9 +48,9 @@ const timer = {
                     "type": sectype
                 }
             }).then(data => {
-                if (data.data.status.code == 1101) {
+                if (data.code == 1101) {
                     this.phone1isRegister = true
-                } else if (data.data.status.code == 1102) {
+                } else if (data.code == 1102) {
                     this.phone1isRegister = true
                 }
             }).then(() => {

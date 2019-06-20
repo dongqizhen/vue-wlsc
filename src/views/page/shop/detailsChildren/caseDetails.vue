@@ -111,7 +111,7 @@
             }
           }
         ).then(data => {
-          this.commentData = data.data.result;
+          this.commentData = data.result;
         });
       }
     },
@@ -128,7 +128,7 @@
         }
       )
         .then(data => {
-          this.detail = data.data.result;
+          this.detail = data.result;
         })
         .then(() => {
           this.getCommentList().then(() => {
