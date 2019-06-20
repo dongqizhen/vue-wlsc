@@ -8,7 +8,7 @@
               <h2>{{ item.title }}</h2>
               <router-link
                 tag="span"
-                to="/footer/guide/aboutUs"
+                :to="`/footer/guide/${v.subtitle}`"
                 v-for="v in item.topicVoList"
                 :key="v.id"
               >
