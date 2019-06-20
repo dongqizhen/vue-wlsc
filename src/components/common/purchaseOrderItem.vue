@@ -105,12 +105,14 @@
       addMyStore(id) {
         _getData("/collect/add", { typeId: 0, valueId: id }).then(data => {
           console.log("收藏接口：", data);
-          _.each(this.data.list, o => {
-            if (o.goods_id == id) {
-              o.isCollection = 1;
-            }
-          });
-          this.$message.success("商品收藏成功", 1);
+          if (data.code == 0) {
+            _.each(this.data.list, o => {
+              if (o.goods_id == id) {
+                o.isCollection = 1;
+              }
+            });
+            this.$message.success("商品收藏成功", 1);
+          }
         });
       },
       onChange(id) {

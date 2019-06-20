@@ -141,29 +141,29 @@
           {
             id: 1,
             name: "新增访问店铺数",
-            amount: 238,
-            rate: "18.4%",
+            amount: 0,
+            rate: "0%",
             increase: true
           },
           {
             id: 2,
             name: "新增收藏店铺数",
-            amount: 29,
-            rate: "36.1%",
+            amount: 0,
+            rate: "0%",
             increase: true
           },
           {
             id: 3,
             name: "新增询价单数",
-            amount: 1,
-            rate: "50.7%",
+            amount: 0,
+            rate: "0%",
             increase: false
           },
           {
             id: 4,
             name: "新增订单数",
-            amount: 3,
-            rate: "11.2%",
+            amount: 0,
+            rate: "0%",
             increase: true
           }
         ],
@@ -481,6 +481,15 @@
       getShopCountInfo() {
         _getData("/store/sjHomeStore", {}).then(data => {
           console.log("头部的统计信息:::", data);
+          this.amountData[0].amount = data.recordsNCount;
+          this.amountData[0].rate = data.recordsGrowth;
+          this.amountData[0].increase = data.recordsGrowth;
+          this.amountData[1].amount = data.collectNCount;
+          this.amountData[1].rate = data.collectGrowth;
+          this.amountData[2].amount = data.enquiryNCount;
+          this.amountData[2].rate = data.enquiryGrowth;
+          this.amountData[3].amount = data.orderCount;
+          this.amountData[3].rate = data.orderGrowth;
         });
       }
     },

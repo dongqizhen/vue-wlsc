@@ -62,85 +62,15 @@
         ]
       };
     },
-    methods: {},
-    beforeRouteUpdate(to, from, next) {
-      // if (to.path.indexOf("messageCenter") != -1) {
-      //   this.reload();
-      // }
-      next();
-    },
     beforeMount() {
-      switch (this.$route.path.split("/")[2]) {
-        case "shopIndex":
-          this.defaultSelectedKeys = ["1"];
-          break;
-        case "myInquiry":
-          this.defaultSelectedKeys = ["2"];
-          break;
-        case "inquiryOrderDetail":
-          this.defaultSelectedKeys = ["2"];
-          break;
-        case "submitOrder":
-          this.defaultSelectedKeys = ["2"];
-          break;
-        case "myOrder":
-          this.defaultSelectedKeys = ["3"];
-          break;
-        case "orderDetail":
-          this.defaultSelectedKeys = ["3"];
-          break;
-        case "myQuote":
-          this.defaultSelectedKeys = ["4"];
-          break;
-        case "lookQuote":
-          this.defaultSelectedKeys = ["4"];
-          break;
-        case "editQuote":
-          this.defaultSelectedKeys = ["4"];
-          break;
-        case "myStore":
-          this.defaultSelectedKeys = ["5"];
-          break;
-        case "addressManage":
-          this.defaultSelectedKeys = ["6"];
-          break;
-        case "invoiceManage":
-          this.defaultSelectedKeys = ["7"];
-          break;
-        case "myCenter":
-          this.defaultSelectedKeys = ["8"];
-          break;
-        case "myMessage":
-          this.defaultSelectedKeys = ["9"];
-          break;
-        case "messageDetail":
-          this.defaultSelectedKeys = ["9"];
-          break;
-        case "changePassword":
-          this.defaultSelectedKeys = ["10"];
-          break;
-        case "changeEmail":
-          this.defaultSelectedKeys = ["10"];
-          break;
-        case "changePhone":
-          this.defaultSelectedKeys = ["10"];
-          break;
-        case "userSecurity":
-          this.defaultSelectedKeys = ["10"];
-          break;
-        default:
-          this.defaultSelectedKeys = ["1"];
-          break;
-      }
+      this.defaultSelectedKeys = [`${this.$route.query.id}`];
     },
-
     mounted() {
       if (window.history && window.history.pushState) {
         history.pushState(null, null, document.URL);
         window.addEventListener("popstate", this.goBack, false);
       }
     },
-
     destroyed() {
       window.removeEventListener("popstate", this.goBack, false);
     },

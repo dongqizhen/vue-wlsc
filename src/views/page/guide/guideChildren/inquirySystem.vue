@@ -27,6 +27,9 @@
     data() {
       return {};
     },
+created(){
+console.log(this)
+},
     components: {
       guideRight
     }
