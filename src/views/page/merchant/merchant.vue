@@ -102,14 +102,13 @@
           this.defaultSelectedKeys = ["1"];
           this.$router.replace({ path: "/merchant/shopIndex" });
         }
+      } else {
+        this.defaultSelectedKeys = ["0"];
+        this.$router.replace({
+          path: "/merchant/openShop",
+          query: { shopStatus: this.userShopInfo.audit_status }
+        });
       }
-      // else {
-      //   this.defaultSelectedKeys = ["0"];
-      //   this.$router.replace({
-      //     path: "/merchant/openShop",
-      //     query: { shopStatus: this.userShopInfo.audit_status }
-      //   });
-      // }
     },
     components: {
       Header,

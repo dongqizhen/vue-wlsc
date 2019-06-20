@@ -1,5 +1,5 @@
 <template>
-  <div class="messageCenter">
+  <div class="inquiryDetail">
     <common-title title="询价单"></common-title>
     <div class="listContainer">
       <order-title
@@ -306,7 +306,7 @@
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
   @import "../../../../assets/scss/_input";
-  .messageCenter {
+  .inquiryDetail {
     min-height: 693px;
     background-color: #fff;
     padding: 4px 20px 20px;

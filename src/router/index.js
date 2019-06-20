@@ -427,7 +427,7 @@ const router = new Router({
                 },
                 {
                     path: "myMessage",
-                    name: "个人信息",
+                    name: "我的消息中心",
                     meta: {
                         role: 'Administrator'
                     },
@@ -436,7 +436,7 @@ const router = new Router({
                 },
                 {
                     path: "myCenter",
-                    name: "个人信息中心",
+                    name: "个人信息",
                     meta: {
                         role: 'Administrator'
                     },

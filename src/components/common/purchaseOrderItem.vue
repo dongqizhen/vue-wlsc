@@ -7,24 +7,30 @@
     </div>
     <div class="productList">
       <ul>
-        <li v-for="item in data.list" :key="item.id">
+        <li
+          v-for="item in data.list"
+          :key="item.id"
+          @click="turnToProductDetail(item.goods_id)"
+        >
           <span>
-            <a-checkbox
-              @change="onChange(item.goods_id)"
-              :checked="checkedChange(item.goods_id)"
-            ></a-checkbox>
+            <label @click.stop="stopChange">
+              <a-checkbox
+                @change="onChange(item.goods_id)"
+                :checked="checkedChange(item.goods_id)"
+              ></a-checkbox>
+            </label>
           </span>
           <span>
             <img :src="JSON.parse(item.list_pic_url)[0]" />
           </span>
           <span>{{ item.goods_name }}</span>
           <span>{{ item.brand_name }}/{{ item.model_name }}</span>
-          <span>¥{{ item.retail_price }}</span>
+          <span>{{ item.show_price }}</span>
           <span>
             <van-stepper v-model="item.number" :max="item.goods_number" />
             <i class="stockNumber">库存{{ item.goods_number }}件</i>
           </span>
-          <span>¥{{ (item.retail_price * item.number).toFixed(2) }}</span>
+          <!-- <span>{{ (item.show_price * item.number).toFixed(2) }}</span> -->
           <span>
             <a-textarea
               placeholder="请输入备注"
@@ -83,6 +89,13 @@
       }
     },
     methods: {
+      turnToProductDetail(id) {
+        let { href } = this.$router.resolve({
+          path: `/details/productDetails/${id}`
+        });
+        window.open(href, "_blank");
+      },
+
       deleteProduct(id) {
         _getData("/cart/delete", { goodIds: id }).then(data => {
           // console.log(data);
@@ -143,7 +156,8 @@
           storeId: this.data.sid,
           goodsList: this.checkedList
         });
-      }
+      },
+      stopChange() {}
     }
   };
 </script>
@@ -203,7 +217,7 @@
               margin-right: 30px;
             }
             &:nth-child(5) {
-              width: 45px;
+              width: 100px;
               margin-right: 30px;
             }
             &:nth-child(6) {
@@ -239,13 +253,7 @@
               }
             }
             &:nth-child(7) {
-              width: 65px;
-              overflow: hidden;
-              white-space: wrap;
-              margin-right: 30px;
-            }
-            &:nth-child(8) {
-              width: 116px;
+              width: 170px;
               margin-right: 30px;
               .ant-input {
                 font-size: 12px;
