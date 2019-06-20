@@ -1,10 +1,16 @@
 <template>
-  <div class="inquiryProductItem" :class="addClass(itemData.id)">
+  <div
+    class="inquiryProductItem"
+    :class="addClass(itemData.id)"
+    @click="turnToProductDetail(itemData.goodsId)"
+  >
     <span>
-      <a-checkbox
-        @change="onChange(itemData.id)"
-        :checked="checkedChange(itemData.id)"
-      ></a-checkbox>
+      <label @click.stop="stopChange">
+        <a-checkbox
+          @change="onChange(itemData.id)"
+          :checked="checkedChange(itemData.id)"
+        ></a-checkbox
+      ></label>
     </span>
     <span>
       <img :src="itemData.goodsImage" />
@@ -83,9 +89,16 @@
     },
     methods: {
       moment,
+
       onDateChange(date, dataString) {
         console.log(date, dataString);
         this.itemData.arrivalTime = dataString;
+      },
+      turnToProductDetail(id) {
+        let { href } = this.$router.resolve({
+          path: `/details/productDetails/${id}`
+        });
+        window.open(href, "_blank");
       },
       onChange(id) {
         if (_.indexOf(this.list, id) == -1) {
@@ -111,7 +124,8 @@
             return "active";
           }
         }
-      }
+      },
+      stopChange() {}
     }
   };
 </script>
@@ -184,6 +198,8 @@
       }
       &:nth-child(8) {
         width: 98px;
+        word-break: break-word;
+        overflow: hidden;
       }
       &:nth-child(9) {
         width: 135px;

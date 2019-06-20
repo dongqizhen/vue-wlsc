@@ -263,7 +263,7 @@
               width: 80px;
             }
             &:nth-child(6) {
-              width: 170px;
+              width: 160px;
               margin-right: 30px;
             }
           }

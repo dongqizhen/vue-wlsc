@@ -77,11 +77,14 @@
       },
       getUEContentTxt() {
         return this.editor.getContentTxt();
+      },
+      setUEContent(html) {
+        return this.editor.setContent(html);
       }
+    },
+    destroyed() {
+      this.editor.destroy();
     }
-    // destroyed() {
-    //   this.editor.destroy();
-    // }
   };
 </script>
 <style lang="scss" scoped></style>

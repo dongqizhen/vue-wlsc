@@ -265,8 +265,8 @@
   import paramItem from "../../../../components/common/productParams/paramItem";
   import newParam from "../../../../components/common/productParams/newParam";
   import ueditor from "../../../../components/common/ueditor";
-  import { _getData } from "../../../../config/getData";
-  import { mapState } from "vuex";
+  import { _getData, _getDataAll } from "../../../../config/getData";
+  import { mapState, mapMutations } from "vuex";
   export default {
     data() {
       return {
@@ -320,41 +320,71 @@
       };
     },
     methods: {
+      ...mapMutations(["changeUserShopInfoState"]),
       release() {
-        // console.log(this.$refs.goodDesc);
-        // console.log(this.$refs.goodDesc.getUEContent());
-        // console.log(this.$refs.goodDesc.getUEContentTxt());
-        // console.log(this.specificationParams);
-
-        if (this.infoJudge() !== false) {
-          if (this.submitData.goodsId) {
-            _getData("/goods/updateGoods", this.submitData).then(data => {
-              this.$message.success("产品编辑成功", 1);
-              this.$router.replace({ path: "/merchant/productManage" });
-            });
+        _getData("/user/getUser", {}).then(data => {
+          console.log("获取用户的店铺开店信息：", data);
+          this.changeUserShopInfoState(data);
+          if (data.store_id && data.audit_status == 2) {
+            if (this.infoJudge() !== false) {
+              if (this.submitData.goodsId) {
+                _getData("/goods/updateGoods", this.submitData).then(data => {
+                  this.$message.success("产品编辑成功", 1);
+                  this.$router.replace({ path: "/merchant/productManage" });
+                });
+              } else {
+                _getData("/goods/addGoods", this.submitData).then(data => {
+                  this.$message.success("产品发布成功", 1);
+                });
+              }
+            }
           } else {
-            _getData("/goods/addGoods", this.submitData).then(data => {
-              this.$message.success("产品发布成功", 1);
-            });
+            this.$message.warning("您的店铺异常，暂不能上传，请联系客服！", 1);
+            return;
           }
-        }
+        });
       },
       save() {
         if (this.infoJudge() !== false) {
           this.submitData.isOnSale = 0;
           if (this.submitData.goodsId) {
             _getData("/goods/updateGoods", this.submitData).then(data => {
-              this.$message.success("产品编辑成功", 1);
-              this.$router.replace({ path: "/merchant/productManage" });
+              this.$message.success("产品保存成功", 1);
             });
           } else {
             _getData("/goods/addGoods", this.submitData).then(data => {
-              this.$message.success("产品发布成功", 1);
+              this.$message.success("产品保存成功", 1);
             });
           }
         }
       },
-      reset() {},
+      reset() {
+        this.submitData = {
+          name: "",
+          goodsSn: "",
+          bigCategoryId: "", //大类
+          categoryId: "", //小类
+          attribute_category: "", //产品类型
+          brandId: "",
+          modelId: "",
+          minPrice: "",
+          maxPrice: "",
+          sparePart: "", //备件号
+          goodsNumber: "", //库存
+          origin: "", //产地
+          goodsDesc: "",
+          goodsDescText: "",
+          isOnSale: "1",
+          isEnquiry: 1,
+          listPicUrl: [] //商品图片
+        };
+        this.specificationParams = [];
+        this.uploadList = [];
+        this.current = -1;
+        this.tempUploadList = [];
+        this.isSparePart = 0;
+        this.$refs.goodDesc.setUEContent("");
+      },
       infoJudge() {
         if (!this.submitData.name) {
           this.$message.warning("请输入商品名称", 1);
@@ -422,8 +452,7 @@
             return false;
           }
         }
-        console.log(this.$refs.goodDesc.getUEContent());
-        console.log(this.$refs.goodDesc.getUEContentTxt());
+
         this.submitData.goodsDesc = this.$refs.goodDesc.getUEContent();
         this.submitData.goodsDescText = this.$refs.goodDesc.getUEContentTxt();
         if (!this.submitData.goodsDesc) {

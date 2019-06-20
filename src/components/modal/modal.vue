@@ -694,7 +694,19 @@
                   color: #fff;
                   font-size: 12px;
                 }
+                &:last-child {
+                  &:hover {
+                    border-color: $theme-color;
+                    color: $theme-color;
+                  }
+                }
               }
+            }
+          }
+          .emailAddress {
+            padding-top: 20px;
+            .common {
+              margin-bottom: 40px;
             }
           }
         }
