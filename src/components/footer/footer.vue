@@ -4,12 +4,17 @@
       <div class="link">
         <div class="left">
           <ul>
-            <li>
-              <h2>入门指南</h2>
-              <router-link tag="span" to="/footer/guide/aboutUs">
-                <a target="_blank">关于我们</a>
+            <li v-for="item in footerList" :key="item.id">
+              <h2>{{ item.title }}</h2>
+              <router-link
+                tag="span"
+                to="/footer/guide/aboutUs"
+                v-for="v in item.topicVoList"
+                :key="v.id"
+              >
+                <a target="_blank">{{ v.title }}</a>
               </router-link>
-              <router-link tag="span" to="/footer/guide/howToRegister">
+              <!-- <router-link tag="span" to="/footer/guide/howToRegister">
                 <a target="_blank">如何注册</a>
               </router-link>
               <router-link tag="span" to="/footer/guide/sellerEntry">
@@ -17,9 +22,9 @@
               </router-link>
               <router-link tag="span" to="/footer/guide/buyerEntry">
                 <a target="_blank">买家入门</a>
-              </router-link>
+              </router-link> -->
             </li>
-            <li>
+            <!-- <li>
               <h2>采购专家</h2>
               <router-link tag="span" to="/footer/guide/inquirySystem">
                 <a target="_blank">询价系统</a>
@@ -63,7 +68,7 @@
               <router-link tag="span" to="/footer/guide/shopRules">
                 <a target="_blank">网来商城规则</a>
               </router-link>
-            </li>
+            </li> -->
           </ul>
         </div>
         <div class="right">
@@ -85,9 +90,18 @@
 </template>
 
 <script>
+  import { _getData } from "../../config/getData";
   export default {
     data() {
-      return {};
+      return {
+        footerList: ""
+      };
+    },
+    mounted() {
+      _getData("topic/queryTopicList", {}).then(data => {
+        console.log("底部", data);
+        this.footerList = data;
+      });
     }
   };
 </script>

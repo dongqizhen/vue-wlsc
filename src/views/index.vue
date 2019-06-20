@@ -212,7 +212,7 @@
         }
       }).then(data => {
         console.log("1111", data);
-        this.articleList = data.data.result.articlelist;
+        this.articleList = data.result.articlelist;
       });
       //案例
       _getData(
@@ -228,7 +228,7 @@
         }
       ).then(data => {
         console.log("222", data);
-        this.maintenanceList = data.data.result.maintenancelist;
+        this.maintenanceList = data.result.maintenancelist;
       });
       //视频
       _getData(`${this.$API_URL.HYGPROURL}/server_pro/video!request.action`, {
@@ -241,7 +241,7 @@
         params: {}
       }).then(data => {
         console.log("333", data);
-        this.videoList = data.data.result.videolist;
+        this.videoList = data.result.videolist;
       });
     },
     components: {

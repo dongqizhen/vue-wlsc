@@ -357,8 +357,8 @@
             }
           ).then(data => {
             console.log(data);
-            this.submitData = data.data.result;
-            this.selectMainArea = data.data.result.userLocation;
+            this.submitData = data.result;
+            this.selectMainArea = data.result.userLocation;
             this.submitData.id = newVal;
             this.isSpace = false;
           });

@@ -180,9 +180,9 @@
           }
         ).then(data => {
           console.log(data);
-          this.userAddressList = data.data.result.UserAddressList;
+          this.userAddressList = data.result.UserAddressList;
           let ids = [];
-          _.map(data.data.result.UserAddressList, val => {
+          _.map(data.result.UserAddressList, val => {
             if (current == -1 || !current) {
               if (val.status == 1) {
                 this.current = val.id;

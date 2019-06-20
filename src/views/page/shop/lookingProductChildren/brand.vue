@@ -202,7 +202,7 @@
           }
         )
           .then(data => {
-            this.arr = data.data.result.articlelist;
+            this.arr = data.result.articlelist;
           })
           .then(() => {
             this.$nextTick().then(() => {
@@ -231,7 +231,7 @@
           }
         )
           .then(data => {
-            this.arr = data.data.result.videolist;
+            this.arr = data.result.videolist;
           })
           .then(() => {
             this.$nextTick().then(() => {
@@ -261,7 +261,7 @@
           }
         )
           .then(data => {
-            this.arr = data.data.result.maintenancelist;
+            this.arr = data.result.maintenancelist;
           })
           .then(() => {
             this.$nextTick().then(() => {

@@ -2,7 +2,7 @@
  * @Author: mikey.dongqizhen 
  * @Date: 2019-04-18 17:08:47 
  * @Last Modified by: mikey.dongqizhen
- * @Last Modified time: 2019-06-04 23:03:06
+ * @Last Modified time: 2019-06-20 12:07:18
  */
 
 
@@ -47,6 +47,28 @@ axios.interceptors.request.use(function(config) {
     // 对请求错误做些什么
     return Promise.reject(error);
 });
+
+
+// 添加响应拦截器
+axios.interceptors.response.use(function(response) {
+    console.log(response)
+    if (response.config.url.indexOf('!request.action') == -1) {
+        return response.data
+    } else {
+        return {
+            result: response.data.result,
+            code: response.data.status.code,
+            msg: response.data.status.message
+        }
+    }
+
+    // 对响应数据做点什么
+    // return response;
+}, function(error) {
+    // 对响应错误做点什么
+    return Promise.reject(error);
+});
+
 
 axios.defaults.timeout = 1000000 //请求超时时间
 axios.withCredentials = false // 是否携带cookie信息

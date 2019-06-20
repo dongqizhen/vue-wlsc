@@ -61,9 +61,14 @@
                     :key="item.id"
                   >
                     <a target="_blank">
-                      <div class="img_box">
+                      <div
+                        class="img_box"
+                        v-lazy-container="{
+                          selector: 'img'
+                        }"
+                      >
                         <img
-                          :src="item.list_pic_url || item.app_list_pic_url"
+                          :data-src="item.list_pic_url || item.app_list_pic_url"
                           alt=""
                         />
                       </div>
@@ -283,6 +288,19 @@
   }
   .brand {
     margin-bottom: 25px;
+    /deep/ img[lazy="loading"] {
+      /*your style here*/
+      background: url("../../assets/images/loading.gif") no-repeat center;
+      background-size: 100px;
+      background-color: #f7f9fa;
+    }
+    /deep/ img[lazy="error"] {
+      /*your style here*/
+      background: url("../../assets/images/loading.gif") no-repeat center;
+      background-size: 100px;
+      display: none;
+      // background-color: #f7f9fa;
+    }
     .commonWidth {
       h2 {
         @extend %h2;
