@@ -29,7 +29,13 @@
                 v-for="menuItem in itemObj.menus"
                 :key="menuItem.key"
               >
-                <router-link :to="menuItem.href" replace>
+                <router-link
+                  :to="{
+                    path: menuItem.href,
+                    query: { keyId: menuItem.key, topTitle: itemObj.key }
+                  }"
+                  replace
+                >
                   {{ menuItem.name }}
                 </router-link>
               </a-menu-item>

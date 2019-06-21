@@ -29,7 +29,10 @@
     >
       {{ itemData.number }}
     </span>
-    <span v-if="isShowInfo.current == 3 && !isShowInfo.isMerchant">
+    <span
+      v-if="isShowInfo.current == 3 && !isShowInfo.isMerchant"
+      @click.stop="stopChange"
+    >
       <van-stepper v-model="itemData.number" :max="itemData.repertoryNum" />
       <i class="stockNumber">库存{{ itemData.repertoryNum }}件</i>
     </span>
@@ -56,6 +59,7 @@
     <span
       v-if="isShowInfo.current == 3 && !isShowInfo.isMerchant"
       style="width:157px"
+      @click.stop="stopChange"
     >
       <a-textarea
         style="width:157px"
@@ -88,7 +92,6 @@
     },
     watch: {
       checkedList(newVal) {
-        //console.log(newVal);
         this.goodList = newVal;
       }
     },
@@ -100,7 +103,6 @@
         window.open(href, "_blank");
       },
       onChange(id) {
-        // console.log(id);
         if (_.indexOf(this.goodList, id) == -1) {
           this.goodList.push(id);
           this.checkedProductInfo.push(this.itemData);
@@ -111,13 +113,10 @@
             this.itemData
           );
         }
-        // console.log(this.goodList);
-        //console.log("产品信息：：：", this.checkedProductInfo);
         this.$emit("getCheckedList", {
           goodList: this.goodList,
           productInfo: this.checkedProductInfo
         });
-        // this.$emit("getCheckedProductInfo", );
       },
       checkedChange(id) {
         for (const val of this.goodList) {
@@ -132,6 +131,7 @@
 </script>
 <style lang="scss" scoped>
   @import "../../../assets/scss/_commonScss";
+  @import "../../../assets/scss/_input";
   .inquiryProductItem {
     display: flex;
     height: 90px;

@@ -194,7 +194,8 @@
           }).then(data => {
             console.log(data);
             let { href } = this.$router.resolve({
-              path: `editQuote/${data.id}`
+              path: `editQuote/${data.id}`,
+              query: { keyId: 2 }
             });
             window.open(href, "_blank");
           });
@@ -236,11 +237,9 @@
           console.log(this.selectDatas);
           _getData("/enquiryPlus/addEnquiry", { param: params }).then(data => {
             console.log("一键获取报价：", data);
-            // if (data.data.code == 0) {
             this.isShowInfo.current = 1;
             this.searchParams.status = 1;
             this.getInquiryList();
-            // }
           });
         }
       },
@@ -260,7 +259,8 @@
         console.log(this.products);
         if (this.products.length > 0) {
           let { href } = this.$router.resolve({
-            path: `submitOrder/${this.products.join(",")}`
+            path: `submitOrder/${this.products.join(",")}`,
+            query: { keyId: 2 }
           });
           window.open(href, "_blank");
         } else {

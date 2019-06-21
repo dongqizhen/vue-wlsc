@@ -113,14 +113,6 @@
     padding-bottom: 110px;
     background: #f7f9fa;
   }
-  // .ant-input:hover {
-  //   border-color: #f10215 !important;
-  // }
-
-  // .ant-input:focus {
-  //   border-color: #f10215 !important;
-  //   box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2) !important;
-  // }
   .el-picker-panel {
     .el-date-table {
       td.today {
@@ -213,6 +205,9 @@
     border-color: #f10215;
     color: #f10215;
   }
+  .ant-calendar-selected-day .ant-calendar-date {
+    background-color: #fff;
+  }
   .ant-calendar-selected-date .ant-calendar-date,
   .ant-calendar-selected-start-date .ant-calendar-date,
   .ant-calendar-selected-end-date .ant-calendar-date {
@@ -226,5 +221,8 @@
         color: #fff;
       }
     }
+  }
+  .ant-calendar-footer-btn .ant-calendar-today-btn {
+    color: #f10215;
   }
 </style>

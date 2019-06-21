@@ -1,97 +1,97 @@
 <template>
   <div class="shopIndex">
     <common-title title="店铺首页"></common-title>
-    <div class="container-box">
-      <div class="header">
-        <ul>
-          <li v-for="data in amountData" :key="data.id">
-            <div class="textName">{{ data.name }}</div>
-            <div class="number">{{ data.amount }}</div>
-            <div class="increase">
-              <svg class="icon" aria-hidden="true">
-                <use
-                  xlink:href="#icontongbizengchang"
-                  v-if="data.increase"
-                ></use>
-                <use xlink:href="#icontongbixiajiang" v-else></use>
-              </svg>
-              同比{{ data.increase ? "增长" : "下降" }}{{ data.rate }}
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="nav-box">
-        <manage-number-nav
-          :navArr="[
-            '全部',
-            '新增访问店铺数',
-            '新增收藏店铺数',
-            '新增询价单数',
-            '新增订单数'
-          ]"
-          v-on:tab="getTab"
-        ></manage-number-nav>
-        <div class="trend">
-          <div class="time">
-            <ul>
-              <li
-                v-for="time in timesTab"
-                :key="time.id"
-                :class="currentTab == time.id ? 'active' : ''"
-                @click="triggleTab(time.id)"
-              >
-                {{ time.name }}
-              </li>
-            </ul>
-            <calendar-range></calendar-range>
-          </div>
-          <e-chart :options="polar" :init-options="initOptions"></e-chart>
-        </div>
-        <div class="statisticalTable">
+    <div v-if="!isLoading">
+      <div class="container-box">
+        <div class="header">
           <ul>
-            <li>
-              <span @click="tabClick(1)">
-                时间
+            <li v-for="data in amountData" :key="data.id">
+              <div class="textName">{{ data.name }}</div>
+              <div class="number">{{ data.amount }}</div>
+              <div class="increase">
                 <svg class="icon" aria-hidden="true">
-                  <use v-bind:xlink:href="timeSvg"></use>
+                  <use
+                    xlink:href="#icontongbizengchang"
+                    v-if="data.increase"
+                  ></use>
+                  <use xlink:href="#icontongbixiajiang" v-else></use>
                 </svg>
-              </span>
-              <span @click="tabClick(2)">
-                新增访问店铺数
-                <svg class="icon" aria-hidden="true">
-                  <use v-bind:xlink:href="visitSvg"></use>
-                </svg>
-              </span>
-              <span @click="tabClick(3)">
-                新增收藏店铺数
-                <svg class="icon" aria-hidden="true">
-                  <use v-bind:xlink:href="storeSvg"></use>
-                </svg>
-              </span>
-              <span @click="tabClick(4)">
-                新增询价单数
-                <svg class="icon" aria-hidden="true">
-                  <use v-bind:xlink:href="inquirySvg"></use>
-                </svg>
-              </span>
-              <span @click="tabClick(5)">
-                新增订单数
-                <svg class="icon" aria-hidden="true">
-                  <use v-bind:xlink:href="orderSvg"></use>
-                </svg>
-              </span>
-            </li>
-            <li v-for="item in items" :key="item.id">
-              <span>{{ item.time }}</span>
-              <span>{{ item.newVisit }}</span>
-              <span>{{ item.newStore }}</span>
-              <span>{{ item.newInquiry }}</span>
-              <span>{{ item.newOrder }}</span>
+                同比{{ data.increase ? "增长" : "下降" }}{{ data.rate }}%
+              </div>
             </li>
           </ul>
         </div>
+        <div class="nav-box">
+          <manage-number-nav
+            :navArr="tabs"
+            v-on:tab="getTab"
+          ></manage-number-nav>
+          <div class="trend">
+            <div class="time">
+              <ul>
+                <li
+                  v-for="time in timesTab"
+                  :key="time.id"
+                  :class="currentTab == time.id ? 'active' : ''"
+                  @click="triggleTab(time.id, time.tabValue)"
+                >
+                  {{ time.name }}
+                </li>
+              </ul>
+              <calendar-range
+                :dateRange="dataChange"
+                v-on:getDateRange="getDateRange"
+              ></calendar-range>
+            </div>
+            <e-chart :options="polar" :init-options="initOptions"></e-chart>
+          </div>
+          <div class="statisticalTable">
+            <ul>
+              <li>
+                <span @click="tabClick(1)">
+                  时间
+                  <svg class="icon" aria-hidden="true">
+                    <use v-bind:xlink:href="timeSvg"></use>
+                  </svg>
+                </span>
+                <span @click="tabClick(2)">
+                  新增访问店铺数
+                  <svg class="icon" aria-hidden="true">
+                    <use v-bind:xlink:href="visitSvg"></use>
+                  </svg>
+                </span>
+                <span @click="tabClick(3)">
+                  新增收藏店铺数
+                  <svg class="icon" aria-hidden="true">
+                    <use v-bind:xlink:href="storeSvg"></use>
+                  </svg>
+                </span>
+                <span @click="tabClick(4)">
+                  新增询价单数
+                  <svg class="icon" aria-hidden="true">
+                    <use v-bind:xlink:href="inquirySvg"></use>
+                  </svg>
+                </span>
+                <span @click="tabClick(5)">
+                  新增订单数
+                  <svg class="icon" aria-hidden="true">
+                    <use v-bind:xlink:href="orderSvg"></use>
+                  </svg>
+                </span>
+              </li>
+              <li v-for="item in items" :key="item.id">
+                <span>{{ item.time }}</span>
+                <span>{{ item.newVisit }}</span>
+                <span>{{ item.newStore }}</span>
+                <span>{{ item.newInquiry }}</span>
+                <span>{{ item.newOrder }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
+    <loading v-else></loading>
   </div>
 </template>
 
@@ -99,7 +99,8 @@
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import manageNumberNav from "../../../../components/common/manageNumberNav";
   import calendarRange from "../../../../components/common/calendarRange";
-  import { _getData } from "../../../../config/getData";
+  import { _getData, _getDataAll } from "../../../../config/getData";
+  import _ from "lodash";
   import EChart from "vue-echarts";
   import "zrender/lib/svg/svg";
 
@@ -114,6 +115,7 @@
   export default {
     data() {
       return {
+        isLoading: true,
         flag1: -1,
         flag2: 0,
         flag3: 0,
@@ -137,49 +139,20 @@
         newStoreNumber: [2, 3, 23, 2, 9, 4, 9],
         newInquiryNumber: [2, 2, 12, 1, 2, 2, 6],
         newOrderNumber: [56, 76, 45, 2, 23, 98, 68],
-        amountData: [
-          {
-            id: 1,
-            name: "新增访问店铺数",
-            amount: 0,
-            rate: "0%",
-            increase: true
-          },
-          {
-            id: 2,
-            name: "新增收藏店铺数",
-            amount: 0,
-            rate: "0%",
-            increase: true
-          },
-          {
-            id: 3,
-            name: "新增询价单数",
-            amount: 0,
-            rate: "0%",
-            increase: false
-          },
-          {
-            id: 4,
-            name: "新增订单数",
-            amount: 0,
-            rate: "0%",
-            increase: true
-          }
-        ],
+        amountData: [],
         defaultActiveKey: 1,
         tabs: [
-          { id: 1, name: "全部" },
-          { id: 2, name: "新增访问店铺数" },
-          { id: 3, name: "新增收藏店铺数" },
-          { id: 4, name: "新增询价单数" },
-          { id: 5, name: "新增订单数" }
+          "全部",
+          "新增访问店铺数",
+          "新增收藏店铺数",
+          "新增询价单数",
+          "新增订单数"
         ],
-        currentTab: 1,
+        currentTab: 7,
         timesTab: [
-          { id: 1, name: "最近一周" },
-          { id: 2, name: "最近半个月" },
-          { id: 3, name: "最近一个月" }
+          { id: 7, name: "最近一周", tabValue: "aWeek" },
+          { id: 15, name: "最近半个月", tabValue: "halfAMonth" },
+          { id: 30, name: "最近一个月", tabValue: "aJan" }
         ],
         items: [
           {
@@ -336,32 +309,36 @@
             }
           ]
           // animationDuration: 1000
-        }
+        },
+        getSelectData: {
+          startTime: "",
+          endTime: "",
+          order: "",
+          dateTime: "aWeek"
+        },
+        dataChange: [],
+        timeArr: []
       };
     },
     mounted() {
-      this.getShopCountInfo();
+      _getDataAll([this.getShopCountInfo(), this.getShopSelectInfo()]).then(
+        () => {
+          this.isLoading = false;
+        }
+      );
+      console.log(this.getTimeRange(7));
       this.polar.legend.data = [
         "新增访问店铺数",
         "新增收藏店铺数",
         "新增询价单数",
         "新增订单数"
       ];
-      this.polar.xAxis.data = [
-        "2019-03-01",
-        "2019-03-02",
-        "2019-03-03",
-        "2019-03-04",
-        "2019-03-05",
-        "2019-03-06",
-        "2019-03-07"
-      ];
+      this.polar.xAxis.data = this.timeArr;
       this.polar.series[0].data = [2, 3, 2, 13, 2, 15, 17];
       this.polar.series[1].data = [2, 3, 23, 2, 9, 4, 9];
       this.polar.series[2].data = [2, 2, 12, 1, 2, 2, 6];
       this.polar.series[3].data = [56, 76, 45, 2, 23, 98, 68];
     },
-
     methods: {
       tabClick(i) {
         if (i == 1) {
@@ -461,36 +438,89 @@
           this.polar.series[3].data = [56, 76, 45, 2, 23, 98, 68];
         }
       },
-      triggleTab(currentTabId) {
+      triggleTab(currentTabId, currentTabValue) {
         this.currentTab = currentTabId;
+        this.getSelectData.dateTime = currentTabValue;
+        this.timeArr = this.getTimeRange(currentTabId);
+        this.getShopSelectInfo();
       },
-      onPanelChange(date, dateString) {
-        console.log(date, dateString);
-      },
-      onChange(value, dateString) {
-        console.log("Selected Time: ", value);
-        console.log("Formatted Selected Time: ", dateString);
-      },
-      onOk(value) {
-        console.log("onOk: ", value);
-      },
-      changeDate(value) {
-        console.log(value);
+      getDateRange(val) {
+        console.log(val);
         this.currentTab = -1;
+        this.dataChange = val;
+        this.getSelectData.dateTime = "";
+        this.getSelectData.startTime = val[0];
+        this.getSelectData.endTime = val[1];
+        this.getShopSelectInfo();
       },
       getShopCountInfo() {
         _getData("/store/sjHomeStore", {}).then(data => {
-          console.log("头部的统计信息:::", data);
-          this.amountData[0].amount = data.recordsNCount;
-          this.amountData[0].rate = data.recordsGrowth;
-          this.amountData[0].increase = data.recordsGrowth;
-          this.amountData[1].amount = data.collectNCount;
-          this.amountData[1].rate = data.collectGrowth;
-          this.amountData[2].amount = data.enquiryNCount;
-          this.amountData[2].rate = data.enquiryGrowth;
-          this.amountData[3].amount = data.orderCount;
-          this.amountData[3].rate = data.orderGrowth;
+          //console.log("头部的统计信息:::", data);
+          this.amountData = [
+            {
+              id: 1,
+              name: "新增访问店铺数",
+              amount: data.recordsNCount,
+              rate: Math.abs(data.recordsGrowth).toFixed(2),
+              increase: data.recordsGrowth >= 0
+            },
+            {
+              id: 2,
+              name: "新增收藏店铺数",
+              amount: data.collectNCount,
+              rate: Math.abs(data.collectGrowth).toFixed(2),
+              increase: data.collectGrowth >= 0
+            },
+            {
+              id: 3,
+              name: "新增询价单数",
+              amount: data.enquiryNCount,
+              rate: Math.abs(data.enquiryGrowth).toFixed(2),
+              increase: data.enquiryGrowth >= 0
+            },
+            {
+              id: 4,
+              name: "新增订单数",
+              amount: data.orderCount,
+              rate: Math.abs(data.orderGrowth).toFixed(2),
+              increase: data.orderGrowth >= 0
+            }
+          ];
         });
+      },
+      getShopSelectInfo() {
+        _getData("/store/homeStoreCount", this.getSelectData).then(data => {
+          console.log("selectInfo:::", data);
+          this.polar.xAxis.data = this.timeArr;
+          _.map(this.timeArr, o => {
+            _.map(data.recordsList, v => {});
+          });
+        });
+      },
+      getTimeRange(val) {
+        this.timeArr = [];
+        for (var i = -val; i < 0; i++) {
+          this.timeArr.push(this.getCurrentTime(i));
+        }
+        return this.timeArr;
+      },
+      getCurrentTime(value) {
+        var date = new Date();
+        var targetDay_ms = date.getTime() + 1000 * 60 * 60 * 24 * value;
+        date.setTime(targetDay_ms);
+        var year = date.getFullYear();
+        var month = date.getMonth();
+        var day = date.getDate();
+        month = this.handleMonthOrDay(month + 1);
+        day = this.handleMonthOrDay(day);
+        return year + "-" + month + "-" + day;
+      },
+      handleMonthOrDay(val) {
+        var v = val;
+        if (v.toString().length == 1) {
+          v = "0" + val;
+        }
+        return v;
       }
     },
     components: {
@@ -517,7 +547,7 @@
         ul {
           display: flex;
           li {
-            width: 236px;
+            width: 237.5px;
             height: 130px;
             margin-right: 20px;
             background-color: #fff;
@@ -560,6 +590,7 @@
           background-color: #fff;
           height: 484px;
           padding-top: 21px;
+          padding-left: 20px;
           margin-top: 1px;
           border-bottom: $border-style;
           .time {
@@ -583,6 +614,17 @@
                   color: $theme-color;
                   font-weight: 600;
                 }
+              }
+            }
+            /deep/.ant-calendar-picker-input {
+              padding: 0;
+              height: 27px;
+              line-height: 27px;
+              .ant-calendar-range-picker-input {
+                height: 100%;
+              }
+              .ant-calendar-picker-clear {
+                right: 6px;
               }
             }
           }

@@ -249,11 +249,6 @@
       }
       this.getMessageList();
       this.getMessageNumber();
-      this.$router.replace({ path: this.$route.path });
-      _getData("/user/getUser", {}).then(data => {
-        console.log("获取用户的店铺开店信息：", data);
-        this.changeUserShopInfoState(data);
-      });
     },
     components: {
       commonTitle,

@@ -25,12 +25,15 @@
             v-for="item in data.goodList"
             :key="item.id"
             :class="addClass(item.id)"
+            @click="turnToProductDetail(item.goodsId)"
           >
             <span>
-              <a-checkbox
-                @change="onChange(item.id)"
-                :checked="checkedChange(item.id)"
-              ></a-checkbox>
+              <label @click.stop="stopChange">
+                <a-checkbox
+                  @change="onChange(item.id)"
+                  :checked="checkedChange(item.id)"
+                ></a-checkbox
+              ></label>
             </span>
             <span><img :src="item.goodsImage"/></span>
             <span>{{ item.goodsName }}</span>
@@ -39,7 +42,7 @@
             <span v-if="isShowInfo.current != 3">
               {{ item.number }}
             </span>
-            <span v-if="isShowInfo.current == 3">
+            <span v-if="isShowInfo.current == 3" @click.stop="stopChange">
               <van-stepper v-model="item.number" :max="item.goods_number" />
               <i class="stockNumber">库存{{ item.goods_number }}件</i>
             </span>
@@ -53,7 +56,11 @@
               {{ item.userRemark }}
             </span>
             <span v-if="isShowInfo.current == 2">{{ item.shopRemark }}</span>
-            <span v-if="isShowInfo.current == 3" style="width: 160px;">
+            <span
+              v-if="isShowInfo.current == 3"
+              style="width: 160px;"
+              @click.stop="stopChange"
+            >
               <a-textarea
                 style="width: 157px;"
                 placeholder="请输入备注"
@@ -85,13 +92,7 @@
                 报价总金额：<i>¥{{ data.subtotal }}</i>
               </span>
               <span class="download" @click="turnMyQuote">转为我的报价</span>
-              <span class="edit">
-                <router-link
-                  :to="`/userCenter/submitOrder/${checkedList.join(',')}`"
-                >
-                  提交订单
-                </router-link>
-              </span>
+              <span class="edit" @click="submitOrder">提交订单</span>
             </div>
             <div
               :class="[
@@ -145,31 +146,35 @@
     },
     methods: {
       turnMyQuote() {
-        console.log(this.checkedList);
-        this.goodsList = [];
-        _.map(this.checkedList, val => {
-          _.map(this.data.list, value => {
-            if (val == value.id) {
-              this.goodsList.push({
-                goodsId: val,
-                number: value.number,
-                unitPrice: value.unit_price
-              });
+        if (this.checkedList.length == 0) {
+          this.$message.warning("请选择产品", 1);
+          return;
+        } else {
+          _getData("/quotation/toMyQuotation", {
+            param: {
+              ids: this.checkedList.join(",")
             }
+          }).then(data => {
+            console.log(data);
+            let { href } = this.$router.resolve({
+              path: `/userCenter/editQuote/${data.id}`,
+              query: { keyId: 4 }
+            });
+            window.open(href, "_blank");
           });
-        });
-        console.log(this.goodsList);
-        _getData("/enquiry/myEnquiry", {
-          param: [
-            {
-              enquirySn: this.$route.params.id,
-              goodsList: this.goodsList
-            }
-          ]
-        }).then(data => {
-          console.log(data);
-          this.$router.replace({ path: "/userCenter/myQuote" });
-        });
+        }
+      },
+      submitOrder() {
+        if (this.checkedList.length == 0) {
+          this.$message.warning("请选择产品", 1);
+          return;
+        } else {
+          const { href } = this.$router.resolve({
+            path: `/userCenter/submitOrder/${this.checkedList.join(",")}`,
+            query: { keyId: 2 }
+          });
+          window.open(href, "_blank");
+        }
       },
       remindQuote(storeId, enquiryId) {
         if (this.data.remind == 0) {
@@ -207,9 +212,22 @@
             param: [{ storeId: this.data.storeId, goodsList: goodsList }]
           }).then(data => {
             console.log("一键获取报价：", data);
-            this.$router.replace({ path: "/userCenter/myInquiry" });
+            const { href } = this.$router.resolve({
+              path: "/userCenter/myInquiry",
+              query: { keyId: 2 }
+            });
+            window.open(href, "_blank");
           });
+        } else {
+          this.$message.warning("请选择产品", 1);
+          return;
         }
+      },
+      turnToProductDetail(id) {
+        let { href } = this.$router.resolve({
+          path: `/details/productDetails/${id}`
+        });
+        window.open(href, "_blank");
       },
       tab(tabVal) {
         this.current = tabVal;
@@ -266,6 +284,7 @@
           this.checkedList = [];
         }
       },
+      stopChange() {},
       getInquiryDetail() {
         _getData("/enquiryPlus/enquiryDetail", {
           id: this.$route.params.id

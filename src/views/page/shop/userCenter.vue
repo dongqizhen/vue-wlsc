@@ -63,7 +63,11 @@
       };
     },
     beforeMount() {
-      this.defaultSelectedKeys = [`${this.$route.query.id}`];
+      if (this.$route.query.keyId) {
+        this.defaultSelectedKeys = [`${this.$route.query.keyId}`];
+      } else {
+        this.defaultSelectedKeys = ["1"];
+      }
     },
     mounted() {
       if (window.history && window.history.pushState) {

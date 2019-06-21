@@ -10,7 +10,7 @@
                 tag="span"
                 :to="{
                   path: `/footer/guide/${v.subtitle}`,
-                  query: { id: v.id }
+                  query: { keyId: v.id, topTitle: 'sub' + item.id }
                 }"
                 v-for="v in item.topicVoList"
                 :key="v.id"

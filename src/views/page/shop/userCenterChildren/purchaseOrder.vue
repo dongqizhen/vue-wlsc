@@ -96,7 +96,8 @@
           data => {
             // console.log("一键获取报价：", data);
             let { href } = this.$router.resolve({
-              path: "/userCenter/myInquiry"
+              path: "/userCenter/myInquiry",
+              query: { keyId: 2 }
             });
             window.open(href, "_blank");
           }

@@ -39,7 +39,6 @@
       };
     },
     created() {
-      
       _getData("topic/queryTopicList", {}).then(data => {
         _.map(data, o => {
           o.key = "sub" + o.id;
@@ -54,11 +53,9 @@
         console.log(data);
         this.dataArr = data;
       });
-      
     },
     beforeMount() {
-      console.log(this)
-      this.defaultSelectedKeys = [`${this.$route.query.id}`];
+      this.defaultSelectedKeys = [`${this.$route.query.keyId}`];
     },
     components: {
       Header,

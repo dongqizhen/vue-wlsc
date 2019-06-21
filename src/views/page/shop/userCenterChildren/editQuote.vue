@@ -113,7 +113,11 @@
       save() {
         _getData("/quotation/save", { param: this.param }).then(data => {
           console.log(data);
-          this.$router.replace({ path: "/userCenter/myQuote" });
+          const { href } = this.$router.resolve({
+            path: "/userCenter/myQuote",
+            query: { keyId: 4 }
+          });
+          window.open(href, "_blank");
         });
       },
       addCarSuccess(id) {

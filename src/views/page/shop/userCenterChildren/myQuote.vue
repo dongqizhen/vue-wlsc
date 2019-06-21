@@ -56,7 +56,8 @@
                   <router-link
                     target="_blank"
                     :to="{
-                      path: `/userCenter/lookQuote/${item.id}`
+                      path: `/userCenter/lookQuote/${item.id}`,
+                      query: { keyId: 4 }
                     }"
                   >
                     查看
