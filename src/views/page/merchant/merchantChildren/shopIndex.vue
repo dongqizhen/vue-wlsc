@@ -116,6 +116,7 @@
     data() {
       return {
         isLoading: true,
+        currentTitleTab: 0,
         flag1: -1,
         flag2: 0,
         flag3: 0,
@@ -135,10 +136,10 @@
           "2019-03-06",
           "2019-03-07"
         ],
-        newVisitNumber: [2, 3, 2, 13, 2, 15, 17],
-        newStoreNumber: [2, 3, 23, 2, 9, 4, 9],
-        newInquiryNumber: [2, 2, 12, 1, 2, 2, 6],
-        newOrderNumber: [56, 76, 45, 2, 23, 98, 68],
+        newVisitNumber: [],
+        newStoreNumber: [],
+        newInquiryNumber: [],
+        newOrderNumber: [],
         amountData: [],
         defaultActiveKey: 1,
         tabs: [
@@ -326,18 +327,13 @@
           this.isLoading = false;
         }
       );
-      console.log(this.getTimeRange(7));
       this.polar.legend.data = [
         "新增访问店铺数",
         "新增收藏店铺数",
         "新增询价单数",
         "新增订单数"
       ];
-      this.polar.xAxis.data = this.timeArr;
-      this.polar.series[0].data = [2, 3, 2, 13, 2, 15, 17];
-      this.polar.series[1].data = [2, 3, 23, 2, 9, 4, 9];
-      this.polar.series[2].data = [2, 2, 12, 1, 2, 2, 6];
-      this.polar.series[3].data = [56, 76, 45, 2, 23, 98, 68];
+      this.polar.xAxis.data = this.getTimeRange(7);
     },
     methods: {
       tabClick(i) {
@@ -400,6 +396,7 @@
         }
       },
       getTab(val) {
+        this.currentTitleTab = val;
         console.log(val);
         if (val == 0) {
           this.polar.legend.data = [
@@ -408,41 +405,45 @@
             "新增询价单数",
             "新增订单数"
           ];
-          this.polar.series[0].data = [2, 3, 2, 13, 2, 15, 17];
-          this.polar.series[1].data = [2, 3, 23, 2, 9, 4, 9];
-          this.polar.series[2].data = [2, 2, 12, 1, 2, 2, 6];
-          this.polar.series[3].data = [56, 76, 45, 2, 23, 98, 68];
+          this.polar.series[0].data = this.newVisitNumber;
+          this.polar.series[1].data = this.newStoreNumber;
+          this.polar.series[2].data = this.newInquiryNumber;
+          this.polar.series[3].data = this.newOrderNumber;
         } else if (val == 1) {
           this.polar.legend.data = ["新增访问店铺数"];
-          this.polar.series[0].data = [2, 3, 2, 13, 2, 15, 17];
+          this.polar.series[0].data = this.newVisitNumber;
           this.polar.series[1].data = [];
           this.polar.series[2].data = [];
           this.polar.series[3].data = [];
         } else if (val == 2) {
           this.polar.legend.data = ["新增收藏店铺数"];
           this.polar.series[0].data = [];
-          this.polar.series[1].data = [2, 3, 23, 2, 9, 4, 9];
+          this.polar.series[1].data = this.newStoreNumber;
           this.polar.series[2].data = [];
           this.polar.series[3].data = [];
         } else if (val == 3) {
           this.polar.legend.data = ["新增询价单数"];
           this.polar.series[0].data = [];
           this.polar.series[1].data = [];
-          this.polar.series[2].data = [2, 2, 12, 1, 2, 2, 6];
+          this.polar.series[2].data = this.newInquiryNumber;
           this.polar.series[3].data = [];
         } else {
           this.polar.legend.data = ["新增订单数"];
           this.polar.series[0].data = [];
           this.polar.series[1].data = [];
           this.polar.series[2].data = [];
-          this.polar.series[3].data = [56, 76, 45, 2, 23, 98, 68];
+          this.polar.series[3].data = this.newOrderNumber;
         }
       },
       triggleTab(currentTabId, currentTabValue) {
         this.currentTab = currentTabId;
         this.getSelectData.dateTime = currentTabValue;
+        this.getSelectData.startTime = "";
+        this.getSelectData.endTime = "";
+        this.dataChange = [];
         this.timeArr = this.getTimeRange(currentTabId);
         this.getShopSelectInfo();
+        this.getTab(this.currentTitleTab);
       },
       getDateRange(val) {
         console.log(val);
@@ -451,10 +452,11 @@
         this.getSelectData.dateTime = "";
         this.getSelectData.startTime = val[0];
         this.getSelectData.endTime = val[1];
+        this.timeArr = this.getDiffDate(val[0], val[1]);
         this.getShopSelectInfo();
       },
-      getShopCountInfo() {
-        _getData("/store/sjHomeStore", {}).then(data => {
+      async getShopCountInfo() {
+        return await _getData("/store/sjHomeStore", {}).then(data => {
           //console.log("头部的统计信息:::", data);
           this.amountData = [
             {
@@ -492,9 +494,69 @@
         _getData("/store/homeStoreCount", this.getSelectData).then(data => {
           console.log("selectInfo:::", data);
           this.polar.xAxis.data = this.timeArr;
+          this.newVisitNumber = [];
+          this.newStoreNumber = [];
+          this.newInquiryNumber = [];
+          this.newOrderNumber = [];
+          console.log(this.timeArr);
           _.map(this.timeArr, o => {
-            _.map(data.recordsList, v => {});
+            if (
+              _.find(data.recordsList, v => {
+                return o == v.createOn.substring(0, 10);
+              })
+            ) {
+              this.newVisitNumber.push(
+                _.find(data.recordsList, v => {
+                  return o == v.createOn.substring(0, 10);
+                }).nCount
+              );
+            } else {
+              this.newVisitNumber.push(0);
+            }
+            if (
+              _.find(data.orderList, v => {
+                return o == v.createOn.substring(0, 10);
+              })
+            ) {
+              this.newOrderNumber.push(
+                _.find(data.orderList, v => {
+                  return o == v.createOn.substring(0, 10);
+                }).nCount
+              );
+            } else {
+              this.newOrderNumber.push(0);
+            }
+            if (
+              _.find(data.enquiryList, v => {
+                return o == v.createOn.substring(0, 10);
+              })
+            ) {
+              this.newInquiryNumber.push(
+                _.find(data.enquiryList, v => {
+                  return o == v.createOn.substring(0, 10);
+                }).nCount
+              );
+            } else {
+              this.newInquiryNumber.push(0);
+            }
+            if (
+              _.find(data.collectList, v => {
+                return o == v.createOn.substring(0, 10);
+              })
+            ) {
+              this.newStoreNumber.push(
+                _.find(data.collectList, v => {
+                  return o == v.createOn.substring(0, 10);
+                }).nCount
+              );
+            } else {
+              this.newStoreNumber.push(0);
+            }
           });
+          this.polar.series[0].data = this.newVisitNumber;
+          this.polar.series[1].data = this.newStoreNumber;
+          this.polar.series[2].data = this.newInquiryNumber;
+          this.polar.series[3].data = this.newOrderNumber;
         });
       },
       getTimeRange(val) {
@@ -521,6 +583,29 @@
           v = "0" + val;
         }
         return v;
+      },
+      getDiffDate(startTime, endTime) {
+        var diffDateArr = [];
+        var i = 0;
+        while (startTime <= endTime) {
+          diffDateArr[i] = startTime;
+          //获取开始日期时间戳
+          var startMs = new Date(startTime).getTime();
+          //增加一天时间戳后的日期
+          var nextDate = startMs + 24 * 60 * 60 * 1000;
+          var nextDateYear = new Date(nextDate).getFullYear() + "-";
+          var nextDateMonth =
+            new Date(nextDate).getMonth() + 1 < 10
+              ? "0" + (new Date(nextDate).getMonth() + 1) + "-"
+              : new Date(nextDate).getMonth() + 1 + "-";
+          var nextDateDay =
+            new Date(nextDate).getDate() < 10
+              ? "0" + new Date(nextDate).getDate()
+              : new Date(nextDate).getDate();
+          startTime = nextDateYear + nextDateMonth + nextDateDay;
+          i++;
+        }
+        return diffDateArr;
       }
     },
     components: {
