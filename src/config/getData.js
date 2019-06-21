@@ -35,6 +35,7 @@ export async function _getData(url = '', data = {}, config = {}) {
             if (!(data.code == 1116 || data.code == 1106)) {
                 const v = router.app.$children[0];
                 v.$message.error(data.msg)
+
             }
 
             return data

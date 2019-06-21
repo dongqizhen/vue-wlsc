@@ -14,6 +14,14 @@
       src="../../assets/images/no_data/no-search.png"
       v-else-if="type == 'no-search'"
     />
+    <img
+      src="../../assets/images/no_data/no-message.png"
+      v-else-if="type == 'no-message'"
+    />
+    <img
+      src="../../assets/images/no_data/no-order.png"
+      v-else-if="type == 'no-order'"
+    />
     <span>{{ text }}</span>
   </div>
 </template>

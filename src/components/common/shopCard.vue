@@ -64,10 +64,15 @@
       </div>
       <div class="service">
         <a-button>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#iconlianxikefu"></use>
-          </svg>
-          联系客服
+          <router-link
+            to="/userCenter/myMessage/contactService"
+            target="_blank"
+          >
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconlianxikefu"></use>
+            </svg>
+            联系客服
+          </router-link>
         </a-button>
       </div>
       <div class="shop-bottom-shadow"></div>
@@ -100,19 +105,23 @@
     methods: {
       collect() {
         if (this.isLogin) {
-          _getData("collect/addordelete", {
-            valueId: this.detail.sid,
-            typeId: 1 //收藏类型 0 产品 1 店铺
-          }).then(data => {
-            console.log(data);
-            if (this.isCollection) {
-              this.isCollection = 0;
-              this.$message.success("取消收藏成功");
-            } else {
+          if (this.isCollection == 0) {
+            _getData("collect/add", {
+              valueId: this.detail.sid,
+              typeId: 1
+            }).then(data => {
               this.isCollection = 1;
               this.$message.success("店铺收藏成功");
-            }
-          });
+            });
+          } else {
+            _getData("collect/delete", {
+              valueId: this.detail.sid,
+              typeId: 1
+            }).then(data => {
+              this.isCollection = 0;
+              this.$message.success("取消收藏成功");
+            });
+          }
         } else {
           this.visible = true;
         }
@@ -243,6 +252,14 @@
         box-shadow: none;
         border: #fff 1px solid;
         background: #fff;
+        a {
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          &:hover {
+            opacity: 0.7;
+          }
+        }
         &:active {
           box-shadow: none;
         }

@@ -4,7 +4,7 @@
     tag="li"
     :to="{
       path: `/details/productDetails/${list.id}`,
-      query: { nav_index: $route.query.nav_index, shopId: list.storeId }
+      query: { nav_index: $route.query.nav_index, shopId: list.store_id }
     }"
   >
     <a target="_blank">
@@ -27,7 +27,7 @@
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconxiaoliang"></use>
             </svg>
-            销量: <span>99</span>
+            销量: <span>{{ list.sell_volume }}</span>
           </span>
         </div>
         <p>
@@ -41,7 +41,7 @@
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#icondianpu"></use>
           </svg>
-          {{ list.shopName }}
+          {{ list.shop_name }}
         </div>
       </li>
     </a>
@@ -114,15 +114,16 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-family: PingFangSC-Semibold;
-      font-size: 20px;
+      // font-family: PingFangSC-Semibold;
+      font-size: 18px;
+      font-weight: 600;
       color: $theme-color;
       margin-bottom: 5px;
       > span {
         font-family: PingFangSC-Regular;
         font-size: 13px;
         color: #666666;
-
+        font-weight: normal;
         .icon {
           width: 14px;
           height: 14px;
