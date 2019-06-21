@@ -17,7 +17,7 @@
     </span>
     <span>{{ itemData.goodsName }}</span>
     <span>{{ itemData.goodsBrand }}/{{ itemData.goodsModel }}</span>
-    <span>
+    <span @click.stop="stopChange">
       <a-input
         ref="unitPrice"
         placeholder="输入单价"
@@ -25,7 +25,7 @@
       ></a-input>
     </span>
     <span>{{ itemData.number }}</span>
-    <span>
+    <span @click.stop="stopChange">
       <a-date-picker
         :format="'YYYY-MM-DD'"
         @change="onDateChange"
@@ -38,7 +38,7 @@
       />
     </span>
     <span>{{ itemData.userRemark }}</span>
-    <span>
+    <span @click.stop="stopChange">
       <a-textarea
         placeholder="输入备注"
         v-model="itemData.shopRemark"

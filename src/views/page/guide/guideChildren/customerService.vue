@@ -1,30 +1,27 @@
 <template>
-  <div class="howToOpenShop">
+  <div class="customerService">
     <guide-right title="客服中心">
-      <div class="info" slot="contentInfo">
-        <p>
-          商务合作及服务电话：<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 400-012-1211
-          或010-57065620-423
-        </p>
-        <p>
-          服务时间：<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 周一至周五 09：00——18：00
-        </p>
-        <p>
-          地址：<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          北京市顺义区竺园路12号院泰达融科园7号楼
-        </p>
-      </div>
+      <div class="info" slot="contentInfo" v-html="htmlData"></div>
     </guide-right>
   </div>
 </template>
 <script>
   import guideRight from "../../../../components/common/guideRight";
+  import { _getData } from "../../../../config/getData";
   export default {
     data() {
-      return {};
+      return {
+        htmlData: ""
+      };
+    },
+    created() {
+      _getData("/topic/queryTopicObject", {
+        topicCategoryId: this.$route.query.topTitle.substring(3),
+        topicId: this.$route.query.keyId
+      }).then(data => {
+        //console.log(data);
+        this.htmlData = data.topicVoList[0].content;
+      });
     },
     components: {
       guideRight
@@ -32,10 +29,4 @@
   };
 </script>
 <style lang="scss" scoped>
-  p {
-    text-indent: 2em;
-    line-height: 32px;
-    color: #333;
-    font-size: 16px;
-  }
 </style>

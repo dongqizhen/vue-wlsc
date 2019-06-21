@@ -101,13 +101,13 @@
         if (this.$route.path.indexOf("merchant") != -1) {
           let { href } = this.$router.resolve({
             path: "/merchant/messageCenter",
-            query: { type: "system", id: 10 }
+            query: { type: "system", keyId: 10 }
           });
           window.open(href, "_blank");
         } else {
           let { href } = this.$router.resolve({
             path: "/userCenter/myMessage",
-            query: { type: "system", id: 9 }
+            query: { type: "system", keyId: 9 }
           });
           window.open(href, "_blank");
         }
@@ -116,13 +116,13 @@
         if (this.$route.path.indexOf("merchant") != -1) {
           let { href } = this.$router.resolve({
             path: "/merchant/messageCenter",
-            query: { type: "private", id: 10 }
+            query: { type: "private", keyId: 10 }
           });
           window.open(href, "_blank");
         } else {
           let { href } = this.$router.resolve({
             path: "/userCenter/myMessage",
-            query: { type: "private", id: 9 }
+            query: { type: "private", keyId: 9 }
           });
           window.open(href, "_blank");
         }

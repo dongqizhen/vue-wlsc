@@ -1,7 +1,7 @@
 <template>
   <div class="orderDetail">
     <common-title title="订单详情">
-      <div slot="titleRight" class="orderClose">
+      <div slot="titleRight" class="orderClose" v-if="data.order_status == 7">
         订单关闭原因：{{ data.closeReason }}
       </div>
     </common-title>

@@ -24,7 +24,9 @@
             : data.isPayProve == 0
             ? isShowInfo.isMerchant
               ? isShowInfo.isDetail
-                ? "--"
+                ? data.order_status != 6
+                  ? "--"
+                  : ""
                 : ""
               : "提交支付证明"
             : "查看支付证明"
@@ -82,7 +84,11 @@
             !isShowInfo.isDetail
         "
       >
-        <router-link tag="a" target="_blank" :to="`comment/${data.id}`">
+        <router-link
+          tag="a"
+          target="_blank"
+          :to="{ path: `comment/${data.id}`, query: { keyId: 7 } }"
+        >
           评价
         </router-link>
       </div>
@@ -119,7 +125,11 @@
         退货中
       </div>
       <div class="lookOrderDetail" v-if="!isShowInfo.isDetail">
-        <router-link tag="a" target="_blank" :to="`orderDetail/${data.id}`">
+        <router-link
+          tag="a"
+          target="_blank"
+          :to="{ path: `orderDetail/${data.id}`, query: { keyId: 7 } }"
+        >
           查看订单详情
         </router-link>
       </div>

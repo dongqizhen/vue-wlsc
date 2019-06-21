@@ -19,14 +19,6 @@
             :isShowInfo="isShowInfo"
           ></inquiry-detail-item-product>
         </div>
-        <!-- <div class="list-footer">
-          <check-all
-            :amount="checkedList.length"
-            :checkAll="checkAll"
-            v-on:isCheckAll="isCheckAllMethod"
-          >
-          </check-all>
-        </div> -->
       </div>
     </div>
   </div>

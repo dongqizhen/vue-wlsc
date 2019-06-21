@@ -234,7 +234,6 @@
         ];
         this.getInquiryListParams.status = this.$route.query.status;
         this.isShowInfo.current = this.$route.query.status;
-        this.$router.replace({ path: "/merchant/inquiryManage" });
       }
       this.getInquiryList();
       this.getInquiryNumber();

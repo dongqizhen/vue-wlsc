@@ -57,14 +57,18 @@
         ]
       };
     },
-    inject: ["reload"],
     computed: {
       ...mapState(["isLogin", "userShopInfo"])
     },
     beforeMount() {
       console.log(111111);
       if (this.userShopInfo.audit_status == 2) {
-        this.defaultSelectedKeys = [`${this.$route.query.id}`];
+        if (this.$route.query.keyId) {
+          this.defaultSelectedKeys = [`${this.$route.query.keyId}`];
+        } else {
+          this.defaultSelectedKeys = ["1"];
+          this.$router.replace({ path: "/merchant/shopIndex" });
+        }
       } else {
         this.defaultSelectedKeys = ["0"];
         this.$router.replace({

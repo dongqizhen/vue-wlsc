@@ -1,28 +1,26 @@
 <template>
-  <div class="howToOpenShop">
+  <div class="quickOrder">
     <guide-right title="快速下单">
-      <div class="info" slot="contentInfo">
-        <p>
-          1、进入个人中心，点击“我的询价”。
-        </p>
-        <p>
-          2、在“已报价”列表中，可以选择报价产品，点击“查看详情”。
-        </p>
-        <p>
-          3、进入询价单详情页，选择需要报价产品，点击“提交订单”。
-        </p>
-        <p>
-          4、添加收货详细信息后，点击“确认”，该笔订单完成。
-        </p>
-      </div>
+      <div class="info" slot="contentInfo" v-html="htmlData"></div>
     </guide-right>
   </div>
 </template>
 <script>
   import guideRight from "../../../../components/common/guideRight";
+  import { _getData } from "../../../../config/getData";
   export default {
     data() {
-      return {};
+      return {
+        htmlData: ""
+      };
+    },
+    created() {
+      _getData("/topic/queryTopicObject", {
+        topicCategoryId: this.$route.query.topTitle.substring(3),
+        topicId: this.$route.query.keyId
+      }).then(data => {
+        this.htmlData = data.topicVoList[0].content;
+      });
     },
     components: {
       guideRight
@@ -30,10 +28,4 @@
   };
 </script>
 <style lang="scss" scoped>
-  p {
-    text-indent: 2em;
-    line-height: 32px;
-    color: #333;
-    font-size: 16px;
-  }
 </style>

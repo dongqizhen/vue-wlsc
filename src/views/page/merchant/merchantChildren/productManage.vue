@@ -3,7 +3,10 @@
     <div class="productContainer">
       <commonTitle title="产品列表">
         <span slot="titleRight" class="publishGood">
-          <router-link target="_blank" to="/merchant/publishGoods">
+          <router-link
+            target="_blank"
+            :to="{ path: '/merchant/publishGoods', query: { keyId: 4 } }"
+          >
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icontianjiatupian1"></use>
             </svg>
@@ -115,7 +118,7 @@
                     target="_blank"
                     :to="{
                       path: '/merchant/publishGoods',
-                      query: { id: `${item.id}` }
+                      query: { id: `${item.id}`, keyId: 4 }
                     }"
                   >
                     编辑

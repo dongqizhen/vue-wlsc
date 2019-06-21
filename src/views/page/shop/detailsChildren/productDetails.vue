@@ -433,7 +433,7 @@
           this.$nextTick().then(() => {
             setTimeout(() => {
               this.initMagnifier();
-            }, 100);
+            }, 200);
           });
         })
         .then(() => {

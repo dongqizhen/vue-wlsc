@@ -282,16 +282,25 @@ const router = new Router({
             children: [{
                 name: '登录',
                 path: '/',
+                meta: {
+                    title: '登录'
+                },
                 component: () =>
                     import ('../views/page/login/loginChildren/loginUp')
             }, {
                 name: '注册',
                 path: '/register',
+                meta: {
+                    title: '注册'
+                },
                 component: () =>
                     import ('../views/page/login/loginChildren/register')
             }, {
                 name: '忘记密码',
                 path: '/forgetPassword',
+                meta: {
+                    title: '忘记密码'
+                },
                 component: () =>
                     import ('../views/page/login/loginChildren/forgetPassword')
             }]

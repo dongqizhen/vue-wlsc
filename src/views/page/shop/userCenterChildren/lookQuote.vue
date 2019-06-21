@@ -36,13 +36,16 @@
         <span class="totalPrice">
           报价总金额：<i>¥{{ sumPrice }}</i>
         </span>
-        <span class="download" @click="download(`${$route.params.id}`)"
-          >下载报价</span
-        >
+        <span class="download" @click="download(`${$route.params.id}`)">
+          下载报价
+        </span>
         <span class="edit">
           <router-link
             target="_blank"
-            :to="{ path: `/userCenter/editQuote/${$route.params.id}` }"
+            :to="{
+              path: `/userCenter/editQuote/${$route.params.id}`,
+              query: { keyId: 4 }
+            }"
           >
             修改报价
           </router-link>
