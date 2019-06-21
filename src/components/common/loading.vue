@@ -22,7 +22,7 @@
     },
     created() {
       //console.log(this.loading != undefined);
-      this.rowNumber = Array(4);
+      this.rowNumber = Array(this.number);
     },
     props: {
       text: {

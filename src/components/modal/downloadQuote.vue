@@ -2,13 +2,17 @@
   <div class="login-modal">
     <modal :isShow="visible" :options="options">
       <div slot="content" v-if="type != 'login'">
-        <div class="orderInfo">
+        <div class="orderInfo emailAddress">
           <div class="common">
             <div class="left-box">
               邮箱地址
             </div>
             <div class="right-box">
-              <a-input placeholder="请输入邮箱" v-model="email"></a-input>
+              <a-input
+                ref="email"
+                placeholder="请输入邮箱"
+                v-model="email"
+              ></a-input>
             </div>
           </div>
         </div>
@@ -43,7 +47,7 @@
         email: "",
         visible: false,
         options: {
-          title: "下载",
+          title: "填写邮箱地址",
           closable: true,
           maskClosable: false,
           wrapClassName: "confirmDelivery",
@@ -83,8 +87,19 @@
       },
       sureOrder() {
         if (!this.email) {
-          this.$message.warning("请输入邮箱");
+          this.$message.warning("请输入邮箱", 1);
+          this.$refs.email.focus();
           return;
+        } else {
+          if (
+            !/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/.test(
+              this.email
+            )
+          ) {
+            this.$message.warning("请输入正确的邮箱", 1);
+            this.$refs.email.focus();
+            return;
+          }
         }
         _getData("/quotation/queryProjectInfoBySchemeId", {
           id: this.quoteId,

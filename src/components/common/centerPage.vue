@@ -19,9 +19,10 @@
           >
             <a-sub-menu v-for="itemObj in dataArr" :key="itemObj.key">
               <span slot="title">
-                <svg class="icon" aria-hidden="true">
+                <svg class="icon" aria-hidden="true" v-if="itemObj.icon">
                   <use v-bind:xlink:href="itemObj.icon"></use>
                 </svg>
+                <img :src="itemObj.pic_url" v-else />
                 <span>{{ itemObj.name }}</span>
               </span>
               <a-menu-item
@@ -126,6 +127,15 @@
                 }
                 .icon {
                   margin-right: 7px;
+                }
+                > span {
+                  display: flex;
+                  align-items: center;
+                  img {
+                    width: 14px;
+                    height: 14px;
+                    margin-right: 7px;
+                  }
                 }
               }
               .ant-menu-sub {

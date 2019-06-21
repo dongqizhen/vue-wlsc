@@ -1,14 +1,19 @@
 <template>
-  <div class="inquiryProductItem">
+  <div
+    class="inquiryProductItem"
+    @click="turnToProductDetail(itemData.goodsId)"
+  >
     <span
       :class="
         isShowInfo.isMerchant || isShowInfo.current == 1 ? 'boxHidden' : ''
       "
     >
-      <a-checkbox
-        @change="onChange(itemData.id)"
-        :checked="checkedChange(itemData.id)"
-      ></a-checkbox>
+      <label @click.stop="stopChange">
+        <a-checkbox
+          @change="onChange(itemData.id)"
+          :checked="checkedChange(itemData.id)"
+        ></a-checkbox
+      ></label>
     </span>
     <span>
       <img :src="itemData.goodsImage" />
@@ -36,10 +41,16 @@
         isShowInfo.current != 3 ||
           (isShowInfo.current == 3 && isShowInfo.isMerchant)
       "
+      style="overflow: hidden;
+        word-break: break-word;"
     >
       {{ itemData.userRemark ? itemData.userRemark : "暂无备注" }}
     </span>
-    <span v-if="isShowInfo.current == 2">
+    <span
+      v-if="isShowInfo.current == 2"
+      style="overflow: hidden;
+        word-break: break-word;"
+    >
       {{ itemData.shopRemark ? itemData.shopRemark : "暂无备注" }}
     </span>
     <span
@@ -82,6 +93,12 @@
       }
     },
     methods: {
+      turnToProductDetail(id) {
+        let { href } = this.$router.resolve({
+          path: `/details/productDetails/${id}`
+        });
+        window.open(href, "_blank");
+      },
       onChange(id) {
         // console.log(id);
         if (_.indexOf(this.goodList, id) == -1) {
@@ -108,7 +125,8 @@
             return true;
           }
         }
-      }
+      },
+      stopChange() {}
     }
   };
 </script>

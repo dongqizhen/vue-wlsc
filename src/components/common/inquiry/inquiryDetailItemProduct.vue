@@ -1,10 +1,16 @@
 <template>
-  <div class="inquiryProductItem" :class="addClass(itemData.id)">
+  <div
+    class="inquiryProductItem"
+    :class="addClass(itemData.id)"
+    @click="turnToProductDetail(itemData.goodsId)"
+  >
     <span>
-      <a-checkbox
-        @change="onChange(itemData.id)"
-        :checked="checkedChange(itemData.id)"
-      ></a-checkbox>
+      <label @click.stop="stopChange">
+        <a-checkbox
+          @change="onChange(itemData.id)"
+          :checked="checkedChange(itemData.id)"
+        ></a-checkbox
+      ></label>
     </span>
     <span>
       <img :src="itemData.goodsImage" />
@@ -17,10 +23,14 @@
       {{ itemData.arrivalTime ? itemData.arrivalTime.substring(0, 10) : "" }}
     </span>
     <span :style="isShowInfo.current == 2 ? 'width:83px' : ''">
-      {{ itemData.userRemark }}
+      {{ itemData.userRemark ? itemData.userRemark : "暂无备注" }}
     </span>
-    <span v-if="isShowInfo.current == 2" style="width:83px;">
-      {{ itemData.shopRemark }}
+    <span
+      v-if="isShowInfo.current == 2"
+      style="width:83px;overflow: hidden;
+        word-break: break-word;"
+    >
+      {{ itemData.shopRemark ? itemData.shopRemark : "暂无备注" }}
     </span>
   </div>
 </template>
@@ -46,6 +56,12 @@
       }
     },
     methods: {
+      turnToProductDetail(id) {
+        let { href } = this.$router.resolve({
+          path: `/details/productDetails/${id}`
+        });
+        window.open(href, "_blank");
+      },
       onChange(id) {
         if (_.indexOf(this.list, id) == -1) {
           this.list.push(id);
@@ -68,7 +84,8 @@
             return "active";
           }
         }
-      }
+      },
+      stopChange() {}
     }
   };
 </script>
@@ -118,6 +135,8 @@
       }
       &:nth-child(8) {
         width: 120px;
+        overflow: hidden;
+        word-break: break-word;
       }
     }
   }

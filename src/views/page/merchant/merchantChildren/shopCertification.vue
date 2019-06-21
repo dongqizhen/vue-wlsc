@@ -33,6 +33,7 @@
               placeholder="请输入公司名称"
               v-model="submitData.companyName"
             />
+            <div class="warning">请输入公司名称</div>
           </div>
         </div>
         <div class="common companyAddress">
@@ -475,6 +476,8 @@
       }
       .right-box {
         @include placeholderStyle;
+        display: flex;
+        align-items: center;
         .ant-input {
           width: 390px;
           height: 34px;
@@ -487,6 +490,11 @@
           outline: none;
           resize: none;
           line-height: 22px;
+        }
+        .warning {
+          margin-left: 20px;
+          font-size: 14px;
+          color: $theme-color;
         }
       }
     }

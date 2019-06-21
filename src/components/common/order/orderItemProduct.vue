@@ -5,6 +5,7 @@
         class="itemProduct"
         v-for="product in data.goodsList"
         :key="product.id"
+        @click="turnToProductDetail(product.goods_id)"
       >
         <span><img :src="product.list_pic_url"/></span>
         <span>{{ product.goods_name }}</span>
@@ -210,6 +211,12 @@
       }
     },
     methods: {
+      turnToProductDetail(id) {
+        let { href } = this.$router.resolve({
+          path: `/details/productDetails/${id}`
+        });
+        window.open(href, "_blank");
+      },
       //确认订单
       confirmOrder(orderId) {
         console.log(orderId);

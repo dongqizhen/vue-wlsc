@@ -312,7 +312,8 @@ const router = new Router({
                     path: "/",
                     name: '选购单',
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-选购单'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/purchaseOrder")
@@ -321,7 +322,8 @@ const router = new Router({
                     path: "myInquiry",
                     name: "我的询价",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-我的询价'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/myInquiry")
@@ -330,7 +332,8 @@ const router = new Router({
                     path: "inquiryOrderDetail/:id",
                     name: "询价单",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-询价单'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/inquiryOrderDetail")
@@ -339,7 +342,8 @@ const router = new Router({
                     path: "submitOrder/:id",
                     name: "提交订单",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-提交订单'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/submitOrder")
@@ -348,7 +352,8 @@ const router = new Router({
                     path: "myOrder",
                     name: "我的订单",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-我的订单'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/myOrder")
@@ -357,7 +362,8 @@ const router = new Router({
                     path: "orderDetail/:id",
                     name: "我的订单详情",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-我的订单详情'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/orderDetails")
@@ -366,7 +372,8 @@ const router = new Router({
                     path: "comment/:id",
                     name: "评价",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心=评价'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/comment")
@@ -375,7 +382,8 @@ const router = new Router({
                     path: "myQuote",
                     name: "我的报价",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-我的报价'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/myQuote")
@@ -384,7 +392,8 @@ const router = new Router({
                     path: "lookQuote/:id",
                     name: "查看报价单",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-查看报价单'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/lookQuote")
@@ -393,7 +402,8 @@ const router = new Router({
                     path: "editQuote/:id",
                     name: "编辑报价单",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-编辑报价单'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/editQuote")
@@ -402,7 +412,8 @@ const router = new Router({
                     path: "myStore",
                     name: "我的收藏",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-我的收藏'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/myStore")
@@ -411,7 +422,8 @@ const router = new Router({
                     path: "addressManage",
                     name: "地址管理",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-地址管理'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/addressManage")
@@ -420,25 +432,47 @@ const router = new Router({
                     path: "invoiceManage",
                     name: "发票管理",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-发票管理'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/invoiceManage")
                 },
                 {
                     path: "myMessage",
-                    name: "我的消息中心",
+
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心'
                     },
                     component: () =>
-                        import ("../views/page/shop/userCenterChildren/myMessage")
+                        import ("../views/page/shop/userCenterChildren/myMessage"),
+                    children: [{
+                        path: '/',
+                        name: "我的消息中心",
+                        meta: {
+                            role: 'Administrator',
+                            title: '个人中心-我的消息中心'
+                        },
+                        component: () =>
+                            import ('../views/page/shop/userCenterChildren/myMessageChildren/message')
+                    }, {
+                        path: 'contactService',
+                        name: '联系客服',
+                        meta: {
+                            role: 'Administrator',
+                            title: '个人中心-联系客服'
+                        },
+                        component: () =>
+                            import ('../views/page/shop/userCenterChildren/myMessageChildren/contactService')
+                    }]
                 },
                 {
                     path: "myCenter",
                     name: "个人信息",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-个人信息'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/myCenter"),
@@ -447,7 +481,8 @@ const router = new Router({
                     path: "userSecurity",
                     name: "账号安全",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-账号安全'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/accountSecurity")
@@ -456,7 +491,8 @@ const router = new Router({
                     path: "messageDetail/:id",
                     name: '消息详情',
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-消息详情'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/messageDetails")
@@ -464,7 +500,8 @@ const router = new Router({
                     path: "changePassword",
                     name: '修改密码',
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-修改密码'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/changePassword")
@@ -472,14 +509,16 @@ const router = new Router({
                     path: "changePhone",
                     name: '修改手机号',
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心-修改手机号'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/changePhone")
                 }, {
                     path: "changeEmail",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '个人中心'
                     },
                     name: '修改邮箱',
                     component: () =>

@@ -38,9 +38,9 @@
             ></a-textarea>
           </span>
           <span>
-            <div @click="deleteProduct(item.goods_id)">删除</div>
+            <div @click.stop="deleteProduct(item.goods_id)">删除</div>
             <div
-              @click="addMyStore(item.goods_id)"
+              @click.stop="addMyStore(item.goods_id)"
               v-if="item.isCollection == 0"
             >
               添加到我的收藏
@@ -103,9 +103,9 @@
         });
       },
       addMyStore(id) {
-        _getData("/collect/addordelete", { typeId: 0, valueId: id }).then(
-          data => {
-            // console.log("收藏接口：", data);
+        _getData("/collect/add", { typeId: 0, valueId: id }).then(data => {
+          console.log("收藏接口：", data);
+          if (data.code == 0) {
             _.each(this.data.list, o => {
               if (o.goods_id == id) {
                 o.isCollection = 1;
@@ -113,7 +113,7 @@
             });
             this.$message.success("商品收藏成功", 1);
           }
-        );
+        });
       },
       onChange(id) {
         // console.log(id);
@@ -253,7 +253,7 @@
               }
             }
             &:nth-child(7) {
-              width: 170px;
+              width: 160px;
               margin-right: 30px;
               .ant-input {
                 font-size: 12px;
