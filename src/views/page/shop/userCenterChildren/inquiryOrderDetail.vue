@@ -25,7 +25,7 @@
             v-for="item in data.goodList"
             :key="item.id"
             :class="addClass(item.id)"
-            @click="turnToProductDetail(item.goodsId)"
+            @click="turnToProductDetail(item.goodsId, item.storeId)"
           >
             <span>
               <label @click.stop="stopChange">
@@ -223,9 +223,10 @@
           return;
         }
       },
-      turnToProductDetail(id) {
+      turnToProductDetail(id, storeId) {
         let { href } = this.$router.resolve({
-          path: `/details/productDetails/${id}`
+          path: `/details/productDetails/${id}`,
+          query: { shopId: storeId }
         });
         window.open(href, "_blank");
       },

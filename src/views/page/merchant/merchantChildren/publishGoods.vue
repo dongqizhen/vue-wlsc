@@ -639,10 +639,10 @@
           this.submitData.brandId = data.productInfo.brand_id;
           this.submitData.modelId = data.productInfo.model_id;
 
-          this.submitData.sparePart = data.productInfo.sparePart;
+          this.submitData.sparePart = data.productInfo.spare_part;
+          this.isSparePart = data.productInfo.spare_part ? 1 : 0;
           this.submitData.goodsNumber = data.productInfo.goods_number;
           this.submitData.origin = data.productInfo.origin;
-
           this.specificationParams = data.specificationInfo;
           this.submitData.specificationInfo = this.specificationParams;
 
@@ -931,6 +931,7 @@
           position: relative;
           img {
             width: 100%;
+            height: 100%;
           }
           &:hover {
             cursor: pointer;

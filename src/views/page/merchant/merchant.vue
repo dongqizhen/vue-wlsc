@@ -4,6 +4,7 @@
     :dataArr="dataArr"
     :openKeys="['sub1', 'sub2', 'sub3']"
     :defaultSelectedKeys="defaultSelectedKeys"
+    :shopStatus="shopStatus"
   >
     <div slot="header">
       <Header></Header>
@@ -18,6 +19,7 @@
   export default {
     data() {
       return {
+        shopStatus: 2,
         defaultSelectedKeys: ["0"],
         dataArr: [
           {
@@ -69,6 +71,7 @@
           this.$router.replace({ path: "/merchant/shopIndex" });
         }
       } else {
+        this.shopStatus = this.userShopInfo.audit_status;
         this.defaultSelectedKeys = ["0"];
         this.$router.replace({
           path: "/merchant/openShop",

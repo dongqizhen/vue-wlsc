@@ -11,7 +11,7 @@
               placeholder="请输入店铺名称"
               v-model="submitData.shopName"
             />
-            <div class="warning">请输入店铺名称</div>
+            <div class="warning" v-show="shopNameFlag">请输入店铺名称</div>
           </div>
         </div>
         <div class="common shopType">
@@ -31,12 +31,14 @@
               >
               </el-option>
             </el-select>
+            <div class="warning" v-show="typeFlag">请选择经营模式</div>
           </div>
         </div>
         <div class="common shopIndexPicture">
           <div class="left-box"><span class="red">*</span>店铺首页图片</div>
           <div class="right-box">
             <upload v-on:getVal="getImgUrl" :imgUrl="submitData.image"></upload>
+            <div class="warning" v-show="imageFlag">请上传图片</div>
           </div>
         </div>
         <div class="common ">
@@ -46,6 +48,7 @@
               placeholder="请输入店铺经营范围"
               v-model="submitData.shopScope"
             />
+            <div class="warning" v-show="shopScopeFlag">请输入店铺经营范围</div>
           </div>
         </div>
         <div class="common shopSaleArea">
@@ -56,6 +59,7 @@
               :defaultData="submitData.defaultProvinceData"
               v-on:getSaleArea="getSaleArea"
             ></cascade-select>
+            <div class="warning" v-show="saleAreaFlag">请选择销售地区</div>
           </div>
         </div>
         <div class="common shopIntroduce">
@@ -101,6 +105,11 @@
         visible: false,
         type: "",
         isShow: false,
+        shopNameFlag: false,
+        typeFlag: false,
+        imageFlag: false,
+        shopScopeFlag: false,
+        saleAreaFlag: false,
         shopTypeData: [],
         submitData: {
           shopName: "",
@@ -127,25 +136,35 @@
       ...mapMutations(["changeUserShopInfoState"]),
       save() {
         if (!this.submitData.shopName) {
-          this.$message.warning("请输入店铺名称", 1);
+          this.shopNameFlag = true;
           this.$refs.shopName.focus();
           return;
+        } else {
+          this.shopNameFlag = false;
         }
         if (!this.submitData.type) {
-          this.$message.warning("请选择店铺类型", 1);
+          this.typeFlag = true;
           return;
+        } else {
+          this.typeFlag = false;
         }
         if (!this.submitData.image) {
-          this.$message.warning("请上传店铺首页图片", 1);
+          this.imageFlag = true;
           return;
+        } else {
+          this.imageFlag = false;
         }
         if (!this.submitData.shopScope) {
-          this.$message.warning("请输入店铺经营范围", 1);
+          this.shopScopeFlag = true;
           return;
+        } else {
+          this.shopScopeFlag = false;
         }
         if (this.submitData.defaultProvinceData.length == 0) {
-          this.$message.warning("请选择销售地区", 1);
+          this.saleAreaFlag = true;
           return;
+        } else {
+          this.saleAreaFlag = false;
         }
         this.submitData = {
           ...this.submitData,
@@ -155,11 +174,11 @@
         if (this.isOpenShop) {
           _getData("/store/insertOrUpdateStore", this.submitData).then(data => {
             console.log(data);
-            this.submitData.sid = data.sid;
             _getData("/user/getUser", {})
               .then(data => {
                 console.log("获取用户的店铺开店信息：", data);
                 this.changeUserShopInfoState(data);
+                this.submitData.sid = data.store_id;
               })
               .then(() => {
                 if (this.isOpenShop) {

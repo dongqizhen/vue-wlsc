@@ -10,7 +10,7 @@
         <li
           v-for="item in data.list"
           :key="item.id"
-          @click="turnToProductDetail(item.goods_id)"
+          @click="turnToProductDetail(item.goods_id, data.sid)"
         >
           <span>
             <label @click.stop="stopChange">
@@ -88,9 +88,10 @@
       }
     },
     methods: {
-      turnToProductDetail(id) {
+      turnToProductDetail(id, storeId) {
         let { href } = this.$router.resolve({
-          path: `/details/productDetails/${id}`
+          path: `/details/productDetails/${id}`,
+          query: { shopId: storeId }
         });
         window.open(href, "_blank");
       },

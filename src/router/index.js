@@ -382,7 +382,7 @@ const router = new Router({
                     name: "评价",
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心=评价'
+                        title: '个人中心-评价'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/comment")

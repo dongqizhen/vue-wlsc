@@ -2,7 +2,7 @@
   <div
     class="inquiryProductItem"
     :class="addClass(itemData.id)"
-    @click="turnToProductDetail(itemData.goodsId)"
+    @click="turnToProductDetail(itemData)"
   >
     <span>
       <label @click.stop="stopChange">
@@ -94,9 +94,10 @@
         console.log(date, dataString);
         this.itemData.arrivalTime = dataString;
       },
-      turnToProductDetail(id) {
+      turnToProductDetail(itemData) {
         let { href } = this.$router.resolve({
-          path: `/details/productDetails/${id}`
+          path: `/details/productDetails/${itemData.goodsId}`,
+          query: { shopId: itemData.storeId }
         });
         window.open(href, "_blank");
       },
