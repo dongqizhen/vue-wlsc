@@ -11,6 +11,7 @@
               placeholder="请输入店铺名称"
               v-model="submitData.shopName"
             />
+            <div class="warning">请输入店铺名称</div>
           </div>
         </div>
         <div class="common shopType">
@@ -78,10 +79,7 @@
         </div>
       </div>
     </div>
-    <div
-      :class="['modal-box', isShow ? 'active' : '']"
-      @click="isShowModal"
-    ></div>
+    <div :class="['modal-box', { active: isShow }]" @click="isShowModal"></div>
     <submit-success-modal
       :Visible="visible"
       :type="type"
@@ -128,20 +126,20 @@
     methods: {
       ...mapMutations(["changeUserShopInfoState"]),
       save() {
-        if (this.submitData.shopName == "") {
+        if (!this.submitData.shopName) {
           this.$message.warning("请输入店铺名称", 1);
           this.$refs.shopName.focus();
           return;
         }
-        if (this.submitData.type == "") {
+        if (!this.submitData.type) {
           this.$message.warning("请选择店铺类型", 1);
           return;
         }
-        if (this.submitData.image == "") {
+        if (!this.submitData.image) {
           this.$message.warning("请上传店铺首页图片", 1);
           return;
         }
-        if (this.submitData.shopScope == "") {
+        if (!this.submitData.shopScope) {
           this.$message.warning("请输入店铺经营范围", 1);
           return;
         }
@@ -208,33 +206,35 @@
       cascadeSelect,
       submitSuccessModal
     },
-
     mounted() {
-      _getData("/storeType/queryStoreType", {}).then(data => {
-        console.log("店铺类型", data);
-        _.each(data, val => {
-          val.label = val.name;
-          val.value = val.id;
-        });
-        this.shopTypeData = data;
-        if (this.userShopInfo.store_id) {
-          _getData("/store/selectAllStore", {}).then(data => {
-            console.log("获取已填写的店铺信息：", data);
-            _.each(data.defaultProvinceData, val => {
-              val.id = val.provinceId;
-            });
-            this.submitData = {
-              shopName: data.shopName,
-              type: data.type,
-              image: data.image,
-              shopScope: data.shopScope,
-              defaultProvinceData: data.defaultProvinceData,
-              introduce: data.introduce,
-              sid: this.userShopInfo.store_id
-            };
+      _getData("/storeType/queryStoreType", {})
+        .then(data => {
+          console.log("店铺类型", data);
+          _.each(data, val => {
+            val.label = val.name;
+            val.value = val.id;
           });
-        }
-      });
+          this.shopTypeData = data;
+        })
+        .then(() => {
+          if (this.userShopInfo.store_id) {
+            _getData("/store/selectAllStore", {}).then(data => {
+              console.log("获取已填写的店铺信息：", data);
+              _.each(data.defaultProvinceData, val => {
+                val.id = val.provinceId;
+              });
+              this.submitData = {
+                shopName: data.shopName,
+                type: data.type,
+                image: data.image,
+                shopScope: data.shopScope,
+                defaultProvinceData: data.defaultProvinceData,
+                introduce: data.introduce,
+                sid: this.userShopInfo.store_id
+              };
+            });
+          }
+        });
     }
   };
 </script>
@@ -274,8 +274,9 @@
             }
           }
           .right-box {
+            display: flex;
+            align-items: center;
             @include placeholderStyle;
-
             .ant-input {
               width: 390px;
               height: 34px;
@@ -293,6 +294,11 @@
               .ant-select-arrow {
                 right: 20px;
               }
+            }
+            .warning {
+              margin-left: 20px;
+              font-size: 14px;
+              color: $theme-color;
             }
           }
           .saleArea {

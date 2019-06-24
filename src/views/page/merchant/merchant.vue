@@ -61,7 +61,6 @@
       ...mapState(["isLogin", "userShopInfo"])
     },
     beforeMount() {
-      console.log(111111);
       if (this.userShopInfo.audit_status == 2) {
         if (this.$route.query.keyId) {
           this.defaultSelectedKeys = [`${this.$route.query.keyId}`];
@@ -102,7 +101,7 @@
                 color: #fff;
               }
               p.backIndex {
-                width: 163px;
+                width: 168px;
                 height: 30px;
                 border-radius: 16px;
                 background-color: #fff;
@@ -115,6 +114,9 @@
                   color: $theme-color;
                   font-weight: 600;
                   font-size: 14px;
+                  display: flex;
+                  justify-content: center;
+                  padding: 0;
                 }
               }
             }

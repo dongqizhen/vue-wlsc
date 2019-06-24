@@ -329,12 +329,16 @@
             if (this.infoJudge() !== false) {
               if (this.submitData.goodsId) {
                 _getData("/goods/updateGoods", this.submitData).then(data => {
-                  this.$message.success("产品编辑成功", 1);
-                  this.$router.replace({ path: "/merchant/productManage" });
+                  if (data.code != 500) {
+                    this.$message.success("产品编辑成功", 1);
+                    this.$router.replace({ path: "/merchant/productManage" });
+                  }
                 });
               } else {
                 _getData("/goods/addGoods", this.submitData).then(data => {
-                  this.$message.success("产品发布成功", 1);
+                  if (data.code != 500) {
+                    this.$message.success("产品发布成功", 1);
+                  }
                 });
               }
             }
@@ -621,14 +625,14 @@
         _getData("/goods/gooddetail", { id: this.$route.query.id }).then(data => {
           console.log("获取产品详情：", data);
           this.submitData.goodsId = data.productInfo.id;
-          this.getSmallType(data.productInfo.bigCategoryId);
+          this.getSmallType(data.productInfo.big_category_id);
           this.getModelData(
             data.productInfo.category_id,
             data.productInfo.brand_id
           );
           this.submitData.name = data.productInfo.name;
           this.submitData.goodsSn = data.productInfo.goods_sn;
-          this.submitData.bigCategoryId = data.productInfo.bigCategoryId;
+          this.submitData.bigCategoryId = data.productInfo.big_category_id;
           this.submitData.categoryId = data.productInfo.category_id;
           this.submitData.attribute_category =
             data.productInfo.attribute_category;
