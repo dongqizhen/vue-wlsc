@@ -32,7 +32,7 @@
                 <li
                   v-for="time in timesTab"
                   :key="time.id"
-                  :class="currentTab == time.id ? 'active' : ''"
+                  :class="{ active: currentTab == time.id }"
                   @click="triggleTab(time.id, time.tabValue)"
                 >
                   {{ time.name }}
@@ -46,47 +46,36 @@
             <e-chart :options="polar" :init-options="initOptions"></e-chart>
           </div>
           <div class="statisticalTable">
-            <ul>
-              <li>
-                <span @click="tabClick(1)">
-                  时间
-                  <svg class="icon" aria-hidden="true">
-                    <use v-bind:xlink:href="timeSvg"></use>
-                  </svg>
-                </span>
-                <span @click="tabClick(2)">
-                  新增访问店铺数
-                  <svg class="icon" aria-hidden="true">
-                    <use v-bind:xlink:href="visitSvg"></use>
-                  </svg>
-                </span>
-                <span @click="tabClick(3)">
-                  新增收藏店铺数
-                  <svg class="icon" aria-hidden="true">
-                    <use v-bind:xlink:href="storeSvg"></use>
-                  </svg>
-                </span>
-                <span @click="tabClick(4)">
-                  新增询价单数
-                  <svg class="icon" aria-hidden="true">
-                    <use v-bind:xlink:href="inquirySvg"></use>
-                  </svg>
-                </span>
-                <span @click="tabClick(5)">
-                  新增订单数
-                  <svg class="icon" aria-hidden="true">
-                    <use v-bind:xlink:href="orderSvg"></use>
-                  </svg>
-                </span>
-              </li>
-              <li v-for="item in items" :key="item.id">
-                <span>{{ item.time }}</span>
-                <span>{{ item.newVisit }}</span>
-                <span>{{ item.newStore }}</span>
-                <span>{{ item.newInquiry }}</span>
-                <span>{{ item.newOrder }}</span>
-              </li>
-            </ul>
+            <div class="table">
+              <div class="thead">
+                <tr>
+                  <th
+                    v-for="item in tableArr"
+                    :key="item.id"
+                    @click="sortChange(item.id, item.flag, item.sortField)"
+                  >
+                    <span>{{ item.name }}</span>
+                    <span>
+                      <svg class="icon" aria-hidden="true">
+                        <use v-bind:xlink:href="item.icon"></use>
+                      </svg>
+                    </span>
+                  </th>
+                </tr>
+              </div>
+
+              <div class="tbody">
+                <ul>
+                  <li v-for="item in sortDataArr" :key="item.id">
+                    <span>{{ item.time }}</span>
+                    <span>{{ item.newVisit }}</span>
+                    <span>{{ item.newStore }}</span>
+                    <span>{{ item.newInquiry }}</span>
+                    <span>{{ item.newOrder }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -112,36 +101,27 @@
   import "echarts/lib/component/title";
   import "echarts/lib/component/visualMap";
   import "echarts/lib/component/legend";
+
   export default {
     data() {
       return {
         isLoading: true,
+        currentTab: 7,
         currentTitleTab: 0,
-        flag1: -1,
-        flag2: 0,
-        flag3: 0,
-        flag4: 0,
-        flag5: 0,
-        timeSvg: "#iconpaixu",
-        visitSvg: "#iconpaixucopy",
-        storeSvg: "#iconpaixucopy",
-        inquirySvg: "#iconpaixucopy",
-        orderSvg: "#iconpaixucopy",
-        xAxisData: [
-          "2019-03-01",
-          "2019-03-02",
-          "2019-03-03",
-          "2019-03-04",
-          "2019-03-05",
-          "2019-03-06",
-          "2019-03-07"
-        ],
-        newVisitNumber: [],
-        newStoreNumber: [],
-        newInquiryNumber: [],
-        newOrderNumber: [],
+        dataChange: [], //选择的日期范围
+        timeArr: [], //日期
+        sortDataArr: [], //底部排序数据集合
+        newVisitNumber: [], //新增访问店铺数
+        newStoreNumber: [], //新增收藏店铺数
+        newInquiryNumber: [], //新增询价单数
+        newOrderNumber: [], //新增订单数
         amountData: [],
-        defaultActiveKey: 1,
+        getSelectData: {
+          startTime: "",
+          endTime: "",
+          order: "",
+          dateTime: "aWeek"
+        },
         tabs: [
           "全部",
           "新增访问店铺数",
@@ -149,63 +129,49 @@
           "新增询价单数",
           "新增订单数"
         ],
-        currentTab: 7,
         timesTab: [
           { id: 7, name: "最近一周", tabValue: "aWeek" },
           { id: 15, name: "最近半个月", tabValue: "halfAMonth" },
           { id: 30, name: "最近一个月", tabValue: "aJan" }
         ],
-        items: [
+        tableArr: [
           {
             id: 1,
-            time: "2019-03-01",
-            newVisit: 2,
-            newStore: 2,
-            newInquiry: 2,
-            newOrder: 56
+            name: "时间",
+            icon: "#iconpaixu",
+            flag: -1,
+            sortField: "time"
           },
           {
             id: 2,
-            time: "2019-03-02",
-            newVisit: 3,
-            newStore: 3,
-            newInquiry: 2,
-            newOrder: 76
+            name: "新增访问店铺数",
+            icon: "#iconpaixucopy",
+            flag: -1,
+            sortField: "newVisit"
           },
           {
             id: 3,
-            time: "2019-03-03",
-            newVisit: 2,
-            newStore: 23,
-            newInquiry: 12,
-            newOrder: 45
+            name: "新增收藏店铺数",
+            icon: "#iconpaixucopy",
+            flag: -1,
+            sortField: "newStore"
           },
           {
             id: 4,
-            time: "2019-03-04",
-            newVisit: 13,
-            newStore: 2,
-            newInquiry: 1,
-            newOrder: 2
+            name: "新增询价单数",
+            icon: "#iconpaixucopy",
+            flag: -1,
+            sortField: "newInquiry"
           },
           {
             id: 5,
-            time: "2019-03-05",
-            newVisit: 2,
-            newStore: 9,
-            newInquiry: 2,
-            newOrder: 23
-          },
-          {
-            id: 6,
-            time: "2019-03-06",
-            newVisit: 15,
-            newStore: 4,
-            newInquiry: 2,
-            newOrder: 98
+            name: "新增订单数",
+            icon: "#iconpaixucopy",
+            flag: -1,
+            sortField: "newOrder"
           }
         ],
-        value: "",
+        //echart配置
         initOptions: {
           renderer: "svg"
         },
@@ -309,102 +275,49 @@
               }
             }
           ]
-          // animationDuration: 1000
-        },
-        getSelectData: {
-          startTime: "",
-          endTime: "",
-          order: "",
-          dateTime: "aWeek"
-        },
-        dataChange: [],
-        timeArr: []
+        }
       };
     },
+
     mounted() {
       _getDataAll([this.getShopCountInfo(), this.getShopSelectInfo()]).then(
         () => {
           this.isLoading = false;
         }
       );
-      this.polar.legend.data = [
-        "新增访问店铺数",
-        "新增收藏店铺数",
-        "新增询价单数",
-        "新增订单数"
-      ];
+      this.polar.legend.data = this.tabs.slice(0);
       this.polar.xAxis.data = this.getTimeRange(7);
     },
     methods: {
-      tabClick(i) {
-        if (i == 1) {
-          this.flag1 = this.flag1 + 1;
-          console.log(this.flag1);
-          if (this.flag1 % 2) {
-            this.timeSvg = "#iconpaixu";
+      sortChange(id, flag, sortField) {
+        _.map(this.tableArr, o => {
+          if (o.id == id) {
+            o.flag = flag + 1;
+            if (o.flag % 2) {
+              o.icon = "#iconpaixu1";
+              this.sortDataArr = _.sortBy(this.sortDataArr, sortField, () => {
+                return sortField;
+              });
+            } else {
+              o.icon = "#iconpaixu";
+              this.sortDataArr = _.sortBy(this.sortDataArr, sortField, () => {
+                return sortField;
+              }).reverse();
+            }
           } else {
-            this.timeSvg = "#iconpaixu1";
+            o.flag = -1;
+            o.icon = "#iconpaixucopy";
           }
-          this.visitSvg = "#iconpaixucopy";
-          this.storeSvg = "#iconpaixucopy";
-          this.inquirySvg = "#iconpaixucopy";
-          this.orderSvg = "#iconpaixucopy";
-        } else if (i == 2) {
-          this.flag2 = this.flag2 + 1;
-          if (this.flag2 % 2) {
-            this.visitSvg = "#iconpaixu";
-          } else {
-            this.visitSvg = "#iconpaixu1";
-          }
-          this.timeSvg = "#iconpaixucopy";
-          this.storeSvg = "#iconpaixucopy";
-          this.inquirySvg = "#iconpaixucopy";
-          this.orderSvg = "#iconpaixucopy";
-        } else if (i == 3) {
-          this.flag3 = this.flag3 + 1;
-          if (this.flag3 % 2) {
-            this.storeSvg = "#iconpaixu";
-          } else {
-            this.storeSvg = "#iconpaixu1";
-          }
-          this.timeSvg = "#iconpaixucopy";
-          this.visitSvg = "#iconpaixucopy";
-          this.inquirySvg = "#iconpaixucopy";
-          this.orderSvg = "#iconpaixucopy";
-        } else if (i == 4) {
-          this.flag4 = this.flag4 + 1;
-          if (this.flag4 % 2) {
-            this.inquirySvg = "#iconpaixu";
-          } else {
-            this.inquirySvg = "#iconpaixu1";
-          }
-          this.timeSvg = "#iconpaixucopy";
-          this.storeSvg = "#iconpaixucopy";
-          this.visitSvg = "#iconpaixucopy";
-          this.orderSvg = "#iconpaixucopy";
-        } else if (i == 5) {
-          this.flag5 = this.flag5 + 1;
-          if (this.flag5 % 2) {
-            this.orderSvg = "#iconpaixu";
-          } else {
-            this.orderSvg = "#iconpaixu1";
-          }
-          this.timeSvg = "#iconpaixucopy";
-          this.storeSvg = "#iconpaixucopy";
-          this.inquirySvg = "#iconpaixucopy";
-          this.visitSvg = "#iconpaixucopy";
-        }
+        });
       },
       getTab(val) {
         this.currentTitleTab = val;
-        console.log(val);
+        this.polar.series[0].data = [];
+        this.polar.series[1].data = [];
+        this.polar.series[2].data = [];
+        this.polar.series[3].data = [];
         if (val == 0) {
-          this.polar.legend.data = [
-            "新增访问店铺数",
-            "新增收藏店铺数",
-            "新增询价单数",
-            "新增订单数"
-          ];
+          this.polar.legend.data = this.tabs.slice(0);
           this.polar.series[0].data = this.newVisitNumber;
           this.polar.series[1].data = this.newStoreNumber;
           this.polar.series[2].data = this.newInquiryNumber;
@@ -412,26 +325,14 @@
         } else if (val == 1) {
           this.polar.legend.data = ["新增访问店铺数"];
           this.polar.series[0].data = this.newVisitNumber;
-          this.polar.series[1].data = [];
-          this.polar.series[2].data = [];
-          this.polar.series[3].data = [];
         } else if (val == 2) {
           this.polar.legend.data = ["新增收藏店铺数"];
-          this.polar.series[0].data = [];
           this.polar.series[1].data = this.newStoreNumber;
-          this.polar.series[2].data = [];
-          this.polar.series[3].data = [];
         } else if (val == 3) {
           this.polar.legend.data = ["新增询价单数"];
-          this.polar.series[0].data = [];
-          this.polar.series[1].data = [];
           this.polar.series[2].data = this.newInquiryNumber;
-          this.polar.series[3].data = [];
         } else {
           this.polar.legend.data = ["新增订单数"];
-          this.polar.series[0].data = [];
-          this.polar.series[1].data = [];
-          this.polar.series[2].data = [];
           this.polar.series[3].data = this.newOrderNumber;
         }
       },
@@ -442,8 +343,9 @@
         this.getSelectData.endTime = "";
         this.dataChange = [];
         this.timeArr = this.getTimeRange(currentTabId);
-        this.getShopSelectInfo();
-        this.getTab(this.currentTitleTab);
+        this.getShopSelectInfo().then(() => {
+          this.getTab(this.currentTitleTab);
+        });
       },
       getDateRange(val) {
         console.log(val);
@@ -453,7 +355,9 @@
         this.getSelectData.startTime = val[0];
         this.getSelectData.endTime = val[1];
         this.timeArr = this.getDiffDate(val[0], val[1]);
-        this.getShopSelectInfo();
+        this.getShopSelectInfo().then(() => {
+          this.getTab(this.currentTitleTab);
+        });
       },
       async getShopCountInfo() {
         return await _getData("/store/sjHomeStore", {}).then(data => {
@@ -490,74 +394,87 @@
           ];
         });
       },
-      getShopSelectInfo() {
-        _getData("/store/homeStoreCount", this.getSelectData).then(data => {
-          console.log("selectInfo:::", data);
-          this.polar.xAxis.data = this.timeArr;
-          this.newVisitNumber = [];
-          this.newStoreNumber = [];
-          this.newInquiryNumber = [];
-          this.newOrderNumber = [];
-          console.log(this.timeArr);
-          _.map(this.timeArr, o => {
-            if (
-              _.find(data.recordsList, v => {
-                return o == v.createOn.substring(0, 10);
-              })
-            ) {
-              this.newVisitNumber.push(
+      async getShopSelectInfo() {
+        return await _getData("/store/homeStoreCount", this.getSelectData).then(
+          data => {
+            //console.log("selectInfo:::", data);
+            this.polar.xAxis.data = this.timeArr;
+            this.newVisitNumber = [];
+            this.newStoreNumber = [];
+            this.newInquiryNumber = [];
+            this.newOrderNumber = [];
+            _.map(this.timeArr, o => {
+              if (
                 _.find(data.recordsList, v => {
                   return o == v.createOn.substring(0, 10);
-                }).nCount
-              );
-            } else {
-              this.newVisitNumber.push(0);
-            }
-            if (
-              _.find(data.orderList, v => {
-                return o == v.createOn.substring(0, 10);
-              })
-            ) {
-              this.newOrderNumber.push(
+                })
+              ) {
+                this.newVisitNumber.push(
+                  _.find(data.recordsList, v => {
+                    return o == v.createOn.substring(0, 10);
+                  }).nCount
+                );
+              } else {
+                this.newVisitNumber.push(0);
+              }
+              if (
                 _.find(data.orderList, v => {
                   return o == v.createOn.substring(0, 10);
-                }).nCount
-              );
-            } else {
-              this.newOrderNumber.push(0);
-            }
-            if (
-              _.find(data.enquiryList, v => {
-                return o == v.createOn.substring(0, 10);
-              })
-            ) {
-              this.newInquiryNumber.push(
+                })
+              ) {
+                this.newOrderNumber.push(
+                  _.find(data.orderList, v => {
+                    return o == v.createOn.substring(0, 10);
+                  }).nCount
+                );
+              } else {
+                this.newOrderNumber.push(0);
+              }
+              if (
                 _.find(data.enquiryList, v => {
                   return o == v.createOn.substring(0, 10);
-                }).nCount
-              );
-            } else {
-              this.newInquiryNumber.push(0);
-            }
-            if (
-              _.find(data.collectList, v => {
-                return o == v.createOn.substring(0, 10);
-              })
-            ) {
-              this.newStoreNumber.push(
+                })
+              ) {
+                this.newInquiryNumber.push(
+                  _.find(data.enquiryList, v => {
+                    return o == v.createOn.substring(0, 10);
+                  }).nCount
+                );
+              } else {
+                this.newInquiryNumber.push(0);
+              }
+              if (
                 _.find(data.collectList, v => {
                   return o == v.createOn.substring(0, 10);
-                }).nCount
-              );
-            } else {
-              this.newStoreNumber.push(0);
-            }
-          });
-          this.polar.series[0].data = this.newVisitNumber;
-          this.polar.series[1].data = this.newStoreNumber;
-          this.polar.series[2].data = this.newInquiryNumber;
-          this.polar.series[3].data = this.newOrderNumber;
-        });
+                })
+              ) {
+                this.newStoreNumber.push(
+                  _.find(data.collectList, v => {
+                    return o == v.createOn.substring(0, 10);
+                  }).nCount
+                );
+              } else {
+                this.newStoreNumber.push(0);
+              }
+            });
+            this.polar.series[0].data = this.newVisitNumber;
+            this.polar.series[1].data = this.newStoreNumber;
+            this.polar.series[2].data = this.newInquiryNumber;
+            this.polar.series[3].data = this.newOrderNumber;
+            const items = [];
+            _.map(this.timeArr, (o, i) => {
+              items.push({
+                id: i,
+                time: o,
+                newVisit: this.newVisitNumber[i],
+                newStore: this.newStoreNumber[i],
+                newInquiry: this.newInquiryNumber[i],
+                newOrder: this.newOrderNumber[i]
+              });
+            });
+            this.sortDataArr = items.reverse();
+          }
+        );
       },
       getTimeRange(val) {
         this.timeArr = [];
@@ -728,8 +645,32 @@
           background-color: #fff;
           margin-top: 1px;
           margin-bottom: 130px;
+          .table {
+            .thead {
+              tr {
+                display: flex;
+                align-items: center;
+                height: 48px;
+                font-size: 14px;
+                color: #333;
+                font-weight: 600;
+                background-color: #f8f8f8;
+                border: 1px solid #ddd;
+                th {
+                  flex: 1;
+                  text-align: center;
+                  span {
+                    &:first-child {
+                      margin-right: 4px;
+                    }
+                  }
+                }
+              }
+            }
+          }
           ul {
             border: $border-style;
+            border-top: none;
             li {
               display: flex;
               height: 48px;
@@ -741,12 +682,6 @@
               span {
                 flex: 1;
                 text-align: center;
-              }
-              &:first-child {
-                background: #f8f8f8;
-                font-family: PingFangSC-Medium;
-                color: #333333;
-                font-weight: 600;
               }
               &:last-child {
                 border-bottom: none;

@@ -26,12 +26,11 @@
           <span>{{ item.goods_name }}</span>
           <span>{{ item.brand_name }}/{{ item.model_name }}</span>
           <span>{{ item.show_price }}</span>
-          <span>
+          <span @click.stop="stopChange">
             <van-stepper v-model="item.number" :max="item.goods_number" />
             <i class="stockNumber">库存{{ item.goods_number }}件</i>
           </span>
-          <!-- <span>{{ (item.show_price * item.number).toFixed(2) }}</span> -->
-          <span>
+          <span @click.stop="stopChange">
             <a-textarea
               placeholder="请输入备注"
               v-model="item.goods_specifition_name_value"
