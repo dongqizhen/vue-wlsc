@@ -5,7 +5,7 @@
         <slot name="header"></slot>
       </a-layout-header>
       <a-layout>
-        <a-layout-sider>
+        <a-layout-sider v-show="!(shopStatus == 0 || shopStatus == 3)">
           <div class="title">
             <slot name="Icon"></slot>
             {{ titleText }}
@@ -56,6 +56,7 @@
 </template>
 <script>
   import Footer from "../footer/footer";
+  import { mapState } from "vuex";
   export default {
     data() {
       return {
@@ -77,6 +78,9 @@
       },
       defaultSelectedKeys: {
         type: Array
+      },
+      shopStatus: {
+        type: Number
       }
     },
     methods: {

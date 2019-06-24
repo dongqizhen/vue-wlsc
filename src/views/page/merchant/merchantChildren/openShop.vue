@@ -98,6 +98,7 @@
         _getData("/user/getUser", {}).then(data => {
           console.log("获取用户的店铺开店信息：", data);
           this.changeUserShopInfoState(data);
+          this.certificationStatus = data.audit_status;
         });
       },
       reset() {
@@ -125,6 +126,7 @@
 <style lang="scss" scoped>
   @import "../../../../assets/scss/_commonScss";
   .openShop {
+    margin-bottom: 100px;
     .steps-head {
       height: 192px;
       background-color: #fff;

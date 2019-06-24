@@ -353,15 +353,18 @@
         if (this.isOpenShop) {
           console.log(this.shopInfo);
           this.submitData.sid = this.shopInfo.sid;
-          _getData("/store/updateShopCertification", this.submitData)
-            .then(data => {
+          _getData("/store/updateShopCertification", this.submitData).then(
+            data => {
               console.log(data);
-            })
-            .then(() => {
-              if (this.isOpenShop) {
-                this.$emit("sure", 1);
+              if (data.code == 1) {
+                return;
+              } else {
+                if (this.isOpenShop) {
+                  this.$emit("sure", 1);
+                }
               }
-            });
+            }
+          );
         } else {
           this.addCarSuccess();
         }

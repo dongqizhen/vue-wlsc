@@ -1,7 +1,7 @@
 <template>
   <div
     class="inquiryProductItem"
-    @click="turnToProductDetail(itemData.goodsId)"
+    @click="turnToProductDetail(itemData.goodsId, itemData.storeId)"
   >
     <span
       :class="
@@ -19,7 +19,11 @@
       <img :src="itemData.goodsImage" />
     </span>
     <span>{{ itemData.goodsName }}</span>
-    <span>{{ itemData.unitPrice }}</span>
+    <span>
+      {{
+        isShowInfo.current == 2 ? "￥" + itemData.unitPrice : itemData.showPrice
+      }}
+    </span>
     <span v-if="isShowInfo.isDetail">¥198988282.00</span>
     <span
       v-if="
@@ -96,9 +100,10 @@
       }
     },
     methods: {
-      turnToProductDetail(id) {
+      turnToProductDetail(id, storeId) {
         let { href } = this.$router.resolve({
-          path: `/details/productDetails/${id}`
+          path: `/details/productDetails/${id}`,
+          query: { shopId: storeId }
         });
         window.open(href, "_blank");
       },

@@ -1,49 +1,52 @@
 <template>
   <div class="myStore">
-    <common-title title="我的收藏">
-      <div slot="titleRight" class="right-box">
-        <div class="search-box">
-          <a-input
-            placeholder="请输入搜索内容"
-            v-model="searchParams.name"
-          ></a-input>
-          <a-button class="searchBtn" @click="search">搜索</a-button>
-          <a-button class="clearBtn" @click="clear">清空</a-button>
-        </div>
-        <div class="tab-box">
-          <div :class="current == 0 ? 'active' : ''" @click="getTab(0)">
-            产品({{ goodsCount }})
+    <div v-if="!isLoading">
+      <common-title title="我的收藏">
+        <div slot="titleRight" class="right-box">
+          <div class="search-box">
+            <a-input
+              placeholder="请输入搜索内容"
+              v-model="searchParams.name"
+            ></a-input>
+            <a-button class="searchBtn" @click="search">搜索</a-button>
+            <a-button class="clearBtn" @click="clear">清空</a-button>
           </div>
-          <div :class="current == 1 ? 'active' : ''" @click="getTab(1)">
-            店铺({{ shopCount }})
+          <div class="tab-box">
+            <div :class="current == 0 ? 'active' : ''" @click="getTab(0)">
+              产品({{ goodsCount }})
+            </div>
+            <div :class="current == 1 ? 'active' : ''" @click="getTab(1)">
+              店铺({{ shopCount }})
+            </div>
           </div>
         </div>
+      </common-title>
+      <div class="listContainer">
+        <div class="listContent" v-if="data.length > 0">
+          <ul v-if="current == 0">
+            <product-item
+              v-for="item in data"
+              :key="item.id"
+              :list="item"
+            ></product-item>
+          </ul>
+          <ul v-else>
+            <shop-item
+              v-for="item in data"
+              :key="item.id"
+              :item="item"
+            ></shop-item>
+          </ul>
+        </div>
+        <no-data v-else text="暂无数据"></no-data>
       </div>
-    </common-title>
-    <div class="listContainer">
-      <div class="listContent" v-if="data.length > 0">
-        <ul v-if="current == 0">
-          <product-item
-            v-for="item in data"
-            :key="item.id"
-            :list="item"
-          ></product-item>
-        </ul>
-        <ul v-else>
-          <shop-item
-            v-for="item in data"
-            :key="item.id"
-            :item="item"
-          ></shop-item>
-        </ul>
-      </div>
-      <no-data v-else text="暂无数据"></no-data>
+      <pagination
+        :data="paginationData"
+        v-on:onPaginationChange="getPaginationChange"
+        v-if="paginationData.count != 0"
+      ></pagination>
     </div>
-    <pagination
-      :data="paginationData"
-      v-on:onPaginationChange="getPaginationChange"
-      v-if="paginationData.count != 0"
-    ></pagination>
+    <loading v-else></loading>
   </div>
 </template>
 
@@ -52,11 +55,12 @@
   import productItem from "../../../../components/common/item/productItem";
   import shopItem from "../../../../components/common/item/shopItem";
   import pagination from "../../../../components/common/pagination";
-  import { _getData } from "../../../../config/getData";
+  import { _getData, _getDataAll } from "../../../../config/getData";
   import _ from "lodash";
   export default {
     data() {
       return {
+        isLoading: true,
         data: [],
         current: 0,
         goodsCount: 0,
@@ -88,21 +92,21 @@
         this.searchParams.typeId = val;
         this.getList(val);
       },
-      getList() {
-        _getData("/collect/list", this.searchParams).then(data => {
+      async getList() {
+        return await _getData("/collect/list", this.searchParams).then(data => {
           console.log("获取收藏数据：", data);
           this.data = data.data;
           this.paginationData = data;
         });
       },
-      getStoreNumber() {
-        _getData("/collect/count", { name: this.searchParams.name }).then(
-          data => {
-            console.log("获取的收藏的数量：：：", data);
-            this.goodsCount = data.goodsCount;
-            this.shopCount = data.shopCount;
-          }
-        );
+      async getStoreNumber() {
+        return await _getData("/collect/count", {
+          name: this.searchParams.name
+        }).then(data => {
+          console.log("获取的收藏的数量：：：", data);
+          this.goodsCount = data.goodsCount;
+          this.shopCount = data.shopCount;
+        });
       }
     },
     components: {
@@ -112,8 +116,9 @@
       pagination
     },
     mounted() {
-      this.getList();
-      this.getStoreNumber();
+      _getDataAll([this.getList(), this.getStoreNumber()]).then(() => {
+        this.isLoading = false;
+      });
     }
   };
 </script>

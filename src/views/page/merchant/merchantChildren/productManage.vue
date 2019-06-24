@@ -82,7 +82,6 @@
           <div class="selectBtn">
             <button class="search" @click="searchData">搜索</button>
             <button class="clear" @click="clearData">清除</button>
-            <button class="export">导出</button>
           </div>
         </div>
         <div class="listContent">
@@ -98,12 +97,19 @@
             <span>操作</span>
           </h2>
           <ul v-if="data.length != 0">
-            <li v-for="item in data" :key="item.id" :class="addClass(item.id)">
+            <li
+              v-for="item in data"
+              :key="item.id"
+              :class="addClass(item.id)"
+              @click="turnToDetail(item)"
+            >
               <span>
-                <a-checkbox
-                  @change="onChange(item.id)"
-                  :checked="checkedChange(item.id)"
-                ></a-checkbox>
+                <label @click.stop="stopChange">
+                  <a-checkbox
+                    @change="onChange(item.id)"
+                    :checked="checkedChange(item.id)"
+                  ></a-checkbox
+                ></label>
               </span>
               <span><img :src="JSON.parse(item.list_pic_url)[0]"/></span>
               <span>{{ item.name }}</span>
@@ -113,7 +119,7 @@
               <span>{{ item.goods_number }}</span>
               <span>{{ item.add_time.substring(0, 16) }}</span>
               <span>
-                <div>
+                <div @click.stop="stopChange">
                   <router-link
                     target="_blank"
                     :to="{
@@ -124,7 +130,7 @@
                     编辑
                   </router-link>
                 </div>
-                <div @click="obtained(item.id, item.is_on_sale)">
+                <div @click.stop="obtained(item.id, item.is_on_sale)">
                   {{ item.is_on_sale == 1 ? "下架" : "上架" }}
                 </div>
               </span>
@@ -189,6 +195,13 @@
       ...mapState(["userShopInfo"])
     },
     methods: {
+      turnToDetail(item) {
+        const { href } = this.$router.resolve({
+          path: `/details/productDetails/${item.id}`,
+          query: { shopId: item.store_id }
+        });
+        window.open(href, "_blank");
+      },
       obtained(id, is_on_sale) {
         if (is_on_sale == 1) {
           is_on_sale = 0;
@@ -266,6 +279,7 @@
           this.checkedList = [];
         }
       },
+      stopChange() {},
       handleStatusChange(value) {
         this.submitData.isOnSale = value;
       },

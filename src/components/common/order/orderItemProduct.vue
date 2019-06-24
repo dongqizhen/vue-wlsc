@@ -5,7 +5,7 @@
         class="itemProduct"
         v-for="product in data.goodsList"
         :key="product.id"
-        @click="turnToProductDetail(product.goods_id)"
+        @click="turnToProductDetail(product.goods_id, data.storeId)"
       >
         <span><img :src="product.list_pic_url"/></span>
         <span>{{ product.goods_name }}</span>
@@ -221,9 +221,10 @@
       }
     },
     methods: {
-      turnToProductDetail(id) {
+      turnToProductDetail(id, storeId) {
         let { href } = this.$router.resolve({
-          path: `/details/productDetails/${id}`
+          path: `/details/productDetails/${id}`,
+          query: { shopId: storeId }
         });
         window.open(href, "_blank");
       },
