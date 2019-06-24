@@ -166,11 +166,11 @@
               "
             >
               <li v-for="val in item.modelSpecificationInfo" :key="val.id">
-                {{ val.value }}
+                {{ val.value || "--" }}
               </li>
             </ul>
             <ul v-else>
-              <li v-for="val in paramas" :key="val.specificationId"></li>
+              <li v-for="val in paramas" :key="val">--</li>
             </ul>
           </div>
         </transition-group>

@@ -469,6 +469,9 @@
         > div:not(.shop-nav) {
           > div {
             margin-right: -16px;
+            .model-item {
+              margin-right: 16px;
+            }
           }
           .recommond_video {
             display: flex;

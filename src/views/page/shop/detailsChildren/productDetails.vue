@@ -60,7 +60,7 @@
               <li>
                 <span>
                   <span>产品类型：</span>
-                  <a>整机/备件/人工</a>
+                  <a>{{ productInfo.attribute_category_name }}</a>
                 </span>
                 <!-- <span>
                   <span>销售范围：</span>
@@ -82,9 +82,9 @@
                 </span>
               </li>
               <li>
-                <span>
+                <span v-if="productInfo.attribute_category_name == '备件'">
                   <span>备件号：</span>
-                  <a>XCV111122333939932222</a>
+                  <a>{{ productInfo.spare_part }}</a>
                 </span>
               </li>
             </ul>
