@@ -898,6 +898,8 @@
             color: #666666;
           }
           .right-box {
+            display: flex;
+            align-items: center;
             .ant-input {
               width: 240px;
               height: 30px;
@@ -916,6 +918,10 @@
               height: 94px;
               line-height: 22px;
               resize: none;
+            }
+            .warning {
+              color: $theme-color;
+              margin-left: 10px;
             }
           }
         }

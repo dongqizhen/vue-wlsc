@@ -147,6 +147,7 @@
           }
         }).then(data => {
           console.log("获取的商品报价单详情：", data);
+          this.sumPrice = 0;
           this.data = data;
           this.param.clienteleName = data.clienteleName;
           this.param.offerCompany = data.offerCompany;

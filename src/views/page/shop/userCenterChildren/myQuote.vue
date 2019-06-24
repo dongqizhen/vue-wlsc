@@ -1,99 +1,109 @@
 <template>
   <div class="myQuote">
     <common-title title="我的报价"></common-title>
-    <div class="listContainer">
-      <div class="selectInfoBox">
-        <div class="selectInfo">
-          <div class="common productName">
-            <div class="left-box">客户名称</div>
-            <div class="right-box">
-              <a-input
-                placeholder="请输入客户名称"
-                v-model="param.clenteleName"
-              />
+    <div v-if="!isLoading">
+      <div class="listContainer">
+        <div class="selectInfoBox">
+          <div class="selectInfo">
+            <div class="common productName">
+              <div class="left-box">客户名称</div>
+              <div class="right-box">
+                <a-input
+                  placeholder="请输入客户名称"
+                  v-model="param.clenteleName"
+                />
+              </div>
+            </div>
+            <div class="common productName">
+              <div class="left-box">商品名称</div>
+              <div class="right-box">
+                <a-input
+                  placeholder="请输入商品名称"
+                  v-model="param.goodsName"
+                />
+              </div>
             </div>
           </div>
-          <div class="common productName">
-            <div class="left-box">商品名称</div>
-            <div class="right-box">
-              <a-input placeholder="请输入商品名称" v-model="param.goodsName" />
-            </div>
+          <div class="selectBtn">
+            <button class="search" @click="search">搜索</button>
+            <button class="clear" @click="clearData">清空</button>
           </div>
         </div>
-        <div class="selectBtn">
-          <button class="search" @click="search">搜索</button>
-          <button class="clear" @click="clearData">清空</button>
+        <div class="listContent">
+          <list-title :titleArr="titleArr"></list-title>
+          <div class="content">
+            <ul v-if="data.length > 0">
+              <li
+                v-for="item in data"
+                :key="item.id"
+                :class="addClass(item.id)"
+              >
+                <div>
+                  <a-checkbox
+                    @change="onChange(item.id)"
+                    :checked="checkedChange(item.id)"
+                  ></a-checkbox>
+                </div>
+                <div>{{ item.clienteleName }}</div>
+                <div>
+                  <div v-for="goodItem in item.goodList" :key="goodItem.id">
+                    <span>{{ goodItem.goodsName }}</span>
+                    <span>
+                      {{ goodItem.goodsBrand }}/{{ goodItem.goodsModel }}
+                    </span>
+                    <span>{{ goodItem.number }}</span>
+                    <span>{{ goodItem.unit }}</span>
+                  </div>
+                </div>
+                <div>¥{{ item.totalPrice }}</div>
+                <div>
+                  {{ item.createdOn ? item.createdOn.substring(0, 16) : "" }}
+                </div>
+                <div>
+                  <div class="operate">
+                    <router-link
+                      target="_blank"
+                      :to="{
+                        path: `/userCenter/lookQuote/${item.id}`,
+                        query: { keyId: 4 }
+                      }"
+                    >
+                      查看
+                    </router-link>
+                  </div>
+                  <div class="operate" @click="download(item.id)">下载</div>
+                  <div class="operate" @click="deleteItem(item.id)">
+                    删除
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <no-data text="暂无数据" v-else></no-data>
+          </div>
+        </div>
+        <div class="tfooter">
+          <check-all
+            :amount="checkedList.length"
+            :checkAll="checkAll"
+            v-on:isCheckAll="isCheckAllMethod"
+            @isDelete="batchDeleteData"
+            v-if="data.length > 0"
+          >
+          </check-all>
         </div>
       </div>
-      <div class="listContent">
-        <list-title :titleArr="titleArr"></list-title>
-        <div class="content">
-          <ul v-if="data.length > 0">
-            <li v-for="item in data" :key="item.id" :class="addClass(item.id)">
-              <div>
-                <a-checkbox
-                  @change="onChange(item.id)"
-                  :checked="checkedChange(item.id)"
-                ></a-checkbox>
-              </div>
-              <div>{{ item.clienteleName }}</div>
-              <div>
-                <div v-for="goodItem in item.goodList" :key="goodItem.id">
-                  <span>{{ goodItem.goodsName }}</span>
-                  <span>
-                    {{ goodItem.goodsBrand }}/{{ goodItem.goodsModel }}
-                  </span>
-                  <span>{{ goodItem.number }}</span>
-                  <span>{{ goodItem.unit }}</span>
-                </div>
-              </div>
-              <div>¥{{ item.totalPrice }}</div>
-              <div>
-                {{ item.createdOn ? item.createdOn.substring(0, 16) : "" }}
-              </div>
-              <div>
-                <div class="operate">
-                  <router-link
-                    target="_blank"
-                    :to="{
-                      path: `/userCenter/lookQuote/${item.id}`,
-                      query: { keyId: 4 }
-                    }"
-                  >
-                    查看
-                  </router-link>
-                </div>
-                <div class="operate" @click="download(item.id)">下载</div>
-                <div class="operate" @click="deleteItem(item.id)">
-                  删除
-                </div>
-              </div>
-            </li>
-          </ul>
-          <no-data text="暂无数据" v-else></no-data>
-        </div>
-      </div>
-      <div class="tfooter">
-        <check-all
-          :amount="checkedList.length"
-          :checkAll="checkAll"
-          v-on:isCheckAll="isCheckAllMethod"
-          @isDelete="batchDeleteData"
-          v-if="data.length > 0"
-        >
-        </check-all>
-      </div>
+      <pagination
+        :data="paginationData"
+        v-on:onPaginationChange="getPaginationChange"
+        v-if="paginationData.count != 0"
+      ></pagination>
+      <download-quote
+        :Visible="visible"
+        :type="type"
+        :quoteId="quoteId"
+      ></download-quote>
     </div>
-    <pagination
-      :data="paginationData"
-      v-on:onPaginationChange="getPaginationChange"
-      v-if="paginationData.count != 0"
-    ></pagination>
-    <download-quote
-      :Visible="visible"
-      :type="type"
-      :quoteId="quoteId"
-    ></download-quote>
+    <loading v-else></loading>
   </div>
 </template>
 
@@ -109,6 +119,7 @@
   export default {
     data() {
       return {
+        isLoading: true,
         titleArr: [
           "客户名称",
           "商品名称",
@@ -234,18 +245,22 @@
         this.param.currentPage = val;
         this.getList();
       },
-      getList() {
-        _getData("/quotation/list", { param: this.param }).then(data => {
-          console.log("获取我的报价列表:", data);
-          this.checkedList = [];
-          this.checkAll = false;
-          this.data = data.data;
-          this.paginationData = data;
-        });
+      async getList() {
+        return await _getData("/quotation/list", { param: this.param }).then(
+          data => {
+            console.log("获取我的报价列表:", data);
+            this.checkedList = [];
+            this.checkAll = false;
+            this.data = data.data;
+            this.paginationData = data;
+          }
+        );
       }
     },
     mounted() {
-      this.getList();
+      this.getList().then(() => {
+        this.isLoading = false;
+      });
     },
     components: {
       commonTitle,

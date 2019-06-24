@@ -10,6 +10,7 @@
                 placeholder="请输入商品名称"
                 v-model="submitData.goodsName"
               ></a-input>
+              <div class="warning" v-show="goodsNameFlag">请输入商品名称</div>
             </div>
           </div>
           <div class="common">
@@ -46,6 +47,7 @@
                 placeholder="请输入单价"
                 v-model="submitData.unitPrice"
               ></a-input>
+              <div class="warning" v-show="unitPriceFlag">请输入正确的单价</div>
             </div>
           </div>
           <div class="common">
@@ -55,6 +57,7 @@
                 placeholder="请输入数量"
                 v-model="submitData.number"
               ></a-input>
+              <div class="warning" v-show="numberFlag">请输入正确的数量</div>
             </div>
           </div>
           <div class="common ">
@@ -125,6 +128,9 @@
   export default {
     data() {
       return {
+        goodsNameFlag: false,
+        unitPriceFlag: false,
+        numberFlag: false,
         visible: false,
         options: {
           title: "编辑商品",
@@ -192,7 +198,30 @@
         window.open(href, "_blank");
       },
       saveAddress() {
+        // numberFlag: false,
         console.log(this.submitData);
+        if (!this.submitData.goodsName) {
+          this.goodsNameFlag = true;
+          return;
+        } else {
+          this.goodsNameFlag = false;
+        }
+        if (this.submitData.unitPrice) {
+          if (!/^[1-9]\d*$/.test(this.submitData.unitPrice)) {
+            this.unitPriceFlag = true;
+            return;
+          } else {
+            this.unitPriceFlag = false;
+          }
+        }
+        if (this.submitData.number) {
+          if (!/^[1-9]\d*$/.test(this.submitData.number)) {
+            this.numberFlag = true;
+            return;
+          } else {
+            this.numberFlag = false;
+          }
+        }
         _getData("/quotation/saveOrUpdateGoods", { param: this.submitData }).then(
           data => {
             console.log(data);
