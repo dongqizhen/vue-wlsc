@@ -57,7 +57,8 @@
         <li>
           <i>
             <svg class="icon" aria-hidden="true">
-              <use xlink:href="#iconshoucang"></use>
+              <use xlink:href="#iconshoucang" v-if="!item.isFavorite"></use>
+              <use xlink:href="#iconpingjiashixinwujiaoxing" v-else></use>
             </svg>
           </i>
           {{ item.favoriteNum }}
@@ -65,7 +66,8 @@
         <li>
           <i>
             <svg class="icon" aria-hidden="true">
-              <use xlink:href="#iconzan"></use>
+              <use xlink:href="#iconzan" v-if="!item.isDianZan"></use>
+              <use xlink:href="#iconzanx" v-else></use>
             </svg>
           </i>
           {{ item.amount }}

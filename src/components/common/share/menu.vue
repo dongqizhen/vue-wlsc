@@ -11,7 +11,11 @@
       </span>
     </a-anchor-link>
     <a-anchor-link href="#a">
-      <span slot="title" @click="toolMenuClick(2)">
+      <span
+        slot="title"
+        @click="toolMenuClick(2)"
+        :class="isCollect && 'active'"
+      >
         <i>
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#iconshoucang" v-if="!isCollect"></use>
@@ -22,7 +26,11 @@
       </span>
     </a-anchor-link>
     <a-anchor-link href="#a">
-      <span slot="title" @click="toolMenuClick(3)">
+      <span
+        slot="title"
+        @click="toolMenuClick(3)"
+        :class="isThumpUp && 'active'"
+      >
         <i>
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#iconzan" v-if="!isThumpUp"></use>
@@ -220,17 +228,21 @@
               }
             }
             &::after {
-              content: "回复";
-              width: 100%;
+              content: "评论";
+              width: 50px;
               height: 100%;
               position: absolute;
               display: flex;
               justify-content: center;
               align-items: center;
               font-size: 15px;
+              white-space: pre;
               color: #ffffff;
+              word-break: break-all;
               background: $theme-color;
               display: none;
+              flex-wrap: wrap;
+              text-align: center;
             }
             &:hover {
               &::after {
@@ -243,10 +255,16 @@
           > a > span::after {
             content: "收藏";
           }
+          > a > span.active::after {
+            content: "取消\A收藏";
+          }
         }
         &:nth-child(4) {
           a > span::after {
             content: "点赞";
+          }
+          a > span.active::after {
+            content: "取消\A点赞";
           }
         }
         &:nth-child(5) {

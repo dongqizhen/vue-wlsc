@@ -65,7 +65,10 @@
       <div class="service">
         <a-button>
           <router-link
-            to="/userCenter/myMessage/contactService"
+            :to="{
+              path: '/userCenter/myMessage/contactService',
+              query: { keyId: 9 }
+            }"
             target="_blank"
           >
             <svg class="icon" aria-hidden="true">

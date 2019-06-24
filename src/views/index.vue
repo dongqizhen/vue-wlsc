@@ -189,9 +189,9 @@
         console.log("data", data);
         this.nav = [
           `推荐产品(${data.count || 0})`,
-          `文章(${data.articleNum || 0})`,
-          `视频(${data.videoNum || 0})`,
-          `案例(${data.maintenanceNum || 0})`
+          `推荐文章(${data.articleNum || 0})`,
+          `推荐视频(${data.videoNum || 0})`,
+          `推荐案例(${data.maintenanceNum || 0})`
         ];
       });
       _getData("goods/homePagelist", {}).then(data => {
@@ -202,7 +202,7 @@
       _getData(`${this.$API_URL.HYGLOGINURL}/server/article!request.action`, {
         method: "getTopArticleListV30",
         token: "",
-        userid: "",
+        userid: this.$userid,
         version: "3.0.0",
         deviceId: "",
         source: "",
@@ -220,7 +220,7 @@
         {
           method: "getHomeRecommendListV30",
           token: "",
-          userid: "",
+          userid: this.$userid,
           version: "3.0.0",
           deviceId: "",
           source: "",
@@ -234,7 +234,7 @@
       _getData(`${this.$API_URL.HYGPROURL}/server_pro/video!request.action`, {
         method: "getHomeRecommendListV30",
         token: "",
-        userid: "",
+        userid: this.$userid,
         version: "3.0.0",
         deviceId: "",
         source: "",
