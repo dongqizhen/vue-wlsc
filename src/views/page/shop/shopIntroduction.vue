@@ -11,7 +11,7 @@
             <ul class="header">
               <li>{{ shopdetails.accessNum }}<span>访问量</span></li>
               <li>{{ shopdetails.consultNum }}<span>咨询数</span></li>
-              <li>--<span>成交数</span></li>
+              <li>{{ shopdetails.salenum }}<span>成交数</span></li>
               <li>{{ shopdetails.highPraiseNum }}%<span>好评率</span></li>
             </ul>
             <div class="basic-information information">

@@ -49,10 +49,18 @@
       </div>
       <div class="bottom">
         <ul>
-          <li>访问量<span>2321</span></li>
-          <li>咨询数<span>987</span></li>
-          <li>成交数<span>--</span></li>
-          <li>好评率<span>98%</span></li>
+          <li>
+            访问量<span>{{ item.accessNum }}</span>
+          </li>
+          <li>
+            咨询数<span>{{ item.consultNum }}</span>
+          </li>
+          <li>
+            成交数<span>{{ item.salenum }}</span>
+          </li>
+          <li>
+            好评率<span>{{ item.highPraiseNum }}%</span>
+          </li>
         </ul>
       </div>
     </a>

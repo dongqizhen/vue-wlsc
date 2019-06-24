@@ -319,6 +319,9 @@
 
 <style lang="scss" scoped>
   @import "../../../../assets/scss/_commonScss";
+  input:-webkit-autofill {
+    box-shadow: 0 0 0px 1000px white inset !important;
+  }
   .login-up {
     height: 100%;
     width: 100%;

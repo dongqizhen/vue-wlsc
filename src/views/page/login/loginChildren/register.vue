@@ -42,6 +42,10 @@
         >
         </a-input>
       </a-form-item>
+      <div class="hidden-input">
+        <!--让浏览器自动填充到这个input-->
+        <input type="text" class="form-control" />
+      </div>
       <a-form-item
         :validate-status="Error('seccode') ? 'error' : ''"
         :help="Error('seccode') || ''"
@@ -74,6 +78,10 @@
           <span slot="suffix" @click="gainCodeHandler(1)">{{ content }}</span>
         </a-input>
       </a-form-item>
+      <div class="hidden-input">
+        <!--让浏览器自动填充到这个input-->
+        <input type="text" class="form-control" />
+      </div>
       <a-form-item
         :validate-status="Error('password') ? 'error' : ''"
         :help="Error('password') || ''"
@@ -82,6 +90,8 @@
           placeholder="请输入新密码，长度不少于6位"
           autocomplete="off"
           type="password"
+          readonly
+          onfocus="this.removeAttribute('readonly');"
           v-decorator="[
             'password',
             {
@@ -109,6 +119,8 @@
           placeholder="请再次输入密码"
           autocomplete="off"
           type="password"
+          readonly
+          onfocus="this.removeAttribute('readonly');"
           v-decorator="[
             'confirmPassword',
             {
@@ -266,6 +278,19 @@
 
 <style lang="scss" scoped>
   @import "../../../../assets/scss/_commonScss";
+  input:-webkit-autofill {
+    box-shadow: 0 0 0px 1000px white inset !important;
+  }
+  .hidden-input {
+    position: relative;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+  .hidden-input .form-control {
+    position: absolute;
+    left: -1000px;
+  }
   .register {
     height: 100%;
     padding: 0 71px;
@@ -366,7 +391,7 @@
             }
           }
         }
-        &:nth-child(2) {
+        &:nth-child(3) {
           .ant-form-item-control-wrapper {
             .ant-form-item-control {
               .ant-form-explain {

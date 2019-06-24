@@ -158,6 +158,9 @@
 
 <style lang="scss" scoped>
   @import "../../../../assets/scss/_commonScss";
+  input:-webkit-autofill {
+    box-shadow: 0 0 0px 1000px white inset !important;
+  }
   .forget-password {
     width: 100%;
     height: 100%;

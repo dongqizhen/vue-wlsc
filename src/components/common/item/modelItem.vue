@@ -33,7 +33,7 @@
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
             </svg>
-            30万
+            {{ item.hit }}
           </span>
         </span>
       </div>
