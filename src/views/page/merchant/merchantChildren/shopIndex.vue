@@ -16,7 +16,7 @@
                   ></use>
                   <use xlink:href="#icontongbixiajiang" v-else></use>
                 </svg>
-                同比{{ data.increase ? "增长" : "下降" }}{{ data.rate }}%
+                同比{{ data.increase ? "增长" : "下降" }}{{ data.rate }}
               </div>
             </li>
           </ul>
@@ -367,28 +367,40 @@
               id: 1,
               name: "新增访问店铺数",
               amount: data.recordsNCount,
-              rate: Math.abs(data.recordsGrowth).toFixed(2),
+              rate:
+                typeof data.recordsGrowth == "number"
+                  ? Math.abs(data.recordsGrowth).toFixed(2) + "%"
+                  : data.recordsGrowth,
               increase: data.recordsGrowth >= 0
             },
             {
               id: 2,
               name: "新增收藏店铺数",
               amount: data.collectNCount,
-              rate: Math.abs(data.collectGrowth).toFixed(2),
+              rate:
+                typeof data.collectGrowth == "number"
+                  ? Math.abs(data.collectGrowth).toFixed(2) + "%"
+                  : data.collectGrowth,
               increase: data.collectGrowth >= 0
             },
             {
               id: 3,
               name: "新增询价单数",
               amount: data.enquiryNCount,
-              rate: Math.abs(data.enquiryGrowth).toFixed(2),
+              rate:
+                typeof data.enquiryGrowth == "number"
+                  ? Math.abs(data.enquiryGrowth).toFixed(2) + "%"
+                  : data.enquiryGrowth,
               increase: data.enquiryGrowth >= 0
             },
             {
               id: 4,
               name: "新增订单数",
-              amount: data.orderCount,
-              rate: Math.abs(data.orderGrowth).toFixed(2),
+              amount: data.orderNCount,
+              rate:
+                typeof data.orderGrowth == "number"
+                  ? Math.abs(data.orderGrowth).toFixed(2) + "%"
+                  : data.orderGrowth,
               increase: data.orderGrowth >= 0
             }
           ];

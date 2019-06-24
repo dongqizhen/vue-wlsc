@@ -33,7 +33,9 @@
               placeholder="请输入公司名称"
               v-model="submitData.companyName"
             />
-            <div class="warning">请输入公司名称</div>
+            <div class="warning" v-show="companyNameFlag">
+              请输入公司名称
+            </div>
           </div>
         </div>
         <div class="common companyAddress">
@@ -45,6 +47,7 @@
               placeholder="请选择省/市/区"
               style="width: 390px"
             ></el-cascader>
+            <div class="warning" v-show="addressFlag">请选择省/市/区</div>
           </div>
         </div>
         <div class="common companyIntroduce">
@@ -57,6 +60,9 @@
               v-model="submitData.companyIntroduction"
               class="noInput"
             />
+            <div class="warning" v-show="companyIntroductionFlag">
+              请输入公司介绍
+            </div>
           </div>
         </div>
         <div class="common ">
@@ -76,6 +82,7 @@
               placeholder="请输入联系人"
               v-model="submitData.linkName"
             />
+            <div class="warning" v-show="linkNameFlag">请输入联系人</div>
           </div>
         </div>
         <div class="common ">
@@ -86,6 +93,7 @@
               placeholder="请输入手机号"
               v-model="submitData.mobile"
             />
+            <div class="warning" v-show="mobileFlag">请输入正确的手机号</div>
           </div>
         </div>
         <div class="common ">
@@ -96,6 +104,9 @@
               placeholder="请输入办公室电话"
               v-model="submitData.workPhone"
             />
+            <div class="warning" v-show="workPhoneFlag">
+              请输入正确的办公室电话
+            </div>
           </div>
         </div>
         <div class="common ">
@@ -106,6 +117,7 @@
               placeholder="请输入企业邮箱"
               v-model="submitData.email"
             />
+            <div class="warning" v-show="emailFlag">请输入正确的企业邮箱</div>
           </div>
         </div>
         <div class="common ">
@@ -114,21 +126,6 @@
             <a-input placeholder="请输入传真" v-model="submitData.fax" />
           </div>
         </div>
-        <!-- <div class="common ">
-          <div class="left-box">开户银行</div>
-          <div class="right-box">
-            <a-input placeholder="请输入开户银行" v-model="submitData.bank" />
-          </div>
-        </div>
-        <div class="common ">
-          <div class="left-box">开户账号</div>
-          <div class="right-box">
-            <a-input
-              placeholder="请输入开户账号"
-              v-model="submitData.bankNum"
-            />
-          </div>
-        </div> -->
         <div class="common ">
           <div class="left-box">QQ号</div>
           <div class="right-box">
@@ -137,6 +134,7 @@
               placeholder="请输入QQ号"
               v-model="submitData.qqCode"
             />
+            <div class="warning" v-show="qqCodeFlag">请输入正确的QQ号</div>
           </div>
         </div>
         <div class="common ">
@@ -208,10 +206,18 @@
   export default {
     data() {
       return {
-        visible: false,
         type: "",
-        certificationStatus: 2,
-        defaultCascaderValue: [],
+        visible: false,
+        options: [],
+        certificationStatus: 1,
+        companyNameFlag: false,
+        addressFlag: false,
+        companyIntroductionFlag: false,
+        linkNameFlag: false,
+        mobileFlag: false,
+        workPhoneFlag: false,
+        emailFlag: false,
+        qqCodeFlag: false,
         submitData: {
           sid: "",
           companyName: "",
@@ -231,8 +237,7 @@
           yyimage: "",
           swimage: "",
           zzjgimage: ""
-        },
-        options: []
+        }
       };
     },
     props: {
@@ -254,41 +259,50 @@
       submit() {
         console.log(this.shopInfo);
         if (!this.submitData.companyName) {
-          this.$message.warning("请输入公司名称", 1);
+          this.companyNameFlag = true;
           this.$refs.companyName.focus();
           return;
+        } else {
+          this.companyNameFlag = false;
         }
         if (this.submitData.address.length == 0) {
-          this.$message.warning("请选择公司地址", 1);
+          this.addressFlag = true;
           return;
         } else {
           this.submitData.provinceId = this.submitData.address[0];
           this.submitData.cityId = this.submitData.address[1];
           this.submitData.countryId = this.submitData.address[2];
+          this.addressFlag = false;
         }
         if (!this.submitData.companyIntroduction) {
-          this.$message.warning("请输入公司介绍", 1);
+          this.companyIntroductionFlag = true;
           this.$refs.companyIntroduction.focus();
           return;
+        } else {
+          this.companyIntroductionFlag = false;
         }
         if (!this.submitData.linkName) {
-          this.$message.warning("请输入联系人", 1);
+          this.linkNameFlag = true;
           this.$refs.linkName.focus();
           return;
+        } else {
+          this.linkNameFlag = false;
         }
         if (!this.submitData.mobile) {
-          this.$message.warning("请输入手机号", 1);
+          this.mobileFlag = true;
           this.$refs.mobile.focus();
           return;
         } else {
           if (!/^[1][3,4,5,7,8][0-9]{9}$/.test(this.submitData.mobile)) {
-            this.$message.warning("请输入正确的手机号", 1);
+            this.mobileFlag = true;
             this.$refs.mobile.focus();
             return;
+          } else {
+            this.mobileFlag = false;
           }
         }
         if (!this.submitData.workPhone) {
-          this.$message.warning("请输入办公室电话", 1);
+          this.workPhoneFlag = true;
           this.$refs.workPhone.focus();
           return;
         } else {
@@ -297,13 +311,15 @@
               this.submitData.workPhone
             )
           ) {
-            this.$message.warning("请输入正确的办公室电话", 1);
+            this.workPhoneFlag = true;
             this.$refs.workPhone.focus();
             return;
+          } else {
+            this.workPhoneFlag = false;
           }
         }
         if (!this.submitData.email) {
-          this.$message.warning("请输入企业邮箱", 1);
+          this.emailFlag = true;
           this.$refs.email.focus();
           return;
         } else {
@@ -312,18 +328,23 @@
               this.submitData.email
             )
           ) {
-            this.$message.warning("请输入正确的企业邮箱", 1);
+            this.emailFlag = true;
             this.$refs.email.focus();
             return;
+          } else {
+            this.emailFlag = false;
           }
         }
-        console.log(this.submitData.qqCode);
         if (this.submitData.qqCode) {
           if (!/^[1-9][0-9]{4,}$/.test(this.submitData.qqCode)) {
-            this.$message.warning("请输入正确的QQ号", 1);
+            this.qqCodeFlag = true;
             this.$refs.qqCode.focus();
             return;
+          } else {
+            this.qqCodeFlag = false;
           }
+        } else {
+          this.qqCodeFlag = false;
         }
         if (!this.submitData.yyimage) {
           this.$message.warning("请上传营业执照", 1);
@@ -413,6 +434,7 @@
         _getData("/store/selectAllStore", {})
           .then(data => {
             console.log("获取已填写的店铺信息：", data);
+            this.certificationStatus = data.auditStatus;
             this.submitData = {
               sid: data.sid,
               companyName: data.companyName,
