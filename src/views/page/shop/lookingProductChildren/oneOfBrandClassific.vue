@@ -224,7 +224,7 @@
           });
       },
       success() {
-        this.getCommonBrandCategory();
+        if (this.defaultsNav == "常用品牌") this.getCommonBrand();
       },
       async getCommonBrand() {
         return await _getData("ubrand/list", {})

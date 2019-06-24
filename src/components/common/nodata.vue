@@ -22,6 +22,10 @@
       src="../../assets/images/no_data/no-order.png"
       v-else-if="type == 'no-order'"
     />
+    <img
+      src="../../assets/images/no_data/no-collect.png"
+      v-else-if="type == 'no-collect'"
+    />
     <span>{{ text }}</span>
   </div>
 </template>

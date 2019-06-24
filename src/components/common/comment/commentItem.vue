@@ -212,7 +212,9 @@
       //点赞
       giveALike(id) {
         this.isCommentLike = !this.isCommentLike;
-        console.log(this.$refs.vueStar);
+        this.commentAmount = this.isCommentLike
+          ? (this.commentAmount += 1)
+          : (this.commentAmount -= 1);
         _getData(`${this.$API_URL.HYGPROURL}/server_pro/dianzan!request.action`, {
           method: "addOrDeleteDianzan_v27",
           token: "",
@@ -224,16 +226,14 @@
           }
         })
           .then(() => {
-            this.commentAmount = this.isCommentLike
-              ? (this.commentAmount += 1)
-              : (this.commentAmount -= 1);
+            //console.log(this.isCommentLike);
           })
           .then(() => {
-            if (this.$parent.$parent.getCommentList) {
-              this.$parent.$parent.getCommentList();
-            } else {
-              this.$parent.$parent.$parent.getCommentList();
-            }
+            // if (this.$parent.$parent.getCommentList) {
+            //   this.$parent.$parent.getCommentList();
+            // } else {
+            //   this.$parent.$parent.$parent.getCommentList();
+            // }
           });
       }
     },
