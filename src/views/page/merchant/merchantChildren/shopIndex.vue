@@ -9,14 +9,15 @@
               <div class="textName">{{ data.name }}</div>
               <div class="number">{{ data.amount }}</div>
               <div class="increase">
-                <svg class="icon" aria-hidden="true">
+                <svg class="icon" aria-hidden="true" v-if="data.rate != '--'">
                   <use
                     xlink:href="#icontongbizengchang"
                     v-if="data.increase"
                   ></use>
                   <use xlink:href="#icontongbixiajiang" v-else></use>
                 </svg>
-                同比{{ data.increase ? "增长" : "下降" }}{{ data.rate }}
+                同比{{ data.rate == "--" ? "" : data.increase ? "增长" : "下降"
+                }}{{ data.rate }}
               </div>
             </li>
           </ul>

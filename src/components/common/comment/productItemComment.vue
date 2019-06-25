@@ -80,7 +80,7 @@
       return {
         actionURL: this.$API_URL.HYGFILEURL + "/api/upload/imageUpload",
         loading: false,
-        productId: this.data.id,
+        productId: this.data.goods_id,
         uploadList: [],
         tempUploadList: [],
         submitData: {
@@ -230,6 +230,7 @@
             position: relative;
             img {
               width: 100%;
+              height: 100%;
             }
             &:hover {
               cursor: pointer;

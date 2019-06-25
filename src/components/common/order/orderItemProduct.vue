@@ -87,7 +87,10 @@
         <router-link
           tag="a"
           target="_blank"
-          :to="{ path: `comment/${data.id}`, query: { keyId: 7 } }"
+          :to="{
+            path: `comment/${data.id}`,
+            query: { keyId: 3, topTitle: 'sub1' }
+          }"
         >
           评价
         </router-link>
@@ -128,7 +131,13 @@
         <router-link
           tag="a"
           target="_blank"
-          :to="{ path: `orderDetail/${data.id}`, query: { keyId: 7 } }"
+          :to="{
+            path: `orderDetail/${data.id}`,
+            query: {
+              keyId: isShowInfo.isMerchant ? 7 : 3,
+              topTitle: isShowInfo.isMerchant ? 'sub2' : 'sub1'
+            }
+          }"
         >
           查看订单详情
         </router-link>
