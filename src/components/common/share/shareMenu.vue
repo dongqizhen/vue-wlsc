@@ -59,6 +59,7 @@
       };
     },
     components: {},
+    props: ["data"],
     methods: {
       getShareOffsetTop() {
         let top = this.$refs.share.offsetTop;
@@ -76,15 +77,18 @@
       // wechatQrcodeTitle   : '微信扫一扫：分享', // 微信二维码提示文字
       // wechatQrcodeHelper  : '<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>'
 
+      console.log(this.data);
+
       let $config = {
-        title: "234",
-        description: "123",
+        title: this.data.name || this.data.title || this.data.topic || '',
+        image: this.data.image || this.data.cover[0] || "",
+        description: "",
         wechatQrcodeTitle: "微信扫一扫：分享", // 微信二维码提示文字
         wechatQrcodeHelper:
           "<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>"
       };
 
-      socialShare(".social-share");
+      socialShare(".social-share", $config);
     }
   };
 </script>

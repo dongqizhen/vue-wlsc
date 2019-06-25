@@ -21,8 +21,8 @@
         <a-button :loading="loading" @click="sendComment">发送</a-button>
       </div>
       <h2>
-        {{ commentData.amount }}条回复
-        <ul>
+        {{ commentData.amount }}条评论
+        <!-- <ul>
           <li
             :class="i == defaultVal && 'active'"
             v-for="(item, i) in ['按时间倒序', '按时间正序']"
@@ -31,7 +31,7 @@
           >
             {{ item }}
           </li>
-        </ul>
+        </ul> -->
       </h2>
       <div class="review_content" v-if="!load">
         <ul v-if="commentData.commentList.length">

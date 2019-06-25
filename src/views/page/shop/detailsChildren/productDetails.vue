@@ -619,7 +619,7 @@
             justify-content: flex-start;
             align-items: center;
             background: rgba(241, 2, 21, 0.05);
-            padding-left: 30px;
+            padding-left: 20px;
             line-height: 50px;
             margin-bottom: 6px;
             span {

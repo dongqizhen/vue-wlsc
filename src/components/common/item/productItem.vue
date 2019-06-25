@@ -3,8 +3,11 @@
     class="product-item"
     tag="li"
     :to="{
-      path: `/details/productDetails/${list.id}`,
-      query: { nav_index: $route.query.nav_index, shopId: list.store_id }
+      path: `/details/productDetails/${list.id || list.value_id}`,
+      query: {
+        nav_index: $route.query.nav_index,
+        shopId: list.store_id || list.sid
+      }
     }"
   >
     <a target="_blank">
@@ -41,7 +44,7 @@
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#icondianpu"></use>
           </svg>
-          {{ list.shop_name }}
+          {{ list.shop_name || list.shopName }}
         </div>
       </li>
     </a>

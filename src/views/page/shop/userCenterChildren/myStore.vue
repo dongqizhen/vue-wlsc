@@ -38,7 +38,7 @@
             ></shop-item>
           </ul>
         </div>
-        <no-data v-else text="暂无数据"></no-data>
+        <no-data v-else type="no-collect" text="暂无数据"></no-data>
       </div>
       <pagination
         :data="paginationData"

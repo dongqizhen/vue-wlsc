@@ -22,7 +22,14 @@
           </h3> -->
             <div class="photo">
               <div class="img_box">
-                <img :src="detail.userImageUrl" alt="" />
+                <img
+                  :src="detail.userImageUrl"
+                  alt=""
+                  v-if="detail.userImageUrl"
+                />
+                <svg class="icon" aria-hidden="true" v-else>
+                  <use xlink:href="#iconweidenglutouxiang"></use>
+                </svg>
               </div>
               <p>
                 {{ detail.author }}
@@ -59,7 +66,7 @@
               <li>{{ detail.brandName }}</li>
               <li>{{ detail.modelName }}</li>
             </ul>
-            <share-menu-vue></share-menu-vue>
+            <share-menu-vue :data="detail"></share-menu-vue>
           </div>
         </div>
         <comment-vue
@@ -215,9 +222,16 @@
           .img_box {
             height: 50px;
             width: 50px;
-            background: $base-background;
+            background: #cbcbcb;
             margin-right: 10px;
             border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .icon {
+              height: 30px;
+              width: 30px;
+            }
             img {
               height: 100%;
               width: 100%;

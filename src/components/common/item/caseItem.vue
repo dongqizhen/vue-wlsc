@@ -10,7 +10,10 @@
     <a target="_blank">
       <div class="photo">
         <div class="img_box">
-          <img :src="item.userImageUrl" alt="" />
+          <img :src="item.userImageUrl" v-if="item.userImageUrl" alt="" />
+          <svg class="icon" aria-hidden="true" v-else>
+            <use xlink:href="#iconweidenglutouxiang"></use>
+          </svg>
         </div>
         <p>
           {{ item.author }}
@@ -57,7 +60,8 @@
           <span>
             <i>
               <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconshoucang"></use>
+                <use xlink:href="#iconshoucang" v-if="!item.isFavorite"></use>
+                <use xlink:href="#iconpingjiashixinwujiaoxing" v-else></use>
               </svg>
             </i>
             {{ item.favoriteNum }}
@@ -65,7 +69,8 @@
           <span>
             <i>
               <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconzan"></use>
+                <use xlink:href="#iconzan" v-if="!item.isDianZan"></use>
+                <use xlink:href="#iconzanx" v-else></use>
               </svg>
             </i>
             {{ item.amount }}
@@ -152,8 +157,11 @@
         height: 30px;
         width: 30px;
         border-radius: 16px;
-        background: #f7f9fa;
+        background: #cbcbcb;
         margin-right: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         img {
           height: 100%;
           width: 100%;

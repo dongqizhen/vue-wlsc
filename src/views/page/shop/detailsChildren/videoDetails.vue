@@ -4,16 +4,16 @@
       <div v-if="!isLoading">
         <div class="video_box">
           <h2>
-            {{ detail.title }}
+            {{ detail.course.title }}
             <p>
               <span>
                 <svg class="icon" aria-hidden="true">
                   <use xlink:href="#iconxinghaoliebiaoliulanliang"></use>
                 </svg>
-                {{ detail.watchAmount }}
+                {{ detail.course.watchAmount }}
               </span>
               <span>{{ detail.createdOn }}</span>
-              <span>课程总时长：{{ detail.totalTime }}</span>
+              <span>课程总时长：{{ detail.course.totalTime }}</span>
             </p>
           </h2>
           <div class="video">
@@ -49,20 +49,25 @@
               讲师介绍
             </h3>
             <div class="photo">
-              <div class="img_box"></div>
-              <p>
-                {{ detail.speaker }}
-                <span>
-                  {{ detail.videoUserIntroduce }}
-                </span>
-              </p>
+              <div v-for="item in detail.course.lecturerList" :key="item.id">
+                <div class="img_box">
+                  <img :src="item.image" v-if="item.image" alt="" />
+                  <svg class="icon" aria-hidden="true" v-else>
+                    <use xlink:href="#iconweidenglutouxiang"></use>
+                  </svg>
+                </div>
+                <p>
+                  {{ item.name }}
+                  <span>{{ item.company }}{{ item.post }} </span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
         <div class="introduce">
           <a-tabs defaultActiveKey="1">
             <a-tab-pane tab="课件介绍" key="1" :forceRender="true">
-              <div class="introduce-content" v-html="detail.introduce">
+              <div class="introduce-content" v-html="detail.course.introduce">
                 <!-- <h2>
                 <svg class="icon" aria-hidden="true">
                   <use xlink:href="#iconkejianjieshaoziseyuandian"></use>
@@ -100,7 +105,11 @@
               </span> -->
               </div>
             </a-tab-pane>
-            <a-tab-pane tab="课件目录" key="2" :forceRender="true">
+            <a-tab-pane
+              :tab="`课件目录(${detail.videoSubList.length})`"
+              key="2"
+              :forceRender="true"
+            >
               <ul class="videoList">
                 <li
                   v-for="(item, i) in detail.videoSubList"
@@ -131,7 +140,7 @@
               </ul>
             </a-tab-pane>
           </a-tabs>
-          <share-menu-vue></share-menu-vue>
+          <share-menu-vue :data="detail.course"></share-menu-vue>
         </div>
         <comment-vue
           :isLogin="$store.state.isLogin"
@@ -270,11 +279,14 @@
       }
     },
     mounted() {
-      _getData(`${this.$API_URL.HYGPROURL}/server_pro/video!request.action`, {
-        method: "getVideoByIdV1",
-        userid: this.$userid,
-        params: { id: this.$route.query.id }
-      })
+      _getData(
+        `${this.$API_URL.HYGPROURL}/server_pro/microClassroom!request.action`,
+        {
+          method: "getVideoById_v31",
+          userid: this.$userid,
+          params: { id: this.$route.query.id }
+        }
+      )
         .then(data => {
           this.detail = data.result;
           this.playerOptions.poster = this.detail.image;
@@ -432,12 +444,33 @@
         .photo {
           display: flex;
           justify-content: flex-start;
+          flex-direction: column;
+          > div {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 24px;
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
           .img_box {
             height: 50px;
             width: 50px;
-            background: $base-background;
+            background: #cbcbcb;
             margin-right: 10px;
             border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            img {
+              height: 100%;
+              width: 100%;
+            }
+            .icon {
+              height: 30px;
+              width: 30px;
+            }
           }
           p {
             font-weight: 600;

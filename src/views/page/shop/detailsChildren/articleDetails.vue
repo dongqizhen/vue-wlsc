@@ -29,7 +29,7 @@
               <li>标签字数</li>
               <li>最长显示多少再定</li>
             </ul>
-            <share-menu-vue></share-menu-vue>
+            <share-menu-vue :data="detail"></share-menu-vue>
           </div>
         </div>
         <comment-vue
