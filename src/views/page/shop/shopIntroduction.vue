@@ -96,6 +96,10 @@
                 </li>
               </ul>
             </div>
+            <div class="information introduction">
+              <h2><span></span>店铺介绍</h2>
+              <div v-html="shopdetails.introduce"></div>
+            </div>
           </div>
           <div class="right">
             <shop-card-vue :detail="shopdetails"></shop-card-vue>
@@ -251,6 +255,15 @@
             }
             &.certificated-information {
               height: 288px;
+              margin-bottom: 20px;
+            }
+            &.introduction {
+              > div {
+                padding: 24px 16px;
+                /deep/ img {
+                  width: 100%;
+                }
+              }
             }
           }
         }

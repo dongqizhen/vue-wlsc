@@ -50,7 +50,9 @@ import {
 } from 'element-ui'
 Vue.config.productionTip = false;
 
-Vue.use(Meta).use(vChatTitle).use(VueLazyload, {
+Vue.use(Meta, {
+    refreshOnceOnNavigation: true
+}).use(vChatTitle).use(VueLazyload, {
     preLoad: 1.3,
     attempt: 1,
     lazyComponent: true

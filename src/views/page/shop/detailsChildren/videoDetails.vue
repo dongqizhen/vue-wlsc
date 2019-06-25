@@ -167,6 +167,12 @@
   import { videoPlayer } from "vue-video-player";
 
   export default {
+    metaInfo() {
+      return {
+        title: this.title,
+        meta: []
+      };
+    },
     data() {
       return {
         detail: "",
@@ -199,6 +205,7 @@
           ],
           poster: ""
         },
+        title: "",
         defaultVideo: 0,
         globalOptions: {},
         commentData: "",
@@ -289,6 +296,7 @@
       )
         .then(data => {
           this.detail = data.result;
+          this.title = this.detail.course.title + "-网来商城";
           this.playerOptions.poster = this.detail.image;
           this.playerOptions.sources[0].src = this.detail.videoSubList[0].url;
         })

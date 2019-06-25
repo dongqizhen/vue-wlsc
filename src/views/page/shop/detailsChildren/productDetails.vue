@@ -270,14 +270,16 @@
   import pagination from "../../../../components/common/pagination";
 
   export default {
-    metaInfo: {
-      title: "",
-      meta: [
-        {
-          name: "",
-          content: ""
-        }
-      ]
+    metaInfo() {
+      return {
+        title: this.title,
+        meta: [
+          {
+            name: "description",
+            content: this.description
+          }
+        ]
+      };
     },
     data() {
       return {
@@ -292,6 +294,7 @@
         bannerIndex: 0,
         visible: false,
         title: "",
+        description: "",
         imgUrl: "",
         type: "", //控制弹出框的类型
         isCollection: 0, //是否收藏产品
@@ -422,7 +425,15 @@
           this.productInfo = data.productInfo;
           this.specificationInfo = data.specificationInfo;
           // this.comment = data.comment ? data.comment : [];
-          console.log(this, this.$meta());
+          this.title = data.productInfo.name + "-网来商城";
+
+          this.description =
+            "在网来商城中寻找" +
+            data.productInfo.name +
+            "，采购" +
+            data.productInfo.name +
+            "，上网来商城。";
+
           this.isCollection = data.isCollection;
           this.imgarr = JSON.parse(this.productInfo.list_pic_url);
           this.imgUrl = JSON.parse(this.productInfo.list_pic_url)[0];

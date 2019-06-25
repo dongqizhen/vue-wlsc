@@ -90,6 +90,12 @@
   import { _getData } from "../../../../config/getData";
 
   export default {
+    metaInfo() {
+      return {
+        title: this.detail.name + "-网来商城",
+        meta: []
+      };
+    },
     data() {
       return {
         isLogin: true,

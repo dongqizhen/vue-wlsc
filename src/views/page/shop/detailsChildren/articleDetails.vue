@@ -53,10 +53,18 @@
   import { _getData } from "../../../../config/getData";
 
   export default {
+    metaInfo() {
+      return {
+        title: this.detail.topic + "-网来商城",
+        meta: []
+      };
+    },
     data() {
       return {
         isLogin: true,
         isLoading: true,
+        title: "",
+        description: "",
         detail: {},
         commentData: ""
       };
