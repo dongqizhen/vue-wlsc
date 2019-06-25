@@ -139,7 +139,7 @@
   @import "../../../../assets/scss/_commonScss";
   .myStore {
     width: 1040px;
-    min-height: 693px;
+    min-height: 571px;
     margin-bottom: 100px;
     .common-title {
       height: 59px;

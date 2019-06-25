@@ -14,148 +14,153 @@
           </router-link>
         </span>
       </commonTitle>
-      <div class="listContainer">
-        <div class="selectInfoBox">
-          <div class="selectInfo">
-            <div class="common productName">
-              <div class="left-box">产品名称</div>
-              <div class="right-box">
-                <a-input
-                  placeholder="请输入产品名称"
-                  v-model="submitData.name"
-                />
-              </div>
-            </div>
-            <div class="common productStatus">
-              <div class="left-box">产品状态</div>
-              <div class="right-box">
-                <el-select
-                  style="width: 112px;margin-right:10px;"
-                  v-model="submitData.isOnSale"
-                  placeholder="请选择状态"
-                  @change="handleStatusChange"
-                >
-                  <el-option
-                    v-for="item in statusOptions"
-                    :key="item.id"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
-                </el-select>
-              </div>
-            </div>
-            <div class="common productType">
-              <div class="left-box">产品分类</div>
-              <div class="right-box">
-                <el-select
-                  style="width: 112px;margin-right:10px;"
-                  v-model="submitData.bigCategoryId"
-                  placeholder="请选择大类"
-                  @change="handleProductBigTypeChange"
-                >
-                  <el-option
-                    v-for="item in bigOptions"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
-                  >
-                  </el-option>
-                </el-select>
-                <el-select
-                  style="width: 112px;margin-right:10px;"
-                  v-model="submitData.categoryId"
-                  placeholder="请选择小类"
-                  @change="handleProductSmallTypeChange"
-                >
-                  <el-option
-                    v-for="item in smallOptions"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
-                  >
-                  </el-option>
-                </el-select>
-              </div>
-            </div>
-          </div>
-          <div class="selectBtn">
-            <button class="search" @click="searchData">搜索</button>
-            <button class="clear" @click="clearData">清除</button>
-          </div>
-        </div>
-        <div class="listContent">
-          <h2>
-            <span></span>
-            <span>产品图片</span>
-            <span>产品名称</span>
-            <span>产品分类</span>
-            <span>品牌/型号</span>
-            <span>产品状态</span>
-            <span>库存数量</span>
-            <span>发布时间</span>
-            <span>操作</span>
-          </h2>
-          <ul v-if="data.length != 0">
-            <li
-              v-for="item in data"
-              :key="item.id"
-              :class="addClass(item.id)"
-              @click="turnToDetail(item)"
-            >
-              <span>
-                <label @click.stop="stopChange">
-                  <a-checkbox
-                    @change="onChange(item.id)"
-                    :checked="checkedChange(item.id)"
-                  ></a-checkbox
-                ></label>
-              </span>
-              <span><img :src="JSON.parse(item.list_pic_url)[0]"/></span>
-              <span>{{ item.name }}</span>
-              <span>{{ item.big_category_name }}/{{ item.category_name }}</span>
-              <span>{{ item.brand_name }}/{{ item.brand_model_name }}</span>
-              <span>{{ item.is_on_sale == 1 ? "上架" : "未上架" }}</span>
-              <span>{{ item.goods_number }}</span>
-              <span>{{ item.add_time.substring(0, 16) }}</span>
-              <span>
-                <div @click.stop="stopChange">
-                  <router-link
-                    target="_blank"
-                    :to="{
-                      path: '/merchant/publishGoods',
-                      query: { id: `${item.id}`, keyId: 4 }
-                    }"
-                  >
-                    编辑
-                  </router-link>
+      <div v-if="!isLoading">
+        <div class="listContainer">
+          <div class="selectInfoBox">
+            <div class="selectInfo">
+              <div class="common productName">
+                <div class="left-box">产品名称</div>
+                <div class="right-box">
+                  <a-input
+                    placeholder="请输入产品名称"
+                    v-model="submitData.name"
+                  />
                 </div>
-                <div @click.stop="obtained(item.id, item.is_on_sale)">
-                  {{ item.is_on_sale == 1 ? "下架" : "上架" }}
+              </div>
+              <div class="common productStatus">
+                <div class="left-box">产品状态</div>
+                <div class="right-box">
+                  <el-select
+                    style="width: 112px;margin-right:10px;"
+                    v-model="submitData.isOnSale"
+                    placeholder="请选择状态"
+                    @change="handleStatusChange"
+                  >
+                    <el-option
+                      v-for="item in statusOptions"
+                      :key="item.id"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                    </el-option>
+                  </el-select>
                 </div>
-              </span>
-            </li>
-          </ul>
-          <no-data v-else text="暂无数据"></no-data>
-        </div>
-        <check-all
-          :amount="checkedList.length"
-          :checkAll="checkAll"
-          v-on:isCheckAll="isCheckAllMethod"
-          @isDelete="batchDeleteData"
-          v-if="data.length > 0"
-        >
-          <div slot="right-box" class="right-box">
-            <button class="shelf" @click="batchShelf">上架</button>
-            <button class="obtained" @click="batchObtained">下架</button>
+              </div>
+              <div class="common productType">
+                <div class="left-box">产品分类</div>
+                <div class="right-box">
+                  <el-select
+                    style="width: 112px;margin-right:10px;"
+                    v-model="submitData.bigCategoryId"
+                    placeholder="请选择大类"
+                    @change="handleProductBigTypeChange"
+                  >
+                    <el-option
+                      v-for="item in bigOptions"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
+                    >
+                    </el-option>
+                  </el-select>
+                  <el-select
+                    style="width: 112px;margin-right:10px;"
+                    v-model="submitData.categoryId"
+                    placeholder="请选择小类"
+                    @change="handleProductSmallTypeChange"
+                  >
+                    <el-option
+                      v-for="item in smallOptions"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
+                    >
+                    </el-option>
+                  </el-select>
+                </div>
+              </div>
+            </div>
+            <div class="selectBtn">
+              <button class="search" @click="searchData">搜索</button>
+              <button class="clear" @click="clearData">清除</button>
+            </div>
           </div>
-        </check-all>
-        <pagination
-          :data="paginationData"
-          v-on:onPaginationChange="getPaginationChange"
-          v-if="paginationData.count != 0"
-        ></pagination>
+          <div class="listContent">
+            <h2>
+              <span></span>
+              <span>产品图片</span>
+              <span>产品名称</span>
+              <span>产品分类</span>
+              <span>品牌/型号</span>
+              <span>产品状态</span>
+              <span>库存数量</span>
+              <span>发布时间</span>
+              <span>操作</span>
+            </h2>
+            <ul v-if="data.length != 0">
+              <li
+                v-for="item in data"
+                :key="item.id"
+                :class="addClass(item.id)"
+                @click="turnToDetail(item)"
+              >
+                <span>
+                  <label @click.stop="stopChange">
+                    <a-checkbox
+                      @change="onChange(item.id)"
+                      :checked="checkedChange(item.id)"
+                    ></a-checkbox
+                  ></label>
+                </span>
+                <span><img :src="JSON.parse(item.list_pic_url)[0]"/></span>
+                <span>{{ item.name }}</span>
+                <span
+                  >{{ item.big_category_name }}/{{ item.category_name }}</span
+                >
+                <span>{{ item.brand_name }}/{{ item.brand_model_name }}</span>
+                <span>{{ item.is_on_sale == 1 ? "上架" : "未上架" }}</span>
+                <span>{{ item.goods_number }}</span>
+                <span>{{ item.add_time.substring(0, 16) }}</span>
+                <span>
+                  <div @click.stop="stopChange">
+                    <router-link
+                      target="_blank"
+                      :to="{
+                        path: '/merchant/publishGoods',
+                        query: { id: `${item.id}`, keyId: 4 }
+                      }"
+                    >
+                      编辑
+                    </router-link>
+                  </div>
+                  <div @click.stop="obtained(item.id, item.is_on_sale)">
+                    {{ item.is_on_sale == 1 ? "下架" : "上架" }}
+                  </div>
+                </span>
+              </li>
+            </ul>
+            <no-data v-else text="暂无数据"></no-data>
+          </div>
+          <check-all
+            :amount="checkedList.length"
+            :checkAll="checkAll"
+            v-on:isCheckAll="isCheckAllMethod"
+            @isDelete="batchDeleteData"
+            v-if="data.length > 0"
+          >
+            <div slot="right-box" class="right-box">
+              <button class="shelf" @click="batchShelf">上架</button>
+              <button class="obtained" @click="batchObtained">下架</button>
+            </div>
+          </check-all>
+          <pagination
+            :data="paginationData"
+            v-on:onPaginationChange="getPaginationChange"
+            v-if="paginationData.count != 0"
+          ></pagination>
+        </div>
       </div>
+      <loading v-else></loading>
     </div>
   </div>
 </template>
@@ -170,6 +175,7 @@
   export default {
     data() {
       return {
+        isLoading: true,
         data: [],
         bigOptions: [],
         smallOptions: [],
@@ -356,21 +362,18 @@
           return;
         }
       },
-      getProductList() {
-        _getData("/goods/sjGoodsList", this.submitData).then(data => {
-          console.log("获取产品列表：", data);
-          this.checkedList = [];
-          this.data = data.data;
-          this.paginationData = data;
-        });
+      async getProductList() {
+        return await _getData("/goods/sjGoodsList", this.submitData).then(
+          data => {
+            console.log("获取产品列表：", data);
+            this.checkedList = [];
+            this.data = data.data;
+            this.paginationData = data;
+          }
+        );
       }
     },
     mounted() {
-      this.submitData = {
-        ...this.submitData,
-        storeId: this.userShopInfo.store_id
-      };
-      this.getProductList();
       _getData("/catalog/first", {}).then(data => {
         console.log("一级", data);
         _.each(data.categoryList, val => {
@@ -378,6 +381,13 @@
           val.value = val.id;
         });
         this.bigOptions = data.categoryList;
+      });
+      this.submitData = {
+        ...this.submitData,
+        storeId: this.userShopInfo.store_id
+      };
+      this.getProductList().then(() => {
+        this.isLoading = false;
       });
     },
     components: {

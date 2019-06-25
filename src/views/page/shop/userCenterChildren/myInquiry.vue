@@ -1,113 +1,125 @@
 <template>
   <div class="myInquiry">
-    <common-title title="我的询价">
-      <div slot="titleRight" class="right-box">
-        <ul>
-          <li :class="isShowInfo.current == 1 ? 'active' : ''" @click="tab(1)">
-            报价中({{ quoting }})
-          </li>
-          <li :class="isShowInfo.current == 2 ? 'active' : ''" @click="tab(2)">
-            已报价({{ quoted }})
-          </li>
-          <li :class="isShowInfo.current == 3 ? 'active' : ''" @click="tab(3)">
-            已关闭({{ closed }})
-          </li>
-        </ul>
-      </div>
-    </common-title>
-    <div class="listContainer">
-      <div class="selectInfoBox">
-        <div class="selectInfo">
-          <div class="common productName">
-            <div class="left-box">询价单号</div>
-            <div class="right-box">
-              <a-input
-                placeholder="请输入询价单号"
-                v-model="searchParams.enquirySn"
-              />
+    <div v-if="!isLoading">
+      <common-title title="我的询价">
+        <div slot="titleRight" class="right-box">
+          <ul>
+            <li
+              :class="isShowInfo.current == 1 ? 'active' : ''"
+              @click="tab(1)"
+            >
+              报价中({{ quoting }})
+            </li>
+            <li
+              :class="isShowInfo.current == 2 ? 'active' : ''"
+              @click="tab(2)"
+            >
+              已报价({{ quoted }})
+            </li>
+            <li
+              :class="isShowInfo.current == 3 ? 'active' : ''"
+              @click="tab(3)"
+            >
+              已关闭({{ closed }})
+            </li>
+          </ul>
+        </div>
+      </common-title>
+      <div class="listContainer">
+        <div class="selectInfoBox">
+          <div class="selectInfo">
+            <div class="common productName">
+              <div class="left-box">询价单号</div>
+              <div class="right-box">
+                <a-input
+                  placeholder="请输入询价单号"
+                  v-model="searchParams.enquirySn"
+                />
+              </div>
+            </div>
+            <div class="common productStatus">
+              <div class="left-box">产品名称</div>
+              <div class="right-box">
+                <a-input
+                  placeholder="请输入产品名称"
+                  v-model="searchParams.goodsName"
+                />
+              </div>
             </div>
           </div>
-          <div class="common productStatus">
-            <div class="left-box">产品名称</div>
-            <div class="right-box">
-              <a-input
-                placeholder="请输入产品名称"
-                v-model="searchParams.goodsName"
-              />
+          <div class="selectBtn">
+            <div class="common">
+              <div class="left-box">询价日期</div>
+              <div class="right-box">
+                <calendar-range
+                  v-on:getDateRange="getDateTime"
+                  :dateRange="dateRange"
+                ></calendar-range>
+              </div>
             </div>
+            <a-button class="search" @click="searchData">搜索</a-button>
+            <a-button class="clear" @click="clearData">清除</a-button>
           </div>
         </div>
-        <div class="selectBtn">
-          <div class="common">
-            <div class="left-box">询价日期</div>
-            <div class="right-box">
-              <calendar-range
-                v-on:getDateRange="getDateTime"
-                :dateRange="dateRange"
-              ></calendar-range>
+        <div class="listContent">
+          <list-title :titleArr="titleArr"></list-title>
+          <ul v-if="data.length > 0">
+            <li v-for="item in data" :key="item.id">
+              <inquiry-item
+                :data="item"
+                :checkedList="selectDatas"
+                v-on:getChecked="getChecked"
+                :isShowInfo="isShowInfo"
+                v-on:getIsDelete="getIsDelete"
+              ></inquiry-item>
+            </li>
+          </ul>
+          <no-data v-else text="暂无数据"></no-data>
+        </div>
+        <div class="tfooter">
+          <check-all
+            :amount="selectArr.length"
+            :checkAll="checkAll"
+            :deleteText="isShowInfo.current"
+            v-on:isCheckAll="isCheckAllMethod"
+            v-on:isDelete="getCheckDelete"
+            v-if="data.length > 0"
+            :class="isShowInfo.current != 1 ? 'checkAllStyle' : ''"
+          >
+            <div slot="right-box" class="right-box">
+              <div
+                class="turnMyQuote"
+                v-if="isShowInfo.current == 2"
+                @click="turnMyQuote"
+              >
+                转为我的报价
+              </div>
+              <div
+                class="submitOrder"
+                v-if="isShowInfo.current == 2"
+                @click="submitOrder"
+              >
+                提交订单
+              </div>
+              <div
+                :class="['submit', products.length > 0 ? 'active' : '']"
+                v-if="isShowInfo.current == 3"
+                @click="getQuote"
+              >
+                一键获取报价
+              </div>
             </div>
-          </div>
-          <a-button class="search" @click="searchData">搜索</a-button>
-          <a-button class="clear" @click="clearData">清除</a-button>
+          </check-all>
         </div>
       </div>
-      <div class="listContent">
-        <list-title :titleArr="titleArr"></list-title>
-        <ul v-if="data.length > 0">
-          <li v-for="item in data" :key="item.id">
-            <inquiry-item
-              :data="item"
-              :checkedList="selectDatas"
-              v-on:getChecked="getChecked"
-              :isShowInfo="isShowInfo"
-              v-on:getIsDelete="getIsDelete"
-            ></inquiry-item>
-          </li>
-        </ul>
-        <no-data v-else text="暂无数据"></no-data>
-      </div>
-      <div class="tfooter">
-        <check-all
-          :amount="selectArr.length"
-          :checkAll="checkAll"
-          :deleteText="isShowInfo.current"
-          v-on:isCheckAll="isCheckAllMethod"
-          v-on:isDelete="getCheckDelete"
-          v-if="data.length > 0"
-          :class="isShowInfo.current != 1 ? 'checkAllStyle' : ''"
-        >
-          <div slot="right-box" class="right-box">
-            <div
-              class="turnMyQuote"
-              v-if="isShowInfo.current == 2"
-              @click="turnMyQuote"
-            >
-              转为我的报价
-            </div>
-            <div
-              class="submitOrder"
-              v-if="isShowInfo.current == 2"
-              @click="submitOrder"
-            >
-              提交订单
-            </div>
-            <div
-              :class="['submit', products.length > 0 ? 'active' : '']"
-              v-if="isShowInfo.current == 3"
-              @click="getQuote"
-            >
-              一键获取报价
-            </div>
-          </div>
-        </check-all>
-      </div>
+      <pagination
+        :data="paginationData"
+        v-on:onPaginationChange="getPaginationChange"
+        v-if="paginationData.count != 0"
+      ></pagination>
+      <side-bar v-show="isShowInfo.current == 1" />
     </div>
-    <pagination
-      :data="paginationData"
-      v-on:onPaginationChange="getPaginationChange"
-      v-if="paginationData.count != 0"
-    ></pagination>
-    <side-bar v-show="isShowInfo.current == 1" />
+    <loading v-else></loading>
   </div>
 </template>
 
@@ -119,11 +131,12 @@
   import calendarRange from "../../../../components/common/calendarRange";
   import pagination from "../../../../components/common/pagination";
   import sideBar from "../../../../components/sideBar/sideBar";
-  import { _getData } from "../../../../config/getData";
+  import { _getData, _getDataAll } from "../../../../config/getData";
   import _ from "lodash";
   export default {
     data() {
       return {
+        isLoading: true,
         isShowInfo: {
           isDetail: false,
           isShow: false,
@@ -147,7 +160,7 @@
         ],
         searchParams: {
           page: 1,
-          size: 10,
+          size: 5,
           status: 1,
           enquirySn: "",
           storeId: ""
@@ -364,42 +377,45 @@
           this.checkAll = false;
         }
       },
-      getInquiryList() {
-        _getData("/enquiryPlus/enquiryList", this.searchParams).then(data => {
-          console.log("获取询价管理的列表：", data);
-          this.products = [];
-          this.allProducts = [];
-          this.selectDatas = [];
-          this.checkAll = false;
-          this.data = data.data;
-          this.paginationData = data;
-          _.map(this.data, o => {
-            for (const val of o.goodList) {
-              this.allProducts.push(val.id);
-            }
-          });
-        });
-      },
-      getInquiryNumber() {
-        _getData("/enquiryPlus/enquiryCount", { param: { storeId: "" } }).then(
+      async getInquiryList() {
+        return await _getData("/enquiryPlus/enquiryList", this.searchParams).then(
           data => {
-            console.log("获取的询价数：：：", data);
-            _.map(data.data, o => {
-              if (o.status == 1) {
-                this.quoting = o.num;
-              } else if (o.status == 2) {
-                this.quoted = o.num;
-              } else {
-                this.closed = o.num;
+            console.log("获取询价管理的列表：", data);
+            this.products = [];
+            this.allProducts = [];
+            this.selectDatas = [];
+            this.checkAll = false;
+            this.data = data.data;
+            this.paginationData = data;
+            _.map(this.data, o => {
+              for (const val of o.goodList) {
+                this.allProducts.push(val.id);
               }
             });
           }
         );
+      },
+      async getInquiryNumber() {
+        return await _getData("/enquiryPlus/enquiryCount", {
+          param: { storeId: "" }
+        }).then(data => {
+          console.log("获取的询价数：：：", data);
+          _.map(data.data, o => {
+            if (o.status == 1) {
+              this.quoting = o.num;
+            } else if (o.status == 2) {
+              this.quoted = o.num;
+            } else {
+              this.closed = o.num;
+            }
+          });
+        });
       }
     },
     mounted() {
-      this.getInquiryList();
-      this.getInquiryNumber();
+      _getDataAll([this.getInquiryList(), this.getInquiryNumber()]).then(() => {
+        this.isLoading = false;
+      });
     },
     components: {
       commonTitle,

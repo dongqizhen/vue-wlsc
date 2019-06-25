@@ -1,50 +1,55 @@
 <template>
   <div class="orderManage">
     <commonTitle title="我的订单"></commonTitle>
-    <manage-number-nav
-      :navArr="tabs"
-      v-on:tab="getOrderStatus"
-      :defaultActiveKey="defaultActiveKey"
-    ></manage-number-nav>
-    <div class="orderContainer">
-      <filter-search v-on:getSearchData="getSearchData"></filter-search>
-      <div class="listContent">
-        <list-title :titleArr="titleArr"></list-title>
-        <div class="tbody">
-          <ul v-if="data.length > 0">
-            <li v-for="item in data" :key="item.id">
-              <order-item
-                :data="item"
-                :checkedList="checkedList"
-                :isShowInfo="isShowInfo"
-                v-on:getChecked="getChecked"
-                v-on:returnValue="getReturnStatus"
-                v-on:deleteOrder="deleteSingleOrder"
-              ></order-item>
-            </li>
-          </ul>
-          <no-data v-else text="暂无数据"></no-data>
-        </div>
-        <div class="tfooter">
-          <checkAll
-            :amount="checkedList.length"
-            :checkAll="checkAll"
-            v-on:isCheckAll="isCheckAllMethod"
-            v-on:isDelete="getCheckDelete"
-            v-if="
-              (getOrderData.orderStatus == 5 ||
-                getOrderData.orderStatus == 7) &&
-                data.length > 0
-            "
-          ></checkAll>
+    <div v-if="!isLoading">
+      <manage-number-nav
+        :navArr="tabs"
+        v-on:tab="getOrderStatus"
+        :defaultActiveKey="defaultActiveKey"
+      ></manage-number-nav>
+      <div v-if="!isOrderLoading">
+      <div class="orderContainer">
+        <filter-search v-on:getSearchData="getSearchData"></filter-search>
+        <div class="listContent">
+          <list-title :titleArr="titleArr"></list-title>
+          <div class="tbody">
+            <ul v-if="data.length > 0">
+              <li v-for="item in data" :key="item.id">
+                <order-item
+                  :data="item"
+                  :checkedList="checkedList"
+                  :isShowInfo="isShowInfo"
+                  v-on:getChecked="getChecked"
+                  v-on:returnValue="getReturnStatus"
+                  v-on:deleteOrder="deleteSingleOrder"
+                ></order-item>
+              </li>
+            </ul>
+            <no-data v-else text="暂无数据"></no-data>
+          </div>
+          <div class="tfooter">
+            <checkAll
+              :amount="checkedList.length"
+              :checkAll="checkAll"
+              v-on:isCheckAll="isCheckAllMethod"
+              v-on:isDelete="getCheckDelete"
+              v-if="
+                (getOrderData.orderStatus == 5 ||
+                  getOrderData.orderStatus == 7) &&
+                  data.length > 0
+              "
+            ></checkAll>
+          </div>
         </div>
       </div>
+      <pagination
+        :data="paginationData"
+        v-on:onPaginationChange="getPaginationChange"
+        v-if="paginationData.count != 0"
+      ></pagination></div>
+      <loading v-else></loading>
     </div>
-    <pagination
-      :data="paginationData"
-      v-on:onPaginationChange="getPaginationChange"
-      v-if="paginationData.count != 0"
-    ></pagination>
+    <loading v-else></loading>
   </div>
 </template>
 <script>
@@ -55,10 +60,12 @@
   import orderItem from "../../../../components/common/order/orderItem";
   import checkAll from "../../../../components/common/checkAll";
   import pagination from "../../../../components/common/pagination";
-  import { _getData } from "../../../../config/getData";
+  import { _getData, _getDataAll } from "../../../../config/getData";
   export default {
     data() {
       return {
+        isLoading: true,
+        isOrderLoading:true,
         isShowInfo: {
           isDetail: false,
           current: -1,
@@ -199,17 +206,22 @@
         this.getOrderData.currentPage = val;
         this.getOrderList();
       },
-      getOrderList() {
-        _getData("/order/orderList", this.getOrderData).then(data => {
-          console.log("获取订单列表：", data);
-          this.checkAll = false;
-          this.checkedList = [];
-          this.data = data.data;
-          this.paginationData = data;
+      async getOrderList() {
+        this.isOrderLoading = true;
+        return await _getData("/order/orderList", this.getOrderData).then(
+          data => {
+            console.log("获取订单列表：", data);
+            this.checkAll = false;
+            this.checkedList = [];
+            this.data = data.data;
+            this.paginationData = data;
+          }
+        ).then(()=>{
+          this.isOrderLoading = false;
         });
       },
-      getOrderNumber() {
-        _getData("/order/orderCount", {
+      async getOrderNumber() {
+        return await _getData("/order/orderCount", {
           param: {
             storeId: ""
           }
@@ -232,8 +244,9 @@
         this.isShowInfo.current = -1;
         this.$router.replace({ path: "/userCenter/myOrder" });
       }
-      this.getOrderList();
-      this.getOrderNumber();
+      _getDataAll([this.getOrderList(), this.getOrderNumber()]).then(() => {
+        this.isLoading = false;
+      });
     },
     components: {
       manageNumberNav,

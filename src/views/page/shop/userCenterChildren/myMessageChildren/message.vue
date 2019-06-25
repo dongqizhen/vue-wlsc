@@ -103,6 +103,7 @@
   import checkAll from "../../../../../components/common/checkAll";
   import pagination from "../../../../../components/common/pagination";
   import { _getData, _getDataAll } from "../../../../../config/getData";
+  import { mapState } from "vuex";
   export default {
     data() {
       return {
@@ -120,7 +121,7 @@
         params: {
           currentPage: "1", //类型：String  必有字段  备注：当前页
           countPerPage: "10", //类型：String  必有字段  备注：每页显示条数
-          messageType: 0, //类型：String  可有字段  备注：消息类型 0系统消息，1私信，空字符串查询全部
+          storeId: "",
           readType: 0 //类型：String  可有字段  备注：消息状态 0未读，1已读，空字符串查询全部
         },
         getMessageNumberParams: {
@@ -130,7 +131,7 @@
         paginationData: {}
       };
     },
-
+    computed: { ...mapState(["userShopInfo"]) },
     methods: {
       getTab(val) {
         // console.log(val);
@@ -179,9 +180,6 @@
       //批量删除
       batchDeleteData() {
         if (this.checkedList.length > 0) {
-          //向后台发送请求，标记为已读，成功后将刷新数据
-          // console.log(this.checkedList);
-          // console.log(this.checkedList.join(","));
           _getData("/message/updateStatus", {
             ids: this.checkedList.join(","),
             flag: "delete"
@@ -198,9 +196,6 @@
       },
       remarkRead() {
         if (this.checkedList.length > 0) {
-          //向后台发送请求，标记为已读，成功后将刷新数据
-          // console.log(this.checkedList);
-          // console.log(this.checkedList.join(","));
           _getData("/message/updateStatus", {
             ids: this.checkedList.join(","),
             flag: "read"
@@ -221,12 +216,27 @@
         this.params.currentPage = val;
         this.getMessageList();
       },
-      //获取消息列表
-      async getMessageList() {
+      //获取系统消息列表
+      async getSystemMessageList() {
         this.isMessageLoading = true;
         return await _getData("/message/list", this.params)
           .then(data => {
             // console.log("获取到的信息列表：", data);
+            this.checkedList = [];
+            this.checkAll = false;
+            this.data = data.data;
+            this.paginationData = data;
+          })
+          .then(() => {
+            this.isMessageLoading = false;
+          });
+      },
+      //获取私信消息列表
+      async getPrivateMessageList() {
+        this.isMessageLoading = true;
+        return await _getData("/message/chatList", this.params)
+          .then(data => {
+            console.log("获取到的信息列表：", data);
             this.checkedList = [];
             this.checkAll = false;
             this.data = data.data;
@@ -261,7 +271,6 @@
         });
       }
     },
-    created() {},
     mounted() {
       //点击头部进入页面的显示信息
       if (this.$route.query.type == "message") {
@@ -271,14 +280,13 @@
         //已读消息
         this.system(1);
       }
-      _getDataAll([this.getMessageNumber(), this.getMessageList()]).then(() => {
+      _getDataAll([
+        this.getMessageNumber(),
+        this.getSystemMessageList(),
+        this.getPrivateMessageList()
+      ]).then(() => {
         this.isLoading = false;
       });
-
-      // _getData("/user/getUser", {}).then(data => {
-      //   console.log("获取用户的店铺开店信息：", data);
-      //   this.changeUserShopInfoState(data);
-      // });
     },
     components: {
       commonTitle,
