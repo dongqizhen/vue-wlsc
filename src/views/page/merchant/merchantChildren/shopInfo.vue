@@ -65,12 +65,17 @@
         <div class="common shopIntroduce">
           <div class="left-box">店铺介绍</div>
           <div class="right-box">
-            <a-textarea
+            <!-- <a-textarea
               placeholder="请在这里对店铺做一个介绍"
               type="textarea"
               v-model="submitData.introduce"
               class="noInput"
-            />
+            /> -->
+            <ueditor
+              :value="submitData.introduce"
+              :config="UEConfig"
+              ref="goodDesc"
+            ></ueditor>
           </div>
         </div>
         <div class="common submit">
@@ -97,6 +102,7 @@
   import upload from "../../../../components/common/upload";
   import cascadeSelect from "../../../../components/common/casadeSelect/cascadeSelect";
   import submitSuccessModal from "../../../../components/modal/submitSuccessModal";
+  import ueditor from "../../../../components/common/ueditor";
   import { _getData } from "../../../../config/getData";
   import { mapState, mapMutations } from "vuex";
   export default {
@@ -118,6 +124,13 @@
           shopScope: "",
           defaultProvinceData: [],
           introduce: ""
+        },
+        UEConfig: {
+          zIndex: 1,
+          autoFloatEnabled: false,
+          initialFrameWidth: "100%",
+          initialFrameHeight: 350,
+          initialContent: "请输入商品描述"
         }
       };
     },
@@ -223,7 +236,8 @@
       commonTitle,
       upload,
       cascadeSelect,
-      submitSuccessModal
+      submitSuccessModal,
+      ueditor
     },
     mounted() {
       _getData("/storeType/queryStoreType", {})
@@ -332,6 +346,11 @@
         .shopIndexPicture {
           .right-box {
             height: 118px;
+          }
+        }
+        .shopIntroduce {
+          .right-box {
+            width: 666px;
           }
         }
         .ant-btn {
