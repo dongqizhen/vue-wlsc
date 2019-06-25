@@ -271,12 +271,11 @@
 
   export default {
     metaInfo: {
-      title: "This is the test",
+      title: "",
       meta: [
         {
-          name: "viewport",
-          content:
-            "width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+          name: "",
+          content: ""
         }
       ]
     },
@@ -413,19 +412,7 @@
         });
       }
     },
-    computed: {
-      ...mapState(["isLogin"]),
-      convertStr() {
-        return this.productInfo.goods_desc.replace(
-          /(?<=\<img [^>]*src=['"])([^'"]+)(?=[^>]*>)/gi,
-          '"data-src="$1'
-        );
-      }
-    },
-    destroyed() {
-      window.removeEventListener("scroll", this.handleScroll);
-    },
-    mounted() {
+    created() {
       //获取产品详情
       _getData("goods/gooddetail", {
         id: this.$route.params.id
@@ -435,6 +422,7 @@
           this.productInfo = data.productInfo;
           this.specificationInfo = data.specificationInfo;
           // this.comment = data.comment ? data.comment : [];
+          console.log(this, this.$meta());
           this.isCollection = data.isCollection;
           this.imgarr = JSON.parse(this.productInfo.list_pic_url);
           this.imgUrl = JSON.parse(this.productInfo.list_pic_url)[0];
@@ -478,7 +466,20 @@
         .then(() => {
           window.addEventListener("scroll", this.handleScroll);
         });
-
+    },
+    computed: {
+      ...mapState(["isLogin"]),
+      convertStr() {
+        return this.productInfo.goods_desc.replace(
+          /(?<=\<img [^>]*src=['"])([^'"]+)(?=[^>]*>)/gi,
+          '"data-src="$1'
+        );
+      }
+    },
+    destroyed() {
+      window.removeEventListener("scroll", this.handleScroll);
+    },
+    mounted() {
       this.getCommentList();
     }
   };
