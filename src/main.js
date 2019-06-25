@@ -9,6 +9,7 @@ import VueLazyload from 'vue-lazyload'
 import NoData from './components/common/nodata'
 import loading from './components/common/loading'
 import VueStar from 'vue-star'
+import Meta from 'vue-meta'
 import animated from 'animate.css'
 import {
     BackTop,
@@ -49,7 +50,7 @@ import {
 } from 'element-ui'
 Vue.config.productionTip = false;
 
-Vue.use(vChatTitle).use(VueLazyload, {
+Vue.use(Meta).use(vChatTitle).use(VueLazyload, {
     preLoad: 1.3,
     attempt: 1,
     lazyComponent: true

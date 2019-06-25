@@ -270,6 +270,16 @@
   import pagination from "../../../../components/common/pagination";
 
   export default {
+    metaInfo: {
+      title: "This is the test",
+      meta: [
+        {
+          name: "viewport",
+          content:
+            "width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+        }
+      ]
+    },
     data() {
       return {
         productInfo: "", //产品详情

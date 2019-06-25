@@ -12,7 +12,7 @@ const router = new Router({
             component: () =>
                 import ( /* webpackChunkName: "index" */ "../views/index"),
             meta: {
-                title: '网来商城'
+                title: '网来商城-全国领先的医疗设备、医疗器械、医疗备件、医疗配件交易平台'
             },
         },
         {
@@ -210,7 +210,7 @@ const router = new Router({
                 path: 'productDetails/:id',
                 name: '产品详情',
                 meta: {
-                    title: '产品详情'
+                    //title: '产品详情'
                 },
                 component: () =>
                     import ('../views/page/shop/detailsChildren/productDetails')
@@ -228,6 +228,9 @@ const router = new Router({
         }, {
             name: '找店铺',
             path: '/lookingShop',
+            meta: {
+                title: '找医疗器械店铺-网来商城'
+            },
             component: () =>
                 import ('../views/page/shop/lookingShop.vue')
         }, {
@@ -242,27 +245,42 @@ const router = new Router({
             children: [{
                 name: '产品分类',
                 path: '/',
+                meta: {
+                    title: '找医疗器械产品-网来商城'
+                },
                 component: () =>
                     import ('../views/page/shop/lookingProductChildren/brandClassific')
             }, {
                 name: '产品分类主页',
                 path: 'oneOfBrandClassificne',
+                meta: {
+                    title: '找医疗器械品牌-网来商城'
+                },
                 component: () =>
                     import ('../views/page/shop/lookingProductChildren/oneOfBrandClassific')
             }, {
                 name: '品牌主页',
                 path: 'brand',
+                // meta: {
+                //     title: '找医疗器械品牌-网来商城'
+                // },
                 component: () =>
                     import ('../views/page/shop/lookingProductChildren/brand')
             }, {
                 name: '型号主页',
                 path: 'model',
+                // meta: {
+                //     title: '找医疗器械产品-网来商城'
+                // },
                 component: () =>
                     import ('../views/page/shop/lookingProductChildren/model')
             }]
         }, {
             name: '关于我们',
             path: '/aboutUs',
+            meta: {
+                title: '关于我们-网来商城'
+            },
             component: () =>
                 import ('../views/page/shop/aboutUs')
         }, {
@@ -652,6 +670,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
     let localStorage = JSON.parse(window.localStorage["vuex-along"])["vuex-along"];
     /* 路由发生变化修改页面title */
+    console.log(to)
     if (to.meta.title) {
         document.title = to.meta.title
     }
