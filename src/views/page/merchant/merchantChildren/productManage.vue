@@ -166,6 +166,7 @@
             <pagination
               :data="paginationData"
               v-on:onPaginationChange="getPaginationChange"
+              ref="pagination"
               v-if="paginationData.count != 0"
             ></pagination>
           </div>
@@ -237,7 +238,13 @@
       searchData() {
         console.log(this.submitData);
         this.submitData.currentPage = 1;
-        this.getProductList();
+        this.getProductList().then(() => {
+          this.$nextTick(() => {
+            if (this.$refs.pagination) {
+              this.$refs.pagination.$data.current = 1;
+            }
+          });
+        });
       },
       clearData() {
         this.submitData.isOnSale = "";
@@ -591,6 +598,9 @@
             padding-top: 11px;
             &.active {
               background-color: rgba(245, 166, 35, 0.06);
+            }
+            &:hover {
+              cursor: pointer;
             }
             span {
               @extend %span;
