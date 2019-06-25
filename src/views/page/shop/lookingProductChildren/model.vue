@@ -253,6 +253,11 @@
           this.othersort = i;
           this.getCaseList();
         }
+        this.$nextTick(() => {
+          if (this.$refs.pagination) {
+            this.$refs.pagination.$data.current = 1;
+          }
+        });
       },
       tabClick(i, val) {
         console.log(val);

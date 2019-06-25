@@ -566,6 +566,7 @@
                 cursor: pointer;
                 border: 2px solid #fff;
                 width: 45px;
+                margin-right: 16px;
                 img {
                   height: 100%;
                   width: 100%;
