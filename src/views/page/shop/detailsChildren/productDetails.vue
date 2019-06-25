@@ -566,6 +566,7 @@
                 cursor: pointer;
                 border: 2px solid #fff;
                 width: 45px;
+                margin-right: 16px;
                 img {
                   height: 100%;
                   width: 100%;
@@ -628,7 +629,7 @@
               line-height: 13px;
 
               &:nth-child(2) {
-                font-size: 25px;
+                font-size: 20px;
                 color: #f10215;
                 font-weight: 700;
                 line-height: 24px;

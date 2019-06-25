@@ -70,7 +70,9 @@
           </div>
           <div class="right">
             <shop-nav-vue
-              :navArr="['推荐', '按点击量', '按好评']"
+              :navArr="['发布时间', '按点击量', '按好评']"
+              v-on:tabClick="tabClick"
+              ref="shopNav"
             ></shop-nav-vue>
             <div v-if="!isLoading">
               <div v-if="arr.length">
@@ -81,12 +83,17 @@
                     :item="item"
                   ></shop-item-vue>
                 </ul>
-                <pagination :data="data"></pagination>
               </div>
 
               <no-data v-else text="暂无店铺"></no-data>
             </div>
             <loading v-else></loading>
+            <pagination
+              :data="data"
+              v-on:onPaginationChange="onPaginationChange"
+              ref="pagination"
+              v-if="data != '' && arr.length"
+            ></pagination>
           </div>
         </div>
       </div>
@@ -115,6 +122,9 @@
     data() {
       return {
         data: "",
+        createTime: "create_time DESC", //创建时间排序：createTime DESC
+        accessNum: "", //访问量排序：accessNum DESC
+        highPraiseNum: "", //好评率排序：highPraiseNum DESC
         arr: [], //店铺列表
         areaIsShow: false, //控制选择地区弹层是否显示
         area: [], //省份列表
@@ -179,6 +189,30 @@
           // console.log(data);
         });
       },
+      onPaginationChange(page) {
+        this.getShop(page);
+      },
+      tabClick(i, val) {
+        if (i == 0) {
+          this.createTime = "create_time DESC";
+          this.accessNum = "";
+          this.highPraiseNum = "";
+        } else if (i == 1) {
+          this.createTime = "";
+          this.accessNum = "accessNum DESC";
+          this.highPraiseNum = "";
+        } else {
+          this.createTime = "";
+          this.accessNum = "";
+          this.highPraiseNum = "highPraiseNum DESC";
+        }
+        this.getShop();
+        this.$nextTick(() => {
+          if (this.$refs.pagination) {
+            this.$refs.pagination.$data.current = 1;
+          }
+        });
+      },
       brandClick(item) {
         console.log(item);
         this.brandId = item.id;
@@ -190,14 +224,17 @@
         this.province = "选择省/直辖市";
       },
       //异步获取店铺
-      async getShop() {
+      async getShop(page = 1) {
         this.isLoading = true;
         return await _getData("queryEnquiry", {
           brandId: this.brandId,
           provinceName: this.provinceName,
           cityName: this.cityName,
           categoryId: this.categoryId,
-          page: 1,
+          createTime: this.createTime,
+          accessNum: this.accessNum,
+          highPraiseNum: this.highPraiseNum,
+          page,
           size: 20
         })
           .then(data => {

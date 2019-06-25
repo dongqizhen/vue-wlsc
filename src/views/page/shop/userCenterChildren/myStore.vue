@@ -4,10 +4,7 @@
       <common-title title="我的收藏">
         <div slot="titleRight" class="right-box">
           <div class="search-box">
-            <a-input
-              placeholder="请输入搜索内容"
-              v-model="searchParams.name"
-            ></a-input>
+            <a-input placeholder="请输入搜索内容" v-model="name"></a-input>
             <a-button class="searchBtn" @click="search">搜索</a-button>
             <a-button class="clearBtn" @click="clear">清空</a-button>
           </div>
@@ -22,23 +19,26 @@
         </div>
       </common-title>
       <div class="listContainer">
-        <div class="listContent" v-if="data.length > 0">
-          <ul v-if="current == 0">
-            <product-item
-              v-for="item in data"
-              :key="item.id"
-              :list="item"
-            ></product-item>
-          </ul>
-          <ul v-else>
-            <shop-item
-              v-for="item in data"
-              :key="item.id"
-              :item="item"
-            ></shop-item>
-          </ul>
+        <div v-if="!goodLoading">
+          <div class="listContent" v-if="data.length > 0">
+            <ul v-if="current == 0">
+              <product-item
+                v-for="item in data"
+                :key="item.id"
+                :list="item"
+              ></product-item>
+            </ul>
+            <ul v-else>
+              <shop-item
+                v-for="item in data"
+                :key="item.id"
+                :item="item"
+              ></shop-item>
+            </ul>
+          </div>
+          <no-data v-else type="no-collect" text="暂无数据"></no-data>
         </div>
-        <no-data v-else type="no-collect" text="暂无数据"></no-data>
+        <loading v-else :number="2" :rows="4"></loading>
       </div>
       <pagination
         :data="paginationData"
@@ -46,7 +46,7 @@
         v-if="paginationData.count != 0"
       ></pagination>
     </div>
-    <loading v-else></loading>
+    <loading v-else :number="2"></loading>
   </div>
 </template>
 
@@ -62,46 +62,58 @@
       return {
         isLoading: true,
         data: [],
+        name: "", //搜索关键字
         current: 0,
         goodsCount: 0,
         shopCount: 0,
-        searchParams: {
-          name: "",
-          typeId: 0, //收藏类型 0 商品 1 店铺
-          currentPage: 1,
-          countPerPage: 8
-        },
+        // searchParams: {
+        //   name: "",
+        //   typeId: 0, //收藏类型 0 商品 1 店铺
+        //   currentPage: 1,
+        //   countPerPage: 8
+        // },
+        goodLoading: true,
         paginationData: {}
       };
     },
     methods: {
-      getPaginationChange(val) {
-        console.log(val);
-        this.searchParams.currentPage = val;
-        this.getList();
+      getPaginationChange(page) {
+        //console.log(val);
+        //this.searchParams.currentPage = val;
+        this.getList(page);
       },
       search() {
         this.getList();
         this.getStoreNumber();
       },
       clear() {
-        this.searchParams.name = "";
+        this.name = "";
       },
       getTab(val) {
         this.current = val;
-        this.searchParams.typeId = val;
-        this.getList(val);
+        //this.searchParams.typeId = val;
+        this.getList();
       },
-      async getList() {
-        return await _getData("/collect/list", this.searchParams).then(data => {
-          console.log("获取收藏数据：", data);
-          this.data = data.data;
-          this.paginationData = data;
-        });
+      async getList(currentPage = 1) {
+        this.goodLoading = true;
+        return await _getData("/collect/list", {
+          name: this.name,
+          typeId: this.current, //收藏类型 0 商品 1 店铺
+          currentPage: currentPage,
+          countPerPage: 8
+        })
+          .then(data => {
+            console.log("获取收藏数据：", data);
+            this.data = data.data;
+            this.paginationData = data;
+          })
+          .then(() => {
+            this.goodLoading = false;
+          });
       },
       async getStoreNumber() {
         return await _getData("/collect/count", {
-          name: this.searchParams.name
+          name: this.name
         }).then(data => {
           console.log("获取的收藏的数量：：：", data);
           this.goodsCount = data.goodsCount;
@@ -198,7 +210,9 @@
     .listContainer {
       margin-top: 12px;
       margin-right: -50px;
-
+      /deep/ .loading {
+        width: 1040px;
+      }
       ul {
         display: flex;
         flex-wrap: wrap;
