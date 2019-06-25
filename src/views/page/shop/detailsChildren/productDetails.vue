@@ -629,7 +629,7 @@
               line-height: 13px;
 
               &:nth-child(2) {
-                font-size: 25px;
+                font-size: 20px;
                 color: #f10215;
                 font-weight: 700;
                 line-height: 24px;

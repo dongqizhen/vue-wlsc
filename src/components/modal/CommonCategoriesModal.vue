@@ -232,9 +232,13 @@
           this.$message.warning("已添加至常用分类", 1);
           return;
         } else {
-          this.myArray2.push(item);
+          if (this.myArray2.length < 8) {
+            this.myArray2.push(item);
+            this.saveCategory();
+          } else {
+            this.$message.warning("最多添加8个常用分类", 1);
+          }
         }
-        this.saveCategory();
       },
       //保存常用分类
       async saveCategory() {
