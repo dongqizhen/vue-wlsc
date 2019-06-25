@@ -59,6 +59,7 @@
     watch: {
       value(newVal) {
         this.value = newVal;
+        this.editor.setContent(newVal);
       }
     },
     mounted() {

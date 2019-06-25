@@ -65,16 +65,10 @@
         <div class="common shopIntroduce">
           <div class="left-box">店铺介绍</div>
           <div class="right-box">
-            <!-- <a-textarea
-              placeholder="请在这里对店铺做一个介绍"
-              type="textarea"
-              v-model="submitData.introduce"
-              class="noInput"
-            /> -->
             <ueditor
               :value="submitData.introduce"
               :config="UEConfig"
-              ref="goodDesc"
+              ref="introduce"
             ></ueditor>
           </div>
         </div>
@@ -148,6 +142,7 @@
     methods: {
       ...mapMutations(["changeUserShopInfoState"]),
       save() {
+        console.log(this.$refs.introduce);
         if (!this.submitData.shopName) {
           this.shopNameFlag = true;
           this.$refs.shopName.focus();
@@ -179,11 +174,14 @@
         } else {
           this.saleAreaFlag = false;
         }
+        this.submitData.introduce = this.$refs.introduce.getUEContent();
+        this.submitData.introduceTxt = this.$refs.introduce.getUEContentTxt();
         this.submitData = {
           ...this.submitData,
           current: this.current,
           sid: this.$store.state.userShopInfo.store_id
         };
+        console.log(this.submitData);
         if (this.isOpenShop) {
           _getData("/store/insertOrUpdateStore", this.submitData).then(data => {
             console.log(data);
