@@ -66,11 +66,13 @@
             commentList: commentList
           }).then(data => {
             console.log("评价是否成功：", data);
-            this.$message.success("评论成功", 1);
-            this.$router.replace({
-              path: "/userCenter/myOrder",
-              query: { status: 5 }
-            });
+            if (data.code != 500) {
+              this.$message.success("评论成功", 1);
+              this.$router.replace({
+                path: "/userCenter/myOrder",
+                query: { status: 5 }
+              });
+            }
           });
         }
       },

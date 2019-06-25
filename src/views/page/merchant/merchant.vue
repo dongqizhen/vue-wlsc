@@ -71,11 +71,13 @@
           this.$router.replace({ path: "/merchant/shopIndex" });
         }
       } else {
-        this.shopStatus = this.userShopInfo.audit_status;
+        this.shopStatus = this.userShopInfo.audit_status
+          ? this.userShopInfo.audit_status
+          : 0;
         this.defaultSelectedKeys = ["0"];
         this.$router.replace({
           path: "/merchant/openShop",
-          query: { shopStatus: this.userShopInfo.audit_status }
+          query: { shopStatus: this.shopStatus }
         });
       }
     },

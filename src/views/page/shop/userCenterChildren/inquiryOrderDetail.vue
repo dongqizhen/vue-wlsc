@@ -156,11 +156,13 @@
             }
           }).then(data => {
             console.log(data);
-            let { href } = this.$router.resolve({
-              path: `/userCenter/editQuote/${data.id}`,
-              query: { keyId: 4 }
-            });
-            window.open(href, "_blank");
+            if (data.code != 500) {
+              let { href } = this.$router.resolve({
+                path: `/userCenter/editQuote/${data.id}`,
+                query: { keyId: 4 }
+              });
+              window.open(href, "_blank");
+            }
           });
         }
       },

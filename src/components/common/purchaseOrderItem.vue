@@ -21,7 +21,7 @@
             </label>
           </span>
           <span>
-            <img :src="JSON.parse(item.list_pic_url)[0]" />
+            <img :src="item.primary_pic_url" />
           </span>
           <span>{{ item.goods_name }}</span>
           <span>{{ item.brand_name }}/{{ item.model_name }}</span>

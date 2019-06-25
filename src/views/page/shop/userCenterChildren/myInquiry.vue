@@ -206,11 +206,13 @@
             }
           }).then(data => {
             console.log(data);
-            let { href } = this.$router.resolve({
-              path: `editQuote/${data.id}`,
-              query: { keyId: 2 }
-            });
-            window.open(href, "_blank");
+            if (data.code != 500) {
+              let { href } = this.$router.resolve({
+                path: `editQuote/${data.id}`,
+                query: { keyId: 2 }
+              });
+              window.open(href, "_blank");
+            }
           });
         } else {
           this.$message.warning("请选择产品", 1);

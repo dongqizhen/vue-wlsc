@@ -16,7 +16,12 @@
                   ></use>
                   <use xlink:href="#icontongbixiajiang" v-else></use>
                 </svg>
-                同比{{ data.rate == "--" ? "" : data.increase ? "增长" : "下降"
+                {{
+                  data.rate == "--"
+                    ? ""
+                    : data.increase
+                    ? "同比增长"
+                    : "同比下降"
                 }}{{ data.rate }}
               </div>
             </li>

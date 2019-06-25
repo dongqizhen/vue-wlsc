@@ -85,79 +85,91 @@
               <button class="clear" @click="clearData">清除</button>
             </div>
           </div>
-          <div class="listContent">
-            <h2>
-              <span></span>
-              <span>产品图片</span>
-              <span>产品名称</span>
-              <span>产品分类</span>
-              <span>品牌/型号</span>
-              <span>产品状态</span>
-              <span>库存数量</span>
-              <span>发布时间</span>
-              <span>操作</span>
-            </h2>
-            <ul v-if="data.length != 0">
-              <li
-                v-for="item in data"
-                :key="item.id"
-                :class="addClass(item.id)"
-                @click="turnToDetail(item)"
-              >
-                <span>
-                  <label @click.stop="stopChange">
-                    <a-checkbox
-                      @change="onChange(item.id)"
-                      :checked="checkedChange(item.id)"
-                    ></a-checkbox
-                  ></label>
-                </span>
-                <span><img :src="JSON.parse(item.list_pic_url)[0]"/></span>
-                <span>{{ item.name }}</span>
-                <span
-                  >{{ item.big_category_name }}/{{ item.category_name }}</span
+          <div v-if="!isListLoading">
+            <div class="listContent">
+              <h2>
+                <span></span>
+                <span>产品图片</span>
+                <span>产品名称</span>
+                <span>产品分类</span>
+                <span>品牌/型号</span>
+                <span>产品状态</span>
+                <span>库存数量</span>
+                <span>发布时间</span>
+                <span>操作</span>
+              </h2>
+              <ul v-if="data.length != 0">
+                <li
+                  v-for="item in data"
+                  :key="item.id"
+                  :class="addClass(item.id)"
+                  @click="turnToDetail(item)"
                 >
-                <span>{{ item.brand_name }}/{{ item.brand_model_name }}</span>
-                <span>{{ item.is_on_sale == 1 ? "上架" : "未上架" }}</span>
-                <span>{{ item.goods_number }}</span>
-                <span>{{ item.add_time.substring(0, 16) }}</span>
-                <span>
-                  <div @click.stop="stopChange">
-                    <router-link
-                      target="_blank"
-                      :to="{
-                        path: '/merchant/publishGoods',
-                        query: { id: `${item.id}`, keyId: 4 }
-                      }"
-                    >
-                      编辑
-                    </router-link>
-                  </div>
-                  <div @click.stop="obtained(item.id, item.is_on_sale)">
-                    {{ item.is_on_sale == 1 ? "下架" : "上架" }}
-                  </div>
-                </span>
-              </li>
-            </ul>
-            <no-data v-else text="暂无数据"></no-data>
-          </div>
-          <check-all
-            :amount="checkedList.length"
-            :checkAll="checkAll"
-            v-on:isCheckAll="isCheckAllMethod"
-            @isDelete="batchDeleteData"
-            v-if="data.length > 0"
-          >
-            <div slot="right-box" class="right-box">
-              <button class="shelf" @click="batchShelf">上架</button>
-              <button class="obtained" @click="batchObtained">下架</button>
+                  <span>
+                    <label @click.stop="stopChange">
+                      <a-checkbox
+                        @change="onChange(item.id)"
+                        :checked="checkedChange(item.id)"
+                      ></a-checkbox
+                    ></label>
+                  </span>
+                  <span
+                    v-lazy-container="{
+                      selector: 'img'
+                    }"
+                  >
+                    <img
+                      :data-src="item.primary_pic_url"
+                      v-if="item.primary_pic_url"
+                    />
+                  </span>
+                  <span>{{ item.name }}</span>
+                  <span
+                    >{{ item.big_category_name }}/{{ item.category_name }}</span
+                  >
+                  <span>{{ item.brand_name }}/{{ item.brand_model_name }}</span>
+                  <span>{{ item.is_on_sale == 1 ? "上架" : "未上架" }}</span>
+                  <span>{{ item.goods_number }}</span>
+                  <span>{{ item.add_time.substring(0, 16) }}</span>
+                  <span>
+                    <div @click.stop="stopChange">
+                      <router-link
+                        target="_blank"
+                        :to="{
+                          path: '/merchant/publishGoods',
+                          query: { id: `${item.id}`, keyId: 4 }
+                        }"
+                      >
+                        编辑
+                      </router-link>
+                    </div>
+                    <div @click.stop="obtained(item.id, item.is_on_sale)">
+                      {{ item.is_on_sale == 1 ? "下架" : "上架" }}
+                    </div>
+                  </span>
+                </li>
+              </ul>
+              <no-data v-else text="暂无数据"></no-data>
             </div>
-          </check-all>
-          <pagination
-            :data="paginationData"
-            v-on:onPaginationChange="getPaginationChange"
-            v-if="paginationData.count != 0"
-          ></pagination>
+            <check-all
+              :amount="checkedList.length"
+              :checkAll="checkAll"
+              v-on:isCheckAll="isCheckAllMethod"
+              @isDelete="batchDeleteData"
+              v-if="data.length > 0"
+            >
+              <div slot="right-box" class="right-box">
+                <button class="shelf" @click="batchShelf">上架</button>
+                <button class="obtained" @click="batchObtained">下架</button>
+              </div>
+            </check-all>
+            <pagination
+              :data="paginationData"
+              v-on:onPaginationChange="getPaginationChange"
+              v-if="paginationData.count != 0"
+            ></pagination>
+          </div>
+          <loading v-else></loading>
         </div>
       </div>
       <loading v-else></loading>
@@ -176,6 +188,7 @@
     data() {
       return {
         isLoading: true,
+        isListLoading: true,
         data: [],
         bigOptions: [],
         smallOptions: [],
@@ -223,6 +236,7 @@
       },
       searchData() {
         console.log(this.submitData);
+        this.submitData.currentPage = 1;
         this.getProductList();
       },
       clearData() {
@@ -363,14 +377,16 @@
         }
       },
       async getProductList() {
-        return await _getData("/goods/sjGoodsList", this.submitData).then(
-          data => {
+        return await _getData("/goods/sjGoodsList", this.submitData)
+          .then(data => {
             console.log("获取产品列表：", data);
             this.checkedList = [];
             this.data = data.data;
             this.paginationData = data;
-          }
-        );
+          })
+          .then(() => {
+            this.isListLoading = false;
+          });
       }
     },
     mounted() {
@@ -578,6 +594,11 @@
             }
             span {
               @extend %span;
+              &:nth-child(2) {
+                width: 70px;
+                height: 70px;
+                background-color: #f5f5f5;
+              }
             }
           }
           /deep/.no-data {
@@ -676,5 +697,18 @@
         }
       }
     }
+  }
+  /deep/ img[lazy="loading"] {
+    /*your style here*/
+    background: url("../../../../assets/images/loading.gif") no-repeat center;
+    background-size: 100px;
+    background-color: #f7f9fa;
+  }
+  /deep/ img[lazy="error"] {
+    /*your style here*/
+    background: url("../../../../assets/images/loading.gif") no-repeat center;
+    background-size: 100px;
+    display: none;
+    // background-color: #f7f9fa;
   }
 </style>

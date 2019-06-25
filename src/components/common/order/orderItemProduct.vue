@@ -293,6 +293,20 @@
       },
       //支付证明弹框
       addModal(id) {
+        if (this.data.order_status != 1) {
+          // if(this.isShowInfo.is){
+          // }
+          if (!this.isLogin) {
+            this.type = "login";
+          } else {
+            if (this.data.isPayProve == 1) {
+              this.visible = true;
+            } else {
+              this.payVisible = true;
+              this.orderId = id;
+            }
+          }
+        }
         if (!this.isLogin) {
           this.type = "login";
         } else {
