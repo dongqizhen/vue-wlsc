@@ -72,7 +72,7 @@
               </p>
             </div>
             <ul>
-              <li v-for="item in paramas" :key="item.specificationId">
+              <li v-for="item in paramas" :key="`${item.specificationId}-item`">
                 {{ item.specificationName || "--" }}
               </li>
             </ul>
@@ -170,7 +170,7 @@
               </li>
             </ul>
             <ul v-else>
-              <li v-for="val in paramas" :key="val">--</li>
+              <li v-for="val in paramas" :key="val.id">--</li>
             </ul>
           </div>
         </transition-group>

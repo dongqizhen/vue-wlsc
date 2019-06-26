@@ -3,14 +3,32 @@
     <div class="head">
       <common-title title="消息中心"></common-title>
       <div class="shopInfo">
-        <div>
+        <div v-if="sender == 'user'">
           <div class="img-box">
             <img :src="shopDetail.image" alt="" />
           </div>
           <div class="right">
-            <h3>{{ shopDetail.shopName }}<span>2019-11-14 14:28</span></h3>
+            <h3>{{ shopDetail.shopName }}</h3>
+            <p></p>
+          </div>
+        </div>
+        <div v-else>
+          <div class="img-box">
+            <img
+              :src="firstMessage.senderImage"
+              v-if="firstMessage.senderImage"
+            />
+            <svg class="icon" aria-hidden="true" v-else>
+              <use xlink:href="#iconweidenglutouxiang"></use>
+            </svg>
+          </div>
+          <div class="right">
+            <h3>
+              {{ firstMessage.senderName }}
+              <span>{{ firstMessage.createdOn }}</span>
+            </h3>
             <p>
-              这里显示用户发布的信息这里显示用户发布的信息这里显示用户发布的信息这里显示用户发布的信息显示用户发布的信息
+              {{ firstMessage.content }}
             </p>
           </div>
         </div>
@@ -20,34 +38,8 @@
     <div class="reply">
       <h2>最新回复</h2>
       <div class="replay-content">
-        <ul v-if="commentData.firstMessage">
-          <li>
-            <div class="img-box">
-              <img
-                :src="commentData.firstMessage.senderImage"
-                v-if="commentData.firstMessage.senderImage"
-              />
-              <svg class="icon" aria-hidden="true" v-else>
-                <use xlink:href="#iconweidenglutouxiang"></use>
-              </svg>
-            </div>
-            <div class="right">
-              <h3>
-                {{ commentData.firstMessage.senderName
-                }}<span>{{ commentData.firstMessage.createdOn }}</span>
-              </h3>
-              <p>
-                {{ commentData.firstMessage.content }}
-              </p>
-            </div>
-            <a-button v-if="$userid == commentData.firstMessage.sendUserId">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconshanchu"></use>
-              </svg>
-              删除
-            </a-button>
-          </li>
-          <li v-for="item in commentData.replyList" :key="item.id">
+        <ul v-if="firstMessage">
+          <li v-for="item in replyList" :key="item.id">
             <div class="img-box">
               <img :src="item.senderImage" v-if="item.senderImage" />
               <svg class="icon" aria-hidden="true" v-else>
@@ -62,7 +54,39 @@
                 {{ item.content }}
               </p>
             </div>
-            <a-button v-if="$userid == item.sendUserId">
+            <a-button
+              v-if="$userid == item.sendUserId"
+              @click="delMessage(item)"
+            >
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconshanchu"></use>
+              </svg>
+              删除
+            </a-button>
+          </li>
+          <li v-if="sender == 'user'">
+            <div class="img-box">
+              <img
+                :src="firstMessage.senderImage"
+                v-if="firstMessage.senderImage"
+              />
+              <svg class="icon" aria-hidden="true" v-else>
+                <use xlink:href="#iconweidenglutouxiang"></use>
+              </svg>
+            </div>
+            <div class="right">
+              <h3>
+                {{ firstMessage.senderName
+                }}<span>{{ firstMessage.createdOn }}</span>
+              </h3>
+              <p>
+                {{ firstMessage.content }}
+              </p>
+            </div>
+            <a-button
+              v-if="$userid == firstMessage.sendUserId"
+              @click="delMessage(firstMessage)"
+            >
               <svg class="icon" aria-hidden="true">
                 <use xlink:href="#iconshanchu"></use>
               </svg>
@@ -96,6 +120,8 @@
         value: "",
         shopDetail: "",
         commentData: "",
+        replyList: "",
+        firstMessage: "",
         sender: "", //用户类型
         sendBtnLoad: false
       };
@@ -119,9 +145,34 @@
           userId: this.$userid, //类型：Number  必有字段  备注：用户id
           content: this.value, //类型：String  必有字段  备注：消息内容
           sender: this.sender
+        })
+          .then(data => {
+            this.value = "";
+          })
+          .then(() => {
+            this.getCommentList();
+          })
+          .then(() => {
+            this.sendBtnLoad = false;
+          });
+      },
+      delMessage(item) {
+        _getData("message/deleteChat", {
+          ids: item.id,
+          flag: this.sender
+        });
+      },
+      getCommentList() {
+        _getData("message/beginChat", {
+          storeId: this.$route.query.shopId
         }).then(data => {
-          this.value = "";
-          this.sendBtnLoad = false;
+          console.log("消息", data);
+          this.commentData = data;
+          if (!this.firstMessage) {
+            this.firstMessage = data.firstMessage;
+          }
+
+          this.replyList = data.replyList;
         });
       }
     },
@@ -133,12 +184,7 @@
         this.shopDetail = data;
       });
 
-      _getData("message/beginChat", {
-        storeId: this.$route.query.shopId
-      }).then(data => {
-        console.log("消息", data);
-        this.commentData = data;
-      });
+      this.getCommentList();
     }
   };
 </script>
@@ -379,12 +425,13 @@
           }
         }
         button {
-          position: absolute;
+          position: absolute !important;
           width: 102px;
           height: 42px;
           background-image: linear-gradient(270deg, #ff4e1a 0%, #f10000 100%);
           border-radius: 4px;
           display: flex;
+          padding: 0;
           align-items: center;
           justify-content: center;
           font-size: 16px;
@@ -395,6 +442,7 @@
           bottom: 17px;
           &[disabled] {
             opacity: 0.2;
+            padding: 0;
           }
           &::after {
             display: none;
