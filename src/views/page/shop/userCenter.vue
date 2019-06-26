@@ -36,7 +36,6 @@
   import centerPage from "../../../components/common/centerPage";
   import Nav from "../../../components/common/nav";
   export default {
-    inject: ["reload"],
     data() {
       return {
         defaultSelectedKeys: ["1"],
@@ -68,15 +67,6 @@
       } else {
         this.defaultSelectedKeys = ["1"];
       }
-    },
-    mounted() {
-      if (window.history && window.history.pushState) {
-        history.pushState(null, null, document.URL);
-        window.addEventListener("popstate", this.goBack, false);
-      }
-    },
-    destroyed() {
-      window.removeEventListener("popstate", this.goBack, false);
     },
     components: {
       Header,

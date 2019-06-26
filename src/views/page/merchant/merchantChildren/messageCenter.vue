@@ -44,7 +44,14 @@
             v-for="item in data"
             :key="item.id"
             :to="{
-              path: `messageDetail/${item.id}`
+              path: `/userCenter/myMessage/contactService`,
+              query: {
+                keyId: 9,
+                topTitle: 'sub1',
+                id: item.id,
+                shopId: item.storeId,
+                sender: 'store'
+              }
             }"
           >
             <private-message

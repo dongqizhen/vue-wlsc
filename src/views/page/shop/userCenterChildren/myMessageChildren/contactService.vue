@@ -13,7 +13,7 @@
           </div>
         </div>
         <div v-else>
-          <div class="img-box">
+          <div class="img-box store">
             <img
               :src="firstMessage.senderImage"
               v-if="firstMessage.senderImage"
@@ -32,13 +32,18 @@
             </p>
           </div>
         </div>
-        <span>进入店铺</span>
+        <span v-if="sender == 'user'">进入店铺</span>
       </div>
     </div>
     <div class="reply">
       <h2>最新回复</h2>
       <div class="replay-content">
-        <ul v-if="firstMessage">
+        <ul
+          v-if="
+            (sender == 'user' && firstMessage) ||
+              (sender == 'store' && replyList.length)
+          "
+        >
           <li v-for="item in replyList" :key="item.id">
             <div class="img-box">
               <img :src="item.senderImage" v-if="item.senderImage" />
@@ -131,10 +136,10 @@
     },
     created() {
       console.log(this.$route);
-      if (_.startsWith(this.$route.path, "/userCenter")) {
-        this.sender = "user";
-      } else {
+      if (this.$route.query.sender == "store") {
         this.sender = "store";
+      } else {
+        this.sender = "user";
       }
     },
     methods: {
@@ -142,7 +147,8 @@
         this.sendBtnLoad = true;
         _getData("message/sendPersonlMessage", {
           storeId: this.$route.query.shopId, //类型：Number  必有字段  备注：店铺id
-          userId: this.$userid, //类型：Number  必有字段  备注：用户id
+          userId:
+            this.sender == "user" ? this.$userid : this.firstMessage.sendUserId, //类型：Number  必有字段  备注：用户id
           content: this.value, //类型：String  必有字段  备注：消息内容
           sender: this.sender
         })
@@ -163,27 +169,41 @@
         });
       },
       getCommentList() {
-        _getData("message/beginChat", {
-          storeId: this.$route.query.shopId
-        }).then(data => {
-          console.log("消息", data);
-          this.commentData = data;
-          if (!this.firstMessage) {
-            this.firstMessage = data.firstMessage;
-          }
+        if (this.sender == "user") {
+          _getData("message/beginChat", {
+            storeId: this.$route.query.shopId
+          }).then(data => {
+            console.log("消息", data);
+            this.commentData = data;
+            if (!this.firstMessage) {
+              this.firstMessage = data.firstMessage;
+            }
 
-          this.replyList = data.replyList;
-        });
+            this.replyList = data.replyList;
+          });
+        } else {
+          _getData("message/chatDetail", {
+            id: this.$route.query.id, //类型：Number  必有字段  备
+            storeId: this.$route.query.shopId
+          }).then(data => {
+            if (!this.firstMessage) {
+              this.firstMessage = data.firstMessage;
+            }
+
+            this.replyList = data.replyList;
+          });
+        }
       }
     },
     mounted() {
       console.log(this);
-      _getData("/store/homeStore", {
-        storeId: this.$route.query.shopId
-      }).then(data => {
-        this.shopDetail = data;
-      });
-
+      if (this.sender == "user") {
+        _getData("/store/homeStore", {
+          storeId: this.$route.query.shopId
+        }).then(data => {
+          this.shopDetail = data;
+        });
+      }
       this.getCommentList();
     }
   };
@@ -213,6 +233,16 @@
             background: #f5f5f5;
             margin-right: 9px;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            &.store {
+              background: #cbcbcb;
+            }
+            .icon {
+              height: 25px;
+              width: 25px;
+            }
             img {
               height: 100%;
               width: 100%;
