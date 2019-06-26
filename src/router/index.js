@@ -28,7 +28,7 @@ const router = new Router({
                 },
                 {
                     path: "openShop",
-                    name: '我要开店',
+                    name: '商家中心-我要开店-网来商城',
                     meta: {
                         role: 'Administrator'
                     },
@@ -317,7 +317,7 @@ const router = new Router({
                 name: '忘记密码',
                 path: '/forgetPassword',
                 meta: {
-                    title: '忘记密码-网来商城'
+                    title: '忘记密码-用户中心-网来商城'
                 },
                 component: () =>
                     import ('../views/page/login/loginChildren/forgetPassword')
@@ -340,7 +340,7 @@ const router = new Router({
                     name: '选购单',
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-选购单'
+                        title: '个人中心-选购单-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/purchaseOrder")
@@ -350,7 +350,7 @@ const router = new Router({
                     name: "我的询价",
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-我的询价'
+                        title: '个人中心-我的询价-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/myInquiry")
@@ -360,7 +360,7 @@ const router = new Router({
                     name: "询价单",
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-询价单'
+                        title: '个人中心-询价单-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/inquiryOrderDetail")
@@ -370,7 +370,7 @@ const router = new Router({
                     name: "提交订单",
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-提交订单'
+                        title: '个人中心-提交订单-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/submitOrder")
@@ -380,7 +380,7 @@ const router = new Router({
                     name: "我的订单",
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-我的订单'
+                        title: '个人中心-我的订单-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/myOrder")
@@ -390,7 +390,7 @@ const router = new Router({
                     name: "我的订单详情",
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-我的订单详情'
+                        title: '个人中心-我的订单详情-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/orderDetails")
@@ -400,7 +400,7 @@ const router = new Router({
                     name: "评价",
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-评价'
+                        title: '个人中心-评价-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/comment")
@@ -410,7 +410,7 @@ const router = new Router({
                     name: "我的报价",
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-我的报价'
+                        title: '个人中心-我的报价-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/myQuote")
@@ -420,7 +420,7 @@ const router = new Router({
                     name: "查看报价单",
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-查看报价单'
+                        title: '个人中心-查看报价单-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/lookQuote")
@@ -430,7 +430,7 @@ const router = new Router({
                     name: "编辑报价单",
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-编辑报价单'
+                        title: '个人中心-编辑报价单-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/editQuote")
@@ -440,7 +440,7 @@ const router = new Router({
                     name: "我的收藏",
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-我的收藏'
+                        title: '个人中心-我的收藏-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/myStore")
@@ -450,7 +450,7 @@ const router = new Router({
                     name: "地址管理",
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-地址管理'
+                        title: '个人中心-地址管理-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/addressManage")
@@ -460,7 +460,7 @@ const router = new Router({
                     name: "发票管理",
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-发票管理'
+                        title: '个人中心-发票管理-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/invoiceManage")
@@ -479,7 +479,7 @@ const router = new Router({
                         name: "我的消息中心",
                         meta: {
                             role: 'Administrator',
-                            title: '个人中心-我的消息中心'
+                            title: '个人中心-我的消息中心-网来商城'
                         },
                         component: () =>
                             import ('../views/page/shop/userCenterChildren/myMessageChildren/message')
@@ -488,7 +488,7 @@ const router = new Router({
                         name: '联系客服',
                         meta: {
                             role: 'Administrator',
-                            title: '个人中心-联系客服'
+                            title: '个人中心-联系客服-网来商城'
                         },
                         component: () =>
                             import ('../views/page/shop/userCenterChildren/myMessageChildren/contactService')
@@ -499,7 +499,7 @@ const router = new Router({
                     name: "个人信息",
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-个人信息'
+                        title: '个人中心-个人信息-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/myCenter"),
@@ -509,7 +509,7 @@ const router = new Router({
                     name: "账号安全",
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-账号安全'
+                        title: '个人中心-账号安全-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/accountSecurity")
@@ -519,7 +519,7 @@ const router = new Router({
                     name: '消息详情',
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-消息详情'
+                        title: '个人中心-消息详情-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/messageDetails")
@@ -528,7 +528,7 @@ const router = new Router({
                     name: '修改密码',
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-修改密码'
+                        title: '个人中心-修改密码-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/changePassword")
@@ -537,7 +537,7 @@ const router = new Router({
                     name: '修改手机号',
                     meta: {
                         role: 'Administrator',
-                        title: '个人中心-修改手机号'
+                        title: '个人中心-修改手机号-网来商城'
                     },
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/changePhone")
@@ -547,7 +547,7 @@ const router = new Router({
                         role: 'Administrator',
                         title: '个人中心'
                     },
-                    name: '修改邮箱',
+                    name: '个人中心-修改邮箱-网来商城',
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/changeEmail")
                 },

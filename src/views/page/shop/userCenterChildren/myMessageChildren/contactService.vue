@@ -20,12 +20,12 @@
     <div class="reply">
       <h2>最新回复</h2>
       <div class="replay-content">
-        <ul v-if="commentData.firstMessage">
+        <ul v-if="firstMessage">
           <li>
             <div class="img-box">
               <img
-                :src="commentData.firstMessage.senderImage"
-                v-if="commentData.firstMessage.senderImage"
+                :src="firstMessage.senderImage"
+                v-if="firstMessage.senderImage"
               />
               <svg class="icon" aria-hidden="true" v-else>
                 <use xlink:href="#iconweidenglutouxiang"></use>
@@ -33,21 +33,24 @@
             </div>
             <div class="right">
               <h3>
-                {{ commentData.firstMessage.senderName
-                }}<span>{{ commentData.firstMessage.createdOn }}</span>
+                {{ firstMessage.senderName
+                }}<span>{{ firstMessage.createdOn }}</span>
               </h3>
               <p>
-                {{ commentData.firstMessage.content }}
+                {{ firstMessage.content }}
               </p>
             </div>
-            <a-button v-if="$userid == commentData.firstMessage.sendUserId">
+            <a-button
+              v-if="$userid == firstMessage.sendUserId"
+              @click="delMessage(firstMessage)"
+            >
               <svg class="icon" aria-hidden="true">
                 <use xlink:href="#iconshanchu"></use>
               </svg>
               删除
             </a-button>
           </li>
-          <li v-for="item in commentData.replyList" :key="item.id">
+          <li v-for="item in replyList" :key="item.id">
             <div class="img-box">
               <img :src="item.senderImage" v-if="item.senderImage" />
               <svg class="icon" aria-hidden="true" v-else>
@@ -62,7 +65,10 @@
                 {{ item.content }}
               </p>
             </div>
-            <a-button v-if="$userid == item.sendUserId">
+            <a-button
+              v-if="$userid == item.sendUserId"
+              @click="delMessage(item)"
+            >
               <svg class="icon" aria-hidden="true">
                 <use xlink:href="#iconshanchu"></use>
               </svg>
@@ -96,6 +102,8 @@
         value: "",
         shopDetail: "",
         commentData: "",
+        replyList: "",
+        firstMessage: "",
         sender: "", //用户类型
         sendBtnLoad: false
       };
@@ -123,6 +131,12 @@
           this.value = "";
           this.sendBtnLoad = false;
         });
+      },
+      delMessage(item) {
+        _getData("message/deleteChat", {
+          ids: item.id,
+          flag: this.sender
+        });
       }
     },
     mounted() {
@@ -138,6 +152,8 @@
       }).then(data => {
         console.log("消息", data);
         this.commentData = data;
+        this.firstMessage = data.firstMessage;
+        this.replyList = data.replyList;
       });
     }
   };
