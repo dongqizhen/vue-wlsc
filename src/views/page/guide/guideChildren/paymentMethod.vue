@@ -9,9 +9,16 @@
   import guideRight from "../../../../components/common/guideRight";
   import { _getData } from "../../../../config/getData";
   export default {
+    metaInfo() {
+      return {
+        title: this.title,
+        meta: []
+      };
+    },
     data() {
       return {
-        htmlData: ""
+        htmlData: "",
+        title: "网来商城-全国领先的医疗设备、医疗器械、医疗备件、医疗配件交易平台"
       };
     },
     created() {
@@ -20,6 +27,7 @@
         topicId: this.$route.query.keyId
       }).then(data => {
         this.htmlData = data.topicVoList[0].content;
+        this.title = data.topicVoList[0].title + "-网来商城";
       });
     },
     components: {

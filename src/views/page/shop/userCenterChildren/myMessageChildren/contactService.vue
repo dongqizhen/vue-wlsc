@@ -4,9 +4,11 @@
       <common-title title="消息中心"></common-title>
       <div class="shopInfo">
         <div>
-          <div class="img-box"></div>
+          <div class="img-box">
+            <img :src="shopDetail.image" alt="" />
+          </div>
           <div class="right">
-            <h3>商家名称<span>2019-11-14 14:28</span></h3>
+            <h3>{{ shopDetail.shopName }}<span>2019-11-14 14:28</span></h3>
             <p>
               这里显示用户发布的信息这里显示用户发布的信息这里显示用户发布的信息这里显示用户发布的信息显示用户发布的信息
             </p>
@@ -17,47 +19,68 @@
     </div>
     <div class="reply">
       <h2>最新回复</h2>
-      <ul>
-        <li>
-          <div class="img-box"></div>
-          <div class="right">
-            <h3>商家名称<span>2019-11-14 14:28</span></h3>
-            <p>
-              这里显示用户发布的信息这里显示用户发布的信息这里显示用户发布的信息这里显示用户发布的信息显示用户发布的信息
-            </p>
-          </div>
-        </li>
-        <li>
-          <div class="img-box"></div>
-          <div class="right">
-            <h3>商家名称<span>2019-11-14 14:28</span></h3>
-            <p>
-              这里显示用户发布的信息这里显示用户发布的信息这里显示用户发布的信息这里显示用户发布的信息显示用户发布的信息
-            </p>
-          </div>
-        </li>
-        <li>
-          <div class="img-box"></div>
-          <div class="right">
-            <h3>商家名称<span>2019-11-14 14:28</span></h3>
-            <p>
-              这里显示用户发布的信息这里显示用户发布的信息这里显示用户发布的信息这里显示用户发布的信息显示用户发布的信息
-            </p>
-          </div>
-        </li>
-        <li>
-          <div class="img-box"></div>
-          <div class="right">
-            <h3>商家名称<span>2019-11-14 14:28</span></h3>
-            <p>
-              这里显示用户发布的信息这里显示用户发布的信息这里显示用户发布的信息这里显示用户发布的信息显示用户发布的信息
-            </p>
-          </div>
-        </li>
-      </ul>
+      <div class="replay-content">
+        <ul v-if="commentData.firstMessage">
+          <li>
+            <div class="img-box">
+              <img
+                :src="commentData.firstMessage.senderImage"
+                v-if="commentData.firstMessage.senderImage"
+              />
+              <svg class="icon" aria-hidden="true" v-else>
+                <use xlink:href="#iconweidenglutouxiang"></use>
+              </svg>
+            </div>
+            <div class="right">
+              <h3>
+                {{ commentData.firstMessage.senderName
+                }}<span>{{ commentData.firstMessage.createdOn }}</span>
+              </h3>
+              <p>
+                {{ commentData.firstMessage.content }}
+              </p>
+            </div>
+            <a-button v-if="$userid == commentData.firstMessage.sendUserId">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconshanchu"></use>
+              </svg>
+              删除
+            </a-button>
+          </li>
+          <li v-for="item in commentData.replyList" :key="item.id">
+            <div class="img-box">
+              <img :src="item.senderImage" v-if="item.senderImage" />
+              <svg class="icon" aria-hidden="true" v-else>
+                <use xlink:href="#iconweidenglutouxiang"></use>
+              </svg>
+            </div>
+            <div class="right">
+              <h3>
+                {{ item.senderName }}<span>{{ item.createdOn }}</span>
+              </h3>
+              <p>
+                {{ item.content }}
+              </p>
+            </div>
+            <a-button v-if="$userid == item.sendUserId">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconshanchu"></use>
+              </svg>
+              删除
+            </a-button>
+          </li>
+        </ul>
+        <no-data v-else type="no-message" text="暂无消息"></no-data>
+      </div>
+
       <div class="replay-container">
         <a-textarea placeholder="请输入内容…" :rows="4" v-model="value" />
-        <a-button :disabled="value == ''">发送</a-button>
+        <a-button
+          :disabled="value == ''"
+          @click="sendMessage"
+          :loading="sendBtnLoad"
+          >发送</a-button
+        >
       </div>
     </div>
   </div>
@@ -65,14 +88,57 @@
 
 <script>
   import commonTitle from "../../../../../components/common/merchantRightCommonTitle";
+  import { _getData } from "../../../../../config/getData";
+  import _ from "lodash";
   export default {
     data() {
       return {
-        value: ""
+        value: "",
+        shopDetail: "",
+        commentData: "",
+        sender: "", //用户类型
+        sendBtnLoad: false
       };
     },
     components: {
       commonTitle
+    },
+    created() {
+      console.log(this.$route);
+      if (_.startsWith(this.$route.path, "/userCenter")) {
+        this.sender = "user";
+      } else {
+        this.sender = "store";
+      }
+    },
+    methods: {
+      sendMessage() {
+        this.sendBtnLoad = true;
+        _getData("message/sendPersonlMessage", {
+          storeId: this.$route.query.shopId, //类型：Number  必有字段  备注：店铺id
+          userId: this.$userid, //类型：Number  必有字段  备注：用户id
+          content: this.value, //类型：String  必有字段  备注：消息内容
+          sender: this.sender
+        }).then(data => {
+          this.value = "";
+          this.sendBtnLoad = false;
+        });
+      }
+    },
+    mounted() {
+      console.log(this);
+      _getData("/store/homeStore", {
+        storeId: this.$route.query.shopId
+      }).then(data => {
+        this.shopDetail = data;
+      });
+
+      _getData("message/beginChat", {
+        storeId: this.$route.query.shopId
+      }).then(data => {
+        console.log("消息", data);
+        this.commentData = data;
+      });
     }
   };
 </script>
@@ -98,8 +164,13 @@
             height: 46px;
             width: 46px;
             border-radius: 46px;
-            background: #cbcbcb;
+            background: #f5f5f5;
             margin-right: 9px;
+            overflow: hidden;
+            img {
+              height: 100%;
+              width: 100%;
+            }
           }
           .right {
             h3 {
@@ -161,15 +232,13 @@
         color: #333333;
         border-bottom: 1px solid #dddddd;
       }
-      ul {
-        display: flex;
-        padding: 0 20px;
-        display: flex;
-        flex-direction: column;
-        border-bottom: 1px solid #dddddd;
-        //padding-bottom: 50px;
+      .replay-content {
         height: 390px;
         overflow: auto;
+        border-bottom: 1px solid #dddddd;
+        .no-data {
+          height: 100%;
+        }
         &::-webkit-scrollbar {
           width: 5px;
           height: 5px;
@@ -184,45 +253,99 @@
           background: #aaa;
           border-radius: 2px;
         }
-        li {
+        ul {
           display: flex;
-          justify-content: flex-start;
-          padding: 24px 0;
-          border-bottom: 0.5px solid #dddddd;
-          .img-box {
-            height: 46px;
-            width: 46px;
-            border-radius: 46px;
-            background: #cbcbcb;
-            margin-right: 9px;
-          }
-          .right {
-            h3 {
-              font-size: 15px;
-              color: #333333;
-              font-weight: 600;
-              line-height: 21px;
+          padding: 0 20px;
+          display: flex;
+          flex-direction: column;
+
+          //padding-bottom: 50px;
+
+          li {
+            display: flex;
+            justify-content: flex-start;
+            padding: 24px 0;
+            align-items: center;
+            border-bottom: 0.5px solid #dddddd;
+            cursor: pointer;
+            .img-box {
+              height: 46px;
+              width: 46px;
+              border-radius: 46px;
+              background: #cbcbcb;
+              margin-right: 9px;
+              overflow: hidden;
               display: flex;
               align-items: center;
-              margin-bottom: 8px;
-              span {
-                margin-left: 10px;
-                font-size: 12px;
-                color: #999999;
+              justify-content: center;
+              .icon {
+                height: 25px;
+                width: 25px;
+              }
+              img {
+                width: 100%;
+                height: 100%;
               }
             }
-            p {
-              line-height: 21px;
-              font-size: 15px;
-              color: #333333;
-              width: 688px;
+            .right {
+              width: 835px;
+              h3 {
+                font-size: 15px;
+                color: #333333;
+                font-weight: 600;
+                line-height: 21px;
+                display: flex;
+                align-items: center;
+                margin-bottom: 8px;
+                span {
+                  margin-left: 10px;
+                  font-size: 12px;
+                  color: #999999;
+                }
+              }
+              p {
+                line-height: 21px;
+                font-size: 15px;
+                color: #333333;
+                width: 688px;
+              }
             }
-          }
-          &:last-child {
-            border-bottom: 0;
+            /deep/ .ant-btn {
+              background: #f5f5f5;
+              border-radius: 15.5px;
+              height: 30px;
+              width: 75px;
+              border: 0;
+              font-size: 12px;
+              color: #333333;
+              border: #f5f5f5 1px solid;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              line-height: 28px;
+              display: none;
+              .icon {
+                margin-right: 3px;
+              }
+              &:hover {
+                opacity: 0.7;
+              }
+              &::after {
+                display: none;
+              }
+            }
+            &:last-child {
+              border-bottom: 0;
+            }
+            &:hover {
+              /deep/ .ant-btn {
+                display: flex;
+              }
+            }
           }
         }
       }
+
       .replay-container {
         position: relative;
         height: 170px;

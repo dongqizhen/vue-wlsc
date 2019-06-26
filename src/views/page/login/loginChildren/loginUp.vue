@@ -249,7 +249,7 @@
                 this.changeUserShopInfoState(data);
               })
               .then(() => {
-                // this.$router.back();
+                this.$router.back();
               });
           } else if (data.code == 1116) {
             this.seccode_err = true;

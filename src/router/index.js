@@ -301,7 +301,7 @@ const router = new Router({
                 name: '登录',
                 path: '/',
                 meta: {
-                    title: '登录'
+                    title: '用户登录-网来商城'
                 },
                 component: () =>
                     import ('../views/page/login/loginChildren/loginUp')
@@ -309,7 +309,7 @@ const router = new Router({
                 name: '注册',
                 path: '/register',
                 meta: {
-                    title: '注册'
+                    title: '用户注册-网来商城'
                 },
                 component: () =>
                     import ('../views/page/login/loginChildren/register')
@@ -317,7 +317,7 @@ const router = new Router({
                 name: '忘记密码',
                 path: '/forgetPassword',
                 meta: {
-                    title: '忘记密码'
+                    title: '忘记密码-网来商城'
                 },
                 component: () =>
                     import ('../views/page/login/loginChildren/forgetPassword')
@@ -660,7 +660,7 @@ const router = new Router({
             component: () =>
                 import ("../views/page/shop/notice"),
             meta: {
-                title: '系统公告'
+                title: '系统公告-网来商城'
             },
         }
 

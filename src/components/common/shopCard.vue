@@ -67,7 +67,7 @@
           <router-link
             :to="{
               path: '/userCenter/myMessage/contactService',
-              query: { keyId: 9, topTitle: 'sub1' }
+              query: { keyId: 9, topTitle: 'sub1', shopId: $route.query.shopId }
             }"
             target="_blank"
           >
