@@ -1,40 +1,45 @@
 <template>
   <div class="shoppingCart">
     <common-title title="选购单"></common-title>
-    <div class="listContainer">
-      <list-title :titleArr="titleArr"></list-title>
-      <div class="listContent" v-if="data.length > 0">
-        <purchase-order-item
-          v-for="item in data"
-          :key="item.id"
-          :data="item"
-          :isCheckAll="isCheckAll(item.sid)"
-          v-on:getIsCheckAll="getIsCheckAll"
-          :selectDatas="selectDatas"
-          v-on:getIsDelete="getIsDelete"
-        ></purchase-order-item>
-      </div>
-      <no-data text="暂无数据" v-else></no-data>
-      <div class="tfooter">
-        <check-all
-          :amount="products.length"
-          :checkAll="checkAll"
-          v-on:isCheckAll="isCheckAllMethod"
-          v-on:isDelete="batchDeleteData"
-          v-if="data.length > 0"
-        >
-          <div slot="right-box">
-            <div
-              v-bind:class="['remark', products.length > 0 ? 'active' : '']"
-              @click="addInquiry"
-            >
-              一键获取报价
+    <div v-if="!isLoading">
+      <div class="listContainer">
+        <list-title :titleArr="titleArr"></list-title>
+        <div class="listContent" v-if="data.length > 0">
+          <purchase-order-item
+            v-for="item in data"
+            :key="item.id"
+            :data="item"
+            :isCheckAll="isCheckAll(item.sid)"
+            v-on:getIsCheckAll="getIsCheckAll"
+            :selectDatas="selectDatas"
+            v-on:getIsDelete="getIsDelete"
+          ></purchase-order-item>
+        </div>
+        <no-data text="暂无数据" v-else></no-data>
+        <div class="tfooter">
+          <check-all
+            :amount="products.length"
+            :checkAll="checkAll"
+            v-on:isCheckAll="isCheckAllMethod"
+            v-on:isDelete="batchDeleteData"
+            v-if="data.length > 0"
+          >
+            <div slot="right-box">
+              <a-button
+                type="primary"
+                :loading="loading"
+                v-bind:class="['remark', products.length > 0 ? 'active' : '']"
+                @click="addInquiry"
+              >
+                一键获取报价
+              </a-button>
             </div>
-          </div>
-        </check-all>
+          </check-all>
+        </div>
       </div>
+      <side-bar />
     </div>
-    <side-bar />
+    <loading v-else></loading>
   </div>
 </template>
 
@@ -49,6 +54,8 @@
   export default {
     data() {
       return {
+        loading: false,
+        isLoading: true,
         data: [],
         checkAll: false,
         checkedList: [],
@@ -68,12 +75,11 @@
     },
     methods: {
       addInquiry() {
-        // console.log(this.selectDatas);
         if (this.selectDatas.length == 0) {
           this.$message.warning("请先选择产品", 1);
           return;
         } else {
-          // console.log(this.products);
+          this.loading = true;
           _.map(this.selectDatas, o => {
             let selectProducts = [];
             _.map(o.goodsList, value => {
@@ -92,16 +98,18 @@
             o.goodsList = selectProducts;
           });
         }
-        _getData("/enquiryPlus/addEnquiry", { param: this.selectDatas }).then(
-          data => {
-            // console.log("一键获取报价：", data);
-            let { href } = this.$router.resolve({
-              path: "/userCenter/myInquiry",
-              query: { keyId: 2 }
-            });
-            window.open(href, "_blank");
-          }
-        );
+        // _getData("/enquiryPlus/addEnquiry", { param: this.selectDatas }).then(
+        //   data => {
+        //     // console.log("一键获取报价：", data);
+        //     if (data.code != 500) {
+        //       let { href } = this.$router.resolve({
+        //         path: "/userCenter/myInquiry",
+        //         query: { keyId: 2 }
+        //       });
+        //       window.open(href, "_blank");
+        //     }
+        //   }
+        // );
       },
       getIsCheckAll(val) {
         // console.log(val);
@@ -195,7 +203,7 @@
       },
       getIsDelete(val) {
         // console.log(val);
-        this.$message.success("删除成功");
+        this.$message.success("删除成功", 1);
         this.getCart();
       },
       batchDeleteData() {
@@ -207,11 +215,12 @@
               selectProduct.push(val);
             });
           });
-          // console.log(selectProduct);
           _getData("/cart/delete", { goodIds: selectProduct.join(",") }).then(
             data => {
               // console.log(data);
-              this.$message.success("删除成功");
+              if (data.code != 500) {
+                this.$message.success("删除成功", 1);
+              }
             }
           );
         } else {
@@ -219,20 +228,27 @@
           return;
         }
       },
-      getCart() {
-        _getData("/cart/getCarts", {}).then(data => {
-          console.log("获取选购单：", data);
-          this.data = data.list;
-          _.map(data.list, o => {
-            for (const item of o.list) {
-              this.allProducts.push(item);
-            }
+      async getCart() {
+        this.isLoading = true;
+        return await _getData("/cart/getCarts", {})
+          .then(data => {
+            console.log("获取选购单：", data);
+            this.data = data.list;
+            _.map(data.list, o => {
+              for (const item of o.list) {
+                this.allProducts.push(item);
+              }
+            });
+          })
+          .then(() => {
+            this.isLoading = false;
           });
-        });
       }
     },
     mounted() {
-      this.getCart();
+      this.getCart().then(() => {
+        this.isLoading = false;
+      });
     },
     components: {
       commonTitle,
@@ -286,6 +302,8 @@
           line-height: 42px;
           text-align: center;
           font-weight: 600;
+          border: none;
+          border-radius: 0;
           cursor: pointer;
           &.active {
             background-image: linear-gradient(90deg, #f10000 0%, #ff4e1a 100%);
