@@ -28,9 +28,10 @@ const router = new Router({
                 },
                 {
                     path: "openShop",
-                    name: '商家中心-我要开店-网来商城',
+                    name: '我要开店',
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '商家中心-我要开店-网来商城'
                     },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/openShop")
@@ -56,7 +57,8 @@ const router = new Router({
                     path: "shopCertification",
                     name: "店铺认证",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '商家中心-店铺认证-网来商城'
                     },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/shopCertification")
@@ -65,7 +67,8 @@ const router = new Router({
                     path: "publishGoods",
                     name: "发布商品",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '商家中心-发布商品-网来商城'
                     },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/publishGoods")
@@ -74,7 +77,8 @@ const router = new Router({
                     path: "productManage",
                     name: "产品管理",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '商家中心-产品管理-网来商城'
                     },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/productManage")
@@ -83,7 +87,8 @@ const router = new Router({
                     path: "inquiryManage",
                     name: "询价管理",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '商家中心-询价管理-网来商城'
                     },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/inquiryManage")
@@ -92,7 +97,8 @@ const router = new Router({
                     path: "inquiryOrderDetail/:id",
                     name: "询价单详情",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '商家中心-询价单详情-网来商城'
                     },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/inquiryDetail")
@@ -101,7 +107,8 @@ const router = new Router({
                     path: "editInquiry/:id",
                     name: "编辑询价单",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '商家中心-编辑询价单-网来商城'
                     },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/editInquiry")
@@ -110,7 +117,8 @@ const router = new Router({
                     path: "orderManage",
                     name: "订单管理",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '商家中心-订单管理-网来商城'
                     },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/orderManage")
@@ -119,7 +127,8 @@ const router = new Router({
                     path: "orderDetail/:id",
                     name: "订单详情",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '商家中心-订单详情-网来商城'
                     },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/orderDetail")
@@ -128,7 +137,8 @@ const router = new Router({
                     path: "accountSecurity",
                     name: "账户安全",
                     meta: {
-                        role: 'Administrator'
+                        role: 'Administrator',
+                        title: '商家中心-账户安全-网来商城'
                     },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/accountSecurity")
