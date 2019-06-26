@@ -92,8 +92,8 @@
   import privateMessage from "../../../../components/messageCenter/privateMessageItem";
   import checkAll from "../../../../components/common/checkAll";
   import pagination from "../../../../components/common/pagination";
-  import { _getData } from "../../../../config/getData";
-  import { mapMutations } from "vuex";
+  import { _getData, _getDataAll } from "../../../../config/getData";
+  import { mapState, mapMutations } from "vuex";
   export default {
     data() {
       return {
@@ -116,19 +116,23 @@
         checkAll: false,
         checkedList: [],
         current: 0,
+        readType: 0, //消息类型
         unRead: true,
         params: {
           currentPage: "1", //类型：String  必有字段  备注：当前页
           countPerPage: "10", //类型：String  必有字段  备注：每页显示条数
-          messageType: 0, //类型：String  可有字段  备注：消息类型 0系统消息，1私信，空字符串查询全部
+          storeId: 0, //类型：String  可有字段  备注：店铺id，不传时默认查询当前登录用户
           readType: 0 //类型：String  可有字段  备注：消息状态 0未读，1已读，空字符串查询全部
         },
         getMessageNumberParams: {
           messageType: 0, //类型：String  可有字段  备注：消息类型 0系统消息，1私信，空字符串查询全部
-          readType: 0 //类型：String  可有字段  备注：消息状态 0未读，1已读，空字符串查询全部
+          storeId: 0 //类型：String  可有字段  备注：消息状态 0未读，1已读，空字符串查询全部
         },
         paginationData: {}
       };
+    },
+    computed: {
+      ...mapState(["userShopInfo"])
     },
     methods: {
       ...mapMutations(["changeUserShopInfoState"]),
@@ -141,19 +145,19 @@
         }
         this.checkedList = [];
         this.checkAll = false;
+        this.readType = val;
         this.params.readType = val;
         this.getMessageNumberParams.readType = val;
-        this.getMessageList();
-        this.getMessageNumber();
+        // this.getMessageList();
+        // this.getMessageNumber();
       },
       system(val) {
         this.current = val;
         this.checkedList = [];
         this.checkAll = false;
-        this.params.messageType = val;
-        this.getMessageNumberParams.messageType = val;
-        this.getMessageList();
-        this.getMessageNumber();
+        this.params.storeId = "";
+        this.params.readType = val;
+        this.getPrivateMessageList();
       },
       getChecked(val) {
         if (typeof val == "object") {
@@ -193,8 +197,8 @@
           }).then(data => {
             console.log(data);
             this.$message.success("批量删除成功", 1);
-            this.getMessageList();
-            this.getMessageNumber();
+            // this.getMessageList();
+            // this.getMessageNumber();
           });
         } else {
           this.$message.warning("请选择信息", 1);
@@ -217,8 +221,8 @@
             this.defaultActiveKey = 1;
             this.params.readType = 1;
             this.getMessageNumberParams.readType = 1;
-            this.getMessageList();
-            this.getMessageNumber();
+            // this.getMessageList();
+            // this.getMessageNumber();
           });
         } else {
           this.$message.warning("请选择信息", 1);
@@ -228,26 +232,48 @@
       getPaginationChange(val) {
         console.log(val);
         this.params.currentPage = val;
-        this.getMessageList();
+        //this.getMessageList();
       },
-      getMessageList() {
-        _getData("/message/list", this.params).then(data => {
-          console.log("获取到的信息列表：", data);
+      async getPrivateMessageList(page = 1) {
+        // this.params.storeId = this.userShopInfo.store_id;
+        return await _getData("/message/chatList", {
+          currentPage: page, //当前页
+          countPerPage: "6", //每页显示条数
+          storeId: this.userShopInfo.store_id, //店铺id，不传时默认查询当前登录用户
+          readType: 1 //消息状态 0未读，1已读，空字符串查询全部
+        }).then(data => {
+          console.log("获取私信信息列表：", data);
           this.checkedList = [];
           this.data = data.data;
           this.paginationData = data;
         });
       },
-      getMessageNumber() {
-        _getData("/message/messageNum", this.getMessageNumberParams).then(
-          data => {
-            console.log("私信消息数量：", data);
-            this.tabs[0].amount = data.unread;
-            this.tabs[1].amount = data.read;
-            this.systemNumber = data.system;
-            this.personalNumber = data.personal;
-          }
-        );
+      async getSystemMessageList(page = 1) {
+        //this.params.storeId = this.userShopInfo.store_id;
+        return await _getData("/message/list", {
+          currentPage: page, //当前页
+          countPerPage: "6", //每页显示条数
+          storeId: this.userShopInfo.store_id, //店铺id，不传时默认查询当前登录用户
+          readType: this.readType //消息状态 0未读，1已读，空字符串查询全部
+        }).then(data => {
+          console.log("获取系统通知列表：", data);
+          this.checkedList = [];
+          this.data = data.data;
+          this.paginationData = data;
+        });
+      },
+      async getMessageNumber() {
+        // this.getMessageNumberParams.storeId = this.userShopInfo.store_id;
+        return await _getData("/message/messageNum", {
+          messageType: 0, //消息类型 0系统消息，1私信，空字符串查询全部
+          storeId: this.userShopInfo.store_id //消息状态 店铺id，不传时默认查询当前用户的
+        }).then(data => {
+          console.log("私信消息数量：", data);
+          this.tabs[0].amount = data.unread;
+          this.tabs[1].amount = data.read;
+          this.systemNumber = data.system;
+          this.personalNumber = data.personal;
+        });
       }
     },
     mounted() {
@@ -256,12 +282,9 @@
       } else if (this.$route.query.type == "private") {
         this.system(1);
       }
-      this.getMessageList();
-      this.getMessageNumber();
-      _getData("/user/getUser", {}).then(data => {
-        console.log("获取用户的店铺开店信息：", data);
-        this.changeUserShopInfoState(data);
-      });
+      _getDataAll([this.getPrivateMessageList(), this.getMessageNumber()]).then(
+        () => {}
+      );
     },
     components: {
       commonTitle,

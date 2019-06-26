@@ -121,7 +121,7 @@
         params: {
           currentPage: "1", //类型：String  必有字段  备注：当前页
           countPerPage: "10", //类型：String  必有字段  备注：每页显示条数
-          storeId: "",
+          storeId: 395,
           readType: 0 //类型：String  可有字段  备注：消息状态 0未读，1已读，空字符串查询全部
         },
         getMessageNumberParams: {
@@ -221,7 +221,7 @@
         this.isMessageLoading = true;
         return await _getData("/message/list", this.params)
           .then(data => {
-            // console.log("获取到的信息列表：", data);
+            console.log("获取到的系统消息列表：", data);
             this.checkedList = [];
             this.checkAll = false;
             this.data = data.data;
@@ -236,7 +236,7 @@
         this.isMessageLoading = true;
         return await _getData("/message/chatList", this.params)
           .then(data => {
-            console.log("获取到的信息列表：", data);
+            console.log("获取到的私信消息列表：", data);
             this.checkedList = [];
             this.checkAll = false;
             this.data = data.data;
@@ -281,8 +281,8 @@
         this.system(1);
       }
       _getDataAll([
-        this.getMessageNumber(),
-        this.getSystemMessageList(),
+        // this.getMessageNumber(),
+        // this.getSystemMessageList(),
         this.getPrivateMessageList()
       ]).then(() => {
         this.isLoading = false;

@@ -25,37 +25,40 @@
           </ul>
         </div>
       </commonTitle>
-      <div class="listContainer">
-        <div class="listContent">
-          <list-title :titleArr="titleArr"></list-title>
-          <div class="tbody">
-            <ul v-if="data.length != 0">
-              <li v-for="item in data" :key="item.id">
-                <inquiry-manage-item
-                  :data="item"
-                  :checkedList="checkedList"
-                  v-on:getChecked="getChecked"
-                  :isShowInfo="isShowInfo"
-                  v-on:getIsDelete="getIsDelete"
-                ></inquiry-manage-item>
-              </li>
-            </ul>
-            <no-data v-else text="暂无数据"></no-data>
+      <div v-if="!isLoading">
+        <div class="listContainer">
+          <div class="listContent">
+            <list-title :titleArr="titleArr"></list-title>
+            <div class="tbody">
+              <ul v-if="data.length != 0">
+                <li v-for="item in data" :key="item.id">
+                  <inquiry-manage-item
+                    :data="item"
+                    :checkedList="checkedList"
+                    v-on:getChecked="getChecked"
+                    :isShowInfo="isShowInfo"
+                    v-on:getIsDelete="getIsDelete"
+                  ></inquiry-manage-item>
+                </li>
+              </ul>
+              <no-data v-else text="暂无数据"></no-data>
+            </div>
+            <checkAll
+              :amount="checkedList.length"
+              :checkAll="checkAll"
+              v-on:isCheckAll="isCheckAllMethod"
+              v-on:isDelete="getCheckDelete"
+              v-if="isShowInfo.current != 1"
+            ></checkAll>
           </div>
-          <checkAll
-            :amount="checkedList.length"
-            :checkAll="checkAll"
-            v-on:isCheckAll="isCheckAllMethod"
-            v-on:isDelete="getCheckDelete"
-            v-if="isShowInfo.current != 1"
-          ></checkAll>
         </div>
+        <pagination
+          :data="paginationData"
+          v-on:onPaginationChange="getPaginationChange"
+          v-if="paginationData.count != 0"
+        ></pagination>
       </div>
-      <pagination
-        :data="paginationData"
-        v-on:onPaginationChange="getPaginationChange"
-        v-if="paginationData.count != 0"
-      ></pagination>
+      <loading v-else></loading>
     </div>
   </div>
 </template>
@@ -71,6 +74,7 @@
   export default {
     data() {
       return {
+        isLoading: true,
         isShowInfo: {
           isDetail: false,
           current: 1,
@@ -93,7 +97,7 @@
         ],
         getInquiryListParams: {
           page: 1, //当前页
-          size: 10, //每页显示条数
+          size: 5, //每页显示条数
           status: 1, //询价状态:1：报价中，2：已报价，3：已关闭。',
           enquirySn: "", //询价单号
           storeId: "" //商铺id，商铺id为空时，查询当前用户的询价单。
@@ -191,20 +195,21 @@
         this.getInquiryListParams.page = val;
         this.getInquiryList();
       },
-      getInquiryList() {
+      async getInquiryList() {
         this.getInquiryListParams.storeId = this.userShopInfo.store_id;
-        _getData("/enquiryPlus/enquiryList", this.getInquiryListParams).then(
-          data => {
-            console.log("获取询价管理的列表：", data);
-            this.checkedList = [];
-            this.checkAll = false;
-            this.data = data.data;
-            this.paginationData = data;
-          }
-        );
+        return await _getData(
+          "/enquiryPlus/enquiryList",
+          this.getInquiryListParams
+        ).then(data => {
+          console.log("获取询价管理的列表：", data);
+          this.checkedList = [];
+          this.checkAll = false;
+          this.data = data.data;
+          this.paginationData = data;
+        });
       },
-      getInquiryNumber() {
-        _getData("/enquiryPlus/enquiryCount", {
+      async getInquiryNumber() {
+        return await _getData("/enquiryPlus/enquiryCount", {
           param: { storeId: this.userShopInfo.store_id }
         }).then(data => {
           console.log("获取的询价数：：：", data);
@@ -291,8 +296,11 @@
             margin-bottom: 12px;
             ul {
               li {
+                &:nth-child(2) {
+                  width: 145px;
+                }
                 &:nth-child(3) {
-                  width: 78px;
+                  width: 88px;
                 }
                 &:nth-child(4) {
                   width: 80px;

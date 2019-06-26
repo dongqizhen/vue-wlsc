@@ -38,7 +38,7 @@
             <span><img :src="item.goodsImage"/></span>
             <span>{{ item.goodsName }}</span>
             <span>{{ item.goodsBrand }}/{{ item.goodsModel }}</span>
-            <span>{{ item.unitPrice }}</span>
+            <span>{{ item.showPrice }}</span>
             <span v-if="isShowInfo.current != 3">
               {{ item.number }}
             </span>
@@ -47,7 +47,9 @@
               <i class="stockNumber">库存{{ item.goods_number }}件</i>
             </span>
             <span>
-              {{ item.arrivalTime ? item.arrivalTime.substring(0, 16) : "" }}
+              {{
+                item.arrivalTime ? item.arrivalTime.substring(0, 16) : "暂无"
+              }}
             </span>
             <span
               v-if="isShowInfo.current != 3"
@@ -396,8 +398,11 @@
         /deep/.listTitle {
           ul {
             li {
+              &:nth-child(2) {
+                width: 145px;
+              }
               &:nth-child(4) {
-                width: 60px;
+                width: 70px;
               }
               &:nth-child(5) {
                 width: 92px;
@@ -437,13 +442,15 @@
               }
             }
             &:nth-child(3) {
-              width: 155px;
+              width: 145px;
             }
             &:nth-child(4) {
               width: 98px;
             }
             &:nth-child(5) {
-              width: 60px;
+              width: 70px;
+              word-wrap: break-word;
+              overflow: hidden;
             }
             &:nth-child(6) {
               width: 92px;

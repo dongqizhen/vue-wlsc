@@ -19,11 +19,7 @@
       <img :src="itemData.goodsImage" />
     </span>
     <span>{{ itemData.goodsName }}</span>
-    <span>
-      {{
-        isShowInfo.current == 2 ? "￥" + itemData.unitPrice : itemData.showPrice
-      }}
-    </span>
+    <span>{{ itemData.showPrice }}</span>
     <span v-if="isShowInfo.isDetail">¥198988282.00</span>
     <span
       v-if="
@@ -41,7 +37,9 @@
       <i class="stockNumber">库存{{ itemData.repertoryNum }}件</i>
     </span>
     <span>
-      {{ itemData.arrivalTime ? itemData.arrivalTime.substring(0, 16) : "" }}
+      {{
+        itemData.arrivalTime ? itemData.arrivalTime.substring(0, 16) : "暂无"
+      }}
     </span>
     <span
       v-if="
@@ -141,7 +139,7 @@
     display: flex;
     height: 90px;
     border: $border-style;
-    padding-top: 10px;
+    padding: 10px 0;
     > span {
       font-size: 12px;
       color: #666;
@@ -163,10 +161,12 @@
         margin-right: 12px;
       }
       &:nth-child(3) {
-        width: 155px;
+        width: 145px;
       }
       &:nth-child(4) {
-        width: 78px;
+        width: 88px;
+        word-wrap: break-word;
+        overflow: hidden;
       }
       &:nth-child(5) {
         width: 80px;
