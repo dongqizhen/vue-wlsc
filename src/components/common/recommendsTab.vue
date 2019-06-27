@@ -42,6 +42,7 @@
         //获取第一个slide的宽
         let navSlideWidth = this.nav.firstChild.clientWidth;
         //获取bar元素
+
         this.bar = this.nav.querySelector(".bar");
         //初始化bar的宽度
         this.bar.style.width = navSlideWidth + "px";

@@ -18,7 +18,7 @@
         </h2>
         <div class="product_container">
           <div class="swiper-container nav_slide">
-            <div class="swiper-wrapper">
+            <div class="swiper-wrapper" ref="nav">
               <!-- <div
                 class="swiper-slide"
                 @click="navHandleClick()"
@@ -141,6 +141,25 @@
           this.getCommonCategory();
         }
         this.defaultsVal = i;
+        this.tap(i);
+      },
+      init() {
+        this.nav = this.$refs.nav;
+        //获取第一个slide的宽
+        let navSlideWidth = this.nav.firstChild.clientWidth;
+        //获取bar元素
+        console.log(navSlideWidth);
+        this.bar = this.nav.querySelector(".bar");
+        //初始化bar的宽度
+        this.bar.style.width = navSlideWidth + "px";
+      },
+      tap(i) {
+        this.bar.style.width =
+          this.nav.querySelectorAll(".swiper-slide")[i].clientWidth + "px";
+        this.bar.style.transform =
+          "translateX(" +
+          this.nav.querySelectorAll(".swiper-slide")[i].offsetLeft +
+          "px)";
       }
     },
     computed: {
@@ -170,6 +189,7 @@
         })
         .then(() => {
           this.$nextTick().then(() => {
+            this.init();
             new Swiper(".product-category .swiper-container.nav_slide", {
               slidesPerView: "auto",
               // freeMode: true,
@@ -178,14 +198,10 @@
               on: {
                 init: function() {
                   this.navSlideWidth = this.slides[0].clientWidth; //导航字数需要统一,每个导航宽度一致
-
-                  this.bar = this.$el.find(".bar");
-
-                  this.bar.transition(300);
+                  // this.bar = this.$el.find(".bar");
+                  // this.bar.transition(300);
                   this.navSum = this.slides[this.slides.length - 1].offsetLeft; //最后一个slide的位置
-
                   this.clientWidth = parseInt(this.$wrapperEl[0].clientWidth); //Nav的可视宽度
-
                   this.navWidth = this.navSlideWidth * this.slides.length;
                 },
                 touchStart: function() {
@@ -197,21 +213,17 @@
                   if (this.clickedIndex == undefined) return;
                   // mySwiper.slideTo(this.clickIndex, 0);
                   const activeSlidePosition = this.slides[this.clickedIndex]
-                    .offsetLeft;
-
-                  this.bar.transform("translateX(" + activeSlidePosition + "px)");
-
+                    .offsetLeft; //activeSlide距左边的距离
+                  // this.bar.transform("translateX(" + activeSlidePosition + "px)");
                   // console.log(this.slides[this.clickedIndex]);
                   // this.slides[this.clickedIndex].classList.add("active");
                   //导航居中
-                  // let navActiveSlideLeft = this.slides[this.clickedIndex].offsetLeft; //activeSlide距左边的距离
-                  this.setTransition(300);
 
+                  this.setTransition(300);
                   if (this.navWidth <= this.clientWidth) {
                     this.setTranslate(0);
                     return;
                   }
-
                   if (
                     activeSlidePosition <
                     (this.clientWidth - parseInt(this.navSlideWidth)) / 2
@@ -226,8 +238,7 @@
                   } else {
                     this.setTranslate(
                       (this.clientWidth - parseInt(this.navSlideWidth)) / 2 -
-                        activeSlidePosition +
-                        parseInt(this.marginLeft)
+                        activeSlidePosition
                     );
                   }
                 }
@@ -324,6 +335,7 @@
               width: 180px;
               background: $theme-color;
               bottom: -0.5px;
+              transition: transform 0.3s;
               i {
                 display: flex;
                 position: absolute;

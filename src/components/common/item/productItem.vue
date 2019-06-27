@@ -19,9 +19,9 @@
           }"
         >
           <img
-            :data-src="JSON.parse(list.list_pic_url)[0]"
+            :data-src="list.primary_pic_url"
             alt=""
-            v-if="list.list_pic_url"
+            v-if="list.primary_pic_url"
           />
         </div>
         <div class="price">
