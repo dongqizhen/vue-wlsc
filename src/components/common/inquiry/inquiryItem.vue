@@ -19,16 +19,6 @@
         ></inquiry-product-item>
       </div>
       <div class="operating">
-        <!-- <div v-if="isShowInfo.current == 1 && isShowInfo.isMerchant">
-          <router-link
-            :to="{
-              path: `editInquiry/${data.id}`,
-              query: { isShowInfo: isShowInfo }
-            }"
-          >
-            编辑报价
-          </router-link>
-        </div> -->
         <div>
           <router-link
             tag="li"

@@ -1,31 +1,28 @@
 <template>
-  <div
-    class="inquiryProductItem"
-    :class="addClass(itemData.id)"
-    @click="turnToProductDetail(itemData)"
-  >
+  <div class="inquiryProductItem" :class="addClass(itemData.id)">
     <span>
-      <label @click.stop="stopChange">
+      <label>
         <a-checkbox
           @change="onChange(itemData.id)"
           :checked="checkedChange(itemData.id)"
         ></a-checkbox
       ></label>
     </span>
-    <span>
+    <span @click="turnToProductDetail(itemData)">
       <img :src="itemData.goodsImage" />
     </span>
-    <span>{{ itemData.goodsName }}</span>
+    <span @click="turnToProductDetail(itemData)">{{ itemData.goodsName }}</span>
     <span>{{ itemData.goodsBrand }}/{{ itemData.goodsModel }}</span>
-    <span @click.stop="stopChange">
+    <span>
       <a-input
         ref="unitPrice"
         placeholder="输入单价"
         v-model="itemData.unitPrice"
+        @change="inputChange"
       ></a-input>
     </span>
     <span>{{ itemData.number }}</span>
-    <span @click.stop="stopChange">
+    <span>
       <a-date-picker
         :format="'YYYY-MM-DD'"
         @change="onDateChange"
@@ -38,7 +35,7 @@
       />
     </span>
     <span>{{ itemData.userRemark }}</span>
-    <span @click.stop="stopChange">
+    <span>
       <a-textarea
         placeholder="输入备注"
         v-model="itemData.shopRemark"
@@ -89,7 +86,6 @@
     },
     methods: {
       moment,
-
       onDateChange(date, dataString) {
         console.log(date, dataString);
         this.itemData.arrivalTime = dataString;
@@ -126,7 +122,18 @@
           }
         }
       },
-      stopChange() {}
+      inputChange(e) {
+        const { value } = e.target;
+        const reg = /^(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+        if (!isNaN(value) && reg.test(value)) {
+        } else {
+          this.itemData.unitPrice = this.itemData.unitPrice.slice(
+            0,
+            this.itemData.unitPrice.length - 1
+          );
+        }
+        this.$emit("getData", { data: this.itemData });
+      }
     }
   };
 </script>
@@ -157,9 +164,15 @@
       &:nth-child(2) {
         width: 70px;
         margin-right: 12px;
+        &:hover {
+          cursor: pointer;
+        }
       }
       &:nth-child(3) {
         width: 138px;
+        &:hover {
+          cursor: pointer;
+        }
       }
       &:nth-child(4) {
         width: 98px;

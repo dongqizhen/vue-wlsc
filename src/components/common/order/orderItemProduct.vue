@@ -9,13 +9,13 @@
       >
         <span><img :src="product.list_pic_url"/></span>
         <span>{{ product.goods_name }}</span>
-        <span>{{ product.retail_price }}</span>
+        <span>￥{{ product.retail_price }}</span>
         <span>{{ product.number }}</span>
       </div>
     </div>
     <div class="actualPrice">￥{{ data.actual_price }}</div>
     <div class="operating">
-      <div class="lookPay" @click="addModal(data.id)">
+      <div class="lookPay" ref="lookPay" @click="addModal(data.id)">
         {{
           data.order_status == 1
             ? isShowInfo.isDetail
@@ -97,7 +97,7 @@
       </div>
       <div
         class="sure"
-        @click="confirmReturn"
+        @click="confirmReturn(data.id)"
         v-if="
           data.order_status == 6 &&
             isShowInfo.isMerchant &&
@@ -278,13 +278,16 @@
         });
       },
       //确认退货
-      confirmReturn() {
+      confirmReturn(orderId) {
         _getData("/order/updateOrderStatus", {
-          orderId: this.$route.params.id,
+          orderId: orderId,
           orderStatus: "refundConfirm"
         }).then(data => {
           console.log(data);
-          this.$message.success("操作成功", 1);
+          if (data.code != 500) {
+            this.$message.success("操作成功", 1);
+            this.$emit("returnValue", 7); //7表示关闭
+          }
         });
       },
       getReturnStatus(val) {
@@ -293,9 +296,7 @@
       },
       //支付证明弹框
       addModal(id) {
-        if (this.data.order_status != 1) {
-          // if(this.isShowInfo.is){
-          // }
+        if (this.$refs.lookPay.innerText != "--") {
           if (!this.isLogin) {
             this.type = "login";
           } else {
@@ -305,16 +306,6 @@
               this.payVisible = true;
               this.orderId = id;
             }
-          }
-        }
-        if (!this.isLogin) {
-          this.type = "login";
-        } else {
-          if (this.data.isPayProve == 1) {
-            this.visible = true;
-          } else {
-            this.payVisible = true;
-            this.orderId = id;
           }
         }
       },
@@ -366,8 +357,11 @@
       .itemProduct {
         display: flex;
         height: 90px;
-        padding-top: 10px;
+        padding: 10px 0;
         border-bottom: $border-style;
+        &:hover {
+          cursor: pointer;
+        }
         &:last-child {
           border-bottom: none;
         }

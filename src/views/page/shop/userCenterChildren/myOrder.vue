@@ -7,47 +7,48 @@
         v-on:tab="getOrderStatus"
         :defaultActiveKey="defaultActiveKey"
       ></manage-number-nav>
-      <div v-if="!isOrderLoading">
       <div class="orderContainer">
         <filter-search v-on:getSearchData="getSearchData"></filter-search>
-        <div class="listContent">
-          <list-title :titleArr="titleArr"></list-title>
-          <div class="tbody">
-            <ul v-if="data.length > 0">
-              <li v-for="item in data" :key="item.id">
-                <order-item
-                  :data="item"
-                  :checkedList="checkedList"
-                  :isShowInfo="isShowInfo"
-                  v-on:getChecked="getChecked"
-                  v-on:returnValue="getReturnStatus"
-                  v-on:deleteOrder="deleteSingleOrder"
-                ></order-item>
-              </li>
-            </ul>
-            <no-data v-else text="暂无数据"></no-data>
-          </div>
-          <div class="tfooter">
-            <checkAll
-              :amount="checkedList.length"
-              :checkAll="checkAll"
-              v-on:isCheckAll="isCheckAllMethod"
-              v-on:isDelete="getCheckDelete"
-              v-if="
-                (getOrderData.orderStatus == 5 ||
-                  getOrderData.orderStatus == 7) &&
-                  data.length > 0
-              "
-            ></checkAll>
+        <list-title :titleArr="titleArr"></list-title>
+        <div v-if="!isOrderLoading">
+          <div class="listContent">
+            <div class="tbody">
+              <ul v-if="data.length > 0">
+                <li v-for="item in data" :key="item.id">
+                  <order-item
+                    :data="item"
+                    :checkedList="checkedList"
+                    :isShowInfo="isShowInfo"
+                    v-on:getChecked="getChecked"
+                    v-on:returnValue="getReturnStatus"
+                    v-on:deleteOrder="deleteSingleOrder"
+                  ></order-item>
+                </li>
+              </ul>
+              <no-data v-else text="暂无数据"></no-data>
+            </div>
+            <div class="tfooter">
+              <checkAll
+                :amount="checkedList.length"
+                :checkAll="checkAll"
+                v-on:isCheckAll="isCheckAllMethod"
+                v-on:isDelete="getCheckDelete"
+                v-if="
+                  (getOrderData.orderStatus == 5 ||
+                    getOrderData.orderStatus == 7) &&
+                    data.length > 0
+                "
+              ></checkAll>
+            </div>
           </div>
         </div>
+        <loading v-else></loading>
       </div>
       <pagination
         :data="paginationData"
         v-on:onPaginationChange="getPaginationChange"
         v-if="paginationData.count != 0"
-      ></pagination></div>
-      <loading v-else></loading>
+      ></pagination>
     </div>
     <loading v-else></loading>
   </div>
@@ -65,7 +66,7 @@
     data() {
       return {
         isLoading: true,
-        isOrderLoading:true,
+        isOrderLoading: true,
         isShowInfo: {
           isDetail: false,
           current: -1,
@@ -208,17 +209,17 @@
       },
       async getOrderList() {
         this.isOrderLoading = true;
-        return await _getData("/order/orderList", this.getOrderData).then(
-          data => {
+        return await _getData("/order/orderList", this.getOrderData)
+          .then(data => {
             console.log("获取订单列表：", data);
             this.checkAll = false;
             this.checkedList = [];
             this.data = data.data;
             this.paginationData = data;
-          }
-        ).then(()=>{
-          this.isOrderLoading = false;
-        });
+          })
+          .then(() => {
+            this.isOrderLoading = false;
+          });
       },
       async getOrderNumber() {
         return await _getData("/order/orderCount", {
@@ -269,6 +270,26 @@
     margin-bottom: 100px;
     .orderContainer {
       margin-top: 24px;
+      /deep/.listTitle {
+        margin-bottom: 12px;
+        ul {
+          li {
+            &:nth-child(2) {
+              width: 197px;
+            }
+            &:nth-child(5) {
+              width: 190px;
+              margin-right: 0;
+              justify-content: center;
+            }
+            &:nth-child(6) {
+              width: 175px;
+              margin-right: 0;
+              justify-content: center;
+            }
+          }
+        }
+      }
       .listContent {
         /deep/.listTitle {
           margin-bottom: 12px;

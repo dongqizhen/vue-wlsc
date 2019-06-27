@@ -5,15 +5,18 @@
         订单关闭原因：{{ data.closeReason }}
       </div>
     </common-title>
-    <div class="orderContainer">
-      <order-title :isShowInfo="isShowInfo" :data="data"></order-title>
-      <delivery-info :data="data"></delivery-info>
-      <list-title :titleArr="titleArr"></list-title>
-      <order-item-product
-        :data="data"
-        :isShowInfo="isShowInfo"
-      ></order-item-product>
+    <div v-if="!isLoading">
+      <div class="orderContainer">
+        <order-title :isShowInfo="isShowInfo" :data="data"></order-title>
+        <delivery-info :data="data"></delivery-info>
+        <list-title :titleArr="titleArr"></list-title>
+        <order-item-product
+          :data="data"
+          :isShowInfo="isShowInfo"
+        ></order-item-product>
+      </div>
     </div>
+    <loading v-else></loading>
   </div>
 </template>
 <script>
@@ -26,6 +29,7 @@
   export default {
     data() {
       return {
+        isLoading: true,
         titleArr: ["产品图片", "产品名称", "单价", "数量", "实付金额", "操作"],
         isShowInfo: {
           isDetail: true,
@@ -38,12 +42,12 @@
         data: {}
       };
     },
-    methods: {},
     mounted() {
       _getData("/order/orderDetails", { id: this.$route.params.id }).then(
         data => {
           console.log("获取订单详情：", data);
           this.data = data;
+          this.isLoading = false;
         }
       );
     },

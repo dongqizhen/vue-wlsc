@@ -52,14 +52,14 @@
                 v-if="isShowInfo.current != 1"
               ></checkAll>
             </div>
-            <pagination
-              :data="paginationData"
-              v-on:onPaginationChange="getPaginationChange"
-              ref="pagination"
-              v-if="paginationData.count != 0"
-            ></pagination>
           </div>
           <loading v-else></loading>
+          <pagination
+            :data="paginationData"
+            v-on:onPaginationChange="getPaginationChange"
+            ref="pagination"
+            v-if="paginationData.count != 0"
+          ></pagination>
         </div>
       </div>
       <loading v-else></loading>

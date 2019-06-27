@@ -1,24 +1,23 @@
 <template>
-  <div
-    class="inquiryProductItem"
-    @click="turnToProductDetail(itemData.goodsId, itemData.storeId)"
-  >
+  <div class="inquiryProductItem">
     <span
       :class="
         isShowInfo.isMerchant || isShowInfo.current == 1 ? 'boxHidden' : ''
       "
     >
-      <label @click.stop="stopChange">
+      <label>
         <a-checkbox
           @change="onChange(itemData.id)"
           :checked="checkedChange(itemData.id)"
         ></a-checkbox
       ></label>
     </span>
-    <span>
+    <span @click="turnToProductDetail(itemData.goodsId, itemData.storeId)">
       <img :src="itemData.goodsImage" />
     </span>
-    <span>{{ itemData.goodsName }}</span>
+    <span @click="turnToProductDetail(itemData.goodsId, itemData.storeId)">
+      {{ itemData.goodsName }}
+    </span>
     <span>{{ itemData.showPrice }}</span>
     <span v-if="isShowInfo.isDetail">¥198988282.00</span>
     <span
@@ -29,10 +28,7 @@
     >
       {{ itemData.number }}
     </span>
-    <span
-      v-if="isShowInfo.current == 3 && !isShowInfo.isMerchant"
-      @click.stop="stopChange"
-    >
+    <span v-if="isShowInfo.current == 3 && !isShowInfo.isMerchant">
       <van-stepper v-model="itemData.number" :max="itemData.repertoryNum" />
       <i class="stockNumber">库存{{ itemData.repertoryNum }}件</i>
     </span>
@@ -61,7 +57,6 @@
     <span
       v-if="isShowInfo.current == 3 && !isShowInfo.isMerchant"
       style="width:157px"
-      @click.stop="stopChange"
     >
       <a-textarea
         style="width:157px"
@@ -127,8 +122,7 @@
             return true;
           }
         }
-      },
-      stopChange() {}
+      }
     }
   };
 </script>
@@ -140,6 +134,7 @@
     height: 90px;
     border: $border-style;
     padding: 10px 0;
+
     > span {
       font-size: 12px;
       color: #666;
@@ -159,9 +154,15 @@
       &:nth-child(2) {
         width: 70px;
         margin-right: 12px;
+        &:hover {
+          cursor: pointer;
+        }
       }
       &:nth-child(3) {
         width: 145px;
+        &:hover {
+          cursor: pointer;
+        }
       }
       &:nth-child(4) {
         width: 88px;

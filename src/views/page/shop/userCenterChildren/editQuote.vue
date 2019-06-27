@@ -187,7 +187,7 @@
         span {
           margin-right: 30px;
           .ant-input {
-            width: 120px;
+            width: 160px;
             height: 27px;
             line-height: 27px;
             font-size: 12px;

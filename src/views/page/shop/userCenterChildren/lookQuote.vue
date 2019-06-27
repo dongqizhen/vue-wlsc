@@ -15,7 +15,6 @@
             <span>{{ item.goodsBrand }}/{{ item.goodsModel }}</span>
             <span>¥{{ item.unitPrice }}</span>
             <span>{{ item.number }}</span>
-            <span>{{ item.unit }}</span>
             <span>¥{{ item.number * item.unitPrice }}</span>
             <span>{{ item.arrivalTime }}</span>
             <span>{{
@@ -74,7 +73,6 @@
           "品牌型号",
           "单价",
           "数量",
-          "单位",
           "总额",
           "到货时间",
           "备注"
@@ -123,9 +121,9 @@
   .lookQuote {
     min-height: 693px;
     background-color: #fff;
-    padding: 4px 20px;
+    padding: 4px 20px 20px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
-    margin-bottom: 10px;
+    margin-bottom: 100px;
     .quoteOrderInfo {
       .infoBar {
         border: $border-style;
@@ -148,21 +146,20 @@
             &:first-child {
               margin-left: 20px;
             }
+            &:nth-child(3) {
+              width: 130px;
+            }
             &:nth-child(4) {
               width: 75px;
             }
             &:nth-child(5) {
               width: 43px;
-              margin-right: 15px;
-            }
-            &:nth-child(6) {
-              width: 30px;
-            }
-            &:nth-child(7) {
-              width: 68px;
               margin-right: 30px;
             }
-            &:nth-child(8) {
+            &:nth-child(6) {
+              width: 80px;
+            }
+            &:nth-child(7) {
               width: 68px;
               margin-right: 30px;
             }
@@ -175,7 +172,7 @@
           li {
             border: $border-style;
             height: 90px;
-            padding-top: 10px;
+            padding: 10px 0;
             display: flex;
             border-top: none;
             &:first-child {
@@ -198,17 +195,19 @@
                 width: 155px;
               }
               &:nth-child(3) {
-                width: 100px;
+                width: 130px;
               }
               &:nth-child(4) {
                 width: 75px;
               }
               &:nth-child(5) {
                 width: 43px;
-                margin-right: 15px;
+                margin-right: 30px;
               }
               &:nth-child(6) {
-                width: 30px;
+                width: 80px;
+                overflow: hidden;
+                word-wrap: break-word;
               }
               &:nth-child(7) {
                 width: 68px;
@@ -216,12 +215,10 @@
                 margin-right: 30px;
               }
               &:nth-child(8) {
-                width: 68px;
-                margin-right: 30px;
-              }
-              &:nth-child(9) {
-                width: 110px;
-                margin-right: 0;
+                width: 125px;
+                margin-right: 10px;
+                overflow: hidden;
+                word-wrap: break-word;
               }
             }
           }

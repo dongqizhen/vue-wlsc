@@ -104,27 +104,19 @@
                   v-for="item in data"
                   :key="item.id"
                   :class="addClass(item.id)"
-                  @click="turnToDetail(item)"
                 >
                   <span>
-                    <label @click.stop="stopChange">
+                    <label>
                       <a-checkbox
                         @change="onChange(item.id)"
                         :checked="checkedChange(item.id)"
                       ></a-checkbox
                     ></label>
                   </span>
-                  <span
-                    v-lazy-container="{
-                      selector: 'img'
-                    }"
-                  >
-                    <img
-                      :data-src="item.primary_pic_url"
-                      v-if="item.primary_pic_url"
-                    />
+                  <span @click="turnToDetail(item)">
+                    <img :src="item.primary_pic_url" />
                   </span>
-                  <span>{{ item.name }}</span>
+                  <span @click="turnToDetail(item)">{{ item.name }}</span>
                   <span>
                     {{ item.big_category_name }}/{{ item.category_name }}
                   </span>
@@ -134,7 +126,7 @@
                   <span>{{ item.goods_number }}</span>
                   <span>{{ item.add_time.substring(0, 16) }}</span>
                   <span>
-                    <div @click.stop="stopChange">
+                    <div>
                       <router-link
                         target="_blank"
                         :to="{
@@ -308,7 +300,6 @@
           this.checkedList = [];
         }
       },
-      stopChange() {},
       handleStatusChange(value) {
         this.submitData.isOnSale = value;
       },

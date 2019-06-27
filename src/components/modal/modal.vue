@@ -940,6 +940,9 @@
             border: 1px solid #f5a623;
             margin-left: 73px;
             margin-right: 7px;
+            &:hover {
+              opacity: 0.7;
+            }
           }
         }
       }

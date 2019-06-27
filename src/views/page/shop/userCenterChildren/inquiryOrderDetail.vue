@@ -26,24 +26,27 @@
               v-for="item in data.goodList"
               :key="item.id"
               :class="addClass(item.id)"
-              @click="turnToProductDetail(item.goodsId, item.storeId)"
             >
               <span>
-                <label @click.stop="stopChange">
+                <label>
                   <a-checkbox
                     @change="onChange(item.id)"
                     :checked="checkedChange(item.id)"
                   ></a-checkbox
                 ></label>
               </span>
-              <span><img :src="item.goodsImage"/></span>
-              <span>{{ item.goodsName }}</span>
+              <span @click="turnToProductDetail(item.goodsId, item.storeId)">
+                <img :src="item.goodsImage" />
+              </span>
+              <span @click="turnToProductDetail(item.goodsId, item.storeId)">
+                {{ item.goodsName }}
+              </span>
               <span>{{ item.goodsBrand }}/{{ item.goodsModel }}</span>
               <span>{{ item.showPrice }}</span>
               <span v-if="isShowInfo.current != 3">
                 {{ item.number }}
               </span>
-              <span v-if="isShowInfo.current == 3" @click.stop="stopChange">
+              <span v-if="isShowInfo.current == 3">
                 <van-stepper v-model="item.number" :max="item.goods_number" />
                 <i class="stockNumber">库存{{ item.goods_number }}件</i>
               </span>
@@ -59,11 +62,7 @@
                 {{ item.userRemark }}
               </span>
               <span v-if="isShowInfo.current == 2">{{ item.shopRemark }}</span>
-              <span
-                v-if="isShowInfo.current == 3"
-                style="width: 160px;"
-                @click.stop="stopChange"
-              >
+              <span v-if="isShowInfo.current == 3" style="width: 160px;">
                 <a-textarea
                   style="width: 157px;"
                   placeholder="请输入备注"
@@ -293,7 +292,6 @@
           this.checkedList = [];
         }
       },
-      stopChange() {},
       getInquiryDetail() {
         _getData("/enquiryPlus/enquiryDetail", {
           id: this.$route.params.id
@@ -445,9 +443,15 @@
                 width: 100%;
                 height: 70px;
               }
+              &:hover {
+                cursor: pointer;
+              }
             }
             &:nth-child(3) {
               width: 145px;
+              &:hover {
+                cursor: pointer;
+              }
             }
             &:nth-child(4) {
               width: 98px;

@@ -36,7 +36,7 @@
             <div class="right-box">
               <a-input
                 placeholder="请输入型号"
-                v-model="submitData.goodsModel"
+                v-model.trim="submitData.goodsModel"
               ></a-input>
             </div>
           </div>
@@ -45,7 +45,8 @@
             <div class="right-box">
               <a-input
                 placeholder="请输入单价"
-                v-model="submitData.unitPrice"
+                v-model.trim="submitData.unitPrice"
+                @change="inputChange"
               ></a-input>
               <div class="warning" v-show="unitPriceFlag">请输入正确的单价</div>
             </div>
@@ -55,12 +56,12 @@
             <div class="right-box">
               <a-input
                 placeholder="请输入数量"
-                v-model="submitData.number"
+                v-model.trim="submitData.number"
               ></a-input>
               <div class="warning" v-show="numberFlag">请输入正确的数量</div>
             </div>
           </div>
-          <div class="common ">
+          <!-- <div class="common ">
             <div class="left-box">单位</div>
             <div class="right-box">
               <a-input
@@ -68,7 +69,7 @@
                 v-model="submitData.unit"
               ></a-input>
             </div>
-          </div>
+          </div> -->
           <!-- <div class="common ">
             <div class="left-box">到货时间</div>
             <div class="right-box">
@@ -101,7 +102,7 @@
         </div>
         <div class="btn">
           <a-button @click="saveAddress">保存修改</a-button>
-          <a-button @click="cancelAddress">取消</a-button>
+          <a-button @click="visible = false">取消</a-button>
         </div>
       </div>
       <div slot="content" v-else>
@@ -182,6 +183,18 @@
         console.log(date, dataString);
         this.submitData.arrivalTime = dataString;
       },
+      inputChange(e) {
+        const { value } = e.target;
+        const reg = /^(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+        if (!isNaN(value) && reg.test(value)) {
+        } else {
+          this.itemData.unitPrice = this.itemData.unitPrice.slice(
+            0,
+            this.itemData.unitPrice.length - 1
+          );
+        }
+        this.$emit("getData", { data: this.itemData });
+      },
       getImgUrl(val) {
         console.log(val);
         if (val.length > 0) {
@@ -198,7 +211,6 @@
         window.open(href, "_blank");
       },
       saveAddress() {
-        // numberFlag: false,
         console.log(this.submitData);
         if (!this.submitData.goodsName) {
           this.goodsNameFlag = true;
@@ -213,6 +225,9 @@
           } else {
             this.unitPriceFlag = false;
           }
+        } else {
+          this.unitPriceFlag = true;
+          return;
         }
         if (this.submitData.number) {
           if (!/^[1-9]\d*$/.test(this.submitData.number)) {
@@ -221,18 +236,17 @@
           } else {
             this.numberFlag = false;
           }
+        } else {
+          this.numberFlag = true;
+          return;
         }
-        _getData("/quotation/saveOrUpdateGoods", { param: this.submitData }).then(
-          data => {
-            console.log(data);
-            this.visible = false;
-            this.$emit("getIsUpdate", true);
-          }
-        );
-      },
-      cancelAddress() {
-        this.visible = false;
-        this.$parent.visible = false;
+        // _getData("/quotation/saveOrUpdateGoods", { param: this.submitData }).then(
+        //   data => {
+        //     console.log(data);
+        //     this.visible = false;
+        //     this.$emit("getIsUpdate", true);
+        //   }
+        // );
       }
     },
     watch: {

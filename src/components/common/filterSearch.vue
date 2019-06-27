@@ -18,8 +18,12 @@
       </div>
     </div>
     <div class="selectBtn">
-      <a-button class="search" @click="searchData">搜索</a-button>
-      <a-button class="clear" @click="clearData">清空</a-button>
+      <a-button type="primary" class="search" @click="searchData">
+        搜索
+      </a-button>
+      <a-button type="primary" class="clear" @click="clearData">
+        清空
+      </a-button>
     </div>
   </div>
 </template>
@@ -99,8 +103,6 @@
     .selectBtn {
       button {
         border: 0;
-        outline: none;
-        background-color: transparent;
         color: #fff;
         font-size: 12px;
         margin-right: 10px;
@@ -112,14 +114,17 @@
         &:last-child {
           margin-right: 0;
         }
+        &:hover {
+          opacity: 0.7;
+        }
       }
       .search {
         background-color: $theme-color;
-        border: 1px solid $theme-color;
+        border-color: $theme-color;
       }
       .clear {
         background-color: #999;
-        border: 1px solid #999;
+        border-color: #999;
       }
     }
   }

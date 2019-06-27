@@ -28,12 +28,14 @@
               v-on:isCheckAll="isCheckAllMethod"
             >
               <div slot="right-box" class="right-box">
-                <button
+                <a-button
+                  type="primary"
+                  :loading="loading"
                   :class="['submit', checkedList.length > 0 ? 'active' : '']"
                   @click="submitQuote"
                 >
                   提交报价
-                </button>
+                </a-button>
               </div>
             </check-all>
           </div>
@@ -53,6 +55,7 @@
   export default {
     data() {
       return {
+        loading: false,
         isLoading: true,
         isShowInfo: {
           isDetail: true,
@@ -79,32 +82,48 @@
     },
     methods: {
       submitQuote() {
-        console.log(this.goodsList);
         if (this.goodsList.length == 0) {
           this.$message.warning("请选择产品", 1);
           return;
         } else {
-          _getData("/enquiryPlus/updateEnquiry", {
-            param: [{ id: this.$route.params.id, goodsList: this.goodsList }]
-          }).then(data => {
-            //console.log(data);
-            this.$message.success("报价成功", 1);
-            this.$router.replace({
-              path: "/merchant/inquiryManage",
-              query: { status: 2, keyId: 6 }
-            });
+          this.loading = true;
+          console.log(this.goodsList);
+          let flag = true;
+          _.map(this.goodsList, o => {
+            if (flag) {
+              if (!o.unitPrice) {
+                flag = false;
+                this.loading = false;
+                this.$message.warning("报价不能为空", 1);
+              }
+            }
           });
+          if (flag) {
+            _getData("/enquiryPlus/updateEnquiry", {
+              param: [{ id: this.$route.params.id, goodsList: this.goodsList }]
+            }).then(data => {
+              console.log(data);
+              this.loading = false;
+              if (data.code != 500) {
+                this.$message.success("报价成功", 1);
+                this.$router.replace({
+                  path: "/merchant/inquiryManage",
+                  query: { status: 2, keyId: 6 }
+                });
+              }
+            });
+          }
         }
       },
       getData(val) {
         console.log("获取所填的数据：", val);
-        console.log(typeof val == "object");
         if (typeof val == "object") {
           _.map(this.goodsList, value => {
             if (value.goodsId == val.data.id) {
               this.goodsList = _.without(this.goodsList, value);
             }
           });
+
           this.goodsList.push({
             goodsId: val.data.id,
             unitPrice: val.data.unitPrice,
@@ -119,7 +138,6 @@
             }
           });
         }
-        console.log(this.goodsList);
       },
       getChecked(val) {
         if (typeof val == "object") {
@@ -233,7 +251,8 @@
             height: 42px;
             line-height: 42px;
             padding: 0 24px;
-            border: 0;
+            border: none;
+            border-radius: 0;
             outline: none;
             color: #fff;
             font-size: 14px;
@@ -242,6 +261,9 @@
             &.active {
               background-color: #f5a623;
             }
+          }
+          [ant-click-animating-without-extra-node]:after {
+            display: none;
           }
         }
       }

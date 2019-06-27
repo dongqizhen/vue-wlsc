@@ -25,74 +25,83 @@
             </div>
           </div>
           <div class="selectBtn">
-            <button class="search" @click="search">搜索</button>
-            <button class="clear" @click="clearData">清空</button>
+            <a-button type="primary" class="search" @click="search">
+              搜索
+            </a-button>
+            <a-button type="primary" class="clear" @click="clearData">
+              清空
+            </a-button>
           </div>
         </div>
-        <div class="listContent">
-          <list-title :titleArr="titleArr"></list-title>
-          <div class="content">
-            <ul v-if="data.length > 0">
-              <li
-                v-for="item in data"
-                :key="item.id"
-                :class="addClass(item.id)"
-              >
-                <div>
-                  <a-checkbox
-                    @change="onChange(item.id)"
-                    :checked="checkedChange(item.id)"
-                  ></a-checkbox>
-                </div>
-                <div>{{ item.clienteleName }}</div>
-                <div>
-                  <div v-for="goodItem in item.goodList" :key="goodItem.id">
-                    <span>{{ goodItem.goodsName }}</span>
-                    <span>
-                      {{ goodItem.goodsBrand }}/{{ goodItem.goodsModel }}
-                    </span>
-                    <span>{{ goodItem.number }}</span>
-                    <span>{{ goodItem.unit }}</span>
+        <list-title :titleArr="titleArr"></list-title>
+        <div v-if="!isSearchLoading">
+          <div class="listContent">
+            <div class="content">
+              <ul v-if="data.length > 0">
+                <li
+                  v-for="item in data"
+                  :key="item.id"
+                  :class="addClass(item.id)"
+                >
+                  <div>
+                    <a-checkbox
+                      @change="onChange(item.id)"
+                      :checked="checkedChange(item.id)"
+                    ></a-checkbox>
                   </div>
-                </div>
-                <div>¥{{ item.totalPrice }}</div>
-                <div>
-                  {{ item.createdOn ? item.createdOn.substring(0, 16) : "" }}
-                </div>
-                <div>
-                  <div class="operate">
-                    <router-link
-                      target="_blank"
-                      :to="{
-                        path: `/userCenter/lookQuote/${item.id}`,
-                        query: { keyId: 4 }
-                      }"
-                    >
-                      查看
-                    </router-link>
+                  <div>
+                    {{ item.clienteleName ? item.clienteleName : "--" }}
                   </div>
-                  <div class="operate" @click="download(item.id)">下载</div>
-                  <div class="operate" @click="deleteItem(item.id)">
-                    删除
+                  <div>
+                    <div v-for="goodItem in item.goodList" :key="goodItem.id">
+                      <span>{{ goodItem.goodsName }}</span>
+                      <span>
+                        {{ goodItem.goodsBrand }}/{{ goodItem.goodsModel }}
+                      </span>
+                      <span>{{ goodItem.number }}</span>
+                    </div>
                   </div>
-                </div>
-              </li>
-            </ul>
-            <no-data text="暂无数据" v-else></no-data>
+                  <div>¥{{ item.totalPrice }}</div>
+                  <div>
+                    {{ item.createdOn ? item.createdOn.substring(0, 16) : "" }}
+                  </div>
+                  <div>
+                    <div class="operate">
+                      <router-link
+                        target="_blank"
+                        :to="{
+                          path: `/userCenter/lookQuote/${item.id}`,
+                          query: { keyId: 4 }
+                        }"
+                      >
+                        查看
+                      </router-link>
+                    </div>
+                    <div class="operate" @click="download(item.id)">下载</div>
+                    <div class="operate" @click="deleteItem(item.id)">
+                      删除
+                    </div>
+                  </div>
+                </li>
+              </ul>
+              <no-data text="暂无数据" v-else></no-data>
+            </div>
+          </div>
+          <div class="tfooter">
+            <check-all
+              :amount="checkedList.length"
+              :checkAll="checkAll"
+              v-on:isCheckAll="isCheckAllMethod"
+              @isDelete="batchDeleteData"
+              v-if="data.length > 0"
+            >
+            </check-all>
           </div>
         </div>
-        <div class="tfooter">
-          <check-all
-            :amount="checkedList.length"
-            :checkAll="checkAll"
-            v-on:isCheckAll="isCheckAllMethod"
-            @isDelete="batchDeleteData"
-            v-if="data.length > 0"
-          >
-          </check-all>
-        </div>
+        <loading v-else></loading>
       </div>
       <pagination
+        ref="pagination"
         :data="paginationData"
         v-on:onPaginationChange="getPaginationChange"
         v-if="paginationData.count != 0"
@@ -120,12 +129,12 @@
     data() {
       return {
         isLoading: true,
+        isSearchLoading: true,
         titleArr: [
           "客户名称",
           "商品名称",
           "品牌型号",
           "数量",
-          "单位",
           "报价总额",
           "报价日期",
           "操作"
@@ -178,7 +187,14 @@
         }
       },
       search() {
-        this.getList();
+        this.param.currentPage = 1;
+        this.getList().then(() => {
+          this.$nextTick(() => {
+            if (this.$refs.pagination) {
+              this.$refs.pagination.$data.current = 1;
+            }
+          });
+        });
       },
       clearData() {
         this.param.clenteleName = "";
@@ -246,15 +262,18 @@
         this.getList();
       },
       async getList() {
-        return await _getData("/quotation/list", { param: this.param }).then(
-          data => {
+        this.isSearchLoading = true;
+        return await _getData("/quotation/list", { param: this.param })
+          .then(data => {
             console.log("获取我的报价列表:", data);
             this.checkedList = [];
             this.checkAll = false;
             this.data = data.data;
             this.paginationData = data;
-          }
-        );
+          })
+          .then(() => {
+            this.isSearchLoading = false;
+          });
       }
     },
     mounted() {
@@ -284,6 +303,7 @@
       margin-top: 12px;
       .selectInfoBox {
         display: flex;
+        justify-content: space-between;
         margin-top: 24px;
         margin-bottom: 24px;
         .selectInfo {
@@ -301,7 +321,7 @@
             .right-box {
               @include placeholderStyle(12px);
               .ant-input {
-                width: 121px;
+                width: 140px;
                 height: 27px;
               }
             }
@@ -309,59 +329,59 @@
         }
         .selectBtn {
           button {
-            border: 0;
-            outline: none;
-            background-color: transparent;
+            border-radius: 0;
             color: #fff;
             font-size: 12px;
             margin-right: 10px;
             padding: 0 18px;
             height: 27px;
             line-height: 27px;
-            cursor: pointer;
             &:last-child {
               margin-right: 0;
             }
+            &:hover {
+              cursor: pointer;
+              opacity: 0.7;
+            }
           }
           .search {
+            border-color: $theme-color;
             background-color: $theme-color;
           }
           .clear {
+            border-color: #999;
             background-color: #999;
           }
         }
       }
-      .listContent {
-        /deep/.listTitle {
-          ul {
-            li {
-              &:first-child {
-                width: 86px;
-                margin-left: 56px;
-                margin-right: 30px;
-              }
-              &:nth-child(2) {
-                width: 155px;
-              }
-              &:nth-child(3) {
-                width: 100px;
-              }
-              &:nth-child(4) {
-                width: 69px;
-              }
-              &:nth-child(5) {
-                width: 50px;
-              }
-              &:nth-child(6) {
-                width: 90px;
-              }
-              &:nth-child(7) {
-                width: 68px;
-                margin-right: 60px;
-              }
+      /deep/.listTitle {
+        ul {
+          li {
+            &:first-child {
+              width: 86px;
+              margin-left: 56px;
+              margin-right: 30px;
+            }
+            &:nth-child(2) {
+              width: 155px;
+            }
+            &:nth-child(3) {
+              width: 130px;
+            }
+            &:nth-child(4) {
+              width: 70px;
+            }
+            &:nth-child(5) {
+              width: 140px;
+            }
+            &:nth-child(6) {
+              width: 68px;
+              margin-right: 60px;
             }
           }
         }
+      }
+      .listContent {
         .content {
           margin-top: 10px;
           ul {
@@ -369,27 +389,25 @@
               display: flex;
               border: $border-style;
               margin-bottom: 10px;
-              padding-bottom: 10px;
-              // min-height: 125px;
+              padding: 10px 0;
               > div {
                 display: flex;
+                justify-content: center;
                 flex-direction: column;
                 margin-right: 30px;
-                padding-top: 10px;
                 font-size: 12px;
                 color: #333333;
                 &:first-child {
                   width: 56px;
                   padding-left: 20px;
                   margin-right: 0;
-                  // justify-content: center;
                 }
                 &:nth-child(2) {
                   width: 86px;
-                  // justify-content: center;
+                  align-items: center;
                 }
                 &:nth-child(3) {
-                  width: 464px;
+                  width: 415px;
                   > div {
                     display: flex;
                     margin-bottom: 22px;
@@ -397,27 +415,25 @@
                       margin-bottom: 0;
                     }
                     span {
-                      height: 36px;
                       margin-right: 30px;
                       &:nth-child(1) {
                         width: 155px;
                       }
                       &:nth-child(2) {
-                        width: 100px;
+                        width: 130px;
                       }
                       &:nth-child(3) {
-                        width: 69px;
-                      }
-                      &:nth-child(4) {
-                        width: 50px;
+                        width: 70px;
                         margin-right: 0;
                       }
                     }
                   }
                 }
                 &:nth-child(4) {
-                  width: 90px;
+                  width: 140px;
                   color: #f10215;
+                  font-size: 16px;
+                  font-weight: 600;
                 }
                 &:nth-child(5) {
                   width: 68px;

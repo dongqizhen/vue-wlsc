@@ -62,24 +62,37 @@
     computed: {
       ...mapState(["isLogin", "userShopInfo"])
     },
-    beforeMount() {
-      if (this.userShopInfo.audit_status == 2) {
-        if (this.$route.query.keyId) {
-          this.defaultSelectedKeys = [`${this.$route.query.keyId}`];
-        } else {
-          this.defaultSelectedKeys = ["1"];
-          this.$router.replace({ path: "/merchant/shopIndex" });
-        }
-      } else {
-        this.shopStatus = this.userShopInfo.audit_status
-          ? this.userShopInfo.audit_status
-          : 0;
-        this.defaultSelectedKeys = ["0"];
-        this.$router.replace({
-          path: "/merchant/openShop",
-          query: { shopStatus: this.shopStatus }
+    methods: {
+      ...mapMutations(["changeUserShopInfoState"])
+    },
+    created() {
+      _getData("/user/getUser", {})
+        .then(data => {
+          if (data.code == 500) {
+            return;
+          } else {
+            this.changeUserShopInfoState(data);
+          }
+        })
+        .then(() => {
+          if (this.userShopInfo.audit_status == 2) {
+            if (this.$route.query.keyId) {
+              this.defaultSelectedKeys = [`${this.$route.query.keyId}`];
+            } else {
+              this.defaultSelectedKeys = ["1"];
+              this.$router.replace({ path: "/merchant/shopIndex" });
+            }
+          } else {
+            this.shopStatus = this.userShopInfo.audit_status
+              ? this.userShopInfo.audit_status
+              : 0;
+            this.defaultSelectedKeys = ["0"];
+            this.$router.replace({
+              path: "/merchant/openShop",
+              query: { shopStatus: this.shopStatus }
+            });
+          }
         });
-      }
     },
     components: {
       Header,

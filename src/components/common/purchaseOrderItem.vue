@@ -7,30 +7,28 @@
     </div>
     <div class="productList">
       <ul>
-        <li
-          v-for="item in data.list"
-          :key="item.id"
-          @click="turnToProductDetail(item.goods_id, data.sid)"
-        >
+        <li v-for="item in data.list" :key="item.id">
           <span>
-            <label @click.stop="stopChange">
+            <label>
               <a-checkbox
                 @change="onChange(item.goods_id)"
                 :checked="checkedChange(item.goods_id)"
               ></a-checkbox>
             </label>
           </span>
-          <span>
+          <span @click="turnToProductDetail(item.goods_id, data.sid)">
             <img :src="item.primary_pic_url" />
           </span>
-          <span>{{ item.goods_name }}</span>
+          <span @click="turnToProductDetail(item.goods_id, data.sid)">{{
+            item.goods_name
+          }}</span>
           <span>{{ item.brand_name }}/{{ item.model_name }}</span>
           <span>{{ item.show_price }}</span>
-          <span @click.stop="stopChange">
+          <span>
             <van-stepper v-model="item.number" :max="item.goods_number" />
             <i class="stockNumber">库存{{ item.goods_number }}件</i>
           </span>
-          <span @click.stop="stopChange">
+          <span>
             <a-textarea
               placeholder="请输入备注"
               v-model="item.goods_specifition_name_value"
@@ -156,8 +154,7 @@
           storeId: this.data.sid,
           goodsList: this.checkedList
         });
-      },
-      stopChange() {}
+      }
     }
   };
 </script>
@@ -207,10 +204,16 @@
               width: 70px;
               height: 70px;
               margin-right: 12px;
+              &:hover {
+                cursor: pointer;
+              }
             }
             &:nth-child(3) {
               width: 155px;
               margin-right: 30px;
+              &:hover {
+                cursor: pointer;
+              }
             }
             &:nth-child(4) {
               width: 100px;

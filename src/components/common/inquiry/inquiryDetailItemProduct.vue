@@ -1,23 +1,21 @@
 <template>
-  <div
-    class="inquiryProductItem"
-    :class="addClass(itemData.id)"
-    @click="turnToProductDetail(itemData.goodsId, itemData.storeId)"
-  >
+  <div class="inquiryProductItem" :class="addClass(itemData.id)">
     <span>
-      <label @click.stop="stopChange">
+      <label>
         <a-checkbox
           @change="onChange(itemData.id)"
           :checked="checkedChange(itemData.id)"
         ></a-checkbox
       ></label>
     </span>
-    <span>
+    <span @click="turnToProductDetail(itemData.goodsId, itemData.storeId)">
       <img :src="itemData.goodsImage" />
     </span>
-    <span>{{ itemData.goodsName }}</span>
+    <span @click="turnToProductDetail(itemData.goodsId, itemData.storeId)">{{
+      itemData.goodsName
+    }}</span>
     <span>{{ itemData.goodsBrand }}/{{ itemData.goodsModel }}</span>
-    <span>{{ itemData.unitPrice }}</span>
+    <span>{{ itemData.showPrice }}</span>
     <span>{{ itemData.number }}</span>
     <span>
       {{ itemData.arrivalTime ? itemData.arrivalTime.substring(0, 10) : "" }}
@@ -85,8 +83,7 @@
             return "active";
           }
         }
-      },
-      stopChange() {}
+      }
     }
   };
 </script>
@@ -96,7 +93,8 @@
     display: flex;
     height: 90px;
     border: $border-style;
-    padding-top: 10px;
+    padding: 10px 0;
+
     &.active {
       background: rgba(245, 166, 35, 0.06);
     }
@@ -117,15 +115,23 @@
       &:nth-child(2) {
         width: 70px;
         margin-right: 12px;
+        &:hover {
+          cursor: pointer;
+        }
       }
       &:nth-child(3) {
         width: 155px;
+        &:hover {
+          cursor: pointer;
+        }
       }
       &:nth-child(4) {
         width: 98px;
       }
       &:nth-child(5) {
         width: 78px;
+        overflow: hidden;
+        word-break: break-word;
       }
       &:nth-child(6) {
         width: 60px;
