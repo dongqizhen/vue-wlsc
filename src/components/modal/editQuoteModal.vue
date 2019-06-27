@@ -57,6 +57,7 @@
               <a-input
                 placeholder="请输入数量"
                 v-model.trim="submitData.number"
+                @change="inputChange"
               ></a-input>
               <div class="warning" v-show="numberFlag">请输入正确的数量</div>
             </div>
@@ -188,12 +189,18 @@
         const reg = /^(0|[1-9][0-9]*)(\.[0-9]*)?$/;
         if (!isNaN(value) && reg.test(value)) {
         } else {
-          this.itemData.unitPrice = this.itemData.unitPrice.slice(
-            0,
-            this.itemData.unitPrice.length - 1
-          );
+          if (e.target.placeholder.indexOf("单价") != -1) {
+            this.submitData.unitPrice = this.submitData.unitPrice.slice(
+              0,
+              this.submitData.unitPrice.length - 1
+            );
+          } else {
+            this.submitData.number = this.submitData.number.slice(
+              0,
+              this.submitData.number.length - 1
+            );
+          }
         }
-        this.$emit("getData", { data: this.itemData });
       },
       getImgUrl(val) {
         console.log(val);
@@ -240,13 +247,13 @@
           this.numberFlag = true;
           return;
         }
-        // _getData("/quotation/saveOrUpdateGoods", { param: this.submitData }).then(
-        //   data => {
-        //     console.log(data);
-        //     this.visible = false;
-        //     this.$emit("getIsUpdate", true);
-        //   }
-        // );
+        _getData("/quotation/saveOrUpdateGoods", { param: this.submitData }).then(
+          data => {
+            console.log(data);
+            this.visible = false;
+            this.$emit("getIsUpdate", true);
+          }
+        );
       }
     },
     watch: {

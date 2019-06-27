@@ -575,9 +575,7 @@
             }
           }
           .ant-btn {
-            border: none;
             outline: none;
-            background-color: transparent;
             color: #fff;
             font-size: 12px;
             margin-right: 10px;
@@ -587,12 +585,16 @@
             &:last-child {
               margin-right: 0;
             }
+            &:hover {
+              opacity: 0.7;
+            }
           }
           .search {
-            border: 1px solid #f10215;
+            border-color: $theme-color;
             background-color: $theme-color;
           }
           .clear {
+            border-color: #999;
             background-color: #999;
           }
         }

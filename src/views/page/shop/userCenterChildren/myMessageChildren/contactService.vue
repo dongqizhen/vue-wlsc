@@ -3,7 +3,7 @@
     <div class="head">
       <common-title title="消息中心"></common-title>
       <div class="shopInfo">
-        <div v-if="sender == 'user'">
+        <div v-if="sender == 'user'" class="user_box">
           <div v-if="!shopIsLoading">
             <div class="img-box">
               <img :src="shopDetail.image" alt="" />
@@ -15,7 +15,7 @@
           </div>
           <loading v-else :number="1" :rows="2" avatar></loading>
         </div>
-        <div v-else>
+        <div v-else class="store_box">
           <div class="img-box store">
             <img
               :src="firstMessage.senderImage"
@@ -262,12 +262,13 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+
         > div {
           display: flex;
+          &.user_box > div {
+            display: flex;
+          }
           width: 100%;
-        }
-        > div > div {
-          display: flex;
           .img-box {
             height: 46px;
             width: 46px;
@@ -290,6 +291,7 @@
               width: 100%;
             }
           }
+
           .right {
             h3 {
               font-size: 15px;
@@ -361,6 +363,9 @@
         height: 390px;
         overflow: auto;
         border-bottom: 1px solid #dddddd;
+        > div {
+          height: 100%;
+        }
         .no-data {
           height: 100%;
         }

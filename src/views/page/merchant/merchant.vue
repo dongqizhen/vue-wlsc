@@ -65,7 +65,7 @@
     methods: {
       ...mapMutations(["changeUserShopInfoState"])
     },
-    created() {
+    beforeMount() {
       _getData("/user/getUser", {})
         .then(data => {
           if (data.code == 500) {
@@ -76,12 +76,14 @@
         })
         .then(() => {
           if (this.userShopInfo.audit_status == 2) {
+            console.log(this.defaultSelectedKeys);
             if (this.$route.query.keyId) {
               this.defaultSelectedKeys = [`${this.$route.query.keyId}`];
             } else {
               this.defaultSelectedKeys = ["1"];
               this.$router.replace({ path: "/merchant/shopIndex" });
             }
+            console.log(this.defaultSelectedKeys);
           } else {
             this.shopStatus = this.userShopInfo.audit_status
               ? this.userShopInfo.audit_status
