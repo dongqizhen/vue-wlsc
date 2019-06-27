@@ -103,11 +103,13 @@
             // console.log("一键获取报价：", data);
             this.loading = false;
             if (data.code != 500) {
-              let { href } = this.$router.resolve({
-                path: "/userCenter/myInquiry",
-                query: { keyId: 2 }
+              this.getCart().then(() => {
+                let { href } = this.$router.resolve({
+                  path: "/userCenter/myInquiry",
+                  query: { keyId: 2 }
+                });
+                window.open(href, "_blank");
               });
-              window.open(href, "_blank");
             }
           }
         );

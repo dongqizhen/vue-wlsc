@@ -1,30 +1,21 @@
 <template>
   <div class="myInquiry">
+    <common-title title="我的询价">
+      <div slot="titleRight" class="right-box">
+        <ul>
+          <li :class="isShowInfo.current == 1 ? 'active' : ''" @click="tab(1)">
+            报价中({{ quoting }})
+          </li>
+          <li :class="isShowInfo.current == 2 ? 'active' : ''" @click="tab(2)">
+            已报价({{ quoted }})
+          </li>
+          <li :class="isShowInfo.current == 3 ? 'active' : ''" @click="tab(3)">
+            已关闭({{ closed }})
+          </li>
+        </ul>
+      </div>
+    </common-title>
     <div v-if="!isLoading">
-      <common-title title="我的询价">
-        <div slot="titleRight" class="right-box">
-          <ul>
-            <li
-              :class="isShowInfo.current == 1 ? 'active' : ''"
-              @click="tab(1)"
-            >
-              报价中({{ quoting }})
-            </li>
-            <li
-              :class="isShowInfo.current == 2 ? 'active' : ''"
-              @click="tab(2)"
-            >
-              已报价({{ quoted }})
-            </li>
-            <li
-              :class="isShowInfo.current == 3 ? 'active' : ''"
-              @click="tab(3)"
-            >
-              已关闭({{ closed }})
-            </li>
-          </ul>
-        </div>
-      </common-title>
       <div class="listContainer">
         <div class="selectInfoBox">
           <div class="selectInfo">
@@ -118,15 +109,15 @@
               </div>
             </check-all>
           </div>
+          <pagination
+            :data="paginationData"
+            v-on:onPaginationChange="getPaginationChange"
+            v-if="paginationData.count != 0"
+            ref="pagination"
+          ></pagination>
         </div>
         <loading v-else></loading>
       </div>
-      <pagination
-        :data="paginationData"
-        v-on:onPaginationChange="getPaginationChange"
-        v-if="paginationData.count != 0"
-        ref="pagination"
-      ></pagination>
       <side-bar v-show="isShowInfo.current == 1" />
     </div>
     <loading v-else></loading>

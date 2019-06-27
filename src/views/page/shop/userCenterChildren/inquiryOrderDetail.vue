@@ -1,115 +1,118 @@
 <template>
   <div class="inquiryDetail">
     <common-title title="询价单"></common-title>
-    <div class="listContainer">
-      <order-title
-        :isShowInfo="isShowInfo"
-        :data="data"
-        :checkedList="checkedList"
-        v-on:getChecked="getChecked"
-      ></order-title>
-      <div class="shopAndlink">
-        <div class="shopName">
-          <img
-            src="http://file.haoyigong.com/server/upload/1554429391594.jpg"
-          />
-          {{ data.shopName }}
-        </div>
-        <div class="linkName">联系人：{{ data.username }}</div>
-        <div class="phone">联系方式：188100000299 400-121-1212</div>
-      </div>
-      <div class="listContent">
-        <list-title :titleArr="titleArr"></list-title>
-        <ul>
-          <li
-            v-for="item in data.goodList"
-            :key="item.id"
-            :class="addClass(item.id)"
-            @click="turnToProductDetail(item.goodsId, item.storeId)"
-          >
-            <span>
-              <label @click.stop="stopChange">
-                <a-checkbox
-                  @change="onChange(item.id)"
-                  :checked="checkedChange(item.id)"
-                ></a-checkbox
-              ></label>
-            </span>
-            <span><img :src="item.goodsImage"/></span>
-            <span>{{ item.goodsName }}</span>
-            <span>{{ item.goodsBrand }}/{{ item.goodsModel }}</span>
-            <span>{{ item.showPrice }}</span>
-            <span v-if="isShowInfo.current != 3">
-              {{ item.number }}
-            </span>
-            <span v-if="isShowInfo.current == 3" @click.stop="stopChange">
-              <van-stepper v-model="item.number" :max="item.goods_number" />
-              <i class="stockNumber">库存{{ item.goods_number }}件</i>
-            </span>
-            <span>
-              {{
-                item.arrivalTime ? item.arrivalTime.substring(0, 16) : "暂无"
-              }}
-            </span>
-            <span
-              v-if="isShowInfo.current != 3"
-              :style="isShowInfo.current == 1 ? 'width:160px' : ''"
-            >
-              {{ item.userRemark }}
-            </span>
-            <span v-if="isShowInfo.current == 2">{{ item.shopRemark }}</span>
-            <span
-              v-if="isShowInfo.current == 3"
-              style="width: 160px;"
-              @click.stop="stopChange"
-            >
-              <a-textarea
-                style="width: 157px;"
-                placeholder="请输入备注"
-                v-model="item.introduce"
-              ></a-textarea>
-            </span>
-          </li>
-        </ul>
-      </div>
-      <div class="tfooter">
-        <check-all
-          :amount="checkedList.length"
-          :checkAll="checkAll"
-          v-on:isCheckAll="isCheckAllMethod"
-        >
-          <div slot="right-box" class="right-box">
-            <div
-              :class="[
-                'commonStyle',
-                data.remind == 1 ? 'disabledStyle' : 'remind'
-              ]"
-              v-if="isShowInfo.current == 1"
-              @click="remindQuote(data.storeId, data.id)"
-            >
-              {{ data.remind == 1 ? "已" : "" }}提醒商家报价
-            </div>
-            <div class="totalInfo" v-if="isShowInfo.current == 2">
-              <span class="totalPrice">
-                报价总金额：<i>¥{{ data.subtotal }}</i>
-              </span>
-              <span class="download" @click="turnMyQuote">转为我的报价</span>
-              <span class="edit" @click="submitOrder">提交订单</span>
-            </div>
-            <div
-              :class="[
-                'commonStyle',
-                checkedList.length > 0 ? 'remind' : 'disabledStyle'
-              ]"
-              v-if="isShowInfo.current == 3"
-              @click="getQuote"
-            >
-              一键获取报价
-            </div>
+    <div v-if="!isLoading">
+      <div class="listContainer">
+        <order-title
+          :isShowInfo="isShowInfo"
+          :data="data"
+          :checkedList="checkedList"
+          v-on:getChecked="getChecked"
+        ></order-title>
+        <div class="shopAndlink">
+          <div class="shopName">
+            <img
+              src="http://file.haoyigong.com/server/upload/1554429391594.jpg"
+            />
+            {{ data.shopName }}
           </div>
-        </check-all>
+          <div class="linkName">联系人：{{ data.username }}</div>
+          <div class="phone">联系方式：188100000299 400-121-1212</div>
+        </div>
+        <div class="listContent">
+          <list-title :titleArr="titleArr"></list-title>
+          <ul>
+            <li
+              v-for="item in data.goodList"
+              :key="item.id"
+              :class="addClass(item.id)"
+              @click="turnToProductDetail(item.goodsId, item.storeId)"
+            >
+              <span>
+                <label @click.stop="stopChange">
+                  <a-checkbox
+                    @change="onChange(item.id)"
+                    :checked="checkedChange(item.id)"
+                  ></a-checkbox
+                ></label>
+              </span>
+              <span><img :src="item.goodsImage"/></span>
+              <span>{{ item.goodsName }}</span>
+              <span>{{ item.goodsBrand }}/{{ item.goodsModel }}</span>
+              <span>{{ item.showPrice }}</span>
+              <span v-if="isShowInfo.current != 3">
+                {{ item.number }}
+              </span>
+              <span v-if="isShowInfo.current == 3" @click.stop="stopChange">
+                <van-stepper v-model="item.number" :max="item.goods_number" />
+                <i class="stockNumber">库存{{ item.goods_number }}件</i>
+              </span>
+              <span>
+                {{
+                  item.arrivalTime ? item.arrivalTime.substring(0, 16) : "暂无"
+                }}
+              </span>
+              <span
+                v-if="isShowInfo.current != 3"
+                :style="isShowInfo.current == 1 ? 'width:160px' : ''"
+              >
+                {{ item.userRemark }}
+              </span>
+              <span v-if="isShowInfo.current == 2">{{ item.shopRemark }}</span>
+              <span
+                v-if="isShowInfo.current == 3"
+                style="width: 160px;"
+                @click.stop="stopChange"
+              >
+                <a-textarea
+                  style="width: 157px;"
+                  placeholder="请输入备注"
+                  v-model="item.introduce"
+                ></a-textarea>
+              </span>
+            </li>
+          </ul>
+        </div>
+        <div class="tfooter">
+          <check-all
+            :amount="checkedList.length"
+            :checkAll="checkAll"
+            v-on:isCheckAll="isCheckAllMethod"
+          >
+            <div slot="right-box" class="right-box">
+              <div
+                :class="[
+                  'commonStyle',
+                  data.remind == 1 ? 'disabledStyle' : 'remind'
+                ]"
+                v-if="isShowInfo.current == 1"
+                @click="remindQuote(data.storeId, data.id)"
+              >
+                {{ data.remind == 1 ? "已" : "" }}提醒商家报价
+              </div>
+              <div class="totalInfo" v-if="isShowInfo.current == 2">
+                <span class="totalPrice">
+                  报价总金额：<i>¥{{ data.subtotal }}</i>
+                </span>
+                <span class="download" @click="turnMyQuote">转为我的报价</span>
+                <span class="edit" @click="submitOrder">提交订单</span>
+              </div>
+              <div
+                :class="[
+                  'commonStyle',
+                  checkedList.length > 0 ? 'remind' : 'disabledStyle'
+                ]"
+                v-if="isShowInfo.current == 3"
+                @click="getQuote"
+              >
+                一键获取报价
+              </div>
+            </div>
+          </check-all>
+        </div>
       </div>
     </div>
+    <loading v-else></loading>
   </div>
 </template>
 
@@ -123,6 +126,7 @@
   export default {
     data() {
       return {
+        isLoading: true,
         isShowInfo: {
           isDetail: true,
           isShow: false,
@@ -296,6 +300,7 @@
         }).then(data => {
           console.log("获取询价单详情：", data);
           this.data = data;
+          this.isLoading = false;
         });
       }
     },
