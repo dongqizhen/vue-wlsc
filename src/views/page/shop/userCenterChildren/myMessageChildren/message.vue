@@ -11,10 +11,10 @@
           ></manage-number-nav>
         </div>
         <div class="right-box">
-          <div :class="current == 0 ? 'active' : ''" @click="system(0)">
+          <div :class="current == 0 && 'active'" @click="system(0)">
             系统通知({{ systemNumber }})
           </div>
-          <div :class="current == 1 ? 'active' : ''" @click="system(1)">
+          <div :class="current == 1 && 'active'" @click="system(1)">
             私信消息({{ personalNumber }})
           </div>
         </div>
@@ -110,6 +110,7 @@
         systemNumber: 0,
         personalNumber: 0,
         defaultActiveKey: 0,
+        pageType: "message", //页面类型
         data: [],
         tabs: [],
         isLoading: true,
@@ -118,16 +119,8 @@
         checkedList: [],
         current: 0,
         unRead: true,
-        params: {
-          currentPage: "1", //类型：String  必有字段  备注：当前页
-          countPerPage: "10", //类型：String  必有字段  备注：每页显示条数
-          storeId: "",
-          readType: 0 //类型：String  可有字段  备注：消息状态 0未读，1已读，空字符串查询全部
-        },
-        getMessageNumberParams: {
-          messageType: 0, //类型：String  可有字段  备注：消息类型 0系统消息，1私信，空字符串查询全部
-          readType: 0 //类型：String  可有字段  备注：消息状态 0未读，1已读，空字符串查询全部
-        },
+        readType: 0,
+
         paginationData: {}
       };
     },
@@ -140,17 +133,19 @@
         } else {
           this.unRead = false;
         }
-        this.params.readType = val;
+
+        this.readType = val;
+        //this.params.readType = val;
         this.getMessageNumberParams.readType = val;
-        this.getMessageList();
-        this.getMessageNumber();
+        // this.getMessageList();
+        // this.getMessageNumber();
       },
       system(val) {
         this.current = val;
-        this.params.messageType = val;
-        this.getMessageNumberParams.messageType = val;
-        this.getMessageList();
-        this.getMessageNumber();
+        // this.params.messageType = val;
+        // this.getMessageNumberParams.messageType = val;
+        // this.getMessageList();
+        // this.getMessageNumber();
       },
       getChecked(val) {
         if (typeof val == "object") {
@@ -186,8 +181,8 @@
           }).then(data => {
             // console.log(data);
             this.$message.success("批量删除成功", 1);
-            this.getMessageList();
-            this.getMessageNumber();
+            // this.getMessageList();
+            // this.getMessageNumber();
           });
         } else {
           this.$message.warning("请选择信息", 1);
@@ -203,25 +198,30 @@
             // console.log(data);
             //移动到已读列表
             this.unRead = false;
-            this.defaultActiveKey = 1;
+            // this.defaultActiveKey = 1;
             this.params.readType = 1;
             this.getMessageNumberParams.readType = 1;
-            this.getMessageList();
-            this.getMessageNumber();
+            // this.getMessageList();
+            // this.getMessageNumber();
           });
         }
       },
       getPaginationChange(val) {
         // console.log(val);
         this.params.currentPage = val;
-        this.getMessageList();
+        // this.getMessageList();
       },
       //获取系统消息列表
-      async getSystemMessageList() {
+      async getSystemMessageList(page = 1) {
         this.isMessageLoading = true;
-        return await _getData("/message/list", this.params)
+        return await _getData("/message/list", {
+          currentPage: page, //当前页
+          countPerPage: "10", //每页显示条数
+          storeId: "",
+          readType: this.readType //消息状态 0未读，1已读，空字符串查询全部
+        })
           .then(data => {
-            // console.log("获取到的信息列表：", data);
+            console.log("系统信息列表：", data);
             this.checkedList = [];
             this.checkAll = false;
             this.data = data.data;
@@ -232,11 +232,16 @@
           });
       },
       //获取私信消息列表
-      async getPrivateMessageList() {
+      async getPrivateMessageList(page = 1) {
         this.isMessageLoading = true;
-        return await _getData("/message/chatList", this.params)
+        return await _getData("/message/chatList", {
+          currentPage: page, //当前页
+          countPerPage: "10", //每页显示条数
+          storeId: "",
+          readType: this.readType //消息状态 0未读，1已读，空字符串查询全部
+        })
           .then(data => {
-            console.log("获取到的信息列表：", data);
+            console.log("私信信息列表：", data);
             this.checkedList = [];
             this.checkAll = false;
             this.data = data.data;
@@ -248,42 +253,48 @@
       },
       //获取系统消息跟私信消息的数量
       async getMessageNumber() {
-        return await _getData(
-          "/message/messageNum",
-          this.getMessageNumberParams
-        ).then(data => {
-          // console.log("私信消息数量：", data);
-          this.tabs = [
-            {
-              id: 0,
-              name: "未读消息",
-              amount: data.unread
-            },
-            {
-              id: 1,
-              name: "已读消息",
-              amount: data.read
-            }
-          ];
+        return await _getData("/message/messageNum", { storeId: "" }).then(
+          data => {
+            console.log("私信消息数量：", data);
+            this.tabs = [
+              {
+                id: 0,
+                name: "未读消息",
+                amount: data.systemUnread
+              },
+              {
+                id: 1,
+                name: "已读消息",
+                amount: data.systemRead
+              }
+            ];
 
-          this.systemNumber = data.system;
-          this.personalNumber = data.personal;
-        });
+            this.systemNumber = data.system;
+            this.personalNumber = data.personal;
+          }
+        );
       }
     },
-    mounted() {
+    created() {
       //点击头部进入页面的显示信息
-      if (this.$route.query.type == "message") {
+
+      this.pageType = this.$route.query.type || "system";
+
+      if (this.$route.query.type == "system") {
         //系统消息
         this.system(0);
       } else if (this.$route.query.type == "private") {
         //已读消息
         this.system(1);
       }
+    },
+    mounted() {
+      console.log(this.pageType);
       _getDataAll([
         this.getMessageNumber(),
-        this.getSystemMessageList(),
-        this.getPrivateMessageList()
+        this.pageType == "system"
+          ? this.getSystemMessageList()
+          : this.getPrivateMessageList()
       ]).then(() => {
         this.isLoading = false;
       });

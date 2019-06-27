@@ -1,86 +1,95 @@
 <template>
   <div class="messageCenter">
     <common-title title="消息中心"></common-title>
-    <div class="tabBar">
-      <div class="left-box">
-        <manage-number-nav
-          :navArr="tabs"
-          v-on:tab="getTab"
-          :defaultActiveKey="defaultActiveKey"
-        ></manage-number-nav>
-      </div>
-      <div class="right-box">
-        <div :class="current == 0 ? 'active' : ''" @click="system(0)">
-          系统通知({{ systemNumber }})
+    <div v-if="!isLoading">
+      <div class="tabBar">
+        <div class="left-box">
+          <manage-number-nav
+            :navArr="tabs"
+            v-on:tab="getTab"
+            :defaultActiveKey="defaultActiveKey"
+          ></manage-number-nav>
         </div>
-        <div :class="current == 1 ? 'active' : ''" @click="system(1)">
-          私信消息({{ personalNumber }})
-        </div>
-      </div>
-    </div>
-    <div class="listContainer">
-      <div class="listContent" v-if="data.length > 0">
-        <ul v-if="current == 0">
-          <router-link
-            tag="li"
-            v-for="item in data"
-            :key="item.id"
-            :to="{
-              path: `messageDetail/${item.id}`
-            }"
-          >
-            <system-notice
-              :data="item"
-              :checkedList="checkedList"
-              v-on:getChecked="getChecked"
-              :unRead="unRead"
-            ></system-notice>
-          </router-link>
-        </ul>
-        <ul v-else>
-          <router-link
-            class="messageBox"
-            tag="li"
-            v-for="item in data"
-            :key="item.id"
-            :to="{
-              path: `messageDetail/${item.id}`
-            }"
-          >
-            <private-message
-              :data="item"
-              :checkedList="checkedList"
-              v-on:getChecked="getChecked"
-              :unRead="unRead"
-            ></private-message>
-          </router-link>
-        </ul>
-      </div>
-      <no-data v-else text="暂无数据"></no-data>
-      <div class="tfooter">
-        <check-all
-          :amount="checkedList.length"
-          :checkAll="checkAll"
-          v-on:isCheckAll="isCheckAllMethod"
-          @isDelete="batchDeleteData"
-          v-if="data.length > 0"
-        >
-          <div slot="right-box">
-            <div
-              v-bind:class="['remark', checkedList.length > 0 ? 'active' : '']"
-              @click="remarkRead"
-            >
-              标记已读
-            </div>
+        <div class="right-box">
+          <div :class="current == 0 ? 'active' : ''" @click="system(0)">
+            系统通知({{ systemNumber }})
           </div>
-        </check-all>
+          <div :class="current == 1 ? 'active' : ''" @click="system(1)">
+            私信消息({{ personalNumber }})
+          </div>
+        </div>
       </div>
+      <div v-if="!isMessageLoading">
+        <div class="listContainer">
+          <div class="listContent" v-if="data.length > 0">
+            <ul v-if="current == 0">
+              <router-link
+                tag="li"
+                v-for="item in data"
+                :key="item.id"
+                :to="{
+                  path: `messageDetail/${item.id}`
+                }"
+              >
+                <system-notice
+                  :data="item"
+                  :checkedList="checkedList"
+                  v-on:getChecked="getChecked"
+                  :unRead="unRead"
+                ></system-notice>
+              </router-link>
+            </ul>
+            <ul v-else>
+              <router-link
+                class="messageBox"
+                tag="li"
+                v-for="item in data"
+                :key="item.id"
+                :to="{
+                  path: `messageDetail/${item.id}`
+                }"
+              >
+                <private-message
+                  :data="item"
+                  :checkedList="checkedList"
+                  v-on:getChecked="getChecked"
+                  :unRead="unRead"
+                ></private-message>
+              </router-link>
+            </ul>
+          </div>
+          <no-data v-else text="暂无数据"></no-data>
+          <div class="tfooter">
+            <check-all
+              :amount="checkedList.length"
+              :checkAll="checkAll"
+              v-on:isCheckAll="isCheckAllMethod"
+              @isDelete="batchDeleteData"
+              v-if="data.length > 0"
+            >
+              <div slot="right-box">
+                <div
+                  v-bind:class="[
+                    'remark',
+                    checkedList.length > 0 ? 'active' : ''
+                  ]"
+                  @click="remarkRead"
+                >
+                  标记已读
+                </div>
+              </div>
+            </check-all>
+          </div>
+        </div>
+        <pagination
+          :data="paginationData"
+          v-on:onPaginationChange="getPaginationChange"
+          v-if="paginationData.count != 0"
+        ></pagination>
+      </div>
+      <loading v-else :number="2"></loading>
     </div>
-    <pagination
-      :data="paginationData"
-      v-on:onPaginationChange="getPaginationChange"
-      v-if="paginationData.count != 0"
-    ></pagination>
+    <loading v-else></loading>
   </div>
 </template>
 
@@ -100,18 +109,9 @@
         systemNumber: 0,
         personalNumber: 0,
         data: [],
-        tabs: [
-          {
-            id: 0,
-            name: "未读消息",
-            amount: 0
-          },
-          {
-            id: 1,
-            name: "已读消息",
-            amount: 0
-          }
-        ],
+        isLoading: true,
+        isMessageLoading: true,
+        tabs: [],
         defaultActiveKey: 0,
         checkAll: false,
         checkedList: [],
@@ -238,16 +238,27 @@
           this.paginationData = data;
         });
       },
-      getMessageNumber() {
-        _getData("/message/messageNum", this.getMessageNumberParams).then(
-          data => {
-            console.log("私信消息数量：", data);
-            this.tabs[0].amount = data.unread;
-            this.tabs[1].amount = data.read;
-            this.systemNumber = data.system;
-            this.personalNumber = data.personal;
-          }
-        );
+      async getMessageNumber() {
+        return await _getData(
+          "/message/messageNum",
+          this.getMessageNumberParams
+        ).then(data => {
+          console.log("私信消息数量：", data);
+          this.tabs = [
+            {
+              id: 0,
+              name: "未读消息",
+              amount: data.systemUnread
+            },
+            {
+              id: 1,
+              name: "已读消息",
+              amount: data.systemRead
+            }
+          ];
+          this.systemNumber = data.system;
+          this.personalNumber = data.personal;
+        });
       }
     },
     mounted() {
