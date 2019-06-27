@@ -25,37 +25,44 @@
           </ul>
         </div>
       </commonTitle>
-      <div class="listContainer">
-        <div class="listContent">
+      <div v-if="!isLoading">
+        <div class="listContainer">
           <list-title :titleArr="titleArr"></list-title>
-          <div class="tbody">
-            <ul v-if="data.length != 0">
-              <li v-for="item in data" :key="item.id">
-                <inquiry-manage-item
-                  :data="item"
-                  :checkedList="checkedList"
-                  v-on:getChecked="getChecked"
-                  :isShowInfo="isShowInfo"
-                  v-on:getIsDelete="getIsDelete"
-                ></inquiry-manage-item>
-              </li>
-            </ul>
-            <no-data v-else text="暂无数据"></no-data>
+          <div v-if="!isInQuiryLoading">
+            <div class="listContent">
+              <div class="tbody">
+                <ul v-if="data.length != 0">
+                  <li v-for="item in data" :key="item.id">
+                    <inquiry-manage-item
+                      :data="item"
+                      :checkedList="checkedList"
+                      v-on:getChecked="getChecked"
+                      :isShowInfo="isShowInfo"
+                      v-on:getIsDelete="getIsDelete"
+                    ></inquiry-manage-item>
+                  </li>
+                </ul>
+                <no-data v-else text="暂无数据"></no-data>
+              </div>
+              <checkAll
+                :amount="checkedList.length"
+                :checkAll="checkAll"
+                v-on:isCheckAll="isCheckAllMethod"
+                v-on:isDelete="getCheckDelete"
+                v-if="isShowInfo.current != 1"
+              ></checkAll>
+            </div>
+            <pagination
+              :data="paginationData"
+              v-on:onPaginationChange="getPaginationChange"
+              ref="pagination"
+              v-if="paginationData.count != 0"
+            ></pagination>
           </div>
-          <checkAll
-            :amount="checkedList.length"
-            :checkAll="checkAll"
-            v-on:isCheckAll="isCheckAllMethod"
-            v-on:isDelete="getCheckDelete"
-            v-if="isShowInfo.current != 1"
-          ></checkAll>
+          <loading v-else></loading>
         </div>
       </div>
-      <pagination
-        :data="paginationData"
-        v-on:onPaginationChange="getPaginationChange"
-        v-if="paginationData.count != 0"
-      ></pagination>
+      <loading v-else></loading>
     </div>
   </div>
 </template>
@@ -66,11 +73,13 @@
   import inquiryManageItem from "../../../../components/common/inquiry/inquiryManageItem";
   import checkAll from "../../../../components/common/checkAll";
   import pagination from "../../../../components/common/pagination";
-  import { _getData } from "../../../../config/getData";
+  import { _getData, _getDataAll } from "../../../../config/getData";
   import { mapState } from "vuex";
   export default {
     data() {
       return {
+        isLoading: true,
+        isInQuiryLoading: true,
         isShowInfo: {
           isDetail: false,
           current: 1,
@@ -93,7 +102,7 @@
         ],
         getInquiryListParams: {
           page: 1, //当前页
-          size: 10, //每页显示条数
+          size: 5, //每页显示条数
           status: 1, //询价状态:1：报价中，2：已报价，3：已关闭。',
           enquirySn: "", //询价单号
           storeId: "" //商铺id，商铺id为空时，查询当前用户的询价单。
@@ -157,8 +166,14 @@
             "操作"
           ];
         }
-
-        this.getInquiryList();
+        this.getInquiryListParams.page = 1;
+        this.getInquiryList().then(() => {
+          this.$nextTick(() => {
+            if (this.$refs.pagination) {
+              this.$refs.pagination.$data.current = 1;
+            }
+          });
+        });
       },
       getChecked(val) {
         if (typeof val == "object") {
@@ -191,20 +206,26 @@
         this.getInquiryListParams.page = val;
         this.getInquiryList();
       },
-      getInquiryList() {
+      async getInquiryList() {
+        this.isInQuiryLoading = true;
         this.getInquiryListParams.storeId = this.userShopInfo.store_id;
-        _getData("/enquiryPlus/enquiryList", this.getInquiryListParams).then(
-          data => {
+        return await _getData(
+          "/enquiryPlus/enquiryList",
+          this.getInquiryListParams
+        )
+          .then(data => {
             console.log("获取询价管理的列表：", data);
             this.checkedList = [];
             this.checkAll = false;
             this.data = data.data;
             this.paginationData = data;
-          }
-        );
+          })
+          .then(() => {
+            this.isInQuiryLoading = false;
+          });
       },
-      getInquiryNumber() {
-        _getData("/enquiryPlus/enquiryCount", {
+      async getInquiryNumber() {
+        return await _getData("/enquiryPlus/enquiryCount", {
           param: { storeId: this.userShopInfo.store_id }
         }).then(data => {
           console.log("获取的询价数：：：", data);
@@ -235,8 +256,9 @@
         this.getInquiryListParams.status = this.$route.query.status;
         this.isShowInfo.current = this.$route.query.status;
       }
-      this.getInquiryList();
-      this.getInquiryNumber();
+      _getDataAll([this.getInquiryNumber(), this.getInquiryList()]).then(() => {
+        this.isLoading = false;
+      });
     },
     components: {
       commonTitle,
@@ -286,34 +308,37 @@
       }
       .listContainer {
         margin-top: 24px;
-        .listContent {
-          /deep/.listTitle {
-            margin-bottom: 12px;
-            ul {
-              li {
-                &:nth-child(3) {
-                  width: 78px;
-                }
-                &:nth-child(4) {
-                  width: 80px;
-                }
-                &:nth-child(5) {
-                  width: 98px;
-                }
-                &:nth-child(6) {
-                  width: 90px;
-                  margin-right: 15px;
-                }
-                &:nth-child(7) {
-                  width: 91px;
-                  margin-right: 15px;
-                }
-                &:last-child {
-                  width: 96px;
-                }
+        /deep/.listTitle {
+          margin-bottom: 12px;
+          ul {
+            li {
+              &:nth-child(2) {
+                width: 145px;
+              }
+              &:nth-child(3) {
+                width: 88px;
+              }
+              &:nth-child(4) {
+                width: 80px;
+              }
+              &:nth-child(5) {
+                width: 98px;
+              }
+              &:nth-child(6) {
+                width: 90px;
+                margin-right: 15px;
+              }
+              &:nth-child(7) {
+                width: 91px;
+                margin-right: 15px;
+              }
+              &:last-child {
+                width: 96px;
               }
             }
           }
+        }
+        .listContent {
           .tbody {
             /deep/.no-data {
               height: 552px;

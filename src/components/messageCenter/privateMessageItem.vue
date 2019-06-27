@@ -10,16 +10,19 @@
     </div>
     <div class="introduceBox">
       <div class="avatar">
-        <img src="http://file.haoyigong.com/server/upload/1554081863934.jpg" />
+        <img :src="data.senderImage" v-if="data.senderImage" />
+        <svg class="icon" aria-hidden="true" v-else>
+          <use xlink:href="#iconweidenglutouxiang"></use>
+        </svg>
       </div>
       <div class="messageContent">
         <div class="userName">
-          <span class="name">用户18810041528</span>
-          <span>2018-11-18 03:02</span>
+          <span class="name">{{ data.senderName }}</span>
+          <span>{{ data.createdOn }}</span>
         </div>
         <div class="info">
           <span>
-            您好，我是山东省人民医院的张三，可以交个朋友吗？您好，我是山东省人民医院的张三，可以交个朋友吗？您好，我是山东省...
+            {{ data.content }}
           </span>
           <span class="unRead" v-if="unRead">1</span>
         </div>
@@ -94,6 +97,14 @@
         height: 50px;
         border-radius: 50%;
         margin-right: 13px;
+        background: #cbcbcb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .icon {
+          height: 25px;
+          width: 25px;
+        }
         img {
           width: 50px;
           height: 50px;

@@ -1,43 +1,46 @@
 <template>
   <div class="inquiryOrderDetail">
     <common-title title="编辑询价单"></common-title>
-    <div class="inquiryContainer">
-      <order-title
-        :isShowInfo="isShowInfo"
-        :data="data"
-        :checkedList="checkedList"
-      ></order-title>
-      <div class="inquiryContent">
-        <list-title :titleArr="titleArr"></list-title>
-        <div class="listContent">
-          <edit-inquiry-product
-            v-for="item in data.goodList"
-            :key="item.id"
-            :itemData="item"
-            v-on:getChecked="getChecked"
-            :checkedList="checkedList"
-            v-on:getData="getData"
-            :checkAll="checkAll"
-          ></edit-inquiry-product>
-        </div>
-        <div class="list-footer">
-          <check-all
-            :amount="checkedList.length"
-            :checkAll="checkAll"
-            v-on:isCheckAll="isCheckAllMethod"
-          >
-            <div slot="right-box" class="right-box">
-              <button
-                :class="['submit', checkedList.length > 0 ? 'active' : '']"
-                @click="submitQuote"
-              >
-                提交报价
-              </button>
-            </div>
-          </check-all>
+    <div v-if="!isLoading">
+      <div class="inquiryContainer">
+        <order-title
+          :isShowInfo="isShowInfo"
+          :data="data"
+          :checkedList="checkedList"
+        ></order-title>
+        <div class="inquiryContent">
+          <list-title :titleArr="titleArr"></list-title>
+          <div class="listContent">
+            <edit-inquiry-product
+              v-for="item in data.goodList"
+              :key="item.id"
+              :itemData="item"
+              v-on:getChecked="getChecked"
+              :checkedList="checkedList"
+              v-on:getData="getData"
+              :checkAll="checkAll"
+            ></edit-inquiry-product>
+          </div>
+          <div class="list-footer">
+            <check-all
+              :amount="checkedList.length"
+              :checkAll="checkAll"
+              v-on:isCheckAll="isCheckAllMethod"
+            >
+              <div slot="right-box" class="right-box">
+                <button
+                  :class="['submit', checkedList.length > 0 ? 'active' : '']"
+                  @click="submitQuote"
+                >
+                  提交报价
+                </button>
+              </div>
+            </check-all>
+          </div>
         </div>
       </div>
     </div>
+    <loading v-else></loading>
   </div>
 </template>
 <script>
@@ -50,6 +53,7 @@
   export default {
     data() {
       return {
+        isLoading: true,
         isShowInfo: {
           isDetail: true,
           isShow: false,
@@ -150,6 +154,7 @@
         data => {
           console.log("获取询价单详情：", data);
           this.data = data;
+          this.isLoading = false;
         }
       );
     },

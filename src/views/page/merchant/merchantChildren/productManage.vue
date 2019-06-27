@@ -93,6 +93,7 @@
                 <span>产品名称</span>
                 <span>产品分类</span>
                 <span>品牌/型号</span>
+                <span>产品类型</span>
                 <span>产品状态</span>
                 <span>库存数量</span>
                 <span>发布时间</span>
@@ -124,10 +125,11 @@
                     />
                   </span>
                   <span>{{ item.name }}</span>
-                  <span
-                    >{{ item.big_category_name }}/{{ item.category_name }}</span
-                  >
+                  <span>
+                    {{ item.big_category_name }}/{{ item.category_name }}
+                  </span>
                   <span>{{ item.brand_name }}/{{ item.brand_model_name }}</span>
+                  <span>{{ item.attr_name }}</span>
                   <span>{{ item.is_on_sale == 1 ? "上架" : "未上架" }}</span>
                   <span>{{ item.goods_number }}</span>
                   <span>{{ item.add_time.substring(0, 16) }}</span>
@@ -551,6 +553,10 @@
             }
             &:nth-child(6) {
               width: 68px;
+              margin-right: 20px;
+            }
+            &:nth-child(7) {
+              width: 50px;
               margin-right: 30px;
             }
             &:nth-last-child(3) {
@@ -563,7 +569,6 @@
             }
             &:last-child {
               width: 34px;
-              margin-left: 50px;
               div {
                 margin-bottom: 10px;
                 cursor: pointer;

@@ -11,10 +11,10 @@
           ></manage-number-nav>
         </div>
         <div class="right-box">
-          <div :class="current == 0 ? 'active' : ''" @click="system(0)">
+          <div :class="current == 0 && 'active'" @click="system(0)">
             系统通知({{ systemNumber }})
           </div>
-          <div :class="current == 1 ? 'active' : ''" @click="system(1)">
+          <div :class="current == 1 && 'active'" @click="system(1)">
             私信消息({{ personalNumber }})
           </div>
         </div>
@@ -46,7 +46,14 @@
                 v-for="item in data"
                 :key="item.id"
                 :to="{
-                  path: `messageDetail/${item.id}`
+                  path: `/userCenter/myMessage/contactService`,
+                  query: {
+                    keyId: 9,
+                    topTitle: 'sub1',
+                    id: item.id,
+                    shopId: item.storeId,
+                    sender: 'store'
+                  }
                 }"
               >
                 <private-message
@@ -58,7 +65,7 @@
               </router-link>
             </ul>
           </div>
-          <no-data v-else text="暂无数据"></no-data>
+          <no-data v-else type="no-message" text="暂无消息"></no-data>
           <div class="tfooter">
             <check-all
               :amount="checkedList.length"
@@ -69,11 +76,9 @@
             >
               <div slot="right-box">
                 <div
-                  v-bind:class="[
-                    'remark',
-                    checkedList.length > 0 ? 'active' : ''
-                  ]"
+                  :class="['remark', checkedList.length > 0 && 'active']"
                   @click="remarkRead"
+                  v-if="!readType"
                 >
                   标记已读
                 </div>
@@ -81,13 +86,14 @@
             </check-all>
           </div>
         </div>
-        <pagination
-          :data="paginationData"
-          v-on:onPaginationChange="getPaginationChange"
-          v-if="paginationData.count != 0"
-        ></pagination>
       </div>
       <loading v-else :number="2"></loading>
+      <pagination
+        :data="paginationData"
+        v-on:onPaginationChange="getPaginationChange"
+        v-if="paginationData.count != 0"
+        ref="pagination"
+      ></pagination>
     </div>
     <loading v-else></loading>
   </div>
@@ -101,8 +107,8 @@
   import privateMessage from "../../../../components/messageCenter/privateMessageItem";
   import checkAll from "../../../../components/common/checkAll";
   import pagination from "../../../../components/common/pagination";
-  import { _getData } from "../../../../config/getData";
-  import { mapMutations } from "vuex";
+  import { _getData, _getDataAll } from "../../../../config/getData";
+  import { mapState, mapMutations } from "vuex";
   export default {
     data() {
       return {
@@ -112,23 +118,20 @@
         isLoading: true,
         isMessageLoading: true,
         tabs: [],
+        messageNumber: "",
         defaultActiveKey: 0,
         checkAll: false,
         checkedList: [],
         current: 0,
+        readType: 0, //消息类型
         unRead: true,
-        params: {
-          currentPage: "1", //类型：String  必有字段  备注：当前页
-          countPerPage: "10", //类型：String  必有字段  备注：每页显示条数
-          messageType: 0, //类型：String  可有字段  备注：消息类型 0系统消息，1私信，空字符串查询全部
-          readType: 0 //类型：String  可有字段  备注：消息状态 0未读，1已读，空字符串查询全部
-        },
-        getMessageNumberParams: {
-          messageType: 0, //类型：String  可有字段  备注：消息类型 0系统消息，1私信，空字符串查询全部
-          readType: 0 //类型：String  可有字段  备注：消息状态 0未读，1已读，空字符串查询全部
-        },
+        pageType: "system", //页面类型
+
         paginationData: {}
       };
+    },
+    computed: {
+      ...mapState(["userShopInfo"])
     },
     methods: {
       ...mapMutations(["changeUserShopInfoState"]),
@@ -141,19 +144,56 @@
         }
         this.checkedList = [];
         this.checkAll = false;
-        this.params.readType = val;
-        this.getMessageNumberParams.readType = val;
-        this.getMessageList();
-        this.getMessageNumber();
+        this.readType = val;
+        if (this.current) {
+          this.getPrivateMessageList();
+        } else {
+          this.getSystemMessageList();
+        }
+        this.$nextTick(() => {
+          if (this.$refs.pagination) {
+            this.$refs.pagination.$data.current = 1;
+          }
+        });
       },
       system(val) {
         this.current = val;
         this.checkedList = [];
         this.checkAll = false;
-        this.params.messageType = val;
-        this.getMessageNumberParams.messageType = val;
-        this.getMessageList();
-        this.getMessageNumber();
+        if (val) {
+          this.tabs = [
+            {
+              id: 0,
+              name: "未读消息",
+              amount: this.messageNumber.personalUnread
+            },
+            {
+              id: 1,
+              name: "已读消息",
+              amount: this.messageNumber.personalRead
+            }
+          ];
+          this.getPrivateMessageList();
+        } else {
+          this.tabs = [
+            {
+              id: 0,
+              name: "未读消息",
+              amount: this.messageNumber.systemUnread
+            },
+            {
+              id: 1,
+              name: "已读消息",
+              amount: this.messageNumber.systemRead
+            }
+          ];
+          this.getSystemMessageList();
+        }
+        this.$nextTick(() => {
+          if (this.$refs.pagination) {
+            this.$refs.pagination.$data.current = 1;
+          }
+        });
       },
       getChecked(val) {
         if (typeof val == "object") {
@@ -193,8 +233,8 @@
           }).then(data => {
             console.log(data);
             this.$message.success("批量删除成功", 1);
-            this.getMessageList();
-            this.getMessageNumber();
+            // this.getMessageList();
+            // this.getMessageNumber();
           });
         } else {
           this.$message.warning("请选择信息", 1);
@@ -209,16 +249,15 @@
           console.log(this.checkedList.join(","));
           _getData("/message/updateStatus", {
             ids: this.checkedList.join(","),
-            flag: "read"
+            flag: "read",
+            storeId: this.userShopInfo.store_id
           }).then(data => {
             console.log(data);
             //移动到已读列表
             this.unRead = false;
             this.defaultActiveKey = 1;
-            this.params.readType = 1;
-            this.getMessageNumberParams.readType = 1;
-            this.getMessageList();
-            this.getMessageNumber();
+            this.readType = 1;
+            this.getMessageAll();
           });
         } else {
           this.$message.warning("请选择信息", 1);
@@ -227,23 +266,56 @@
       },
       getPaginationChange(val) {
         console.log(val);
-        this.params.currentPage = val;
-        this.getMessageList();
+
+        if (this.current) {
+          this.getPrivateMessageList(val);
+        } else {
+          this.getSystemMessageList(val);
+        }
       },
-      getMessageList() {
-        _getData("/message/list", this.params).then(data => {
-          console.log("获取到的信息列表：", data);
-          this.checkedList = [];
-          this.data = data.data;
-          this.paginationData = data;
-        });
+      async getPrivateMessageList(page = 1) {
+        this.isMessageLoading = true;
+        return await _getData("/message/chatList", {
+          currentPage: page, //当前页
+          countPerPage: "6", //每页显示条数
+          storeId: this.userShopInfo.store_id, //店铺id，不传时默认查询当前登录用户
+          readType: 1 //消息状态 0未读，1已读，空字符串查询全部
+        })
+          .then(data => {
+            console.log("获取私信信息列表：", data);
+            this.checkedList = [];
+            this.data = data.data;
+            this.paginationData = data;
+          })
+          .then(() => {
+            this.isMessageLoading = false;
+          });
+      },
+      async getSystemMessageList(page = 1) {
+        this.isMessageLoading = true;
+        return await _getData("/message/list", {
+          currentPage: page, //当前页
+          countPerPage: "6", //每页显示条数
+          storeId: this.userShopInfo.store_id, //店铺id，不传时默认查询当前登录用户
+          readType: this.readType //消息状态 0未读，1已读，空字符串查询全部
+        })
+          .then(data => {
+            console.log("获取系统通知列表：", data);
+            this.checkedList = [];
+            this.data = data.data;
+            this.paginationData = data;
+          })
+          .then(() => {
+            this.isMessageLoading = false;
+          });
       },
       async getMessageNumber() {
-        return await _getData(
-          "/message/messageNum",
-          this.getMessageNumberParams
-        ).then(data => {
+        // this.getMessageNumberParams.storeId = this.userShopInfo.store_id;
+        return await _getData("/message/messageNum", {
+          storeId: this.userShopInfo.store_id //消息状态 店铺id，不传时默认查询当前用户的
+        }).then(data => {
           console.log("私信消息数量：", data);
+          this.messageNumber = data;
           this.tabs = [
             {
               id: 0,
@@ -259,20 +331,34 @@
           this.systemNumber = data.system;
           this.personalNumber = data.personal;
         });
+      },
+      async getMessageAll() {
+        this.isLoading = true;
+        return await _getDataAll([
+          this.getMessageNumber(),
+          this.pageType == "system"
+            ? this.getSystemMessageList()
+            : this.getPrivateMessageList()
+        ]).then(() => {
+          this.isLoading = false;
+        });
+      }
+    },
+    created() {
+      //点击头部进入页面的显示信息
+
+      this.pageType = this.$route.query.type || "system";
+
+      if (this.$route.query.type == "system") {
+        //系统消息
+        this.system(0);
+      } else if (this.$route.query.type == "private") {
+        //已读消息
+        this.system(1);
       }
     },
     mounted() {
-      if (this.$route.query.type == "message") {
-        this.system(0);
-      } else if (this.$route.query.type == "private") {
-        this.system(1);
-      }
-      this.getMessageList();
-      this.getMessageNumber();
-      _getData("/user/getUser", {}).then(data => {
-        console.log("获取用户的店铺开店信息：", data);
-        this.changeUserShopInfoState(data);
-      });
+      this.getMessageAll();
     },
     components: {
       commonTitle,
@@ -292,7 +378,7 @@
     background-color: #fff;
     padding: 4px 20px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
-    margin-bottom: 10px;
+    margin-bottom: 100px;
     .tabBar {
       display: flex;
       justify-content: space-between;
@@ -334,6 +420,9 @@
       margin-top: 12px;
       /deep/.no-data {
         height: 550px;
+      }
+      /deep/ .paginationBox {
+        margin-bottom: 40px;
       }
       .tfooter {
         .remark {

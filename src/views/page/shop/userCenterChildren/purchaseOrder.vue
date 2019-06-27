@@ -98,18 +98,21 @@
             o.goodsList = selectProducts;
           });
         }
-        // _getData("/enquiryPlus/addEnquiry", { param: this.selectDatas }).then(
-        //   data => {
-        //     // console.log("一键获取报价：", data);
-        //     if (data.code != 500) {
-        //       let { href } = this.$router.resolve({
-        //         path: "/userCenter/myInquiry",
-        //         query: { keyId: 2 }
-        //       });
-        //       window.open(href, "_blank");
-        //     }
-        //   }
-        // );
+        _getData("/enquiryPlus/addEnquiry", { param: this.selectDatas }).then(
+          data => {
+            // console.log("一键获取报价：", data);
+            this.loading = false;
+            if (data.code != 500) {
+              this.getCart().then(() => {
+                let { href } = this.$router.resolve({
+                  path: "/userCenter/myInquiry",
+                  query: { keyId: 2 }
+                });
+                window.open(href, "_blank");
+              });
+            }
+          }
+        );
       },
       getIsCheckAll(val) {
         // console.log(val);
@@ -308,6 +311,9 @@
           &.active {
             background-image: linear-gradient(90deg, #f10000 0%, #ff4e1a 100%);
           }
+        }
+        [ant-click-animating-without-extra-node]:after {
+          display: none;
         }
       }
     }

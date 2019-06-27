@@ -1,30 +1,21 @@
 <template>
   <div class="myInquiry">
+    <common-title title="我的询价">
+      <div slot="titleRight" class="right-box">
+        <ul>
+          <li :class="isShowInfo.current == 1 ? 'active' : ''" @click="tab(1)">
+            报价中({{ quoting }})
+          </li>
+          <li :class="isShowInfo.current == 2 ? 'active' : ''" @click="tab(2)">
+            已报价({{ quoted }})
+          </li>
+          <li :class="isShowInfo.current == 3 ? 'active' : ''" @click="tab(3)">
+            已关闭({{ closed }})
+          </li>
+        </ul>
+      </div>
+    </common-title>
     <div v-if="!isLoading">
-      <common-title title="我的询价">
-        <div slot="titleRight" class="right-box">
-          <ul>
-            <li
-              :class="isShowInfo.current == 1 ? 'active' : ''"
-              @click="tab(1)"
-            >
-              报价中({{ quoting }})
-            </li>
-            <li
-              :class="isShowInfo.current == 2 ? 'active' : ''"
-              @click="tab(2)"
-            >
-              已报价({{ quoted }})
-            </li>
-            <li
-              :class="isShowInfo.current == 3 ? 'active' : ''"
-              @click="tab(3)"
-            >
-              已关闭({{ closed }})
-            </li>
-          </ul>
-        </div>
-      </common-title>
       <div class="listContainer">
         <div class="selectInfoBox">
           <div class="selectInfo">
@@ -61,62 +52,72 @@
             <a-button class="clear" @click="clearData">清除</a-button>
           </div>
         </div>
-        <div class="listContent">
-          <list-title :titleArr="titleArr"></list-title>
-          <ul v-if="data.length > 0">
-            <li v-for="item in data" :key="item.id">
-              <inquiry-item
-                :data="item"
-                :checkedList="selectDatas"
-                v-on:getChecked="getChecked"
-                :isShowInfo="isShowInfo"
-                v-on:getIsDelete="getIsDelete"
-              ></inquiry-item>
-            </li>
-          </ul>
-          <no-data v-else text="暂无数据"></no-data>
+        <list-title :titleArr="titleArr"></list-title>
+        <div v-if="!isInquiryLoading">
+          <div class="listContent">
+            <ul v-if="data.length > 0">
+              <li v-for="item in data" :key="item.id">
+                <inquiry-item
+                  :data="item"
+                  :checkedList="selectDatas"
+                  v-on:getChecked="getChecked"
+                  :isShowInfo="isShowInfo"
+                  v-on:getIsDelete="getIsDelete"
+                ></inquiry-item>
+              </li>
+            </ul>
+            <no-data v-else text="暂无数据"></no-data>
+          </div>
+          <div class="tfooter">
+            <check-all
+              :amount="selectArr.length"
+              :checkAll="checkAll"
+              :deleteText="isShowInfo.current"
+              v-on:isCheckAll="isCheckAllMethod"
+              v-on:isDelete="getCheckDelete"
+              v-if="data.length > 0"
+              :class="isShowInfo.current != 1 ? 'checkAllStyle' : ''"
+            >
+              <div slot="right-box" class="right-box">
+                <a-button
+                  type="primary"
+                  :loading="quoteLoading"
+                  class="turnMyQuote"
+                  v-if="isShowInfo.current == 2"
+                  @click="turnMyQuote"
+                >
+                  转为我的报价
+                </a-button>
+                <a-button
+                  type="primary"
+                  :loading="orderLoading"
+                  class="submitOrder"
+                  v-if="isShowInfo.current == 2"
+                  @click="submitOrder"
+                >
+                  提交订单
+                </a-button>
+                <a-button
+                  type="primary"
+                  :loading="loading"
+                  :class="['submit', products.length > 0 ? 'active' : '']"
+                  v-if="isShowInfo.current == 3"
+                  @click="getQuote"
+                >
+                  一键获取报价
+                </a-button>
+              </div>
+            </check-all>
+          </div>
+          <pagination
+            :data="paginationData"
+            v-on:onPaginationChange="getPaginationChange"
+            v-if="paginationData.count != 0"
+            ref="pagination"
+          ></pagination>
         </div>
-        <div class="tfooter">
-          <check-all
-            :amount="selectArr.length"
-            :checkAll="checkAll"
-            :deleteText="isShowInfo.current"
-            v-on:isCheckAll="isCheckAllMethod"
-            v-on:isDelete="getCheckDelete"
-            v-if="data.length > 0"
-            :class="isShowInfo.current != 1 ? 'checkAllStyle' : ''"
-          >
-            <div slot="right-box" class="right-box">
-              <div
-                class="turnMyQuote"
-                v-if="isShowInfo.current == 2"
-                @click="turnMyQuote"
-              >
-                转为我的报价
-              </div>
-              <div
-                class="submitOrder"
-                v-if="isShowInfo.current == 2"
-                @click="submitOrder"
-              >
-                提交订单
-              </div>
-              <div
-                :class="['submit', products.length > 0 ? 'active' : '']"
-                v-if="isShowInfo.current == 3"
-                @click="getQuote"
-              >
-                一键获取报价
-              </div>
-            </div>
-          </check-all>
-        </div>
+        <loading v-else></loading>
       </div>
-      <pagination
-        :data="paginationData"
-        v-on:onPaginationChange="getPaginationChange"
-        v-if="paginationData.count != 0"
-      ></pagination>
       <side-bar v-show="isShowInfo.current == 1" />
     </div>
     <loading v-else></loading>
@@ -136,7 +137,11 @@
   export default {
     data() {
       return {
+        loading: false,
+        quoteLoading: false,
+        orderLoading: false,
         isLoading: true,
+        isInquiryLoading: true,
         isShowInfo: {
           isDetail: false,
           isShow: false,
@@ -200,12 +205,14 @@
       turnMyQuote() {
         console.log(this.products);
         if (this.products.length > 0) {
+          this.quoteLoading = true;
           _getData("/quotation/toMyQuotation", {
             param: {
               ids: this.products.join(",")
             }
           }).then(data => {
             console.log(data);
+            this.quoteLoading = false;
             if (data.code != 500) {
               let { href } = this.$router.resolve({
                 path: `editQuote/${data.id}`,
@@ -226,6 +233,7 @@
           this.$message.warning("请选择产品", 1);
           return;
         } else {
+          this.loading = true;
           let params = [];
           _.map(this.selectDatas, o => {
             let selectProducts = [];
@@ -252,9 +260,19 @@
           console.log(this.selectDatas);
           _getData("/enquiryPlus/addEnquiry", { param: params }).then(data => {
             console.log("一键获取报价：", data);
-            this.isShowInfo.current = 1;
-            this.searchParams.status = 1;
-            this.getInquiryList();
+            this.loading = false;
+            if (data.code != 500) {
+              this.isShowInfo.current = 1;
+              this.searchParams.status = 1;
+              this.searchParams.page = 1;
+              this.getInquiryList().then(() => {
+                this.$nextTick(() => {
+                  if (this.$refs.pagination) {
+                    this.$refs.pagination.$data.current = 1;
+                  }
+                });
+              });
+            }
           });
         }
       },
@@ -273,10 +291,12 @@
       submitOrder() {
         console.log(this.products);
         if (this.products.length > 0) {
+          this.orderLoading = true;
           let { href } = this.$router.resolve({
             path: `submitOrder/${this.products.join(",")}`,
             query: { keyId: 2 }
           });
+          this.orderLoading = false;
           window.open(href, "_blank");
         } else {
           this.$message.warning("请选择产品", 1);
@@ -285,7 +305,14 @@
       },
       searchData() {
         console.log(this.searchParams);
-        this.getInquiryList();
+        this.searchParams.page = 1;
+        this.getInquiryList().then(() => {
+          this.$nextTick(() => {
+            if (this.$refs.pagination) {
+              this.$refs.pagination.$data.current = 1;
+            }
+          });
+        });
       },
       clearData() {
         this.searchParams.enquirySn = "";
@@ -298,6 +325,7 @@
         this.searchParams.endTime = val[1];
       },
       tab(tabVal) {
+        this.searchParams.page = 1;
         this.isShowInfo.current = tabVal;
         this.searchParams.status = tabVal;
         if (tabVal == 2) {
@@ -323,7 +351,13 @@
             "操作"
           ];
         }
-        this.getInquiryList();
+        this.getInquiryList().then(() => {
+          this.$nextTick(() => {
+            if (this.$refs.pagination) {
+              this.$refs.pagination.$data.current = 1;
+            }
+          });
+        });
       },
       getChecked(val) {
         console.log("订单复选框做选择的值：", val);
@@ -380,8 +414,9 @@
         }
       },
       async getInquiryList() {
-        return await _getData("/enquiryPlus/enquiryList", this.searchParams).then(
-          data => {
+        this.isInquiryLoading = true;
+        return await _getData("/enquiryPlus/enquiryList", this.searchParams)
+          .then(data => {
             console.log("获取询价管理的列表：", data);
             this.products = [];
             this.allProducts = [];
@@ -394,8 +429,10 @@
                 this.allProducts.push(val.id);
               }
             });
-          }
-        );
+          })
+          .then(() => {
+            this.isInquiryLoading = false;
+          });
       },
       async getInquiryNumber() {
         return await _getData("/enquiryPlus/enquiryCount", {
@@ -566,8 +603,11 @@
       /deep/.listTitle {
         ul {
           li {
+            &:nth-child(2) {
+              width: 145px;
+            }
             &:nth-child(3) {
-              width: 78px;
+              width: 88px;
             }
             &:nth-child(4) {
               width: 80px;
@@ -601,7 +641,14 @@
         display: flex;
         font-weight: 600;
         font-size: 14px;
-        color: #ffffff;
+        .ant-btn {
+          border: none;
+          border-radius: 0;
+          color: #ffffff;
+        }
+        [ant-click-animating-without-extra-node]::after {
+          display: none;
+        }
         .turnMyQuote {
           width: 132px;
           height: 42px;

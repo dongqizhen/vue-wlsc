@@ -129,8 +129,18 @@
       },
       openMerchant() {
         if (this.$getLocalStorage()) {
-          let { href } = this.$router.resolve({ path: "/merchant" });
-          window.open(href, "_blank");
+          _getData("/user/getUser", {})
+            .then(data => {
+              if (data.code == 500) {
+                return;
+              } else {
+                this.changeUserShopInfoState(data);
+              }
+            })
+            .then(() => {
+              let { href } = this.$router.resolve({ path: "/merchant" });
+              window.open(href, "_blank");
+            });
         } else {
           this.$router.push("/login");
         }
