@@ -4,13 +4,16 @@
       <common-title title="消息中心"></common-title>
       <div class="shopInfo">
         <div v-if="sender == 'user'">
-          <div class="img-box">
-            <img :src="shopDetail.image" alt="" />
+          <div v-if="!shopIsLoading">
+            <div class="img-box">
+              <img :src="shopDetail.image" alt="" />
+            </div>
+            <div class="right user">
+              <h3>{{ shopDetail.shopName }}</h3>
+              <p></p>
+            </div>
           </div>
-          <div class="right">
-            <h3>{{ shopDetail.shopName }}</h3>
-            <p></p>
-          </div>
+          <loading v-else :number="1" :rows="2" avatar></loading>
         </div>
         <div v-else>
           <div class="img-box store">
@@ -32,74 +35,92 @@
             </p>
           </div>
         </div>
-        <span v-if="sender == 'user'">进入店铺</span>
+        <router-link
+          v-if="sender == 'user'"
+          tag="span"
+          :to="{
+            path: '/shopDetails',
+            query: {
+              nav_index: 3,
+              shopId: $route.query.shopId,
+              shopName: shopDetail.shopName
+            }
+          }"
+        >
+          <a target="_blank">
+            进入店铺
+          </a>
+        </router-link>
       </div>
     </div>
     <div class="reply">
       <h2>最新回复</h2>
       <div class="replay-content">
-        <ul
-          v-if="
-            (sender == 'user' && firstMessage) ||
-              (sender == 'store' && replyList.length)
-          "
-        >
-          <li v-for="item in replyList" :key="item.id">
-            <div class="img-box">
-              <img :src="item.senderImage" v-if="item.senderImage" />
-              <svg class="icon" aria-hidden="true" v-else>
-                <use xlink:href="#iconweidenglutouxiang"></use>
-              </svg>
-            </div>
-            <div class="right">
-              <h3>
-                {{ item.senderName }}<span>{{ item.createdOn }}</span>
-              </h3>
-              <p>
-                {{ item.content }}
-              </p>
-            </div>
-            <a-button
-              v-if="$userid == item.sendUserId"
-              @click="delMessage(item)"
-            >
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconshanchu"></use>
-              </svg>
-              删除
-            </a-button>
-          </li>
-          <li v-if="sender == 'user'">
-            <div class="img-box">
-              <img
-                :src="firstMessage.senderImage"
-                v-if="firstMessage.senderImage"
-              />
-              <svg class="icon" aria-hidden="true" v-else>
-                <use xlink:href="#iconweidenglutouxiang"></use>
-              </svg>
-            </div>
-            <div class="right">
-              <h3>
-                {{ firstMessage.senderName
-                }}<span>{{ firstMessage.createdOn }}</span>
-              </h3>
-              <p>
-                {{ firstMessage.content }}
-              </p>
-            </div>
-            <a-button
-              v-if="$userid == firstMessage.sendUserId"
-              @click="delMessage(firstMessage)"
-            >
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#iconshanchu"></use>
-              </svg>
-              删除
-            </a-button>
-          </li>
-        </ul>
-        <no-data v-else type="no-message" text="暂无消息"></no-data>
+        <div v-if="!isLoading">
+          <ul
+            v-if="
+              (sender == 'user' && firstMessage) ||
+                (sender == 'store' && replyList.length)
+            "
+          >
+            <li v-for="item in replyList" :key="item.id">
+              <div class="img-box">
+                <img :src="item.senderImage" v-if="item.senderImage" />
+                <svg class="icon" aria-hidden="true" v-else>
+                  <use xlink:href="#iconweidenglutouxiang"></use>
+                </svg>
+              </div>
+              <div class="right">
+                <h3>
+                  {{ item.senderName }}<span>{{ item.createdOn }}</span>
+                </h3>
+                <p>
+                  {{ item.content }}
+                </p>
+              </div>
+              <a-button
+                v-if="$userid == item.sendUserId"
+                @click="delMessage(item)"
+              >
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconshanchu"></use>
+                </svg>
+                删除
+              </a-button>
+            </li>
+            <li v-if="sender == 'user'">
+              <div class="img-box">
+                <img
+                  :src="firstMessage.senderImage"
+                  v-if="firstMessage.senderImage"
+                />
+                <svg class="icon" aria-hidden="true" v-else>
+                  <use xlink:href="#iconweidenglutouxiang"></use>
+                </svg>
+              </div>
+              <div class="right">
+                <h3>
+                  {{ firstMessage.senderName
+                  }}<span>{{ firstMessage.createdOn }}</span>
+                </h3>
+                <p>
+                  {{ firstMessage.content }}
+                </p>
+              </div>
+              <a-button
+                v-if="$userid == firstMessage.sendUserId"
+                @click="delMessage(firstMessage)"
+              >
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#iconshanchu"></use>
+                </svg>
+                删除
+              </a-button>
+            </li>
+          </ul>
+          <no-data v-else type="no-message" text="暂无消息"></no-data>
+        </div>
+        <loading v-else :number="2" :rows="4" avatar></loading>
       </div>
 
       <div class="replay-container">
@@ -128,6 +149,8 @@
         replyList: "",
         firstMessage: "",
         sender: "", //用户类型
+        shopIsLoading: true,
+        isLoading: true,
         sendBtnLoad: false
       };
     },
@@ -163,35 +186,46 @@
           });
       },
       delMessage(item) {
-        _getData("message/deleteChat", {
-          ids: item.id,
-          flag: this.sender
+        _getData("message/deleteChatRecord", {
+          id: item.id
+        }).then(data => {
+          this.$message.success("删除成功");
+          this.getCommentList();
         });
       },
       getCommentList() {
+        this.isLoading = true;
         if (this.sender == "user") {
           _getData("message/beginChat", {
             storeId: this.$route.query.shopId
-          }).then(data => {
-            console.log("消息", data);
-            this.commentData = data;
-            if (!this.firstMessage) {
-              this.firstMessage = data.firstMessage;
-            }
+          })
+            .then(data => {
+              console.log("消息", data);
+              this.commentData = data;
+              if (!this.firstMessage) {
+                this.firstMessage = data.firstMessage;
+              }
 
-            this.replyList = data.replyList;
-          });
+              this.replyList = data.replyList;
+            })
+            .then(() => {
+              this.isLoading = false;
+            });
         } else {
           _getData("message/chatDetail", {
             id: this.$route.query.id, //类型：Number  必有字段  备
             storeId: this.$route.query.shopId
-          }).then(data => {
-            if (!this.firstMessage) {
-              this.firstMessage = data.firstMessage;
-            }
+          })
+            .then(data => {
+              if (!this.firstMessage) {
+                this.firstMessage = data.firstMessage;
+              }
 
-            this.replyList = data.replyList;
-          });
+              this.replyList = data.replyList;
+            })
+            .then(() => {
+              this.isLoading = false;
+            });
         }
       }
     },
@@ -200,9 +234,13 @@
       if (this.sender == "user") {
         _getData("/store/homeStore", {
           storeId: this.$route.query.shopId
-        }).then(data => {
-          this.shopDetail = data;
-        });
+        })
+          .then(data => {
+            this.shopDetail = data;
+          })
+          .then(() => {
+            this.shopIsLoading = false;
+          });
       }
       this.getCommentList();
     }
@@ -225,6 +263,10 @@
         align-items: center;
         justify-content: space-between;
         > div {
+          display: flex;
+          width: 100%;
+        }
+        > div > div {
           display: flex;
           .img-box {
             height: 46px;
@@ -269,6 +311,10 @@
               color: #333333;
               width: 688px;
             }
+            &.user {
+              display: flex;
+              align-items: center;
+            }
           }
           &:last-child {
             border-bottom: 0;
@@ -284,11 +330,14 @@
           border: 1px solid #f5a623;
           border-radius: 20.5px;
           font-size: 15px;
-          color: #f5a623;
-          font-weight: 600;
-          cursor: pointer;
           &:hover {
             opacity: 0.7;
+          }
+          font-weight: 600;
+          cursor: pointer;
+          a {
+            color: #f5a623;
+            text-decoration: none;
           }
         }
       }
@@ -314,6 +363,9 @@
         border-bottom: 1px solid #dddddd;
         .no-data {
           height: 100%;
+        }
+        .loading {
+          padding: 0 20px;
         }
         &::-webkit-scrollbar {
           width: 5px;

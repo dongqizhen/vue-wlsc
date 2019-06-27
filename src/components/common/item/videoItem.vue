@@ -92,6 +92,9 @@
     data() {
       return {};
     },
+    created() {
+      console.log(this.item);
+    },
     components: {
       menuVue
     },

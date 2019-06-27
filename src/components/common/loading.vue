@@ -74,6 +74,9 @@
       display: flex;
       flex-direction: column;
       /deep/ .ant-skeleton {
+        .ant-skeleton-header {
+          padding-top: 10px;
+        }
       }
     }
   }

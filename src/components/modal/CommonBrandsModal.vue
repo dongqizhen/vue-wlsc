@@ -24,10 +24,7 @@
                 @click="delHandleClick(item)"
               >
                 <div class="img_box">
-                  <img
-                    :src="item.list_pic_url || item.app_list_pic_url"
-                    alt=""
-                  />
+                  <img :src="item.app_list_pic_url" alt="" />
                 </div>
                 {{ item.name }}
                 <i>
@@ -91,7 +88,7 @@
                 @click="handleClick(item)"
               >
                 <div class="img_box">
-                  <img :src="item.list_pic_url" alt="" />
+                  <img :src="item.app_list_pic_url" alt="" />
                 </div>
                 {{ item.name }}
                 <i>

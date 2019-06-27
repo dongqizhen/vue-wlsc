@@ -12,7 +12,7 @@
           </div>
           <div class="login-box">
             <router-view></router-view>
-            <div class="wechat">
+            <!-- <div class="wechat">
               <span></span>
               <p @mouseenter="isHover = true" @mouseleave="isHover = false">
                 <svg class="icon" aria-hidden="true">
@@ -22,7 +22,7 @@
                 微信登录
               </p>
               <span></span>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="slogan">

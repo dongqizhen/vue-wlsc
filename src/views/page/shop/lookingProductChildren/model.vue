@@ -35,8 +35,8 @@
             ref="shopNav"
           ></shop-nav-vue>
           <div class="main-content">
-            <div v-if="shopList.length">
-              <div v-if="!shopIsloading">
+            <div v-if="!shopIsloading">
+              <div v-if="shopList.length">
                 <ul v-if="startWith('店铺')">
                   <shop-item-vue
                     v-for="item in shopList"
@@ -59,15 +59,30 @@
                     :item="item"
                   ></article-item-vue>
                 </ul>
+                <ul v-else-if="startWith('视频')">
+                  <video-item-vue
+                    v-for="item in shopList"
+                    :key="item.id"
+                    :item="item"
+                  ></video-item-vue>
+                </ul>
+                <ul v-else-if="startWith('案例')">
+                  <case-item-vue
+                    v-for="item in shopList"
+                    :key="item.id"
+                    :item="item"
+                  ></case-item-vue>
+                </ul>
               </div>
-              <loading-vue v-else></loading-vue>
-              <pagination-vue
-                :data="data"
-                v-on:onPaginationChange="onPaginationChange"
-                ref="pagination"
-              ></pagination-vue>
+              <no-data v-else text="暂无数据"></no-data>
             </div>
-            <no-data v-else text="暂无数据"></no-data>
+            <loading-vue v-else></loading-vue>
+            <pagination-vue
+              v-if="!shopIsloading && shopList.length"
+              :data="data"
+              v-on:onPaginationChange="onPaginationChange"
+              ref="pagination"
+            ></pagination-vue>
           </div>
         </div>
         <div class="right">
@@ -195,6 +210,7 @@
         )
           .then(data => {
             this.shopList = data.result.videolist;
+            console.log(this.shopList);
           })
           .then(() => {
             this.$nextTick().then(() => {
@@ -503,7 +519,7 @@
         align-items: center;
         margin-bottom: 12px;
         position: absolute;
-        right: 0;
+        right: -80px;
         top: -2.5px;
         a {
           display: flex;
@@ -551,6 +567,9 @@
             > li {
               margin-right: 7.5px;
               margin-bottom: 10px;
+              &.case-item {
+                width: 100%;
+              }
             }
           }
           /deep/ .loading {

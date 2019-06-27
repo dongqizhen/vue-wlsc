@@ -18,7 +18,7 @@
         </h2>
         <div class="product_container">
           <div class="swiper-container nav_slide">
-            <div class="swiper-wrapper">
+            <div class="swiper-wrapper" ref="nav">
               <div
                 class="swiper-slide"
                 v-for="(item, i) in navArr"
@@ -63,7 +63,11 @@
                     <a target="_blank">
                       <div class="img_box">
                         <img
-                          :src="item.list_pic_url || item.app_list_pic_url"
+                          :src="
+                            defaultsVal
+                              ? item.new_pic_url
+                              : item.app_list_pic_url
+                          "
                           alt=""
                         />
                       </div>
@@ -128,6 +132,25 @@
           this.getCommonBrand();
         }
         this.defaultsVal = i;
+        this.tap(i);
+      },
+      init() {
+        this.nav = this.$refs.nav;
+        //获取第一个slide的宽
+        let navSlideWidth = this.nav.firstChild.clientWidth;
+        //获取bar元素
+        console.log(this.nav);
+        this.bar = this.nav.querySelector(".bar");
+        //初始化bar的宽度
+        this.bar.style.width = navSlideWidth + "px";
+      },
+      tap(i) {
+        this.bar.style.width =
+          this.nav.querySelectorAll(".swiper-slide")[i].clientWidth + "px";
+        this.bar.style.transform =
+          "translateX(" +
+          this.nav.querySelectorAll(".swiper-slide")[i].offsetLeft +
+          "px)";
       },
       async getCommonBrand() {
         return await _getData("ubrand/list", {})
@@ -170,72 +193,74 @@
         this.getCommonBrand();
       }
       this.getCommonBrandCategory();
+      this.$nextTick().then(() => {
+        this.init();
+        new Swiper(".brand-category .swiper-container.nav_slide", {
+          slidesPerView: "auto",
+          // freeMode: true,
+          direction: "horizontal",
+          slideToClickedSlide: true,
+          on: {
+            init: function() {
+              this.navSlideWidth = this.slides[0].clientWidth; //导航字数需要统一,每个导航宽度一致
 
-      new Swiper(".brand-category .swiper-container.nav_slide", {
-        slidesPerView: "auto",
-        // freeMode: true,
-        direction: "horizontal",
-        slideToClickedSlide: true,
-        on: {
-          init: function() {
-            this.navSlideWidth = this.slides[0].clientWidth; //导航字数需要统一,每个导航宽度一致
+              // this.bar = this.$el.find(".bar");
 
-            this.bar = this.$el.find(".bar");
+              // this.bar.transition(300);
+              this.navSum = this.slides[this.slides.length - 1].offsetLeft; //最后一个slide的位置
 
-            this.bar.transition(300);
-            this.navSum = this.slides[this.slides.length - 1].offsetLeft; //最后一个slide的位置
+              this.clientWidth = parseInt(this.$wrapperEl[0].clientWidth); //Nav的可视宽度
 
-            this.clientWidth = parseInt(this.$wrapperEl[0].clientWidth); //Nav的可视宽度
+              this.navWidth = this.navSlideWidth * this.slides.length;
+            },
+            touchStart: function() {
+              this.updateSlides();
+            },
+            tap: function(e) {
+              //console.log(this);
+              if (this.clickedIndex == undefined) return;
+              // mySwiper.slideTo(this.clickIndex, 0);
+              const activeSlidePosition = this.slides[this.clickedIndex]
+                .offsetLeft;
 
-            this.navWidth = this.navSlideWidth * this.slides.length;
-          },
-          touchStart: function() {
-            this.updateSlides();
-          },
-          tap: function(e) {
-            //console.log(this);
-            if (this.clickedIndex == undefined) return;
-            // mySwiper.slideTo(this.clickIndex, 0);
-            const activeSlidePosition = this.slides[this.clickedIndex].offsetLeft;
+              // this.bar.transform("translateX(" + activeSlidePosition + "px)");
 
-            this.bar.transform("translateX(" + activeSlidePosition + "px)");
+              // console.log(this.slides[this.clickedIndex]);
+              // this.slides[this.clickedIndex].classList.add("active");
+              //导航居中
+              // let navActiveSlideLeft = this.slides[this.clickedIndex].offsetLeft; //activeSlide距左边的距离
+              this.setTransition(300);
 
-            // console.log(this.slides[this.clickedIndex]);
-            // this.slides[this.clickedIndex].classList.add("active");
-            //导航居中
-            // let navActiveSlideLeft = this.slides[this.clickedIndex].offsetLeft; //activeSlide距左边的距离
-            this.setTransition(300);
+              if (this.navWidth <= this.clientWidth) {
+                this.setTranslate(0);
+                return;
+              }
 
-            if (this.navWidth <= this.clientWidth) {
-              this.setTranslate(0);
-              return;
-            }
-
-            if (
-              activeSlidePosition <
-              (this.clientWidth - parseInt(this.navSlideWidth)) / 2
-            ) {
-              this.setTranslate(0);
-            } else if (
-              activeSlidePosition >
-              this.navWidth -
-                (parseInt(this.navSlideWidth) + this.clientWidth) / 2
-            ) {
-              console.log(
-                activeSlidePosition,
-                this.navSlideWidth,
-                this.clientWidth
-              );
-              this.setTranslate(this.clientWidth - this.navWidth);
-            } else {
-              this.setTranslate(
-                (this.clientWidth - parseInt(this.navSlideWidth)) / 2 -
-                  activeSlidePosition +
-                  parseInt(this.marginLeft)
-              );
+              if (
+                activeSlidePosition <
+                (this.clientWidth - parseInt(this.navSlideWidth)) / 2
+              ) {
+                this.setTranslate(0);
+              } else if (
+                activeSlidePosition >
+                this.navWidth -
+                  (parseInt(this.navSlideWidth) + this.clientWidth) / 2
+              ) {
+                console.log(
+                  activeSlidePosition,
+                  this.navSlideWidth,
+                  this.clientWidth
+                );
+                this.setTranslate(this.clientWidth - this.navWidth);
+              } else {
+                this.setTranslate(
+                  (this.clientWidth - parseInt(this.navSlideWidth)) / 2 -
+                    activeSlidePosition
+                );
+              }
             }
           }
-        }
+        });
       });
     }
   };
@@ -338,6 +363,7 @@
               width: 180px;
               background: $theme-color;
               bottom: -0.5px;
+              transition: transform 0.3s;
               i {
                 display: flex;
                 position: absolute;

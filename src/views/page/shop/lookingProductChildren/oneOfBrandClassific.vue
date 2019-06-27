@@ -82,7 +82,11 @@
                 <a>
                   <div class="img_box">
                     <img
-                      :src="item.list_pic_url || item.app_list_pic_url"
+                      :src="
+                        defaultsNav == '一线品牌'
+                          ? item.new_pic_url
+                          : item.app_list_pic_url
+                      "
                       alt=""
                     />
                   </div>
