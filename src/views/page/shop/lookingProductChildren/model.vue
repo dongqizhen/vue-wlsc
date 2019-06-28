@@ -180,6 +180,7 @@
           }
         )
           .then(data => {
+            this.data = data;
             this.shopList = data.result.articlelist;
           })
           .then(() => {
@@ -209,8 +210,8 @@
           }
         )
           .then(data => {
+            this.data = data;
             this.shopList = data.result.videolist;
-            console.log(this.shopList);
           })
           .then(() => {
             this.$nextTick().then(() => {
@@ -243,6 +244,7 @@
           }
         )
           .then(data => {
+            this.data = data;
             this.shopList = data.result.maintenancelist;
           })
           .then(() => {
@@ -313,7 +315,7 @@
         return await _getData("queryStore", {
           modelId: this.$route.query.modelId,
           currentPage,
-          countPerPage: 6,
+          countPerPage: 20,
           sort: this.shopSort,
           order: "asc"
         })
@@ -338,7 +340,7 @@
           attributeCategoryId: this.attributeCategoryId,
           currentPage,
           modelId: this.$route.query.modelId,
-          countPerPage: 6,
+          countPerPage: 20,
           sort: this.goodSort,
           order: "asc"
         })
@@ -559,16 +561,26 @@
           margin-top: 4px;
         }
         .main-content {
-          margin-right: -7.5px;
+          margin-right: -20px;
           > div > div > ul {
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-start;
+            //  width: 776px;
             > li {
               margin-right: 7.5px;
               margin-bottom: 10px;
               &.case-item {
                 width: 100%;
+                width: 776px;
+              }
+              &.article-item {
+                margin-right: 0;
+                width: 776px;
+              }
+              &.video-item {
+                margin-right: 21px;
+                margin-bottom: 20px;
               }
             }
           }
@@ -580,6 +592,9 @@
             background: #ffffff;
             width: 776px;
           }
+        }
+        .paginationBox {
+          margin-bottom: 0;
         }
       }
       .right {
