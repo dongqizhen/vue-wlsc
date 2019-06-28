@@ -131,7 +131,7 @@
         } else {
           this.itemData.unitPrice = this.itemData.unitPrice.slice(
             0,
-            this.itemData.unitPrice.length - 1
+            this.itemData.unitPrice.indexOf(value)
           );
         }
         this.$emit("getData", { data: this.itemData });

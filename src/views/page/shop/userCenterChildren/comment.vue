@@ -10,7 +10,7 @@
       ></product-item-comment>
     </div>
     <div class="btn">
-      <a-button @click="submitComment">提交评价</a-button>
+      <a-button :loading="loading" @click="submitComment">提交评价</a-button>
     </div>
   </div>
 </template>
@@ -22,6 +22,7 @@
   export default {
     data() {
       return {
+        loading: false,
         data: [],
         flag: true
       };
@@ -61,16 +62,18 @@
         });
         console.log(commentList);
         if (this.flag) {
+          this.loading = true;
           _getData("/commentPlus/comment", {
             orderId: this.$route.params.id,
             commentList: commentList
           }).then(data => {
             console.log("评价是否成功：", data);
+            this.loading = false;
             if (data.code != 500) {
               this.$message.success("评论成功", 1);
               this.$router.replace({
                 path: "/userCenter/myOrder",
-                query: { status: 5 }
+                query: { status: 5, keyId: 3, topTitle: "sub1" }
               });
             }
           });
@@ -119,6 +122,10 @@
         color: #ffffff;
         font-weight: 600;
         border: 1px solid #f5a623;
+        &:hover {
+          cursor: pointer;
+          opacity: 0.7;
+        }
       }
     }
   }

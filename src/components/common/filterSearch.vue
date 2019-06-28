@@ -4,7 +4,11 @@
       <div class="common">
         <div class="left-box">关键词</div>
         <div class="right-box">
-          <a-input placeholder="请输入关键词" v-model="submitData.value" />
+          <a-input
+            placeholder="请输入关键词"
+            v-model="submitData.value"
+            @pressEnter="searchData"
+          />
         </div>
       </div>
       <div class="common">

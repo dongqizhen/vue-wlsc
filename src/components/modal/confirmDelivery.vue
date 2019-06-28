@@ -10,7 +10,8 @@
             <div class="right-box">
               <a-input
                 placeholder="请输入快递公司"
-                v-model="courierCompany"
+                v-model.trim="courierCompany"
+                ref="courierCompany"
               ></a-input>
             </div>
           </div>
@@ -21,13 +22,14 @@
             <div class="right-box">
               <a-input
                 placeholder="请输入快递单号"
-                v-model="courierNumber"
+                v-model.trim="courierNumber"
+                ref="courierNumber"
               ></a-input>
             </div>
           </div>
         </div>
         <div class="btn">
-          <a-button @click="sureOrder">确认发货</a-button>
+          <a-button :loading="loading" @click="sureOrder">确认发货</a-button>
           <a-button @click="visible = false">取消</a-button>
         </div>
       </div>
@@ -54,6 +56,7 @@
   export default {
     data() {
       return {
+        loading: false,
         courierCompany: "",
         courierNumber: "",
         visible: false,
@@ -98,21 +101,27 @@
       },
       sureOrder() {
         if (!this.courierCompany) {
-          alert("请输入快递公司");
+          this.$message.warning("请输入快递公司");
+          this.$refs.courierCompany.focus();
           return;
         }
         if (!this.courierNumber) {
-          alert("请输入快递单号");
+          this.$message.warining("请输入快递单号");
+          this.$refs.courierNumber.focus();
           return;
         }
+        this.loading = true;
         _getData("/order/affirmOrder", {
           orderId: this.orderId,
           shippingName: this.courierCompany,
           shippingNo: this.courierNumber
         }).then(data => {
           console.log(data);
-          this.$emit("returnValue", 3); //3表示已发货，进入待收货状态
-          this.visible = false;
+          this.loading = false;
+          if (data.code != 500) {
+            this.$emit("returnValue", 3); //3表示已发货，进入待收货状态
+            this.visible = false;
+          }
         });
       }
     },

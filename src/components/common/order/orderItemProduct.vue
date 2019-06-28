@@ -28,6 +28,10 @@
                   ? "--"
                   : ""
                 : ""
+              : data.order_status == 7
+              ? isShowInfo.isDetail
+                ? "--"
+                : ""
               : "提交支付证明"
             : "查看支付证明"
         }}
@@ -83,17 +87,9 @@
             !isShowInfo.isMerchant &&
             !isShowInfo.isDetail
         "
+        @click="toComment(data.id)"
       >
-        <router-link
-          tag="a"
-          target="_blank"
-          :to="{
-            path: `comment/${data.id}`,
-            query: { keyId: 3, topTitle: 'sub1' }
-          }"
-        >
-          评价
-        </router-link>
+        评价
       </div>
       <div
         class="sure"
@@ -200,6 +196,7 @@
   export default {
     data() {
       return {
+        sureOrderLoading: false,
         visible: false,
         sureVisible: false,
         commentVisible: false,
@@ -230,6 +227,21 @@
       }
     },
     methods: {
+      toComment(orderId) {
+        _getData("/order/orderDetails", { id: orderId }).then(data => {
+          console.log("获取订单详情：", data);
+          if (data.order_status == 5) {
+            this.$message.warning("此订单已经评价，无需在评价");
+            this.$emit("returnValue", 4);
+          } else {
+            const { href } = this.$router.resolve({
+              path: `comment/${orderId}`,
+              query: { keyId: 3, topTitle: "sub1" }
+            });
+            window.open(href, "_blank");
+          }
+        });
+      },
       turnToProductDetail(id, storeId) {
         let { href } = this.$router.resolve({
           path: `/details/productDetails/${id}`,
@@ -239,14 +251,18 @@
       },
       //确认订单
       confirmOrder(orderId) {
-        console.log(orderId);
-        _getData("/order/updateOrderStatus", {
-          orderId: orderId,
-          orderStatus: "connect"
-        }).then(data => {
-          console.log(data);
-          this.$emit("returnValue", 2); //2表示已经接单，进入待发货状态
-        });
+        if (!this.sureOrderLoading) {
+          console.log(orderId);
+          this.sureOrderLoading = true;
+          _getData("/order/updateOrderStatus", {
+            orderId: orderId,
+            orderStatus: "connect"
+          }).then(data => {
+            console.log(data);
+            this.sureOrderLoading = false;
+            this.$emit("returnValue", 2); //2表示已经接单，进入待发货状态
+          });
+        }
       },
       //取消订单
       cancelOrder(orderId) {

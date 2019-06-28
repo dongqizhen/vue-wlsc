@@ -243,7 +243,6 @@
         this.getOrderData.orderStatus = 5;
         this.defaultActiveKey = 5;
         this.isShowInfo.current = -1;
-        this.$router.replace({ path: "/userCenter/myOrder" });
       }
       _getDataAll([this.getOrderList(), this.getOrderNumber()]).then(() => {
         this.isLoading = false;

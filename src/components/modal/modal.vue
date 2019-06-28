@@ -582,7 +582,7 @@
           .btn {
             .ant-btn {
               height: 42px;
-              width: 115px;
+              // width: 115px;
               font-size: 16px;
               color: #666666;
               border: 1px solid #cccccc;
@@ -631,7 +631,7 @@
             }
           }
           .ant-btn {
-            padding: 0 10px;
+            padding: 0 24px;
           }
         }
       }
@@ -1068,6 +1068,9 @@
             color: #666;
             border: 1px solid #ddd;
           }
+          &:hover {
+            opacity: 0.7;
+          }
         }
       }
     }
@@ -1136,6 +1139,7 @@
       .btn {
         display: flex;
         justify-content: center;
+        align-items: center;
         margin-bottom: 30px;
         .ant-btn {
           width: 115px;
@@ -1152,6 +1156,9 @@
           &:last-child {
             color: #666;
             border: 1px solid #ddd;
+          }
+          &:hover {
+            opacity: 0.7;
           }
         }
       }

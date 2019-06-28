@@ -362,6 +362,9 @@
           font-size: 14px;
           color: #fff;
           margin-left: 58px;
+          &:hover {
+            opacity: 0.7;
+          }
         }
       }
     }

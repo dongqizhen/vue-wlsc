@@ -11,6 +11,7 @@
                 <a-input
                   placeholder="请输入客户名称"
                   v-model="param.clenteleName"
+                  @pressEnter="search"
                 />
               </div>
             </div>
@@ -20,6 +21,7 @@
                 <a-input
                   placeholder="请输入商品名称"
                   v-model="param.goodsName"
+                  @pressEnter="search"
                 />
               </div>
             </div>

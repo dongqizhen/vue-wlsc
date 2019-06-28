@@ -7,14 +7,14 @@
           报价公司
           <a-input
             placeholder="请输入报价公司"
-            v-model="param.clienteleName"
+            v-model="param.offerCompany"
           ></a-input>
         </span>
         <span>
           客户名称
           <a-input
             placeholder="请输入客户名称"
-            v-model="param.offerCompany"
+            v-model="param.clienteleName"
           ></a-input>
         </span>
       </div>
@@ -99,7 +99,7 @@
           "备注",
           "操作"
         ],
-        data: [],
+        data: {},
         sumPrice: 0,
         param: {
           id: this.$route.params.id,
@@ -114,17 +114,22 @@
     },
     methods: {
       save() {
-        this.loading = true;
-        _getData("/quotation/save", { param: this.param }).then(data => {
-          console.log(data);
-          this.loading = false;
-          if (data.code != 500) {
-            this.$router.replace({
-              path: "/userCenter/myQuote",
-              query: { keyId: 4 }
-            });
-          }
-        });
+        if (this.data.goodList.length > 0) {
+          this.loading = true;
+          _getData("/quotation/save", { param: this.param }).then(data => {
+            console.log(data);
+            this.loading = false;
+            if (data.code != 500) {
+              this.$router.replace({
+                path: "/userCenter/myQuote",
+                query: { keyId: 4 }
+              });
+            }
+          });
+        } else {
+          this.$message.warning("请添加商品");
+          return;
+        }
       },
       addCarSuccess(id) {
         if (!this.isLogin) {

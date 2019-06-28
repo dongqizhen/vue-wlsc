@@ -103,8 +103,9 @@
       addMyStore(id) {
         _getData("/collect/add", { typeId: 0, valueId: id }).then(data => {
           console.log("收藏接口：", data);
-          if (data.code == 0) {
+          if (data == "") {
             _.each(this.data.list, o => {
+              console.log(o.goods_id);
               if (o.goods_id == id) {
                 o.isCollection = 1;
               }
@@ -222,6 +223,8 @@
             &:nth-child(5) {
               width: 100px;
               margin-right: 30px;
+              overflow: hidden;
+              word-wrap: break-word;
             }
             &:nth-child(6) {
               width: 80px;

@@ -4,7 +4,9 @@
       <div slot="content" v-if="type != 'login'">
         <div class="alertContent">{{ contentText }}</div>
         <div class="btn">
-          <a-button @click="sureSubmit">确定重新认证</a-button>
+          <a-button type="primary" :loading="loading" @click="sureSubmit"
+            >确定重新认证</a-button
+          >
           <a-button @click="visible = false">取消</a-button>
         </div>
       </div>
@@ -31,6 +33,7 @@
   export default {
     data() {
       return {
+        loading: false,
         visible: false,
         options: {
           title: "提示",
@@ -69,10 +72,12 @@
       ...mapMutations(["changeUserShopInfoState"]),
       sureSubmit() {
         console.log(this.submitData);
+        this.loading = true;
         if (this.submitData.mobile) {
           _getData("/store/updateShopCertification", this.submitData)
             .then(data => {
               console.log(data);
+              this.loading = false;
             })
             .then(() => {
               this.getUserShopInfo();
@@ -81,6 +86,7 @@
           _getData("/store/insertOrUpdateStore", this.submitData)
             .then(data => {
               console.log(data);
+              this.loading = false;
             })
             .then(() => {
               this.getUserShopInfo();
@@ -88,12 +94,14 @@
         }
       },
       getUserShopInfo() {
+        this.loading = true;
         _getData("/user/getUser", {})
           .then(data => {
             console.log("获取用户的店铺开店信息：", data);
             this.changeUserShopInfoState(data);
           })
           .then(() => {
+            this.loading = false;
             this.$message.success("提交修改成功，请耐心等待审核!");
             this.visible = false;
           });
