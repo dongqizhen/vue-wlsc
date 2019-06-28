@@ -102,8 +102,8 @@
           </div>
         </div>
         <div class="btn">
-          <a-button @click="saveAddress">保存修改</a-button>
-          <a-button @click="visible = false">取消</a-button>
+          <a-button type="primary" @click="saveAddress">保存修改</a-button>
+          <a-button type="primary" @click="visible = false">取消</a-button>
         </div>
       </div>
       <div slot="content" v-else>

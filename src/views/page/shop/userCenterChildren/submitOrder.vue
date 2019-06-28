@@ -58,7 +58,9 @@
         <span>
           总额<i>￥{{ sumPrice }}</i>
         </span>
-        <a-button @click="sureSubmit">确认</a-button>
+        <a-button type="primary" :loading="loading" @click="sureSubmit"
+          >确认</a-button
+        >
       </div>
     </div>
     <add-address-modal
@@ -80,6 +82,7 @@
   export default {
     data() {
       return {
+        loading: false,
         visible: false,
         type: "",
         editId: 0,
@@ -115,6 +118,7 @@
     },
     methods: {
       sureSubmit() {
+        this.loading = true;
         _.map(this.userAddressList, val => {
           if (this.current == val.id) {
             this.submitAddressData.consignee = val.userName;
@@ -125,6 +129,7 @@
         });
         if (!this.submitAddressData.mobile) {
           this.$message.warning("请选择地址", 1);
+          this.loading = false;
           return;
         }
         _.map(this.data, o => {
@@ -150,7 +155,10 @@
         console.log(this.submitData);
         _getData("/order/addOrder", { param: this.submitData }).then(data => {
           console.log(data);
-          this.$router.replace({ path: "/userCenter/myOrder" });
+          this.loading = false;
+          if (data.code != 500) {
+            this.$router.replace({ path: "/userCenter/myOrder" });
+          }
         });
       },
       addCarSuccess(id) {
@@ -369,7 +377,13 @@
           font-size: 14px;
           color: #ffffff;
           font-weight: 600;
-          cursor: pointer;
+          &:hover {
+            cursor: pointer;
+            opacity: 0.7;
+          }
+        }
+        [ant-click-animating-without-extra-node]:after {
+          display: none;
         }
       }
     }

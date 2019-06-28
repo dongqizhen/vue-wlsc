@@ -293,6 +293,7 @@
 
 <style scoped lang="scss">
   @import "../../../../assets/scss/_commonScss";
+  @import "../../../../assets/scss/_input";
   .myQuote {
     min-height: 693px;
     background-color: #fff;

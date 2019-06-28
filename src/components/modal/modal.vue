@@ -86,7 +86,6 @@
 
 <style lang="scss">
   @import "../../assets/scss/_commonScss";
-  @import "../../assets/scss/_input";
   body .ant-modal-mask {
     background: rgba(0, 0, 0, 0.17);
   }
@@ -681,25 +680,37 @@
                   width: 240px;
                   height: 31px;
                 }
+                /deep/.ant-input:hover {
+                  border-color: $theme-color;
+                }
+
+                /deep/.ant-input:focus {
+                  border-color: $theme-color;
+                  box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
+                }
               }
             }
             .btn {
+              display: flex;
+              align-items: center;
               margin-top: 30px;
-              margin-left: 72px;
               .ant-btn {
-                padding: 0 24px;
-                margin-right: 7px;
+                background-color: #fff;
+                border-color: #ccc;
+                color: #666;
+                box-shadow: none;
+                width: 70px;
+                font-size: 12px;
                 &:first-child {
-                  border: 1px solid #f5a623;
-                  background-color: #f5a623;
+                  width: 96px;
+                  margin-left: 73px;
+                  margin-right: 10px;
+                  background: #f5a623;
+                  border-color: #f5a623;
                   color: #fff;
-                  font-size: 12px;
                 }
-                &:last-child {
-                  &:hover {
-                    border-color: $theme-color;
-                    color: $theme-color;
-                  }
+                &:hover {
+                  opacity: 0.7;
                 }
               }
             }
@@ -739,6 +750,14 @@
             line-height: 30px;
             font-size: 12px;
             color: #333;
+          }
+          /deep/.ant-input:hover {
+            border-color: $theme-color;
+          }
+
+          /deep/.ant-input:focus {
+            border-color: $theme-color;
+            box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
           }
           .testTrue {
             font-size: 12px;
@@ -867,16 +886,25 @@
       }
     }
     .btn {
+      display: flex;
+      align-items: center;
       .ant-btn {
+        background-color: #fff;
+        border-color: #ccc;
+        color: #666;
+        box-shadow: none;
+        width: 70px;
+        font-size: 12px;
         &:first-child {
-          background: #f5a623;
-          border-radius: 3px;
-          font-size: 12px;
-          color: #ffffff;
-          font-weight: 600;
-          border: 1px solid #f5a623;
+          width: 96px;
           margin-left: 73px;
-          margin-right: 7px;
+          margin-right: 10px;
+          background: #f5a623;
+          border-color: #f5a623;
+          color: #fff;
+        }
+        &:hover {
+          opacity: 0.7;
         }
       }
     }
@@ -907,11 +935,11 @@
               font-size: 12px;
               color: #333;
               &:hover {
-                border-color: $theme-color !important;
+                border-color: $theme-color;
               }
               &:focus {
-                border-color: $theme-color !important;
-                box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2) !important;
+                border-color: $theme-color;
+                box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
               }
             }
             .textArea {
@@ -931,18 +959,22 @@
       }
       .btn {
         .ant-btn {
+          background-color: #fff;
+          border-color: #ccc;
+          color: #666;
+          box-shadow: none;
+          width: 70px;
+          font-size: 12px;
           &:first-child {
-            background: #f5a623;
-            border-radius: 3px;
-            font-size: 12px;
-            color: #ffffff;
-            font-weight: 600;
-            border: 1px solid #f5a623;
+            width: 96px;
             margin-left: 73px;
-            margin-right: 7px;
-            &:hover {
-              opacity: 0.7;
-            }
+            margin-right: 10px;
+            background: #f5a623;
+            border-color: #f5a623;
+            color: #fff;
+          }
+          &:hover {
+            opacity: 0.7;
           }
         }
       }
