@@ -159,7 +159,7 @@ const router = new Router({
                         role: 'Administrator'
                     },
                     component: () =>
-                        import ("../views/page/merchant/merchantChildren/messageCenter"),
+                        import ("../views/page/merchant/merchantChildren/messageCenter")
                 },
                 {
                     path: "messageDetail/:id",
@@ -169,6 +169,15 @@ const router = new Router({
                     },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/messageDetail")
+                }, {
+                    path: 'contactBuyer',
+                    name: '联系买家',
+                    meta: {
+                        role: 'Administrator',
+                        title: '商家中心-联系买家-网来商城'
+                    },
+                    component: () =>
+                        import ('../views/page/merchant/merchantChildren/messageCenterChildren/contactBuyer')
                 }, {
                     path: "changePassword",
                     name: '更改密码',

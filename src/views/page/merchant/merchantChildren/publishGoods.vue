@@ -343,7 +343,17 @@
               }
             }
           } else {
-            this.$message.warning("您的店铺异常，暂不能上传，请联系客服！", 1);
+            if (data.audit_status == 1) {
+              this.$message.warning(
+                "您的店铺正在审核中，暂不能提交商品，请联系管理员！",
+                1
+              );
+            } else if (data.audit_status == 3) {
+              this.$message.warning(
+                "您的店铺未通过审核，暂不能提交商品，请联系管理员！",
+                1
+              );
+            }
             return;
           }
         });

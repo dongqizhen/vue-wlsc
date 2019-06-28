@@ -228,6 +228,7 @@
             this.$message.success("批量删除成功", 1);
             // this.getMessageList();
             // this.getMessageNumber();
+            this.getMessageAll();
           });
         } else {
           this.$message.warning("请选择信息", 1);

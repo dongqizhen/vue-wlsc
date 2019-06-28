@@ -79,7 +79,9 @@
             v-on:isCheckAll="isCheckAllMethod"
           >
             <div slot="right-box" class="right-box">
-              <div
+              <a-button
+                type="primary"
+                :loading="remindLoading"
                 :class="[
                   'commonStyle',
                   data.remind == 1 ? 'disabledStyle' : 'remind'
@@ -88,15 +90,31 @@
                 @click="remindQuote(data.storeId, data.id)"
               >
                 {{ data.remind == 1 ? "已" : "" }}提醒商家报价
-              </div>
+              </a-button>
               <div class="totalInfo" v-if="isShowInfo.current == 2">
                 <span class="totalPrice">
                   报价总金额：<i>¥{{ data.subtotal }}</i>
                 </span>
-                <span class="download" @click="turnMyQuote">转为我的报价</span>
-                <span class="edit" @click="submitOrder">提交订单</span>
+                <a-button
+                  type="primary"
+                  :loading="quoteLoading"
+                  class="download"
+                  @click="turnMyQuote"
+                >
+                  转为我的报价
+                </a-button>
+                <a-button
+                  type="primary"
+                  :loading="orderLoading"
+                  class="edit"
+                  @click="submitOrder"
+                >
+                  提交订单
+                </a-button>
               </div>
-              <div
+              <a-button
+                type="primary"
+                :loading="getQuoteLoading"
                 :class="[
                   'commonStyle',
                   checkedList.length > 0 ? 'remind' : 'disabledStyle'
@@ -105,7 +123,7 @@
                 @click="getQuote"
               >
                 一键获取报价
-              </div>
+              </a-button>
             </div>
           </check-all>
         </div>
@@ -126,6 +144,10 @@
     data() {
       return {
         isLoading: true,
+        remindLoading: false,
+        quoteLoading: false,
+        orderLoading: false,
+        getQuoteLoading: false,
         isShowInfo: {
           isDetail: true,
           isShow: false,
@@ -151,6 +173,7 @@
     },
     methods: {
       turnMyQuote() {
+        this.quoteLoading = true;
         if (this.checkedList.length == 0) {
           this.$message.warning("请选择产品", 1);
           return;
@@ -161,6 +184,7 @@
             }
           }).then(data => {
             console.log(data);
+            this.quoteLoading = false;
             if (data.code != 500) {
               let { href } = this.$router.resolve({
                 path: `/userCenter/editQuote/${data.id}`,
@@ -172,19 +196,23 @@
         }
       },
       submitOrder() {
+        this.orderLoading = true;
         if (this.checkedList.length == 0) {
           this.$message.warning("请选择产品", 1);
+          this.orderLoading = false;
           return;
         } else {
           const { href } = this.$router.resolve({
             path: `/userCenter/submitOrder/${this.checkedList.join(",")}`,
             query: { keyId: 2 }
           });
+          this.orderLoading = false;
           window.open(href, "_blank");
         }
       },
       remindQuote(storeId, enquiryId) {
         if (this.data.remind == 0) {
+          this.remindLoading = true;
           _getData("/message/enquiryRemind", {
             param: {
               storeId: storeId, //备注：商铺id
@@ -192,8 +220,11 @@
             }
           }).then(data => {
             console.log("提醒商家报价：", data);
-            this.$message.success("已提醒商家报价", 1);
-            this.data.remind = 1;
+            this.remindLoading = false;
+            if (data.code != 500) {
+              this.$message.success("已提醒商家报价", 1);
+              this.data.remind = 1;
+            }
           });
         } else {
           this.$message.warning("已提醒商家报价", 1);
@@ -202,6 +233,7 @@
       },
       getQuote() {
         if (this.checkedList.length > 0) {
+          this.getQuoteLoading = true;
           let goodsList = [];
           _.map(this.checkedList, val => {
             _.map(this.data.goodList, o => {
@@ -219,11 +251,14 @@
             param: [{ storeId: this.data.storeId, goodsList: goodsList }]
           }).then(data => {
             console.log("一键获取报价：", data);
-            const { href } = this.$router.resolve({
-              path: "/userCenter/myInquiry",
-              query: { keyId: 2 }
-            });
-            window.open(href, "_blank");
+            this.getQuoteLoading = false;
+            if (data.code != 500) {
+              const { href } = this.$router.resolve({
+                path: "/userCenter/myInquiry",
+                query: { keyId: 2 }
+              });
+              window.open(href, "_blank");
+            }
           });
         } else {
           this.$message.warning("请选择产品", 1);
@@ -524,6 +559,16 @@
       }
       .tfooter {
         .right-box {
+          .ant-btn {
+            border: none;
+            border-radius: 0;
+            &:hover {
+              opacity: 0.7;
+            }
+          }
+          [ant-click-animating-without-extra-node]:after {
+            display: none;
+          }
           .commonStyle {
             width: 132px;
             height: 42px;

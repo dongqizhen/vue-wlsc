@@ -39,6 +39,7 @@
       <a-textarea
         placeholder="输入备注"
         v-model="itemData.shopRemark"
+        @change="remarkChange"
       ></a-textarea>
     </span>
   </div>
@@ -89,6 +90,7 @@
       onDateChange(date, dataString) {
         console.log(date, dataString);
         this.itemData.arrivalTime = dataString;
+        this.$emit("getData", { data: this.itemData });
       },
       turnToProductDetail(itemData) {
         let { href } = this.$router.resolve({
@@ -132,6 +134,9 @@
             this.itemData.unitPrice.length - 1
           );
         }
+        this.$emit("getData", { data: this.itemData });
+      },
+      remarkChange() {
         this.$emit("getData", { data: this.itemData });
       }
     }

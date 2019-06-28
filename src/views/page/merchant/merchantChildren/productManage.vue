@@ -85,20 +85,21 @@
               <button class="clear" @click="clearData">清除</button>
             </div>
           </div>
+          <list-title
+            :titleArr="[
+              '产品图片',
+              '产品名称',
+              '产品分类',
+              '品牌/型号',
+              '产品类型',
+              '产品状态',
+              '库存数量',
+              '发布时间',
+              '操作'
+            ]"
+          ></list-title>
           <div v-if="!isListLoading">
             <div class="listContent">
-              <h2>
-                <span></span>
-                <span>产品图片</span>
-                <span>产品名称</span>
-                <span>产品分类</span>
-                <span>品牌/型号</span>
-                <span>产品类型</span>
-                <span>产品状态</span>
-                <span>库存数量</span>
-                <span>发布时间</span>
-                <span>操作</span>
-              </h2>
               <ul v-if="data.length != 0">
                 <li
                   v-for="item in data"
@@ -157,14 +158,14 @@
                 <button class="obtained" @click="batchObtained">下架</button>
               </div>
             </check-all>
-            <pagination
-              :data="paginationData"
-              v-on:onPaginationChange="getPaginationChange"
-              ref="pagination"
-              v-if="paginationData.count != 0"
-            ></pagination>
           </div>
           <loading v-else></loading>
+          <pagination
+            :data="paginationData"
+            v-on:onPaginationChange="getPaginationChange"
+            ref="pagination"
+            v-if="paginationData.count != 0"
+          ></pagination>
         </div>
       </div>
       <loading v-else></loading>
@@ -177,6 +178,7 @@
   import _ from "lodash";
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import pagination from "../../../../components/common/pagination";
+  import listTitle from "../../../../components/common/listTitle";
   import checkAll from "../../../../components/common/checkAll";
   import { _getData } from "../../../../config/getData";
   export default {
@@ -225,7 +227,9 @@
         _getData("/goods/goodsIsOnSale", { ids: id, isOnSale: is_on_sale }).then(
           data => {
             console.log(data);
-            this.getProductList();
+            if (data.code != 500 && data.code != 1) {
+              this.getProductList();
+            }
           }
         );
       },
@@ -325,15 +329,17 @@
       //批量上架
       batchShelf() {
         if (this.checkedList.length > 0) {
-          console.log(this.checkedList);
-          console.log(this.checkedList.join(","));
+          // console.log(this.checkedList);
+          // console.log(this.checkedList.join(","));
           _getData("/goods/goodsIsOnSale", {
             ids: this.checkedList.join(","),
             isOnSale: 1
           }).then(data => {
             console.log(data);
-            this.$message.success("批量上架成功", 1);
-            this.getProductList();
+            if (data.code != 500 && data.code != 1) {
+              this.$message.success("批量上架成功", 1);
+              this.getProductList();
+            }
           });
         } else {
           this.$message.warning("请选择产品", 1);
@@ -350,8 +356,10 @@
             isOnSale: 0
           }).then(data => {
             console.log(data);
-            this.$message.success("批量下架成功", 1);
-            this.getProductList();
+            if (data.code != 500 && data.code != 1) {
+              this.$message.success("批量下架成功", 1);
+              this.getProductList();
+            }
           });
         } else {
           this.$message.warning("请选择产品", 1);
@@ -368,8 +376,10 @@
             goodsIds: this.checkedList.join(",")
           }).then(data => {
             console.log(data);
-            this.$message.success("批量删除成功", 1);
-            this.getProductList();
+            if (data.code != 500) {
+              this.$message.success("批量删除成功", 1);
+              this.getProductList();
+            }
           });
         } else {
           this.$message.warning("请选择产品", 1);
@@ -377,6 +387,7 @@
         }
       },
       async getProductList() {
+        this.isListLoading = true;
         return await _getData("/goods/sjGoodsList", this.submitData)
           .then(data => {
             console.log("获取产品列表：", data);
@@ -409,7 +420,8 @@
     components: {
       commonTitle,
       pagination,
-      checkAll
+      checkAll,
+      listTitle
     }
   };
 </script>
@@ -500,6 +512,9 @@
               &:last-child {
                 margin-right: 0;
               }
+              &:hover {
+                opacity: 0.7;
+              }
             }
             .search {
               background-color: $theme-color;
@@ -507,8 +522,34 @@
             .clear {
               background-color: #999;
             }
-            .export {
-              background-color: #f5a623;
+          }
+        }
+        /deep/.listTitle {
+          margin-bottom: 12px;
+          ul {
+            li {
+              &:nth-child(3) {
+                width: 98px;
+              }
+              &:nth-child(4) {
+                width: 98px;
+                margin-right: 18px;
+              }
+              &:nth-child(5) {
+                width: 68px;
+                margin-right: 20px;
+              }
+              &:nth-child(6) {
+                width: 50px;
+              }
+              &:nth-child(7) {
+                width: 68px;
+                margin-right: 30px;
+              }
+              &:nth-child(8) {
+                width: 68px;
+                margin-right: 30px;
+              }
             }
           }
         }
@@ -575,17 +616,6 @@
               }
             }
           }
-          h2 {
-            height: 40px;
-            display: flex;
-            align-items: center;
-            background-color: #f8f8f8;
-            border: 1px solid #ddd;
-            margin-bottom: 12px;
-            span {
-              @extend %span;
-            }
-          }
           li {
             display: flex;
             height: 93px;
@@ -595,65 +625,25 @@
             &.active {
               background-color: rgba(245, 166, 35, 0.06);
             }
-            &:hover {
-              cursor: pointer;
-            }
             span {
               @extend %span;
               &:nth-child(2) {
                 width: 70px;
                 height: 70px;
                 background-color: #f5f5f5;
+                &:hover {
+                  cursor: pointer;
+                }
+              }
+              &:nth-child(3) {
+                &:hover {
+                  cursor: pointer;
+                }
               }
             }
           }
           /deep/.no-data {
             height: 490px;
-          }
-          .checkedAllBox {
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid #dddddd;
-            .left-box {
-              span {
-                &:first-child {
-                  width: 34px;
-                  margin-right: 12px;
-                  padding-left: 20px;
-                }
-                &:nth-child(3) {
-                  margin-right: 40px;
-                  padding-left: 42px;
-                }
-                i {
-                  font-style: normal;
-                  color: $theme-color;
-                  font-size: 16px;
-                  font-weight: 600;
-                }
-              }
-            }
-            .right-box {
-              button {
-                width: 76px;
-                height: 42px;
-                line-height: 42px;
-                border: 0;
-                outline: none;
-                background-color: transparent;
-                color: #fff;
-                text-align: center;
-                cursor: pointer;
-                &.shelf {
-                  background-color: $theme-color;
-                }
-                &.obtained {
-                  background-color: #f5a623;
-                }
-              }
-            }
           }
         }
         .checkedAllBox {
@@ -697,6 +687,9 @@
               }
               &.obtained {
                 background-color: #f5a623;
+              }
+              &:hover {
+                opacity: 0.7;
               }
             }
           }

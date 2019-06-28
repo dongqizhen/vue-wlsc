@@ -66,6 +66,8 @@
       ...mapMutations(["changeUserShopInfoState"])
     },
     beforeMount() {
+      console.log(this.userShopInfo.audit_status);
+      console.log(this.defaultSelectedKeys);
       _getData("/user/getUser", {})
         .then(data => {
           if (data.code == 500) {

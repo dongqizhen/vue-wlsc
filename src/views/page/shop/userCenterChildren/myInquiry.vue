@@ -3,13 +3,13 @@
     <common-title title="我的询价">
       <div slot="titleRight" class="right-box">
         <ul>
-          <li :class="isShowInfo.current == 1 ? 'active' : ''" @click="tab(1)">
+          <li :class="{ active: isShowInfo.current == 1 }" @click="tab(1)">
             报价中({{ quoting }})
           </li>
-          <li :class="isShowInfo.current == 2 ? 'active' : ''" @click="tab(2)">
+          <li :class="{ active: isShowInfo.current == 2 }" @click="tab(2)">
             已报价({{ quoted }})
           </li>
-          <li :class="isShowInfo.current == 3 ? 'active' : ''" @click="tab(3)">
+          <li :class="{ active: isShowInfo.current == 3 }" @click="tab(3)">
             已关闭({{ closed }})
           </li>
         </ul>
@@ -290,8 +290,8 @@
       //提交订单（已报价）
       submitOrder() {
         console.log(this.products);
+        this.orderLoading = true;
         if (this.products.length > 0) {
-          this.orderLoading = true;
           let { href } = this.$router.resolve({
             path: `submitOrder/${this.products.join(",")}`,
             query: { keyId: 2 }
@@ -300,6 +300,7 @@
           window.open(href, "_blank");
         } else {
           this.$message.warning("请选择产品", 1);
+          this.orderLoading = false;
           return;
         }
       },
@@ -521,7 +522,6 @@
           height: 27px;
           margin-right: 30px;
           .left-box {
-            font-family: PingFangSC-Regular;
             font-size: 12px;
             color: #333333;
             margin-right: 6px;
@@ -535,11 +535,11 @@
               font-size: 12px;
               font-weight: 400;
               &:hover {
-                border-color: $theme-color !important;
+                border-color: $theme-color;
               }
               &:focus {
-                border-color: $theme-color !important;
-                box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2) !important;
+                border-color: $theme-color;
+                box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
               }
             }
             /deep/.el-select {
@@ -647,6 +647,9 @@
           border: none;
           border-radius: 0;
           color: #ffffff;
+          &:hover {
+            opacity: 0.7;
+          }
         }
         [ant-click-animating-without-extra-node]::after {
           display: none;
@@ -669,7 +672,6 @@
         }
       }
       .submit {
-        width: 104px;
         height: 42px;
         line-height: 42px;
         text-align: center;

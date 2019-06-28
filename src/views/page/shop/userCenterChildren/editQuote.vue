@@ -63,7 +63,9 @@
         <span class="totalPrice">
           报价总金额：<i>¥{{ sumPrice }}</i>
         </span>
-        <span class="save" @click="save">保存</span>
+        <a-button type="primary" :loading="loading" class="save" @click="save"
+          >保存</a-button
+        >
       </div>
     </div>
     <edit-quote-modal
@@ -83,6 +85,7 @@
   export default {
     data() {
       return {
+        loading: false,
         visible: false,
         type: "",
         editId: 0,
@@ -111,13 +114,16 @@
     },
     methods: {
       save() {
+        this.loading = true;
         _getData("/quotation/save", { param: this.param }).then(data => {
           console.log(data);
-          const { href } = this.$router.resolve({
-            path: "/userCenter/myQuote",
-            query: { keyId: 4 }
-          });
-          window.open(href, "_blank");
+          this.loading = false;
+          if (data.code != 500) {
+            this.$router.replace({
+              path: "/userCenter/myQuote",
+              query: { keyId: 4 }
+            });
+          }
         });
       },
       addCarSuccess(id) {
@@ -355,6 +361,8 @@
           }
         }
         .save {
+          border: none;
+          border-radius: 0;
           width: 76px;
           height: 100%;
           line-height: 40px;
@@ -363,7 +371,13 @@
           font-size: 14px;
           color: #ffffff;
           font-weight: 600;
-          cursor: pointer;
+          &:hover {
+            opacity: 0.7;
+            cursor: pointer;
+          }
+        }
+        [ant-click-animating-without-extra-node]:after {
+          display: none;
         }
       }
     }

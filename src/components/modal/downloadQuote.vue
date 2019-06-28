@@ -17,8 +17,10 @@
           </div>
         </div>
         <div class="btn">
-          <a-button @click="sureOrder">确认下载</a-button>
-          <a-button @click="visible = false">取消</a-button>
+          <a-button type="primary" @click="sureOrder" :loading="loading"
+            >确认下载</a-button
+          >
+          <a-button type="primary" @click="visible = false">取消</a-button>
         </div>
       </div>
       <div slot="content" v-else>
@@ -29,8 +31,8 @@
           你还没登录
         </p>
         <div class="btn">
-          <a-button @click="toLogin">去登录</a-button>
-          <a-button @click="visible = false">取消</a-button>
+          <a-button type="primary" @click="toLogin">去登录</a-button>
+          <a-button type="primary" @click="visible = false">取消</a-button>
         </div>
       </div>
     </modal>
@@ -45,6 +47,7 @@
     data() {
       return {
         email: "",
+        loading: false,
         visible: false,
         options: {
           title: "填写邮箱地址",
@@ -86,7 +89,9 @@
         window.open(href, "_blank");
       },
       sureOrder() {
+        this.loading = true;
         if (!this.email) {
+          this.loading = false;
           this.$message.warning("请输入邮箱", 1);
           this.$refs.email.focus();
           return;
@@ -96,6 +101,7 @@
               this.email
             )
           ) {
+            this.loading = false;
             this.$message.warning("请输入正确的邮箱", 1);
             this.$refs.email.focus();
             return;
@@ -106,7 +112,11 @@
           toAddress: this.email
         }).then(data => {
           console.log(data);
-          this.visible = false;
+          this.loading = false;
+          if (data.code != 500) {
+            this.$message.success("邮件发送成功，请查收！", 1);
+            this.visible = false;
+          }
         });
       }
     },

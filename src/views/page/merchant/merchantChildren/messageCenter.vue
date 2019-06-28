@@ -46,10 +46,10 @@
                 v-for="item in data"
                 :key="item.id"
                 :to="{
-                  path: `/userCenter/myMessage/contactService`,
+                  path: `contactBuyer`,
                   query: {
-                    keyId: 9,
-                    topTitle: 'sub1',
+                    keyId: 10,
+                    topTitle: 'sub3',
                     id: item.id,
                     shopId: item.storeId,
                     sender: 'store'

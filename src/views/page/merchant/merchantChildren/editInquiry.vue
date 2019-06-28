@@ -261,6 +261,9 @@
             &.active {
               background-color: #f5a623;
             }
+            &:hover {
+              opacity: 0.7;
+            }
           }
           [ant-click-animating-without-extra-node]:after {
             display: none;
