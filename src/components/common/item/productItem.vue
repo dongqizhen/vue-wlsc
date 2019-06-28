@@ -23,15 +23,10 @@
             alt=""
             v-if="list.primary_pic_url"
           />
+          <img v-else src="../../../assets/images/default.png" alt="" />
         </div>
         <div class="price">
           {{ list.show_price }}
-          <span>
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#iconxiaoliang"></use>
-            </svg>
-            销量: <span>{{ list.sell_volume }}</span>
-          </span>
         </div>
         <p>
           {{ list.name }}
@@ -41,10 +36,18 @@
           <span>型号：{{ list.brand_model_name }}</span>
         </div>
         <div class="address">
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icondianpu"></use>
-          </svg>
-          {{ list.shop_name || list.shopName }}
+          <div>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icondianpu"></use>
+            </svg>
+            {{ list.shop_name || list.shopName }}
+          </div>
+          <span>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconxiaoliang"></use>
+            </svg>
+            销量: <span>{{ list.sell_volume }}</span>
+          </span>
         </div>
       </li>
     </a>
@@ -88,9 +91,9 @@
     }
     /deep/ img[lazy="error"] {
       /*your style here*/
-      background: url("../../../assets/images/loading.gif") no-repeat center;
-      background-size: 100px;
-      display: none;
+      background: url("../../../assets/images/default.png") no-repeat center;
+      background-size: 100% 100%;
+      //display: none;
       // background-color: #f7f9fa;
     }
     width: 253px;
@@ -122,22 +125,6 @@
       font-weight: 600;
       color: $theme-color;
       margin-bottom: 5px;
-      > span {
-        font-family: PingFangSC-Regular;
-        font-size: 13px;
-        color: #666666;
-        font-weight: normal;
-        .icon {
-          width: 14px;
-          height: 14px;
-        }
-        > span {
-          font-family: PingFangSC-Medium;
-          font-size: 12px;
-          color: #2a2a2a;
-          line-height: 16px;
-        }
-      }
     }
     p {
       //font-family: PingFangSC-Medium;
@@ -177,12 +164,33 @@
       font-size: 13px;
       color: #333333;
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
       height: 18px;
       align-items: center;
-      .icon {
-        margin-right: 6px;
-        margin-top: 2px;
+      > div {
+        display: flex;
+        align-items: center;
+        > .icon {
+          margin-right: 6px;
+          margin-top: 2px;
+        }
+      }
+
+      > span {
+        font-family: PingFangSC-Regular;
+        font-size: 13px;
+        color: #666666;
+        font-weight: normal;
+        .icon {
+          width: 14px;
+          height: 14px;
+        }
+        > span {
+          font-family: PingFangSC-Medium;
+          font-size: 12px;
+          color: #2a2a2a;
+          line-height: 16px;
+        }
       }
     }
   }

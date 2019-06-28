@@ -78,7 +78,7 @@
             </div>
             <loading-vue v-else></loading-vue>
             <pagination-vue
-              v-if="!shopIsloading && shopList.length"
+              v-if="shopList.length"
               :data="data"
               v-on:onPaginationChange="onPaginationChange"
               ref="pagination"
@@ -155,13 +155,19 @@
           this.getGoodsList(page);
         } else if (_.startsWith(this.defaultVal, "店铺")) {
           this.getShopList(page);
+        } else if (_.startsWith(this.defaultVal, "文章")) {
+          this.getArticleList(page);
+        } else if (_.startsWith(this.defaultVal, "视频")) {
+          this.getVideoList(page);
+        } else if (_.startsWith(this.defaultVal, "案例")) {
+          this.getCaseList(page);
         }
       },
       startWith(val) {
         return _.startsWith(this.defaultVal, val);
       },
       //获取文章列表
-      async getArticleList() {
+      async getArticleList(page = 1) {
         this.shopIsloading = true;
         return await _getData(
           `${this.$API_URL.HYGLOGINURL}/server/article!request.action`,
@@ -171,7 +177,7 @@
             deviceId: "",
             source: "",
             params: {
-              currentPage: 1,
+              currentPage: page,
               countPerPage: 20,
               classifyId: this.modelDetail.a_classify_id || "",
               sortType: this.othersort,
@@ -180,7 +186,7 @@
           }
         )
           .then(data => {
-            this.data = data;
+            this.data = data.result;
             this.shopList = data.result.articlelist;
           })
           .then(() => {
@@ -190,7 +196,7 @@
           });
       },
       //获取视频列表
-      async getVideoList() {
+      async getVideoList(page = 1) {
         this.shopIsloading = true;
         return await _getData(
           `${this.$API_URL.HYGPROURL}/server_pro/video!request.action`,
@@ -200,7 +206,7 @@
             deviceId: "",
             source: "",
             params: {
-              currentPage: 1,
+              currentPage: page,
               countPerPage: 20,
               vBigCategoryId: this.modelDetail.v_big_category_id || "",
               vCategoryId: this.modelDetail.v_sub_category_id || "",
@@ -210,7 +216,7 @@
           }
         )
           .then(data => {
-            this.data = data;
+            this.data = data.result;
             this.shopList = data.result.videolist;
           })
           .then(() => {
@@ -223,7 +229,7 @@
           });
       },
       //获取维修宝列表
-      async getCaseList() {
+      async getCaseList(page = 1) {
         this.shopIsloading = true;
         return await _getData(
           `${this.$API_URL.HYGPROURL}/server_pro/maintenance!request.action`,
@@ -233,7 +239,7 @@
             deviceId: "",
             source: "",
             params: {
-              currentPage: 1,
+              currentPage: page,
               countPerPage: 20,
               mCatogoryId: this.modelDetail.m_category_id || "",
               mBrandId: this.modelDetail.brand_id || "",
@@ -244,7 +250,7 @@
           }
         )
           .then(data => {
-            this.data = data;
+            this.data = data.result;
             this.shopList = data.result.maintenancelist;
           })
           .then(() => {
@@ -315,7 +321,7 @@
         return await _getData("queryStore", {
           modelId: this.$route.query.modelId,
           currentPage,
-          countPerPage: 20,
+          countPerPage: 6,
           sort: this.shopSort,
           order: "asc"
         })
@@ -340,7 +346,7 @@
           attributeCategoryId: this.attributeCategoryId,
           currentPage,
           modelId: this.$route.query.modelId,
-          countPerPage: 20,
+          countPerPage: 6,
           sort: this.goodSort,
           order: "asc"
         })

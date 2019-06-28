@@ -37,6 +37,7 @@
     },
     created() {
       //this.current = this.data.currentPage;
+      console.log(this.data);
     },
     props: {
       data: {

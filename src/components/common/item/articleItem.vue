@@ -15,7 +15,8 @@
           selector: 'img'
         }"
       >
-        <img :data-src="item.cover0" alt="" />
+        <img :data-src="item.cover0" v-if="item.cover0" alt="" />
+        <img v-else src="../../../assets/images/default.png" alt="" />
       </div>
       <div class="content">
         <h2>
@@ -90,9 +91,9 @@
     }
     /deep/ img[lazy="error"] {
       /*your style here*/
-      background: url("../../../assets/images/loading.gif") no-repeat center;
-      background-size: 100px;
-      display: none;
+      background: url("../../../assets/images/default.png") no-repeat center;
+      background-size: 100% 100%;
+      //display: none;
       // background-color: #f7f9fa;
     }
     a {

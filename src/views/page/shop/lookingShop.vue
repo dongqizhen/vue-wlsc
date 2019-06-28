@@ -256,7 +256,7 @@
           return;
         }
         this.province = val.name;
-
+        this.provinceName = val.name;
         _getData("address/getCity", { provinceId: val.id })
           .then(data => {
             console.log(data);
@@ -273,6 +273,8 @@
       cityItemClick(item) {
         this.selectMainArea = this.province + item.name;
         this.areaIsShow = false;
+        this.cityName = item.name;
+        this.getShop();
       }
     }
   };
