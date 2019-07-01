@@ -129,7 +129,7 @@
       return {
         routes: [],
         recommend_tabs_index: 0, //推荐nav标识
-        nav: ["店铺", "产品", "型号"],
+        nav: ["店铺(0)", "产品(0)", "型号(0)"],
         list: "",
         isLoading: false,
         categoryId: "", //分类id
@@ -224,6 +224,11 @@
           .then(data => {
             console.log("搜索内容", data);
             this.list = data;
+            this.nav = [
+              `店铺(${data.storeList.length})`,
+              `产品(${data.goodList.length})`,
+              `型号(${data.modelList.length})`
+            ];
           })
           .then(() => {
             this.$nextTick().then(() => {

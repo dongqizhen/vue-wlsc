@@ -224,7 +224,10 @@
       },
       //获取常用分类
       async getCommonCategory() {
-        return await _getData("ucatalog/list", {}).then(data => {
+        let param = this.$route.query.brandId
+          ? { brandId: this.$route.query.brandId }
+          : {};
+        return await _getData("ucatalog/list", param).then(data => {
           console.log("常用分类", data);
           if (this.isLogin) {
             this.left[0].subCategoryList = data.userCategoryList;
@@ -256,10 +259,37 @@
           .then(() => {
             this.$nextTick().then(() => {});
           });
+      },
+      async getByBrandId() {
+        return await _getData("/catalog/getByBrand", {
+          brandId: this.$route.query.brandId
+        }).then(data => {
+          console.log("按品牌", data);
+          _.map(data.currentCategory, (val, i) => {
+            if ((i + 1) % 2 == 1) {
+              if (this.isLogin) {
+                this.right.push(val);
+              } else {
+                this.left.push(val);
+              }
+            } else {
+              if (this.isLogin) {
+                this.left.push(val);
+              } else {
+                this.right.push(val);
+              }
+            }
+          });
+        });
       }
     },
     mounted() {
-      _getDataAll([this.getCommonCategory(), this.getAllCategory()])
+      _getDataAll([
+        this.getCommonCategory(),
+        this.$route.query.nav_index == 1
+          ? this.getAllCategory()
+          : this.getByBrandId()
+      ])
         .then(() => {
           this.isLoading = false;
         })
