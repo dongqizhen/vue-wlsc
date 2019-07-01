@@ -46,7 +46,7 @@
                 v-for="item in data"
                 :key="item.id"
                 :to="{
-                  path: `contactBuyer`,
+                  path: 'contactBuyer',
                   query: {
                     keyId: 10,
                     topTitle: 'sub3',
@@ -112,21 +112,31 @@
   export default {
     data() {
       return {
-        systemNumber: 0,
-        personalNumber: 0,
-        data: [],
         isLoading: true,
         isMessageLoading: true,
-        tabs: [],
-        messageNumber: "",
+        data: [],
+        tabs: [
+          {
+            id: 0,
+            name: "未读消息",
+            amount: 0
+          },
+          {
+            id: 1,
+            name: "已读消息",
+            amount: 0
+          }
+        ],
         defaultActiveKey: 0,
+        messageNumber: {},
+        systemNumber: 0,
+        personalNumber: 0,
         checkAll: false,
         checkedList: [],
-        current: 0,
-        readType: 0, //消息类型
+        current: 0, //系统0、私信1
+        readType: 0, //消息类型：0未读、1已读
         unRead: true,
         pageType: "system", //页面类型
-
         paginationData: {}
       };
     },
@@ -137,14 +147,13 @@
       ...mapMutations(["changeUserShopInfoState"]),
       getTab(val) {
         console.log(val);
+        this.readType = val;
+        this.defaultActiveKey = val;
         if (this.tabs[0].id == val) {
           this.unRead = true;
         } else {
           this.unRead = false;
         }
-        this.checkedList = [];
-        this.checkAll = false;
-        this.readType = val;
         if (this.current) {
           this.getPrivateMessageList();
         } else {
@@ -158,37 +167,20 @@
       },
       system(val) {
         this.current = val;
-        this.checkedList = [];
-        this.checkAll = false;
         if (val) {
-          this.tabs = [
-            {
-              id: 0,
-              name: "未读消息",
-              amount: this.messageNumber.personalUnread
-            },
-            {
-              id: 1,
-              name: "已读消息",
-              amount: this.messageNumber.personalRead
-            }
-          ];
-          this.getPrivateMessageList();
+          this.pageType = "private";
         } else {
-          this.tabs = [
-            {
-              id: 0,
-              name: "未读消息",
-              amount: this.messageNumber.systemUnread
-            },
-            {
-              id: 1,
-              name: "已读消息",
-              amount: this.messageNumber.systemRead
-            }
-          ];
-          this.getSystemMessageList();
+          this.pageType = "system";
         }
+        this.getMessageAll().then(() => {
+          if (val) {
+            this.tabs[0].amount = this.messageNumber.personalUnread;
+            this.tabs[1].amount = this.messageNumber.personalRead;
+          } else {
+            this.tabs[0].amount = this.messageNumber.systemUnread;
+            this.tabs[1].amount = this.messageNumber.systemRead;
+          }
+        });
         this.$nextTick(() => {
           if (this.$refs.pagination) {
             this.$refs.pagination.$data.current = 1;
@@ -210,32 +202,39 @@
         }
       },
       isCheckAllMethod(val) {
+        this.checkedList = [];
         if (val) {
           this.checkAll = true;
-          this.checkedList = [];
           for (const val of this.data) {
             this.checkedList.push(val.id);
           }
         } else {
           this.checkAll = false;
-          this.checkedList = [];
         }
       },
       //批量删除
       batchDeleteData() {
         if (this.checkedList.length > 0) {
           //向后台发送请求，标记为已读，成功后将刷新数据
-          console.log(this.checkedList);
-          console.log(this.checkedList.join(","));
-          _getData("/message/updateStatus", {
-            ids: this.checkedList.join(","),
-            flag: "delete"
-          }).then(data => {
-            console.log(data);
-            this.$message.success("批量删除成功", 1);
-            // this.getMessageList();
-            // this.getMessageNumber();
-          });
+          if (this.pageType == "system") {
+            _getData("/message/updateStatus", {
+              ids: this.checkedList.join(","),
+              flag: "delete",
+              storeId: this.userShopInfo.store_id
+            }).then(data => {
+              console.log(data);
+              this.$message.success("批量删除成功", 1);
+              this.getMessageAll();
+            });
+          } else {
+            _getData("/message/deleteChat", {
+              ids: this.checkedList.join(","),
+              flag: "store"
+            }).then(data => {
+              this.$message.success("批量删除成功", 1);
+              this.getMessageAll();
+            });
+          }
         } else {
           this.$message.warning("请选择信息", 1);
           return;
@@ -245,20 +244,32 @@
       remarkRead() {
         if (this.checkedList.length > 0) {
           //向后台发送请求，标记为已读，成功后将刷新数据
-          console.log(this.checkedList);
-          console.log(this.checkedList.join(","));
-          _getData("/message/updateStatus", {
-            ids: this.checkedList.join(","),
-            flag: "read",
-            storeId: this.userShopInfo.store_id
-          }).then(data => {
-            console.log(data);
-            //移动到已读列表
-            this.unRead = false;
-            this.defaultActiveKey = 1;
-            this.readType = 1;
-            this.getMessageAll();
-          });
+          if (this.pageType == "system") {
+            _getData("/message/updateStatus", {
+              ids: this.checkedList.join(","),
+              flag: "read",
+              storeId: this.userShopInfo.store_id
+            }).then(data => {
+              console.log(data);
+              //移动到已读列表
+              this.unRead = false;
+              this.defaultActiveKey = 1;
+              this.readType = 1;
+              this.getMessageAll();
+            });
+          } else {
+            _getData("/message/setChatRead", {
+              ids: this.checkedList.join(","),
+              storeId: this.userShopInfo.store_id
+            }).then(data => {
+              console.log(data);
+              //移动到已读列表
+              this.unRead = false;
+              this.defaultActiveKey = 1;
+              this.readType = 1;
+              this.getMessageAll();
+            });
+          }
         } else {
           this.$message.warning("请选择信息", 1);
           return;
@@ -266,7 +277,6 @@
       },
       getPaginationChange(val) {
         console.log(val);
-
         if (this.current) {
           this.getPrivateMessageList(val);
         } else {
@@ -279,10 +289,11 @@
           currentPage: page, //当前页
           countPerPage: "6", //每页显示条数
           storeId: this.userShopInfo.store_id, //店铺id，不传时默认查询当前登录用户
-          readType: 1 //消息状态 0未读，1已读，空字符串查询全部
+          readType: this.readType //消息状态 0未读，1已读，空字符串查询全部
         })
           .then(data => {
             console.log("获取私信信息列表：", data);
+            this.checkAll = false;
             this.checkedList = [];
             this.data = data.data;
             this.paginationData = data;
@@ -301,6 +312,7 @@
         })
           .then(data => {
             console.log("获取系统通知列表：", data);
+            this.checkAll = false;
             this.checkedList = [];
             this.data = data.data;
             this.paginationData = data;
@@ -310,26 +322,20 @@
           });
       },
       async getMessageNumber() {
-        // this.getMessageNumberParams.storeId = this.userShopInfo.store_id;
         return await _getData("/message/messageNum", {
           storeId: this.userShopInfo.store_id //消息状态 店铺id，不传时默认查询当前用户的
         }).then(data => {
           console.log("私信消息数量：", data);
           this.messageNumber = data;
-          this.tabs = [
-            {
-              id: 0,
-              name: "未读消息",
-              amount: data.systemUnread
-            },
-            {
-              id: 1,
-              name: "已读消息",
-              amount: data.systemRead
-            }
-          ];
           this.systemNumber = data.system;
           this.personalNumber = data.personal;
+          if (this.pageType == "system") {
+            this.tabs[0].amount = data.systemUnread;
+            this.tabs[1].amount = data.systemRead;
+          } else {
+            this.tabs[0].amount = data.personalUnread;
+            this.tabs[1].amount = data.personalRead;
+          }
         });
       },
       async getMessageAll() {

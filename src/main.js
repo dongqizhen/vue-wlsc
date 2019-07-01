@@ -34,6 +34,7 @@ import {
     DatePicker,
     Skeleton,
     Affix,
+    Avatar,
     Message,
     Notification,
     Steps
@@ -56,7 +57,7 @@ Vue.use(Meta, {
     preLoad: 1.3,
     attempt: 1,
     lazyComponent: true
-}).use(animated).use(Share).use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Upload).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form).use(Skeleton).use(Affix).use(Steps).use(Option).use(Stepper);
+}).use(animated).use(Share).use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Upload).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form).use(Skeleton).use(Affix).use(Steps).use(Option).use(Stepper).use(Avatar);
 
 let userid = '';
 if (window.localStorage["vuex-along"] != "{}") {

@@ -11,9 +11,7 @@
         ></order-title>
         <div class="shopAndlink">
           <div class="shopName">
-            <img
-              src="http://file.haoyigong.com/server/upload/1554429391594.jpg"
-            />
+            <img :src="data.shopImage" />
             {{ data.shopName }}
           </div>
           <div class="linkName">联系人：{{ data.username }}</div>

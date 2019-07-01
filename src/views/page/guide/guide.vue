@@ -4,6 +4,7 @@
     :dataArr="dataArr"
     :openKeys="['sub1', 'sub2', 'sub3', 'sub4']"
     :defaultSelectedKeys="defaultSelectedKeys"
+    :currentSelectedKeys="currentSelectedKeys"
   >
     <div slot="header">
       <Header></Header>
@@ -17,6 +18,7 @@
   export default {
     data() {
       return {
+        currentSelectedKeys: "0",
         defaultSelectedKeys: ["0"],
         dataArr: [
           // {
@@ -54,8 +56,8 @@
         this.dataArr = data;
       });
     },
-    beforeMount() {
-      this.defaultSelectedKeys = [`${this.$route.query.keyId}`];
+    mounted() {
+      this.currentSelectedKeys = this.$route.query.keyId;
     },
     components: {
       Header,

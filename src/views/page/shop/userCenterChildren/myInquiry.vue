@@ -78,7 +78,7 @@
               v-on:isCheckAll="isCheckAllMethod"
               v-on:isDelete="getCheckDelete"
               v-if="data.length > 0"
-              :class="isShowInfo.current != 1 ? 'checkAllStyle' : ''"
+              :class="{ checkAllStyle: isShowInfo.current != 1 }"
             >
               <div slot="right-box" class="right-box">
                 <a-button

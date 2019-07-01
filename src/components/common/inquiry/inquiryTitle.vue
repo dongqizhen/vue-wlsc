@@ -26,11 +26,7 @@
         class="common userName"
         v-if="isShowInfo.isMerchant || !isShowInfo.isDetail"
       >
-        <span>
-          <img
-            src="http://file.haoyigong.com/server/upload/1554429391594.jpg"
-          />
-        </span>
+        <span><img :src="data.shopImage"/></span>
         <span>{{ isShowInfo.isMerchant ? data.userName : data.shopName }}</span>
       </div>
     </div>

@@ -15,6 +15,7 @@
             :openKeys="openKeys"
             style="width: 170px"
             :defaultSelectedKeys="defaultSelectedKeys"
+            :selectedKeys="[current]"
             @click="handleClick"
           >
             <a-sub-menu v-for="itemObj in dataArr" :key="itemObj.key">
@@ -60,7 +61,8 @@
   export default {
     data() {
       return {
-        defaultKey: []
+        defaultKey: [],
+        current: "0"
       };
     },
     props: {
@@ -81,10 +83,22 @@
       },
       shopStatus: {
         type: Number
+      },
+      currentSelectedKeys: {
+        type: String
+      }
+    },
+    watch: {
+      currentSelectedKeys(newVal) {
+        console.log(newVal);
+        this.current = newVal;
       }
     },
     methods: {
-      handleClick(e) {}
+      handleClick(e) {
+        console.log(e);
+        this.current = e.key;
+      }
     },
     components: {
       Footer
