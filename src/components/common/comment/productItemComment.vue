@@ -41,7 +41,7 @@
             @change="handleChange"
             v-show="uploadList.length < 6"
           >
-            <div v-if="uploadList.length < 6">
+            <div>
               <a-icon class="icon">
                 <use xlink:href="#icontianjiatupian1"></use>
               </a-icon>

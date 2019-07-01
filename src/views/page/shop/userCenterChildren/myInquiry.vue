@@ -25,6 +25,7 @@
                 <a-input
                   placeholder="请输入询价单号"
                   v-model="searchParams.enquirySn"
+                  @pressEnter="searchData"
                 />
               </div>
             </div>
@@ -34,6 +35,7 @@
                 <a-input
                   placeholder="请输入产品名称"
                   v-model="searchParams.goodsName"
+                  @pressEnter="searchData"
                 />
               </div>
             </div>

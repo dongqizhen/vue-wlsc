@@ -24,6 +24,7 @@
                   <a-input
                     placeholder="请输入产品名称"
                     v-model="submitData.name"
+                    @pressEnter="searchData"
                   />
                 </div>
               </div>
@@ -391,6 +392,7 @@
         return await _getData("/goods/sjGoodsList", this.submitData)
           .then(data => {
             console.log("获取产品列表：", data);
+            this.checkAll = false;
             this.checkedList = [];
             this.data = data.data;
             this.paginationData = data;

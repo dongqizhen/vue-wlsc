@@ -4,10 +4,7 @@
       <div class="title">我要开店</div>
       <div class="flowChart">
         <div class="content">
-          <a-steps
-            :current="current"
-            :class="current == 2 ? 'finishAfter' : ''"
-          >
+          <a-steps :current="current" :class="{ finishAfter: current == 2 }">
             <a-step
               v-for="(item, index) in steps"
               :key="index"

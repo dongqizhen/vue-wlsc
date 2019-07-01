@@ -10,7 +10,7 @@
                 placeholder="请输入商品名称"
                 v-model="submitData.goodsName"
               ></a-input>
-              <div class="warning" v-show="goodsNameFlag">请输入商品名称</div>
+              <div class="warning" v-show="goodsNameFlag">*请输入商品名称</div>
             </div>
           </div>
           <div class="common">
@@ -20,6 +20,7 @@
                 v-on:getVal="getImgUrl"
                 :imgUrl="submitData.goodsImage"
               ></upload>
+              <div class="warning" v-show="goodsImageFlag">*请上传图片</div>
             </div>
           </div>
           <div class="common">
@@ -29,6 +30,7 @@
                 placeholder="请输入品牌"
                 v-model="submitData.goodsBrand"
               ></a-input>
+              <div class="warning" v-show="goodsBrandFlag">*请输入商品品牌</div>
             </div>
           </div>
           <div class="common">
@@ -38,6 +40,7 @@
                 placeholder="请输入型号"
                 v-model.trim="submitData.goodsModel"
               ></a-input>
+              <div class="warning" v-show="goodsModelFlag">*请输入商品型号</div>
             </div>
           </div>
           <div class="common ">
@@ -48,7 +51,9 @@
                 v-model.trim="submitData.unitPrice"
                 @change="inputChange"
               ></a-input>
-              <div class="warning" v-show="unitPriceFlag">请输入正确的单价</div>
+              <div class="warning" v-show="unitPriceFlag">
+                *请输入正确的单价
+              </div>
             </div>
           </div>
           <div class="common">
@@ -57,9 +62,9 @@
               <a-input
                 placeholder="请输入数量"
                 v-model.trim="submitData.number"
-                @change="inputChange"
+                @change="inputNumberChange"
               ></a-input>
-              <div class="warning" v-show="numberFlag">请输入正确的数量</div>
+              <div class="warning" v-show="numberFlag">*请输入正确的数量</div>
             </div>
           </div>
           <!-- <div class="common ">
@@ -102,7 +107,9 @@
           </div>
         </div>
         <div class="btn">
-          <a-button type="primary" @click="saveAddress">保存修改</a-button>
+          <a-button type="primary" :loading="loading" @click="saveAddress">
+            保存修改
+          </a-button>
           <a-button type="primary" @click="visible = false">取消</a-button>
         </div>
       </div>
@@ -130,7 +137,11 @@
   export default {
     data() {
       return {
+        loading: false,
+        goodsImageFlag: false,
         goodsNameFlag: false,
+        goodsBrandFlag: false,
+        goodsModelFlag: false,
         unitPriceFlag: false,
         numberFlag: false,
         visible: false,
@@ -185,21 +196,26 @@
         this.submitData.arrivalTime = dataString;
       },
       inputChange(e) {
+        // console.log(e);
         const { value } = e.target;
         const reg = /^(0|[1-9][0-9]*)(\.[0-9]*)?$/;
         if (!isNaN(value) && reg.test(value)) {
         } else {
-          if (e.target.placeholder.indexOf("单价") != -1) {
-            this.submitData.unitPrice = this.submitData.unitPrice.slice(
-              0,
-              this.submitData.unitPrice.length - 1
-            );
-          } else {
-            this.submitData.number = this.submitData.number.slice(
-              0,
-              this.submitData.number.length - 1
-            );
-          }
+          this.submitData.unitPrice = this.submitData.unitPrice.slice(
+            0,
+            this.submitData.unitPrice.indexOf(value)
+          );
+        }
+      },
+      inputNumberChange(e) {
+        const { value } = e.target;
+        const reg = /^[1-9]\d*$/;
+        if (!isNaN(value) && reg.test(value)) {
+        } else {
+          this.submitData.number = this.submitData.number.slice(
+            0,
+            this.submitData.number.indexOf(value)
+          );
         }
       },
       getImgUrl(val) {
@@ -218,15 +234,42 @@
         window.open(href, "_blank");
       },
       saveAddress() {
-        console.log(this.submitData);
+        this.goodsNameFlag = false;
+        this.goodsImageFlag = false;
+        this.goodsBrandFlag = false;
+        this.goodsModelFlag = false;
+        this.unitPriceFlag = false;
+        this.numberFlag = false;
+        // console.log(this.submitData);
         if (!this.submitData.goodsName) {
           this.goodsNameFlag = true;
           return;
         } else {
           this.goodsNameFlag = false;
         }
+        if (
+          !this.submitData.goodsImage ||
+          this.submitData.goodsImage == "initial"
+        ) {
+          this.goodsImageFlag = true;
+          return;
+        } else {
+          this.goodsImageFlag = false;
+        }
+        if (!this.submitData.goodsBrand) {
+          this.goodsBrandFlag = true;
+          return;
+        } else {
+          this.goodsBrandFlag = false;
+        }
+        if (!this.submitData.goodsModel) {
+          this.goodsModelFlag = true;
+          return;
+        } else {
+          this.goodsModelFlag = false;
+        }
         if (this.submitData.unitPrice) {
-          if (!/^[1-9]\d*$/.test(this.submitData.unitPrice)) {
+          if (!/^(0|[1-9][0-9]*)(\.[0-9]*)?$/.test(this.submitData.unitPrice)) {
             this.unitPriceFlag = true;
             return;
           } else {
@@ -237,7 +280,7 @@
           return;
         }
         if (this.submitData.number) {
-          if (!/^[1-9]\d*$/.test(this.submitData.number)) {
+          if (!/^(0|[1-9][0-9]*)(\.[0-9]*)?$/.test(this.submitData.number)) {
             this.numberFlag = true;
             return;
           } else {
@@ -247,11 +290,15 @@
           this.numberFlag = true;
           return;
         }
+        this.loading = true;
         _getData("/quotation/saveOrUpdateGoods", { param: this.submitData }).then(
           data => {
             console.log(data);
-            this.visible = false;
-            this.$emit("getIsUpdate", true);
+            this.loading = false;
+            if (data.code != 500) {
+              this.visible = false;
+              this.$emit("getIsUpdate", true);
+            }
           }
         );
       }

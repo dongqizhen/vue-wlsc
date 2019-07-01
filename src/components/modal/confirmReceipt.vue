@@ -6,7 +6,9 @@
           您是否已经收到该订单？
         </div>
         <div class="btn">
-          <a-button @click="sure">确认收货</a-button>
+          <a-button type="primary" :loading="loading" @click="sure"
+            >确认收货</a-button
+          >
           <a-button @click="visible = false">取消</a-button>
         </div>
       </div>
@@ -33,6 +35,7 @@
   export default {
     data() {
       return {
+        loading: false,
         visible: false,
         options: {
           title: "提示",
@@ -77,13 +80,17 @@
         window.open(href, "_blank");
       },
       sure() {
+        this.loading = true;
         _getData("/order/updateOrderStatus", {
           orderId: this.orderId,
           orderStatus: "affirm"
         }).then(data => {
           console.log(data);
-          this.visible = false;
-          this.$emit("returnValue", 4); //4表示已经收货，进入待评价状态
+          this.loading = false;
+          if (data.code != 500) {
+            this.visible = false;
+            this.$emit("returnValue", 4); //4表示已经收货，进入待评价状态
+          }
         });
       }
     },

@@ -4,7 +4,11 @@
       <common-title title="我的收藏">
         <div slot="titleRight" class="right-box">
           <div class="search-box">
-            <a-input placeholder="请输入搜索内容" v-model="name"></a-input>
+            <a-input
+              placeholder="请输入搜索内容"
+              v-model="name"
+              @pressEnter="search"
+            ></a-input>
             <a-button class="searchBtn" @click="search">搜索</a-button>
             <a-button class="clearBtn" @click="clear">清空</a-button>
           </div>

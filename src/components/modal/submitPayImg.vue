@@ -5,7 +5,7 @@
         <div class="alertContent">
           <upload v-on:getVal="getImgUrl"></upload>
         </div>
-        <p>支持格式：jpg/png</p>
+        <p><!-- 支持格式：jpg/png --></p>
         <div class="btn">
           <a-button @click="sure">确定</a-button>
           <a-button @click="cancel">取消</a-button>

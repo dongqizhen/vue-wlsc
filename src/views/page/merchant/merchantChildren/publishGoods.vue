@@ -219,6 +219,7 @@
           </div>
         </div>
         <a-upload
+          v-show="uploadList.length < 6"
           ref="upload"
           listType="picture-card"
           class="avatar-uploader"
@@ -228,7 +229,7 @@
           :beforeUpload="beforeUpload"
           @change="handleChange"
         >
-          <div v-if="uploadList.length < 6">
+          <div>
             <a-icon class="icon">
               <use xlink:href="#icontianjiatupian1"></use>
             </a-icon>
