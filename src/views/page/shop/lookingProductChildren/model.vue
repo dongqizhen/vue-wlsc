@@ -123,6 +123,7 @@
         attributeCategoryId: "", //属性id
         isLoading: true,
         tabs: [],
+        countData: "",
         modelDetail: "",
         index: 0,
         navArr: ["发布时间", "按价格", "按好评"],
@@ -179,7 +180,7 @@
             params: {
               currentPage: page,
               countPerPage: 20,
-              classifyId: this.modelDetail.a_classify_id || "",
+              classifyId: this.countData.classifyId || "",
               sortType: this.othersort,
               sortFlag: 1 //排序标识0正序1 倒序
             }
@@ -208,8 +209,8 @@
             params: {
               currentPage: page,
               countPerPage: 20,
-              vBigCategoryId: this.modelDetail.v_big_category_id || "",
-              vCategoryId: this.modelDetail.v_sub_category_id || "",
+              vBigCategoryId: this.countData.vBigCategoryId || "",
+              vCategoryId: this.countData.vCategoryId || "",
               sortType: this.othersort,
               sortFlag: 1
             }
@@ -241,11 +242,11 @@
             params: {
               currentPage: page,
               countPerPage: 20,
-              mCatogoryId: this.modelDetail.m_category_id || "",
-              mBrandId: this.modelDetail.brand_id || "",
+              mCatogoryId: this.countData.mCatogoryId || "",
+              mBrandId: this.countData.mBrandId || "",
               sortType: this.othersort,
               sortFlag: 1,
-              searchType: 0 //查询类型0列表1详情
+              searchType: 1 //查询类型0列表1详情
             }
           }
         )
@@ -369,6 +370,7 @@
         .then(data => {
           console.log("nav", data);
           this.navList = data.list;
+          this.countData = data.params;
           this.attributeCategoryId = this.navList[0].id;
           this.tabs = [
             ..._.map(data.list, val => {
