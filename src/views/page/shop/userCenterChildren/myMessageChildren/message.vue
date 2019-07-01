@@ -220,16 +220,25 @@
       //批量删除
       batchDeleteData() {
         if (this.checkedList.length > 0) {
-          _getData("/message/updateStatus", {
-            ids: this.checkedList.join(","),
-            flag: "delete"
-          }).then(data => {
-            // console.log(data);
-            this.$message.success("批量删除成功", 1);
-            // this.getMessageList();
-            // this.getMessageNumber();
-            this.getMessageAll();
-          });
+          if (this.pageType == "system") {
+            _getData("/message/updateStatus", {
+              ids: this.checkedList.join(","),
+              flag: "delete",
+              storeId: ""
+            }).then(data => {
+              console.log(data);
+              this.$message.success("批量删除成功", 1);
+              this.getMessageAll();
+            });
+          } else {
+            _getData("/message/deleteChat", {
+              ids: this.checkedList.join(","),
+              flag: "user"
+            }).then(data => {
+              this.$message.success("批量删除成功", 1);
+              this.getMessageAll();
+            });
+          }
         } else {
           this.$message.warning("请选择信息", 1);
           return;
@@ -237,17 +246,32 @@
       }, //批量已读
       remarkRead() {
         if (this.checkedList.length > 0) {
-          _getData("/message/updateStatus", {
-            ids: this.checkedList.join(","),
-            flag: "read"
-          }).then(data => {
-            // console.log(data);
-            //移动到已读列表
-            this.unRead = false;
-            this.defaultActiveKey = 1;
-            this.readType = 1;
-            this.getMessageAll();
-          });
+          if (this.pageType == "system") {
+            _getData("/message/updateStatus", {
+              ids: this.checkedList.join(","),
+              flag: "read",
+              storeId: ""
+            }).then(data => {
+              console.log(data);
+              //移动到已读列表
+              this.unRead = false;
+              this.defaultActiveKey = 1;
+              this.readType = 1;
+              this.getMessageAll();
+            });
+          } else {
+            _getData("/message/setChatRead", {
+              ids: this.checkedList.join(","),
+              storeId: ""
+            }).then(data => {
+              console.log(data);
+              //移动到已读列表
+              this.unRead = false;
+              this.defaultActiveKey = 1;
+              this.readType = 1;
+              this.getMessageAll();
+            });
+          }
         } else {
           this.$message.warning("请选择信息", 1);
           return;
