@@ -175,12 +175,12 @@
         justify-content: flex-start;
         .left {
           width: 223px;
-          height: 590px;
+          height: 400px;
           // box-shadow: $base-box-shadow;
           margin-right: 17px;
           > div {
             width: 223px;
-            height: 590px;
+            height: 400px;
           }
           /deep/ .ant-anchor-wrapper {
             display: flex;
@@ -194,7 +194,7 @@
             .ant-anchor {
               padding: 0;
               width: 100%;
-              height: 590px;
+              height: 400px;
               box-shadow: $base-box-shadow;
 
               .ant-anchor-ink {

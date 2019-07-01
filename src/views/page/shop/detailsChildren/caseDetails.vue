@@ -100,7 +100,7 @@
       return {
         isLogin: true,
         isLoading: true,
-        detail: "",
+        detail: {'name':'网来商城-全国领先的医疗设备、医疗器械、医疗备件、医疗配件交易平台'},
         commentData: ""
       };
     },
