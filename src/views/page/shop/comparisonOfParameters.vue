@@ -61,7 +61,8 @@
           </div>
         </div>
 
-        <transition-group name="list-complete" tag="div" class="content">
+        <!-- <transition-group name="list-complete" tag="div" class="content"> -->
+        <div class="content">
           <div class="col" key="first">
             <div class="header">
               <p>
@@ -72,7 +73,7 @@
               </p>
             </div>
             <ul>
-              <li v-for="item in paramas" :key="`${item.specificationId}-item`">
+              <li v-for="(item, i) in paramas" :key="`${i}-item`">
                 {{ item.specificationName || "--" }}
               </li>
             </ul>
@@ -173,7 +174,9 @@
               <li v-for="val in paramas" :key="val.id">--</li>
             </ul>
           </div>
-        </transition-group>
+        </div>
+
+        <!-- </transition-group> -->
         <a-button type="primary" @click="addbtnClick" v-if="arr.length < 6">
           添加型号
         </a-button>
@@ -250,6 +253,7 @@
       //点击选择分类
       categoryBoxClick() {
         this.categoryShow = !this.categoryShow;
+        this.defaultShowIndex = null;
         this.isShowSmallCategory = false;
       },
       async getBrandByCategory() {
@@ -312,7 +316,7 @@
       smallCategoryClick(item) {
         this.categoryShow = false;
 
-        if (this.currentCategory != item.name) {
+        if (this.categoryId != item.id) {
           this.currentCategory = item.name;
 
           this.categoryId = item.id;
@@ -336,7 +340,7 @@
         });
         // this.arr[this.defaultShowIndex]["brandName"] = val.name;
         console.log(this.defaultShowIndex, this.arr);
-
+        console.log(this.categoryId);
         this.getModelListByBrand(val.id).then(data => {
           this.modelList = data.brandModelList;
         });
@@ -381,7 +385,7 @@
       //获取品牌下型号列表
       async getModelListByBrand(id) {
         return await _getData("brandmodel/list", {
-          categoryId: this.$route.query.categoryId,
+          categoryId: this.categoryId,
           brandId: id
         });
       },
@@ -850,7 +854,7 @@
   .list-complete-enter,
   .list-complete-leave-to {
     opacity: 0;
-    transform: translateY(30px);
+    // transform: translateY(30px);
   }
   .list-complete-leave-active {
     // position: absolute;

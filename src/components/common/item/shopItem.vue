@@ -20,6 +20,7 @@
           }"
         >
           <img :data-src="item.image" alt="" v-if="item.image" />
+          <img v-else src="../../../assets/images/default.png" alt="" />
           <span
             :class="
               item.type == 3
@@ -97,9 +98,9 @@
     }
     /deep/ img[lazy="error"] {
       /*your style here*/
-      background: url("../../../assets/images/loading.gif") no-repeat center;
-      background-size: 100px;
-      display: none;
+      background: url("../../../assets/images/default.png") no-repeat center;
+      background-size: 100% 100%;
+      //display: none;
       // background-color: #f7f9fa;
     }
     a {

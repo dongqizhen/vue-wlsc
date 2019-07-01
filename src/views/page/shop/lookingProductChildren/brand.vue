@@ -63,7 +63,12 @@
                 :item="item"
               ></case-item-vue>
             </ul>
-            <!-- <pagination :data="" ref="pagination"></pagination> -->
+            <pagination
+              :data="data"
+              v-if="defaultVal"
+              v-on:onPaginationChange="onPaginationChange"
+              ref="pagination"
+            ></pagination>
           </div>
           <no-data v-else></no-data>
         </div>
@@ -97,6 +102,7 @@
     data() {
       return {
         arr: [],
+        data: {},
         articleList: [],
         caseList: [],
         videoList: [],
@@ -123,6 +129,9 @@
       pagination
     },
     methods: {
+      onPaginationChange(page) {
+        this.getList(page);
+      },
       shopTabClick(key, val) {
         if (this.defaultVal == 0) {
           this.sort = key ? 0 : 1;
@@ -131,6 +140,11 @@
         }
 
         this.getList();
+        this.$nextTick(() => {
+          if (this.$refs.pagination) {
+            this.$refs.pagination.$data.current = 1;
+          }
+        });
       },
       tabClick(i) {
         this.defaultVal = i;
@@ -141,26 +155,26 @@
           this.navArr = otherArr;
         }
         this.getList();
-        // this.$nextTick(() => {
-        //   if (this.$refs.pagination) {
-        //     this.$refs.pagination.$data.current = 1;
-        //   }
-        // });
+        this.$nextTick(() => {
+          if (this.$refs.pagination) {
+            this.$refs.pagination.$data.current = 1;
+          }
+        });
       },
 
-      async getList() {
+      async getList(page = 1) {
         this.arr = [];
         switch (this.defaultVal) {
           case 0:
             return await this.getModelList();
           case 1:
-            return await this.getArticleList();
+            return await this.getArticleList(page);
 
           case 2:
-            return await this.getVideoList();
+            return await this.getVideoList(page);
 
           case 3:
-            return await this.getCaseList();
+            return await this.getCaseList(page);
         }
       },
       //获取型号列表
@@ -183,7 +197,7 @@
           });
       },
       //获取文章列表
-      async getArticleList() {
+      async getArticleList(page = 1) {
         this.isLoading = true;
         return await _getData(
           `${this.$API_URL.HYGLOGINURL}/server/article!request.action`,
@@ -193,15 +207,16 @@
             deviceId: "",
             source: "",
             params: {
-              currentPage: 1,
+              currentPage: page,
               countPerPage: 20,
-              classifyId: this.params.a_classify_id || "",
+              classifyId: this.params.classifyId || "",
               sortType: this.othersort,
               sortFlag: 1 //排序标识0正序1 倒序
             }
           }
         )
           .then(data => {
+            this.data = data.result;
             this.arr = data.result.articlelist;
           })
           .then(() => {
@@ -211,7 +226,7 @@
           });
       },
       //获取视频列表
-      async getVideoList() {
+      async getVideoList(page = 1) {
         this.isLoading = true;
         return await _getData(
           `${this.$API_URL.HYGPROURL}/server_pro/video!request.action`,
@@ -221,16 +236,17 @@
             deviceId: "",
             source: "",
             params: {
-              currentPage: 1,
+              currentPage: page,
               countPerPage: 20,
-              vBigCategoryId: this.params.v_big_category_id || "",
-              vCategoryId: this.params.v_sub_category_id || "",
+              vBigCategoryId: this.params.vBigCategoryId || "",
+              vCategoryId: this.params.vCategoryId || "",
               sortType: this.othersort,
               sortFlag: 1
             }
           }
         )
           .then(data => {
+            this.data = data.result;
             this.arr = data.result.videolist;
           })
           .then(() => {
@@ -240,7 +256,7 @@
           });
       },
       //获取维修宝列表
-      async getCaseList() {
+      async getCaseList(page = 1) {
         this.isLoading = true;
         return await _getData(
           `${this.$API_URL.HYGPROURL}/server_pro/maintenance!request.action`,
@@ -250,10 +266,10 @@
             deviceId: "",
             source: "",
             params: {
-              currentPage: 1,
+              currentPage: page,
               countPerPage: 20,
-              mCatogoryId: this.params.m_category_id || "",
-              mBrandId: this.params.brand_id || "",
+              mCatogoryId: this.params.mCatogoryId || "",
+              mBrandId: this.params.mBrandId || "",
               sortType: this.othersort,
               sortFlag: 1,
               searchType: 0 //查询类型0列表1详情
@@ -261,6 +277,7 @@
           }
         )
           .then(data => {
+            this.data = data.result;
             this.arr = data.result.maintenancelist;
           })
           .then(() => {

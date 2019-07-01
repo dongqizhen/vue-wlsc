@@ -80,8 +80,8 @@
       console.log(this.data);
 
       let $config = {
-        title: this.data.name || this.data.title || this.data.topic || '',
-        image: this.data.image || this.data.cover[0] || "",
+        title: this.data.name || this.data.title || this.data.topic || "",
+        image: this.data.image || (this.data.cover && this.data.cover[0]) || "",
         description: "",
         wechatQrcodeTitle: "微信扫一扫：分享", // 微信二维码提示文字
         wechatQrcodeHelper:

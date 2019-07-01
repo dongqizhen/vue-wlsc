@@ -362,15 +362,18 @@
         this.$refs.preview.firstChild.setAttribute("src", img);
       },
       addCarSuccess() {
+        if (!this.isLogin) {
+          this.type = "login";
+          this.visible = true;
+          return;
+        }
+
         _getData("cart/addCart", {
           goodsId: this.$route.params.id,
           number: 1
         }).then(data => {
-          if (data.code == 1) {
-          }
-          if (!this.isLogin) {
-            this.type = "login";
-          }
+          // if (data.code == 1) {
+          // }
           this.visible = true;
         });
       },

@@ -92,9 +92,7 @@
     data() {
       return {};
     },
-    created() {
-      console.log(this.item);
-    },
+    created() {},
     components: {
       menuVue
     },

@@ -6,7 +6,30 @@
     <Nav :defaultNav="defaultNav"></Nav>
     <div class="container">
       <div class="commonWidth">
-        <breadcrumb-vue :routes="routes"></breadcrumb-vue>
+        <breadcrumb-vue :routes="routes">
+          <ul slot="search-type" class="search-type">
+            <li
+              v-for="(item, i) in searchParamas"
+              :key="`key-${i}`"
+              class="search-type-item"
+            >
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#iconwangyelujing"></use>
+              </svg>
+              <span>
+                {{ item.name }}
+
+                <svg
+                  class="icon del"
+                  aria-hidden="true"
+                  v-if="i != 0"
+                  @click="delHandleClick(i, item.key)"
+                >
+                  <use xlink:href="#icontianjiaduibichanpinshanchu"></use>
+                </svg>
+              </span>
+            </li></ul
+        ></breadcrumb-vue>
         <div class="select-area">
           选择销售地区：
           <span @click="selectArea">
@@ -133,11 +156,12 @@
         city: "选择市",
         isActive: 0, //是否显示市弹出层
         selectMainArea: "", //默认显示地址
-        provinceName: "北京市",
-        cityName: "北京市",
+        provinceName: "",
+        cityName: "",
         categoryId: "", //分类id
         isLoading: true,
         brandId: "",
+        searchParamas: [], //搜素条件集合
         routes: [
           {
             name: "首页",
@@ -166,25 +190,41 @@
     },
     created() {
       //this.routes = JSON.parse(this.$route.query.routes);
+      this.searchParamas.push({
+        name: "销售地区：" + "",
+        key: "keyword"
+      });
     },
     mounted() {
-      _getData("address/getRemortIP", {}).then(data => {
-        this.selectMainArea = data.content.address;
-      });
-      _getData("address/getProvince", {})
+      _getData("address/getRemortIP", {})
         .then(data => {
-          console.log("data", data);
-          this.area = data;
+          this.selectMainArea = data.content.address;
+          this.provinceName = data.content.address_detail.province;
+          this.cityName = data.content.address_detail.city;
+          this.searchParamas.splice(0, 1, {
+            name: "销售地区：" + this.selectMainArea,
+            key: "keyword"
+          });
         })
         .then(() => {
           this.getShop();
         });
+      _getData("address/getProvince", {}).then(data => {
+        console.log("data", data);
+        this.area = data;
+      });
     },
     methods: {
       //点击产品分类
-      categoryClick(item) {
+      categoryClick(item, val) {
         console.log(item);
         this.categoryId = item.id;
+        this.brandId = "";
+        this.searchParamas = _.take(this.searchParamas, 1);
+        this.searchParamas.push({
+          name: val.name + "：" + item.name,
+          key: "category"
+        });
         this.getShop().then(data => {
           // console.log(data);
         });
@@ -216,6 +256,22 @@
       brandClick(item) {
         console.log(item);
         this.brandId = item.id;
+        let obj = _.keyBy(this.searchParamas, "key");
+
+        if (!_.has(obj, "brand")) {
+          //this.searchParamas = _.dropRight(this.searchParamas);
+          this.searchParamas.push({
+            name: "品牌：" + item.name,
+            key: "brand"
+          });
+        } else {
+          let index = _.indexOf(_.keys(obj), "brand");
+
+          this.searchParamas.splice(index, 1, {
+            name: "品牌：" + item.name,
+            key: "brand"
+          });
+        }
         this.getShop();
       },
       selectArea() {
@@ -248,15 +304,23 @@
             });
           });
       },
+      //点击省
       handleClick(val) {
         console.log(val);
         if (val.name == "全国") {
           this.selectMainArea = val.name;
           this.areaIsShow = false;
+          this.provinceName = "全国";
+          this.cityName = "全国";
+          this.searchParamas.splice(0, 1, {
+            name: "销售地区：" + this.selectMainArea,
+            key: "keyword"
+          });
+          this.getShop();
           return;
         }
         this.province = val.name;
-
+        this.provinceName = val.name;
         _getData("address/getCity", { provinceId: val.id })
           .then(data => {
             console.log(data);
@@ -270,9 +334,24 @@
         this.isActive = 0;
         this.province = "选择省/直辖市";
       },
+      delHandleClick(i, key) {
+        this.searchParamas.splice(i, 1);
+        if (key == "brand") {
+          this.brandId = "";
+        } else if (key == "category") {
+          this.categoryId = "";
+        }
+        this.getShop();
+      },
       cityItemClick(item) {
         this.selectMainArea = this.province + item.name;
+        this.searchParamas.splice(0, 1, {
+          name: "销售地区：" + this.selectMainArea,
+          key: "keyword"
+        });
         this.areaIsShow = false;
+        this.cityName = item.name;
+        this.getShop();
       }
     }
   };

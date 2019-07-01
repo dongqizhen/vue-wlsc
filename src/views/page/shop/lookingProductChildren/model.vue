@@ -78,7 +78,7 @@
             </div>
             <loading-vue v-else></loading-vue>
             <pagination-vue
-              v-if="!shopIsloading && shopList.length"
+              v-if="shopList.length"
               :data="data"
               v-on:onPaginationChange="onPaginationChange"
               ref="pagination"
@@ -123,6 +123,7 @@
         attributeCategoryId: "", //属性id
         isLoading: true,
         tabs: [],
+        countData: "",
         modelDetail: "",
         index: 0,
         navArr: ["发布时间", "按价格", "按好评"],
@@ -155,13 +156,19 @@
           this.getGoodsList(page);
         } else if (_.startsWith(this.defaultVal, "店铺")) {
           this.getShopList(page);
+        } else if (_.startsWith(this.defaultVal, "文章")) {
+          this.getArticleList(page);
+        } else if (_.startsWith(this.defaultVal, "视频")) {
+          this.getVideoList(page);
+        } else if (_.startsWith(this.defaultVal, "案例")) {
+          this.getCaseList(page);
         }
       },
       startWith(val) {
         return _.startsWith(this.defaultVal, val);
       },
       //获取文章列表
-      async getArticleList() {
+      async getArticleList(page = 1) {
         this.shopIsloading = true;
         return await _getData(
           `${this.$API_URL.HYGLOGINURL}/server/article!request.action`,
@@ -171,15 +178,16 @@
             deviceId: "",
             source: "",
             params: {
-              currentPage: 1,
+              currentPage: page,
               countPerPage: 20,
-              classifyId: this.modelDetail.a_classify_id || "",
+              classifyId: this.countData.classifyId || "",
               sortType: this.othersort,
               sortFlag: 1 //排序标识0正序1 倒序
             }
           }
         )
           .then(data => {
+            this.data = data.result;
             this.shopList = data.result.articlelist;
           })
           .then(() => {
@@ -189,7 +197,7 @@
           });
       },
       //获取视频列表
-      async getVideoList() {
+      async getVideoList(page = 1) {
         this.shopIsloading = true;
         return await _getData(
           `${this.$API_URL.HYGPROURL}/server_pro/video!request.action`,
@@ -199,18 +207,18 @@
             deviceId: "",
             source: "",
             params: {
-              currentPage: 1,
+              currentPage: page,
               countPerPage: 20,
-              vBigCategoryId: this.modelDetail.v_big_category_id || "",
-              vCategoryId: this.modelDetail.v_sub_category_id || "",
+              vBigCategoryId: this.countData.vBigCategoryId || "",
+              vCategoryId: this.countData.vCategoryId || "",
               sortType: this.othersort,
               sortFlag: 1
             }
           }
         )
           .then(data => {
+            this.data = data.result;
             this.shopList = data.result.videolist;
-            console.log(this.shopList);
           })
           .then(() => {
             this.$nextTick().then(() => {
@@ -222,7 +230,7 @@
           });
       },
       //获取维修宝列表
-      async getCaseList() {
+      async getCaseList(page = 1) {
         this.shopIsloading = true;
         return await _getData(
           `${this.$API_URL.HYGPROURL}/server_pro/maintenance!request.action`,
@@ -232,17 +240,18 @@
             deviceId: "",
             source: "",
             params: {
-              currentPage: 1,
+              currentPage: page,
               countPerPage: 20,
-              mCatogoryId: this.modelDetail.m_category_id || "",
-              mBrandId: this.modelDetail.brand_id || "",
+              mCatogoryId: this.countData.mCatogoryId || "",
+              mBrandId: this.countData.mBrandId || "",
               sortType: this.othersort,
               sortFlag: 1,
-              searchType: 0 //查询类型0列表1详情
+              searchType: 1 //查询类型0列表1详情
             }
           }
         )
           .then(data => {
+            this.data = data.result;
             this.shopList = data.result.maintenancelist;
           })
           .then(() => {
@@ -361,6 +370,7 @@
         .then(data => {
           console.log("nav", data);
           this.navList = data.list;
+          this.countData = data.params;
           this.attributeCategoryId = this.navList[0].id;
           this.tabs = [
             ..._.map(data.list, val => {
@@ -559,16 +569,26 @@
           margin-top: 4px;
         }
         .main-content {
-          margin-right: -7.5px;
+          margin-right: -20px;
           > div > div > ul {
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-start;
+            //  width: 776px;
             > li {
               margin-right: 7.5px;
               margin-bottom: 10px;
               &.case-item {
                 width: 100%;
+                width: 776px;
+              }
+              &.article-item {
+                margin-right: 0;
+                width: 776px;
+              }
+              &.video-item {
+                margin-right: 21px;
+                margin-bottom: 20px;
               }
             }
           }
@@ -580,6 +600,9 @@
             background: #ffffff;
             width: 776px;
           }
+        }
+        .paginationBox {
+          margin-bottom: 0;
         }
       }
       .right {
