@@ -1,7 +1,7 @@
 <template>
   <div class="aboutUs">
     <guide-right title="关于我们">
-      <div class="info" slot="contentInfo"></div>
+      <div class="info" slot="contentInfo" v-html="htmlData"></div>
     </guide-right>
   </div>
 </template>

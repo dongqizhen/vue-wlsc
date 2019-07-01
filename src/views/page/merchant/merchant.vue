@@ -4,6 +4,7 @@
     :dataArr="dataArr"
     :openKeys="['sub1', 'sub2', 'sub3']"
     :defaultSelectedKeys="defaultSelectedKeys"
+    :currentSelectedKeys="currentSelectedKeys"
     :shopStatus="shopStatus"
   >
     <div slot="header">
@@ -20,6 +21,7 @@
     data() {
       return {
         shopStatus: 2,
+        currentSelectedKeys: "0",
         defaultSelectedKeys: ["0"],
         dataArr: [
           {
@@ -78,14 +80,12 @@
         })
         .then(() => {
           if (this.userShopInfo.audit_status == 2) {
-            console.log(this.defaultSelectedKeys);
             if (this.$route.query.keyId) {
-              this.defaultSelectedKeys = [`${this.$route.query.keyId}`];
+              this.currentSelectedKeys = this.$route.query.keyId;
             } else {
-              this.defaultSelectedKeys = ["1"];
+              this.currentSelectedKeys = "1";
               this.$router.replace({ path: "/merchant/shopIndex" });
             }
-            console.log(this.defaultSelectedKeys);
           } else {
             this.shopStatus = this.userShopInfo.audit_status
               ? this.userShopInfo.audit_status
