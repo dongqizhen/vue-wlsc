@@ -82,12 +82,11 @@
     },
     methods: {
       submitQuote() {
-        if (this.goodsList.length == 0) {
+        if (this.checkedList.length == 0) {
           this.$message.warning("请选择产品", 1);
           return;
         } else {
           this.loading = true;
-          console.log(this.goodsList);
           let flag = true;
           _.map(this.goodsList, o => {
             if (flag) {

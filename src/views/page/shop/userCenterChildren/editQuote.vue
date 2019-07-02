@@ -7,14 +7,14 @@
           报价公司
           <a-input
             placeholder="请输入报价公司"
-            v-model="param.offerCompany"
+            v-model="offerCompany"
           ></a-input>
         </span>
         <span>
           客户名称
           <a-input
             placeholder="请输入客户名称"
-            v-model="param.clienteleName"
+            v-model="clienteleName"
           ></a-input>
         </span>
       </div>
@@ -27,9 +27,9 @@
             <span>{{ item.goodsBrand }}/{{ item.goodsModel }}</span>
             <span>{{ item.number }}</span>
             <span>¥{{ item.number * item.unitPrice }}</span>
-            <span>
+            <!-- <span>
               {{ item.arrivalTime ? item.arrivalTime.substring(0, 16) : "" }}
-            </span>
+            </span> -->
             <span>{{
               item.remark
                 ? item.remark.length > 40
@@ -55,7 +55,7 @@
         <span>
           <a-textarea
             placeholder="请输入报价备注"
-            v-model="param.remark"
+            v-model="remark"
           ></a-textarea>
         </span>
       </div>
@@ -63,9 +63,9 @@
         <span class="totalPrice">
           报价总金额：<i>¥{{ sumPrice }}</i>
         </span>
-        <a-button type="primary" :loading="loading" class="save" @click="save"
-          >保存</a-button
-        >
+        <a-button type="primary" :loading="loading" class="save" @click="save">
+          保存
+        </a-button>
       </div>
     </div>
     <edit-quote-modal
@@ -95,18 +95,14 @@
           "品牌型号",
           "数量",
           "总额",
-          "到货时间",
           "备注",
           "操作"
         ],
         data: {},
         sumPrice: 0,
-        param: {
-          id: this.$route.params.id,
-          clienteleName: "",
-          offerCompany: "",
-          remark: ""
-        }
+        clienteleName: "",
+        offerCompany: "",
+        remark: ""
       };
     },
     computed: {
@@ -116,7 +112,14 @@
       save() {
         if (this.data.goodList.length > 0) {
           this.loading = true;
-          _getData("/quotation/save", { param: this.param }).then(data => {
+          _getData("/quotation/save", {
+            param: {
+              id: this.$route.params.id,
+              clienteleName: this.clienteleName,
+              offerCompany: this.offerCompany,
+              remark: this.remark
+            }
+          }).then(data => {
             console.log(data);
             this.loading = false;
             if (data.code != 500) {
@@ -151,8 +154,8 @@
       getIsUpdate(val) {
         this.getQuoteOrderDetail();
       },
-      getQuoteOrderDetail() {
-        _getData("/quotation/detail", {
+      async getQuoteOrderDetail() {
+        return await _getData("/quotation/detail", {
           param: {
             id: this.$route.params.id
           }
@@ -160,9 +163,6 @@
           console.log("获取的商品报价单详情：", data);
           this.sumPrice = 0;
           this.data = data;
-          this.param.clienteleName = data.clienteleName;
-          this.param.offerCompany = data.offerCompany;
-          this.param.remark = data.remark;
           _.map(data.goodList, value => {
             this.sumPrice = this.sumPrice + value.number * value.unitPrice;
           });
@@ -170,7 +170,11 @@
       }
     },
     mounted() {
-      this.getQuoteOrderDetail();
+      this.getQuoteOrderDetail().then(() => {
+        this.clienteleName = this.data.clienteleName;
+        this.offerCompany = this.data.offerCompany;
+        this.remark = this.data.remark;
+      });
     },
     components: {
       commonTitle,
@@ -227,14 +231,10 @@
               width: 79px;
             }
             &:nth-child(5) {
-              width: 79px;
+              width: 99px;
             }
             &:nth-child(6) {
-              width: 68px;
-            }
-            &:nth-child(7) {
-              width: 138px;
-              margin-right: 30px;
+              width: 188px;
             }
           }
         }
@@ -245,7 +245,7 @@
           li {
             border: $border-style;
             height: 90px;
-            padding-top: 10px;
+            padding: 10px 0;
             display: flex;
             border-top: none;
             &:first-child {
@@ -274,15 +274,14 @@
                 width: 79px;
               }
               &:nth-child(5) {
-                width: 79px;
+                width: 99px;
               }
               &:nth-child(6) {
-                width: 68px;
+                width: 188px;
+                overflow: hidden;
+                word-wrap: break-word;
               }
               &:nth-child(7) {
-                width: 138px;
-              }
-              &:nth-child(8) {
                 width: 76px;
                 margin-right: 0;
                 > div {

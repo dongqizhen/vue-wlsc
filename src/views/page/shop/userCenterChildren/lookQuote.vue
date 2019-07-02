@@ -16,7 +16,6 @@
             <span>¥{{ item.unitPrice }}</span>
             <span>{{ item.number }}</span>
             <span>¥{{ item.number * item.unitPrice }}</span>
-            <span>{{ item.arrivalTime }}</span>
             <span>{{
               item.remark
                 ? item.remark.length > 33
@@ -74,7 +73,6 @@
           "单价",
           "数量",
           "总额",
-          "到货时间",
           "备注"
         ],
         data: [],
@@ -150,18 +148,14 @@
               width: 130px;
             }
             &:nth-child(4) {
-              width: 75px;
+              width: 95px;
             }
             &:nth-child(5) {
-              width: 43px;
+              width: 53px;
               margin-right: 30px;
             }
             &:nth-child(6) {
-              width: 80px;
-            }
-            &:nth-child(7) {
-              width: 68px;
-              margin-right: 30px;
+              width: 100px;
             }
           }
         }
@@ -198,24 +192,19 @@
                 width: 130px;
               }
               &:nth-child(4) {
-                width: 75px;
+                width: 95px;
               }
               &:nth-child(5) {
-                width: 43px;
+                width: 53px;
                 margin-right: 30px;
               }
               &:nth-child(6) {
-                width: 80px;
+                width: 100px;
                 overflow: hidden;
                 word-wrap: break-word;
               }
               &:nth-child(7) {
-                width: 68px;
-                color: $theme-color;
-                margin-right: 30px;
-              }
-              &:nth-child(8) {
-                width: 125px;
+                width: 168px;
                 margin-right: 10px;
                 overflow: hidden;
                 word-wrap: break-word;
