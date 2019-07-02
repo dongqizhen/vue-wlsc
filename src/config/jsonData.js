@@ -9,7 +9,7 @@ function toData(json) {
     } else {
         console.log('使用toData加密', data);
         data = aesEncrypt(data);
-        return "data=" + data;
+        return "data=" + encodeURIComponent(data);
     }
 }
 

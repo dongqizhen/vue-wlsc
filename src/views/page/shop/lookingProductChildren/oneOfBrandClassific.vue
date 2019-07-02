@@ -35,7 +35,7 @@
     <span
       class="manageBtn"
       @click="brandVisible = !brandVisible"
-      v-if="isLogin"
+      v-if="isLogin && defaultsNav == '常用品牌'"
     >
       <svg class="icon" aria-hidden="true">
         <use xlink:href="#iconguanlichangyongfenlei"></use>

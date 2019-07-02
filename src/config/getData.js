@@ -10,6 +10,7 @@ export async function _getData(url = '', data = {}, config = {}) {
         ... {
 
         },
+
         ...data
     }).then(data => {
         console.log(data)

@@ -94,6 +94,7 @@
   import articleItemVue from "../../../../components/common/item/articleItem.vue";
   import caseItemVue from "../../../../components/common/item/caseItem.vue";
   import pagination from "../../../../components/common/pagination";
+  import axios from "axios";
 
   const modelArr = ["按首字母排序", "按点击量排序"],
     otherArr = ["发布时间", "浏览量", "点赞数"];
@@ -113,7 +114,8 @@
         tabs: [],
         isLoading: true,
         params: "",
-        navArr: modelArr
+        navArr: modelArr,
+        cancel: null
       };
     },
     components: {
@@ -149,12 +151,14 @@
       tabClick(i) {
         this.defaultVal = i;
         this.$refs.shopNav.$data.val = 0;
+        console.log(this.cancel());
         if (i == 0) {
           this.navArr = modelArr;
         } else {
           this.navArr = otherArr;
         }
         this.getList();
+
         this.$nextTick(() => {
           if (this.$refs.pagination) {
             this.$refs.pagination.$data.current = 1;
@@ -183,7 +187,11 @@
         return await _getData("brandmodel/list", {
           categoryId: this.$route.query.categoryId,
           brandId: this.$route.query.brandId,
-          sortOrder: this.sort
+          sortOrder: this.sort,
+          cancelToken: new axios.CancelToken(c => {
+            // 设置 cancel token
+            this.cancel = c;
+          })
         })
           .then(data => {
             console.log(data);
@@ -211,6 +219,10 @@
               countPerPage: 20,
               classifyId: this.params.classifyId || "",
               sortType: this.othersort,
+              cancelToken: new axios.CancelToken(c => {
+                // 设置 cancel token
+                this.cancel = c;
+              }),
               sortFlag: 1 //排序标识0正序1 倒序
             }
           }
@@ -241,7 +253,11 @@
               vBigCategoryId: this.params.vBigCategoryId || "",
               vCategoryId: this.params.vCategoryId || "",
               sortType: this.othersort,
-              sortFlag: 1
+              sortFlag: 1,
+              cancelToken: new axios.CancelToken(c => {
+                // 设置 cancel token
+                this.cancel = c;
+              })
             }
           }
         )
@@ -272,7 +288,11 @@
               mBrandId: this.params.mBrandId || "",
               sortType: this.othersort,
               sortFlag: 1,
-              searchType: 0 //查询类型0列表1详情
+              searchType: 0, //查询类型0列表1详情
+              cancelToken: new axios.CancelToken(c => {
+                // 设置 cancel token
+                this.cancel = c;
+              })
             }
           }
         )

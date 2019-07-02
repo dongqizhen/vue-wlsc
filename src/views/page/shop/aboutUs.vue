@@ -37,7 +37,9 @@
                 </svg>
                 企业文化
               </h2>
-              <div class="img_box"></div>
+              <div class="img_box">
+                <img src="../../../assets/images/culture.jpg" alt="" />
+              </div>
               <p>
                 网来商城主要业务是打造并运营医疗设备、耗材、配件的电子商务交易平台，依托于好医工app，中国医疗设备杂志社，非公立医疗机构协会临床工程师分会，为医院、工程师个人、厂商、第三方服务商提供丰富且优质的设备配件、医疗耗材及医疗设备。为网来会员打造一个集中采购平台，降低采购成本。
               </p>
@@ -275,6 +277,10 @@
             margin-left: 23px;
             margin-top: 9px;
             margin-bottom: 28px;
+            img {
+              height: 100%;
+              width: 100%;
+            }
           }
           .introduce {
             margin-bottom: 50px;

@@ -2,7 +2,7 @@
  * @Author: mikey.dongqizhen 
  * @Date: 2019-04-18 17:08:47 
  * @Last Modified by: mikey.dongqizhen
- * @Last Modified time: 2019-06-20 12:07:18
+ * @Last Modified time: 2019-07-02 16:36:03
  */
 
 
@@ -16,7 +16,16 @@ import {
 let request = axios.create();
 //console.log(window.localStorage["vuex-along"])
 
-
+let pending = []; //声明一个数组用于存储每个ajax请求的取消函数和ajax标识
+let cancelToken = axios.CancelToken;
+let removePending = (ever) => {
+    for (let p in pending) {
+        if (pending[p].u === ever.url + '&' + ever.method) { //当当前请求在数组中存在时执行函数体
+            pending[p].f(); //执行取消操作
+            pending.splice(p, 1); //把这条记录从数组中移除
+        }
+    }
+}
 
 //添加请求拦截器
 axios.interceptors.request.use(function(config) {
@@ -41,6 +50,15 @@ axios.interceptors.request.use(function(config) {
             }
         ]
     }
+    removePending(config); //在一个ajax发送前执行一下取消操作
+    config.cancelToken = new cancelToken((c) => {
+        // 这里的ajax标识我是用请求地址&请求方式拼接的字符串，当然你可以选择其他的一些方式
+        pending.push({
+            u: config.url + '&' + config.method,
+            f: c
+        });
+    });
+    console.log("aaaaaaaaaaaaaaa", pending)
     return config;
 
 }, function(error) {
@@ -52,6 +70,8 @@ axios.interceptors.request.use(function(config) {
 // 添加响应拦截器
 axios.interceptors.response.use(function(response) {
     console.log(response)
+    removePending(response.config); //在一个ajax响应后再执行一下取消操作，把已经完成的请求从pending中移除
+    console.log("bbbbbbbbb", pending)
     if (response.config.url.indexOf('!request.action') == -1) {
         return response.data
     } else {
@@ -85,6 +105,8 @@ axios.defaults.transformRequest = [ //`transformRequest`选项允许我们在请
     }
 ]
 axios.defaults.baseURL = `${env.API_HOST.URL}/api/`; //如果url不是绝对路径，那么会将baseURL和url拼接作为请求的接口地址
+
+
 
 // request.defaults.adapter = function(config) {
 //     /* ... */

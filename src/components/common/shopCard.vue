@@ -168,8 +168,9 @@
       font-size: 15px;
       color: #2b3e50;
       font-weight: 600;
-      height: 22px;
+
       line-height: 22px;
+      padding: 0 18px;
     }
     > ul {
       padding: 0 18px;

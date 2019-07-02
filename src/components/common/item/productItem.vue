@@ -40,7 +40,9 @@
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icondianpu"></use>
             </svg>
-            {{ list.shop_name || list.shopName }}
+            <div>
+              {{ list.shop_name || list.shopName }}
+            </div>
           </div>
           <span>
             <svg class="icon" aria-hidden="true">
@@ -170,6 +172,13 @@
       > div {
         display: flex;
         align-items: center;
+
+        > div {
+          width: 135px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
         > .icon {
           margin-right: 6px;
           margin-top: 2px;

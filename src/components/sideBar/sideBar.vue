@@ -9,17 +9,21 @@
     </a-back-top>
     <div class="online_server">
       <svg class="icon" aria-hidden="true">
-        <use xlink:href="#iconzaixianzixun"></use>
+        <use xlink:href="#iconyijianfankui"></use>
       </svg>
     </div>
+    <!-- <model-vue></model-vue> -->
   </div>
 </template>
 
 <script>
+  import modelVue from "../../views/page/shop/lookingProductChildren/model.vue";
+
   export default {
     data() {
       return {};
-    }
+    },
+    components: { modelVue }
   };
 </script>
 
