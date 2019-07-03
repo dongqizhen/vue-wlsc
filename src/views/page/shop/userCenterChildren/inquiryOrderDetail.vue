@@ -186,7 +186,7 @@
             if (data.code != 500) {
               let { href } = this.$router.resolve({
                 path: `/userCenter/editQuote/${data.id}`,
-                query: { keyId: 4 }
+                query: { keyId: "4" }
               });
               window.open(href, "_blank");
             }
@@ -202,7 +202,7 @@
         } else {
           const { href } = this.$router.resolve({
             path: `/userCenter/submitOrder/${this.checkedList.join(",")}`,
-            query: { keyId: 2 }
+            query: { keyId: "2" }
           });
           this.orderLoading = false;
           window.open(href, "_blank");
@@ -253,7 +253,7 @@
             if (data.code != 500) {
               const { href } = this.$router.resolve({
                 path: "/userCenter/myInquiry",
-                query: { keyId: 2 }
+                query: { keyId: "2" }
               });
               window.open(href, "_blank");
             }

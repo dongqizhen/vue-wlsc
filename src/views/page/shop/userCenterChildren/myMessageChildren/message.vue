@@ -48,7 +48,7 @@
                 :to="{
                   path: `/userCenter/myMessage/contactService`,
                   query: {
-                    keyId: 9,
+                    keyId: '9',
                     topTitle: 'sub1',
                     id: item.id,
                     shopId: item.storeId,

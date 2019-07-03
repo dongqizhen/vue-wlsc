@@ -160,6 +160,7 @@
           this.getOrderData.endTime = "";
         }
         this.getOrderData.currentPage = 1;
+        //this.getOrderData.orderStatus = "";
         this.getOrderList().then(() => {
           this.$nextTick(() => {
             if (this.$refs.pagination) {

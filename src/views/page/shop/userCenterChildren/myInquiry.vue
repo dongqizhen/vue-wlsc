@@ -218,7 +218,7 @@
             if (data.code != 500) {
               let { href } = this.$router.resolve({
                 path: `editQuote/${data.id}`,
-                query: { keyId: 2 }
+                query: { keyId: "2" }
               });
               window.open(href, "_blank");
             }
@@ -296,7 +296,7 @@
         if (this.products.length > 0) {
           let { href } = this.$router.resolve({
             path: `submitOrder/${this.products.join(",")}`,
-            query: { keyId: 2 }
+            query: { keyId: "2" }
           });
           this.orderLoading = false;
           window.open(href, "_blank");

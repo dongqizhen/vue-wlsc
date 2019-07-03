@@ -23,7 +23,7 @@
             tag="li"
             :to="{
               path: `editInquiry/${data.id}`,
-              query: { isShowInfo: isShowInfo, keyId: 6 }
+              query: { isShowInfo: isShowInfo, keyId: '6' }
             }"
           >
             <a target="_blank">编辑报价</a>
@@ -34,7 +34,7 @@
             tag="li"
             :to="{
               path: `inquiryOrderDetail/${data.id}`,
-              query: { isShowInfo: JSON.stringify(this.isShowInfo), keyId: 6 }
+              query: { isShowInfo: JSON.stringify(this.isShowInfo), keyId: '6' }
             }"
           >
             <a target="_blank">查看详情</a>

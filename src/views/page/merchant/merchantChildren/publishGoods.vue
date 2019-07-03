@@ -256,6 +256,10 @@
       <a-button class="save" @click="save">保存</a-button>
       <a-button class="reset" @click="reset">重置</a-button>
     </div>
+    <publish-goods-success
+      :Visible="visible"
+      :type="type"
+    ></publish-goods-success>
   </div>
 </template>
 
@@ -265,12 +269,15 @@
   import addBtn from "../../../../components/common/productParams/addBtn";
   import paramItem from "../../../../components/common/productParams/paramItem";
   import newParam from "../../../../components/common/productParams/newParam";
+  import publishGoodsSuccess from "../../../../components/modal/publishGoodsSuccess";
   import ueditor from "../../../../components/common/ueditor";
   import { _getData, _getDataAll } from "../../../../config/getData";
   import { mapState, mapMutations } from "vuex";
   export default {
     data() {
       return {
+        type: "",
+        visible: false,
         UEConfig: {
           zIndex: 1,
           autoFloatEnabled: false,
@@ -320,6 +327,9 @@
         }
       };
     },
+    computed: {
+      ...mapState(["isLogin", "userInfo"])
+    },
     methods: {
       ...mapMutations(["changeUserShopInfoState"]),
       release() {
@@ -332,13 +342,16 @@
                 _getData("/goods/updateGoods", this.submitData).then(data => {
                   if (data.code != 500) {
                     this.$message.success("产品编辑成功", 1);
-                    this.$router.replace({ path: "/merchant/productManage" });
+                    this.$router.replace({
+                      path: "/merchant/productManage",
+                      query: { keyId: "5" }
+                    });
                   }
                 });
               } else {
                 _getData("/goods/addGoods", this.submitData).then(data => {
                   if (data.code != 500) {
-                    this.$message.success("产品发布成功", 1);
+                    this.addCarSuccess();
                   }
                 });
               }
@@ -399,6 +412,12 @@
         this.tempUploadList = [];
         this.isSparePart = 0;
         this.$refs.goodDesc.setUEContent("");
+      },
+      addCarSuccess() {
+        if (!this.isLogin) {
+          this.type = "login";
+        }
+        this.visible = true;
       },
       infoJudge() {
         if (!this.submitData.name) {
@@ -603,9 +622,7 @@
         });
       }
     },
-    computed: {
-      ...mapState(["userInfo"])
-    },
+
     mounted() {
       _getData("/catalog/first", {}).then(data => {
         console.log("一级", data);
@@ -682,7 +699,8 @@
       addBtn,
       newParam,
       paramItem,
-      ueditor
+      ueditor,
+      publishGoodsSuccess
     }
   };
 </script>

@@ -42,7 +42,7 @@
             target="_blank"
             :to="{
               path: `/userCenter/editQuote/${$route.params.id}`,
-              query: { keyId: 4 }
+              query: { keyId: '4' }
             }"
           >
             修改报价

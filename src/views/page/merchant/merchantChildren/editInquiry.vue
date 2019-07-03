@@ -107,7 +107,7 @@
                 this.$message.success("报价成功", 1);
                 this.$router.replace({
                   path: "/merchant/inquiryManage",
-                  query: { status: 2, keyId: 6 }
+                  query: { status: 2, keyId: "6" }
                 });
               }
             });

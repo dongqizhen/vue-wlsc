@@ -130,7 +130,7 @@
           :to="{
             path: `orderDetail/${data.id}`,
             query: {
-              keyId: isShowInfo.isMerchant ? 7 : 3,
+              keyId: isShowInfo.isMerchant ? '7' : '3',
               topTitle: isShowInfo.isMerchant ? 'sub2' : 'sub1'
             }
           }"
@@ -236,7 +236,7 @@
           } else {
             const { href } = this.$router.resolve({
               path: `comment/${orderId}`,
-              query: { keyId: 3, topTitle: "sub1" }
+              query: { keyId: "3", topTitle: "sub1" }
             });
             window.open(href, "_blank");
           }

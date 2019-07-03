@@ -125,7 +125,7 @@
             if (data.code != 500) {
               this.$router.replace({
                 path: "/userCenter/myQuote",
-                query: { keyId: 4 }
+                query: { keyId: "4" }
               });
             }
           });

@@ -106,7 +106,7 @@
               this.getCart().then(() => {
                 let { href } = this.$router.resolve({
                   path: "/userCenter/myInquiry",
-                  query: { keyId: 2 }
+                  query: { keyId: "2" }
                 });
                 window.open(href, "_blank");
               });
