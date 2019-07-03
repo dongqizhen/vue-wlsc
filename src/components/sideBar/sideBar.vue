@@ -7,23 +7,50 @@
         </svg>
       </div>
     </a-back-top>
-    <div class="online_server">
+    <div class="online_server" @click="handlerClick">
       <svg class="icon" aria-hidden="true">
         <use xlink:href="#iconyijianfankui"></use>
       </svg>
     </div>
-    <!-- <model-vue></model-vue> -->
+    <modal-vue :isShow="visible" :options="options">
+      <div slot="content">
+        <h2>您的意见是网来商城进步的动力！</h2>
+        <a-textarea
+          placeholder="您好，您可以在这里写下您的意见～"
+          :rows="4"
+          v-model="value"
+        />
+        <div class="btn">
+          <a-button :disabled="value == ''">提交意见</a-button>
+          <a-button @click="visible = false">取消</a-button>
+        </div>
+      </div>
+    </modal-vue>
   </div>
 </template>
 
 <script>
-  import modelVue from "../../views/page/shop/lookingProductChildren/model.vue";
+  import modalVue from "../modal/modal.vue";
 
   export default {
     data() {
-      return {};
+      return {
+        value: "",
+        visible: false,
+        options: {
+          title: "意见反馈",
+          wrapClassName: "suggestions",
+          getContainer: () =>
+            document.getElementById("components-back-top-demo-custom")
+        }
+      };
     },
-    components: { modelVue }
+    components: { modalVue },
+    methods: {
+      handlerClick() {
+        this.visible = !this.visible;
+      }
+    }
   };
 </script>
 
@@ -38,6 +65,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    z-index: 9999;
     //background: red;
     /deep/ .ant-back-top {
       position: static;
@@ -75,6 +103,97 @@
       }
       &:hover {
         opacity: 1;
+      }
+    }
+    /deep/ .ant-modal-mask {
+      // z-index: 9999;
+    }
+    /deep/ .suggestions {
+      z-index: 9999;
+      .modal {
+        z-index: 9999;
+        width: 696px !important;
+        .ant-modal-content {
+          width: 686px;
+          height: 447px;
+          z-index: 9999;
+          .ant-modal-body {
+            padding: 0 34px;
+            h2 {
+              height: 80px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 24px;
+              color: #333333;
+              font-weight: 600;
+            }
+            /deep/ .ant-input {
+              // margin: 0 34px;
+              height: 134px;
+              height: 202px;
+              border: 1px solid #bfc2cc;
+              border-radius: 4px;
+              background: #fafafa;
+              padding: 12px 14px;
+              resize: none;
+              font-size: 15px;
+              color: #333;
+              &::-webkit-scrollbar {
+                width: 5px;
+                height: 5px;
+
+                background-color: #b5b1b1;
+              }
+              &::-webkit-scrollbar-track {
+                background: #f6f6f6;
+                border-radius: 2px;
+              }
+              &::-webkit-scrollbar-thumb {
+                background: #aaa;
+                border-radius: 2px;
+              }
+
+              &:hover,
+              &:focus {
+                // border: none !important;
+                outline: none;
+                box-shadow: none !important;
+              }
+            }
+            .btn {
+              margin-top: 42px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+
+              /deep/ .ant-btn {
+                height: 42px;
+                width: 115px;
+                font-size: 18px;
+                border-radius: 3px;
+                &:hover {
+                  opacity: 0.7;
+                }
+                &:first-child {
+                  font-weight: 600;
+                  color: #ffffff;
+                  background: #f5a623;
+                  margin-right: 12px;
+                  border-color: #f5a623;
+                  &[disabled] {
+                    opacity: 0.5;
+                  }
+                }
+                &:last-child {
+                  color: #666666;
+                  border: 1px solid #cccccc;
+                  border-color: #cccccc;
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

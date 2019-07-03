@@ -528,7 +528,7 @@
           right: 20px;
           bottom: 17px;
           &[disabled] {
-            opacity: 0.2;
+            opacity: 0.5;
             padding: 0;
           }
           &::after {

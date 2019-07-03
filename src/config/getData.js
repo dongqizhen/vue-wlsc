@@ -12,7 +12,7 @@ export async function _getData(url = '', data = {}, config = {}) {
         },
 
         ...data
-    }).then(data => {
+    }, config).then(data => {
         console.log(data)
         if (data.code == 0 || data.code == 200) {
             // console.log(router)

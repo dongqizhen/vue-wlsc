@@ -95,7 +95,9 @@
   import caseItemVue from "../../../../components/common/item/caseItem.vue";
   import pagination from "../../../../components/common/pagination";
   import axios from "axios";
-
+  var CancelToken = axios.CancelToken;
+  var source = CancelToken.source();
+  console.log(source);
   const modelArr = ["按首字母排序", "按点击量排序"],
     otherArr = ["发布时间", "浏览量", "点赞数"];
 
@@ -140,7 +142,7 @@
         } else {
           this.othersort = key;
         }
-
+        this.cancel();
         this.getList();
         this.$nextTick(() => {
           if (this.$refs.pagination) {
@@ -151,12 +153,14 @@
       tabClick(i) {
         this.defaultVal = i;
         this.$refs.shopNav.$data.val = 0;
-        console.log(this.cancel());
+
         if (i == 0) {
           this.navArr = modelArr;
         } else {
           this.navArr = otherArr;
         }
+
+        this.cancel();
         this.getList();
 
         this.$nextTick(() => {
@@ -184,15 +188,20 @@
       //获取型号列表
       async getModelList() {
         this.isLoading = true;
-        return await _getData("brandmodel/list", {
-          categoryId: this.$route.query.categoryId,
-          brandId: this.$route.query.brandId,
-          sortOrder: this.sort,
-          cancelToken: new axios.CancelToken(c => {
-            // 设置 cancel token
-            this.cancel = c;
-          })
-        })
+        return await _getData(
+          "brandmodel/list",
+          {
+            categoryId: this.$route.query.categoryId,
+            brandId: this.$route.query.brandId,
+            sortOrder: this.sort
+          },
+          {
+            cancelToken: new axios.CancelToken(c => {
+              // 设置 cancel token
+              this.cancel = c;
+            })
+          }
+        )
           .then(data => {
             console.log(data);
             this.arr = data.brandModelList;
@@ -219,12 +228,16 @@
               countPerPage: 20,
               classifyId: this.params.classifyId || "",
               sortType: this.othersort,
-              cancelToken: new axios.CancelToken(c => {
-                // 设置 cancel token
-                this.cancel = c;
-              }),
+
               sortFlag: 1 //排序标识0正序1 倒序
             }
+          },
+          {
+            cancelToken: new axios.CancelToken(c => {
+              // 设置 cancel token
+
+              this.cancel = c;
+            })
           }
         )
           .then(data => {
@@ -253,12 +266,14 @@
               vBigCategoryId: this.params.vBigCategoryId || "",
               vCategoryId: this.params.vCategoryId || "",
               sortType: this.othersort,
-              sortFlag: 1,
-              cancelToken: new axios.CancelToken(c => {
-                // 设置 cancel token
-                this.cancel = c;
-              })
+              sortFlag: 1
             }
+          },
+          {
+            cancelToken: new axios.CancelToken(c => {
+              // 设置 cancel token
+              this.cancel = c;
+            })
           }
         )
           .then(data => {
@@ -288,12 +303,14 @@
               mBrandId: this.params.mBrandId || "",
               sortType: this.othersort,
               sortFlag: 1,
-              searchType: 0, //查询类型0列表1详情
-              cancelToken: new axios.CancelToken(c => {
-                // 设置 cancel token
-                this.cancel = c;
-              })
+              searchType: 0 //查询类型0列表1详情
             }
+          },
+          {
+            cancelToken: new axios.CancelToken(c => {
+              // 设置 cancel token
+              this.cancel = c;
+            })
           }
         )
           .then(data => {

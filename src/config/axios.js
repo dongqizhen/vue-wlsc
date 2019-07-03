@@ -2,7 +2,7 @@
  * @Author: mikey.dongqizhen 
  * @Date: 2019-04-18 17:08:47 
  * @Last Modified by: mikey.dongqizhen
- * @Last Modified time: 2019-07-02 16:36:03
+ * @Last Modified time: 2019-07-03 14:10:19
  */
 
 
@@ -18,6 +18,7 @@ let request = axios.create();
 
 let pending = []; //声明一个数组用于存储每个ajax请求的取消函数和ajax标识
 let cancelToken = axios.CancelToken;
+let cancel = null
 let removePending = (ever) => {
     for (let p in pending) {
         if (pending[p].u === ever.url + '&' + ever.method) { //当当前请求在数组中存在时执行函数体
@@ -29,6 +30,10 @@ let removePending = (ever) => {
 
 //添加请求拦截器
 axios.interceptors.request.use(function(config) {
+    // if (cancel) {
+    //     cancel()
+    // }
+
     if (config.url.indexOf('!request.action') == -1) {
         let token;
         if (window.localStorage["vuex-along"] != "{}") {
@@ -51,14 +56,16 @@ axios.interceptors.request.use(function(config) {
         ]
     }
     removePending(config); //在一个ajax发送前执行一下取消操作
-    config.cancelToken = new cancelToken((c) => {
-        // 这里的ajax标识我是用请求地址&请求方式拼接的字符串，当然你可以选择其他的一些方式
-        pending.push({
-            u: config.url + '&' + config.method,
-            f: c
-        });
-    });
-    console.log("aaaaaaaaaaaaaaa", pending)
+    // config.cancelToken = new cancelToken((c) => {
+    //     // 这里的ajax标识我是用请求地址&请求方式拼接的字符串，当然你可以选择其他的一些方式
+    //     // pending.push({
+    //     //     u: config.url + '&' + config.method,
+    //     //     f: c
+    //     // });
+    //     cancel = c
+
+    // });
+    // console.log("aaaaaaaaaaaaaaa", pending)
     return config;
 
 }, function(error) {
@@ -70,8 +77,9 @@ axios.interceptors.request.use(function(config) {
 // 添加响应拦截器
 axios.interceptors.response.use(function(response) {
     console.log(response)
-    removePending(response.config); //在一个ajax响应后再执行一下取消操作，把已经完成的请求从pending中移除
-    console.log("bbbbbbbbb", pending)
+
+    //removePending(response.config); //在一个ajax响应后再执行一下取消操作，把已经完成的请求从pending中移除
+    // console.log("bbbbbbbbb", pending)
     if (response.config.url.indexOf('!request.action') == -1) {
         return response.data
     } else {

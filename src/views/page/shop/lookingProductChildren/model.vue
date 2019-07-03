@@ -109,6 +109,7 @@
   import videoItemVue from "../../../../components/common/item/videoItem.vue";
   import caseItemVue from "../../../../components/common/item/caseItem.vue";
   import articleItemVue from "../../../../components/common/item/articleItem.vue";
+  import axios from "axios";
 
   const goodsort = ["发布时间", "按价格", "按好评"],
     shopsort = ["发布时间", "按点击量", "按好评"],
@@ -132,7 +133,8 @@
         goodSort: "createOn", //产品排序类型 “createOn”发布时间 ,"price" 价格 ,“rate”//好评率
         shopSort: "createOn", //店铺排序类型 “createOn”发布时间 ,"hit" 点击量,“rate”//好评率
         othersort: 0, //案例，视频，文章排序标识  0 发布时间 1 浏览量 2 点赞数
-        shopIsloading: false
+        shopIsloading: false,
+        cancel: null
       };
     },
     components: {
@@ -184,6 +186,13 @@
               sortType: this.othersort,
               sortFlag: 1 //排序标识0正序1 倒序
             }
+          },
+          {
+            cancelToken: new axios.CancelToken(c => {
+              // 设置 cancel token
+
+              this.cancel = c;
+            })
           }
         )
           .then(data => {
@@ -214,6 +223,13 @@
               sortType: this.othersort,
               sortFlag: 1
             }
+          },
+          {
+            cancelToken: new axios.CancelToken(c => {
+              // 设置 cancel token
+
+              this.cancel = c;
+            })
           }
         )
           .then(data => {
@@ -248,6 +264,13 @@
               sortFlag: 1,
               searchType: 1 //查询类型0列表1详情
             }
+          },
+          {
+            cancelToken: new axios.CancelToken(c => {
+              // 设置 cancel token
+
+              this.cancel = c;
+            })
           }
         )
           .then(data => {
@@ -262,6 +285,7 @@
           });
       },
       shopTabClick(i) {
+        this.cancel();
         if (this.index < this.navList.length) {
           this.goodSort = i == 0 ? "createOn" : i == 1 ? "price" : "rate";
           this.getGoodsList();
@@ -292,6 +316,7 @@
         this.goodSort = "createOn";
         this.shopSort = "createOn";
         this.$refs.shopNav.$data.val = 0;
+        this.cancel();
         if (i < this.navList.length) {
           this.navArr = goodsort;
           this.attributeCategoryId = this.navList[i].id;
@@ -319,13 +344,23 @@
       //获取商铺列表
       async getShopList(currentPage = 1) {
         this.shopIsloading = true;
-        return await _getData("queryStore", {
-          modelId: this.$route.query.modelId,
-          currentPage,
-          countPerPage: 6,
-          sort: this.shopSort,
-          order: "asc"
-        })
+        return await _getData(
+          "queryStore",
+          {
+            modelId: this.$route.query.modelId,
+            currentPage,
+            countPerPage: 6,
+            sort: this.shopSort,
+            order: "asc"
+          },
+          {
+            cancelToken: new axios.CancelToken(c => {
+              // 设置 cancel token
+
+              this.cancel = c;
+            })
+          }
+        )
           .then(data => {
             console.log("店铺", data);
             this.data = data;
@@ -343,14 +378,24 @@
       //获取产品列表
       async getGoodsList(currentPage = 1) {
         this.shopIsloading = true;
-        return await _getData("goods/goodslist", {
-          attributeCategoryId: this.attributeCategoryId,
-          currentPage,
-          modelId: this.$route.query.modelId,
-          countPerPage: 6,
-          sort: this.goodSort,
-          order: "asc"
-        })
+        return await _getData(
+          "goods/goodslist",
+          {
+            attributeCategoryId: this.attributeCategoryId,
+            currentPage,
+            modelId: this.$route.query.modelId,
+            countPerPage: 6,
+            sort: this.goodSort,
+            order: "asc"
+          },
+          {
+            cancelToken: new axios.CancelToken(c => {
+              // 设置 cancel token
+
+              this.cancel = c;
+            })
+          }
+        )
           .then(data => {
             console.log("产品列表", data);
             this.data = data;
