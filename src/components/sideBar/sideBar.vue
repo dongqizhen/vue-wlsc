@@ -21,7 +21,12 @@
           v-model="value"
         />
         <div class="btn">
-          <a-button :disabled="value == ''">提交意见</a-button>
+          <a-button
+            :disabled="value == ''"
+            @click="saveSuggestions"
+            :loading="loading"
+            >提交意见</a-button
+          >
           <a-button @click="visible = false">取消</a-button>
         </div>
       </div>
@@ -31,12 +36,14 @@
 
 <script>
   import modalVue from "../modal/modal.vue";
+  import { _getData } from "../../config/getData";
 
   export default {
     data() {
       return {
         value: "",
         visible: false,
+        loading: false,
         options: {
           title: "意见反馈",
           wrapClassName: "suggestions",
@@ -49,6 +56,21 @@
     methods: {
       handlerClick() {
         this.visible = !this.visible;
+      },
+      saveSuggestions() {
+        this.loading = true;
+        _getData("feedback/save", {})
+          .then(data => {
+            console.log(data);
+            if (data.code == 0) {
+              this.value = "";
+              this.visible = !this.visible;
+              this.$message.success("提交成功，感谢您对网来商城的支持！");
+            }
+          })
+          .then(() => {
+            this.loading = false;
+          });
       }
     }
   };
@@ -181,6 +203,7 @@
                   background: #f5a623;
                   margin-right: 12px;
                   border-color: #f5a623;
+                  padding-left: 15px;
                   &[disabled] {
                     opacity: 0.5;
                   }

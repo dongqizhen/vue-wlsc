@@ -167,6 +167,10 @@
         height: 22px;
         line-height: 22px;
         margin: 8px 0;
+        width: 224px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       p {
         font-size: 12px;

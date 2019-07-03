@@ -1,56 +1,59 @@
 <template>
-  <a-anchor class="toolMenu menu" :affix="false">
-    <a-anchor-link href="#writeReview">
-      <span slot="title">
-        <i>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#iconpinglun"></use>
-          </svg>
-        </i>
-        {{ item.commentNum }}
-      </span>
-    </a-anchor-link>
-    <a-anchor-link href="#a">
-      <span
-        slot="title"
-        @click="toolMenuClick(2)"
-        :class="isCollect && 'active'"
-      >
-        <i>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#iconshoucang" v-if="!isCollect"></use>
-            <use xlink:href="#iconpingjiashixinwujiaoxing" v-else></use>
-          </svg>
-        </i>
-        {{ item.favoriteNum }}
-      </span>
-    </a-anchor-link>
-    <a-anchor-link href="#a">
-      <span
-        slot="title"
-        @click="toolMenuClick(3)"
-        :class="isThumpUp && 'active'"
-      >
-        <i>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#iconzan" v-if="!isThumpUp"></use>
-            <use xlink:href="#iconzanx" v-else></use>
-          </svg>
-        </i>
-        {{ thumpUpNumber }}
-      </span>
-    </a-anchor-link>
-    <a-anchor-link href="#shareMenu">
-      <span slot="title">
-        <i>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#iconfenxiang"></use>
-          </svg>
-        </i>
-        {{ item.shareNum }}
-      </span>
-    </a-anchor-link>
-  </a-anchor>
+  <div>
+    <a-anchor class="toolMenu menu" :affix="false">
+      <a-anchor-link href="#writeReview">
+        <span slot="title" @click="toolMenuClick(1)">
+          <i>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconpinglun"></use>
+            </svg>
+          </i>
+          {{ item.commentNum }}
+        </span>
+      </a-anchor-link>
+      <a-anchor-link href="#a">
+        <span
+          slot="title"
+          @click="toolMenuClick(2)"
+          :class="isCollect && 'active'"
+        >
+          <i>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconshoucang" v-if="!isCollect"></use>
+              <use xlink:href="#iconpingjiashixinwujiaoxing" v-else></use>
+            </svg>
+          </i>
+          {{ item.favoriteNum }}
+        </span>
+      </a-anchor-link>
+      <a-anchor-link href="#a">
+        <span
+          slot="title"
+          @click="toolMenuClick(3)"
+          :class="isThumpUp && 'active'"
+        >
+          <i>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconzan" v-if="!isThumpUp"></use>
+              <use xlink:href="#iconzanx" v-else></use>
+            </svg>
+          </i>
+          {{ thumpUpNumber }}
+        </span>
+      </a-anchor-link>
+      <a-anchor-link href="#shareMenu">
+        <span slot="title">
+          <i>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#iconfenxiang"></use>
+            </svg>
+          </i>
+          {{ item.shareNum }}
+        </span>
+      </a-anchor-link>
+    </a-anchor>
+    <login-modal-vue :Visible="visible" type="login"></login-modal-vue>
+  </div>
 
   <!-- <span @click="toolMenuClick(2)">
       <a>
@@ -88,16 +91,20 @@
 
 <script>
   import { _getData } from "../../../config/getData";
+  import { mapState } from "vuex";
+  import loginModalVue from "../../modal/loginModal.vue";
   export default {
     data() {
       return {
         isThumpUp: 0, //是否点赞
         thumpUpNumber: "", //点赞数
         isCollect: 0, //是否收藏
-        collectNumber: "" //收藏数
+        collectNumber: "", //收藏数
+        visible: false
       };
     },
     props: ["item", "type"],
+    components: { loginModalVue },
     created() {
       if (this.type == "video") {
         this.isThumpUp = this.item.isDianzan;
@@ -151,6 +158,10 @@
         });
       },
       toolMenuClick(val) {
+        if (!this.isLogin && val != 4) {
+          this.visible = true;
+          return;
+        }
         switch (val) {
           case 1:
             break;
@@ -166,6 +177,7 @@
       }
     },
     computed: {
+      ...mapState(["isLogin"]),
       selectType() {
         switch (this.type) {
           case "article":

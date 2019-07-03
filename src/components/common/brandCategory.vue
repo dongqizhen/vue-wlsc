@@ -330,7 +330,7 @@
         box-shadow: $base-box-shadow;
         .swiper-container.nav_slide {
           height: 63px;
-          border-bottom: 0.5px solid #ccc;
+          border-bottom: 0.5px solid #e6e6e6;
           // overflow-y: auto;
           .swiper-wrapper {
             position: relative;

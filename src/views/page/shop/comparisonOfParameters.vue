@@ -8,7 +8,7 @@
         <h2>
           <span></span>参数对比
           <p>
-            (注：参数对比必须为同类型号，如更换对比分类请选择“更换分类”后添加型号，更换分类后原有添加商品则清空)
+            (注：参数对比必须为同类型号，如更换对比分类请选择“更换分类”后添加型号，更换分类后原有添加型号则清空)
           </p>
         </h2>
 
@@ -69,7 +69,7 @@
                 <svg class="icon" aria-hidden="true">
                   <use xlink:href="#iconcanshuduibi"></use>
                 </svg>
-                主要参数
+                参数名称
               </p>
             </div>
             <ul>
@@ -121,7 +121,7 @@
                     </svg>
                     <span v-if="isShowModel">型号</span>
                   </h2>
-                  <div v-if="!isModelLoading">
+                  <div>
                     <ul class="index-list" v-if="!isShowModel">
                       <li v-for="(v, key) in brandList" :key="key">
                         <h3>{{ key }}</h3>
@@ -145,7 +145,7 @@
                     </ul>
                     <ul class="index-list" v-else>
                       <li>
-                        <ul>
+                        <ul v-if="!isModelLoading">
                           <li
                             v-for="v in modelList"
                             :key="v.id"
@@ -154,6 +154,7 @@
                             {{ v.name }}
                           </li>
                         </ul>
+                        <loading v-else loading text=""></loading>
                       </li>
                     </ul>
                   </div>
@@ -204,6 +205,7 @@
         arr: [],
         currentCategory: "",
         categoryId: "",
+        modelIdArr: new Array(6),
         paramas: [1, 2],
         brandList: [], //全部品牌
         defaultShowIndex: null, //显示的modal层index
@@ -213,7 +215,8 @@
         categoryShow: false, //是否分类层
         isShowSmallCategory: false,
         categoryList: [], //大类
-        smallCategory: [] //小类
+        smallCategory: [], //小类
+        modelLoading: false
       };
     },
     mixins: [mixin],
@@ -233,6 +236,9 @@
 
       this.currentCategory = this.$route.query.categoryName;
       this.categoryId = this.$route.query.categoryId;
+      if (this.$route.query.modelId) {
+        this.modelIdArr.splice(0, 1, Number(this.$route.query.modelId));
+      }
     },
     mounted() {
       //参数对比
@@ -333,6 +339,7 @@
         console.log(val);
         this.isShowModel = true;
         console.log(this.arr[this.defaultShowIndex]);
+        this.modelIdArr.splice(this.defaultShowIndex, 1, "");
         this.arr.splice(this.defaultShowIndex, 1, {
           categoryId: this.$route.query.categoryId,
           categoryName: this.$route.query.categoryName,
@@ -341,13 +348,18 @@
         // this.arr[this.defaultShowIndex]["brandName"] = val.name;
         console.log(this.defaultShowIndex, this.arr);
         console.log(this.categoryId);
-        this.getModelListByBrand(val.id).then(data => {
-          this.modelList = data.brandModelList;
-        });
+        this.getModelListByBrand(val.id);
       },
       //选择型号
       selectModel(val) {
         console.log(val);
+
+        if (_.indexOf(this.modelIdArr, val.id) != -1) {
+          this.$message.warning("该型号已添加");
+          return;
+        }
+        this.modelIdArr.splice(this.defaultShowIndex, 1, val.id);
+        console.log(this.modelIdArr);
         this.arr[this.defaultShowIndex]["modelName"] = val.name;
         //;
 
@@ -366,6 +378,8 @@
       //点击删除按钮
       delbtnClick(i) {
         console.log(i);
+        this.modelIdArr.splice(i, 1, "");
+        console.log(this.modelIdArr);
         if (this.arr.length > 4) {
           this.arr.splice(i, 1);
 
@@ -384,10 +398,19 @@
       },
       //获取品牌下型号列表
       async getModelListByBrand(id) {
+        this.isModelLoading = true;
         return await _getData("brandmodel/list", {
           categoryId: this.categoryId,
           brandId: id
-        });
+        })
+          .then(data => {
+            this.modelList = data.brandModelList;
+          })
+          .then(() => {
+            setTimeout(() => {
+              this.isModelLoading = false;
+            }, 100);
+          });
       },
       //点击添加型号按钮
       addbtnClick() {
@@ -539,6 +562,8 @@
             left: 0;
             z-index: 1000;
             min-height: 300px;
+            display: flex;
+            flex-direction: column;
             h2 {
               height: 30px;
               border-bottom: 1px solid #dddddd;
@@ -566,6 +591,7 @@
             }
             > div {
               background: #fff;
+              flex: 1;
               ul {
                 display: flex;
                 flex-direction: column;
@@ -766,6 +792,9 @@
                       }
                     }
                   }
+                  /deep/.loading {
+                    height: 375px;
+                  }
                 }
               }
             }
@@ -782,12 +811,13 @@
             li {
               border-top: 1px solid #e0e7ea;
               border-right: 1px solid #e0e7ea;
-              height: 50px;
+              height: 140px;
               display: flex;
               align-items: center;
               justify-content: center;
               font-size: 14px;
               color: #666666;
+              padding: 0 14px;
               &:nth-child(2n) {
                 background: rgba(245, 166, 35, 0.03);
               }
