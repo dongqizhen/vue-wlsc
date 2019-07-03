@@ -56,7 +56,9 @@
                   </div>
                   <div>
                     <div v-for="goodItem in item.goodList" :key="goodItem.id">
-                      <span>{{ goodItem.goodsName }}</span>
+                      <span @click="turnToProductDetail(goodItem)">
+                        {{ goodItem.goodsName }}
+                      </span>
                       <span>
                         {{ goodItem.goodsBrand }}/{{ goodItem.goodsModel }}
                       </span>
@@ -73,7 +75,7 @@
                         target="_blank"
                         :to="{
                           path: `/userCenter/lookQuote/${item.id}`,
-                          query: { keyId: 4 }
+                          query: { keyId: '4' }
                         }"
                       >
                         查看
@@ -161,6 +163,15 @@
       ...mapState(["isLogin"])
     },
     methods: {
+      turnToProductDetail(goodsInfo) {
+        if (goodsInfo.shopId) {
+          const { href } = this.$router.resolve({
+            path: `/details/productDetails/${goodsInfo.goodsId}`,
+            query: { shopId: goodsInfo.storeId }
+          });
+          window.open(href, "_blank");
+        }
+      },
       download(id) {
         if (!this.isLogin) {
           this.type = "login";

@@ -67,6 +67,10 @@
     methods: {
       ...mapMutations(["changeUserShopInfoState"])
     },
+    beforeRouteUpdate(to, from, next) {
+      this.currentSelectedKeys = to.query.keyId;
+      next();
+    },
     beforeMount() {
       console.log(this.userShopInfo.audit_status);
       console.log(this.defaultSelectedKeys);

@@ -73,7 +73,7 @@
               this.$message.success("评论成功", 1);
               this.$router.replace({
                 path: "/userCenter/myOrder",
-                query: { status: 5, keyId: 3, topTitle: "sub1" }
+                query: { status: 5, keyId: "3", topTitle: "sub1" }
               });
             }
           });

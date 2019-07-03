@@ -26,7 +26,7 @@
               path: `inquiryOrderDetail/${data.id}`,
               query: {
                 isShowInfo: JSON.stringify(this.isShowInfo),
-                keyId: isShowInfo.isMerchant ? 6 : 2
+                keyId: isShowInfo.isMerchant ? '6' : '2'
               }
             }"
           >

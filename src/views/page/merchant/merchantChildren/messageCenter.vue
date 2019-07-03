@@ -48,7 +48,7 @@
                 :to="{
                   path: 'contactBuyer',
                   query: {
-                    keyId: 10,
+                    keyId: '10',
                     topTitle: 'sub3',
                     id: item.id,
                     shopId: item.storeId,
