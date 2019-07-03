@@ -811,7 +811,7 @@
             li {
               border-top: 1px solid #e0e7ea;
               border-right: 1px solid #e0e7ea;
-              height: 140px;
+              height: 300px;
               display: flex;
               align-items: center;
               justify-content: center;
