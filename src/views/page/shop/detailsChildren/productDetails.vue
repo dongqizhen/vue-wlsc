@@ -846,7 +846,7 @@
                 }
               }
               .specification {
-                width: 590px;
+                width: 728px;
                 border: #dddddd 1px solid;
                 border-bottom: 0;
                 li {
@@ -863,13 +863,13 @@
                     align-items: center;
                     &:first-child {
                       background: #f5f5f5;
-                      width: 123px;
+                      width: 180px;
                       border-right: #dddddd 1px solid;
-                      padding-left: 24px;
+                      padding: 0 16px;
                     }
                     &:last-child {
                       flex: 1;
-                      padding-left: 90px;
+                      padding: 0 20px;
                       font-weight: 600;
                     }
                   }
