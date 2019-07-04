@@ -55,7 +55,9 @@
           {{
             certificationStatus == 1
               ? "您的开店申请已经提交成功，后台正在认证中，三个工作日内给您反馈，请耐心等待…"
-              : "抱歉，您提交的资料有误，请点击“重新审核”进行认证或联系客服。"
+              : `抱歉，由于您提交的资料有误（${
+                  userShopInfo.reason
+                }），请点击“重新审核”进行认证或联系客服。`
           }}
         </div>
         <a-button class="reset" @click="reset" v-if="certificationStatus == 3">
@@ -69,7 +71,7 @@
   import shopInfo from "./shopInfo";
   import shopCertification from "./shopCertification";
   import { _getData } from "../../../../config/getData";
-  import { mapMutations } from "vuex";
+  import { mapState, mapMutations } from "vuex";
   export default {
     data() {
       return {
@@ -79,6 +81,7 @@
         certificationStatus: 1
       };
     },
+    computed: { ...mapState(["userShopInfo"]) },
     methods: {
       ...mapMutations(["changeUserShopInfoState"]),
       getShopInfo(val) {

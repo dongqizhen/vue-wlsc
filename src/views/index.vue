@@ -393,6 +393,7 @@
                   }
                 }
                 .content {
+                  width: 100%;
                   height: 382px;
                   display: flex;
                   justify-content: flex-start;
@@ -411,6 +412,7 @@
                     display: flex;
                     justify-content: flex-start;
                     padding-top: 4px;
+                    overflow: hidden;
                     li {
                       margin-right: 12px;
                       &:last-child {

@@ -14,8 +14,8 @@
             <img :src="data.shopImage" />
             {{ data.shopName }}
           </div>
-          <div class="linkName">联系人：{{ data.username }}</div>
-          <div class="phone">联系方式：188100000299 400-121-1212</div>
+          <div class="linkName">联系人：{{ data.shopLinkName }}</div>
+          <div class="phone">联系方式：{{ data.shopTel }}</div>
         </div>
         <div class="listContent">
           <list-title :titleArr="titleArr"></list-title>

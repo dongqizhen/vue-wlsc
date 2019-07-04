@@ -4,9 +4,9 @@
       <div slot="content" v-if="type != 'login'">
         <div class="alertContent">{{ contentText }}</div>
         <div class="btn">
-          <a-button type="primary" :loading="loading" @click="sureSubmit"
-            >确定重新认证</a-button
-          >
+          <a-button type="primary" :loading="loading" @click="sureSubmit">
+            确定重新认证
+          </a-button>
           <a-button @click="visible = false">取消</a-button>
         </div>
       </div>
@@ -104,6 +104,10 @@
             this.loading = false;
             this.$message.success("提交修改成功，请耐心等待审核!");
             this.visible = false;
+            this.$router.replace({
+              path: "/merchant/openShop",
+              query: { shopStatus: 1 }
+            });
           });
       },
       toLogin() {

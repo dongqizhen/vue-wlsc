@@ -229,7 +229,7 @@
           :beforeUpload="beforeUpload"
           @change="handleChange"
         >
-          <div>
+          <div v-show="!loading">
             <a-icon class="icon">
               <use xlink:href="#icontianjiatupian1"></use>
             </a-icon>
@@ -378,10 +378,14 @@
           if (this.submitData.goodsId) {
             _getData("/goods/updateGoods", this.submitData).then(data => {
               this.$message.success("产品保存成功", 1);
+              this.$router.replace({
+                path: "/merchant/productManage",
+                query: { keyId: "5" }
+              });
             });
           } else {
             _getData("/goods/addGoods", this.submitData).then(data => {
-              this.$message.success("产品保存成功", 1);
+              this.addCarSuccess();
             });
           }
         }
@@ -518,13 +522,12 @@
       },
       handleRemove(file) {
         const fileList = this.$refs.upload.sFileList;
-        // console.log(fileList);
+        this.uploadList.splice(this.uploadList.indexOf(file), 1);
         if (fileList.indexOf(file) != -1) {
           this.$refs.upload.sFileList.splice(fileList.indexOf(file), 1);
         } else {
           this.tempUploadList.splice(this.tempUploadList.indexOf(file), 1);
         }
-        this.uploadList.splice(this.uploadList.indexOf(file), 1);
       },
       handleChange(info) {
         // console.log(info);
@@ -588,7 +591,7 @@
       beforeUpload(file) {
         const isLt2M = file.size / 1024 / 1024 < 1;
         if (!isLt2M) {
-          this.$message.error("Image must smaller than 1MB!");
+          this.$message.error("图片大小不能超过2MB!");
         }
         return isLt2M;
       },
@@ -682,14 +685,14 @@
             this.submitData.maxPrice = "";
           } else {
             this.isEnquiry = false;
-            this.submitData.minPrice = data.productInfo.minPrice;
-            this.submitData.maxPrice = data.productInfo.maxPrice;
+            this.submitData.minPrice = data.productInfo.min_price;
+            this.submitData.maxPrice = data.productInfo.max_price;
           }
           let imgArr = JSON.parse(data.productInfo.list_pic_url);
           _.map(imgArr, (val, index) => {
             this.tempUploadList.push({ uid: index + 1, url: val });
           });
-          this.uploadList = this.tempUploadList;
+          this.uploadList = [...this.tempUploadList];
         });
       }
     },
@@ -994,7 +997,6 @@
               align-items: center;
               justify-content: center;
               z-index: 100;
-              display: none;
             }
             .ant-upload-text {
               font-family: PingFangSC-Regular;

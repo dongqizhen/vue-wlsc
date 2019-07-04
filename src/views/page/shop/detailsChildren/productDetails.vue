@@ -42,8 +42,10 @@
           <div class="main">
             <h2>{{ productInfo.name }}</h2>
             <div class="price">
-              <span>指导价：</span>
-              <span>{{ productInfo.show_price }}</span>
+              <span>指导价:</span>
+              <span v-show="productInfo.show_price != '询价'">
+                {{ productInfo.show_price }}
+              </span>
               <span>询价</span>
             </div>
             <ul class="params">
@@ -645,7 +647,7 @@
             justify-content: flex-start;
             align-items: center;
             background: rgba(241, 2, 21, 0.05);
-            padding-left: 20px;
+            padding-left: 10px;
             line-height: 50px;
             margin-bottom: 6px;
             span {
@@ -658,7 +660,7 @@
                 color: #f10215;
                 font-weight: 700;
                 line-height: 24px;
-                margin: 0 13px 0 4px;
+                margin: 0 4px;
                 margin-bottom: 3px;
               }
               &:nth-child(3) {
@@ -666,7 +668,7 @@
                 color: #f5a623;
                 font-weight: 600;
                 //cursor: pointer;
-                width: 43px;
+                width: 32px;
                 height: 22px;
                 background: #fef7ea;
                 display: flex;

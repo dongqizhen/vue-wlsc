@@ -59,10 +59,10 @@
       },
       saveSuggestions() {
         this.loading = true;
-        _getData("feedback/save", {})
+        _getData("feedback/save", { content: this.value })
           .then(data => {
             console.log(data);
-            if (data.code == 0) {
+            if (data.code != 500 || data.code != 1) {
               this.value = "";
               this.visible = !this.visible;
               this.$message.success("提交成功，感谢您对网来商城的支持！");
