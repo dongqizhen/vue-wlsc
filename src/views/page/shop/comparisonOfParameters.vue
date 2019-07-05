@@ -811,13 +811,14 @@
             li {
               border-top: 1px solid #e0e7ea;
               border-right: 1px solid #e0e7ea;
-              height: 300px;
+              height: 100px;
               display: flex;
               align-items: center;
               justify-content: center;
               font-size: 14px;
               color: #666666;
               padding: 0 14px;
+              overflow: hidden;
               &:nth-child(2n) {
                 background: rgba(245, 166, 35, 0.03);
               }
