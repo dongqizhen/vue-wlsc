@@ -219,6 +219,7 @@
               position: absolute;
               bottom: -62px;
               opacity: 1;
+              z-index: 999;
               .icon {
                 height: 66px;
                 width: 66px;

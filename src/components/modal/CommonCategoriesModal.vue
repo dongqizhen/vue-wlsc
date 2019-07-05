@@ -99,6 +99,7 @@
   import Swiper from "swiper";
   import { _getData } from "../../config/getData";
   import _ from "lodash";
+  import { mapState } from "vuex";
 
   export default {
     data() {
@@ -122,6 +123,9 @@
         type: Boolean,
         default: false
       }
+    },
+    computed: {
+      ...mapState(["isLogin"])
     },
     updated() {
       this.$nextTick().then(() => {
@@ -193,10 +197,12 @@
     },
     mounted() {
       //获取常用分类
-      _getData("ucatalog/list", {}).then(data => {
-        console.log("data", data);
-        this.myArray2 = data.userCategoryList;
-      });
+      if (this.isLogin) {
+        _getData("ucatalog/list", {}).then(data => {
+          console.log("data", data);
+          this.myArray2 = data.userCategoryList;
+        });
+      }
       //获取一级分类
       _getData("catalog/first", {})
         .then(data => {

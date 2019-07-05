@@ -41,7 +41,7 @@
             @change="handleChange"
             v-show="uploadList.length < 6"
           >
-            <div>
+            <div v-show="!loading">
               <a-icon class="icon">
                 <use xlink:href="#icontianjiatupian1"></use>
               </a-icon>
@@ -264,7 +264,6 @@
                 align-items: center;
                 justify-content: center;
                 z-index: 100;
-                display: none;
               }
               .ant-upload-text {
                 font-family: PingFangSC-Regular;

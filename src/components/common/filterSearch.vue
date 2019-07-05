@@ -33,14 +33,20 @@
 </template>
 <script>
   import calendarRange from "./calendarRange";
+  import { StringDecoder } from "string_decoder";
   export default {
     data() {
       return {
         submitData: {
-          value: "",
+          value: this.defaultName,
           dateRange: []
         }
       };
+    },
+    props: {
+      defaultName: {
+        type: String
+      }
     },
     methods: {
       searchData() {
@@ -67,6 +73,7 @@
   @import "../../assets/scss/_input";
   .filter {
     display: flex;
+    justify-content: space-between;
     margin-top: 24px;
     margin-bottom: 24px;
     .selectInfo {
@@ -85,7 +92,7 @@
         .right-box {
           @include placeholderStyle(12px);
           .ant-input {
-            width: 121px;
+            width: 180px;
             height: 27px;
             line-height: 27px;
             font-size: 12px;

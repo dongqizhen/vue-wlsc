@@ -6,33 +6,40 @@
         {{ data.createdOn ? data.createdOn.substring(0, 16) : "" }}
       </div>
       <div class="introduce">
+        {{ data.detail ? data.detail.split("sn")[0] : "" }}
         <router-link
           target="_blank"
-          v-if="data.messageModule.type == 1"
+          v-if="data.messageModule ? data.messageModule.type == 1 : 'true'"
           :to="{
-            path: '/merchant/orderManage',
+            path:
+              userType == 'user'
+                ? '/userCenter/myOrder'
+                : '/merchant/orderManage',
             query: {
-              keyId: '7',
-              status: data.messageModule.status,
-              orderNumber: data.messageModule.orderNumber
+              keyId: userType == 'user' ? '3' : '7',
+              status: data.messageModule ? data.messageModule.status : 0,
+              orderNumber: data.messageModule ? data.messageModule.orderSn : 0
             }
           }"
         >
-          {{ data.detail }}
+          {{ data.detail ? "sn" + data.detail.split("sn")[1] : "" }}
         </router-link>
         <router-link
           target="_blank"
-          v-else-if="data.messageModule.type == 2"
+          v-else-if="data.messageModule ? data.messageModule.type == 2 : 'true'"
           :to="{
-            path: '/merchant/inquiryManage',
+            path:
+              userType == 'user'
+                ? '/userCenter/myInquiry'
+                : '/merchant/inquiryManage',
             query: {
-              keyId: '6',
-              status: data.messageModule.status,
-              inquiryNumber: 'sn2019070417154849341000'
+              keyId: userType == 'user' ? '2' : '6',
+              status: data.messageModule ? data.messageModule.status : 0,
+              inquiryNumber: data.messageModule ? data.messageModule.orderSn : 0
             }
           }"
         >
-          {{ data.detail }}
+          {{ data.detail ? "sn" + data.detail.split("sn")[1] : "" }}
         </router-link>
         <span v-else>{{ data.detail }}</span>
       </div>
@@ -44,7 +51,8 @@
   export default {
     data() {
       return {
-        data: {}
+        data: {},
+        userType: "user"
       };
     },
     props: {
@@ -52,6 +60,11 @@
     },
     mounted() {
       //根据id获取相应的信息内容
+      if (this.$route.path.indexOf("userCenter") != -1) {
+        this.userType = "user";
+      } else {
+        this.userType = "store";
+      }
       _getData("/message/detail", { id: this.$route.params.id }).then(data => {
         console.log(data);
         this.data = data;
@@ -84,7 +97,9 @@
         letter-spacing: 0;
         line-height: 32px;
         a {
-          color: #333;
+          font-size: 18px;
+          font-weight: 600;
+          border-bottom: 1px solid #1890ff;
         }
       }
     }

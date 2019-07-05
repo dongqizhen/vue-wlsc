@@ -35,6 +35,13 @@
                 @mouseenter="activeVal = i"
                 @mouseleave="activeVal = 0"
               >
+                <img
+                  :src="
+                    i == defaultsVal || activeVal == i
+                      ? item.banner_url
+                      : item.icon_url
+                  "
+                />
                 {{ item.name }}
               </div>
 
@@ -327,6 +334,11 @@
               }
               &:hover {
                 color: $theme-color;
+              }
+              img {
+                width: 20px;
+                height: 22px;
+                margin-right: 8px;
               }
             }
             .bar {

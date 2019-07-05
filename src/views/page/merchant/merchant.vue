@@ -88,7 +88,10 @@
               this.currentSelectedKeys = this.$route.query.keyId;
             } else {
               this.currentSelectedKeys = "1";
-              this.$router.replace({ path: "/merchant/shopIndex" });
+              this.$router.replace({
+                path: "/merchant/shopIndex",
+                query: { keyId: "1" }
+              });
             }
           } else {
             this.shopStatus = this.userShopInfo.audit_status

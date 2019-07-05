@@ -28,7 +28,8 @@
                 v-for="item in data"
                 :key="item.id"
                 :to="{
-                  path: `messageDetail/${item.id}`
+                  path: `messageDetail/${item.id}`,
+                  query: { keyId: '9' }
                 }"
               >
                 <system-notice

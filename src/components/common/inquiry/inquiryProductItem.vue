@@ -1,5 +1,5 @@
 <template>
-  <div class="inquiryProductItem">
+  <div :class="['inquiryProductItem', { addClass: isShowInfo.current == 2 }]">
     <span
       :class="
         isShowInfo.isMerchant || isShowInfo.current == 1 ? 'boxHidden' : ''
@@ -19,7 +19,6 @@
       {{ itemData.goodsName }}
     </span>
     <span>{{ itemData.showPrice }}</span>
-    <span v-if="isShowInfo.isDetail">¥198988282.00</span>
     <span
       v-if="
         isShowInfo.current != 3 ||
@@ -27,6 +26,9 @@
       "
     >
       {{ itemData.number }}
+    </span>
+    <span v-if="isShowInfo.current == 2">
+      ¥{{ (itemData.unitPrice * itemData.number).toFixed(2) }}
     </span>
     <span v-if="isShowInfo.current == 3 && !isShowInfo.isMerchant">
       <van-stepper v-model="itemData.number" :max="itemData.repertoryNum" />
@@ -134,7 +136,6 @@
     height: 90px;
     border: $border-style;
     padding: 10px 0;
-
     > span {
       font-size: 12px;
       color: #666;
@@ -215,6 +216,68 @@
       &:nth-child(8) {
         width: 91px;
         margin-right: 15px;
+      }
+    }
+    &.addClass {
+      > span {
+        &:nth-child(4) {
+          width: 60px;
+          word-wrap: break-word;
+          overflow: hidden;
+        }
+        &:nth-child(5) {
+          width: 30px;
+          /deep/.van-stepper {
+            .van-stepper__minus,
+            .van-stepper__plus {
+              width: 20px;
+              height: 20px;
+              border-radius: 0;
+              border: $border-style;
+              background: #f6f6f6;
+              margin: 0;
+              &:hover {
+                cursor: pointer;
+              }
+            }
+            .van-stepper__input {
+              width: 38px;
+              height: 16px;
+              margin: 0;
+              border-top: $border-style;
+              border-bottom: $border-style;
+            }
+          }
+          .stockNumber {
+            font-style: normal;
+            font-size: 10px;
+            color: #ccc;
+            margin-top: 4px;
+          }
+        }
+        &:nth-child(6) {
+          width: 88px;
+          margin-right: 30px;
+          overflow: hidden;
+          word-wrap: break-word;
+        }
+        &:nth-child(7) {
+          width: 68px;
+          margin-right: 30px;
+        }
+        &:nth-child(8) {
+          width: 90px;
+          margin-right: 15px;
+          .ant-input {
+            font-size: 12px;
+            resize: none;
+            height: 65px;
+          }
+        }
+        &:nth-child(9) {
+          width: 91px;
+          margin-right: 15px;
+        }
       }
     }
   }

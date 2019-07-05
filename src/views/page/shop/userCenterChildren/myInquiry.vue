@@ -54,7 +54,10 @@
             <a-button class="clear" @click="clearData">清除</a-button>
           </div>
         </div>
-        <list-title :titleArr="titleArr"></list-title>
+        <list-title
+          :titleArr="titleArr"
+          :class="{ addClass: isShowInfo.current == 2 }"
+        ></list-title>
         <div v-if="!isInquiryLoading">
           <div class="listContent">
             <ul v-if="data.length > 0">
@@ -170,6 +173,8 @@
           size: 5,
           status: 1,
           enquirySn: "",
+          startTime: "",
+          endTime: "",
           storeId: ""
         },
         products: [],
@@ -337,6 +342,7 @@
             "产品名称",
             "单价",
             "数量",
+            "合计",
             "到货时间",
             "询价备注",
             "报价备注",
@@ -455,6 +461,36 @@
       }
     },
     mounted() {
+      if (this.$route.query.status) {
+        if (this.$route.query.status == 1) {
+          this.titleArr = [
+            "产品图片",
+            "产品名称",
+            "单价",
+            "数量",
+            "到货时间",
+            "询价备注",
+            "",
+            "操作"
+          ];
+        } else if (this.$route.query.status == 2) {
+          this.titleArr = [
+            "产品图片",
+            "产品名称",
+            "单价",
+            "数量",
+            "到货时间",
+            "询价备注",
+            "报价备注",
+            "操作"
+          ];
+        }
+        this.searchParams.status = this.$route.query.status;
+        this.isShowInfo.current = this.$route.query.status;
+        if (this.$route.query.inquiryNumber) {
+          this.searchParams.enquirySn = this.$route.query.inquiryNumber;
+        }
+      }
       _getDataAll([this.getInquiryList(), this.getInquiryNumber()]).then(() => {
         this.isLoading = false;
       });
@@ -531,7 +567,7 @@
           .right-box {
             @include placeholderStyle(12px);
             .ant-input {
-              width: 121px;
+              width: 180px;
               height: 27px;
               line-height: 27px;
               font-size: 12px;
@@ -583,6 +619,7 @@
             margin-right: 10px;
             padding: 0 18px;
             height: 27px;
+            border-radius: 0;
             cursor: pointer;
             &:last-child {
               margin-right: 0;
@@ -629,6 +666,36 @@
             }
             &:last-child {
               width: 96px;
+            }
+          }
+        }
+        &.addClass {
+          ul {
+            li {
+              &:nth-child(3) {
+                width: 60px;
+              }
+              &:nth-child(4) {
+                width: 30px;
+              }
+              &:nth-child(5) {
+                width: 88px;
+              }
+              &:nth-child(6) {
+                width: 68px;
+                margin-right: 30px;
+              }
+              &:nth-child(7) {
+                width: 90px;
+                margin-right: 15px;
+              }
+              &:nth-child(8) {
+                width: 90px;
+                margin-right: 15px;
+              }
+              &:last-child {
+                width: 96px;
+              }
             }
           }
         }

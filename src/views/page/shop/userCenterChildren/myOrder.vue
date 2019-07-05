@@ -8,7 +8,10 @@
         :defaultActiveKey="defaultActiveKey"
       ></manage-number-nav>
       <div class="orderContainer">
-        <filter-search v-on:getSearchData="getSearchData"></filter-search>
+        <filter-search
+          v-on:getSearchData="getSearchData"
+          :defaultName="defaultName"
+        ></filter-search>
         <list-title :titleArr="titleArr"></list-title>
         <div v-if="!isOrderLoading">
           <div class="listContent">
@@ -78,6 +81,7 @@
         checkedList: [],
         checkAll: false,
         defaultActiveKey: 1,
+        defaultName: "",
         tabs: [
           {
             id: 1,
@@ -240,9 +244,13 @@
     },
     mounted() {
       if (this.$route.query.status) {
-        this.getOrderData.orderStatus = 5;
-        this.defaultActiveKey = 5;
+        this.getOrderData.orderStatus = this.$route.query.status;
+        this.defaultName = this.$route.query.orderNumber;
+        this.defaultActiveKey = Number(this.$route.query.status);
         this.isShowInfo.current = -1;
+        if (this.$route.query.orderNumber) {
+          this.getOrderData.name = this.$route.query.orderNumber;
+        }
       }
       _getDataAll([this.getOrderList(), this.getOrderNumber()]).then(() => {
         this.isLoading = false;
