@@ -92,7 +92,7 @@
                   </router-link>
                 </h2>
                 <div class="content">
-                  <div class="left">
+                  <div class="left" v-if="item.banner_url">
                     <img :src="item.banner_url" alt="" />
                   </div>
                   <ul class="right">
@@ -307,6 +307,7 @@
       .recommend {
         .commonWidth {
           .recommend_page {
+            width: 102.5%;
             .floor {
               > li {
                 margin-bottom: 30px;
@@ -401,6 +402,7 @@
                     width: 224px;
                     background: #fff;
                     box-shadow: $base-box-shadow;
+                    margin-right: 17px;
                     img {
                       height: 100%;
                       width: 100%;
@@ -408,7 +410,6 @@
                   }
                   .right {
                     flex: 1;
-                    padding-left: 17px;
                     display: flex;
                     justify-content: flex-start;
                     padding-top: 4px;

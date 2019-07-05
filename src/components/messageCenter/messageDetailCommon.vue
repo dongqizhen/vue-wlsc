@@ -6,7 +6,35 @@
         {{ data.createdOn ? data.createdOn.substring(0, 16) : "" }}
       </div>
       <div class="introduce">
-        {{ data.detail }}
+        <router-link
+          target="_blank"
+          v-if="data.messageModule.type == 1"
+          :to="{
+            path: '/merchant/orderManage',
+            query: {
+              keyId: '7',
+              status: data.messageModule.status,
+              orderNumber: data.messageModule.orderNumber
+            }
+          }"
+        >
+          {{ data.detail }}
+        </router-link>
+        <router-link
+          target="_blank"
+          v-else-if="data.messageModule.type == 2"
+          :to="{
+            path: '/merchant/inquiryManage',
+            query: {
+              keyId: '6',
+              status: data.messageModule.status,
+              inquiryNumber: 'sn2019070417154849341000'
+            }
+          }"
+        >
+          {{ data.detail }}
+        </router-link>
+        <span v-else>{{ data.detail }}</span>
       </div>
     </div>
   </div>
@@ -55,6 +83,9 @@
         color: #333333;
         letter-spacing: 0;
         line-height: 32px;
+        a {
+          color: #333;
+        }
       }
     }
   }

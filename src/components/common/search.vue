@@ -195,7 +195,7 @@
         color: #f5a623;
         font-weight: 600;
         right: -135px;
-        bottom: 10px;
+        top: 28px;
         .icon {
           width: 16px;
           height: 16px;

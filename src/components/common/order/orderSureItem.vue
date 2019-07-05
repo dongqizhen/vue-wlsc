@@ -16,7 +16,7 @@
           <span>{{ item.number }}</span>
           <span>¥{{ item.unitPrice * item.number }}</span>
           <span>{{
-            item.arrivalTime ? item.arrivalTime.substring(0, 16) : ""
+            item.offerTime ? item.offerTime.substring(0, 16) : ""
           }}</span>
         </li>
       </ul>

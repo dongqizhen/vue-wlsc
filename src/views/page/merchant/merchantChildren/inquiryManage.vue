@@ -27,6 +27,43 @@
       </commonTitle>
       <div v-if="!isLoading">
         <div class="listContainer">
+          <div class="selectInfoBox">
+            <div class="selectInfo">
+              <div class="common productName">
+                <div class="left-box">询价单号</div>
+                <div class="right-box">
+                  <a-input
+                    placeholder="请输入询价单号"
+                    v-model="getInquiryListParams.enquirySn"
+                    @pressEnter="searchData"
+                  />
+                </div>
+              </div>
+              <div class="common productStatus">
+                <div class="left-box">产品名称</div>
+                <div class="right-box">
+                  <a-input
+                    placeholder="请输入产品名称"
+                    v-model="getInquiryListParams.goodsName"
+                    @pressEnter="searchData"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="selectBtn">
+              <div class="common">
+                <div class="left-box">询价日期</div>
+                <div class="right-box">
+                  <calendar-range
+                    v-on:getDateRange="getDateTime"
+                    :dateRange="dateRange"
+                  ></calendar-range>
+                </div>
+              </div>
+              <a-button class="search" @click="searchData">搜索</a-button>
+              <a-button class="clear" @click="clearData">清除</a-button>
+            </div>
+          </div>
           <list-title :titleArr="titleArr"></list-title>
           <div v-if="!isInQuiryLoading">
             <div class="listContent">
@@ -71,6 +108,7 @@
   import commonTitle from "../../../../components/common/merchantRightCommonTitle";
   import listTitle from "../../../../components/common/listTitle";
   import inquiryManageItem from "../../../../components/common/inquiry/inquiryManageItem";
+  import calendarRange from "../../../../components/common/calendarRange";
   import checkAll from "../../../../components/common/checkAll";
   import pagination from "../../../../components/common/pagination";
   import { _getData, _getDataAll } from "../../../../config/getData";
@@ -88,6 +126,7 @@
           isOrder: false
         },
         data: [],
+        dateRange: [],
         checkAll: false,
         checkedList: [],
         titleArr: [
@@ -104,6 +143,7 @@
           page: 1, //当前页
           size: 5, //每页显示条数
           status: 1, //询价状态:1：报价中，2：已报价，3：已关闭。',
+          goodsName: "",
           enquirySn: "", //询价单号
           storeId: "" //商铺id，商铺id为空时，查询当前用户的询价单。
         },
@@ -117,6 +157,26 @@
       ...mapState(["userShopInfo"])
     },
     methods: {
+      searchData() {
+        this.getInquiryListParams.page = 1;
+        this.getInquiryList().then(() => {
+          this.$nextTick(() => {
+            if (this.$refs.pagination) {
+              this.$refs.pagination.$data.current = 1;
+            }
+          });
+        });
+      },
+      clearData() {
+        this.getInquiryListParams.enquirySn = "";
+        this.getInquiryListParams.goodsName = "";
+        this.dateRange = [];
+      },
+      getDateTime(val) {
+        console.log(val);
+        this.getInquiryListParams.startTime = val[0];
+        this.getInquiryListParams.endTime = val[1];
+      },
       //批量删除
       getCheckDelete(val) {
         console.log(this.checkedList);
@@ -265,6 +325,7 @@
       checkAll,
       listTitle,
       inquiryManageItem,
+      calendarRange,
       pagination
     }
   };
@@ -308,6 +369,99 @@
       }
       .listContainer {
         margin-top: 24px;
+        .selectInfoBox {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 12px;
+          padding-bottom: 12px;
+          margin-bottom: 16px;
+          border-bottom: $border-style;
+          .selectInfo {
+            display: flex;
+          }
+          .common {
+            display: flex;
+            align-items: center;
+            height: 27px;
+            margin-right: 30px;
+            .left-box {
+              font-size: 12px;
+              color: #333333;
+              margin-right: 6px;
+            }
+            .right-box {
+              @include placeholderStyle(12px);
+              .ant-input {
+                width: 121px;
+                height: 27px;
+                line-height: 27px;
+                font-size: 12px;
+                font-weight: 400;
+                &:hover {
+                  border-color: $theme-color;
+                }
+                &:focus {
+                  border-color: $theme-color;
+                  box-shadow: 0 0 0 2px rgba(241, 2, 21, 0.2);
+                }
+              }
+              /deep/.el-select {
+                height: 27px;
+                line-height: 27px;
+                .el-input {
+                  .el-input__inner {
+                    font-size: 12px;
+                  }
+                  .el-input__suffix {
+                    .el-input__suffix-inner {
+                      .el-input__icon {
+                        line-height: 27px;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          .selectBtn {
+            display: flex;
+            /deep/.ant-calendar-picker-input {
+              padding: 0;
+              height: 27px;
+              line-height: 27px;
+              font-weight: 400;
+              .ant-calendar-range-picker-input {
+                height: 100%;
+              }
+              .ant-calendar-picker-clear {
+                right: 6px;
+              }
+            }
+            .ant-btn {
+              outline: none;
+              color: #fff;
+              font-size: 12px;
+              margin-right: 10px;
+              padding: 0 18px;
+              height: 27px;
+              cursor: pointer;
+              &:last-child {
+                margin-right: 0;
+              }
+              &:hover {
+                opacity: 0.7;
+              }
+            }
+            .search {
+              border-color: $theme-color;
+              background-color: $theme-color;
+            }
+            .clear {
+              border-color: #999;
+              background-color: #999;
+            }
+          }
+        }
         /deep/.listTitle {
           margin-bottom: 12px;
           ul {
