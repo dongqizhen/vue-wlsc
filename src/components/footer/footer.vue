@@ -75,7 +75,7 @@
             display: flex;
             justify-content: flex-start;
             li {
-              width: 104px;
+              width: 134px;
               display: flex;
               flex-direction: column;
               h2 {

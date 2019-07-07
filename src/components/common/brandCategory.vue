@@ -395,7 +395,7 @@
             padding: 18px 35px;
             padding-bottom: 0;
             li {
-              margin-right: 17px;
+              margin-right: 19px;
               margin-bottom: 30px;
               a {
                 display: flex;

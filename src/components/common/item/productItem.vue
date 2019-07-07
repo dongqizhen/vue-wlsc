@@ -98,7 +98,7 @@
       //display: none;
       // background-color: #f7f9fa;
     }
-    width: 253px;
+    width: 291px;
     background: #fff;
     box-shadow: $base-box-shadow;
     padding: 15px 15px;
@@ -106,8 +106,8 @@
 
     .img {
       display: flex;
-      height: 224px;
-      width: 224px;
+      height: 261px;
+      width: 261px;
       background: #f7f9fa;
       margin-bottom: 8.6px;
       overflow: hidden;

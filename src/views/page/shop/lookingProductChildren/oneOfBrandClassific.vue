@@ -47,7 +47,7 @@
       ></common-brands-modal-vue>
     </span>
     <div class="content">
-      <div class="left">
+      <div class="left" :class="$route.query.nav_index == 2 && 'active'">
         <div v-if="!isLoading">
           <div v-if="arr.length">
             <ul>
@@ -365,15 +365,17 @@
       justify-content: space-between;
       margin-top: 24px;
       .left {
-        width: $content-left;
-
+        width: 900px;
+        // &.active {
+        //   width: 900px;
+        // }
         ul {
           display: flex;
           justify-content: flex-start;
           flex-wrap: wrap;
           margin-right: -12px;
           li {
-            margin-right: 12px;
+            margin-right: 8px;
             margin-bottom: 30px;
             a {
               display: flex;

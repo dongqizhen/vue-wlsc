@@ -98,7 +98,7 @@
       justify-content: flex-start;
       position: relative;
       h1 {
-        margin-right: 41px;
+        margin-right: 130px;
         width: 160px;
         cursor: pointer;
       }

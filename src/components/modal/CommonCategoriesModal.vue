@@ -197,12 +197,12 @@
     },
     mounted() {
       //获取常用分类
-      if (this.isLogin) {
-        _getData("ucatalog/list", {}).then(data => {
-          console.log("data", data);
-          this.myArray2 = data.userCategoryList;
-        });
-      }
+
+      _getData("ucatalog/list", {}).then(data => {
+        console.log("常用分类", data);
+        this.myArray2 = data.userCategoryList;
+      });
+
       //获取一级分类
       _getData("catalog/first", {})
         .then(data => {

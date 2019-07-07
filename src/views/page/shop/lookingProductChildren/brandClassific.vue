@@ -10,16 +10,17 @@
       </span>
     </h2> -->
     <div class="main-content">
-      <div class="left">
+      <div class="left" :class="$route.query.nav_index == 1 && 'active'">
         <div v-if="!isLoading">
           <div class="left-L">
             <ul class="clearfix">
               <li v-for="(item, i) in left" :key="`item-${i}`">
                 <h2>
                   <span class="title">
-                    <svg class="icon" aria-hidden="true">
+                    <svg class="icon" aria-hidden="true" v-if="item.id == ''">
                       <use xlink:href="#iconpingjiashixinwujiaoxing"></use>
                     </svg>
+                    <img :src="item.icon_url" alt="" v-else />
                     {{ item.name }}
                   </span>
                   <span class="btn" @click="handleClick" v-if="!item.id">
@@ -95,9 +96,10 @@
               <li v-for="(item, i) in right" :key="`item_right-${i}`">
                 <h2>
                   <span class="title">
-                    <svg class="icon" aria-hidden="true">
+                    <!-- <svg class="icon" aria-hidden="true">
                       <use xlink:href="#iconpingjiashixinwujiaoxing"></use>
-                    </svg>
+                    </svg> -->
+                    <img :src="item.icon_url" alt="" />
                     {{ item.name }}
                   </span>
                 </h2>
@@ -158,11 +160,90 @@
               </li>
             </ul>
           </div>
+          <div class="left-C">
+            <ul class="clearfix">
+              <li v-for="(item, i) in center" :key="`item-${i}`">
+                <h2>
+                  <span class="title">
+                    <svg class="icon" aria-hidden="true" v-if="item.id == ''">
+                      <use xlink:href="#iconpingjiashixinwujiaoxing"></use>
+                    </svg>
+                    <img :src="item.icon_url" alt="" v-else />
+                    {{ item.name }}
+                  </span>
+                  <span class="btn" @click="handleClick" v-if="!item.id">
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#iconguanlichangyongfenlei"></use>
+                    </svg>
+                    管理常用分类
+                    <common-categories-modal-vue
+                      :Visible="visible"
+                      v-on:success="success"
+                    ></common-categories-modal-vue>
+                  </span>
+                </h2>
+                <div class="brand-box" :class="center_show_arr[i] && 'active'">
+                  <ul class="box_com">
+                    <router-link
+                      :to="
+                        $route.query.nav_index == 1
+                          ? {
+                              path: 'oneOfBrandClassificne',
+                              query: {
+                                nav_index: $route.query.nav_index,
+                                categoryId: val.id,
+                                categoryName: val.name
+                              }
+                            }
+                          : $route.query.nav_index == 2
+                          ? {
+                              path: 'brand',
+                              query: {
+                                nav_index: $route.query.nav_index,
+                                categoryId: val.id,
+                                categoryName: val.name,
+                                brandId: $route.query.brandId,
+                                brandName: $route.query.brandName
+                              }
+                            }
+                          : ''
+                      "
+                      append
+                      tag="li"
+                      v-for="val in item.subCategoryList"
+                      :key="val.id"
+                    >
+                      <a>
+                        {{ val.name }}
+                      </a>
+                    </router-link>
+                  </ul>
+                </div>
+
+                <span
+                  @click="centerMoreBtnClick(i)"
+                  v-if="center_show_arr[i]"
+                  class="active"
+                >
+                  收起
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icontianjiaduibichanpinxiala"></use>
+                  </svg>
+                </span>
+                <span @click="centerMoreBtnClick(i)" v-else>
+                  更多
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icongengduoxialajiantou"></use>
+                  </svg>
+                </span>
+              </li>
+            </ul>
+          </div>
         </div>
         <loading v-else></loading>
       </div>
 
-      <div class="right">
+      <div class="right" :class="$route.query.nav_index == 1 && 'active'">
         <brand-card-vue v-if="$route.query.nav_index == 2"></brand-card-vue>
       </div>
     </div>
@@ -186,8 +267,10 @@
         left_index: null,
         left_show_arr: [], //左侧点击更多是否展开控制数组
         right_show_arr: [], //右侧点击更多是否展开控制数组
+        center_show_arr: [],
         left: [], //左侧渲染数组
         right: [], //右侧渲染数组
+        center: [],
         commonCategorie: [],
         isLoading: true
       };
@@ -222,6 +305,14 @@
         }
         this.right_show_arr.splice(i, 1, true);
       },
+      centerMoreBtnClick(i) {
+        if (this.center_show_arr[i]) {
+          this.center_show_arr.splice(i, 1, false);
+
+          return;
+        }
+        this.center_show_arr.splice(i, 1, true);
+      },
       //获取常用分类
       async getCommonCategory() {
         let param = this.$route.query.brandId
@@ -240,17 +331,21 @@
             console.log("所有", data);
             console.log(this.left);
             _.map(data.currentCategory, (val, i) => {
-              if ((i + 1) % 2 == 1) {
-                if (this.isLogin) {
+              if (this.isLogin) {
+                if ((i + 1) % 3 == 1) {
                   this.right.push(val);
+                } else if ((i + 1) % 3 == 2) {
+                  this.center.push(val);
                 } else {
                   this.left.push(val);
                 }
               } else {
-                if (this.isLogin) {
+                if ((i + 1) % 3 == 1) {
                   this.left.push(val);
-                } else {
+                } else if ((i + 1) % 3 == 2) {
                   this.right.push(val);
+                } else {
+                  this.center.push(val);
                 }
               }
             });
@@ -395,15 +490,26 @@
       width: $content-left;
       display: flex;
       justify-content: space-between;
+      &.active {
+        width: 1200px;
+        .left-L,
+        .left-R,
+        .left-C {
+          width: 386px;
+        }
+      }
       > div {
-        width: $content-left;
+        width: 100%;
         display: flex;
         justify-content: space-between;
       }
       .left-L,
-      .left-R {
-        width: 374px;
+      .left-R,
+      .left-C {
+        width: 289px;
+        margin-right: 13px;
         > ul {
+          width: 100%;
           // display: flex;
           // justify-content: space-between;
           // flex-wrap: wrap;
@@ -411,7 +517,7 @@
           // float: left;
           margin-right: -30px;
           > li {
-            width: 374px;
+            width: 100%;
             box-shadow: $base-box-shadow;
             background: #fff;
             margin-bottom: 24px;
@@ -432,6 +538,12 @@
                 display: flex;
                 justify-content: flex-start;
                 align-items: center;
+
+                img {
+                  width: 20px;
+                  height: 22px;
+                  margin-right: 8px;
+                }
                 .icon {
                   height: 22px;
                   width: 22px;
@@ -520,10 +632,16 @@
           }
         }
       }
+      .left-C {
+        margin-right: 0;
+      }
     }
 
     .right {
       width: 236px;
+      &.active {
+        display: none;
+      }
     }
   }
 </style>
