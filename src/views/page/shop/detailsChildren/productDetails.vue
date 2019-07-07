@@ -246,11 +246,7 @@
           参数对比
         </router-link>
       </a-button>
-      <shop-card-vue
-        v-if="shopdetails"
-        type="introduce"
-        :detail="shopdetails"
-      ></shop-card-vue>
+      <shop-card-vue v-if="shopdetails" :detail="shopdetails"></shop-card-vue>
     </div>
     <login-modal-vue :Visible="visible" :type="type"></login-modal-vue>
   </div>
@@ -518,7 +514,7 @@
 
   .product-details {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     width: 100%;
     /deep/ img[lazy="loading"] {
       /*your style here*/
@@ -1038,7 +1034,8 @@
       }
     }
     .right {
-      flex: 1;
+      // flex: 1;
+      width: 280px;
       .ant-btn-default {
         height: 40px;
         width: 152px;

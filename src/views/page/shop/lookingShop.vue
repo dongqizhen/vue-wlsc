@@ -480,8 +480,8 @@
       display: flex;
       justify-content: flex-start;
       .left {
-        width: 187px;
-        margin-right: 30px;
+        width: 254px;
+        margin-right: 25px;
         background: #fff;
         box-shadow: $base-box-shadow;
         height: auto;

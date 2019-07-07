@@ -83,7 +83,7 @@
   @import "../../../assets/scss/_commonScss";
   li.shop-item {
     background: #fff;
-    height: 421px;
+    height: 407px;
     width: 291px;
     margin-bottom: 20px;
     box-shadow: $base-box-shadow;

@@ -203,8 +203,8 @@
       justify-content: flex-start;
       position: relative;
       .left {
-        width: 187px;
-        margin-right: 30px;
+        width: 254px;
+        margin-right: 25px;
         background: #fff;
         box-shadow: $base-box-shadow;
         height: auto;
@@ -212,7 +212,7 @@
         align-self: flex-start;
       }
       .right {
-        width: 531px;
+        width: 606px;
         display: flex;
         flex-direction: column;
 
@@ -245,8 +245,8 @@
         }
       }
       .shop {
-        width: 236px;
-        margin-left: 40px;
+        width: 280px;
+        margin-left: 35px;
       }
     }
   }

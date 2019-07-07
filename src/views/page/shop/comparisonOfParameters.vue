@@ -857,7 +857,7 @@
         position: fixed;
         left: 50%;
         top: 400px;
-        margin-left: 512px;
+        margin-left: 600px;
         padding: 0;
         cursor: pointer;
         display: flex;

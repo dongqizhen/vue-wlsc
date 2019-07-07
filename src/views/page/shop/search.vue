@@ -267,8 +267,8 @@
         justify-content: flex-start;
         position: relative;
         > .left {
-          width: 187px;
-          margin-right: 30px;
+          width: 254px;
+          margin-right: 25px;
           background: #fff;
           box-shadow: $base-box-shadow;
           height: auto;
@@ -302,20 +302,20 @@
                     display: flex;
                     flex-wrap: wrap;
                     &.model {
-                      width: 807px;
+                      width: 921px;
                       li {
                         width: 100%;
                       }
                     }
                     > .product-item {
-                      margin-right: 10px;
-                      margin-bottom: 10px;
+                      margin-right: 24px;
+                      margin-bottom: 20px;
                     }
                   }
                   /deep/ .no-data {
                     height: 500px;
                     background: #fff;
-                    width: 807px;
+                    width: 921px;
                   }
                 }
               }

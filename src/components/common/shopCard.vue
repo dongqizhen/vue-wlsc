@@ -148,6 +148,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    padding: 0 44px;
     .leftTopIcon {
       position: absolute;
       top: 0;
@@ -174,10 +175,10 @@
       font-weight: 600;
 
       line-height: 22px;
-      padding: 0 18px;
+      // padding: 0 18px;
     }
     > ul {
-      padding: 0 18px;
+      //padding: 0 44px;
       margin-top: 24px;
       width: 100%;
       li {

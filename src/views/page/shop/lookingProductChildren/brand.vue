@@ -116,6 +116,7 @@
         tabs: [],
         isLoading: true,
         params: "",
+        type: "", // 搜索类型：1：文章； 2：视频； 3：案例； 4：中标信息；
         navArr: modelArr,
         cancel: null
       };
@@ -158,6 +159,7 @@
           this.navArr = modelArr;
         } else {
           this.navArr = otherArr;
+          this.type = i;
         }
 
         this.cancel();
@@ -172,18 +174,25 @@
 
       async getList(page = 1) {
         this.arr = [];
-        switch (this.defaultVal) {
-          case 0:
-            return await this.getModelList();
-          case 1:
-            return await this.getArticleList(page);
 
-          case 2:
-            return await this.getVideoList(page);
-
-          case 3:
-            return await this.getCaseList(page);
+        if (this.defaultVal == 0) {
+          return await this.getModelList();
+        } else {
+          return await this.getOtherList(page);
         }
+
+        // switch (this.defaultVal) {
+        //   case 0:
+        //     return await this.getModelList();
+        //   case 1:
+        //     return await this.getArticleList(page);
+
+        //   case 2:
+        //     return await this.getVideoList(page);
+
+        //   case 3:
+        //     return await this.getCaseList(page);
+        // }
       },
       //获取型号列表
       async getModelList() {
@@ -213,20 +222,60 @@
             setTimeout(() => {}, 300);
           });
       },
+
+      async getOtherList(page = 1) {
+        this.isLoading = true;
+        return await _getData(
+          `${this.$API_URL.HYGLOGINURL}/server/search1!request.action`,
+          {
+            method: "simpleSearchForShoping",
+            token: "",
+            userid: "15301",
+            params: {
+              name: this.params.name,
+              type: this.type,
+              currentPage: page,
+              countPerPage: 20,
+              sortType: this.othersort,
+              sortFlag: 1 //排序标识0正序1 倒序
+            }
+          },
+          {
+            cancelToken: new axios.CancelToken(c => {
+              // 设置 cancel token
+
+              this.cancel = c;
+            })
+          }
+        )
+          .then(data => {
+            this.data = data.result;
+            this.arr =
+              data.result.articlelist ||
+              data.result.videolist ||
+              data.result.maintenancelist ||
+              data.result.bidInfolist;
+          })
+          .then(() => {
+            this.$nextTick().then(() => {
+              this.isLoading = false;
+            });
+          });
+      },
       //获取文章列表
       async getArticleList(page = 1) {
         this.isLoading = true;
         return await _getData(
-          `${this.$API_URL.HYGLOGINURL}/server/article!request.action`,
+          `${this.$API_URL.HYGLOGINURL}/server/search1!request.action`,
           {
-            method: "getListWithShoping",
-            version: "3.0.0",
-            deviceId: "",
-            source: "",
+            method: "simpleSearchForShoping",
+            token: "db",
+            userid: "10482",
             params: {
+              name: "LOGIQ E9",
+              type: 0,
               currentPage: page,
               countPerPage: 20,
-              classifyId: this.params.classifyId || "",
               sortType: this.othersort,
 
               sortFlag: 1 //排序标识0正序1 倒序
@@ -392,12 +441,13 @@
         brandId: this.$route.query.brandId
       }).then(data => {
         console.log("数量", data);
-        this.params = data.params;
+        this.params = data;
         this.tabs = [
           `型号列表(${data.count || 0})`,
           `文章(${data.articleNum || 0})`,
           `视频(${data.videoNum || 0})`,
-          `案例(${data.maintenanceNum || 0})`
+          `案例(${data.maintenanceNum || 0})`,
+          `中标信息(${data.bidInfoNum || 0})`
         ];
       });
       // this.routes =

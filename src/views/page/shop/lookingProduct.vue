@@ -38,10 +38,9 @@
       breadcrumbVue,
       sideBar
     },
-    watch: {
-      $route() {
-        console.log(this);
-      }
+    beforeRouteUpdate(to, from, next) {
+      this.defaultNav = to.query.nav_index;
+      next();
     }
   };
 </script>
