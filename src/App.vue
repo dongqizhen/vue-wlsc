@@ -10,6 +10,7 @@
   import zhCN from "ant-design-vue/lib/locale-provider/zh_CN";
   import modalVue from "./components/modal/modal.vue";
   import { mapState, mapMutations } from "vuex";
+  import { _getData } from "./config/getData";
   export default {
     provide() {
       return { reload: this.reload };
@@ -30,6 +31,12 @@
       //this.showNote();
       console.log(window.history);
       console.log(this.$API_URL);
+      _getData("/user/getUser", {}).then(data => {
+        console.log("获取用户的店铺信息：：：：：", data);
+        if (data.code != 500 && data.code != 1) {
+          this.changeUserShopInfoState(data);
+        }
+      });
     },
     methods: {
       ...mapMutations([

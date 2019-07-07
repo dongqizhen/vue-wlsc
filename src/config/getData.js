@@ -22,11 +22,15 @@ export async function _getData(url = '', data = {}, config = {}) {
                 return data.result
             }
 
-        } else if (data.errno && data.errno == 401) {
-            // console.log(router)
+        } else if (data.code == 401) {
+            console.log(router)
+            console.log(router.app.$store.state.isLogin)
             const v = router.app.$children[0];
+            router.app.$store.state.isLogin = false;
+            console.log(router.app.$store.state.isLogin)
             let localStorage = JSON.parse(window.localStorage["vuex-along"])["vuex-along"];
-
+            console.log(localStorage)
+            localStorage.isLogin = false;
             if (!v.visible && localStorage) {
                 v.showNote()
             }

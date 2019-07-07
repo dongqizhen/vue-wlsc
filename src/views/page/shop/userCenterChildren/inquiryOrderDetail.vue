@@ -91,7 +91,7 @@
               </a-button>
               <div class="totalInfo" v-if="isShowInfo.current == 2">
                 <span class="totalPrice">
-                  报价总金额：<i>¥{{ data.subtotal }}</i>
+                  报价总金额：<i>¥{{ data.totalPrice }}</i>
                 </span>
                 <a-button
                   type="primary"
@@ -513,6 +513,7 @@
                   width: 38px;
                   height: 16px;
                   margin: 0;
+                  background-color: #fff;
                   border-top: $border-style;
                   border-bottom: $border-style;
                 }

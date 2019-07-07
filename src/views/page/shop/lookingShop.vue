@@ -140,7 +140,6 @@
   import { mixin } from "../../../components/mixin/mixin";
   import { _getData } from "../../../config/getData";
   import pagination from "../../../components/common/pagination";
-
   export default {
     data() {
       return {
@@ -196,7 +195,7 @@
       });
     },
     mounted() {
-      _getData("address/getRemortIP", {})
+      _getData("address/getRemortIP", { ip: returnCitySN.cip })
         .then(data => {
           this.selectMainArea = data.content.address;
           this.provinceName = data.content.address_detail.province;

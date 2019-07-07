@@ -172,7 +172,9 @@
           </div>
         </div>
         <div class="common companyProductionLicense">
-          <div class="left-box">医疗器械经营或生产许可证</div>
+          <div class="left-box">
+            <span class="red">*</span>医疗器械经营或生产许可证
+          </div>
           <div class="right-box">
             <upload
               v-on:getVal="getProductionLicenseUrl"
@@ -186,7 +188,9 @@
       <a-button @click="cancel" v-if="isOpenShop" class="cancel">
         上一步
       </a-button>
-      <a-button @click="submit">提交审核</a-button>
+      <a-button @click="submit">{{
+        certificationStatus == 2 ? "重新认证" : "提交审核"
+      }}</a-button>
     </div>
     <submit-success-modal
       :Visible="visible"
@@ -348,6 +352,10 @@
         }
         if (!this.submitData.yyimage) {
           this.$message.warning("请上传营业执照", 1);
+          return;
+        }
+        if (!this.submitData.zzjgimage) {
+          this.$message.warning("请上传医疗器械经营或生产许可证", 1);
           return;
         }
         if (this.isOpenShop) {

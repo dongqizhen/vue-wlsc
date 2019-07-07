@@ -75,7 +75,7 @@
   export default {
     data() {
       return {
-        steps: ["填写店铺信息", "填写认证资料", "完成认证"],
+        steps: ["填写店铺信息", "填写认证资料", "提交成功"],
         shopInfo: {},
         current: 0,
         certificationStatus: 1

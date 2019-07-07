@@ -243,6 +243,13 @@
       }
       .list-footer {
         margin-top: 12px;
+        /deep/.checkedAllBox {
+          span {
+            &:nth-child(3) {
+              display: none;
+            }
+          }
+        }
         .right-box {
           width: 104px;
           .submit {
