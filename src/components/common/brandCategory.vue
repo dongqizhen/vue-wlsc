@@ -350,6 +350,11 @@
                 width: 22px;
                 margin-right: 8px;
               }
+              img {
+                height: 22px;
+                width: 22px;
+                margin-right: 8px;
+              }
               &.active {
                 color: $theme-color;
               }

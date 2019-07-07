@@ -105,7 +105,7 @@
     overflow: hidden;
   }
   .commonWidth {
-    width: 1024px;
+    width: 1200px;
     margin: 0 auto;
     height: 100%;
   }

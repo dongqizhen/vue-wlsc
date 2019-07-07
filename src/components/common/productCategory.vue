@@ -35,7 +35,17 @@
                 @mouseenter="activeVal = i"
                 @mouseleave="activeVal = 0"
               >
+                <svg class="icon" aria-hidden="true" v-if="item.id == ''">
+                  <use
+                    :xlink:href="
+                      i == defaultsVal || activeVal == i
+                        ? '#iconpingjiashixinwujiaoxing'
+                        : '#iconchangyong'
+                    "
+                  ></use>
+                </svg>
                 <img
+                  v-else
                   :src="
                     i == defaultsVal || activeVal == i
                       ? item.banner_url
@@ -329,6 +339,11 @@
               font-weight: 600;
               font-size: 18px;
               color: #666;
+              .icon {
+                height: 22px;
+                width: 22px;
+                margin-right: 8px;
+              }
               &.active {
                 color: $theme-color;
               }

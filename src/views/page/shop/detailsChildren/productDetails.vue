@@ -118,7 +118,7 @@
                 v-if="productInfo"
               ></p>
             </a-tab-pane>
-            <a-tab-pane tab="产品规格/参数" key="2" :forceRender="true">
+            <a-tab-pane tab="产品规格" key="2" :forceRender="true">
               <ul class="specification" v-if="specificationInfo.length">
                 <li v-for="item in specificationInfo" :key="item.id">
                   <span>{{ item.specificationName }}</span
@@ -846,31 +846,37 @@
                 }
               }
               .specification {
-                width: 728px;
+                width: 100%;
                 border: #dddddd 1px solid;
                 border-bottom: 0;
                 li {
-                  height: 46px;
+                  min-height: 46px;
                   display: flex;
                   justify-content: flex-start;
                   align-items: center;
                   border-bottom: #dddddd 1px solid;
+                  position: relative;
+                  overflow: hidden;
                   span {
                     font-size: 14px;
                     color: #666666;
                     height: 100%;
                     display: flex;
                     align-items: center;
+                    // position: absolute;
                     &:first-child {
                       background: #f5f5f5;
+                      position: absolute;
                       width: 180px;
                       border-right: #dddddd 1px solid;
                       padding: 0 16px;
                     }
                     &:last-child {
+                      left: 180px;
                       flex: 1;
                       padding: 0 20px;
                       font-weight: 600;
+                      padding-left: 200px;
                     }
                   }
                 }
