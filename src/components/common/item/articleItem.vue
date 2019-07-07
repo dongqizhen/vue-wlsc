@@ -104,7 +104,7 @@
       width: 100%;
     }
     box-shadow: $base-box-shadow;
-    width: 768px;
+    width: $content-left;
     height: 192px;
     margin-bottom: 12px;
     background: #ffffff;

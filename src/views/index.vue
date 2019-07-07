@@ -477,7 +477,7 @@
                 flex-direction: column;
                 justify-content: flex-start;
                 align-items: center;
-                width: 768px;
+                width: $content-left;
               }
               .recommend_article {
                 margin-bottom: 18px;
