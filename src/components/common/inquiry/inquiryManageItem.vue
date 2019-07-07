@@ -17,6 +17,9 @@
           v-on:getCheckedList="getCheckedList"
         ></inquiry-product-item>
       </div>
+      <div class="amount" v-if="isShowInfo.current == 2">
+        ¥{{ data.totalPrice }}
+      </div>
       <div class="operating">
         <div v-if="isShowInfo.current == 1">
           <router-link
@@ -171,6 +174,15 @@
             border-bottom: none;
           }
         }
+      }
+      .amount {
+        width: 110px;
+        border-left: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #f10215;
       }
       .operating {
         width: 96px;

@@ -342,10 +342,10 @@
             "产品名称",
             "单价",
             "数量",
-            "合计",
             "到货时间",
             "询价备注",
             "报价备注",
+            "合计",
             "操作"
           ];
         } else {
@@ -482,6 +482,7 @@
             "到货时间",
             "询价备注",
             "报价备注",
+            "合计",
             "操作"
           ];
         }
@@ -679,19 +680,20 @@
                 width: 30px;
               }
               &:nth-child(5) {
-                width: 88px;
-              }
-              &:nth-child(6) {
                 width: 68px;
                 margin-right: 30px;
+              }
+              &:nth-child(6) {
+                width: 90px;
+                margin-right: 15px;
               }
               &:nth-child(7) {
                 width: 90px;
                 margin-right: 15px;
               }
               &:nth-child(8) {
-                width: 90px;
-                margin-right: 15px;
+                width: 88px;
+                margin-right: 22px;
               }
               &:last-child {
                 width: 96px;

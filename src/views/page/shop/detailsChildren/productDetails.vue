@@ -74,11 +74,11 @@
                 </span>
               </li>
               <li>
-                <span>
+                <span v-if="productInfo.goods_number">
                   <span>库存数量：</span>
                   <a>{{ productInfo.goods_number }}</a>
                 </span>
-                <span>
+                <span v-if="productInfo.origin">
                   <span>产地：</span>
                   <a>{{ productInfo.origin }}</a>
                 </span>
@@ -215,7 +215,11 @@
                 ></pagination>
               </div>
 
-              <no-data text="暂无评价" type="no-comment" v-else></no-data>
+              <no-data
+                text="暂无评价，下单后可评价"
+                type="no-comment"
+                v-else
+              ></no-data>
             </a-tab-pane>
 
             <template slot="renderTabBar" slot-scope="props, DefaultTabBar">

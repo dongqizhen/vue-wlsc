@@ -2,7 +2,7 @@
  * @Author: mikey.dongqizhen 
  * @Date: 2019-04-18 17:08:47 
  * @Last Modified by: mikey.dongqizhen
- * @Last Modified time: 2019-07-03 14:10:19
+ * @Last Modified time: 2019-07-07 14:09:50
  */
 
 
@@ -30,10 +30,6 @@ let removePending = (ever) => {
 
 //添加请求拦截器
 axios.interceptors.request.use(function(config) {
-    // if (cancel) {
-    //     cancel()
-    // }
-
     if (config.url.indexOf('!request.action') == -1) {
         let token;
         if (window.localStorage["vuex-along"] != "{}") {

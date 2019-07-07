@@ -27,9 +27,7 @@
     >
       {{ itemData.number }}
     </span>
-    <span v-if="isShowInfo.current == 2">
-      ¥{{ (itemData.unitPrice * itemData.number).toFixed(2) }}
-    </span>
+
     <span v-if="isShowInfo.current == 3 && !isShowInfo.isMerchant">
       <van-stepper v-model="itemData.number" :max="itemData.repertoryNum" />
       <i class="stockNumber">库存{{ itemData.repertoryNum }}件</i>
@@ -66,6 +64,9 @@
         v-model="itemData.introduce"
       ></a-textarea>
     </span>
+    <!-- <span v-if="isShowInfo.current == 2">
+      ¥{{ (itemData.unitPrice * itemData.number).toFixed(2) }}
+    </span> -->
   </div>
 </template>
 <script>
@@ -220,6 +221,7 @@
       }
     }
     &.addClass {
+      width: 762px;
       > span {
         &:nth-child(4) {
           width: 60px;
@@ -257,28 +259,32 @@
             margin-top: 4px;
           }
         }
-        &:nth-child(6) {
+        &:nth-child(9) {
           width: 88px;
-          margin-right: 30px;
+          margin-right: 22px;
           overflow: hidden;
           word-wrap: break-word;
         }
-        &:nth-child(7) {
+        &:nth-child(6) {
           width: 68px;
           margin-right: 30px;
         }
-        &:nth-child(8) {
+        &:nth-child(7) {
           width: 90px;
           margin-right: 15px;
+          overflow: hidden;
+          word-wrap: break-word;
           .ant-input {
             font-size: 12px;
             resize: none;
             height: 65px;
           }
         }
-        &:nth-child(9) {
+        &:nth-child(8) {
           width: 91px;
           margin-right: 15px;
+          overflow: hidden;
+          word-wrap: break-word;
         }
       }
     }
