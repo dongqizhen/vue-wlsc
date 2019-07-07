@@ -247,6 +247,7 @@
                   width: 38px;
                   height: 16px;
                   margin: 0;
+                  background-color: #fff;
                   border-top: $border-style;
                   border-bottom: $border-style;
                 }
