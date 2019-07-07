@@ -37,6 +37,11 @@
       Nav,
       breadcrumbVue,
       sideBar
+    },
+    watch: {
+      $route() {
+        console.log(this);
+      }
     }
   };
 </script>

@@ -33,7 +33,7 @@
                 :class="i == defaultsVal && 'active'"
                 @click="navHandleClick(item.id, i, $event)"
                 @mouseenter="activeVal = i"
-                @mouseleave="activeVal = 0"
+                @mouseleave="activeVal = null"
               >
                 <svg class="icon" aria-hidden="true" v-if="item.id == ''">
                   <use

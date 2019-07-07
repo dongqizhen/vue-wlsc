@@ -83,8 +83,8 @@
   @import "../../../assets/scss/_commonScss";
   li.shop-item {
     background: #fff;
-    height: 363px;
-    width: 253px;
+    height: 421px;
+    width: 291px;
     margin-bottom: 20px;
     box-shadow: $base-box-shadow;
     cursor: pointer;
@@ -126,8 +126,8 @@
       padding-bottom: 0;
       flex: 1;
       .img_box {
-        height: 224px;
-        width: 224px;
+        height: 261px;
+        width: 261px;
         background: $base-background;
         overflow: hidden;
         position: relative;

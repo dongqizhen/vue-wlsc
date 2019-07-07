@@ -72,6 +72,11 @@
           query: { nav_index: i }
         });
         window.open(href, "_blank");
+
+        // this.$router.push({
+        //   path: item.path,
+        //   query: { nav_index: i }
+        // });
       }
     },
     created() {}

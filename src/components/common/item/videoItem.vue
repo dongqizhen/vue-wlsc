@@ -103,8 +103,8 @@
 <style scoped lang="scss">
   @import "../../../assets/scss/_commonScss";
   li.video-item {
-    width: 376px;
-    height: 364px;
+    width: 422px;
+    height: 389px;
     display: flex;
     flex-direction: column;
     background: #ffffff;
@@ -126,7 +126,7 @@
       height: 100%;
     }
     .video_box {
-      height: 211px;
+      height: 237px;
       background: #f7f9fa;
       position: relative;
       img {
@@ -201,7 +201,7 @@
           justify-content: flex-start;
           align-items: center;
 
-          width: 130px;
+          width: 180px;
           font-family: PingFangSC-Regular;
           font-size: 13px;
           color: #333333;
@@ -228,7 +228,8 @@
         > ul {
           display: flex;
           flex: 1;
-          justify-content: flex-start;
+          justify-content: flex-end;
+
           > li {
             margin-right: 4px;
             height: 25px;
@@ -238,10 +239,15 @@
             font-family: PingFangSC-Regular;
             font-size: 12px;
             color: #fb6441;
-            display: flex;
+            // display: flex;
             justify-content: center;
             align-items: center;
             line-height: 25px;
+            width: 68px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+
             &:last-child {
               margin-right: 0;
             }

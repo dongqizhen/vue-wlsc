@@ -307,10 +307,11 @@
       .recommend {
         .commonWidth {
           .recommend_page {
-            width: 102.5%;
+            width: 100%;
             .floor {
               > li {
                 margin-bottom: 30px;
+
                 &:last-child {
                   margin-bottom: 0;
                 }
@@ -333,7 +334,7 @@
                   height: 43px;
                   align-items: center;
                   p {
-                    width: 224px;
+                    width: 291px;
                     background: #f5a623;
                     height: 100%;
                     border-radius: 20px 20px 0 0;
@@ -395,9 +396,10 @@
                 }
                 .content {
                   width: 100%;
-                  height: 382px;
+                  min-height: 421px;
                   display: flex;
                   justify-content: flex-start;
+                  flex-wrap: wrap;
                   .left {
                     width: 224px;
                     background: #fff;
@@ -414,6 +416,8 @@
                     justify-content: flex-start;
                     padding-top: 4px;
                     overflow: hidden;
+                    //flex-wrap: wrap;
+                    //margin-right: -12px;
                     li {
                       margin-right: 12px;
                       &:last-child {
