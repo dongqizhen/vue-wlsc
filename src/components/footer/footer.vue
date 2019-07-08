@@ -138,7 +138,7 @@
       .copyright {
         display: flex;
         flex: 1;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
         font-family: PingFangSC-Regular;
         font-size: 12px;

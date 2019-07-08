@@ -15,7 +15,7 @@
         <ul class="swiper-pagination" slot="pagination"></ul>
       </swiper>
       <div class="login">
-        <p :style="background"></p>
+        <p :style="background" key="background"></p>
         <div>
           <div class="avatar">
             <h2 @click="toUserCenter">
@@ -94,19 +94,15 @@
         animate: false,
         swiperOption: {
           //是一个组件自有属性，如果notNextTick设置为true，组件则不会通过NextTick来实例化swiper，也就意味着你可以在第一时间获取到swiper对象，假如你需要刚加载遍使用获取swiper对象来做什么事，那么这个属性一定要是true
-
           notNextTick: true,
-
           //循环
-
           loop: true,
-
           //设定初始化时slide的索引
-
           initialSlide: 0,
-
           //自动播放
-
+          on: {
+            // slideChangeTransitionStart() {}
+          },
           autoplay: {
             delay: 4000,
 
@@ -129,7 +125,9 @@
     components: { swiper, swiperSlide },
     methods: {
       slideChangeTransitionStart() {
-        this.background.background = `url(${this.banner[this.swiper.realIndex].image_url})`;
+        setTimeout(() => {
+          this.background.background = `url(${this.banner[this.swiper.realIndex].image_url})`;
+        }, 500);
       },
       toUserCenter() {
         if (this.$getLocalStorage()) {
@@ -188,14 +186,14 @@
         .then(() => {
           this.$nextTick().then(() => {
             var myswiper = new Swiper(".notice .swiper-container", {
-              slidesPerView: 5,
+              slidesPerView: 6,
               spaceBetween: 0,
               direction: "vertical",
               autoplay: {
                 disableOnInteraction: false,
                 delay: 4000
               },
-              loop: true
+              loop: this.noteList.length >= 6
             });
           });
         });
@@ -212,8 +210,8 @@
       height: 375px;
       //background: $theme-color;
       position: relative;
-      display: flex;
-      justify-content: space-between;
+      // display: flex;
+      // justify-content: space-between;
       /deep/ .swiper-container {
         height: 100%;
         cursor: pointer;
@@ -380,13 +378,13 @@
           flex-direction: column;
           h2 {
             border-bottom: #d8d8d8 1px solid;
-            height: 25px;
+            height: 26px;
             font-size: 12px;
             color: #ffffff;
             font-family: $base-font-family;
             display: flex;
             align-items: center;
-            line-height: 25px;
+            line-height: 26px;
             i {
               margin-top: 1px;
               margin-right: 2.5px;

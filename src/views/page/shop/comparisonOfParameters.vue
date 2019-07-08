@@ -64,14 +64,17 @@
         <!-- <transition-group name="list-complete" tag="div" class="content"> -->
         <div class="content">
           <div class="col" key="first">
-            <div class="header">
-              <p>
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#iconcanshuduibi"></use>
-                </svg>
-                参数名称
-              </p>
-            </div>
+            <a-affix :offsetTop="0" class="affix">
+              <div class="header">
+                <p>
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#iconcanshuduibi"></use>
+                  </svg>
+                  参数名称
+                </p>
+              </div>
+            </a-affix>
+
             <ul>
               <li v-for="(item, i) in paramas" :key="`${i}-item`">
                 {{ item.specificationName || "--" }}
@@ -83,84 +86,87 @@
             v-for="(item, i) in arr"
             :key="`${item.categoryId}-${i}`"
           >
-            <div class="header">
-              <p :class="item.modelName ? '' : 'no-data'">
-                {{
-                  item.modelName
-                    ? item.categoryName +
-                      "&nbsp;&nbsp;" +
-                      item.brandName +
-                      "&nbsp;&nbsp;" +
-                      item.modelName
-                    : "暂无型号"
-                }}
-              </p>
+            <a-affix :offsetTop="0" class="affix">
+              <div class="header">
+                <p :class="item.modelName ? '' : 'no-data'">
+                  {{
+                    item.modelName
+                      ? item.categoryName +
+                        "&nbsp;&nbsp;" +
+                        item.brandName +
+                        "&nbsp;&nbsp;" +
+                        item.modelName
+                      : "暂无型号"
+                  }}
+                </p>
 
-              <span
-                class="del-btn"
-                v-if="item.modelName && $route.query.modelId != 'undefined'"
-                @click="delbtnClick(i)"
-              >
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icontianjiaduibichanpinshanchu"></use>
-                </svg>
-              </span>
-              <a-button type="primary" @click.self.stop="changeModel(i)">
-                {{ item.modelName ? "更改" : "选择" }}型号
-              </a-button>
-              <transition name="slide-fade">
-                <div
-                  class="modal-content"
-                  v-if="defaultShowIndex == i"
-                  @click.stop=""
+                <span
+                  class="del-btn"
+                  v-if="item.modelName && $route.query.modelId != 'undefined'"
+                  @click="delbtnClick(i)"
                 >
-                  <h2>
-                    <span @click.stop="brandTitleClick">品牌</span>
-                    <svg class="icon" aria-hidden="true" v-if="isShowModel">
-                      <use xlink:href="#iconwangyelujing"></use>
-                    </svg>
-                    <span v-if="isShowModel">型号</span>
-                  </h2>
-                  <div>
-                    <ul class="index-list" v-if="!isShowModel">
-                      <li v-for="(v, key) in brandList" :key="key">
-                        <h3>{{ key }}</h3>
-                        <ul>
-                          <li
-                            v-for="value in v"
-                            :key="value.id"
-                            @click.stop="selectBrand(value)"
-                          >
-                            <div class="img_box">
-                              <img
-                                :src="value.app_list_pic_url"
-                                alt=""
-                                v-if="value.app_list_pic_url"
-                              />
-                            </div>
-                            <p>{{ value.name }}</p>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                    <ul class="index-list" v-else>
-                      <li>
-                        <ul v-if="!isModelLoading">
-                          <li
-                            v-for="v in modelList"
-                            :key="v.id"
-                            @click="selectModel(v)"
-                          >
-                            {{ v.name }}
-                          </li>
-                        </ul>
-                        <loading v-else loading text=""></loading>
-                      </li>
-                    </ul>
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icontianjiaduibichanpinshanchu"></use>
+                  </svg>
+                </span>
+                <a-button type="primary" @click.self.stop="changeModel(i)">
+                  {{ item.modelName ? "更改" : "选择" }}型号
+                </a-button>
+                <transition name="slide-fade">
+                  <div
+                    class="modal-content"
+                    v-if="defaultShowIndex == i"
+                    @click.stop=""
+                  >
+                    <h2>
+                      <span @click.stop="brandTitleClick">品牌</span>
+                      <svg class="icon" aria-hidden="true" v-if="isShowModel">
+                        <use xlink:href="#iconwangyelujing"></use>
+                      </svg>
+                      <span v-if="isShowModel">型号</span>
+                    </h2>
+                    <div>
+                      <ul class="index-list" v-if="!isShowModel">
+                        <li v-for="(v, key) in brandList" :key="key">
+                          <h3>{{ key }}</h3>
+                          <ul>
+                            <li
+                              v-for="value in v"
+                              :key="value.id"
+                              @click.stop="selectBrand(value)"
+                            >
+                              <div class="img_box">
+                                <img
+                                  :src="value.app_list_pic_url"
+                                  alt=""
+                                  v-if="value.app_list_pic_url"
+                                />
+                              </div>
+                              <p>{{ value.name }}</p>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                      <ul class="index-list" v-else>
+                        <li>
+                          <ul v-if="!isModelLoading">
+                            <li
+                              v-for="v in modelList"
+                              :key="v.id"
+                              @click="selectModel(v)"
+                            >
+                              {{ v.name }}
+                            </li>
+                          </ul>
+                          <loading v-else loading text=""></loading>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
-                </div>
-              </transition>
-            </div>
+                </transition>
+              </div>
+            </a-affix>
+
             <ul
               v-if="
                 item.modelSpecificationInfo &&
@@ -168,7 +174,7 @@
               "
             >
               <li v-for="val in item.modelSpecificationInfo" :key="val.id">
-                {{ val.value || "--" }}
+                <p>{{ val.value || "--" }}</p>
               </li>
             </ul>
             <ul v-else>
@@ -378,6 +384,7 @@
       //点击删除按钮
       delbtnClick(i) {
         console.log(i);
+        window.scrollTo(0, 0);
         this.modelIdArr.splice(i, 1, "");
         console.log(this.modelIdArr);
         if (this.arr.length > 4) {
@@ -414,6 +421,7 @@
       },
       //点击添加型号按钮
       addbtnClick() {
+        window.scrollTo(0, 0);
         this.arr.push({
           categoryId: this.$route.query.categoryId,
           categoryName: this.$route.query.categoryName
@@ -625,6 +633,11 @@
           flex-direction: column;
           flex: 1;
           transition: all 0.5s;
+          /deep/ .ant-affix {
+            background: #fff;
+            // border-left: 1px solid #e0e7ea;
+            border-bottom: 1px solid #e0e7ea;
+          }
           .header {
             position: relative;
             height: 133px;
@@ -817,13 +830,36 @@
               justify-content: center;
               font-size: 14px;
               color: #666666;
-              padding: 0 14px;
+              padding: 0px 14px;
               overflow: hidden;
               &:nth-child(2n) {
                 background: rgba(245, 166, 35, 0.03);
               }
               &:last-child {
                 border-bottom: 0;
+              }
+              p {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+                width: 100%;
+                // margin: 4px 0px;
+                overflow: auto;
+                &::-webkit-scrollbar {
+                  width: 2px;
+                  height: 2px;
+
+                  background-color: #b5b1b1;
+                }
+                &::-webkit-scrollbar-track {
+                  background: #f6f6f6;
+                  border-radius: 2px;
+                }
+                &::-webkit-scrollbar-thumb {
+                  background: #aaa;
+                  border-radius: 2px;
+                }
               }
             }
           }
