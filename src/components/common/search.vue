@@ -194,8 +194,8 @@
         font-size: 18px;
         color: #f5a623;
         font-weight: 600;
-        right: -135px;
-        top: 28px;
+        right: 0;
+        bottom: -48px;
         .icon {
           width: 16px;
           height: 16px;
