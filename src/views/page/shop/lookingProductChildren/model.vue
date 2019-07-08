@@ -73,6 +73,13 @@
                     :item="item"
                   ></case-item-vue>
                 </ul>
+                <ul v-else-if="startWith('中标信息')">
+                  <bid-info-item-vue
+                    v-for="item in shopList"
+                    :key="item.id"
+                    :item="item"
+                  ></bid-info-item-vue>
+                </ul>
               </div>
               <no-data v-else text="暂无数据"></no-data>
             </div>
@@ -133,6 +140,7 @@
         goodSort: "createOn", //产品排序类型 “createOn”发布时间 ,"price" 价格 ,“rate”//好评率
         shopSort: "createOn", //店铺排序类型 “createOn”发布时间 ,"hit" 点击量,“rate”//好评率
         othersort: 0, //案例，视频，文章排序标识  0 发布时间 1 浏览量 2 点赞数
+        type: "",
         shopIsloading: false,
         cancel: null
       };
@@ -158,12 +166,8 @@
           this.getGoodsList(page);
         } else if (_.startsWith(this.defaultVal, "店铺")) {
           this.getShopList(page);
-        } else if (_.startsWith(this.defaultVal, "文章")) {
-          this.getArticleList(page);
-        } else if (_.startsWith(this.defaultVal, "视频")) {
-          this.getVideoList(page);
-        } else if (_.startsWith(this.defaultVal, "案例")) {
-          this.getCaseList(page);
+        } else {
+          this.getOtherList(page);
         }
       },
       startWith(val) {
@@ -284,6 +288,46 @@
             setTimeout(() => {}, 0);
           });
       },
+      async getOtherList(page = 1) {
+        this.shopIsloading = true;
+        return await _getData(
+          `${this.$API_URL.HYGLOGINURL}/server/search1!request.action`,
+          {
+            method: "simpleSearchForShoping",
+            token: "",
+            userid: "",
+            params: {
+              name: this.$route.query.modelName,
+              type: this.type,
+              currentPage: page,
+              countPerPage: 20,
+              sortType: this.othersort,
+              sortFlag: 1 //排序标识0正序1 倒序
+            }
+          },
+          {
+            cancelToken: new axios.CancelToken(c => {
+              // 设置 cancel token
+
+              this.cancel = c;
+            })
+          }
+        )
+          .then(data => {
+            this.data = data.result;
+            this.shopList =
+              data.result.articlelist ||
+              data.result.videolist ||
+              data.result.maintenancelist ||
+              data.result.bidInfolist;
+          })
+          .then(() => {
+            this.$nextTick().then(() => {
+              this.shopIsloading = false;
+            });
+            setTimeout(() => {}, 0);
+          });
+      },
       shopTabClick(i) {
         this.cancel();
         if (this.index < this.navList.length) {
@@ -292,16 +336,19 @@
         } else if (_.startsWith(this.defaultVal, "店铺")) {
           this.shopSort = i == 0 ? "createOn" : i == 1 ? "hit" : "rate";
           this.getShopList();
-        } else if (_.startsWith(this.defaultVal, "文章")) {
+        } else {
           this.othersort = i;
-          this.getArticleList();
-        } else if (_.startsWith(this.defaultVal, "视频")) {
-          this.othersort = i;
-          this.getVideoList();
-        } else if (_.startsWith(this.defaultVal, "案例")) {
-          this.othersort = i;
-          this.getCaseList();
-        }
+          this.getOtherList();
+        } //else if (_.startsWith(this.defaultVal, "文章")) {
+        //   this.othersort = i;
+        //   this.getArticleList();
+        // } else if (_.startsWith(this.defaultVal, "视频")) {
+        //   this.othersort = i;
+        //   this.getVideoList();
+        // } else if (_.startsWith(this.defaultVal, "案例")) {
+        //   this.othersort = i;
+        //   this.getCaseList();
+        // }
         this.$nextTick(() => {
           if (this.$refs.pagination) {
             this.$refs.pagination.$data.current = 1;
@@ -326,14 +373,21 @@
           this.navArr = shopsort;
           this.getShopList().then(() => {});
         } else if (_.startsWith(this.defaultVal, "文章")) {
+          this.type = 1;
           this.navArr = otherArr;
-          this.getArticleList();
+          this.getOtherList();
         } else if (_.startsWith(this.defaultVal, "视频")) {
+          this.type = 2;
           this.navArr = otherArr;
-          this.getVideoList();
+          this.getOtherList();
         } else if (_.startsWith(this.defaultVal, "案例")) {
+          this.type = 3;
           this.navArr = otherArr;
-          this.getCaseList();
+          this.getOtherList();
+        } else if (_.startsWith(this.defaultVal, "中标")) {
+          this.type = 4;
+          this.navArr = otherArr;
+          this.getOtherList();
         }
         this.$nextTick(() => {
           if (this.$refs.pagination) {
@@ -349,7 +403,7 @@
           {
             modelId: this.$route.query.modelId,
             currentPage,
-            countPerPage: 6,
+            countPerPage: 20,
             sort: this.shopSort,
             order: "asc"
           },
@@ -384,7 +438,7 @@
             attributeCategoryId: this.attributeCategoryId,
             currentPage,
             modelId: this.$route.query.modelId,
-            countPerPage: 6,
+            countPerPage: 20,
             sort: this.goodSort,
             order: "asc"
           },
@@ -425,7 +479,8 @@
               `店铺(${data.sroreCount || 0})`,
               `文章(${data.articleNum || 0})`,
               `视频(${data.videoNum || 0})`,
-              `案例(${data.maintenanceNum || 0})`
+              `案例(${data.maintenanceNum || 0})`,
+              `中标信息(${data.bidInfoNum || 0})`
             ]
           ];
         })
@@ -608,42 +663,46 @@
       display: flex;
       justify-content: space-between;
       .left {
-        width: 775px;
+        width: 900px;
         /deep/ .recommend_tabs {
           margin-bottom: 20px;
           margin-top: 4px;
         }
         .main-content {
-          margin-right: -20px;
+          margin-right: -55px;
           > div > div > ul {
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-start;
             //  width: 776px;
             > li {
-              margin-right: 7.5px;
-              margin-bottom: 10px;
+              margin-right: 14px;
+              margin-bottom: 20px;
               &.case-item {
                 width: 100%;
-                width: 776px;
+                width: 900px;
               }
               &.article-item {
                 margin-right: 0;
-                width: 776px;
+                width: 900px;
               }
               &.video-item {
-                margin-right: 21px;
-                margin-bottom: 20px;
+                margin-right: 55px;
+                margin-bottom: 32px;
+              }
+              &.bid-info-item {
+                margin-right: 0;
+                width: 900px;
               }
             }
           }
           /deep/ .loading {
-            width: $content-left;
+            width: 900px;
           }
           .no-data {
             height: 600px;
             background: #ffffff;
-            width: 776px;
+            width: 900px;
           }
         }
         .paginationBox {
@@ -651,7 +710,7 @@
         }
       }
       .right {
-        width: 236px;
+        width: 280px;
       }
     }
   }

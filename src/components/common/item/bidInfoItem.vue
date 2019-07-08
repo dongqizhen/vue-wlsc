@@ -4,38 +4,50 @@
     tag="li"
     :to="{
       path: '/details/bidinfoDetails',
-      query: { nav_index: 0, id: 0 }
+      query: { nav_index: 0, id: item.id }
     }"
   >
     <a target="_blank">
       <div class="bid-left">
-        <h2>彩色多普勒超声诊断系统</h2>
-        <span>卡威/KaweMiller</span>
+        <h2>{{ item.productName }}</h2>
+        <span>{{ item.brandName }}/{{ item.modelId }}</span>
         <div>
-          <div>开标时间 <span>2019-05-10</span></div>
-          <div>采购单位 <span>荔波县热敏医院</span><span>二级甲等</span></div>
-          <div>中标单位 <span>建发（北京）有限公司</span></div>
+          <div>
+            开标时间 <span>{{ item.bidDate }}</span>
+          </div>
+          <div>
+            采购单位 <span>{{ item.hospitalName }}</span
+            ><span>{{ item.level }}</span>
+          </div>
+          <div>
+            中标单位 <span>{{ item.bider }}</span>
+          </div>
         </div>
       </div>
       <div class="price">
         <span>单品价格</span>
-        <span>1000.00万元</span>
+        <span>{{ item.avgAmount }}</span>
       </div>
       <div class="adress">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icongongsidizhi"></use>
         </svg>
-        新疆藏住自治区阿拉伯山脉
+        {{ item.provinceName }}
       </div>
     </a>
   </router-link>
 </template>
 
 <script>
+  import { mapState } from "vuex";
   export default {
     data() {
       return {};
-    }
+    },
+    computed: {
+      ...mapState(["isLogin"])
+    },
+    props: ["item"]
   };
 </script>
 

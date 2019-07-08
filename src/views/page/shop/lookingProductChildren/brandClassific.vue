@@ -20,7 +20,7 @@
                     <svg class="icon" aria-hidden="true" v-if="item.id == ''">
                       <use xlink:href="#iconpingjiashixinwujiaoxing"></use>
                     </svg>
-                    <img :src="item.icon_url" alt="" v-else />
+                    <img :src="item.active_icon" alt="" v-else />
                     {{ item.name }}
                   </span>
                   <span class="btn" @click="handleClick" v-if="!item.id">
@@ -99,7 +99,7 @@
                     <!-- <svg class="icon" aria-hidden="true">
                       <use xlink:href="#iconpingjiashixinwujiaoxing"></use>
                     </svg> -->
-                    <img :src="item.icon_url" alt="" />
+                    <img :src="item.active_icon" alt="" />
                     {{ item.name }}
                   </span>
                 </h2>
@@ -168,7 +168,7 @@
                     <svg class="icon" aria-hidden="true" v-if="item.id == ''">
                       <use xlink:href="#iconpingjiashixinwujiaoxing"></use>
                     </svg>
-                    <img :src="item.icon_url" alt="" v-else />
+                    <img :src="item.active_icon" alt="" v-else />
                     {{ item.name }}
                   </span>
                   <span class="btn" @click="handleClick" v-if="!item.id">

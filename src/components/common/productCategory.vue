@@ -48,7 +48,7 @@
                   v-else
                   :src="
                     i == defaultsVal || activeVal == i
-                      ? item.banner_url
+                      ? item.active_icon
                       : item.icon_url
                   "
                 />

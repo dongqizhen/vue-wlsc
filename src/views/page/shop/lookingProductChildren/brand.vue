@@ -63,6 +63,13 @@
                 :item="item"
               ></case-item-vue>
             </ul>
+            <ul class="recommond_bid" v-if="defaultVal == 4">
+              <bid-info-item-vue
+                v-for="item in arr"
+                :key="item.id"
+                :item="item"
+              ></bid-info-item-vue>
+            </ul>
             <pagination
               :data="data"
               v-if="defaultVal"
@@ -95,9 +102,11 @@
   import caseItemVue from "../../../../components/common/item/caseItem.vue";
   import pagination from "../../../../components/common/pagination";
   import axios from "axios";
+  import bidInfoItemVue from "../../../../components/common/item/bidInfoItem.vue";
+
   var CancelToken = axios.CancelToken;
   var source = CancelToken.source();
-  console.log(source);
+
   const modelArr = ["按首字母排序", "按点击量排序"],
     otherArr = ["发布时间", "浏览量", "点赞数"];
 
@@ -131,7 +140,8 @@
       videoItemVue,
       articleItemVue,
       caseItemVue,
-      pagination
+      pagination,
+      bidInfoItemVue
     },
     methods: {
       onPaginationChange(page) {
@@ -180,19 +190,6 @@
         } else {
           return await this.getOtherList(page);
         }
-
-        // switch (this.defaultVal) {
-        //   case 0:
-        //     return await this.getModelList();
-        //   case 1:
-        //     return await this.getArticleList(page);
-
-        //   case 2:
-        //     return await this.getVideoList(page);
-
-        //   case 3:
-        //     return await this.getCaseList(page);
-        // }
       },
       //获取型号列表
       async getModelList() {
@@ -230,7 +227,7 @@
           {
             method: "simpleSearchForShoping",
             token: "",
-            userid: "15301",
+            userid: "",
             params: {
               name: this.params.name,
               type: this.type,
@@ -255,116 +252,6 @@
               data.result.videolist ||
               data.result.maintenancelist ||
               data.result.bidInfolist;
-          })
-          .then(() => {
-            this.$nextTick().then(() => {
-              this.isLoading = false;
-            });
-          });
-      },
-      //获取文章列表
-      async getArticleList(page = 1) {
-        this.isLoading = true;
-        return await _getData(
-          `${this.$API_URL.HYGLOGINURL}/server/search1!request.action`,
-          {
-            method: "simpleSearchForShoping",
-            token: "db",
-            userid: "10482",
-            params: {
-              name: "LOGIQ E9",
-              type: 0,
-              currentPage: page,
-              countPerPage: 20,
-              sortType: this.othersort,
-
-              sortFlag: 1 //排序标识0正序1 倒序
-            }
-          },
-          {
-            cancelToken: new axios.CancelToken(c => {
-              // 设置 cancel token
-
-              this.cancel = c;
-            })
-          }
-        )
-          .then(data => {
-            this.data = data.result;
-            this.arr = data.result.articlelist;
-          })
-          .then(() => {
-            this.$nextTick().then(() => {
-              this.isLoading = false;
-            });
-          });
-      },
-      //获取视频列表
-      async getVideoList(page = 1) {
-        this.isLoading = true;
-        return await _getData(
-          `${this.$API_URL.HYGPROURL}/server_pro/video!request.action`,
-          {
-            method: "getListWithShoping",
-            version: "",
-            deviceId: "",
-            source: "",
-            params: {
-              currentPage: page,
-              countPerPage: 20,
-              vBigCategoryId: this.params.vBigCategoryId || "",
-              vCategoryId: this.params.vCategoryId || "",
-              sortType: this.othersort,
-              sortFlag: 1
-            }
-          },
-          {
-            cancelToken: new axios.CancelToken(c => {
-              // 设置 cancel token
-              this.cancel = c;
-            })
-          }
-        )
-          .then(data => {
-            this.data = data.result;
-            this.arr = data.result.videolist;
-          })
-          .then(() => {
-            this.$nextTick().then(() => {
-              this.isLoading = false;
-            });
-          });
-      },
-      //获取维修宝列表
-      async getCaseList(page = 1) {
-        this.isLoading = true;
-        return await _getData(
-          `${this.$API_URL.HYGPROURL}/server_pro/maintenance!request.action`,
-          {
-            method: "getListWithShoping",
-            version: "3.0.0",
-            deviceId: "",
-            source: "",
-            params: {
-              currentPage: page,
-              countPerPage: 20,
-              mCatogoryId: this.params.mCatogoryId || "",
-              mBrandId: this.params.mBrandId || "",
-              sortType: this.othersort,
-              sortFlag: 1,
-              searchType: 0 //查询类型0列表1详情
-            }
-          },
-          {
-            cancelToken: new axios.CancelToken(c => {
-              // 设置 cancel token
-              this.cancel = c;
-            })
-          }
-        )
-          .then(data => {
-            this.data = data.result;
-            this.arr = data.result.maintenancelist;
           })
           .then(() => {
             this.$nextTick().then(() => {
@@ -572,21 +459,30 @@
         }
         > div:not(.shop-nav) {
           > div {
-            margin-right: -16px;
+            margin-right: -36px;
             .model-item {
               margin-right: 16px;
+              width: $content-left;
             }
           }
           .recommond_video {
             display: flex;
-            justify-content: flex-start;
+            justify-content: space-between;
             flex-wrap: wrap;
+            width: $content-left;
             li {
-              margin-right: 16px;
+              // margin-right: 36px;
+              margin-bottom: 32px;
             }
           }
           .recommond_case {
-            width: 768px;
+            width: $content-left;
+          }
+          .recommond_bid {
+            width: $content-left;
+            li {
+              margin-bottom: 16px;
+            }
           }
         }
 
