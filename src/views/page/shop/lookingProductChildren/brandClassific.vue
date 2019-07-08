@@ -349,7 +349,7 @@
                 }
               }
             });
-            console.log(this.left, this.right);
+            console.log(this.left, this.right, this.center);
           })
           .then(() => {
             this.$nextTick().then(() => {});
@@ -361,17 +361,21 @@
         }).then(data => {
           console.log("按品牌", data);
           _.map(data.currentCategory, (val, i) => {
-            if ((i + 1) % 2 == 1) {
-              if (this.isLogin) {
+            if (this.isLogin) {
+              if ((i + 1) % 3 == 1) {
                 this.right.push(val);
+              } else if ((i + 1) % 3 == 2) {
+                this.center.push(val);
               } else {
                 this.left.push(val);
               }
             } else {
-              if (this.isLogin) {
+              if ((i + 1) % 3 == 1) {
                 this.left.push(val);
-              } else {
+              } else if ((i + 1) % 3 == 2) {
                 this.right.push(val);
+              } else {
+                this.center.push(val);
               }
             }
           });

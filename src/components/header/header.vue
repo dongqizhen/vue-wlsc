@@ -62,7 +62,7 @@
             网来商城App
           </a>
           <transition name="slide-fade">
-            <div class="code" v-if="codeShow">
+            <div class="code">
               <svg class="icon" aria-hidden="true">
                 <use xlink:href="#iconappxiazaierweima"></use>
               </svg>

@@ -24,7 +24,7 @@
                 v-for="(item, i) in navArr"
                 :key="item.id"
                 :class="i == defaultsVal && 'active'"
-                @click="navHandleClick(item.id, i, $event)"
+                @click="navHandleClick(item, i, $event)"
                 @mouseenter="activeVal = i"
                 @mouseleave="activeVal = null"
               >
@@ -64,7 +64,7 @@
                       <div class="img_box">
                         <img
                           :src="
-                            defaultsVal
+                            name == '一线品牌'
                               ? item.new_pic_url
                               : item.app_list_pic_url
                           "
@@ -109,6 +109,7 @@
         pageArr: [],
         activeVal: 0,
         isShow: true, //是否显示管理常用分类按钮
+        name: "",
         defaultsVal: 0, //默认高量nav下标
         brandVisible: false //控制modal层弹出
       };
@@ -122,9 +123,9 @@
         this.getCommonBrand();
       },
       //点击nav
-      navHandleClick(id, i, e) {
+      navHandleClick(item, i, e) {
         //点击nav
-        if (id) {
+        if (item.id) {
           this.isShow = false;
           this.pageArr = this.arr.firstLineList;
         } else {
@@ -132,6 +133,7 @@
           this.getCommonBrand();
         }
         this.defaultsVal = i;
+        this.name = item.name;
         this.tap(i);
       },
       init() {
@@ -179,12 +181,15 @@
     created() {
       //如果登录 则显示常用分类
       if (this.isLogin) {
+        this.name = "常用品牌";
         this.navArr.unshift({
           name: "常用品牌",
           id: "",
           iconActive: "#iconpingjiashixinwujiaoxing",
           icon: "#iconchangyong"
         });
+      } else {
+        this.name = "一线品牌";
       }
     },
     components: { CommonBrandsModalVue },

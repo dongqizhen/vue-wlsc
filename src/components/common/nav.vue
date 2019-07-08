@@ -1,15 +1,16 @@
 <template>
   <div class="nav">
     <div class="top_nav">
-      <ul class="commonWidth">
-        <li
-          v-for="(item, i) in nav_title"
-          :key="`nav-${i}`"
-          @click="nav_change(item, i)"
-        >
-          <a :class="i == defaultNav && 'active'">{{ item.name }}</a>
-        </li>
-        <!-- <router-link
+      <div class="commonWidth">
+        <ul>
+          <li
+            v-for="(item, i) in nav_title"
+            :key="`nav-${i}`"
+            @click="nav_change(item, i)"
+          >
+            <a :class="i == defaultNav && 'active'">{{ item.name }}</a>
+          </li>
+          <!-- <router-link
           v-for="(item, i) in nav_title"
           :key="`nav-${i}`"
           tag="li"
@@ -24,7 +25,14 @@
             item.name
           }}</a>
         </router-link> -->
-      </ul>
+        </ul>
+        <span>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconrexiandianhua"></use>
+          </svg>
+          4000-1212-11
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -89,35 +97,61 @@
   .top_nav {
     height: 60px;
     border-bottom: 2px solid $theme-color;
-    ul {
+    > .commonWidth {
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
       align-items: center;
-      li {
+      ul {
         display: flex;
+        justify-content: flex-start;
         align-items: center;
-        justify-content: center;
-        line-height: 58px;
-        font-weight: 600;
-        font-size: 18px;
-        color: #333333;
-        cursor: pointer;
-        a {
-          color: #333333;
-          text-decoration: none;
+        li {
           display: flex;
-          width: 120px;
-          height: 100%;
           align-items: center;
           justify-content: center;
-          background: rgba(255, 255, 255, 0.06);
-          &.active {
-            background: $theme-color;
-            color: #ffffff;
+          line-height: 58px;
+          font-weight: 600;
+          font-size: 18px;
+          color: #333333;
+          cursor: pointer;
+          a {
+            color: #333333;
+            text-decoration: none;
+            display: flex;
+            width: 120px;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.06);
+            &.active {
+              background: $theme-color;
+              color: #ffffff;
+            }
+            &:not(.active):hover {
+              color: $theme-color;
+            }
           }
-          &:not(.active):hover {
-            color: $theme-color;
-          }
+        }
+      }
+      > span {
+        width: 168px;
+        height: 35px;
+        // position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #ffffff;
+        border: 1px solid #f5a623;
+        font-size: 18px;
+        color: #f5a623;
+        font-weight: 600;
+        // right: -135px;
+        // top: 28px;
+        line-height: 33px;
+        .icon {
+          width: 16px;
+          height: 16px;
+          margin-right: 8px;
         }
       }
     }

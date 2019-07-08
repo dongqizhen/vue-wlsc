@@ -36,12 +36,6 @@
           </ul>
         </div>
       </div>
-      <span>
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#iconrexiandianhua"></use>
-        </svg>
-        4000-1212-11
-      </span>
     </div>
   </div>
 </template>
@@ -98,9 +92,12 @@
       justify-content: flex-start;
       position: relative;
       h1 {
-        margin-right: 130px;
-        width: 160px;
+        margin-right: 51px;
+        // width: 160px;
         cursor: pointer;
+        img {
+          height: 77px;
+        }
       }
       .ipt_box {
         > div.search_box {
@@ -180,26 +177,6 @@
               }
             }
           }
-        }
-      }
-      > span {
-        width: 168px;
-        height: 35px;
-        position: absolute;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #ffffff;
-        border: 1px solid #f5a623;
-        font-size: 18px;
-        color: #f5a623;
-        font-weight: 600;
-        right: -135px;
-        top: 28px;
-        .icon {
-          width: 16px;
-          height: 16px;
-          margin-right: 8px;
         }
       }
     }
