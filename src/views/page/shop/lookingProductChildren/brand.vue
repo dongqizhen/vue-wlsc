@@ -234,6 +234,7 @@
               currentPage: page,
               countPerPage: 20,
               sortType: this.othersort,
+              searchType: 0,
               sortFlag: 1 //排序标识0正序1 倒序
             }
           },
@@ -491,6 +492,9 @@
           background: #ffffff;
         }
         ul {
+        }
+        .paginationBox {
+          margin-bottom: 0;
         }
       }
       .right {

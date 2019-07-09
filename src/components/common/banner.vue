@@ -135,7 +135,8 @@
         }
       },
       toNotice(e) {
-        let id = e.target.parentElement.getAttribute("data-id");
+        let id = e.target.parentElement.parentElement.getAttribute("data-id");
+
         this.$router.push({ path: "/notice", query: { id } });
       }
     },
@@ -353,7 +354,7 @@
             margin-bottom: 12px;
             span {
               background: rgba(255, 255, 255, 0.36);
-              border: 0.5px solid #ffffff;
+              // border: 0.5px solid #ffffff;
               display: flex;
               justify-content: center;
               align-items: center;
@@ -363,6 +364,17 @@
               font-size: 14px;
               color: #ffffff;
               cursor: pointer;
+              opacity: 0.8;
+              &:first-child {
+                background: rgba(255, 255, 255, 0.36);
+              }
+              &:last-child {
+                background-image: linear-gradient(
+                  270deg,
+                  #ff4e1a 0%,
+                  #f10000 100%
+                );
+              }
               &:hover {
                 opacity: 0.9;
               }
@@ -420,9 +432,9 @@
                 display: flex;
                 justify-content: flex-start;
                 cursor: pointer;
-                opacity: 1 !important;
+                //opacity: 1 !important;
                 &:hover {
-                  color: $theme-color;
+                  opacity: 0.7;
                 }
                 > div {
                   display: flex;

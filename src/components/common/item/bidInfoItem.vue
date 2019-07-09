@@ -131,6 +131,8 @@
       span {
         font-size: 11px;
         color: #999999;
+        display: flex;
+        justify-content: flex-end;
         &:last-child {
           font-size: 20px;
           color: #f10215;

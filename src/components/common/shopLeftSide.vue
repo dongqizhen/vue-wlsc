@@ -9,7 +9,12 @@
           </svg>
           常用品牌
         </span>
-        <span @click="btnClicik">管理常用品牌</span>
+        <span @click="btnClicik">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconguanlichangyongfenlei"></use>
+          </svg>
+          管理常用品牌
+        </span>
       </h3>
       <div class="item-box" :class="commonMore && 'active'">
         <ul class="item_container">
@@ -235,6 +240,15 @@
           font-size: 11px;
           color: #333333;
           cursor: pointer;
+          &:hover {
+            opacity: 0.7;
+          }
+          .icon {
+            width: 13px;
+            height: 14px;
+            margin-right: 5px;
+            margin-top: 2px;
+          }
         }
       }
     }

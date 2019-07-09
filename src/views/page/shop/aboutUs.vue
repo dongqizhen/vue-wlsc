@@ -263,7 +263,7 @@
             }
           }
           p {
-            font-size: 14px;
+            font-size: 16px;
             color: #333333;
             line-height: 30px;
             padding: 0 23px;

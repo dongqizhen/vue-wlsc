@@ -87,6 +87,9 @@
         padding: 84px 0;
         padding-top: 65px;
         cursor: pointer;
+        img {
+          height: 77px;
+        }
       }
       .login-container {
         height: 535px;

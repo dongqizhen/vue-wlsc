@@ -85,7 +85,7 @@
                       :src="
                         defaultsNav == '一线品牌'
                           ? item.new_pic_url
-                          : item.app_list_pic_url
+                          : item.app_list_pic_url || item.pic_url
                       "
                       alt=""
                     />
@@ -101,7 +101,10 @@
       </div>
 
       <div class="right">
-        <brand-card-vue v-if="$route.query.nav_index == 1"></brand-card-vue>
+        <brand-card-vue
+          v-if="$route.query.nav_index == 1"
+          :data="categoryDetail"
+        ></brand-card-vue>
       </div>
     </div>
   </div>
@@ -114,6 +117,7 @@
   import { _getData } from "../../../../config/getData";
   import { mapState, mapMutations } from "vuex";
   import _ from "lodash";
+  import axios from "axios";
   import pinyin from "pinyin";
 
   export default {
@@ -129,7 +133,8 @@
         letter: [], //字母索引
         nav: ["一线品牌", "全部"],
         defaultsNav: "全部", //默认高亮的nav
-        brandVisible: false
+        brandVisible: false,
+        categoryDetail: ""
       };
     },
     computed: {
@@ -139,6 +144,16 @@
       if (this.isLogin) {
         this.nav.unshift("常用品牌");
       }
+
+      if (this.$route.query.nav_index == 1) {
+        _getData("catalog/getCategory", {
+          id: this.$route.query.categoryId
+        }).then(data => {
+          console.log("小类详情", data);
+          this.categoryDetail = data;
+        });
+      }
+
       this.routes =
         this.$route.query.nav_index == 2
           ? [
@@ -179,16 +194,20 @@
         if (this.val == "") return;
         this.defaultsNav = "";
         this.isLoading = true;
-        _getData("brand/getBrand", {
-          brandName: this.val.trim(),
-          categoryId: this.$route.query.categoryId || ""
-        })
+        _getData(
+          "brand/getBrand",
+          {
+            brandName: this.val.trim(),
+            categoryId: this.$route.query.categoryId || ""
+          },
+          {}
+        )
           .then(data => {
             this.arr = data;
           })
-          .then(() => {
-            this.val = "";
-          })
+          // .then(() => {
+          //   this.val = "";
+          // })
           .then(() => {
             // this.$nextTick().then(() => {
             //   this.isLoading = false;
@@ -413,7 +432,7 @@
         }
       }
       .right {
-        width: 236px;
+        width: 280px;
       }
     }
   }

@@ -34,18 +34,24 @@
         </router-link>
         <li v-if="isLogin" @click="system">
           <a>
-            系统通知({{
-              isMerchant ? userShopInfo.shopSystem : userShopInfo.systemCount
-            }})
+            系统通知(<span>
+              {{
+                isMerchant ? userShopInfo.shopSystem : userShopInfo.systemCount
+              }}
+            </span>
+            )
           </a>
         </li>
         <li v-if="isLogin" @click="privateMessage">
           <a>
-            私信消息({{
-              isMerchant
-                ? userShopInfo.shopPersonal
-                : userShopInfo.privateCount
-            }})
+            私信消息(<span>
+              {{
+                isMerchant
+                  ? userShopInfo.shopPersonal
+                  : userShopInfo.privateCount
+              }}
+            </span>
+            )
           </a>
         </li>
         <router-link tag="li" to="/userCenter" v-if="!isMerchant">

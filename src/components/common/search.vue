@@ -20,7 +20,7 @@
           <span @click="handClick">搜索</span>
         </div>
         <div class="nav">
-          <h2>热门产品：</h2>
+          <h2>热门搜索：</h2>
           <ul>
             <router-link
               tag="li"
