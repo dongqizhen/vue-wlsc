@@ -111,6 +111,9 @@
                 border-bottom: none;
                 .commonWidth {
                   width: 830px;
+                  span {
+                    display: none;
+                  }
                 }
                 ul {
                   li {
