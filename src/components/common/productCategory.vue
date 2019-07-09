@@ -388,7 +388,7 @@
             padding: 20px 20px;
             padding-bottom: 0;
             li {
-              font-size: 13px;
+              font-size: 14px;
               color: #666666;
               margin-bottom: 20px;
               margin-right: 30px;

@@ -302,6 +302,7 @@
               currentPage: page,
               countPerPage: 20,
               sortType: this.othersort,
+              searchType: 1,
               sortFlag: 1 //排序标识0正序1 倒序
             }
           },
@@ -629,7 +630,7 @@
         align-items: center;
         margin-bottom: 12px;
         position: absolute;
-        right: -80px;
+        right: -0px;
         top: -2.5px;
         a {
           display: flex;

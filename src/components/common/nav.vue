@@ -30,7 +30,9 @@
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#iconrexiandianhua"></use>
           </svg>
-          4000-1212-11
+          <span>
+            4000-1212-11
+          </span>
         </span>
       </div>
     </div>
@@ -134,7 +136,8 @@
         }
       }
       > span {
-        width: 168px;
+        padding: 0 14px;
+
         height: 35px;
         // position: absolute;
         display: flex;
@@ -152,6 +155,12 @@
           width: 16px;
           height: 16px;
           margin-right: 8px;
+        }
+        span {
+          flex: 1;
+          display: flex;
+          height: 100%;
+          justify-content: center;
         }
       }
     }

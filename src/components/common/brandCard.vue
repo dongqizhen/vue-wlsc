@@ -2,14 +2,14 @@
   <div class="brand-card">
     <div class="img_box">
       <div class="img">
-        <img :src="data.pic_url" alt="" />
+        <img :src="data.pic_url || data.icon_url" alt="" />
       </div>
       {{ data.name }}
     </div>
     <div class="introduce">
       <div class="desc" :class="isUnwind && 'active'">
         <p>
-          {{ data.simple_desc }}
+          {{ data.simple_desc || data.front_desc }}
         </p>
       </div>
       <span

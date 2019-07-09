@@ -638,6 +638,13 @@
             // border-left: 1px solid #e0e7ea;
             border-bottom: 1px solid #e0e7ea;
           }
+          &:first-child {
+            ul {
+              li {
+                font-weight: 600;
+              }
+            }
+          }
           .header {
             position: relative;
             height: 133px;

@@ -244,7 +244,10 @@
       </div>
 
       <div class="right" :class="$route.query.nav_index == 1 && 'active'">
-        <brand-card-vue v-if="$route.query.nav_index == 2"></brand-card-vue>
+        <brand-card-vue
+          v-if="$route.query.nav_index == 2"
+          :data="brandDetail"
+        ></brand-card-vue>
       </div>
     </div>
   </div>
@@ -271,6 +274,7 @@
         left: [], //左侧渲染数组
         right: [], //右侧渲染数组
         center: [],
+        brandDetail: "",
         commonCategorie: [],
         isLoading: true
       };
@@ -404,6 +408,14 @@
       //获取所有分类
     },
     created() {
+      if (this.$route.query.nav_index == 2) {
+        _getData("brand/detail", {
+          id: this.$route.query.brandId
+        }).then(data => {
+          console.log("品牌详情", data);
+          this.brandDetail = data;
+        });
+      }
       if (this.isLogin) {
         this.left = [
           {
@@ -642,7 +654,7 @@
     }
 
     .right {
-      width: 236px;
+      width: 280px;
       &.active {
         display: none;
       }

@@ -352,7 +352,7 @@
                     flex: 1;
                     height: 100%;
                     align-items: flex-end;
-                    border-bottom: 1px solid #f5a623;
+                    border-bottom: 2px solid #f5a623;
                     padding-bottom: 3px;
                     li {
                       // font-family: PingFangSC-Regular;
@@ -382,7 +382,7 @@
                       cursor: pointer;
                       height: 100%;
                       text-decoration: none;
-                      border-bottom: 1px solid #f5a623;
+                      border-bottom: 2px solid #f5a623;
                       padding-bottom: 3px;
                       .icon {
                         margin-left: 7px;

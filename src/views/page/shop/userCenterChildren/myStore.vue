@@ -39,16 +39,16 @@
                 :item="item"
               ></shop-item>
             </ul>
+            <pagination
+              :data="paginationData"
+              v-on:onPaginationChange="getPaginationChange"
+              v-if="paginationData.count != 0"
+            ></pagination>
           </div>
           <no-data v-else type="no-collect" text="暂无数据"></no-data>
         </div>
         <loading v-else :number="2" :rows="4"></loading>
       </div>
-      <pagination
-        :data="paginationData"
-        v-on:onPaginationChange="getPaginationChange"
-        v-if="paginationData.count != 0"
-      ></pagination>
     </div>
     <loading v-else :number="2"></loading>
   </div>
@@ -220,11 +220,24 @@
       ul {
         display: flex;
         flex-wrap: wrap;
-        li {
+        > li {
           width: 254px;
           margin-right: 8px;
           float: left;
           margin-bottom: 8px;
+          /deep/ .img {
+            height: 224px;
+            width: 224px;
+          }
+          &.product-item {
+            /deep/ .address {
+              > div {
+                > div {
+                  width: 135px;
+                }
+              }
+            }
+          }
         }
       }
       /deep/.no-data {

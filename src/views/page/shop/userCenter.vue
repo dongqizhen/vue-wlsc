@@ -20,7 +20,7 @@
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#iconbaiserexiandianhua"></use>
             </svg>
-            400-012-1122
+            <span>400-012-1122</span>
           </div>
         </div>
       </div>
@@ -110,7 +110,10 @@
                 height: 100%;
                 border-bottom: none;
                 .commonWidth {
-                  width: 830px;
+                  width: 810px;
+                  > span {
+                    display: none;
+                  }
                 }
                 ul {
                   li {
@@ -125,9 +128,20 @@
             .telphone {
               font-size: 24px;
               color: #fff;
+              display: flex;
+              justify-content: flex-end;
+              align-items: center;
+              height: 100%;
+              width: 200px;
               .icon {
                 width: 20px;
                 height: 20px;
+                margin-right: 8px;
+                margin-top: 1px;
+              }
+              span {
+                display: flex;
+                justify-content: flex-end;
               }
             }
           }

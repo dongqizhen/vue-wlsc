@@ -130,7 +130,7 @@
     }
     p {
       //font-family: PingFangSC-Medium;
-      font-size: 13px;
+      font-size: 14px;
       color: #333333;
       font-weight: 600;
       line-height: 17px;
@@ -174,7 +174,7 @@
         align-items: center;
 
         > div {
-          width: 135px;
+          width: 170px;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
