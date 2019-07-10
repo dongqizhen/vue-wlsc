@@ -133,12 +133,12 @@ module.exports = {
                 javascriptEnabled: true
             }
         },
-        // 是否使用css分离插件 ExtractTextPlugin
-        extract: true,
-        // 开启 CSS source maps?
-        sourceMap: false,
-        // 启用 CSS modules for all css / pre-processor files.
-        modules: false
+        // // 是否使用css分离插件 ExtractTextPlugin
+        // extract: true,
+        // // 开启 CSS source maps?
+        // sourceMap: false,
+        // // 启用 CSS modules for all css / pre-processor files.
+        // modules: false
     },
     devServer: {
         port: 8085, // 端口号
