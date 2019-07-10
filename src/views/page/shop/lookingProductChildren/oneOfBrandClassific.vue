@@ -205,9 +205,9 @@
           .then(data => {
             this.arr = data;
           })
-          .then(() => {
-            this.val = "";
-          })
+          // .then(() => {
+          //   this.val = "";
+          // })
           .then(() => {
             // this.$nextTick().then(() => {
             //   this.isLoading = false;

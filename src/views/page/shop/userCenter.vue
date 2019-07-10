@@ -110,8 +110,8 @@
                 height: 100%;
                 border-bottom: none;
                 .commonWidth {
-                  width: 810px;
-                  > span {
+                  width: 830px;
+                  span {
                     display: none;
                   }
                 }
