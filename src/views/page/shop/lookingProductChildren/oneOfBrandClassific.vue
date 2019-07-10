@@ -337,7 +337,7 @@
         height: 35px;
         position: absolute;
         border: 1px solid $theme-color;
-        right: -150px;
+        right: 0px;
         display: flex;
         justify-content: flex-start;
         top: -4px;
@@ -412,7 +412,7 @@
                 width: 144px;
                 height: 104px;
                 background: #fff;
-                box-shadow: $base-box-shadow;
+                box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.2);
                 margin-bottom: 8px;
                 img {
                   height: 100%;

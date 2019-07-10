@@ -70,8 +70,8 @@
       padding: 27px 28px;
       box-shadow: $base-box-shadow;
       .img {
-        width: 180px;
-        height: 113px;
+        width: 200px;
+        height: 104px;
         background: $base-background;
         margin-bottom: 25px;
         img {

@@ -6,12 +6,24 @@
         :options="swiperOption"
         v-if="banner.length"
         @slideChangeTransitionStart="slideChangeTransitionStart"
+        @mouseenter.native="btnShow = true"
+        @mouseleave.native="btnShow = false"
       >
         <!-- slides -->
         <swiper-slide v-for="item in banner" :key="item.id">
           <a target="_blank" :href="item.link"><img :src="item.image_url"/></a>
         </swiper-slide>
         <!-- Optional controls -->
+        <div class="swiper-button-prev" slot="button-prev" v-show="btnShow">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconshangfanye"></use>
+          </svg>
+        </div>
+        <div class="swiper-button-next" slot="button-next" v-show="btnShow">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#iconxiafanye"></use>
+          </svg>
+        </div>
         <ul class="swiper-pagination" slot="pagination"></ul>
       </swiper>
       <div class="login">
@@ -86,10 +98,8 @@
       return {
         background: {
           background: ""
-          // backgroundImage: "",
-          // backgroundSize: "",
-          // backgroundPosition: ""
         },
+        btnShow: false,
         num: 0,
         animate: false,
         swiperOption: {
@@ -115,6 +125,10 @@
             bulletElement: "li",
             // type: "custom",
             clickable: true
+          },
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev"
           }
         },
         bannerURL: "",
@@ -255,6 +269,36 @@
               width: 24px;
               transition-delay: 0s;
             }
+          }
+        }
+        .swiper-button-prev,
+        .swiper-button-next {
+          background: rgba(34, 34, 34, 0.5);
+          height: 52px;
+          width: 52px;
+          border-radius: 53px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: -26px;
+          &:hover {
+            opacity: 0.7;
+          }
+          .icon {
+            height: 22px;
+            width: 22px;
+          }
+        }
+        .swiper-button-prev {
+          left: 30px;
+          .icon {
+            margin-right: 1px;
+          }
+        }
+        .swiper-button-next {
+          right: 30px;
+          .icon {
+            margin-left: 1px;
           }
         }
       }

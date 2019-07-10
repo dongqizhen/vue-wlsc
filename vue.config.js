@@ -5,6 +5,7 @@ const path = require('path')
 const API = require('./src/config/API.js')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 console.log(API)
 const resolve = (dir) => {
     return path.join(__dirname, dir)
@@ -53,7 +54,9 @@ module.exports = {
                 test: new RegExp(`\\.(${productionGzipExtensions.join('|')})$`),
                 threshold: 10240,
                 minRatio: 0.8,
+                deleteOriginalAssets: false
             }));
+            config.plugins.push(new BundleAnalyzerPlugin())
             config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
         }
 

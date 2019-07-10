@@ -5,7 +5,7 @@
         <svg class="icon" aria-hidden="true">
           <use
             xlink:href="#iconyirenzhengjiaobiao"
-            v-if="detail.auditStatus == 1"
+            v-if="detail.auditStatus == 2"
           ></use>
         </svg>
       </span>
