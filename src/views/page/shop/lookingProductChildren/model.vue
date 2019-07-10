@@ -295,7 +295,7 @@
           {
             method: "simpleSearchForShoping",
             token: "",
-            userid: "",
+            userid: this.$userid || "",
             params: {
               name: this.$route.query.modelName,
               type: this.type,

@@ -10,6 +10,7 @@
     <a target="_blank">
       <div class="bid-left">
         <h2>{{ item.productName }}</h2>
+
         <span>{{ item.brandName }}/{{ item.modelId }}</span>
         <div>
           <div>
@@ -26,7 +27,12 @@
       </div>
       <div class="price">
         <span>单品价格</span>
-        <span>{{ item.avgAmount }}</span>
+        <img
+          src="../../../assets/images/diamond.png"
+          v-if="item.avgAmount == '钻石会员可见'"
+          alt=""
+        />
+        <span v-else>{{ item.avgAmount }}万元</span>
       </div>
       <div class="adress">
         <svg class="icon" aria-hidden="true">
@@ -128,6 +134,10 @@
       top: 13.5px;
       display: flex;
       flex-direction: column;
+      img {
+        height: 27px;
+        margin-top: 10px;
+      }
       span {
         font-size: 11px;
         color: #999999;

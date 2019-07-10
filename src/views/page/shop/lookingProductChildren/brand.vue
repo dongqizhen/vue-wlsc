@@ -227,7 +227,7 @@
           {
             method: "simpleSearchForShoping",
             token: "",
-            userid: "",
+            userid: this.$userid || "",
             params: {
               name: this.params.name,
               type: this.type,

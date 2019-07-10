@@ -27,11 +27,12 @@
         </div>
       </div>
       <ul class="right">
-        <router-link tag="li" to="/userCenter" v-if="isLogin && !isMerchant">
-          <a target="_blank">
+        <!-- <router-link tag="li" to="/userCenter"> </router-link> -->
+        <li v-if="isLogin && !isMerchant" @click="toUserCenter">
+          <a>
             个人中心
           </a>
-        </router-link>
+        </li>
         <li v-if="isLogin" @click="system">
           <a>
             系统通知(<span>
@@ -54,14 +55,22 @@
             )
           </a>
         </li>
-        <router-link tag="li" to="/userCenter" v-if="!isMerchant">
+        <!-- <router-link tag="li" to="/userCenter" v-if="!isMerchant">
           <a target="_blank">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icongouwuche"></use>
             </svg>
             我的选购单
           </a>
-        </router-link>
+        </router-link> -->
+        <li v-if="!isMerchant" @click="toUserCenter">
+          <a>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icongouwuche"></use>
+            </svg>
+            我的选购单
+          </a>
+        </li>
         <li v-if="!isMerchant"><a @click="openMerchant">商家中心</a></li>
         <router-link
           tag="li"
@@ -101,6 +110,13 @@
       };
     },
     methods: {
+      toUserCenter() {
+        const { href } = this.$router.resolve({
+          path: "/userCenter"
+        });
+
+        window.open(href, "_blank");
+      },
       exitHandler() {
         this.changeLoginState(false);
         this.changeUserInfoState({});

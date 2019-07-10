@@ -31,7 +31,12 @@
           <span>
             中标金额
           </span>
-          {{ userInfo.memberGrade == 4 ? bidData.bidAmount : "钻石会员可见" }}
+          <img
+            src="../../../../assets/images/diamond.png"
+            v-if="userInfo.memberGrade != 4"
+            alt=""
+          />
+          {{ userInfo.memberGrade == 4 ? bidData.bidAmount + "万元" : "" }}
         </li>
         <li>
           <span>
@@ -72,25 +77,57 @@
           <span>
             本型号产品全省平均价
           </span>
-          {{ bidData.pAvgPrice }}
+          <img
+            src="../../../../assets/images/platinum.png"
+            v-if="bidData.pAvgPrice == '铂金会员可见'"
+            alt=""
+          />
+          {{
+            bidData.pAvgPrice != "铂金会员可见"
+              ? bidData.pAvgPrice + "万元"
+              : ""
+          }}
         </li>
         <li>
           <span>
             本型号产品全省最低价
           </span>
-          {{ bidData.pMinPrice }}
+          <img
+            src="../../../../assets/images/diamond.png"
+            v-if="bidData.pMinPrice == '钻石会员可见'"
+            alt=""
+          />
+          {{
+            bidData.pMinPrice != "钻石会员可见"
+              ? bidData.pMinPrice + "万元"
+              : ""
+          }}
         </li>
         <li>
           <span>
             本型号产品全国平均价
           </span>
-          {{ bidData.avgPrice }}
+          <img
+            src="../../../../assets/images/platinum.png"
+            v-if="bidData.avgPrice == '铂金会员可见'"
+            alt=""
+          />
+          {{
+            bidData.avgPrice != "铂金会员可见" ? bidData.avgPrice + "万元" : ""
+          }}
         </li>
         <li>
           <span>
             本型号产品全国最低价
           </span>
-          {{ bidData.minPrice }}
+          <img
+            src="../../../../assets/images/diamond.png"
+            v-if="bidData.minPrice == '钻石会员可见'"
+            alt=""
+          />
+          {{
+            bidData.minPrice != "钻石会员可见" ? bidData.minPrice + "万元" : ""
+          }}
         </li>
       </ul>
       <modal-vue :isShow="visible" :options="options">
