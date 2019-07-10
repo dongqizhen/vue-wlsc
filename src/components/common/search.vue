@@ -93,7 +93,7 @@
       position: relative;
       h1 {
         margin-right: 51px;
-        // width: 160px;
+        width: 239px;
         cursor: pointer;
         img {
           height: 77px;

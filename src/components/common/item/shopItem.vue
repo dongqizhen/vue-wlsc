@@ -13,14 +13,16 @@
   >
     <a target="_blank">
       <div class="top">
-        <div
-          class="img_box"
-          v-lazy-container="{
-            selector: 'img'
-          }"
-        >
-          <img :data-src="item.image" alt="" v-if="item.image" />
-          <img v-else src="../../../assets/images/default.png" alt="" />
+        <div class="img_box">
+          <div
+            v-lazy-container="{
+              selector: 'img'
+            }"
+          >
+            <img :data-src="item.image" alt="" v-if="item.image" />
+            <img v-else src="../../../assets/images/default.png" alt="" />
+          </div>
+
           <span
             :class="
               item.type == 3
@@ -33,7 +35,9 @@
                 ? 'serve'
                 : ''
             "
-          ></span>
+          >
+            <img :src="item.webIcon" alt="" />
+          </span>
         </div>
         <h2>{{ item.shopName }}</h2>
         <p>
@@ -109,7 +113,7 @@
       flex-direction: column;
       text-decoration: none;
       &:hover {
-        img {
+        .img_box > div > img {
           transform: scale(1.1);
         }
       }
@@ -131,33 +135,41 @@
         background: $base-background;
         overflow: hidden;
         position: relative;
-        > img {
+        > div {
           height: 100%;
           width: 100%;
-          transition: transform 0.5s ease;
+          > img {
+            height: 100%;
+            width: 100%;
+            transition: transform 0.5s ease;
+          }
         }
+
         span {
-          position: absolute;
           display: flex;
           position: absolute;
           right: 0;
-          top: 0;
-          width: 42px;
-          height: 22px;
-          background: url("../../../assets/images/shop.svg") no-repeat center;
-          &.self {
-            background-image: url("../../../assets/images/self.svg");
+          top: -1px;
+
+          // height: 22px;
+          img {
+            // height: 23px;
+            // width: ;
           }
-          &.agency {
-            background-image: url("../../../assets/images/agency.svg");
-          }
-          &.rest {
-            background-image: url("../../../assets/images/rest.svg");
-          }
-          &.serve {
-            width: 55px;
-            background-image: url("../../../assets/images/serve.svg");
-          }
+          // background: url("../../../assets/images/shop.svg") no-repeat center;
+          // &.self {
+          //   background-image: url("../../../assets/images/self.svg");
+          // }
+          // &.agency {
+          //   background-image: url("../../../assets/images/agency.svg");
+          // }
+          // &.rest {
+          //   background-image: url("../../../assets/images/rest.svg");
+          // }
+          // &.serve {
+          //   width: 55px;
+          //   background-image: url("../../../assets/images/serve.svg");
+          // }
         }
       }
       h2 {

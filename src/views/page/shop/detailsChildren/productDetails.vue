@@ -1040,9 +1040,10 @@
     .right {
       // flex: 1;
       width: 280px;
+      position: relative;
       .ant-btn-default {
         height: 40px;
-        width: 152px;
+        width: 120px;
         background: #ffffff;
         border: 1px solid #f5a623;
         color: #f5a623;
@@ -1054,6 +1055,9 @@
         justify-content: center;
         align-items: center;
         margin-bottom: 12px;
+        position: absolute;
+        top: -49px;
+        left: -150px;
         a {
           display: flex;
           align-items: center;

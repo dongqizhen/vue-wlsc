@@ -119,7 +119,11 @@
     },
     methods: {
       onPaginationChange(page) {
-        this.getGoodsList(page);
+        this.getGoodsList(page).then(() => {
+          setTimeout(() => {
+            window.scrollTo(0, 300);
+          }, 100);
+        });
       },
       categoryClick(item) {
         console.log(item);

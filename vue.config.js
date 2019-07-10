@@ -57,6 +57,7 @@ module.exports = {
                 deleteOriginalAssets: false
             }));
             config.plugins.push(new BundleAnalyzerPlugin())
+
             config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
         }
 
@@ -76,14 +77,14 @@ module.exports = {
                 }
             },
             module: {
-                rules: [{
-                    test: /\.tsx?$/,
-                    loader: 'ts-loader',
-                    exclude: /node_modules/,
-                    options: {
-                        appendTsSuffixTo: [/\.vue$/]
-                    }
-                }]
+                // rules: [{
+                //     test: /\.tsx?$/,
+                //     loader: 'ts-loader',
+                //     exclude: /node_modules/,
+                //     options: {
+                //         appendTsSuffixTo: [/\.vue$/]
+                //     }
+                // }]
             },
 
             plugins: [
@@ -94,12 +95,50 @@ module.exports = {
         }
     },
 
+    chainWebpack: config => {
+        //  tsx Loader
+        config.module
+            .rule('tsx')
+            .test(/\.tsx?$/)
+            .use('ts-loader')
+            .loader('ts-loader')
+            .options({
+                appendTsSuffixTo: [/\.vue$/]
+            })
+            .end()
+
+        // 压缩图片
+        config.module
+            .rule('images')
+            .use('image-webpack-loader')
+            .loader('image-webpack-loader')
+            .options({
+                bypassOnDebug: true
+            })
+            .end()
+
+        // 移除 prefetch 插件
+        config.plugins.delete("prefetch");
+        // 移除 preload 插件
+        config.plugins.delete('preload');
+
+        // 分割代码
+        // config.optimization.splitChunks({
+        //     chunks: 'all'
+        // })
+    },
     css: {
         loaderOptions: {
             less: {
                 javascriptEnabled: true
             }
-        }
+        },
+        // // 是否使用css分离插件 ExtractTextPlugin
+        // extract: true,
+        // // 开启 CSS source maps?
+        // sourceMap: false,
+        // // 启用 CSS modules for all css / pre-processor files.
+        // modules: false
     },
     devServer: {
         port: 8085, // 端口号

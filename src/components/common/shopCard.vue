@@ -9,14 +9,17 @@
           ></use>
         </svg>
       </span>
+      <span class="rightTopIcon">
+        <img :src="detail.webIcon" alt="" />
+      </span>
       <div class="img_box">
         <img :src="detail.image" alt="" v-if="detail.image" />
       </div>
       <p>{{ detail.shopName }}</p>
       <ul>
-        <li>
+        <!-- <li>
           <span>店铺类型：</span><span>{{ detail.typeName }}</span>
-        </li>
+        </li> -->
         <li>
           <span>销售地区： </span>
           <span>
@@ -158,15 +161,24 @@
         width: 50px;
       }
     }
+    .rightTopIcon {
+      position: absolute;
+      right: 0;
+      display: flex;
+      top: 0px;
+    }
     .img_box {
       height: 179px;
       width: 179px;
       background: $base-background;
       margin-top: 34px;
       margin-bottom: 8px;
-      img {
+      position: relative;
+      > img {
         height: 100%;
         width: 100%;
+      }
+      span {
       }
     }
     p {

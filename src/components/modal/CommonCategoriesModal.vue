@@ -60,22 +60,24 @@
               type="transition"
               :name="!drag ? 'flip-list' : null"
             > -->
-          <ul class="common">
-            <li
-              v-for="item in myArray"
-              :key="item.id"
-              @click="handleClick(item)"
-            >
-              <span>
-                {{ item.name }}
-                <i>
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#iconguanlichangyongfenleijiahao"></use>
-                  </svg>
-                </i>
-              </span>
-            </li>
-          </ul>
+          <div class="common">
+            <ul>
+              <li
+                v-for="item in myArray"
+                :key="item.id"
+                @click="handleClick(item)"
+              >
+                <span>
+                  {{ item.name }}
+                  <i>
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#iconguanlichangyongfenleijiahao"></use>
+                    </svg>
+                  </i>
+                </span>
+              </li>
+            </ul>
+          </div>
 
           <!-- </transition-group>
           </draggable> -->
@@ -110,7 +112,8 @@
           closable: true,
           maskClosable: true,
           wrapClassName: "commonBrand commonType",
-          centered: false
+          centered: false,
+          getContainer: () => document.querySelector(".Common-Categories-Modal")
         },
         drag: false,
         myArray: [], //二级分类
@@ -139,7 +142,7 @@
             init: function() {
               if (this.slides[0] == undefined) return;
               this.navSlideWidth = this.slides[0].clientWidth; //导航字数需要统一,每个导航宽度一致
-
+              console.log(this.navSlideWidth);
               this.bar = this.$el.find(".bar");
 
               this.bar.transition(300);
@@ -288,4 +291,178 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "../../assets/scss/_commonScss";
+
+  .commonBrand {
+    .ant-modal {
+      width: 873px !important;
+
+      padding-bottom: 0;
+      .ant-modal-header {
+        margin-bottom: 15px;
+      }
+      .ant-modal-body {
+        padding: 0 23px;
+        h2 {
+          height: 57px;
+          display: flex;
+          font-family: PingFangSC-Semibold;
+          font-size: 18px;
+          color: #000000;
+          justify-content: flex-start;
+          align-items: center;
+          line-height: 18px;
+          font-weight: 500;
+          span {
+            font-family: PingFangSC-Regular;
+            font-size: 13px;
+            color: #999999;
+            margin-left: 8px;
+            line-height: 15px;
+            margin-top: 2px;
+          }
+        }
+      }
+    }
+    &.commonType {
+      .ant-modal {
+        .ant-modal-body {
+          .common {
+            min-height: 40px;
+
+            padding: 0 5px;
+            padding-top: 6px;
+
+            li {
+              margin-bottom: 9px;
+              font-size: 14px;
+              color: #333333;
+              height: 28px;
+              width: auto;
+              background: #ffffff;
+              border: 1px solid #cccccc;
+              border-radius: 14px;
+              padding: 0 10px;
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+              line-height: 26px;
+              margin-right: 12px;
+              position: relative;
+              min-width: 98px;
+              span {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+              }
+              i {
+                position: static;
+                display: flex;
+                align-items: center;
+                padding-left: 8px;
+                &:hover {
+                  opacity: 0.7;
+                }
+                .icon {
+                  height: 9px;
+                  width: 9px;
+                }
+              }
+              &::before {
+                content: "添加至常用品牌";
+                display: flex;
+                align-items: center;
+                white-space: pre;
+                height: 100%;
+                width: 100%;
+                position: absolute;
+                background: #fdefd9;
+                text-align: center;
+                display: none;
+                font-family: PingFangSC-Semibold;
+                font-size: 12px;
+                color: #f5a623;
+                justify-content: center;
+              }
+              &:hover {
+                border-color: #fdefd9;
+                &::before {
+                  display: flex;
+                }
+              }
+            }
+          }
+          .list-group {
+            .common {
+              > li:hover {
+                border: 1px solid #cccccc;
+                cursor: pointer;
+                &::before {
+                  display: none;
+                }
+              }
+            }
+          }
+          .all_brand {
+            .word_nav {
+              height: 40px;
+              border-bottom: 1px solid #cccccc;
+              .swiper-wrapper {
+                position: relative;
+                .swiper-slide {
+                  width: 90px;
+                  font-size: 15px;
+                  line-height: 40px;
+                  color: #666666;
+                  cursor: pointer;
+                  text-align: center;
+                  &:hover {
+                    color: $theme-color;
+                  }
+                }
+                .bar {
+                  width: 90px;
+                  height: 2px;
+                  background: $theme-color;
+                  position: absolute;
+                  bottom: 0px;
+                }
+              }
+            }
+            .common {
+              background: #fff;
+              padding-left: 0;
+              padding-right: 0;
+              height: 260px;
+              overflow: auto;
+              ul {
+                width: 100%;
+                // display: flex;
+                // justify-content: flex-start;
+                // flex-wrap: wrap;
+                height: auto;
+                overflow: hidden;
+                li {
+                  background: #ffffff;
+                  margin-bottom: 9px;
+                  border-radius: 1px;
+                  float: left;
+                  span {
+                    font-size: 13px;
+                    color: #666666;
+                    i {
+                      .icon {
+                        height: 12px;
+                        width: 12px;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 </style>
