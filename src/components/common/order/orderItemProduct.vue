@@ -9,11 +9,11 @@
       >
         <span><img :src="product.list_pic_url"/></span>
         <span>{{ product.goods_name }}</span>
-        <span>￥{{ product.retail_price }}</span>
+        <span>￥{{ product.retail_price.toFixed(2) }}</span>
         <span>{{ product.number }}</span>
       </div>
     </div>
-    <div class="actualPrice">￥{{ data.actual_price }}</div>
+    <div class="actualPrice">￥{{ data.actual_price.toFixed(2) }}</div>
     <div class="operating">
       <div class="lookPay" ref="lookPay" @click="addModal(data.id)">
         {{
@@ -115,14 +115,14 @@
       >
         申请退货
       </div>
-      <div
+      <!-- <div
         class="sure"
         v-if="
           data.order_status == 6 && isShowInfo.isMerchant && isShowInfo.isDetail
         "
       >
         退货中
-      </div>
+      </div> -->
       <div class="lookOrderDetail" v-if="!isShowInfo.isDetail">
         <router-link
           tag="a"

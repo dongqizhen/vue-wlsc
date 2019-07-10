@@ -165,7 +165,7 @@
   import recommendsTabVue from "../components/common/recommendsTab.vue";
   import { _getData } from "../config/getData";
   import brandCategoryVue from "../components/common/brandCategory.vue";
-
+  import { mapMutations } from "vuex";
   const IconFont = Icon.createFromIconfontCN({
     scriptUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js"
   });
@@ -182,7 +182,9 @@
         // background: ["#F5A623", "#43D480", "#8880FE", "#0283FF"]
       };
     },
-    beforeCreate() {},
+    created() {
+      // this.changeCurrentCityIp(returnCitySN);
+    },
     mounted() {
       //获取推荐数量
       _getData("index/caseCount", {}).then(data => {
@@ -267,6 +269,7 @@
       next();
     },
     methods: {
+      ...mapMutations(["changeCurrentCityIp"]),
       tabClick(i) {
         this.recommend_tabs_index = i;
       },

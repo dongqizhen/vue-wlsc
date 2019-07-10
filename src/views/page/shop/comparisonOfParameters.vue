@@ -187,8 +187,12 @@
         <a-button type="primary" @click="addbtnClick" v-if="arr.length < 6">
           添加型号
         </a-button>
+        <div class="prompt">
+          <i></i>如参数不准确，请联系客服沟通。电话：<span>4000-121-211</span>
+        </div>
       </div>
     </div>
+
     <Footer></Footer>
     <side-bar />
   </div>
@@ -889,6 +893,25 @@
               }
             }
           }
+        }
+      }
+      .prompt {
+        margin-top: 24px;
+        color: #333;
+        font-size: 16px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        i {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background-color: #f10215;
+          margin-right: 8px;
+        }
+        span {
+          color: #f5a623;
+          font-size: 18px;
         }
       }
       /deep/ & > .ant-btn-primary {

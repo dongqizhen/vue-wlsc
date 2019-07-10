@@ -26,7 +26,7 @@
             {{ item.name }}
           </li>
         </ul>
-        <span @click="commonMore = !commonMore" :class="commonMore && 'active'">
+        <!-- <span @click="commonMore = !commonMore" :class="commonMore && 'active'">
           {{ commonMore ? "收起" : "更多" }}
 
           <svg class="icon" aria-hidden="true" v-if="!commonMore">
@@ -35,7 +35,7 @@
           <svg class="icon" aria-hidden="true" v-else>
             <use xlink:href="#icontianjiaduibichanpinxiala"></use>
           </svg>
-        </span>
+        </span> -->
       </div>
       <common-brands-modal-vue
         :brandVisible="brandVisible"
@@ -255,7 +255,7 @@
     .item-box {
       padding: 20px 15px 0 20px;
       position: relative;
-      height: 102px;
+      // height: 102px;
       overflow: hidden;
       transition: all 0.3s;
       &.active {

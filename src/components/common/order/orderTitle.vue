@@ -75,7 +75,7 @@
               : data.order_status == 5
               ? "已完成"
               : data.order_status == 6
-              ? "退货"
+              ? "退货中"
               : "已关闭"
             : isShowInfo.current == 1
             ? "报价中"

@@ -85,9 +85,12 @@
                       :src="
                         defaultsNav == '一线品牌'
                           ? item.new_pic_url
+                            ? item.new_pic_url
+                            : '../../../../assets/images/default.png'
                           : item.app_list_pic_url || item.pic_url
+                          ? item.app_list_pic_url || item.pic_url
+                          : '../../../../assets/images/default.png'
                       "
-                      alt=""
                     />
                   </div>
                   {{ item.name }}

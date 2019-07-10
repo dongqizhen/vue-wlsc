@@ -72,7 +72,6 @@ Vue.prototype.$getLocalStorage = (key = 'vuex-along', val = 'vuex-along') => {
     return JSON.parse(window.localStorage[key])[val]
 }
 
-
 Vue.component('no-data', NoData)
 Vue.component('loading', loading)
 Vue.component('VueStar', VueStar)

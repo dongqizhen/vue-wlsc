@@ -15,10 +15,10 @@
           </div>
         </div>
         <div class="common">
-          <div class="left-box">产品编号</div>
+          <div class="left-box">批准文号</div>
           <div class="right-box">
             <a-input
-              placeholder="请输入产品编号"
+              placeholder="请输入批准文号"
               v-model="submitData.goodsSn"
             />
           </div>
@@ -146,12 +146,21 @@
           </div>
         </div>
         <div class="common">
-          <div class="left-box">库存数量</div>
+          <div class="left-box"><span class="red">*</span>库存数量</div>
           <div class="right-box">
             <a-input
               ref="goodsNumber"
               placeholder="请输入库存数量"
               v-model="submitData.goodsNumber"
+            />
+          </div>
+        </div>
+        <div class="common">
+          <div class="left-box">保修期</div>
+          <div class="right-box">
+            <a-input
+              placeholder="请输入保修期"
+              v-model="submitData.warrantyPeriodTime"
             />
           </div>
         </div>
@@ -252,8 +261,12 @@
       </div>
     </div>
     <div class="submit">
-      <a-button class="release" @click="release">直接发布并上架</a-button>
-      <a-button class="save" @click="save">保存</a-button>
+      <a-button class="release" @click="release" :loading="releaseLoading">
+        直接发布并上架
+      </a-button>
+      <a-button class="save" @click="save" :loading="saveLoading">
+        保存
+      </a-button>
       <a-button class="reset" @click="reset">重置</a-button>
     </div>
     <publish-goods-success
@@ -287,6 +300,9 @@
         },
         title: "发布商品",
         loading: false,
+        releaseLoading: false,
+        saveLoading: false,
+        resetLoading: false,
         actionURL: this.$API_URL.HYGFILEURL + "/api/upload/imageUpload",
         titleArr: [
           "参数名称",
@@ -317,7 +333,8 @@
           minPrice: "",
           maxPrice: "",
           sparePart: "", //备件号
-          goodsNumber: "", //库存
+          goodsNumber: 1000, //库存
+          warrantyPeriodTime: "", //保修期
           origin: "", //产地
           goodsDesc: "",
           goodsDescText: "",
@@ -333,6 +350,7 @@
     methods: {
       ...mapMutations(["changeUserShopInfoState"]),
       release() {
+        this.releaseLoading = true;
         _getData("/user/getUser", {}).then(data => {
           console.log("获取用户的店铺开店信息：", data);
           this.changeUserShopInfoState(data);
@@ -340,6 +358,7 @@
             if (this.infoJudge() !== false) {
               if (this.submitData.goodsId) {
                 _getData("/goods/updateGoods", this.submitData).then(data => {
+                  this.releaseLoading = false;
                   if (data.code != 500) {
                     this.$message.success("产品编辑成功", 1);
                     this.$router.replace({
@@ -350,6 +369,7 @@
                 });
               } else {
                 _getData("/goods/addGoods", this.submitData).then(data => {
+                  this.releaseLoading = false;
                   if (data.code != 500) {
                     this.addCarSuccess();
                   }
@@ -368,15 +388,18 @@
                 1
               );
             }
+            this.releaseLoading = false;
             return;
           }
         });
       },
       save() {
+        this.saveLoading = true;
         if (this.infoJudge() !== false) {
           this.submitData.isOnSale = 0;
           if (this.submitData.goodsId) {
             _getData("/goods/updateGoods", this.submitData).then(data => {
+              this.saveLoading = false;
               this.$message.success("产品保存成功", 1);
               this.$router.replace({
                 path: "/merchant/productManage",
@@ -385,6 +408,7 @@
             });
           } else {
             _getData("/goods/addGoods", this.submitData).then(data => {
+              this.saveLoading = false;
               this.addCarSuccess();
             });
           }
@@ -402,7 +426,8 @@
           minPrice: "",
           maxPrice: "",
           sparePart: "", //备件号
-          goodsNumber: "", //库存
+          goodsNumber: 1000, //库存
+          warrantyPeriodTime: "", //保修期
           origin: "", //产地
           goodsDesc: "",
           goodsDescText: "",
@@ -425,27 +450,39 @@
       },
       infoJudge() {
         if (!this.submitData.name) {
+          this.releaseLoading = false;
+          this.saveLoading = false;
           this.$message.warning("请输入商品名称", 1);
           this.$refs.name.focus();
           return false;
         }
         if (this.submitData.bigCategoryId == "") {
+          this.releaseLoading = false;
+          this.saveLoading = false;
           this.$message.warning("请选择大类", 1);
           return false;
         }
         if (this.submitData.categoryId == "") {
+          this.releaseLoading = false;
+          this.saveLoading = false;
           this.$message.warning("请选择小类", 1);
           return false;
         }
         if (this.submitData.attribute_category == "") {
+          this.releaseLoading = false;
+          this.saveLoading = false;
           this.$message.warning("请选择类型", 1);
           return false;
         }
         if (this.submitData.brandId == "") {
+          this.releaseLoading = false;
+          this.saveLoading = false;
           this.$message.warning("请选择品牌", 1);
           return false;
         }
         if (this.submitData.modelId == "") {
+          this.releaseLoading = false;
+          this.saveLoading = false;
           this.$message.warning("请选择型号", 1);
           return false;
         }
@@ -453,6 +490,8 @@
           if (
             !/^[1-9]\d*\.?\d*|0\.?\d*[1-9]\d*$/.test(this.submitData.minPrice)
           ) {
+            this.releaseLoading = false;
+            this.saveLoading = false;
             this.$message.warning("指导价只能为数字", 1);
             this.$refs.min.focus();
             return false;
@@ -462,6 +501,8 @@
           if (
             !/^[1-9]\d*\.?\d*|0\.?\d*[1-9]\d*$/.test(this.submitData.maxPrice)
           ) {
+            this.releaseLoading = false;
+            this.saveLoading = false;
             this.$message.warning("指导价只能为数字", 1);
             this.$refs.max.focus();
             return false;
@@ -471,6 +512,8 @@
           if (
             Number(this.submitData.minPrice) > Number(this.submitData.maxPrice)
           ) {
+            this.releaseLoading = false;
+            this.saveLoading = false;
             this.$message.warning("指导价最小值不能高于最大值", 1);
             this.$refs.max.focus();
             return false;
@@ -478,22 +521,36 @@
         }
         if (this.isSparePart) {
           if (!this.submitData.sparePart) {
+            this.releaseLoading = false;
+            this.saveLoading = false;
             this.$message.warning("请输入备件号", 1);
             this.$refs.sparePart.focus();
             return false;
           }
         }
-        if (this.submitData.goodsNumber) {
-          if (!/^[1-9]\d*$/.test(this.submitData.goodsNumber)) {
-            this.$message.warning("库存数量只能为数字", 1);
-            this.$refs.goodsNumber.focus();
-            return false;
+        if (this.submitData.goodsNumber == "") {
+          this.releaseLoading = false;
+          this.saveLoading = false;
+          this.$message.warning("库存数量不能为空", 1);
+          this.$refs.goodsNumber.focus();
+          return false;
+        } else {
+          if (this.submitData.goodsNumber) {
+            if (!/^[1-9]\d*$/.test(this.submitData.goodsNumber)) {
+              this.releaseLoading = false;
+              this.saveLoading = false;
+              this.$message.warning("库存数量只能为数字", 1);
+              this.$refs.goodsNumber.focus();
+              return false;
+            }
           }
         }
 
         this.submitData.goodsDesc = this.$refs.goodDesc.getUEContent();
         this.submitData.goodsDescText = this.$refs.goodDesc.getUEContentTxt();
         if (!this.submitData.goodsDesc) {
+          this.releaseLoading = false;
+          this.saveLoading = false;
           this.$message.warning("请输入商品描述", 1);
           return false;
         }
@@ -673,6 +730,8 @@
           this.submitData.sparePart = data.productInfo.spare_part;
           this.isSparePart = data.productInfo.spare_part ? 1 : 0;
           this.submitData.goodsNumber = data.productInfo.goods_number;
+          this.submitData.warrantyPeriodTime =
+            data.productInfo.warranty_period_time;
           this.submitData.origin = data.productInfo.origin;
           this.specificationParams = data.specificationInfo;
           this.submitData.specificationInfo = this.specificationParams;
@@ -1039,6 +1098,9 @@
       margin-left: 30px;
       padding: 0 24px;
       letter-spacing: 0;
+      &:hover {
+        opacity: 0.7;
+      }
     }
     .release {
       border: 1px solid $theme-color;

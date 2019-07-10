@@ -124,7 +124,12 @@
       </div>
 
       <div class="replay-container">
-        <a-textarea placeholder="请输入内容…" :rows="4" v-model="value" />
+        <a-textarea
+          placeholder="请输入内容…"
+          :rows="4"
+          v-model="value"
+          ref="ipt"
+        />
         <a-button
           :disabled="value == ''"
           @click="sendMessage"
@@ -177,6 +182,7 @@
         })
           .then(data => {
             this.value = "";
+            this.$refs.ipt.focus();
           })
           .then(() => {
             this.getCommentList();
@@ -243,6 +249,7 @@
           });
       }
       this.getCommentList();
+      this.$refs.ipt.focus();
     }
   };
 </script>
@@ -363,6 +370,7 @@
         height: 390px;
         overflow: auto;
         border-bottom: 1px solid #dddddd;
+        background: #fafbfc;
         > div {
           height: 100%;
         }

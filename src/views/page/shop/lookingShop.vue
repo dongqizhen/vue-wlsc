@@ -140,6 +140,7 @@
   import { mixin } from "../../../components/mixin/mixin";
   import { _getData } from "../../../config/getData";
   import pagination from "../../../components/common/pagination";
+  import { mapState } from "vuex";
   export default {
     data() {
       return {
@@ -187,6 +188,7 @@
       shopNavVue,
       pagination
     },
+    computed: { ...mapState(["currentCityIp"]) },
     created() {
       //this.routes = JSON.parse(this.$route.query.routes);
       this.searchParamas.push({
@@ -195,7 +197,8 @@
       });
     },
     mounted() {
-      _getData("address/getRemortIP", { ip: returnCitySN.cip })
+      console.log("店铺", this.currentCityIp);
+      _getData("address/getRemortIP", { ip: this.currentCityIp.cip })
         .then(data => {
           this.selectMainArea = data.content.address;
           this.provinceName = data.content.address_detail.province;

@@ -536,10 +536,24 @@
       padding: 4px 20px;
       box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
       margin-bottom: 10px;
+      /deep/.common-title {
+        justify-content: flex-start;
+      }
       .certificationStatus {
-        font-family: PingFangSC-Medium;
-        font-size: 14px;
+        font-weight: 600;
+        font-size: 16px;
         color: #333333;
+        margin-left: 40px;
+        background: rgba(245, 166, 35, 0.08);
+        border-radius: 17.5px;
+        padding: 0 20px;
+        height: 35px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .icon {
+          margin-right: 6px;
+        }
       }
       .informationContent {
         margin-bottom: 10px;

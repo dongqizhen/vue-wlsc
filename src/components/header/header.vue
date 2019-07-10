@@ -34,7 +34,7 @@
         </router-link>
         <li v-if="isLogin" @click="system">
           <a>
-            系统通知(<span>
+            系统通知(<span :class="isMerchant ? 'whiteColor' : 'redColor'">
               {{
                 isMerchant ? userShopInfo.shopSystem : userShopInfo.systemCount
               }}
@@ -44,7 +44,7 @@
         </li>
         <li v-if="isLogin" @click="privateMessage">
           <a>
-            私信消息(<span>
+            私信消息(<span :class="isMerchant ? 'whiteColor' : 'redColor'">
               {{
                 isMerchant
                   ? userShopInfo.shopPersonal
@@ -225,6 +225,16 @@
             }
             svg {
               margin-right: 5px;
+            }
+            .redColor {
+              color: $theme-color;
+              font-size: 16px;
+              font-weight: 600;
+            }
+            .whiteColor {
+              color: #fff;
+              font-size: 16px;
+              font-weight: 600;
             }
           }
           &:last-child {

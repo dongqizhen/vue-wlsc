@@ -7,6 +7,9 @@ const mutations = {
     },
     changeUserShopInfoState(state: any, val: Object){
         state.userShopInfo = val;
+    },
+    changeCurrentCityIp(state: any, val: Object){
+        state.currentCityIp = val;
     }
 }
 

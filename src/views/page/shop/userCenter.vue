@@ -63,6 +63,10 @@
         ]
       };
     },
+    beforeRouteUpdate(to, from, next) {
+      this.currentSelectedKeys = to.query.keyId;
+      next();
+    },
     mounted() {
       if (this.$route.query.keyId) {
         this.currentSelectedKeys = this.$route.query.keyId;
