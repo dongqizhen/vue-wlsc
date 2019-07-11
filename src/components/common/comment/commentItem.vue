@@ -299,7 +299,7 @@
     display: flex;
     justify-content: flex-start;
     //padding-bottom: 20px;
-    border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid rgba(221, 221, 221, 0.5);
     padding-top: 20px;
     &:last-child {
       border: 0;

@@ -2,7 +2,7 @@
   <div class="brand-card">
     <div class="img_box">
       <div class="img">
-        <img :src="data.pic_url || data.icon_url" alt="" />
+        <img :src="data.app_list_pic_url || data.icon_url" alt="" />
       </div>
       {{ data.name }}
     </div>
@@ -71,7 +71,7 @@
       box-shadow: $base-box-shadow;
       .img {
         width: 200px;
-        height: 104px;
+        height: 144px;
         background: $base-background;
         margin-bottom: 25px;
         img {
