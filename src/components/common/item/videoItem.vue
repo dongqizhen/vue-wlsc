@@ -24,6 +24,7 @@
             <use xlink:href="#iconshipinliebiaoyebofang"></use>
           </svg>
         </div>
+        <span :class="isPay"></span>
       </div>
       <div class="content">
         <h2>
@@ -95,6 +96,19 @@
     created() {},
     components: {
       menuVue
+    },
+    computed: {
+      isPay() {
+        if (this.item.tradeType == 0) {
+          return "free";
+        } else {
+          if (this.item.ispay == 0) {
+            return "pay";
+          } else {
+            return "free";
+          }
+        }
+      }
     },
     props: ["item"]
   };
@@ -176,6 +190,22 @@
           height: 44px;
         }
       }
+      > span {
+        position: absolute;
+        height: 22px;
+        width: 55px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        right: 0;
+        top: 0;
+        &.pay {
+          background: url("../../../assets/images/pay.png") no-repeat;
+        }
+        &.free {
+          background: url("../../../assets/images/free.png") no-repeat;
+        }
+      }
     }
     .content {
       padding: 10px;
@@ -247,7 +277,7 @@
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
-
+            text-align: center;
             &:last-child {
               margin-right: 0;
             }

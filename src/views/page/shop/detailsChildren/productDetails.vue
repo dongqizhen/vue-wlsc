@@ -769,7 +769,7 @@
               height: 49px;
               border-bottom: 1px solid #e8e8e8;
               .ant-tabs-nav-wrap {
-                width: 768px;
+                width: $content-left;
                 z-index: 1000;
                 border-bottom: 1px solid #e8e8e8;
                 //background: #fff;
@@ -812,7 +812,7 @@
                     position: absolute;
 
                     height: 21px;
-                    border-left: 1px #979797 dashed;
+                    border-left: 1px #ddd solid;
                     right: 0;
                   }
                   &:last-child {

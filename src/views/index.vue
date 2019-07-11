@@ -208,9 +208,9 @@
         console.log("data", data);
         this.nav = [
           `推荐产品(${data.count || 0})`,
-          `推荐文章(${data.articleNum || 0})`,
-          `推荐视频(${data.videoNum || 0})`,
-          `推荐案例(${data.maintenanceNum || 0})`
+          `推荐文章(9)`,
+          `推荐视频(9)`,
+          `推荐案例(9)`
         ];
       });
       _getData("goods/homePagelist", {}).then(data => {

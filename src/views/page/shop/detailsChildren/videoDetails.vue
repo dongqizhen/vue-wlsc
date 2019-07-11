@@ -27,6 +27,8 @@
               @ready="playerReadied"
               @pause="onPlayerPause($event)"
               @play="onPlayerPlay($event)"
+              @canplay="onPlayerCanplay($event)"
+              @timeupdate="onPlayerTimeupdate($event)"
               customEventName="customstatechangedeventname"
               @statechanged="playerStateChanged($event)"
             >
@@ -37,6 +39,13 @@
               <use xlink:href="#iconshipinxiangqingyebofangjian"></use>
             </svg>
           </span> -->
+            <modal-vue :isShow="visible" :options="options">
+              <div slot="content" class="content">
+                <h2>此课程为付费课程，请前往好医工App购买观看</h2>
+                <img src="../../../../assets/images/code.png" alt="" />
+                <span>扫码下载好医工APP</span>
+              </div>
+            </modal-vue>
           </div>
           <ul>
             <li v-for="label in detail.course.labelList" :key="label.id">
@@ -165,6 +174,7 @@
   import "video.js/dist/video-js.css";
   import "vue-video-player/src/custom-theme.css";
   import { videoPlayer } from "vue-video-player";
+  import modalVue from "../../../../components/modal/modal.vue";
 
   export default {
     metaInfo() {
@@ -212,31 +222,59 @@
         commentData: "",
         loading: false,
         isPlay: false,
-        isReady: false
+        isReady: false,
+        visible: false,
+        options: {
+          title: "提示",
+          getContainer: () => document.querySelector(".video"),
+          wrapClassName: "videoModal"
+        }
       };
     },
     components: {
       shareMenuVue,
       commentVue,
       menuVue,
+      modalVue,
       videoPlayer
     },
     computed: {
       player() {
         return this.$refs.videoPlayer.player;
+      },
+      isPay() {
+        if (this.detail.course.tradeType == 0) {
+          return false;
+        } else {
+          if (this.detail.course.ispay == 0) {
+            return true;
+          } else {
+            return false;
+          }
+        }
       }
     },
     methods: {
       playerStateChanged(e) {
         console.log("改变");
       },
-      playerReadied() {
+      onPlayerCanplay(e) {
+        console.log("可以");
+      },
+      playerReadied(e) {
         console.log("ready");
         this.isReady = true;
+      },
+      onPlayerTimeupdate(e) {
+        // console.log("时间", e);
       },
       videoPlay(item, i) {
         console.log(this.$refs.videoPlayer);
         console.log(i);
+        if (this.isPay) {
+          this.visible = true;
+          return;
+        }
         if (this.isPlay && this.defaultVideo == i) {
           this.isPlay = false;
           this.$refs.videoPlayer.player.pause();
@@ -307,7 +345,7 @@
               this.isLoading = false;
             })
             .then(() => {
-              console.log(this.$refs.videoPlayer);
+              console.log(this.$refs.videoPlayer.player);
             });
         });
     }
@@ -404,6 +442,47 @@
           .icon {
             width: 80px;
             height: 80px;
+          }
+        }
+        /deep/ .videoModal {
+          .modal {
+            width: 706px !important;
+            .ant-modal-body {
+              .content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                h2 {
+                  font-size: 22px;
+                  color: #222222;
+                  margin-top: 25px;
+                  margin-bottom: 42px;
+                  font-weight: 600;
+                }
+                img {
+                  height: 180px;
+                  width: 180px;
+                }
+                span {
+                  display: flex;
+                  width: 200px;
+                  height: 39px;
+                  background-image: linear-gradient(
+                    96deg,
+                    #fad961 0%,
+                    #f76b1c 100%
+                  );
+                  border-radius: 19.5px;
+                  margin-top: 35px;
+                  font-size: 16px;
+                  color: #ffffff;
+                  justify-content: center;
+                  align-items: center;
+                  font-weight: 600;
+                  margin-bottom: 36px;
+                }
+              }
+            }
           }
         }
       }

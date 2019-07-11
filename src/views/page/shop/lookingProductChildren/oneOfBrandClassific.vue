@@ -301,7 +301,7 @@
         cursor: pointer;
         margin-right: 10px;
         color: #666666;
-        border: 1px solid #333333;
+        border: 1px solid rgba($color: #333, $alpha: 0.5);
         &.active {
           background: rgba(241, 2, 21, 0.03);
           border: 1px solid #f10215;
