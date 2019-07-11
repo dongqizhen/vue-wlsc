@@ -61,32 +61,40 @@
           <div class="swiper-container page">
             <div class="swiper-wrapper">
               <div class="swiper-slide">
-                <ul v-if="canSkip">
-                  <router-link
-                    :to="{
-                      path: '/lookingProduct/oneOfBrandClassificne',
-                      query: {
-                        nav_index: 1,
-                        categoryId: item.id,
-                        categoryName: item.name
-                      }
-                    }"
-                    tag="li"
-                    v-for="item in pageArr"
-                    :key="item.id"
-                  >
-                    <a target="_blank">{{ item.name }}</a>
-                  </router-link>
-                </ul>
-                <ul v-else>
-                  <li
-                    v-for="item in pageArr"
-                    :key="item.id"
-                    @click="categoryClick(item)"
-                  >
-                    <a>{{ item.name }}</a>
-                  </li>
-                </ul>
+                <no-data
+                  type="no-collect"
+                  class="noData"
+                  v-if="pageArr.length == 0"
+                  text="暂无常用分类，请去管理常用分类"
+                ></no-data>
+                <div v-else>
+                  <ul v-if="canSkip">
+                    <router-link
+                      :to="{
+                        path: '/lookingProduct/oneOfBrandClassificne',
+                        query: {
+                          nav_index: 1,
+                          categoryId: item.id,
+                          categoryName: item.name
+                        }
+                      }"
+                      tag="li"
+                      v-for="item in pageArr"
+                      :key="item.id"
+                    >
+                      <a target="_blank">{{ item.name }}</a>
+                    </router-link>
+                  </ul>
+                  <ul v-else>
+                    <li
+                      v-for="item in pageArr"
+                      :key="item.id"
+                      @click="categoryClick(item)"
+                    >
+                      <a>{{ item.name }}</a>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -381,11 +389,14 @@
         }
         .page {
           //min-height: 200px;
+          .noData {
+            margin: 20px;
+          }
           ul {
             display: flex;
             justify-content: flex-start;
             flex-wrap: wrap;
-            padding: 20px 20px;
+            padding: 20px;
             padding-bottom: 0;
             li {
               font-size: 14px;

@@ -46,7 +46,13 @@
           <div class="swiper-container page">
             <div class="swiper-wrapper">
               <div class="swiper-slide">
-                <ul>
+                <no-data
+                  type="no-collect"
+                  class="noData"
+                  v-if="pageArr.length == 0"
+                  text="暂无常用品牌，请去管理常用品牌"
+                ></no-data>
+                <ul v-else>
                   <router-link
                     :to="{
                       path: '/lookingProduct',
@@ -57,7 +63,7 @@
                       }
                     }"
                     tag="li"
-                    v-for="item in pageArr"
+                    v-for="(item, index) in pageArr"
                     :key="item.id"
                   >
                     <a target="_blank">
@@ -69,6 +75,15 @@
                               : item.app_list_pic_url
                           "
                           alt=""
+                        />
+                        <img
+                          v-if="name == '一线品牌'"
+                          :src="
+                            '../../assets/images/o-0' +
+                              ((index + 1) % 12) +
+                              '.png'
+                          "
+                          class="over"
                         />
                       </div>
                       {{ item.name }}
@@ -392,6 +407,9 @@
         }
         .page {
           //min-height: 200px;
+          .noData {
+            margin: 20px;
+          }
           ul {
             display: flex;
             justify-content: flex-start;
@@ -420,9 +438,14 @@
                   background: #fff;
                   box-shadow: $base-box-shadow;
                   margin-bottom: 8px;
+                  position: relative;
                   img {
                     height: 100%;
                     width: 100%;
+                  }
+                  .over {
+                    position: absolute;
+                    left: 0;
                   }
                 }
                 &:hover {
