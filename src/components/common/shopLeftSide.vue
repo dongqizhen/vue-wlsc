@@ -174,7 +174,7 @@
             this.$nextTick().then(() => {
               document.querySelectorAll(".item_container").forEach((val, i) => {
                 // console.log(val.offsetHeight);
-                if (val.offsetHeight <= 102) {
+                if (i != 0 && val.offsetHeight <= 102) {
                   let dom = (document.querySelectorAll(".item-box")[
                     i
                   ].lastChild.style.display = "none");

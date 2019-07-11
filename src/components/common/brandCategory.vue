@@ -401,7 +401,7 @@
         .page {
           //min-height: 200px;
           .noData {
-            margin: 20px;
+            margin: 20px 0;
           }
           ul {
             display: flex;

@@ -347,6 +347,7 @@
               font-weight: 600;
               font-size: 18px;
               color: #666;
+
               .icon {
                 height: 22px;
                 width: 22px;
@@ -390,7 +391,7 @@
         .page {
           //min-height: 200px;
           .noData {
-            margin: 20px;
+            margin: 20px 0;
           }
           ul {
             display: flex;

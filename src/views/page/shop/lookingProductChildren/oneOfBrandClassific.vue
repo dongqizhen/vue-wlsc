@@ -83,14 +83,15 @@
                   <div class="img_box">
                     <img
                       :src="
-                        defaultsNav == '一线品牌'
-                          ? item.new_pic_url
-                            ? item.new_pic_url
-                            : '../../../../assets/images/default.png'
-                          : item.app_list_pic_url || item.pic_url
-                          ? item.app_list_pic_url || item.pic_url
+                        item.app_list_pic_url
+                          ? item.app_list_pic_url
                           : '../../../../assets/images/default.png'
                       "
+                    />
+                    <img
+                      v-if="defaultsNav == '一线品牌'"
+                      :src="'/assets/images/o-0' + ((i + 1) % 12) + '.png'"
+                      class="over"
                     />
                   </div>
                   {{ item.name }}
@@ -417,9 +418,14 @@
                 background: #fff;
                 box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.2);
                 margin-bottom: 8px;
+                position: relative;
                 img {
                   height: 100%;
                   width: 100%;
+                }
+                .over {
+                  position: absolute;
+                  left: 0;
                 }
               }
               &:hover {
