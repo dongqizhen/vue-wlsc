@@ -92,8 +92,25 @@
                   </router-link>
                 </h2>
                 <div class="content">
-                  <div class="left" v-if="item.banner_url">
+                  <div class="left">
                     <img :src="item.banner_url" alt="" />
+                    <ul>
+                      <router-link
+                        :to="{
+                          path: '/lookingProduct/oneOfBrandClassificne',
+                          query: {
+                            nav_index: 1,
+                            categoryId: v.id,
+                            categoryName: v.name
+                          }
+                        }"
+                        tag="li"
+                        v-for="v in item.categoryList"
+                        :key="v.id"
+                      >
+                        <a target="_blank"> {{ v.name }}</a>
+                      </router-link>
+                    </ul>
                   </div>
                   <ul class="right">
                     <product-item
@@ -202,7 +219,7 @@
       });
       //文章
       _getData(`${this.$API_URL.HYGLOGINURL}/server/article!request.action`, {
-        method: "getTopArticleListV30",
+        method: "getTopArticleListV31",
         token: "",
         userid: this.$userid,
         version: "3.0.0",
@@ -220,7 +237,7 @@
       _getData(
         `${this.$API_URL.HYGPROURL}/server_pro/maintenance!request.action`,
         {
-          method: "getHomeRecommendListV30",
+          method: "getHomeRecommendListV31",
           token: "",
           userid: this.$userid,
           version: "3.0.0",
@@ -234,7 +251,7 @@
       });
       //视频
       _getData(`${this.$API_URL.HYGPROURL}/server_pro/video!request.action`, {
-        method: "getHomeRecommendListV30",
+        method: "getHomeRecommendListV31",
         token: "",
         userid: this.$userid,
         version: "3.0.0",
@@ -342,10 +359,10 @@
                     height: 100%;
                     border-radius: 20px 20px 0 0;
                     display: flex;
-                    align-items: center;
+                    align-items: flex-end;
                     // font-family: PingFangSC-Medium;
-                    font-size: 18px;
-                    font-weight: 600;
+                    font-size: 22px;
+                    // font-weight: 600;
                     color: #ffffff;
                     padding-left: 27px;
                   }
@@ -403,21 +420,51 @@
                   display: flex;
                   justify-content: flex-start;
                   flex-wrap: wrap;
+
                   .left {
-                    width: 224px;
-                    background: #fff;
+                    width: 291px;
+                    background-image: linear-gradient(
+                      0deg,
+                      #fad961 0%,
+                      #f5a623 100%
+                    );
+                    position: relative;
                     box-shadow: $base-box-shadow;
-                    margin-right: 17px;
+                    margin-right: 12px;
                     img {
                       height: 100%;
                       width: 100%;
+                    }
+                    ul {
+                      display: flex;
+                      justify-content: space-between;
+                      flex-wrap: wrap;
+                      padding: 0 20px;
+                      position: absolute;
+                      left: 0;
+                      top: 20px;
+                      width: 291px;
+                      li {
+                        height: 30px;
+                        width: 120px;
+                        border: 2px solid #fff;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin-bottom: 10px;
+                        a {
+                          text-decoration: none;
+                          font-size: 15px;
+                          color: #fff;
+                        }
+                      }
                     }
                   }
                   .right {
                     flex: 1;
                     display: flex;
                     justify-content: flex-start;
-                    padding-top: 4px;
+                    padding-top: 20px;
                     overflow: hidden;
                     //flex-wrap: wrap;
                     //margin-right: -12px;
@@ -430,6 +477,13 @@
                   }
                 }
                 &.two {
+                  .left {
+                    background-image: linear-gradient(
+                      0deg,
+                      #71f7a9 0%,
+                      #43d480 99%
+                    );
+                  }
                   h2 {
                     p {
                       background: #43d480;
@@ -445,6 +499,13 @@
                   }
                 }
                 &.three {
+                  .left {
+                    background-image: linear-gradient(
+                      180deg,
+                      #8880fe 2%,
+                      #aaa4ff 98%
+                    );
+                  }
                   h2 {
                     p {
                       background: #8880fe;
@@ -460,6 +521,13 @@
                   }
                 }
                 &.four {
+                  .left {
+                    background-image: linear-gradient(
+                      180deg,
+                      #0283ff 2%,
+                      #45a4ff 98%
+                    );
+                  }
                   h2 {
                     p {
                       background: #0283ff;

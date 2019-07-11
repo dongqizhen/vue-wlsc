@@ -639,7 +639,7 @@
             font-weight: 600;
             margin-bottom: 10px;
             line-height: 28px;
-            height: 56px;
+            // height: 56px;
           }
           .price {
             height: 50px;

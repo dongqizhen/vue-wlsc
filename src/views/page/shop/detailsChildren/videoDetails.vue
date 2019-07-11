@@ -365,7 +365,7 @@
       }
       .video {
         width: 100%;
-        height: 408.7px;
+        height: 473px;
         background: $base-background;
         position: relative;
         cursor: pointer;

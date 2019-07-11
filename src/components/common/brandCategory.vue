@@ -68,14 +68,7 @@
                   >
                     <a target="_blank">
                       <div class="img_box">
-                        <img
-                          :src="
-                            name == '一线品牌'
-                              ? item.new_pic_url
-                              : item.app_list_pic_url
-                          "
-                          alt=""
-                        />
+                        <img :src="item.app_list_pic_url" />
                         <img
                           v-if="name == '一线品牌'"
                           :src="
