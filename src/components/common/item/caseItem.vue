@@ -157,7 +157,8 @@
         height: 30px;
         width: 30px;
         border-radius: 16px;
-        background: #cbcbcb;
+        background: url("../../../assets/images/default.png") no-repeat center;
+        background-size: 100% 100%;
         margin-right: 8px;
         display: flex;
         align-items: center;

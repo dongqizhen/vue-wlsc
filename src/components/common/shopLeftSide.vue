@@ -174,10 +174,18 @@
             this.$nextTick().then(() => {
               document.querySelectorAll(".item_container").forEach((val, i) => {
                 // console.log(val.offsetHeight);
-                if (i != 0 && val.offsetHeight <= 102) {
-                  let dom = (document.querySelectorAll(".item-box")[
-                    i
-                  ].lastChild.style.display = "none");
+                if (this.isLogin) {
+                  if (i != 0 && val.offsetHeight <= 102) {
+                    let dom = (document.querySelectorAll(".item-box")[
+                      i
+                    ].lastChild.style.display = "none");
+                  }
+                } else {
+                  if (val.offsetHeight <= 102) {
+                    let dom = (document.querySelectorAll(".item-box")[
+                      i
+                    ].lastChild.style.display = "none");
+                  }
                 }
               });
             });

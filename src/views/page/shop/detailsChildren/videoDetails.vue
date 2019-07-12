@@ -224,6 +224,7 @@
         isPlay: false,
         isReady: false,
         visible: false,
+        trySee: "",
         options: {
           title: "提示",
           getContainer: () => document.querySelector(".video"),
@@ -266,21 +267,31 @@
         this.isReady = true;
       },
       onPlayerTimeupdate(e) {
-        // console.log("时间", e);
+        // console.log("时间", e.currentTime());
+        if (this.trySee <= 0) return;
+        if (e.currentTime() >= this.trySee * 60) {
+          this.visible = true;
+          e.bigPlayButton.disable();
+          e.exitFullscreen();
+          e.pause();
+        } else {
+          e.bigPlayButton.enable();
+        }
       },
       videoPlay(item, i) {
         console.log(this.$refs.videoPlayer);
         console.log(i);
-        if (this.isPay) {
-          this.visible = true;
-          return;
-        }
+        // if (this.isPay) {
+        //   this.visible = true;
+        //   return;
+        // }
         if (this.isPlay && this.defaultVideo == i) {
           this.isPlay = false;
           this.$refs.videoPlayer.player.pause();
         } else {
           this.defaultVideo = i;
           this.isPlay = true;
+          this.trySee = item.trySee;
           this.playerOptions.sources[0].src = item.url;
 
           // this.$nextTick().then(() => {
@@ -338,6 +349,7 @@
           this.title = this.detail.course.title + "-网来商城";
           this.playerOptions.poster = this.detail.image;
           this.playerOptions.sources[0].src = this.detail.videoSubList[0].url;
+          this.trySee = this.detail.videoSubList[0].trySee;
         })
         .then(() => {
           this.getCommentList()
@@ -346,6 +358,9 @@
             })
             .then(() => {
               console.log(this.$refs.videoPlayer.player);
+              if (this.isPay) {
+                // this.$refs.videoPlayer.player.bigPlayButton.disable();
+              }
             });
         });
     }

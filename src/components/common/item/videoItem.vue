@@ -201,9 +201,11 @@
         top: 0;
         &.pay {
           background: url("../../../assets/images/pay.png") no-repeat;
+          background-size: 100% 100%;
         }
         &.free {
           background: url("../../../assets/images/free.png") no-repeat;
+          background-size: 100% 100%;
         }
       }
     }

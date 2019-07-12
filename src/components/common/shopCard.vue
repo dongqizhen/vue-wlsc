@@ -166,6 +166,10 @@
       right: 0;
       display: flex;
       top: 0px;
+      z-index: 100;
+      img {
+        height: 22px;
+      }
     }
     .img_box {
       height: 179px;

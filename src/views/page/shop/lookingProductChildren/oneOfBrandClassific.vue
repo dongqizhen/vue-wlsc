@@ -136,7 +136,7 @@
         isLoading: false,
         letter: [], //字母索引
         nav: ["一线品牌", "全部"],
-        defaultsNav: "全部", //默认高亮的nav
+        defaultsNav: "", //默认高亮的nav
         brandVisible: false,
         categoryDetail: ""
       };
@@ -147,6 +147,9 @@
     created() {
       if (this.isLogin) {
         this.nav.unshift("常用品牌");
+        this.defaultsNav = "常用品牌";
+      } else {
+        this.defaultsNav = "一线品牌";
       }
 
       if (this.$route.query.nav_index == 1) {
@@ -191,7 +194,11 @@
       CommonBrandsModalVue
     },
     mounted() {
-      this.getCommonBrandCategory();
+      this.getCommonBrandCategory().then(() => {
+        if (this.isLogin) {
+          this.getCommonBrand();
+        }
+      });
     },
     methods: {
       search() {
@@ -237,8 +244,10 @@
           })
           .then(() => {
             console.log(this.navArr);
-            this.arr = this.navArr.listAll;
-            this.letterArr = _.groupBy(this.arr, val => {
+
+            this.arr = this.navArr.firstLineList;
+
+            this.letterArr = _.groupBy(this.navArr.listAll, val => {
               return _.upperFirst(val.pinyin).substring(0, 1);
             });
             //console.log(this.letterArr, _.keys(this.letterArr));
