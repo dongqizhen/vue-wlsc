@@ -18,7 +18,9 @@
       <div class="messageContent">
         <div class="userName">
           <span class="name">{{ data.senderName }}</span>
-          <span>{{ data.createdOn }}</span>
+          <span>
+            {{ data.createdOn ? data.createdOn.substring(0, 10) : "" }}
+          </span>
         </div>
         <div class="info">
           <span>

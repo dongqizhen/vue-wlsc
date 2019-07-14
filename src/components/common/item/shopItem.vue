@@ -61,10 +61,10 @@
             咨询数<span>{{ item.consultNum }}</span>
           </li>
           <li>
-            成交数<span>{{ item.salenum }}</span>
+            好评率<span>{{ item.highPraiseNum }}%</span>
           </li>
           <li>
-            好评率<span>{{ item.highPraiseNum }}%</span>
+            成交数<span>{{ item.salenum }}</span>
           </li>
         </ul>
       </div>

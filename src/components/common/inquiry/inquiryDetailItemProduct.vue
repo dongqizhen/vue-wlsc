@@ -8,12 +8,28 @@
         ></a-checkbox
       ></label>
     </span>
-    <span @click="turnToProductDetail(itemData.goodsId, itemData.storeId)">
+    <span
+      @click="
+        turnToProductDetail(
+          itemData.goodsId,
+          itemData.storeId,
+          itemData.isOnSale
+        )
+      "
+    >
       <img :src="itemData.goodsImage" />
     </span>
-    <span @click="turnToProductDetail(itemData.goodsId, itemData.storeId)">{{
-      itemData.goodsName
-    }}</span>
+    <span
+      @click="
+        turnToProductDetail(
+          itemData.goodsId,
+          itemData.storeId,
+          itemData.isOnSale
+        )
+      "
+    >
+      {{ itemData.goodsName }}
+    </span>
     <span>{{ itemData.goodsBrand }}/{{ itemData.goodsModel }}</span>
     <span>{{ itemData.showPrice }}</span>
     <span>{{ itemData.number }}</span>
@@ -54,12 +70,17 @@
       }
     },
     methods: {
-      turnToProductDetail(id, storeId) {
-        let { href } = this.$router.resolve({
-          path: `/details/productDetails/${id}`,
-          query: { shopId: storeId }
-        });
-        window.open(href, "_blank");
+      turnToProductDetail(id, storeId, isOnSale) {
+        if (isOnSale == 1) {
+          let { href } = this.$router.resolve({
+            path: `/details/productDetails/${id}`,
+            query: { shopId: storeId }
+          });
+          window.open(href, "_blank");
+        } else {
+          this.$message.warning("此商品已下架");
+          return;
+        }
       },
       onChange(id) {
         if (_.indexOf(this.list, id) == -1) {

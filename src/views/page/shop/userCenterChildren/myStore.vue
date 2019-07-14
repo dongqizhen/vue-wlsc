@@ -238,6 +238,12 @@
               }
             }
           }
+          &.shop-item {
+            /deep/.img_box {
+              width: 224px;
+              height: 224px;
+            }
+          }
         }
       }
       /deep/.no-data {

@@ -548,11 +548,17 @@
 
         this.submitData.goodsDesc = this.$refs.goodDesc.getUEContent();
         this.submitData.goodsDescText = this.$refs.goodDesc.getUEContentTxt();
+
         if (!this.submitData.goodsDesc) {
           this.releaseLoading = false;
           this.saveLoading = false;
           this.$message.warning("请输入商品描述", 1);
           return false;
+        } else {
+          if (this.$refs.goodDesc.getUEContentTxt().length > 5000) {
+            this.$message.warning("商品描述不能超过5000字符", 1);
+            return false;
+          }
         }
         if (this.uploadList.length > 0) {
           this.submitData.listPicUrl = [];

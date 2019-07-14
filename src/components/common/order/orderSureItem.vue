@@ -1,7 +1,7 @@
 <template>
   <div class="orderSureItemproduct">
     <div class="shopName">
-      <img src="http://file.haoyigong.com/server/upload/1554429391594.jpg" />
+      <img :src="data.storeImage" />
       <span>{{ data.storeName }}</span>
     </div>
     <div class="productList">

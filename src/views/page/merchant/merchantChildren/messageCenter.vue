@@ -9,26 +9,21 @@
           :defaultActiveKey="defaultActiveKey"
         >
         </manage-number-nav>
-        <div :class="current == 0 && 'active'" @click="system(0)">
-          系统通知({{ systemNumber }})
-        </div>
-        <div :class="current == 1 && 'active'" @click="system(1)">
-          私信消息({{ personalNumber }})
-        </div>
       </div>
       <div class="tabBar">
-        <div class="left-box">
-          <manage-number-nav
-            :navArr="tabs"
-            v-on:tab="getTab"
-            :defaultActiveKey="defaultActiveKey"
-          ></manage-number-nav>
+        <div class="right-box">
+          <div :class="{ active: current == 0 }" @click="read(0)">
+            未读消息({{ unReadNumber }})
+          </div>
+          <div :class="{ active: current == 1 }" @click="read(1)">
+            已读消息({{ readNumber }})
+          </div>
         </div>
       </div>
       <div v-if="!isMessageLoading">
         <div class="listContainer">
           <div class="listContent" v-if="data.length > 0">
-            <ul v-if="current == 0">
+            <ul v-if="pageType == 'system'">
               <router-link
                 tag="li"
                 v-for="item in data"
@@ -122,6 +117,8 @@
         isLoading: true,
         isMessageLoading: true,
         data: [],
+        unReadNumber: 0,
+        readNumber: 0,
         mainTabs: [
           {
             id: 0,
@@ -134,22 +131,8 @@
             amount: 0
           }
         ],
-        tabs: [
-          {
-            id: 0,
-            name: "未读消息",
-            amount: 0
-          },
-          {
-            id: 1,
-            name: "已读消息",
-            amount: 0
-          }
-        ],
         defaultActiveKey: 0,
         messageNumber: {},
-        systemNumber: 0,
-        personalNumber: 0,
         checkAll: false,
         checkedList: [],
         current: 0, //系统0、私信1
@@ -166,40 +149,36 @@
       ...mapMutations(["changeUserShopInfoState"]),
       getTab(val) {
         console.log(val);
-        this.readType = val;
+        if (val == 0) {
+          this.pageType = "system";
+        } else {
+          this.pageType = "private";
+        }
+        this.getMessageAll().then(() => {
+          if (val) {
+            this.unReadNumber = this.messageNumber.personalUnread;
+            this.readNumber = this.messageNumber.personalRead;
+          } else {
+            this.unReadNumber = this.messageNumber.systemUnread;
+            this.readNumber = this.messageNumber.systemRead;
+          }
+        });
         this.defaultActiveKey = val;
-        if (this.tabs[0].id == val) {
-          this.unRead = true;
-        } else {
-          this.unRead = false;
-        }
-        if (this.current) {
-          this.getPrivateMessageList();
-        } else {
-          this.getSystemMessageList();
-        }
         this.$nextTick(() => {
           if (this.$refs.pagination) {
             this.$refs.pagination.$data.current = 1;
           }
         });
       },
-      system(val) {
+      read(val) {
         this.current = val;
-        if (val) {
-          this.pageType = "private";
+        this.readType = val;
+        if (val == 0) {
+          this.unRead = true;
         } else {
-          this.pageType = "system";
+          this.unRead = false;
         }
-        this.getMessageAll().then(() => {
-          if (val) {
-            this.tabs[0].amount = this.messageNumber.personalUnread;
-            this.tabs[1].amount = this.messageNumber.personalRead;
-          } else {
-            this.tabs[0].amount = this.messageNumber.systemUnread;
-            this.tabs[1].amount = this.messageNumber.systemRead;
-          }
-        });
+        this.getMessageAll();
         this.$nextTick(() => {
           if (this.$refs.pagination) {
             this.$refs.pagination.$data.current = 1;
@@ -272,7 +251,7 @@
               console.log(data);
               //移动到已读列表
               this.unRead = false;
-              this.defaultActiveKey = 1;
+              this.current = 1;
               this.readType = 1;
               this.getMessageAll();
             });
@@ -284,7 +263,7 @@
               console.log(data);
               //移动到已读列表
               this.unRead = false;
-              this.defaultActiveKey = 1;
+              this.current = 1;
               this.readType = 1;
               this.getMessageAll();
             });
@@ -296,10 +275,10 @@
       },
       getPaginationChange(val) {
         console.log(val);
-        if (this.current) {
-          this.getPrivateMessageList(val);
-        } else {
+        if (this.pageType == "system") {
           this.getSystemMessageList(val);
+        } else {
+          this.getPrivateMessageList(val);
         }
       },
       async getPrivateMessageList(page = 1) {
@@ -344,16 +323,16 @@
         return await _getData("/message/messageNum", {
           storeId: this.userShopInfo.store_id //消息状态 店铺id，不传时默认查询当前用户的
         }).then(data => {
-          console.log("私信消息数量：", data);
+          console.log("消息数量：：：", data);
           this.messageNumber = data;
-          this.systemNumber = data.system;
-          this.personalNumber = data.personal;
+          this.mainTabs[0].amount = data.system;
+          this.mainTabs[1].amount = data.personal;
           if (this.pageType == "system") {
-            this.tabs[0].amount = data.systemUnread;
-            this.tabs[1].amount = data.systemRead;
+            this.unReadNumber = data.systemUnread;
+            this.readNumber = data.systemRead;
           } else {
-            this.tabs[0].amount = data.personalUnread;
-            this.tabs[1].amount = data.personalRead;
+            this.unReadNumber = data.personalUnread;
+            this.readNumber = data.personalRead;
           }
         });
       },
@@ -371,15 +350,14 @@
     },
     created() {
       //点击头部进入页面的显示信息
-
       this.pageType = this.$route.query.type || "system";
-
       if (this.$route.query.type == "system") {
         //系统消息
-        this.system(0);
+        this.defaultActiveKey = 0;
+        this.getSystemMessageList();
       } else if (this.$route.query.type == "private") {
-        //已读消息
-        this.system(1);
+        this.defaultActiveKey = 1;
+        this.getPrivateMessageList();
       }
     },
     mounted() {
@@ -406,18 +384,8 @@
     margin-bottom: 100px;
     .tabBar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      border-bottom: $border-style;
-      margin-top: 3px;
-      /deep/.nav {
-        border-bottom: none;
-        .ant-tabs {
-          .ant-tabs-ink-bar {
-            bottom: 0 !important;
-          }
-        }
-      }
+      margin: 24px 0;
       .right-box {
         display: flex;
         align-items: center;
@@ -431,6 +399,9 @@
           font-size: 12px;
           color: #333;
           cursor: pointer;
+          &:hover {
+            opacity: 0.7;
+          }
           &:first-child {
             border-right: none;
           }

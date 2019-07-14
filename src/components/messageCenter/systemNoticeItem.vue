@@ -14,9 +14,9 @@
           <use xlink:href="#iconxingzhuang1"></use>
         </svg>
         <span class="titleText">{{ data.title }}</span>
-        <span class="createOn">{{
-          data.createdOn ? data.createdOn.substring(0, 10) : ""
-        }}</span>
+        <span class="createOn">
+          {{ data.createdOn ? data.createdOn.substring(0, 10) : "" }}
+        </span>
       </div>
       <div class="introduce">
         {{
