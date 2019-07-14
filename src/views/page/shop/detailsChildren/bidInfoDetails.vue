@@ -243,6 +243,7 @@
           this.bidData = data.result;
         })
         .then(() => {
+          if (!this.$userid) return;
           _getData(`${this.$API_URL.HYGLOGINURL}/server/bidInfo!request.action`, {
             userid: this.$userid || "",
             method: "getAllProvinceBidInfoV27",

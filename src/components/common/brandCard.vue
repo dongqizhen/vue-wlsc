@@ -2,7 +2,10 @@
   <div class="brand-card">
     <div class="img_box">
       <div class="img">
-        <img :src="data.app_list_pic_url || data.icon_url" alt="" />
+        <img
+          :src="data.app_list_pic_url || data.icon_url || data.pic_url"
+          alt=""
+        />
       </div>
       {{ data.name }}
     </div>
@@ -39,12 +42,13 @@
     },
     props: ["data"],
     mounted() {
-      let DOM = document.querySelector(".desc>p");
-      console.log(DOM.offsetHeight);
-      if (DOM.offsetHeight > 324) {
-        //document.querySelector(".more").style.display = "none";
-        this.isShowMore = true;
-      }
+      setTimeout(() => {
+        let DOM = document.querySelector(".desc>p");
+        if (DOM.offsetHeight > 324) {
+          //document.querySelector(".more").style.display = "none";
+          this.isShowMore = true;
+        }
+      }, 100);
     },
     methods: {
       rightMoreBtnClick() {
@@ -135,7 +139,8 @@
           center;
         height: 18px;
         position: absolute;
-        bottom: -12px;
+
+        bottom: -14px;
         width: 100%;
         left: 0;
       }

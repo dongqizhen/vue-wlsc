@@ -1,5 +1,21 @@
 <template>
   <div class="footer">
+    <div class="icon-nav">
+      <ul class="commonWidth">
+        <li v-for="item in iconArr" :key="item.id">
+          <div class="left">
+            <svg class="icon" aria-hidden="true">
+              <use :xlink:href="item.icon"></use>
+            </svg>
+          </div>
+          <div class="right">
+            {{ item.name }}
+            <span>{{ item.sub }}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
     <div class="commonWidth">
       <div class="link">
         <div class="left">
@@ -23,6 +39,8 @@
         <div class="right">
           <img src="../../assets/images/logo.png" alt="" />
           <i></i>
+          <img src="../../assets/images/hyg.png" alt="" />
+          <i></i>
           <div>
             <img src="../../assets/images/code.png" alt="" />
             欢迎下载网来商城App
@@ -40,10 +58,38 @@
 
 <script>
   import { _getData } from "../../config/getData";
+
+  const iconArr = [
+    {
+      name: "一线品牌",
+      icon: "#iconyixianpinpai1",
+      id: 0,
+      sub: "精选品牌，放心选购"
+    },
+    {
+      name: "参数对比",
+      icon: "#iconcanshuduibi1",
+      id: 1,
+      sub: "同类对比，只选最优"
+    },
+    {
+      name: "优质售后",
+      icon: "#iconshouhou",
+      id: 2,
+      sub: "人工备件，维修不愁"
+    },
+    {
+      name: "设备详情",
+      icon: "#iconshebeixiangqing",
+      id: 3,
+      sub: "视频案例，全部摸透"
+    }
+  ];
   export default {
     data() {
       return {
-        footerList: ""
+        footerList: "",
+        iconArr
       };
     },
     mounted() {
@@ -57,25 +103,68 @@
 
 <style scoped lang="scss">
   @import "../../assets/scss/_commonScss";
+
   .footer {
-    height: 300px;
+    height: 394px;
     border-top: 2px solid $theme-color;
+    display: flex;
+    flex-direction: column;
+    .icon-nav {
+      height: 94px;
+      background: #fafafa;
+      border-bottom: 1px solid #dddddd;
+      ul {
+        flex-direction: inherit;
+        padding-left: 82px;
+        li {
+          display: flex;
+          justify-content: flex-start;
+
+          align-items: center;
+          margin-right: 109px;
+          &:last-child {
+            margin-right: 0;
+          }
+          .left {
+            margin-right: 10px;
+            .icon {
+              height: 58px;
+              width: 58px;
+            }
+          }
+          .right {
+            font-size: 15px;
+            color: #333333;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+
+            span {
+              margin-top: 3px;
+              font-size: 12px;
+              color: #666666;
+              font-weight: normal;
+            }
+          }
+        }
+      }
+    }
     .commonWidth {
       width: 1200px;
       display: flex;
       flex-direction: column;
+
       .link {
         padding: 43px 0 33px;
         border-bottom: 1px solid #ddd;
         display: flex;
         width: 100%;
         .left {
-          flex: 1;
           ul {
             display: flex;
             justify-content: flex-start;
             li {
-              width: 134px;
+              width: 124px;
               display: flex;
               flex-direction: column;
               h2 {
@@ -112,14 +201,14 @@
           align-items: center;
           > img {
             display: flex;
-            height: 51px;
+            height: 77px;
           }
           i {
             display: flex;
             height: 60px;
             border-left: 1px solid #cccccc;
-            margin-left: 77.4px;
-            margin-right: 81px;
+            margin-left: 35px;
+            margin-right: 35px;
           }
           > div {
             display: flex;
@@ -129,7 +218,7 @@
             font-size: 12px;
             color: #666666;
             > img {
-              width: 111px;
+              width: 137px;
               margin-bottom: 7px;
             }
           }

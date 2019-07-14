@@ -132,7 +132,8 @@
       .img_box {
         height: 261px;
         width: 261px;
-        background: $base-background;
+        background: url("../../../assets/images/default.png") no-repeat center;
+        background-size: 100% 100%;
         overflow: hidden;
         position: relative;
         > div {
@@ -151,9 +152,8 @@
           right: 0;
           top: -1px;
 
-          // height: 22px;
           img {
-            // height: 23px;
+            height: 22px;
             // width: ;
           }
           // background: url("../../../assets/images/shop.svg") no-repeat center;

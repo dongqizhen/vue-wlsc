@@ -108,7 +108,8 @@
       display: flex;
       height: 261px;
       width: 261px;
-      background: #f7f9fa;
+      background: url("../../../assets/images/default.png") no-repeat center;
+      background-size: 100% 100%;
       margin-bottom: 8.6px;
       overflow: hidden;
       img {

@@ -14,7 +14,11 @@
         <div v-if="!isLoading">
           <div class="left-L">
             <ul class="clearfix">
-              <li v-for="(item, i) in left" :key="`item-${i}`">
+              <li
+                v-for="(item, i) in left"
+                :key="`item-${i}`"
+                :class="item.id == '' && 'commonCategorie'"
+              >
                 <h2>
                   <span class="title">
                     <svg class="icon" aria-hidden="true" v-if="item.id == ''">
@@ -28,14 +32,11 @@
                       <use xlink:href="#iconguanlichangyongfenlei"></use>
                     </svg>
                     管理常用分类
-                    <common-categories-modal-vue
-                      :Visible="visible"
-                      v-on:success="success"
-                    ></common-categories-modal-vue>
                   </span>
                 </h2>
+
                 <div class="brand-box" :class="left_show_arr[i] && 'active'">
-                  <ul class="box_com">
+                  <ul class="box_com" v-if="item.subCategoryList.length">
                     <router-link
                       :to="
                         $route.query.nav_index == 1
@@ -70,6 +71,12 @@
                       </a>
                     </router-link>
                   </ul>
+                  <no-data
+                    type="no-collect"
+                    class="noData"
+                    v-else
+                    text="暂无常用分类，请去管理常用分类"
+                  ></no-data>
                 </div>
 
                 <span
@@ -90,6 +97,10 @@
                 </span>
               </li>
             </ul>
+            <common-categories-modal-vue
+              :Visible="visible"
+              v-on:success="success"
+            ></common-categories-modal-vue>
           </div>
           <div class="left-R">
             <ul class="clearfix">
@@ -506,6 +517,7 @@
       width: $content-left;
       display: flex;
       justify-content: space-between;
+
       &.active {
         width: 1200px;
         .left-L,
@@ -540,6 +552,11 @@
             position: relative;
             float: left;
             margin-right: 20px;
+            &.commonCategorie {
+              > span {
+                display: none;
+              }
+            }
             h2 {
               height: 60px;
               border-bottom: 1px solid #dddddd;
@@ -571,6 +588,11 @@
                 font-size: 14px;
                 color: #999999;
                 cursor: pointer;
+                position: relative;
+                /deep/ .Common-Categories-Modal {
+                  position: absolute;
+                  z-index: 1000;
+                }
               }
             }
             .brand-box {
