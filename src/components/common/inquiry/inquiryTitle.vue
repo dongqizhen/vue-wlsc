@@ -17,9 +17,19 @@
             <use xlink:href="#icontijiaoshijian"></use>
           </svg>
         </span>
-        <span>询价单提交时间：</span>
         <span>
-          {{ data.createdOn ? data.createdOn.substring(0, 16) : "" }}
+          {{ isShowInfo.current == 2 ? "报价时间" : "询价单提交时间" }}：</span
+        >
+        <span>
+          {{
+            isShowInfo.current == 2
+              ? data.updatedOn
+                ? data.updatedOn.substring(0, 16)
+                : ""
+              : data.createdOn
+              ? data.createdOn.substring(0, 16)
+              : ""
+          }}
         </span>
       </div>
       <div

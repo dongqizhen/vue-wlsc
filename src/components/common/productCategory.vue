@@ -61,12 +61,13 @@
           <div class="swiper-container page">
             <div class="swiper-wrapper">
               <div class="swiper-slide">
-                <no-data
-                  type="no-collect"
-                  class="noData"
-                  v-if="pageArr.length == 0"
-                  text="暂无常用分类，请去管理常用分类"
-                ></no-data>
+                <div @click="handleClick" v-if="pageArr.length == 0">
+                  <no-data
+                    type="no-collect"
+                    class="noData"
+                    text="暂无常用分类，请去管理常用分类"
+                  ></no-data>
+                </div>
                 <div v-else>
                   <ul v-if="canSkip">
                     <router-link
@@ -392,6 +393,7 @@
           //min-height: 200px;
           .noData {
             margin: 20px 0;
+            cursor: pointer;
           }
           ul {
             display: flex;

@@ -65,7 +65,10 @@
       } else {
         this.userType = "store";
       }
-      _getData("/message/detail", { id: this.$route.params.id }).then(data => {
+      _getData("/message/detail", {
+        id: this.$route.params.id,
+        storeId: this.$route.query.storeId
+      }).then(data => {
         console.log(data);
         this.data = data;
       });

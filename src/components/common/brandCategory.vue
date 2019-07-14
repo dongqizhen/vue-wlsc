@@ -46,12 +46,13 @@
           <div class="swiper-container page">
             <div class="swiper-wrapper">
               <div class="swiper-slide">
-                <no-data
-                  type="no-collect"
-                  class="noData"
-                  v-if="pageArr.length == 0"
-                  text="暂无常用品牌，请去管理常用品牌"
-                ></no-data>
+                <div v-if="pageArr.length == 0" @click="handleClick">
+                  <no-data
+                    type="no-collect"
+                    class="noData"
+                    text="暂无常用品牌，请去管理常用品牌"
+                  ></no-data>
+                </div>
                 <ul v-else>
                   <router-link
                     :to="{
@@ -402,6 +403,7 @@
           //min-height: 200px;
           .noData {
             margin: 20px 0;
+            cursor: pointer;
           }
           ul {
             display: flex;

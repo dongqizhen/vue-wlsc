@@ -15,8 +15,8 @@
             :class="current == item.id ? 'active' : ''"
           >
             <div class="receiptName">
-              <span>{{ item.userLocation }}</span
-              ><span>（{{ item.userName }} 收）</span>
+              <span>{{ item.userLocation }}</span>
+              <span>（{{ item.userName }} 收）</span>
             </div>
             <div class="addressDetail">
               <span class="detailAddress">
@@ -58,9 +58,9 @@
         <span>
           总额<i>￥{{ sumPrice }}</i>
         </span>
-        <a-button type="primary" :loading="loading" @click="sureSubmit"
-          >确认</a-button
-        >
+        <a-button type="primary" :loading="loading" @click="sureSubmit">
+          确认
+        </a-button>
       </div>
     </div>
     <add-address-modal
@@ -281,15 +281,22 @@
                 no-repeat center center / 100% 100%;
             }
             .receiptName {
+              width: 100%;
               padding-bottom: 4px;
               border-bottom: $border-style;
               height: 24px;
               overflow: hidden;
+              display: flex;
               span {
                 &:first-child {
                   width: 114px;
                   margin-right: 7px;
                   overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                }
+                &:last-child {
+                  flex: 1;
                 }
               }
             }

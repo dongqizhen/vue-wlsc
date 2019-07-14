@@ -157,7 +157,6 @@
                                 ></use>
                               </svg>
                             </span>
-
                             <span
                               v-for="(rate, value) in Array(5 - v.value)"
                               :key="`rate2-${value}`"

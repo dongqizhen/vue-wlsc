@@ -2,6 +2,20 @@
   <div class="messageCenter">
     <common-title title="消息中心"></common-title>
     <div v-if="!isLoading">
+      <div class="right-box">
+        <manage-number-nav
+          :navArr="mainTabs"
+          v-on:tab="getTab"
+          :defaultActiveKey="defaultActiveKey"
+        >
+        </manage-number-nav>
+        <div :class="current == 0 && 'active'" @click="system(0)">
+          系统通知({{ systemNumber }})
+        </div>
+        <div :class="current == 1 && 'active'" @click="system(1)">
+          私信消息({{ personalNumber }})
+        </div>
+      </div>
       <div class="tabBar">
         <div class="left-box">
           <manage-number-nav
@@ -9,14 +23,6 @@
             v-on:tab="getTab"
             :defaultActiveKey="defaultActiveKey"
           ></manage-number-nav>
-        </div>
-        <div class="right-box">
-          <div :class="current == 0 && 'active'" @click="system(0)">
-            系统通知({{ systemNumber }})
-          </div>
-          <div :class="current == 1 && 'active'" @click="system(1)">
-            私信消息({{ personalNumber }})
-          </div>
         </div>
       </div>
       <div v-if="!isMessageLoading">
@@ -29,7 +35,7 @@
                 :key="item.id"
                 :to="{
                   path: `messageDetail/${item.id}`,
-                  query: { keyId: '10' }
+                  query: { keyId: '10', storeId: userShopInfo.store_id }
                 }"
               >
                 <system-notice
@@ -116,6 +122,18 @@
         isLoading: true,
         isMessageLoading: true,
         data: [],
+        mainTabs: [
+          {
+            id: 0,
+            name: "系统通知",
+            amount: 0
+          },
+          {
+            id: 1,
+            name: "私信消息",
+            amount: 0
+          }
+        ],
         tabs: [
           {
             id: 0,
