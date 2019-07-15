@@ -23,7 +23,10 @@
             alt=""
             v-if="list.primary_pic_url"
           />
-          <img v-else src="../../../assets/images/default.png" alt="" />
+          <div class="bc-box" v-else>
+            <img :src="`../assets/images/b-0${random}.jpg`" alt="" />
+            <span>{{ list.name }}</span>
+          </div>
         </div>
         <div class="price">
           {{ list.show_price }}
@@ -57,6 +60,7 @@
 </template>
 
 <script>
+  import _ from "lodash";
   export default {
     data() {
       return {};
@@ -64,6 +68,11 @@
     props: {
       list: {
         type: Object
+      }
+    },
+    computed: {
+      random() {
+        return _.random(1, 10);
       }
     }
   };
@@ -82,6 +91,13 @@
         }
         img {
           transform: scale(1.1);
+        }
+        .img {
+          .bc-box {
+            span {
+              transform: scale(1.1);
+            }
+          }
         }
       }
     }
@@ -116,6 +132,24 @@
         height: 100%;
         width: 100%;
         transition: transform 0.5s ease;
+      }
+      .bc-box {
+        position: relative;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        text-align: center;
+        span {
+          padding: 0 15px;
+          display: flex;
+          position: absolute;
+          color: #0b526e;
+          font-size: 30px;
+          transition: transform 0.3s ease;
+        }
       }
     }
     .price {

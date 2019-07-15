@@ -9,12 +9,21 @@
           </svg>
           常用品牌
         </span>
-        <span @click="btnClicik">
+        <!-- <span @click="btnClicik">
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#iconguanlichangyongfenlei"></use>
           </svg>
           管理常用品牌
-        </span>
+        </span> -->
+        <!-- <a-tooltip
+          title="仅展示有型号产品的常用品牌"
+          :getPopupContainer="getPopupContainer"
+          placement="right"
+        >
+          <svg class="icon icon-tip" aria-hidden="true">
+            <use xlink:href="#iconzhushi1"></use>
+          </svg>
+        </a-tooltip> -->
       </h3>
       <div class="item-box" :class="commonMore && 'active'">
         <ul class="item_container">
