@@ -9,12 +9,21 @@
           </svg>
           常用品牌
         </span>
-        <span @click="btnClicik">
+        <!-- <span @click="btnClicik">
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#iconguanlichangyongfenlei"></use>
           </svg>
           管理常用品牌
-        </span>
+        </span> -->
+        <!-- <a-tooltip
+          title="仅展示有型号产品的常用品牌"
+          :getPopupContainer="getPopupContainer"
+          placement="right"
+        >
+          <svg class="icon icon-tip" aria-hidden="true">
+            <use xlink:href="#iconzhushi1"></use>
+          </svg>
+        </a-tooltip> -->
       </h3>
       <div class="item-box" :class="commonMore && 'active'">
         <ul class="item_container">
@@ -157,6 +166,7 @@
             console.log("456", data);
             this.brandList = data;
             this.arr = data.listAll;
+            this.commonBrand = data.userbrandList;
             this.letterArr = _.groupBy(
               _.orderBy(
                 this.arr,
@@ -193,9 +203,9 @@
       }
     },
     mounted() {
-      if (this.isLogin) {
-        this.getCommonBrand();
-      }
+      // if (this.isLogin) {
+      //   this.getCommonBrand();
+      // }
 
       this.getBrandList().then(() => {
         this.listMore = [...Array(_.keys(this.letterArr).length)];

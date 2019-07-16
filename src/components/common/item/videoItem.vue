@@ -291,7 +291,7 @@
       height: 40px;
       display: flex;
       align-items: center;
-      border-top: 1px solid #e0e7ea;
+      border-top: 1px solid rgba($color: #e0e7ea, $alpha: 0.5);
       li {
         flex: 1;
         display: flex;

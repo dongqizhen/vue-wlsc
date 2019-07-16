@@ -271,7 +271,7 @@
         if (this.trySee <= 0) return;
         if (e.currentTime() >= this.trySee * 60) {
           this.visible = true;
-          e.bigPlayButton.disable();
+          //e.bigPlayButton.disable();
           e.exitFullscreen();
           e.pause();
         } else {

@@ -27,11 +27,29 @@
                     <img :src="item.active_icon" alt="" v-else />
                     {{ item.name }}
                   </span>
-                  <span class="btn" @click="handleClick" v-if="!item.id">
+                  <span
+                    class="btn"
+                    @click="handleClick"
+                    v-if="!item.id && $route.query.nav_index == 1"
+                  >
                     <svg class="icon" aria-hidden="true">
                       <use xlink:href="#iconguanlichangyongfenlei"></use>
                     </svg>
                     管理常用分类
+                  </span>
+                  <span
+                    class="note"
+                    v-if="!item.id && $route.query.nav_index == 2"
+                  >
+                    <a-tooltip
+                      title="当前品牌下仅展示有型号产品的常用分类"
+                      :getPopupContainer="getPopupContainer"
+                      placement="right"
+                    >
+                      <svg class="icon icon-tip" aria-hidden="true">
+                        <use xlink:href="#iconzhushi1"></use>
+                      </svg>
+                    </a-tooltip>
                   </span>
                 </h2>
 
@@ -75,7 +93,7 @@
                     type="no-collect"
                     class="noData"
                     v-else
-                    text="暂无常用分类，请去管理常用分类"
+                    text="暂无常用分类"
                   ></no-data>
                 </div>
 

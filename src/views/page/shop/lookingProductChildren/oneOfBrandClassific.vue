@@ -35,16 +35,38 @@
     <span
       class="manageBtn"
       @click="brandVisible = !brandVisible"
-      v-if="isLogin && defaultsNav == '常用品牌'"
+      v-if="isLogin && defaultsNav == '常用品牌' && $route.query.nav_index == 2"
     >
       <svg class="icon" aria-hidden="true">
         <use xlink:href="#iconguanlichangyongfenlei"></use>
       </svg>
       管理常用品牌
+      <!-- <a-tooltip
+        title="当前品牌下只展示有型号产品的常用分类"
+        :getPopupContainer="getPopupContainer"
+        placement="right"
+      >
+        <svg
+          class="icon icon-tip"
+          aria-hidden="true"
+          v-if="$route.query.nav_index == 1"
+        >
+          <use xlink:href="#iconzhushi1"></use>
+        </svg>
+      </a-tooltip> -->
       <common-brands-modal-vue
         :brandVisible="brandVisible"
         v-on:success="success"
       ></common-brands-modal-vue>
+    </span>
+    <span
+      v-if="isLogin && defaultsNav == '常用品牌' && $route.query.nav_index == 1"
+      class="note"
+    >
+      <svg class="icon icon-tip" aria-hidden="true">
+        <use xlink:href="#iconzhushi1"></use>
+      </svg>
+      注：当前分类下仅展示有型号产品的常用品牌
     </span>
     <div class="content">
       <div class="left" :class="$route.query.nav_index == 2 && 'active'">
@@ -138,7 +160,8 @@
         nav: ["一线品牌", "全部"],
         defaultsNav: "", //默认高亮的nav
         brandVisible: false,
-        categoryDetail: ""
+        categoryDetail: "",
+        getPopupContainer: () => document.querySelector(".manageBtn")
       };
     },
     computed: {
@@ -195,9 +218,9 @@
     },
     mounted() {
       this.getCommonBrandCategory().then(() => {
-        if (this.isLogin) {
-          this.getCommonBrand();
-        }
+        // if (this.isLogin) {
+        //   this.getCommonBrand();
+        // }
       });
     },
     methods: {
@@ -238,14 +261,19 @@
       },
       async getCommonBrandCategory() {
         this.isLoading = true;
-        return await _getData("brand/merge", { id: this.$route.query.categoryId })
+        return await _getData("brand/merge", {
+          id: this.$route.query.categoryId || ""
+        })
           .then(data => {
             this.navArr = data;
           })
           .then(() => {
             console.log(this.navArr);
-
-            this.arr = this.navArr.firstLineList;
+            if (this.isLogin) {
+              this.arr = this.navArr.userbrandList;
+            } else {
+              this.arr = this.navArr.firstLineList;
+            }
 
             this.letterArr = _.groupBy(this.navArr.listAll, val => {
               return _.upperFirst(val.pinyin).substring(0, 1);
@@ -260,7 +288,8 @@
           });
       },
       success() {
-        if (this.defaultsNav == "常用品牌") this.getCommonBrand();
+        this.getCommonBrandCategory();
+        //if (this.defaultsNav == "常用品牌") this.getCommonBrand();
       },
       async getCommonBrand() {
         return await _getData("ubrand/list", {})
@@ -282,8 +311,8 @@
             this.arr = this.navArr.firstLineList;
             break;
           case "常用品牌":
-            // this.arr = this.navArr.userbrandList;
-            this.getCommonBrand();
+            this.arr = this.navArr.userbrandList;
+            //this.getCommonBrand();
             break;
         }
       }
@@ -346,7 +375,7 @@
         }
       }
       .ipt {
-        width: 213px;
+        width: 280px;
         height: 35px;
         position: absolute;
         border: 1px solid $theme-color;
@@ -385,11 +414,29 @@
       cursor: pointer;
       margin: 24px 0;
       display: flex;
+      align-items: center;
       .icon {
         width: 13px;
         height: 14px;
         margin-right: 5px;
         margin-top: 1px;
+      }
+      .icon-tip {
+        margin-left: 5px;
+        margin-bottom: 1px;
+      }
+      /deep/ .ant-tooltip-inner {
+        width: 270px;
+      }
+    }
+    span.note {
+      display: flex;
+      margin-top: 24px;
+      font-size: 14px;
+      align-items: center;
+      color: #999;
+      .icon {
+        margin-right: 5px;
       }
     }
     .content {

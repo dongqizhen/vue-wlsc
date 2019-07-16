@@ -37,6 +37,7 @@
         <div class="main-content">
           <div class="left">
             <shop-left-side-vue
+              :categoryId="categoryId"
               v-on:brandClick="brandClick"
             ></shop-left-side-vue>
           </div>
@@ -178,12 +179,13 @@
       categoryClick(item, val) {
         console.log(item, val);
         this.categoryId = item.id;
-
+        this.brandId = "";
         this.searchParamas = _.take(this.searchParamas, 1);
         this.searchParamas.push({
           name: val.name + "：" + item.name,
           key: "category"
         });
+        this.getSearchList(this.$route.query.val);
       },
       delHandleClick(i, key) {
         this.searchParamas.splice(i, 1);
@@ -192,6 +194,7 @@
         } else if (key == "category") {
           this.categoryId = "";
         }
+        this.getSearchList(this.$route.query.val);
       },
       brandClick(item) {
         console.log(item);
@@ -212,6 +215,7 @@
             key: "brand"
           });
         }
+        this.getSearchList(this.$route.query.val);
       },
       tabClick(i) {
         this.recommend_tabs_index = i;
@@ -219,7 +223,9 @@
       async getSearchList(val) {
         this.isLoading = true;
         return await _getData("common/search", {
-          name: val
+          name: val,
+          categoryId: this.categoryId,
+          brandId: this.brandId
         })
           .then(data => {
             console.log("搜索内容", data);

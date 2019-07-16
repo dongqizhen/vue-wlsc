@@ -485,10 +485,16 @@
     computed: {
       ...mapState(["isLogin"]),
       convertStr() {
-        return this.productInfo.goods_desc.replace(
-          /(?<=\<img [^>]*src=['"])([^'"]+)(?=[^>]*>)/gi,
-          '"data-src="$1'
-        );
+        // var u = navigator.userAgent,
+        //   app = navigator.appVersion;
+        // if (u.indexOf("Trident") > -1) {
+        //   return this.productInfo.goods_desc;
+        // } else {
+        //   return this.productInfo.goods_desc.replace(
+        //     /(?<=\<img [^>]*src=['"])([^'"]+)(?=[^>]*>)/gi,
+        //     '"data-src="$1'
+        //   );
+        // }
       }
     },
     destroyed() {
