@@ -157,7 +157,10 @@
           console.log(data);
           this.loading = false;
           if (data.code != 500) {
-            this.$router.replace({ path: "/userCenter/myOrder" });
+            this.$router.replace({
+              path: "/userCenter/myOrder",
+              query: { keyId: "3" }
+            });
           }
         });
       },

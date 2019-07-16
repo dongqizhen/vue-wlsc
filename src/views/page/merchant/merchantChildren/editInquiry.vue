@@ -31,7 +31,7 @@
                 <a-button
                   type="primary"
                   :loading="loading"
-                  :class="['submit', checkedList.length > 0 ? 'active' : '']"
+                  :class="['submit', { active: checkedList.length > 0 }]"
                   @click="submitQuote"
                 >
                   提交报价
@@ -82,8 +82,10 @@
     },
     methods: {
       submitQuote() {
-        if (this.checkedList.length == 0) {
-          this.$message.warning("请选择产品", 1);
+        // console.log(this.checkedList);
+        // console.log(this.goodsList);
+        if (this.goodsList.length < this.checkedList.length) {
+          this.$message.warning("报价不能为空", 1);
           return;
         } else {
           this.loading = true;
@@ -172,6 +174,10 @@
           console.log("获取询价单详情：", data);
           this.data = data;
           this.isLoading = false;
+          _.map(this.data.goodList, o => {
+            this.checkedList.push(o.id);
+          });
+          this.checkAll = true;
         }
       );
     },
@@ -244,10 +250,8 @@
       .list-footer {
         margin-top: 12px;
         /deep/.checkedAllBox {
-          span {
-            &:nth-child(3) {
-              display: none;
-            }
+          .left-box {
+            visibility: hidden;
           }
         }
         .right-box {

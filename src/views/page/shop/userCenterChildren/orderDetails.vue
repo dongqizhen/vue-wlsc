@@ -8,6 +8,12 @@
     <div class="orderContainer">
       <order-title :isShowInfo="isShowInfo" :data="data"></order-title>
       <delivery-info :data="data"></delivery-info>
+      <delivery-info
+        :data="data"
+        class="express"
+        :isExpress="isExpress"
+        v-show="data.order_status > 2"
+      ></delivery-info>
       <div class="shopInfo">
         <div class="shopName">
           <img :src="data.shopImage" />{{ data.shopName }}
@@ -41,6 +47,7 @@
           current: 0,
           isMerchant: false
         },
+        isExpress: true,
         data: {}
       };
     },
@@ -88,6 +95,9 @@
         .checkedBox {
           display: none;
         }
+      }
+      .express {
+        margin-top: 10px;
       }
       .shopInfo {
         height: 40px;

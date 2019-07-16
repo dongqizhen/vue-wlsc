@@ -48,6 +48,7 @@
         <loading v-else></loading>
       </div>
       <pagination
+        ref="pagination"
         :data="paginationData"
         v-on:onPaginationChange="getPaginationChange"
         v-if="paginationData.count != 0"
@@ -155,6 +156,7 @@
       getSearchData(val) {
         console.log(val);
         this.getOrderData.name = val.value;
+        this.getOrderData.currentPage = 1;
         if (val.dateRange.length > 0) {
           this.getOrderData.startTime = val.dateRange[0];
           this.getOrderData.endTime = val.dateRange[1];
@@ -162,7 +164,13 @@
           this.getOrderData.startTime = "";
           this.getOrderData.endTime = "";
         }
-        this.getOrderList();
+        this.getOrderList().then(() => {
+          this.$nextTick(() => {
+            if (this.$refs.pagination) {
+              this.$refs.pagination.$data.current = 1;
+            }
+          });
+        });
       },
       getReturnStatus(val) {
         this.defaultActiveKey = val;
@@ -172,12 +180,20 @@
       getOrderStatus(val) {
         console.log("获取订单状态：", val);
         this.getOrderData.orderStatus = val;
+        this.defaultActiveKey = val;
+        this.getOrderData.currentPage = 1;
         if (val == 5 || val == 7) {
           this.isShowInfo.current = -1;
         } else {
           this.isShowInfo.current = 1;
         }
-        this.getOrderList();
+        this.getOrderList().then(() => {
+          this.$nextTick(() => {
+            if (this.$refs.pagination) {
+              this.$refs.pagination.$data.current = 1;
+            }
+          });
+        });
         this.getOrderNumber();
       },
       getChecked(val) {
@@ -251,6 +267,10 @@
         if (this.$route.query.orderNumber) {
           this.getOrderData.name = this.$route.query.orderNumber;
         }
+        this.$router.replace({
+          path: "/userCenter/myOrder",
+          query: { keyId: "3" }
+        });
       }
       _getDataAll([this.getOrderList(), this.getOrderNumber()]).then(() => {
         this.isLoading = false;

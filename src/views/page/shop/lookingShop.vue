@@ -195,6 +195,10 @@
         name: "销售地区：" + "",
         key: "keyword"
       });
+      var myCity = new BMap.LocalCity();
+      myCity.get(function(result) {
+        console.log("IP定位的位置：：：", result);
+      });
     },
     mounted() {
       console.log("店铺", this.currentCityIp);

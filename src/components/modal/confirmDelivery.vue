@@ -119,7 +119,14 @@
           console.log(data);
           this.loading = false;
           if (data.code != 500) {
-            this.$emit("returnValue", 3); //3表示已发货，进入待收货状态
+            if (this.$route.name == "订单详情") {
+              this.$router.replace({
+                path: "/merchant/orderManage",
+                query: { keyId: "7", status: 3 }
+              });
+            } else {
+              this.$emit("returnValue", 3); //3表示已发货，进入待收货状态
+            }
             this.visible = false;
           }
         });

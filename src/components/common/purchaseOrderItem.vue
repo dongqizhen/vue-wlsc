@@ -16,12 +16,20 @@
               ></a-checkbox>
             </label>
           </span>
-          <span @click="turnToProductDetail(item.goods_id, data.sid)">
+          <span
+            @click="
+              turnToProductDetail(item.goods_id, data.sid, item.is_on_sale)
+            "
+          >
             <img :src="item.primary_pic_url" />
           </span>
-          <span @click="turnToProductDetail(item.goods_id, data.sid)">{{
-            item.goods_name
-          }}</span>
+          <span
+            @click="
+              turnToProductDetail(item.goods_id, data.sid, item.is_on_sale)
+            "
+          >
+            {{ item.goods_name }}
+          </span>
           <span>{{ item.brand_name }}/{{ item.model_name }}</span>
           <span>{{ item.show_price }}</span>
           <span>
@@ -37,8 +45,8 @@
           <span>
             <div @click.stop="deleteProduct(item.goods_id)">删除</div>
             <div
-              @click.stop="addMyStore(item.goods_id)"
-              v-if="item.isCollection == 0"
+              @click.stop="addMyStore(item.goods_id, item.is_on_sale)"
+              v-if="item.isCollection == 0 && item.is_on_sale == 1"
             >
               添加到我的收藏
             </div>
@@ -86,12 +94,17 @@
       }
     },
     methods: {
-      turnToProductDetail(id, storeId) {
-        let { href } = this.$router.resolve({
-          path: `/details/productDetails/${id}`,
-          query: { shopId: storeId }
-        });
-        window.open(href, "_blank");
+      turnToProductDetail(id, storeId, isOnSale) {
+        if (isOnSale == 1) {
+          let { href } = this.$router.resolve({
+            path: `/details/productDetails/${id}`,
+            query: { shopId: storeId }
+          });
+          window.open(href, "_blank");
+        } else {
+          this.$message.warning("该商品已下架", 1);
+          return;
+        }
       },
 
       deleteProduct(id) {
@@ -100,19 +113,25 @@
           this.$emit("getIsDelete", true);
         });
       },
-      addMyStore(id) {
-        _getData("/collect/add", { typeId: 0, valueId: id }).then(data => {
-          console.log("收藏接口：", data);
-          if (data == "") {
-            _.each(this.data.list, o => {
-              console.log(o.goods_id);
-              if (o.goods_id == id) {
-                o.isCollection = 1;
-              }
-            });
-            this.$message.success("商品收藏成功", 1);
-          }
-        });
+      addMyStore(id, isOnSale) {
+        console.log(isOnSale);
+        if (isOnSale == 0) {
+          this.$message.warning("该商品已下架", 1);
+          return;
+        } else {
+          _getData("/collect/add", { typeId: 0, valueId: id }).then(data => {
+            console.log("收藏接口：", data);
+            if (data == "") {
+              _.each(this.data.list, o => {
+                console.log(o.goods_id);
+                if (o.goods_id == id) {
+                  o.isCollection = 1;
+                }
+              });
+              this.$message.success("商品收藏成功", 1);
+            }
+          });
+        }
       },
       onChange(id) {
         // console.log(id);

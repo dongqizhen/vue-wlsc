@@ -35,7 +35,9 @@
         </li>
         <li v-if="isLogin" @click="system">
           <a>
-            系统通知(<span :class="isMerchant ? 'whiteColor' : 'redColor'">
+            系统通知(<span
+              :class="isMerchant || isFooter ? 'whiteColor' : 'redColor'"
+            >
               {{
                 isMerchant ? userShopInfo.shopSystem : userShopInfo.systemCount
               }}
@@ -45,7 +47,9 @@
         </li>
         <li v-if="isLogin" @click="privateMessage">
           <a>
-            私信消息(<span :class="isMerchant ? 'whiteColor' : 'redColor'">
+            私信消息(<span
+              :class="isMerchant || isFooter ? 'whiteColor' : 'redColor'"
+            >
               {{
                 isMerchant
                   ? userShopInfo.shopPersonal
@@ -106,7 +110,8 @@
     data() {
       return {
         codeShow: false,
-        isMerchant: false
+        isMerchant: false,
+        isFooter: false
       };
     },
     methods: {
@@ -177,6 +182,9 @@
         this.isMerchant = true;
       } else {
         this.isMerchant = false;
+      }
+      if (this.$route.path.indexOf("footer") != -1) {
+        this.isFooter = true;
       }
     }
   };

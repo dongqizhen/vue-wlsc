@@ -1,6 +1,6 @@
 <template>
   <div class="inquiryProductItem" :class="addClass(itemData.id)">
-    <span>
+    <span style="visibility:hidden">
       <label>
         <a-checkbox
           @change="onChange(itemData.id)"
@@ -93,11 +93,17 @@
         this.$emit("getData", { data: this.itemData });
       },
       turnToProductDetail(itemData) {
-        let { href } = this.$router.resolve({
+        if(itemData.isOnSale==1){
+let { href } = this.$router.resolve({
           path: `/details/productDetails/${itemData.goodsId}`,
           query: { shopId: itemData.storeId }
         });
         window.open(href, "_blank");
+        }else{
+          this.$message.warning("此产品已下架");
+          return;
+        }
+        
       },
       onChange(id) {
         if (_.indexOf(this.list, id) == -1) {

@@ -180,12 +180,13 @@
       getOrderStatus(val) {
         console.log("获取订单状态：", val);
         this.getOrderData.orderStatus = val;
+        this.defaultActiveKey = val;
+        this.getOrderData.currentPage = 1;
         if (val == 5 || val == 7) {
           this.isShowInfo.current = -1;
         } else {
           this.isShowInfo.current = 1;
         }
-        this.getOrderData.currentPage = 1;
         this.getOrderList().then(() => {
           this.$nextTick(() => {
             if (this.$refs.pagination) {
@@ -267,6 +268,10 @@
         if (this.$route.query.orderNumber) {
           this.getOrderData.name = this.$route.query.orderNumber;
         }
+        this.$router.replace({
+          path: "/merchant/orderManage",
+          query: { keyId: "7" }
+        });
       }
       _getDataAll([this.getOrderList(), this.getOrderNumber()]).then(() => {
         this.isLoading = false;

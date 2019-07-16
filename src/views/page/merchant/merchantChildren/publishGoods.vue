@@ -372,6 +372,7 @@
                   this.releaseLoading = false;
                   if (data.code != 500) {
                     this.addCarSuccess();
+                    this.reset();
                   }
                 });
               }

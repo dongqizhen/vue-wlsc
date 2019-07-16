@@ -6,9 +6,9 @@
           您是否已经收到该订单？
         </div>
         <div class="btn">
-          <a-button type="primary" :loading="loading" @click="sure"
-            >确认收货</a-button
-          >
+          <a-button type="primary" :loading="loading" @click="sure">
+            确认收货
+          </a-button>
           <a-button @click="visible = false">取消</a-button>
         </div>
       </div>
@@ -89,7 +89,14 @@
           this.loading = false;
           if (data.code != 500) {
             this.visible = false;
-            this.$emit("returnValue", 4); //4表示已经收货，进入待评价状态
+            if (this.$route.name == "我的订单详情") {
+              this.$router.replace({
+                path: "/userCenter/myOrder",
+                query: { keyId: "3", status: 4 }
+              });
+            } else {
+              this.$emit("returnValue", 4); //4表示已经收货，进入待评价状态
+            }
           }
         });
       }

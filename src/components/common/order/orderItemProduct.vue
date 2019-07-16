@@ -5,22 +5,26 @@
         class="itemProduct"
         v-for="product in data.goodsList"
         :key="product.id"
-        @click="turnToProductDetail(product.goods_id, data.storeId)"
+        @click="
+          turnToProductDetail(
+            product.goods_id,
+            data.storeId,
+            product.is_on_sale
+          )
+        "
       >
         <span><img :src="product.list_pic_url"/></span>
         <span>{{ product.goods_name }}</span>
-        <span>￥{{ product.retail_price.toFixed(2) }}</span>
+        <span>￥{{ product.retail_price?product.retail_price.toFixed(2):"" }}</span>
         <span>{{ product.number }}</span>
       </div>
     </div>
-    <div class="actualPrice">￥{{ data.actual_price.toFixed(2) }}</div>
+    <div class="actualPrice">￥{{ data.actual_price?data.actual_price.toFixed(2):"" }}</div>
     <div class="operating">
       <div class="lookPay" ref="lookPay" @click="addModal(data.id)">
         {{
           data.order_status == 1
-            ? isShowInfo.isDetail
-              ? "--"
-              : ""
+            ? ""
             : data.isPayProve == 0
             ? isShowInfo.isMerchant
               ? isShowInfo.isDetail
@@ -28,7 +32,7 @@
                   ? "--"
                   : ""
                 : ""
-              : data.order_status == 7
+              : data.order_status == 6 || data.order_status == 7
               ? isShowInfo.isDetail
                 ? "--"
                 : ""
@@ -39,19 +43,14 @@
       <div
         class="sure"
         @click="confirmOrder(data.id)"
-        v-if="
-          data.order_status == 1 &&
-            isShowInfo.isMerchant &&
-            !isShowInfo.isDetail
-        "
+        v-if="data.order_status == 1 && isShowInfo.isMerchant"
       >
         确认接单
       </div>
       <div
         class="lookOrderDetail"
         v-if="
-          !isShowInfo.isDetail &&
-            !isShowInfo.isMerchant &&
+          !isShowInfo.isMerchant &&
             (data.order_status == 1 || data.order_status == 2)
         "
         @click="cancelOrder(data.id)"
@@ -61,32 +60,20 @@
       <div
         class="sure"
         @click="confirmDelivery(data.id)"
-        v-if="
-          data.order_status == 2 &&
-            isShowInfo.isMerchant &&
-            !isShowInfo.isDetail
-        "
+        v-if="data.order_status == 2 && isShowInfo.isMerchant"
       >
         确认发货
       </div>
       <div
         class="sure"
         @click="confirmReceipt(data.id)"
-        v-if="
-          data.order_status == 3 &&
-            !isShowInfo.isMerchant &&
-            !isShowInfo.isDetail
-        "
+        v-if="data.order_status == 3 && !isShowInfo.isMerchant"
       >
         确认收货
       </div>
       <div
         class="sure"
-        v-if="
-          data.order_status == 4 &&
-            !isShowInfo.isMerchant &&
-            !isShowInfo.isDetail
-        "
+        v-if="data.order_status == 4 && !isShowInfo.isMerchant"
         @click="toComment(data.id)"
       >
         评价
@@ -94,11 +81,7 @@
       <div
         class="sure"
         @click="confirmReturn(data.id)"
-        v-if="
-          data.order_status == 6 &&
-            isShowInfo.isMerchant &&
-            !isShowInfo.isDetail
-        "
+        v-if="data.order_status == 6 && isShowInfo.isMerchant"
       >
         确认退货
       </div>
@@ -115,14 +98,6 @@
       >
         申请退货
       </div>
-      <!-- <div
-        class="sure"
-        v-if="
-          data.order_status == 6 && isShowInfo.isMerchant && isShowInfo.isDetail
-        "
-      >
-        退货中
-      </div> -->
       <div class="lookOrderDetail" v-if="!isShowInfo.isDetail">
         <router-link
           tag="a"
@@ -235,19 +210,24 @@
             this.$emit("returnValue", 4);
           } else {
             const { href } = this.$router.resolve({
-              path: `comment/${orderId}`,
+              path: `/userCenter/comment/${orderId}`,
               query: { keyId: "3", topTitle: "sub1" }
             });
             window.open(href, "_blank");
           }
         });
       },
-      turnToProductDetail(id, storeId) {
-        let { href } = this.$router.resolve({
-          path: `/details/productDetails/${id}`,
-          query: { shopId: storeId }
-        });
-        window.open(href, "_blank");
+      turnToProductDetail(id, storeId, isOnSale) {
+        if (isOnSale == 1) {
+          let { href } = this.$router.resolve({
+            path: `/details/productDetails/${id}`,
+            query: { shopId: storeId }
+          });
+          window.open(href, "_blank");
+        } else {
+          this.$message.warning("此产品已下架");
+          return;
+        }
       },
       //确认订单
       confirmOrder(orderId) {
@@ -260,7 +240,14 @@
           }).then(data => {
             console.log(data);
             this.sureOrderLoading = false;
-            this.$emit("returnValue", 2); //2表示已经接单，进入待发货状态
+            if (this.$route.name == "订单详情") {
+              this.$router.replace({
+                path: "/merchant/orderManage",
+                query: { keyId: "7", status: 2 }
+              });
+            } else {
+              this.$emit("returnValue", 2); //2表示已经接单，进入待发货状态
+            }
           });
         }
       },
@@ -271,7 +258,14 @@
           orderStatus: "cancel"
         }).then(data => {
           console.log(data);
-          this.$emit("returnValue", 7); //7表示关闭接单
+          if (this.$route.name == "我的订单详情") {
+            this.$router.replace({
+              path: "/userCenter/myOrder",
+              query: { keyId: "3", status: 7 }
+            });
+          } else {
+            this.$emit("returnValue", 7); //7表示关闭接单
+          }
         });
       },
       //确认收货
@@ -290,7 +284,14 @@
         }).then(data => {
           console.log(data);
           this.$message.success("申请成功", 1);
-          this.data.order_status = 6;
+          if (this.$route.name == "我的订单详情") {
+            this.$router.replace({
+              path: "/userCenter/myOrder",
+              query: { keyId: "3", status: 6 }
+            });
+          } else {
+            this.data.order_status = 6;
+          }
         });
       },
       //确认退货
@@ -302,7 +303,14 @@
           console.log(data);
           if (data.code != 500) {
             this.$message.success("操作成功", 1);
-            this.$emit("returnValue", 7); //7表示关闭
+            if (this.$route.name == "订单详情") {
+              this.$router.replace({
+                path: "/merchant/orderManage",
+                query: { keyId: "7", status: 7 }
+              });
+            } else {
+              this.$emit("returnValue", 7); //7表示关闭
+            }
           }
         });
       },

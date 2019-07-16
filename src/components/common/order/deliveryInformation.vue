@@ -1,12 +1,16 @@
 <template>
   <div class="shippingAddress">
-    <div class="left-box">收货信息</div>
+    <div class="left-box">{{ isExpress ? "快递单号" : "收货信息" }}</div>
     <div class="right-box">
       <div>
-        <span>收货人：{{ data.consignee }}</span>
-        <span>联系方式：{{ data.mobile }}</span>
+        <span>
+          {{ isExpress ? `快递公司：顺丰速运` : `收货人：${data.consignee}` }}
+        </span>
+        <span :class="{ isShow: isExpress }">联系方式：{{ data.mobile }}</span>
       </div>
-      <div>收货地址：{{ data.address }}</div>
+      <div>
+        {{ isExpress ? `快递单号：顺丰速运` : `收货地址：${data.address}` }}
+      </div>
     </div>
   </div>
 </template>
@@ -18,7 +22,8 @@
     props: {
       data: {
         type: Object
-      }
+      },
+      isExpress: { type: Boolean }
     }
   };
 </script>
@@ -48,6 +53,9 @@
           margin-bottom: 8px;
           span {
             margin-right: 38px;
+          }
+          .isShow {
+            display: none;
           }
         }
       }
