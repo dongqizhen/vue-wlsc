@@ -166,6 +166,7 @@
             console.log("456", data);
             this.brandList = data;
             this.arr = data.listAll;
+            this.commonBrand = data.userbrandList;
             this.letterArr = _.groupBy(
               _.orderBy(
                 this.arr,
@@ -202,9 +203,9 @@
       }
     },
     mounted() {
-      if (this.isLogin) {
-        this.getCommonBrand();
-      }
+      // if (this.isLogin) {
+      //   this.getCommonBrand();
+      // }
 
       this.getBrandList().then(() => {
         this.listMore = [...Array(_.keys(this.letterArr).length)];

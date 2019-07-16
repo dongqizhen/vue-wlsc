@@ -24,7 +24,7 @@
             v-if="list.primary_pic_url"
           />
           <div class="bc-box" v-else>
-            <img :src="`../assets/images/b-0${random}.jpg`" alt="" />
+            <img :data-src="`../assets/images/b-0${random}.jpg`" alt="" />
             <span>{{ list.name }}</span>
           </div>
         </div>

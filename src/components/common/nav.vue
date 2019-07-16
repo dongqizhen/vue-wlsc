@@ -3,12 +3,12 @@
     <div class="top_nav">
       <div class="commonWidth">
         <ul>
-          <li
-            v-for="(item, i) in nav_title"
-            :key="`nav-${i}`"
-            @click="nav_change(item, i)"
-          >
-            <a :class="i == defaultNav && 'active'">{{ item.name }}</a>
+          <li v-for="(item, i) in nav_title" :key="`nav-${i}`">
+            <a
+              :class="i == defaultNav && 'active'"
+              @click="nav_change(item, i)"
+              >{{ item.name }}</a
+            >
           </li>
           <!-- <router-link
           v-for="(item, i) in nav_title"

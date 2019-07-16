@@ -80,8 +80,10 @@
     computed: {
       convertStr() {
         return this.detail.content.replace(
-          /(?<=\<img [^>]*src=['"])([^'"]+)(?=[^>]*>)/gi,
-          '"data-src="$1'
+          /<img [^>]*src=['"]([^'"]+)[^>]*>/gi,
+          "<img data-src=$1 style='width:100%;height:auto' />"
+          // /(?<=\<img [^>]*src=['"])([^'"]+)(?=[^>]*>)/gi,
+          // '"data-src="$1'
         );
       }
     },
