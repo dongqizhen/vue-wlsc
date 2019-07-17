@@ -301,10 +301,10 @@
       }
     }
     .shop-bottom-shadow {
-      background: url("../../assets/images/shopBottomShadow.png") repeat center;
+      background: url("../../assets/images/shopBottomShadow.png") no-repeat center;
       height: 18px;
       position: absolute;
-      bottom: -18px;
+      bottom: -14px;
       width: 100%;
     }
   }
