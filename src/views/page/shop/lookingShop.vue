@@ -83,6 +83,7 @@
         <product-category-vue
           :canSkip="false"
           v-on:categoryClick="categoryClick"
+          :isFindShop="true"
         ></product-category-vue>
         <div class="main-content">
           <div class="left">

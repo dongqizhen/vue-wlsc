@@ -132,7 +132,8 @@
         //是否可以跳转页面
         type: Boolean,
         default: true
-      }
+      },
+      isFindShop: false //是否是找店铺页面
     },
     components: {
       CommonCategoriesModalVue
@@ -151,10 +152,14 @@
       },
       //获取常用分类
       async getCommonCategory() {
-        _getData("ucatalog/list", {}).then(data => {
-          console.log("产品分类", data);
-          this.pageArr = data.userCategoryList;
-        });
+        if (this.isFindShop) {
+          _getData("ucatalog/getList", {}).then(data => {});
+        } else {
+          _getData("ucatalog/list", {}).then(data => {
+            console.log("产品分类", data);
+            this.pageArr = data.userCategoryList;
+          });
+        }
       },
       //点击nav
       navHandleClick(id, i, e) {
