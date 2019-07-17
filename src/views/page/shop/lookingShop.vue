@@ -197,26 +197,26 @@
       });
       var myCity = new BMap.LocalCity();
       myCity.get(result => {
-        console.log();
-        this.selectMainArea = result.name;
-        console.log("IP定位的位置：：：", result.name);
+        this.cityName = result.name;
+        _getData("/address/getAddress", {}).then(data => {
+          console.log("data1111::", data);
+          _.map(data, o => {
+            _.map(o.defaultCityData, v => {
+              if (this.cityName == v.name) {
+                this.provinceName = o.name;
+                this.selectMainArea = this.provinceName + this.cityName;
+                this.searchParamas.splice(0, 1, {
+                  name: "销售地区：" + this.selectMainArea,
+                  key: "keyword"
+                });
+              }
+            });
+          });
+        });
+        this.getShop();
       });
     },
     mounted() {
-      console.log("店铺", this.currentCityIp);
-      // _getData("address/getRemortIP", { ip: this.currentCityIp.cip })
-      //   .then(data => {
-      //     this.selectMainArea = data.content.address;
-      //     this.provinceName = data.content.address_detail.province;
-      //     this.cityName = data.content.address_detail.city;
-      //     this.searchParamas.splice(0, 1, {
-      //       name: "销售地区：" + this.selectMainArea,
-      //       key: "keyword"
-      //     });
-      //   })
-      //   .then(() => {
-      //     this.getShop();
-      //   });
       _getData("address/getProvince", {}).then(data => {
         console.log("data", data);
         this.area = data;
@@ -290,10 +290,10 @@
       //异步获取店铺
       async getShop(page = 1) {
         this.isLoading = true;
-        return await _getData("queryEnquiry", {
+        return await _getData("queryByBrandOrCategoryStore", {
           brandId: this.brandId,
           provinceName: this.provinceName,
-          cityName: this.cityName,
+          name: this.cityName,
           categoryId: this.categoryId,
           createTime: this.createTime,
           accessNum: this.accessNum,
