@@ -196,25 +196,27 @@
         key: "keyword"
       });
       var myCity = new BMap.LocalCity();
-      myCity.get(function(result) {
-        console.log("IP定位的位置：：：", result);
+      myCity.get(result => {
+        console.log();
+        this.selectMainArea = result.name;
+        console.log("IP定位的位置：：：", result.name);
       });
     },
     mounted() {
       console.log("店铺", this.currentCityIp);
-      _getData("address/getRemortIP", { ip: this.currentCityIp.cip })
-        .then(data => {
-          this.selectMainArea = data.content.address;
-          this.provinceName = data.content.address_detail.province;
-          this.cityName = data.content.address_detail.city;
-          this.searchParamas.splice(0, 1, {
-            name: "销售地区：" + this.selectMainArea,
-            key: "keyword"
-          });
-        })
-        .then(() => {
-          this.getShop();
-        });
+      // _getData("address/getRemortIP", { ip: this.currentCityIp.cip })
+      //   .then(data => {
+      //     this.selectMainArea = data.content.address;
+      //     this.provinceName = data.content.address_detail.province;
+      //     this.cityName = data.content.address_detail.city;
+      //     this.searchParamas.splice(0, 1, {
+      //       name: "销售地区：" + this.selectMainArea,
+      //       key: "keyword"
+      //     });
+      //   })
+      //   .then(() => {
+      //     this.getShop();
+      //   });
       _getData("address/getProvince", {}).then(data => {
         console.log("data", data);
         this.area = data;

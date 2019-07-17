@@ -201,6 +201,10 @@
     },
     created() {
       // this.changeCurrentCityIp(returnCitySN);
+      let [a, b, c] = new Set([1, 2, 3]);
+      console.log(a);
+      console.log(b);
+      console.log(c);
     },
     mounted() {
       //获取推荐数量

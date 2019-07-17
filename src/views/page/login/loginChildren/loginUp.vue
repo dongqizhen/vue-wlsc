@@ -243,7 +243,7 @@
             //成功
             this.changeLoginState(true);
             this.changeUserInfoState(data.result);
-            this.changeCurrentCityIp(returnCitySN);
+            // this.changeCurrentCityIp(returnCitySN);
             _getData("/user/getUser", {})
               .then(data => {
                 console.log("获取用户的店铺开店信息：", data);
@@ -291,7 +291,7 @@
             //成功
             this.changeLoginState(true);
             this.changeUserInfoState(data.result);
-            this.changeCurrentCityIp(returnCitySN);
+            // this.changeCurrentCityIp(returnCitySN);
             _getData("/user/getUser", {})
               .then(data => {
                 console.log("获取用户的店铺开店信息：", data);
