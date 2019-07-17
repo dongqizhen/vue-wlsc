@@ -88,6 +88,10 @@
                   <span>备件号：</span>
                   <a>{{ productInfo.spare_part }}</a>
                 </span>
+                <span v-if="productInfo.attribute_category_name == '备件'">
+                  <span>保修期：</span>
+                  <a>{{ productInfo.spare_part }}</a>
+                </span>
               </li>
             </ul>
             <div class="btn">
