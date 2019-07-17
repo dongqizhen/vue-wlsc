@@ -12,7 +12,7 @@
         :data="data"
         class="express"
         :isExpress="isExpress"
-        v-show="data.order_status > 2"
+        v-show="data.order_status > 2 && data.shipping_no"
       ></delivery-info>
       <div class="shopInfo">
         <div class="shopName">
