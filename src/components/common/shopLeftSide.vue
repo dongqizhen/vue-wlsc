@@ -130,7 +130,8 @@
         listMore: []
       };
     },
-    props: ["categoryId"],
+    props: ["categoryId", "currentPosition"],
+
     computed: {
       ...mapState(["isLogin"])
     },
@@ -161,7 +162,13 @@
           .then(() => {});
       },
       async getBrandList() {
-        return await _getData("brand/merge", { id: this.categoryId })
+        let url = "brand/merge",
+          req = { id: this.categoryId };
+        if (this.currentPosition) {
+          req = this.currentPosition;
+          url = "brand/mergeForShopping";
+        }
+        return await _getData(url, req)
           .then(data => {
             console.log("456", data);
             this.brandList = data;
@@ -200,6 +207,11 @@
               });
             });
           });
+      },
+      init() {
+        this.getBrandList().then(() => {
+          this.listMore = [...Array(_.keys(this.letterArr).length)];
+        });
       }
     },
     mounted() {
@@ -207,9 +219,7 @@
       //   this.getCommonBrand();
       // }
 
-      this.getBrandList().then(() => {
-        this.listMore = [...Array(_.keys(this.letterArr).length)];
-      });
+      this.init();
     },
     watch: {
       categoryId() {

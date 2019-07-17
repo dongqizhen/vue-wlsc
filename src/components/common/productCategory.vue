@@ -133,7 +133,8 @@
         type: Boolean,
         default: true
       },
-      isFindShop: false //是否是找店铺页面
+      currentPosition: ""
+      //是否是找店铺页面
     },
     components: {
       CommonCategoriesModalVue
@@ -152,8 +153,11 @@
       },
       //获取常用分类
       async getCommonCategory() {
-        if (this.isFindShop) {
-          _getData("ucatalog/getList", {}).then(data => {});
+        if (this.currentPosition) {
+          _getData("ucatalog/getList", this.currentPosition).then(data => {
+            console.log("产品分类", data);
+            this.pageArr = data.userCategoryList;
+          });
         } else {
           _getData("ucatalog/list", {}).then(data => {
             console.log("产品分类", data);
@@ -191,97 +195,108 @@
           "translateX(" +
           this.nav.querySelectorAll(".swiper-slide")[i].offsetLeft +
           "px)";
+      },
+      reload() {
+        //如果登录 则显示常用分类
+        this.navArr = [];
+        if (this.isLogin) {
+          this.navArr.push({
+            name: "常用分类",
+            id: ""
+          });
+          this.getCommonCategory();
+        }
+
+        let url = "catalog/listAll",
+          req = {};
+
+        if (this.currentPosition) {
+          req = this.currentPosition;
+          url = "catalog/listAllForShoping";
+        }
+
+        _getData(url, req)
+          .then(data => {
+            console.log("全部产品分类", data);
+            this.navArr = [...this.navArr, ...data.currentCategory];
+            if (!this.isLogin) {
+              this.pageArr = data.currentCategory[0].subCategoryList;
+            }
+          })
+          .then(() => {
+            this.$nextTick().then(() => {
+              this.init();
+              new Swiper(".product-category .swiper-container.nav_slide", {
+                slidesPerView: "auto",
+                // freeMode: true,
+                direction: "horizontal",
+                slideToClickedSlide: true,
+                on: {
+                  init: function() {
+                    this.navSlideWidth = this.slides[0].clientWidth; //导航字数需要统一,每个导航宽度一致
+                    // this.bar = this.$el.find(".bar");
+                    // this.bar.transition(300);
+                    this.navSum = this.slides[this.slides.length - 1].offsetLeft; //最后一个slide的位置
+                    this.clientWidth = parseInt(this.$wrapperEl[0].clientWidth); //Nav的可视宽度
+                    this.navWidth = this.navSlideWidth * this.slides.length;
+                  },
+                  touchStart: function() {
+                    this.updateSlides();
+                    this.updateSize();
+                  },
+                  tap: function(e) {
+                    //console.log(this);
+                    if (this.clickedIndex == undefined) return;
+                    // mySwiper.slideTo(this.clickIndex, 0);
+                    const activeSlidePosition = this.slides[this.clickedIndex]
+                      .offsetLeft; //activeSlide距左边的距离
+                    // this.bar.transform("translateX(" + activeSlidePosition + "px)");
+                    // console.log(this.slides[this.clickedIndex]);
+                    // this.slides[this.clickedIndex].classList.add("active");
+                    //导航居中
+
+                    this.setTransition(300);
+                    if (this.navWidth <= this.clientWidth) {
+                      this.setTranslate(0);
+                      return;
+                    }
+                    if (
+                      activeSlidePosition <
+                      (this.clientWidth - parseInt(this.navSlideWidth)) / 2
+                    ) {
+                      this.setTranslate(0);
+                    } else if (
+                      activeSlidePosition >
+                      this.navWidth -
+                        (parseInt(this.navSlideWidth) + this.clientWidth) / 2
+                    ) {
+                      this.setTranslate(this.clientWidth - this.navWidth);
+                    } else {
+                      this.setTranslate(
+                        (this.clientWidth - parseInt(this.navSlideWidth)) / 2 -
+                          activeSlidePosition
+                      );
+                    }
+                  }
+                }
+              });
+            });
+          });
       }
     },
     computed: {
       ...mapState(["isLogin"])
     },
-    created() {
-      //如果登录 则显示常用分类
-      if (this.isLogin) {
-        this.navArr.push({
-          name: "常用分类",
-          id: ""
-        });
-      }
-    },
+    created() {},
     mounted() {
-      if (this.isLogin) {
-        this.getCommonCategory();
-      }
-
-      _getData("catalog/listAll", {})
-        .then(data => {
-          console.log("全部产品分类", data);
-          this.navArr = [...this.navArr, ...data.currentCategory];
-          if (!this.isLogin) {
-            this.pageArr = data.currentCategory[0].subCategoryList;
-          }
-        })
-        .then(() => {
-          this.$nextTick().then(() => {
-            this.init();
-            new Swiper(".product-category .swiper-container.nav_slide", {
-              slidesPerView: "auto",
-              // freeMode: true,
-              direction: "horizontal",
-              slideToClickedSlide: true,
-              on: {
-                init: function() {
-                  this.navSlideWidth = this.slides[0].clientWidth; //导航字数需要统一,每个导航宽度一致
-                  // this.bar = this.$el.find(".bar");
-                  // this.bar.transition(300);
-                  this.navSum = this.slides[this.slides.length - 1].offsetLeft; //最后一个slide的位置
-                  this.clientWidth = parseInt(this.$wrapperEl[0].clientWidth); //Nav的可视宽度
-                  this.navWidth = this.navSlideWidth * this.slides.length;
-                },
-                touchStart: function() {
-                  this.updateSlides();
-                  this.updateSize();
-                },
-                tap: function(e) {
-                  //console.log(this);
-                  if (this.clickedIndex == undefined) return;
-                  // mySwiper.slideTo(this.clickIndex, 0);
-                  const activeSlidePosition = this.slides[this.clickedIndex]
-                    .offsetLeft; //activeSlide距左边的距离
-                  // this.bar.transform("translateX(" + activeSlidePosition + "px)");
-                  // console.log(this.slides[this.clickedIndex]);
-                  // this.slides[this.clickedIndex].classList.add("active");
-                  //导航居中
-
-                  this.setTransition(300);
-                  if (this.navWidth <= this.clientWidth) {
-                    this.setTranslate(0);
-                    return;
-                  }
-                  if (
-                    activeSlidePosition <
-                    (this.clientWidth - parseInt(this.navSlideWidth)) / 2
-                  ) {
-                    this.setTranslate(0);
-                  } else if (
-                    activeSlidePosition >
-                    this.navWidth -
-                      (parseInt(this.navSlideWidth) + this.clientWidth) / 2
-                  ) {
-                    this.setTranslate(this.clientWidth - this.navWidth);
-                  } else {
-                    this.setTranslate(
-                      (this.clientWidth - parseInt(this.navSlideWidth)) / 2 -
-                        activeSlidePosition
-                    );
-                  }
-                }
-              }
-            });
-          });
-        });
+      this.reload();
     },
+
     watch: {
       navArr(newVal, oldVal) {
         console.log(555555555, newVal, oldVal);
-      }
+      },
+      currentPosition(newVal, oldVal) {}
     }
   };
 </script>

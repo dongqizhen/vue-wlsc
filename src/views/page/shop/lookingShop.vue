@@ -81,14 +81,19 @@
           </transition>
         </div>
         <product-category-vue
+          v-if="provinceName"
+          ref="productCategory"
           :canSkip="false"
           v-on:categoryClick="categoryClick"
-          :isFindShop="true"
+          :currentPosition="{ provinceName, cityName }"
         ></product-category-vue>
         <div class="main-content">
           <div class="left">
             <shop-left-side-vue
               :categoryId="categoryId"
+              v-if="provinceName"
+              ref="shopLeftSide"
+              :currentPosition="{ provinceName, cityName }"
               v-on:brandClick="brandClick"
             ></shop-left-side-vue>
           </div>
@@ -218,7 +223,7 @@
       });
     },
     mounted() {
-      _getData("address/getProvince", {}).then(data => {
+      _getData("address/getAllArea", {}).then(data => {
         console.log("data", data);
         this.area = data;
       });
@@ -265,8 +270,9 @@
       brandClick(item) {
         console.log(item);
         this.brandId = item.id;
+        this.categoryId = "";
         let obj = _.keyBy(this.searchParamas, "key");
-
+        this.searchParamas.splice(1, 1);
         if (!_.has(obj, "brand")) {
           //this.searchParamas = _.dropRight(this.searchParamas);
           this.searchParamas.push({
@@ -360,6 +366,11 @@
         });
         this.areaIsShow = false;
         this.cityName = item.name;
+        setTimeout(() => {
+          this.$refs.productCategory.reload();
+          this.$refs.shopLeftSide.init();
+        }, 0);
+
         this.getShop();
       }
     }
