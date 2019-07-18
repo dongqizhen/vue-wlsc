@@ -215,7 +215,9 @@
             key: "brand"
           });
         }
-        this.getSearchList(this.$route.query.val);
+        this.getSearchList(this.$route.query.val).then(() => {
+          window.scrollTo(0, 0);
+        });
       },
       tabClick(i) {
         this.recommend_tabs_index = i;
