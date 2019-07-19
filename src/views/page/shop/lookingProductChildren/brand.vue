@@ -331,7 +331,7 @@
         console.log("数量", data);
         this.params = data;
         this.tabs = [
-          `型号列表(${data.count || 0})`,
+          `型号(${data.count || 0})`,
           `文章(${data.articleNum || 0})`,
           `视频(${data.videoNum || 0})`,
           `案例(${data.maintenanceNum || 0})`,

@@ -97,6 +97,11 @@
                 this.loading = false;
                 this.$message.warning("报价不能为空", 1);
               }
+              if (o.unitPrice == 0) {
+                flag = false;
+                this.loading = false;
+                this.$message.warning("报价不能为0", 1);
+              }
             }
           });
           if (flag) {
