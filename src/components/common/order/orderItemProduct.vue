@@ -15,11 +15,17 @@
       >
         <span><img :src="product.list_pic_url"/></span>
         <span>{{ product.goods_name }}</span>
-        <span>￥{{ product.retail_price?product.retail_price.toFixed(2):"" }}</span>
+        <span>
+          ￥{{
+            product.retail_price ? product.retail_price.toFixed(2) : "0.00"
+          }}
+        </span>
         <span>{{ product.number }}</span>
       </div>
     </div>
-    <div class="actualPrice">￥{{ data.actual_price?data.actual_price.toFixed(2):"" }}</div>
+    <div class="actualPrice">
+      ￥{{ data.actual_price ? data.actual_price.toFixed(2) : "0.00" }}
+    </div>
     <div class="operating">
       <div class="lookPay" ref="lookPay" @click="addModal(data.id)">
         {{

@@ -34,9 +34,9 @@
             <div class="right-box">
               <div class="select-area">
                 <span @click="selectArea">
-                  <span :class="isSpace ? 'space' : ''">{{
-                    selectMainArea
-                  }}</span>
+                  <span :class="isSpace ? 'space' : ''">
+                    {{ selectMainArea }}
+                  </span>
                   <svg
                     class="icon"
                     aria-hidden="true"

@@ -42,13 +42,13 @@
               imagesList.push(o.url);
             });
             obj.imagesList = imagesList;
-            if (!val.submitData.content) {
-              this.$message.warning("请输入评价内容", 1);
-              this.flag = false;
-              return;
-            } else {
-              obj.content = val.submitData.content;
-            }
+            // if (!val.submitData.content) {
+            //   this.$message.warning("请输入评价内容", 1);
+            //   this.flag = false;
+            //   return;
+            // } else {
+            obj.content = val.submitData.content;
+            // }
             let paramsList = [];
             _.map(val.paramList, o => {
               paramsList.push({

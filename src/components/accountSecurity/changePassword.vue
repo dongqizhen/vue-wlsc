@@ -175,9 +175,14 @@
           confirmPassword
         } = this.form.getFieldsValue();
 
-        _getData(`user/password`, {
-          password: oldPassword,
-          newPassword: confirmPassword
+        _getData(`${this.$API_URL.HYGLOGINURL}/server/user!request.action`, {
+          method: "updatePassword",
+          userid: this.$userid,
+          token: "",
+          params: {
+            password: oldPassword,
+            newPassword: confirmPassword
+          }
         })
           .then(data => {
             setTimeout(() => {

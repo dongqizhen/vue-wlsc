@@ -16,7 +16,14 @@
         </div>
         <div class="right-box">
           <a-button>
-            <router-link to="changePassword">修改</router-link>
+            <router-link
+              :to="{
+                path: '/userCenter/changePassword',
+                query: { keyId: '10' }
+              }"
+            >
+              修改
+            </router-link>
           </a-button>
         </div>
       </div>
@@ -40,9 +47,10 @@
         </div>
         <div class="right-box">
           <a-button>
-            <router-link to="changeEmail">{{
-              userInfo.email ? "修改" : "绑定"
-            }}</router-link>
+            <router-link
+              :to="{ path: '/userCenter/changeEmail', query: { keyId: '10' } }"
+              >{{ userInfo.email ? "修改" : "绑定" }}</router-link
+            >
           </a-button>
         </div>
       </div>
@@ -60,7 +68,10 @@
         </div>
         <div class="right-box">
           <a-button>
-            <router-link to="changePhone">修改</router-link>
+            <router-link
+              :to="{ path: '/userCenter/changePhone', query: { keyId: '10' } }"
+              >修改</router-link
+            >
           </a-button>
         </div>
       </div>
