@@ -8,6 +8,7 @@
             placeholder="请输入关键词"
             v-model="submitData.value"
             @pressEnter="searchData"
+            @change="changeData"
           />
         </div>
       </div>
@@ -57,10 +58,16 @@
           value: "",
           dateRange: []
         };
+        this.$emit("onlyGetData", this.submitData);
       },
       getDateRange(val) {
         console.log(val);
         this.submitData.dateRange = val;
+        this.$emit("onlyGetData", this.submitData);
+      },
+      changeData() {
+        console.log(111);
+        this.$emit("onlyGetData", this.submitData);
       }
     },
     components: {
