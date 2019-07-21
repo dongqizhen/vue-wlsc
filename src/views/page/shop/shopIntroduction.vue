@@ -268,7 +268,7 @@
           }
         }
         .right {
-          width: 236px;
+          width: 280px;
         }
       }
     }

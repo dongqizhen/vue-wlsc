@@ -1,6 +1,6 @@
 <template>
   <div class="quickOrder">
-    <guide-right title="快速下单">
+    <guide-right :title="guideTitle">
       <div class="info" slot="contentInfo" v-html="htmlData"></div>
     </guide-right>
   </div>
@@ -11,7 +11,8 @@
   export default {
     data() {
       return {
-        htmlData: ""
+        htmlData: "",
+        guideTitle: ""
       };
     },
     created() {
@@ -20,6 +21,7 @@
         topicId: this.$route.query.keyId
       }).then(data => {
         this.htmlData = data.topicVoList[0].content;
+        this.guideTitle = data.topicVoList[0].title;
       });
     },
     components: {

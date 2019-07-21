@@ -49,7 +49,7 @@
       </div>
       <div class="copyright">
         Copyright 2005-2016 allbring.com Corporation, All Rights Reserved
-        &nbsp;&nbsp;&nbsp;&nbsp; 京ICP备16013128号 &nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp; 京ICP备16013128号-2 &nbsp;&nbsp;&nbsp;&nbsp;
         版权所属：北京网来天下医疗科技有限责任公司
       </div>
     </div>

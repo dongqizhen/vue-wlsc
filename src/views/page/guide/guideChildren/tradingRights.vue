@@ -1,6 +1,6 @@
 <template>
   <div class="tradingRights">
-    <guide-right title="交易维权">
+    <guide-right :title="guideTitle">
       <div class="info" slot="contentInfo" v-html="htmlData"></div>
     </guide-right>
   </div>
@@ -11,7 +11,8 @@
   export default {
     data() {
       return {
-        htmlData: ""
+        htmlData: "",
+        guideTitle: ""
       };
     },
     created() {
@@ -21,6 +22,7 @@
       }).then(data => {
         //console.log(data);
         this.htmlData = data.topicVoList[0].content;
+        this.guideTitle = data.topicVoList[0].title;
       });
     },
     components: {

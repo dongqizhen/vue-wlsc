@@ -80,51 +80,54 @@
             </div>
           </transition>
         </div>
-        <product-category-vue
-          v-if="provinceName"
-          ref="productCategory"
-          :canSkip="false"
-          v-on:categoryClick="categoryClick"
-          :currentPosition="{ provinceName, cityName }"
-        ></product-category-vue>
-        <div class="main-content">
-          <div class="left">
-            <shop-left-side-vue
-              :categoryId="categoryId"
-              v-if="provinceName"
-              ref="shopLeftSide"
-              :currentPosition="{ provinceName, cityName }"
-              v-on:brandClick="brandClick"
-            ></shop-left-side-vue>
-          </div>
-          <div class="right">
-            <shop-nav-vue
-              :navArr="['发布时间', '按点击量', '按好评']"
-              v-on:tabClick="tabClick"
-              ref="shopNav"
-            ></shop-nav-vue>
-            <div v-if="!isLoading">
-              <div v-if="arr.length">
-                <ul class="shopItem">
-                  <shop-item-vue
-                    v-for="item in arr"
-                    :key="item.id"
-                    :item="item"
-                  ></shop-item-vue>
-                </ul>
-              </div>
-
-              <no-data v-else text="暂无店铺"></no-data>
+        <div v-if="!isAllLoading">
+          <product-category-vue
+            v-if="provinceName"
+            ref="productCategory"
+            :canSkip="false"
+            v-on:categoryClick="categoryClick"
+            :currentPosition="{ provinceName, cityName }"
+          ></product-category-vue>
+          <div class="main-content">
+            <div class="left">
+              <shop-left-side-vue
+                :categoryId="categoryId"
+                v-if="provinceName"
+                ref="shopLeftSide"
+                :currentPosition="{ provinceName, cityName }"
+                v-on:brandClick="brandClick"
+              ></shop-left-side-vue>
             </div>
-            <loading v-else></loading>
-            <pagination
-              :data="data"
-              v-on:onPaginationChange="onPaginationChange"
-              ref="pagination"
-              v-if="data != '' && arr.length"
-            ></pagination>
+            <div class="right">
+              <shop-nav-vue
+                :navArr="['发布时间', '按点击量', '按好评']"
+                v-on:tabClick="tabClick"
+                ref="shopNav"
+              ></shop-nav-vue>
+              <div v-if="!isLoading">
+                <div v-if="arr.length">
+                  <ul class="shopItem">
+                    <shop-item-vue
+                      v-for="item in arr"
+                      :key="item.id"
+                      :item="item"
+                    ></shop-item-vue>
+                  </ul>
+                </div>
+
+                <no-data v-else text="暂无店铺"></no-data>
+              </div>
+              <loading v-else></loading>
+              <pagination
+                :data="data"
+                v-on:onPaginationChange="onPaginationChange"
+                ref="pagination"
+                v-if="data != '' && arr.length"
+              ></pagination>
+            </div>
           </div>
         </div>
+        <loading v-else></loading>
       </div>
     </div>
     <Footer></Footer>
@@ -165,6 +168,7 @@
         provinceName: "",
         cityName: "",
         categoryId: "", //分类id
+        isAllLoading: true,
         isLoading: true,
         brandId: "",
         searchParamas: [], //搜素条件集合
@@ -204,22 +208,33 @@
       var myCity = new BMap.LocalCity();
       myCity.get(result => {
         this.cityName = result.name;
-        _getData("/address/getAddress", {}).then(data => {
-          console.log("data1111::", data);
-          _.map(data, o => {
-            _.map(o.defaultCityData, v => {
-              if (this.cityName == v.name) {
-                this.provinceName = o.name;
-                this.selectMainArea = this.provinceName + this.cityName;
-                this.searchParamas.splice(0, 1, {
-                  name: "销售地区：" + this.selectMainArea,
-                  key: "keyword"
-                });
-              }
+        _getData("/address/getAddress", {})
+          .then(data => {
+            console.log("data1111::", data);
+            _.map(data, o => {
+              _.map(o.defaultCityData, v => {
+                if (this.cityName == v.name) {
+                  this.provinceName = o.name;
+                  this.selectMainArea = this.provinceName + this.cityName;
+                  this.searchParamas.splice(0, 1, {
+                    name: "销售地区：" + this.selectMainArea,
+                    key: "keyword"
+                  });
+                }
+              });
             });
+          })
+          .then(() => {
+            // this.$nextTick().then(() => {
+
+            // });
+            setTimeout(() => {
+              this.isAllLoading = false;
+            }, 100);
+          })
+          .then(() => {
+            this.getShop();
           });
-        });
-        this.getShop();
       });
     },
     mounted() {

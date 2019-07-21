@@ -2,10 +2,12 @@
 
 const chalk = require('chalk');
 const command = process.env.npm_lifecycle_event;
+const _ = require('lodash')
+
 
 let API_HOST = {};
 
-
+//console.log(process.env)
 let alpha = { // 开发
     URL: "http://60.195.252.91:8080/platform",
     // URL: "http://192.168.2.110:8080/platform",
@@ -20,11 +22,11 @@ let beta = { // 测试
     BASE_URL: "https://www.api/code"
 }
 let gamma = { // 验收版本
-    URL: "http://prople.haoyigong.com",
+    URL: "http://shopple.allbring.com/platform",
     HYGLOGINURL: "http://webple.haoyigong.com",
     HYGINFOURL: "http://infople.haoyigong.com",
     HYGPROURL: "http://prople.haoyigong.com",
-    HYGFILEURL: "http://fileple.haoyigong.com",
+    HYGFILEURL: "http://filetest.allbring.com",
 }
 let release = { // 正式版本
     URL: "http://pro.haoyigong.com",
@@ -34,16 +36,17 @@ let release = { // 正式版本
     HYGFILEURL: "http://file.haoyigong.com",
 }
 
-if (command == "serve:alpha") {
+console.log(command)
+if (_.endsWith(command, ':alpha')) {
     console.log(chalk.green(`当前环境为（${process.env.NODE_ENV}）:开发`));
     API_HOST = alpha;
-} else if (command == "serve:beta") {
+} else if (_.endsWith(command, ':beta')) {
     console.log(chalk.green(`当前环境为（${process.env.NODE_ENV}）:测试)`));
     API_HOST = beta;
-} else if (command == "serve:gamma") {
+} else if (_.endsWith(command, ':gamma')) {
     console.log(chalk.green(`当前环境为（${process.env.NODE_ENV}）:验收`));
     API_HOST = gamma;
-} else if (command == "serve:release") {
+} else if (_.endsWith(command, ':release')) {
     console.log(chalk.green(`当前环境为（${process.env.NODE_ENV}）:正式`));
     API_HOST = release;
 } else {
