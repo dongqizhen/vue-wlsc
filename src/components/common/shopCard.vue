@@ -21,6 +21,9 @@
           <span>店铺类型：</span><span>{{ detail.typeName }}</span>
         </li> -->
         <li>
+          <span>经营范围：</span><span>{{ detail.shopScope }}</span>
+        </li>
+        <li>
           <span>销售地区： </span>
           <span>
             <span v-for="item in detail.defaultProvinceData" :key="item.id">

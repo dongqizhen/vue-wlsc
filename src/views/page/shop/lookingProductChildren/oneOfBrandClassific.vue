@@ -270,9 +270,27 @@
           .then(() => {
             console.log(this.navArr);
             if (this.isLogin) {
-              this.arr = this.navArr.userbrandList;
+              if (this.navArr.userbrandList.length == 0) {
+                this.nav.splice(0, 1);
+                if (this.navArr.firstLineList.length == 0) {
+                  this.nav.splice(0, 1);
+                  this.defaultsNav = "全部";
+                  this.arr = this.navArr.listAll;
+                } else {
+                  this.defaultsNav = "一线品牌";
+                  this.arr = this.navArr.firstLineList;
+                }
+              } else {
+                this.arr = this.navArr.userbrandList;
+              }
             } else {
-              this.arr = this.navArr.firstLineList;
+              if (this.navArr.firstLineList.length == 0) {
+                this.nav.splice(0, 1);
+                this.defaultsNav = "全部";
+                this.arr = this.navArr.listAll;
+              } else {
+                this.arr = this.navArr.firstLineList;
+              }
             }
 
             this.letterArr = _.groupBy(this.navArr.listAll, val => {

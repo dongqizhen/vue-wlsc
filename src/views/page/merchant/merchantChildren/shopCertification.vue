@@ -19,6 +19,8 @@
               ? "认证中"
               : certificationStatus == 2
               ? "已认证"
+              : certificationStatus == 3
+              ? "审核未通过"
               : "未认证"
           }}
         </span>

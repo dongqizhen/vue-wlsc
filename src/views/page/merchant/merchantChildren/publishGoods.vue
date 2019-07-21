@@ -272,6 +272,7 @@
     <publish-goods-success
       :Visible="visible"
       :type="type"
+      :title="saveAlert"
     ></publish-goods-success>
   </div>
 </template>
@@ -299,6 +300,7 @@
           initialContent: "请输入商品描述"
         },
         title: "发布商品",
+        saveAlert: "产品发布成功",
         loading: false,
         releaseLoading: false,
         saveLoading: false,
@@ -371,6 +373,7 @@
                 _getData("/goods/addGoods", this.submitData).then(data => {
                   this.releaseLoading = false;
                   if (data.code != 500) {
+                    this.saveAlert = "产品发布成功";
                     this.addCarSuccess();
                     this.reset();
                   }
@@ -410,6 +413,7 @@
           } else {
             _getData("/goods/addGoods", this.submitData).then(data => {
               this.saveLoading = false;
+              this.saveAlert = "产品保存成功";
               this.addCarSuccess();
             });
           }

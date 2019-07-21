@@ -94,7 +94,10 @@
                 </span>
               </li>
             </ul>
-            <div class="btn">
+            <div
+              class="btn"
+              v-show="productInfo.is_on_sale && shopdetails.auditStatus == 2"
+            >
               <a-button @click="addCarSuccess">
                 <svg class="icon" aria-hidden="true">
                   <use xlink:href="#iconbaisegouwuche"></use>
@@ -139,7 +142,9 @@
               <div v-if="comment && comment.length">
                 <ul class="evaluate">
                   <li v-for="(item, i) in comment" :key="i">
-                    <div class="img_box"></div>
+                    <div class="img_box">
+                      <img :src="item.avatar" />
+                    </div>
                     <div class="evaluate-container">
                       <div class="name">
                         {{ item.nickname }}<span>{{ item.add_time }}</span>
@@ -909,6 +914,10 @@
                     border-radius: 16px;
                     background: $base-background;
                     margin-right: 8px;
+                    img {
+                      width: 100%;
+                      height: 100%;
+                    }
                   }
                   .evaluate-container {
                     flex: 1;

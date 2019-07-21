@@ -13,8 +13,12 @@
           {{ title }}
         </p>
         <div class="btn">
-          <a-button @click="toEnquiry">查看已发布产品</a-button>
-          <a-button @click="visible = false">继续发布</a-button>
+          <a-button @click="toEnquiry">
+            查看已{{ title == "产品发布成功" ? "发布" : "保存" }}产品
+          </a-button>
+          <a-button @click="visible = false" v-show="title == '产品发布成功'"
+            >继续发布
+          </a-button>
         </div>
       </div>
       <div slot="content" v-else>

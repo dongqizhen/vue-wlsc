@@ -213,11 +213,16 @@
     },
     methods: {
       turnToDetail(item) {
-        const { href } = this.$router.resolve({
-          path: `/details/productDetails/${item.id}`,
-          query: { shopId: item.store_id }
-        });
-        window.open(href, "_blank");
+        if (item.is_on_sale == 1) {
+          const { href } = this.$router.resolve({
+            path: `/details/productDetails/${item.id}`,
+            query: { shopId: item.store_id }
+          });
+          window.open(href, "_blank");
+        } else {
+          this.$message.warning("此商品未上架");
+          return;
+        }
       },
       obtained(id, is_on_sale) {
         if (is_on_sale == 1) {

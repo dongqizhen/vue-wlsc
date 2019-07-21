@@ -10,6 +10,7 @@
       <div class="orderContainer">
         <filter-search
           v-on:getSearchData="getSearchData"
+          v-on:onlyGetData="onlyGetChangeData"
           :defaultName="defaultName"
         ></filter-search>
         <list-title :titleArr="titleArr"></list-title>
@@ -152,6 +153,17 @@
       deleteSingleOrder(val) {
         this.getOrderList();
         this.getOrderNumber();
+      },
+      onlyGetChangeData(val) {
+        console.log(val);
+        this.getOrderData.name = val.value;
+        if (val.dateRange.length > 0) {
+          this.getOrderData.startTime = val.dateRange[0];
+          this.getOrderData.endTime = val.dateRange[1];
+        } else {
+          this.getOrderData.startTime = "";
+          this.getOrderData.endTime = "";
+        }
       },
       getSearchData(val) {
         console.log(val);
