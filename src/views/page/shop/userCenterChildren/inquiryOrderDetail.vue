@@ -174,6 +174,7 @@
         this.quoteLoading = true;
         if (this.checkedList.length == 0) {
           this.$message.warning("请选择产品", 1);
+          this.quoteLoading = false;
           return;
         } else {
           _getData("/quotation/toMyQuotation", {

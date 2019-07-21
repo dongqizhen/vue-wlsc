@@ -291,12 +291,12 @@
               overflow: hidden;
               display: flex;
               span {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
                 &:first-child {
                   width: 114px;
                   margin-right: 7px;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
                 }
                 &:last-child {
                   flex: 1;
