@@ -70,11 +70,14 @@
     },
     methods: {
       toLogin() {
-        const { href } = this.$router.resolve({
+        // const { href } = this.$router.resolve({
+        //   path: "/login"
+        // });
+        this.visible = false;
+        // window.open(href, "_blank");
+        this.$router.push({
           path: "/login"
         });
-        this.visible = false;
-        window.open(href, "_blank");
       },
       //去询价
       toEnquiry() {

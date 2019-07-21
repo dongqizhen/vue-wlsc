@@ -1,7 +1,7 @@
 <template>
   <div class="shop-left-side">
     <h2>品牌</h2>
-    <div class="commonBrand" v-if="isLogin">
+    <div class="commonBrand" v-show="isLogin && commonBrand.length">
       <h3>
         <span>
           <svg class="icon" aria-hidden="true">
@@ -52,7 +52,7 @@
       ></common-brands-modal-vue>
     </div>
     <div class="line-products">
-      <h3>
+      <h3 v-show="brandList.firstLineList.length">
         <span>
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#iconyixianpinpai"></use>
@@ -61,7 +61,11 @@
         </span>
       </h3>
       <ul>
-        <li class="item-box" :class="firstMore && 'active'">
+        <li
+          class="item-box"
+          :class="firstMore && 'active'"
+          v-show="brandList.firstLineList && brandList.firstLineList.length"
+        >
           <ul class="item_container">
             <li
               v-for="item in brandList.firstLineList"
@@ -130,7 +134,8 @@
         listMore: []
       };
     },
-    props: ["categoryId"],
+    props: ["categoryId", "currentPosition"],
+
     computed: {
       ...mapState(["isLogin"])
     },
@@ -161,7 +166,13 @@
           .then(() => {});
       },
       async getBrandList() {
-        return await _getData("brand/merge", { id: this.categoryId })
+        let url = "brand/merge",
+          req = { id: this.categoryId };
+        if (this.currentPosition) {
+          req = this.currentPosition;
+          url = "brand/mergeForShopping";
+        }
+        return await _getData(url, req)
           .then(data => {
             console.log("456", data);
             this.brandList = data;
@@ -200,6 +211,11 @@
               });
             });
           });
+      },
+      init() {
+        this.getBrandList().then(() => {
+          this.listMore = [...Array(_.keys(this.letterArr).length)];
+        });
       }
     },
     mounted() {
@@ -207,9 +223,7 @@
       //   this.getCommonBrand();
       // }
 
-      this.getBrandList().then(() => {
-        this.listMore = [...Array(_.keys(this.letterArr).length)];
-      });
+      this.init();
     },
     watch: {
       categoryId() {
