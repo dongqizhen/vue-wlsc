@@ -199,13 +199,7 @@
         // background: ["#F5A623", "#43D480", "#8880FE", "#0283FF"]
       };
     },
-    created() {
-      // this.changeCurrentCityIp(returnCitySN);
-      let [a, b, c] = new Set([1, 2, 3]);
-      console.log(a);
-      console.log(b);
-      console.log(c);
-    },
+    created() {},
     mounted() {
       //获取推荐数量
       _getData("index/caseCount", {}).then(data => {

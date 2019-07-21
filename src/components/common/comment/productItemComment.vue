@@ -54,7 +54,7 @@
         </div>
       </div>
     </div>
-    <div class="common">
+    <div class="common" v-show="paramList.length > 0">
       <div class="left-box">商品打分</div>
       <div class="right-box">
         <div

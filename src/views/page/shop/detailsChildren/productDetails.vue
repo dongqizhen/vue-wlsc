@@ -94,7 +94,10 @@
                 </span>
               </li>
             </ul>
-            <div class="btn">
+            <div
+              class="btn"
+              v-show="productInfo.is_on_sale && shopdetails.auditStatus == 2"
+            >
               <a-button @click="addCarSuccess">
                 <svg class="icon" aria-hidden="true">
                   <use xlink:href="#iconbaisegouwuche"></use>
