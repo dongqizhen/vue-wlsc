@@ -74,13 +74,12 @@
     },
     methods: {
       toLogin() {
-        const { href } = this.$router.resolve({
+        this.visible = false;
+        this.$router.push({
           path: "/login"
         });
-        this.visible = false;
-        window.open(href, "_blank");
       },
-      //去询价
+      //去产品管理
       toEnquiry() {
         this.$router.replace({
           path: "/merchant/productManage",
