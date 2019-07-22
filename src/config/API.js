@@ -26,7 +26,7 @@ let gamma = { // 验收版本
     HYGLOGINURL: "http://webple.haoyigong.com",
     HYGINFOURL: "http://infople.haoyigong.com",
     HYGPROURL: "http://prople.haoyigong.com",
-    HYGFILEURL: "http://fileple.allbring.com",
+    HYGFILEURL: "http://shopple.allbring.com/platform",
 }
 let release = { // 正式版本
     URL: "http://pro.haoyigong.com",
