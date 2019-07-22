@@ -278,9 +278,10 @@
       confirmReceipt(orderId) {
         if (!this.isLogin) {
           this.type = "login";
+        } else {
+          this.confirmVisible = true;
+          this.orderId = orderId;
         }
-        this.confirmVisible = true;
-        this.orderId = orderId;
       },
       //申请退货
       applicationReturn() {
@@ -343,25 +344,28 @@
       confirmDelivery(id) {
         if (!this.isLogin) {
           this.type = "login";
+        } else {
+          this.sureVisible = true;
+          this.orderId = id;
         }
-        this.sureVisible = true;
-        this.orderId = id;
       },
       //评论弹框
       commentModal() {
         if (!this.isLogin) {
           this.type = "login";
+        } else {
+          this.commentVisible = true;
         }
-        this.commentVisible = true;
       },
       //删除弹框
       deleteModal(id) {
         if (!this.isLogin) {
           this.type = "login";
+        } else {
+          this.deleteVisible = true;
+          this.deleteObj.deleteId = id;
+          this.deleteObj.isMerchant = this.isShowInfo.isMerchant;
         }
-        this.deleteVisible = true;
-        this.deleteObj.deleteId = id;
-        this.deleteObj.isMerchant = this.isShowInfo.isMerchant;
       }
     },
     computed: {

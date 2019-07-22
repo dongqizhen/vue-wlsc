@@ -199,7 +199,13 @@
         // background: ["#F5A623", "#43D480", "#8880FE", "#0283FF"]
       };
     },
-    created() {},
+    created() {
+      let [x = 1] = [undefined];
+      console.log(x);
+      for(let a of 'hello'){
+        console.log(a)
+      }
+    },
     mounted() {
       //获取推荐数量
       _getData("index/caseCount", {}).then(data => {

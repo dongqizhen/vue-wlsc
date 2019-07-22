@@ -196,16 +196,23 @@
       getCheckDelete(val) {
         console.log(val);
         console.log(this.selectArr);
-        if (this.isShowInfo.current == 1) {
-          //批量关闭
-          _getData("/enquiryPlus/enquiryClose", {
-            ids: this.selectArr.join(",")
-          }).then(data => {
-            console.log("批量关闭询价单：", data);
-            this.$message.success("批量关闭询价单成功", 1);
-            this.getInquiryList();
-            this.getInquiryNumber();
-          });
+        if (this.selectArr.length > 0) {
+          if (this.isShowInfo.current == 1) {
+            //批量关闭
+            _getData("/enquiryPlus/enquiryClose", {
+              ids: this.selectArr.join(",")
+            }).then(data => {
+              console.log("批量关闭询价单：", data);
+              if (data.code != 500 && data.code != 1) {
+                this.$message.success("批量关闭询价单成功", 1);
+                this.getInquiryList();
+                this.getInquiryNumber();
+              }
+            });
+          }
+        } else {
+          this.$message.warning("请选择询价单");
+          return;
         }
       },
       //转为我的报价

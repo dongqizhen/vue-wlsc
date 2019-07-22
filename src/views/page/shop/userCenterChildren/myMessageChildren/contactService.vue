@@ -54,7 +54,7 @@
       </div>
     </div>
     <div class="reply">
-      <h2>最新回复</h2>
+      <h2>全部回复</h2>
       <div class="replay-content">
         <div v-if="!isLoading">
           <ul

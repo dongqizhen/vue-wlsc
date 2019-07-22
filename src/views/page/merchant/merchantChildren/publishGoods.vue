@@ -358,6 +358,7 @@
           this.changeUserShopInfoState(data);
           if (data.store_id && data.audit_status == 2) {
             if (this.infoJudge() !== false) {
+              this.submitData.isOnSale = 1;
               if (this.submitData.goodsId) {
                 _getData("/goods/updateGoods", this.submitData).then(data => {
                   this.releaseLoading = false;

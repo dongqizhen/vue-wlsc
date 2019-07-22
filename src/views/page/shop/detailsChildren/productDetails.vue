@@ -334,16 +334,20 @@
               valueId: this.$route.params.id,
               typeId: 0
             }).then(data => {
-              this.isCollection = 1;
-              this.$message.success("商品收藏成功");
+              if (data.code != 500 && data.code != 1 && data.code != 400) {
+                this.isCollection = 1;
+                this.$message.success("商品收藏成功");
+              }
             });
           } else {
             _getData("collect/delete", {
               valueId: this.$route.params.id,
               typeId: 0
             }).then(data => {
-              this.isCollection = 0;
-              this.$message.success("取消收藏成功");
+              if (data.code != 500 && data.code != 1 && data.code != 400) {
+                this.isCollection = 0;
+                this.$message.success("取消收藏成功");
+              }
             });
           }
         } else {
@@ -385,9 +389,9 @@
           goodsId: this.$route.params.id,
           number: 1
         }).then(data => {
-          // if (data.code == 1) {
-          // }
-          this.visible = true;
+          if (data.code != 500 && data.code != 400 && data.code != 1) {
+            this.visible = true;
+          }
         });
       },
       handleScroll() {
