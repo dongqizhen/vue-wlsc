@@ -317,6 +317,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
       .icon {
         height: 17px;
         width: 17px;

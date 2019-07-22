@@ -143,7 +143,10 @@
                 <ul class="evaluate">
                   <li v-for="(item, i) in comment" :key="i">
                     <div class="img_box">
-                      <img :src="item.avatar" />
+                      <svg class="icon" aria-hidden="true" v-if="!item.avatar">
+                        <use xlink:href="#iconweidenglutouxiang"></use>
+                      </svg>
+                      <img v-else :src="item.avatar" />
                     </div>
                     <div class="evaluate-container">
                       <div class="name">
@@ -912,8 +915,17 @@
                     height: 30px;
                     width: 30px;
                     border-radius: 16px;
-                    background: $base-background;
+                    background: $image-box-color;
                     margin-right: 8px;
+                    overflow: hidden;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    .icon {
+                      height: 17px;
+                      width: 17px;
+                      //margin-left: 1px;
+                    }
                     img {
                       width: 100%;
                       height: 100%;
