@@ -202,9 +202,15 @@
     created() {
       let [x = 1] = [undefined];
       console.log(x);
-      for(let a of 'hello'){
-        console.log(a)
+      for (let a of "hello") {
+        console.log(a);
       }
+      let str = "hello world";
+      console.log(str.endsWith("world"));
+      console.log(str.endsWith("d"));
+      console.log(str.startsWith("hello"));
+      console.log(str.startsWith("h"));
+      console.log(str.includes("h"));
     },
     mounted() {
       //获取推荐数量
