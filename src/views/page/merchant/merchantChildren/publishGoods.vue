@@ -665,7 +665,7 @@
         return isLt2M;
       },
       getSmallType(id) {
-        _getData("/catalog/second", { id: id }).then(data => {
+        _getData("/catalog/secondForWeb", { id: id }).then(data => {
           // console.log(data);
           _.each(data.subCategory, val => {
             val.label = val.name;
@@ -696,7 +696,7 @@
     },
 
     mounted() {
-      _getData("/catalog/first", {}).then(data => {
+      _getData("/catalog/firstForWeb", {}).then(data => {
         console.log("一级", data);
         _.each(data.categoryList, val => {
           val.label = val.name;
@@ -712,7 +712,7 @@
         });
         this.typeOptions = data;
       });
-      _getData("/brand/listAll", { firstLine: null }).then(data => {
+      _getData("/brand/queryListALL", { firstLine: null }).then(data => {
         console.log("产品品牌：", data);
         _.each(data.brandList, val => {
           val.label = val.name;
