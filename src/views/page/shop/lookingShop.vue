@@ -81,51 +81,58 @@
           </transition>
         </div>
         <div v-if="!isAllLoading">
-          <product-category-vue
-            v-if="provinceName"
-            ref="productCategory"
-            :canSkip="false"
-            v-on:categoryClick="categoryClick"
-            :currentPosition="{ provinceName, cityName }"
-          ></product-category-vue>
-          <div class="main-content">
-            <div class="left">
-              <shop-left-side-vue
-                :categoryId="categoryId"
-                v-if="provinceName"
-                ref="shopLeftSide"
-                :currentPosition="{ provinceName, cityName }"
-                v-on:brandClick="brandClick"
-              ></shop-left-side-vue>
-            </div>
-            <div class="right">
-              <shop-nav-vue
-                :navArr="['发布时间', '按点击量', '按好评']"
-                v-on:tabClick="tabClick"
-                ref="shopNav"
-              ></shop-nav-vue>
-              <div v-if="!isLoading">
-                <div v-if="arr.length">
-                  <ul class="shopItem">
-                    <shop-item-vue
-                      v-for="item in arr"
-                      :key="item.id"
-                      :item="item"
-                    ></shop-item-vue>
-                  </ul>
-                </div>
-
-                <no-data v-else text="暂无店铺"></no-data>
+          <div v-show="showContent">
+            <product-category-vue
+              v-if="provinceName"
+              ref="productCategory"
+              :canSkip="false"
+              v-on:categoryClick="categoryClick"
+              :currentPosition="{ provinceName, cityName }"
+            ></product-category-vue>
+            <div class="main-content">
+              <div class="left">
+                <shop-left-side-vue
+                  :categoryId="categoryId"
+                  v-if="provinceName"
+                  ref="shopLeftSide"
+                  :currentPosition="{ provinceName, cityName }"
+                  v-on:brandClick="brandClick"
+                ></shop-left-side-vue>
               </div>
-              <loading v-else></loading>
-              <pagination
-                :data="data"
-                v-on:onPaginationChange="onPaginationChange"
-                ref="pagination"
-                v-if="data != '' && arr.length"
-              ></pagination>
+              <div class="right">
+                <shop-nav-vue
+                  :navArr="['发布时间', '按点击量', '按好评']"
+                  v-on:tabClick="tabClick"
+                  ref="shopNav"
+                ></shop-nav-vue>
+                <div v-if="!isLoading">
+                  <div v-if="arr.length">
+                    <ul class="shopItem">
+                      <shop-item-vue
+                        v-for="item in arr"
+                        :key="item.id"
+                        :item="item"
+                      ></shop-item-vue>
+                    </ul>
+                  </div>
+
+                  <no-data v-else text="暂无店铺"></no-data>
+                </div>
+                <loading v-else></loading>
+                <pagination
+                  :data="data"
+                  v-on:onPaginationChange="onPaginationChange"
+                  ref="pagination"
+                  v-if="data != '' && arr.length"
+                ></pagination>
+              </div>
             </div>
           </div>
+          <no-data
+            class="no-content"
+            v-show="!showContent"
+            text="暂无数据"
+          ></no-data>
         </div>
         <loading v-else></loading>
       </div>
@@ -171,6 +178,7 @@
         isAllLoading: true,
         isLoading: true,
         brandId: "",
+        showContent: true,
         searchParamas: [], //搜素条件集合
         routes: [
           {
@@ -346,6 +354,10 @@
             name: "销售地区：" + this.selectMainArea,
             key: "keyword"
           });
+          setTimeout(() => {
+            this.$refs.productCategory.reload();
+            this.$refs.shopLeftSide.init();
+          }, 0);
           this.getShop();
           return;
         }
@@ -396,6 +408,10 @@
   @import "../../../assets/scss/_commonScss";
   .container {
     background: $base-background;
+    .no-content {
+      height: 500px;
+      background: #fff;
+    }
     .select-area {
       font-size: 14px;
       color: #999999;

@@ -218,6 +218,11 @@
         _getData(url, req)
           .then(data => {
             console.log("全部产品分类", data);
+            if (this.currentPosition && data.currentCategory.length == 0) {
+              this.$parent.showContent = false;
+            }else{
+              this.$parent.showContent = true;
+            }
             this.navArr = [...this.navArr, ...data.currentCategory];
             if (!this.isLogin) {
               this.pageArr = data.currentCategory[0].subCategoryList;

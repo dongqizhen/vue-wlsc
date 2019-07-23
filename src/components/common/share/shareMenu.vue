@@ -59,7 +59,7 @@
       };
     },
     components: {},
-    props: ["data"],
+    props: ["data", "url"],
     methods: {
       getShareOffsetTop() {
         let top = this.$refs.share.offsetTop;

@@ -37,7 +37,7 @@
               </li>
             </transition-group>
           </draggable>
-          <no-data v-else></no-data>
+          <no-data v-else text="暂无常用品牌"></no-data>
         </div>
         <div class="all_brand">
           <h2>全部品牌<span>点击即可设为常用品牌</span></h2>

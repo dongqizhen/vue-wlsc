@@ -8,7 +8,7 @@
  * 当升级编辑器时，可直接使用旧版配置文件替换新版配置文件,不用担心旧版配置文件中因缺少新功能所需的参数而导致脚本报错。
  * 提示*************************
  ******************************************************************************/
-var g_server = 0; //0测试环境1验收环境2正式环境
+var g_server = 1; //0测试环境1验收环境2正式环境
 (function() {
 
     /**
@@ -20,11 +20,19 @@ var g_server = 0; //0测试环境1验收环境2正式环境
      * window.UEDITOR_HOME_URL = "/xxxx/xxxx/";
      */
     //文件服务器url
-    // if (g_server == 0) {
-    window.UEDITOR_COMMIT_URL = "http://filetest.allbring.com/platform/statics/upeditor/jsp_web/controller.jsp"; //测试环境
-    //跨域重定向url
-    window.UEDITOR_CALLBACK_URL = "http://wwwtest.allbring.com/ueditor/jsp/callback.html"; //测试环境
-    // }
+    if (g_server == 0) {
+        window.UEDITOR_COMMIT_URL = "http://filetest.allbring.com/platform/statics/upeditor/jsp_web/controller.jsp"; //测试环境
+        //跨域重定向url
+        window.UEDITOR_CALLBACK_URL = "http://wwwtest.allbring.com/ueditor/jsp/callback.html"; //测试环境
+    } else if (g_server == 1) {
+        window.UEDITOR_COMMIT_URL = "http://fileple.allbring.com/platform/statics/upeditor/jsp_web/controller.jsp"; //验收环境
+        //跨域重定向url
+        window.UEDITOR_CALLBACK_URL = "http://wwwple.allbring.com/ueditor/jsp/callback.html"; //验收环境
+    } else {
+        window.UEDITOR_COMMIT_URL = "http://file.allbring.com/platform/statics/upeditor/jsp_web/controller.jsp"; //正式环境
+        //跨域重定向url
+        window.UEDITOR_CALLBACK_URL = "http://www.allbring.com/ueditor/jsp/callback.html"; //正式环境
+    }
 
     //根目录
     var URL = window.UEDITOR_HOME_URL || getUEBasePath();
