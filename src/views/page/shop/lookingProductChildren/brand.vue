@@ -223,13 +223,16 @@
       async getOtherList(page = 1) {
         this.isLoading = true;
         return await _getData(
-          `${this.$API_URL.HYGLOGINURL}/server/search1!request.action`,
+          `${this.$API_URL.HYGLOGINURL}/server/search32!request.action`,
           {
             method: "simpleSearchForShoping",
             token: "",
             userid: this.$userid || "",
             params: {
-              name: this.params.name,
+              // name: this.params.name,
+              productLineName: this.params.productLineName,
+              brandName: this.params.brandName,
+              modelName: this.params.modelName,
               type: this.type,
               currentPage: page,
               countPerPage: 20,

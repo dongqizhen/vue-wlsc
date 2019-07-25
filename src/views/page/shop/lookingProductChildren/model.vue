@@ -291,13 +291,15 @@
       async getOtherList(page = 1) {
         this.shopIsloading = true;
         return await _getData(
-          `${this.$API_URL.HYGLOGINURL}/server/search1!request.action`,
+          `${this.$API_URL.HYGLOGINURL}/server/search32!request.action`,
           {
             method: "simpleSearchForShoping",
             token: "",
             userid: this.$userid || "",
             params: {
-              name: this.$route.query.modelName,
+              productLineName: this.$route.query.categoryName,
+              brandName: this.$route.query.brandName,
+              modelName: this.$route.query.modelName,
               type: this.type,
               currentPage: page,
               countPerPage: 20,
@@ -471,7 +473,9 @@
           console.log("nav", data);
           this.navList = data.list;
           this.countData = data.params;
-          this.attributeCategoryId = this.navList[0].id;
+          if (this.navList.length != 0) {
+            this.attributeCategoryId = this.navList[0].id;
+          }
           this.tabs = [
             ..._.map(data.list, val => {
               return `${val.name}(${val.count})`;
@@ -486,11 +490,22 @@
           ];
         })
         .then(() => {
-          this.getGoodsList().then(() => {
-            this.$nextTick().then(() => {
-              this.isLoading = false;
+          // console.log(this.defaultVal);
+          // console.log(this.tabs);
+          if (this.navList.length == 0) {
+            this.defaultVal = "店铺";
+            this.getShopList().then(() => {
+              this.$nextTick().then(() => {
+                this.isLoading = false;
+              });
             });
-          });
+          } else {
+            this.getGoodsList().then(() => {
+              this.$nextTick().then(() => {
+                this.isLoading = false;
+              });
+            });
+          }
         });
       // _getDataAll([
       //   //获取nav数量

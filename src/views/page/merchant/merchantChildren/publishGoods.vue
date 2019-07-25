@@ -210,7 +210,7 @@
       <div class="title">
         商品图片
         <span>
-          (图片尺寸为600*400，仅之处jpg.jpeg.png格式，单张大小不超过1M。)
+          (图片尺寸为800*800，单张大小不超过1M。)
         </span>
       </div>
       <div class="pictureContent">
@@ -447,6 +447,7 @@
         this.tempUploadList = [];
         this.isSparePart = 0;
         this.$refs.goodDesc.setUEContent("");
+        this.$refs.upload.sFileList = [];
       },
       addCarSuccess() {
         if (!this.isLogin) {
@@ -660,7 +661,7 @@
       beforeUpload(file) {
         const isLt2M = file.size / 1024 / 1024 < 1;
         if (!isLt2M) {
-          this.$message.error("图片大小不能超过2MB!");
+          this.$message.error("图片大小不能超过1MB!");
         }
         return isLt2M;
       },

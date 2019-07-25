@@ -177,7 +177,7 @@
       }
     },
     computed: {
-      ...mapState(["isLogin"]),
+      ...mapState(["isLogin", "userInfo"]),
       selectType() {
         switch (this.type) {
           case "article":

@@ -22,9 +22,10 @@
                   <order-item
                     :data="item"
                     :checkedList="checkedList"
-                    v-on:getChecked="getChecked"
                     :isShowInfo="isShowInfo"
+                    v-on:getChecked="getChecked"
                     v-on:returnValue="getReturnStatus"
+                    v-on:deleteOrder="deleteSingleOrder"
                   ></order-item>
                 </li>
               </ul>
@@ -144,15 +145,20 @@
         console.log(val);
         console.log(this.checkedList);
         //批量删除
-        _getData("/order/deleteOrder", {
-          ids: this.checkedList.join(","),
-          flag: "shop"
-        }).then(data => {
-          console.log("批量删除订单：", data);
-          this.$message.success("批量删除订单成功", 1);
-          this.getOrderList();
-          this.getOrderNumber();
-        });
+        if (this.checkedList.length > 0) {
+          _getData("/order/deleteOrder", {
+            ids: this.checkedList.join(","),
+            flag: "shop"
+          }).then(data => {
+            console.log("批量删除订单：", data);
+            this.$message.success("批量删除订单成功", 1);
+            this.getOrderList();
+            this.getOrderNumber();
+          });
+        } else {
+          this.$message.warning("请选择要删除的订单");
+          return;
+        }
       },
       onlyGetChangeData(val) {
         console.log(val);
@@ -164,6 +170,10 @@
           this.getOrderData.startTime = "";
           this.getOrderData.endTime = "";
         }
+      },
+      deleteSingleOrder(val) {
+        this.getOrderList();
+        this.getOrderNumber();
       },
       getSearchData(val) {
         console.log(val);

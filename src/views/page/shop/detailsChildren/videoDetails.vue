@@ -175,6 +175,7 @@
   import "vue-video-player/src/custom-theme.css";
   import { videoPlayer } from "vue-video-player";
   import modalVue from "../../../../components/modal/modal.vue";
+  import { mapState } from "vuex";
 
   export default {
     metaInfo() {
@@ -240,6 +241,7 @@
       videoPlayer
     },
     computed: {
+      ...mapState(["isLogin"]),
       player() {
         return this.$refs.videoPlayer.player;
       },
@@ -303,8 +305,11 @@
         }
       },
       onPlayerPlay(e) {
-        console.log(e);
-        this.isPlay = true;
+        if (this.isLogin) {
+          this.isPlay = true;
+        } else {
+          this.$router.push("/login");
+        }
       },
       onPlayerPause(e) {
         this.isPlay = false;
@@ -336,6 +341,7 @@
       }
     },
     mounted() {
+      console.log(this.$userid)
       _getData(
         `${this.$API_URL.HYGPROURL}/server_pro/microClassroom!request.action`,
         {
