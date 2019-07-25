@@ -23,17 +23,19 @@ let beta = { // 测试
 }
 let gamma = { // 验收版本
     URL: "http://shopple.allbring.com/platform",
+    // URL: "http://192.168.2.233:8080/platform",
     HYGLOGINURL: "http://webple.haoyigong.com",
     HYGINFOURL: "http://infople.haoyigong.com",
     HYGPROURL: "http://prople.haoyigong.com",
     HYGFILEURL: "http://shopple.allbring.com/platform",
+    // HYGFILEURL: "http://192.168.2.233:8080/platform",
 }
 let release = { // 正式版本
-    URL: "http://pro.haoyigong.com",
+    URL: "http://shop.allbring.com/platform",
     HYGLOGINURL: 'http://web.haoyigong.com',
     HYGINFOURL: "http://info.haoyigong.com",
     HYGPROURL: "http://pro.haoyigong.com",
-    HYGFILEURL: "http://file.haoyigong.com",
+    HYGFILEURL: "http://file.allbring.com/platform",
 }
 
 console.log(command)

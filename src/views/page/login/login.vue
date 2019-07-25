@@ -27,7 +27,7 @@
         </div>
         <div class="slogan">
           <span></span>
-          这里写一句口号网来商城最棒
+          找医疗器械、配件、人工，到网来商城
           <span></span>
         </div>
       </div>

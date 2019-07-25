@@ -152,7 +152,6 @@
         align-items: center;
         justify-content: center;
         z-index: 100;
-        display: none;
       }
       .anticon {
         width: 18px;

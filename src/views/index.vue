@@ -203,6 +203,10 @@
       let obj = { a: "123", b: "456", c: "789" };
       console.log(Object.keys(obj));
       console.log(Object.getOwnPropertyNames(obj));
+      for (let [key, value] of Object.entries(obj)) {
+        console.log(key, value);
+      }
+      console.log(new Map([[true, 7], [{ foo: 3 }, ["abc"]]]));
     },
     mounted() {
       //获取推荐数量

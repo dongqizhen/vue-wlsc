@@ -140,15 +140,20 @@
         console.log(val);
         console.log(this.checkedList);
         //批量删除
-        _getData("/order/deleteOrder", {
-          ids: this.checkedList.join(","),
-          flag: "user"
-        }).then(data => {
-          console.log("批量删除订单：", data);
-          this.$message.success("批量删除订单成功", 1);
-          this.getOrderList();
-          this.getOrderNumber();
-        });
+        if (this.checkedList.length == 0) {
+          this.$message.warning("请选择订单");
+          return;
+        } else {
+          _getData("/order/deleteOrder", {
+            ids: this.checkedList.join(","),
+            flag: "user"
+          }).then(data => {
+            console.log("批量删除订单：", data);
+            this.$message.success("批量删除订单成功", 1);
+            this.getOrderList();
+            this.getOrderNumber();
+          });
+        }
       },
       deleteSingleOrder(val) {
         this.getOrderList();

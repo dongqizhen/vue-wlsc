@@ -194,7 +194,7 @@
   import { mapMutations } from "vuex";
   import { timer, FormValidator } from "../../../../components/mixin/mixin";
   import { _getData } from "../../../../config/getData";
-
+  import Vue from "vue";
   export default {
     data() {
       return {
@@ -240,6 +240,7 @@
           }, 300);
           if (data.code == 200) {
             //成功
+            this.$userid = data.result.id;
             this.changeLoginState(true);
             this.changeUserInfoState(data.result);
             _getData("/user/getUser", {})
@@ -287,6 +288,8 @@
             return;
           } else if (data.code == 200) {
             //成功
+            console.log(Vue.prototype);
+            Vue.prototype.$userid = data.result.id;
             this.changeLoginState(true);
             this.changeUserInfoState(data.result);
             _getData("/user/getUser", {})
