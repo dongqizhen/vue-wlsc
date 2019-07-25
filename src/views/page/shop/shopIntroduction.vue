@@ -29,20 +29,20 @@
                 <li>
                   <span>
                     <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icongongsidizhi"></use>
-                    </svg>
-                    店铺地址
-                  </span>
-                  {{ shopdetails.companyAddress }}
-                </li>
-                <li>
-                  <span>
-                    <svg class="icon" aria-hidden="true">
                       <use xlink:href="#iconjingyingfanwei"></use>
                     </svg>
                     经营范围
                   </span>
                   {{ shopdetails.shopScope }}
+                </li>
+                <li>
+                  <span>
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#iconleixing"></use>
+                    </svg>
+                    店铺类型
+                  </span>
+                  {{ shopdetails.typeName }}
                 </li>
               </ul>
             </div>
@@ -93,6 +93,15 @@
                     企业邮箱
                   </span>
                   {{ shopdetails.email }}
+                </li>
+                <li>
+                  <span>
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#icongongsidizhi"></use>
+                    </svg>
+                    公司地址
+                  </span>
+                  {{ shopdetails.companyAddress }}
                 </li>
               </ul>
             </div>
@@ -254,7 +263,7 @@
               height: 207px;
             }
             &.certificated-information {
-              height: 288px;
+              height: 330px;
               margin-bottom: 20px;
             }
             &.introduction {
