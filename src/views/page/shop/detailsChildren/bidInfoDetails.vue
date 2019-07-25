@@ -149,7 +149,7 @@
                 >
                   <span>{{ item.HospitalName }}</span>
                   <span>{{ item.provinceName }}</span>
-                  <span>{{ item.sumTS }}万元</span>
+                  <span>{{ item.sumTS }}</span>
                   <span>{{ item.sumJG }}万元</span>
                   <span>{{ item.avgJG }}万元</span>
                 </li>

@@ -27,7 +27,7 @@
           </a-button>
         </div>
       </div>
-      <div class="common">
+      <!-- <div class="common">
         <div class="left-box">
           <span>
             <svg class="icon" aria-hidden="true">
@@ -74,7 +74,7 @@
             >
           </a-button>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

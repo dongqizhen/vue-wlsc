@@ -9,13 +9,12 @@ let API_HOST = {};
 
 //console.log(process.env)
 let alpha = { // 开发
-    URL: "http://60.195.252.91:8080/platform",
-    // URL: "http://192.168.2.110:8080/platform",
-    // URL: "http://192.168.2.233:8080/platform",
-    HYGLOGINURL: 'http://60.195.252.86:8080',
-    HYGINFOURL: "http://60.195.252.86:8082",
-    HYGPROURL: "http://60.195.252.86:8083",
-    HYGFILEURL: "http://60.195.252.91:8080/platform",
+    // URL: "http://60.195.252.91:8080/platform",
+    URL: "http://shoptest.allbring.com/platform",
+    HYGLOGINURL: "http://webtest.haoyigong.com",
+    HYGINFOURL: "http://infotest.haoyigong.com",
+    HYGPROURL: "http://protest.haoyigong.com",
+    HYGFILEURL: "http://shoptest.allbring.com/platform",
 }
 let beta = { // 测试
     URL: "https://www.api/code",
@@ -23,12 +22,10 @@ let beta = { // 测试
 }
 let gamma = { // 验收版本
     URL: "http://shopple.allbring.com/platform",
-    // URL: "http://192.168.2.233:8080/platform",
     HYGLOGINURL: "http://webple.haoyigong.com",
     HYGINFOURL: "http://infople.haoyigong.com",
     HYGPROURL: "http://prople.haoyigong.com",
     HYGFILEURL: "http://shopple.allbring.com/platform",
-    // HYGFILEURL: "http://192.168.2.233:8080/platform",
 }
 let release = { // 正式版本
     URL: "http://shop.allbring.com/platform",
