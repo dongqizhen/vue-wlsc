@@ -105,7 +105,7 @@
                           }
                         }"
                         tag="li"
-                        v-for="v in item.categoryList"
+                        v-for="v in item.homeCategoryList"
                         :key="v.id"
                       >
                         <a target="_blank"> {{ v.name }}</a>
