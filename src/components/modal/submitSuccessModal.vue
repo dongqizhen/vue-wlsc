@@ -83,14 +83,19 @@
               this.getUserShopInfo();
             });
         } else {
-          _getData("/store/insertOrUpdateStore", this.submitData)
-            .then(data => {
-              console.log(data);
-              this.loading = false;
-            })
-            .then(() => {
+          _getData("/store/insertOrUpdateStore", this.submitData).then(data => {
+            console.log(data);
+            this.loading = false;
+            if (data.code == 1) {
+              this.$parent.shopNameFlag = true;
+              this.$parent.shopNameWarnMessage = data.msg;
+              this.$parent.$refs.shopName.focus();
+              this.visible = false;
+              return;
+            } else {
               this.getUserShopInfo();
-            });
+            }
+          });
         }
       },
       getUserShopInfo() {
@@ -106,7 +111,7 @@
             this.visible = false;
             this.$router.replace({
               path: "/merchant/openShop",
-              query: { shopStatus: 1 }
+              query: { keyId: "0", shopStatus: 1 }
             });
           });
       },
