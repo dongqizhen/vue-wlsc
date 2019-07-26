@@ -52,7 +52,10 @@
         window.clearVuexAlong();
         this.$notification.warn({
           message: "提示",
-          description: "系统检测到账号异常，请您重新登录"
+          description: "账号在别处登录，请您重新登录",
+          onClose: () => {
+            this.$router.push("/login");
+          }
         });
       },
       reload() {
