@@ -23,7 +23,7 @@
           {{ item.topic }}
         </h2>
         <p>
-          这不仅仅是一篇简单的文章，这个文章是前辈日积月累的新的，重要的地方读三遍，写三遍。这里展示两行，多余的用…来表示。
+          {{ item.content ? item.content.substring(0, 60) + "..." : "" }}
         </p>
         <ul>
           <li v-for="label in item.labelList" :key="label.id">

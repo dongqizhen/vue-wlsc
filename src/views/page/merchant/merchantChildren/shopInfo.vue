@@ -9,9 +9,11 @@
             <a-input
               ref="shopName"
               placeholder="请输入店铺名称"
-              v-model="submitData.shopName"
+              v-model.trim="submitData.shopName"
             />
-            <div class="warning" v-show="shopNameFlag">请输入店铺名称</div>
+            <div class="warning" v-show="shopNameFlag">
+              {{ shopNameWarnMessage }}
+            </div>
           </div>
         </div>
         <div class="common shopType">
@@ -46,7 +48,7 @@
           <div class="right-box">
             <a-input
               placeholder="请输入店铺经营范围"
-              v-model="submitData.shopScope"
+              v-model.trim="submitData.shopScope"
             />
             <div class="warning" v-show="shopScopeFlag">请输入店铺经营范围</div>
           </div>
@@ -106,6 +108,7 @@
         type: "",
         isShow: false,
         shopNameFlag: false,
+        shopNameWarnMessage: "请输入店铺名称",
         typeFlag: false,
         imageFlag: false,
         shopScopeFlag: false,
@@ -185,17 +188,25 @@
         if (this.isOpenShop) {
           _getData("/store/insertOrUpdateStore", this.submitData).then(data => {
             console.log(data);
-            _getData("/user/getUser", {})
-              .then(data => {
-                console.log("获取用户的店铺开店信息：", data);
-                this.changeUserShopInfoState(data);
-                this.submitData.sid = data.store_id;
-              })
-              .then(() => {
-                if (this.isOpenShop) {
-                  this.$emit("getShopInfo", this.submitData);
-                }
-              });
+            if (data.code == 1) {
+              this.shopNameFlag = true;
+              this.$refs.shopName.focus();
+              this.shopNameWarnMessage = data.msg;
+              return;
+            } else {
+              this.shopNameFlag = false;
+              _getData("/user/getUser", {})
+                .then(data => {
+                  console.log("获取用户的店铺开店信息：", data);
+                  this.changeUserShopInfoState(data);
+                  this.submitData.sid = data.store_id;
+                })
+                .then(() => {
+                  if (this.isOpenShop) {
+                    this.$emit("getShopInfo", this.submitData);
+                  }
+                });
+            }
           });
         } else {
           this.addCarSuccess();
