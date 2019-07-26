@@ -68,7 +68,7 @@
       ...mapMutations(["changeUserShopInfoState"])
     },
     beforeRouteUpdate(to, from, next) {
-      console.log(this.userShopInfo)
+      console.log(this.userShopInfo);
       this.currentSelectedKeys = to.query.keyId;
       next();
     },
@@ -101,7 +101,7 @@
             this.defaultSelectedKeys = ["0"];
             this.$router.replace({
               path: "/merchant/openShop",
-              query: { shopStatus: this.shopStatus }
+              query: { keyId: "0", shopStatus: this.shopStatus }
             });
           }
         });
