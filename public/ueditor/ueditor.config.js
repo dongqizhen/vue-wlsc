@@ -31,7 +31,7 @@ var g_server = 1; //0测试环境1验收环境2正式环境
     } else {
         window.UEDITOR_COMMIT_URL = "http://file.allbring.com/platform/statics/upeditor/jsp_web/controller.jsp"; //正式环境
         //跨域重定向url
-        window.UEDITOR_CALLBACK_URL = "http://www.allbring.com/ueditor/jsp/callback.html"; //正式环境
+        window.UEDITOR_CALLBACK_URL = "http://wl.allbring.com/ueditor/jsp/callback.html"; //正式环境
     }
 
     //根目录

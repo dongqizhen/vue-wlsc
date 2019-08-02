@@ -676,7 +676,7 @@
         });
       },
       getModelData(categoryId, brandId) {
-        _getData("/brandmodel/list", {
+        _getData("/brandmodel/listForAdd", {
           categoryId: categoryId,
           brandId: brandId
         }).then(data => {
