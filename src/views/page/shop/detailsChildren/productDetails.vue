@@ -84,7 +84,7 @@
                 </span>
               </li>
               <li>
-                <span v-if="productInfo.attribute_category_name == '备件'">
+                <span v-if="productInfo.attribute_category_name == '零配件'">
                   <span>备件号：</span>
                   <a>{{ productInfo.spare_part }}</a>
                 </span>

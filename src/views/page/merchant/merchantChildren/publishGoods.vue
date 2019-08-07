@@ -136,7 +136,7 @@
           </div>
         </div>
         <div class="common" v-if="isSparePart">
-          <div class="left-box"><span class="red">*</span>备件号</div>
+          <div class="left-box">备件号</div>
           <div class="right-box">
             <a-input
               ref="sparePart"
@@ -384,13 +384,11 @@
           } else {
             if (data.audit_status == 1) {
               this.$message.warning(
-                "您的店铺正在审核中，暂不能提交商品，请联系管理员！",
-                1
+                "您的店铺正在审核中，暂不能提交商品，请联系管理员！"
               );
             } else if (data.audit_status == 3) {
               this.$message.warning(
-                "您的店铺未通过审核，暂不能提交商品，请联系管理员！",
-                1
+                "您的店铺未通过审核，暂不能提交商品，请联系管理员！"
               );
             }
             this.releaseLoading = false;
@@ -526,15 +524,15 @@
             return false;
           }
         }
-        if (this.isSparePart) {
-          if (!this.submitData.sparePart) {
-            this.releaseLoading = false;
-            this.saveLoading = false;
-            this.$message.warning("请输入备件号", 1);
-            this.$refs.sparePart.focus();
-            return false;
-          }
-        }
+        // if (this.isSparePart) {
+        //   if (!this.submitData.sparePart) {
+        //     this.releaseLoading = false;
+        //     this.saveLoading = false;
+        //     this.$message.warning("请输入备件号", 1);
+        //     this.$refs.sparePart.focus();
+        //     return false;
+        //   }
+        // }
         if (this.submitData.goodsNumber == "") {
           this.releaseLoading = false;
           this.saveLoading = false;
@@ -659,11 +657,11 @@
         this.getSpecificationParam(value);
       },
       beforeUpload(file) {
-        const isLt2M = file.size / 1024 / 1024 < 1;
-        if (!isLt2M) {
-          this.$message.error("图片大小不能超过1MB!");
-        }
-        return isLt2M;
+        // const isLt2M = file.size / 1024 / 1024 < 1;
+        // if (!isLt2M) {
+        //   this.$message.error("图片大小不能超过1MB!");
+        // }
+        // return isLt2M;
       },
       getSmallType(id) {
         _getData("/catalog/secondForWeb", { id: id }).then(data => {
