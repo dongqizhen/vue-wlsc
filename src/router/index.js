@@ -10,10 +10,7 @@ const router = new Router({
             path: "/",
             name: "首页",
             component: () =>
-                import ( /* webpackChunkName: "index" */ "../views/index"),
-            meta: {
-                title: '网来商城-全国领先的医疗设备、医疗器械、医疗备件、医疗配件交易平台'
-            },
+                import ( /* webpackChunkName: "index" */ "../views/index")
         },
         {
             path: "/merchant",
@@ -202,7 +199,7 @@ const router = new Router({
                     },
                     component: () =>
                         import ("../views/page/merchant/merchantChildren/changeEmail")
-                },
+                }
             ]
         },
         {
@@ -569,7 +566,7 @@ const router = new Router({
                     name: '个人中心-修改邮箱-网来商城',
                     component: () =>
                         import ("../views/page/shop/userCenterChildren/changeEmail")
-                },
+                }
             ]
         }, {
             name: "底部tab",
@@ -671,7 +668,7 @@ const router = new Router({
                     path: "shopRules",
                     component: () =>
                         import ("../views/page/guide/guideChildren/shopRules.vue")
-                },
+                }
             ]
         }, {
             path: '/notice',
@@ -680,7 +677,7 @@ const router = new Router({
                 import ("../views/page/shop/notice"),
             meta: {
                 title: '系统公告-网来商城'
-            },
+            }
         }
 
     ]

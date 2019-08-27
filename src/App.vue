@@ -33,7 +33,7 @@
       console.log(this.$API_URL);
       _getData("/user/getUser", {}).then(data => {
         console.log("获取用户的店铺信息：：：：：", data);
-        if (data.code != 500 && data.code != 1) {
+        if (data && data.code != 500 && data.code != 1) {
           this.changeUserShopInfoState(data);
         }
       });

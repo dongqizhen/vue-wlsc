@@ -45,7 +45,7 @@ module.exports = {
     // devServer:{type:Object} 3个属性host,port,https 它支持webPack-dev-server的所有选项
 
     transpileDependencies: [
-        'vue-echarts', 'resize-detector'
+        'vue-echarts', 'resize-detector', 'vuex-along', 'swiper', 'ant-design-vue'
     ],
     configureWebpack: config => {
         if (process.env.NODE_ENV === 'production') {
@@ -107,6 +107,7 @@ module.exports = {
             })
             .end()
 
+        //config.entry('main').add('babel-polyfill')
         // 压缩图片
         config.module
             .rule('images')

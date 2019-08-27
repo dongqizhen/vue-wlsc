@@ -75,7 +75,7 @@
       box-shadow: $base-box-shadow;
       .img {
         width: 200px;
-        height: 144px;
+        //height: 144px;
         background: $base-background;
         margin-bottom: 25px;
         img {

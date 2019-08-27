@@ -98,7 +98,7 @@
 <script>
   import draggable from "vuedraggable";
   import modal from "./modal.vue";
-  import Swiper from "swiper";
+  import Swiper from "swiper/dist/js/swiper.js";
   import { _getData } from "../../config/getData";
   import _ from "lodash";
   import { mapState } from "vuex";
@@ -426,6 +426,7 @@
                   background: $theme-color;
                   position: absolute;
                   bottom: 0px;
+                  left: 0;
                 }
               }
             }

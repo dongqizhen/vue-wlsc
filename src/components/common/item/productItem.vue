@@ -114,7 +114,7 @@
       //display: none;
       // background-color: #f7f9fa;
     }
-    width: 291px;
+    //width: 291px;
     background: #fff;
     box-shadow: $base-box-shadow;
     padding: 15px 15px;

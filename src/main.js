@@ -1,3 +1,6 @@
+import '@babel/polyfill'
+require('es6-promise').polyfill();
+require('es6-promise/auto');
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router/index";
@@ -60,6 +63,7 @@ Vue.use(Meta, {
 }).use(animated).use(Share).use(BackTop).use(Modal).use(Tabs).use(Select).use(Input).use(Button).use(Icon).use(Upload).use(Cascader).use(DatePicker).use(breadcrumb).use(Checkbox).use(Radio).use(Layout).use(Menu).use(Table).use(Pagination).use(LocaleProvider).use(Tooltip).use(Rate).use(Anchor).use(Form).use(Skeleton).use(Affix).use(Steps).use(Option).use(Stepper).use(Avatar);
 
 let userid = '';
+console.log(window.localStorage["vuex-along"])
 if (window.localStorage["vuex-along"] != "{}") {
     userid = JSON.parse(window.localStorage["vuex-along"])['vuex-along'].userInfo.id
 }

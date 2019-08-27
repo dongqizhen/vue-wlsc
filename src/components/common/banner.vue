@@ -91,7 +91,7 @@
   import { _getData } from "../../config/getData";
   import { mapState } from "vuex";
   import _ from "lodash";
-  import Swiper from "swiper";
+  import Swiper from "swiper/dist/js/swiper.js";
 
   export default {
     data() {
@@ -337,6 +337,7 @@
           position: absolute;
           right: 0;
           filter: blur(20px);
+
           top: 0;
           z-index: 0;
           background-size: 100% 100%;

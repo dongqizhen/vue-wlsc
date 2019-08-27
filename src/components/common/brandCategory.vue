@@ -99,7 +99,7 @@
 
 <script>
   import CommonBrandsModalVue from "../modal/CommonBrandsModal.vue";
-  import Swiper from "swiper";
+  import Swiper from "swiper/dist/js/swiper.js";
   import { mapState, mapMutations } from "vuex";
   import { _getData } from "../../config/getData";
 
@@ -382,6 +382,7 @@
               width: 180px;
               background: $theme-color;
               bottom: -0.5px;
+              left: 0;
               transition: transform 0.3s;
               i {
                 display: flex;

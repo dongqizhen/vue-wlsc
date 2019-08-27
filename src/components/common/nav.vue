@@ -151,6 +151,7 @@
         // right: -135px;
         // top: 28px;
         line-height: 33px;
+        width: 170px;
         .icon {
           width: 16px;
           height: 16px;

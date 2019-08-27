@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import Swiper from "swiper";
+  import Swiper from "swiper/dist/js/swiper.js";
   export default {
     data() {
       return {
@@ -177,7 +177,7 @@
       pointer-events: none;
       background: rgba($color: #fff, $alpha: 1);
       z-index: -1;
-
+      left: 0;
       transition: transform 0.3s;
     }
   }

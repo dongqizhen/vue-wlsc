@@ -275,7 +275,8 @@
   const IconFont = Icon.createFromIconfontCN({
     scriptUrl: "//at.alicdn.com/t/font_1093268_lw1r0m4k91i.js"
   });
-  import Swiper from "swiper";
+  import Swiper from "swiper/dist/js/swiper.js";
+
   import shopCardVue from "../../../../components/common/shopCard.vue";
   import loginModalVue from "../../../../components/modal/loginModal.vue";
   import { mapState } from "vuex";

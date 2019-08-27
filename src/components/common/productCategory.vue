@@ -55,7 +55,9 @@
                 {{ item.name }}
               </div>
 
-              <div class="bar"><i></i></div>
+              <div class="bar">
+                <i></i>
+              </div>
             </div>
           </div>
           <div class="swiper-container page">
@@ -110,7 +112,7 @@
 </template>
 
 <script>
-  import Swiper from "swiper";
+  import Swiper from "swiper/dist/js/swiper.js";
   import CommonCategoriesModalVue from "../modal/CommonCategoriesModal.vue";
   import { _getData } from "../../config/getData";
   import { mapState, mapMutations } from "vuex";
@@ -200,10 +202,7 @@
         //如果登录 则显示常用分类
         this.navArr = [];
         if (this.isLogin) {
-          this.navArr.push({
-            name: "常用分类",
-            id: ""
-          });
+          this.navArr.push({ name: "常用分类", id: "" });
           this.getCommonCategory();
         }
 
@@ -220,7 +219,7 @@
             console.log("全部产品分类", data);
             if (this.currentPosition && data.currentCategory.length == 0) {
               this.$parent.showContent = false;
-            }else{
+            } else {
               this.$parent.showContent = true;
             }
             this.navArr = [...this.navArr, ...data.currentCategory];
@@ -239,8 +238,7 @@
                 on: {
                   init: function() {
                     this.navSlideWidth = this.slides[0].clientWidth; //导航字数需要统一,每个导航宽度一致
-                    // this.bar = this.$el.find(".bar");
-                    // this.bar.transition(300);
+                    // this.bar = this.$el.find(".bar"); this.bar.transition(300);
                     this.navSum = this.slides[this.slides.length - 1].offsetLeft; //最后一个slide的位置
                     this.clientWidth = parseInt(this.$wrapperEl[0].clientWidth); //Nav的可视宽度
                     this.navWidth = this.navSlideWidth * this.slides.length;
@@ -252,13 +250,13 @@
                   tap: function(e) {
                     //console.log(this);
                     if (this.clickedIndex == undefined) return;
+
                     // mySwiper.slideTo(this.clickIndex, 0);
                     const activeSlidePosition = this.slides[this.clickedIndex]
                       .offsetLeft; //activeSlide距左边的距离
                     // this.bar.transform("translateX(" + activeSlidePosition + "px)");
                     // console.log(this.slides[this.clickedIndex]);
-                    // this.slides[this.clickedIndex].classList.add("active");
-                    //导航居中
+                    // this.slides[this.clickedIndex].classList.add("active"); 导航居中
 
                     this.setTransition(300);
                     if (this.navWidth <= this.clientWidth) {
@@ -397,15 +395,16 @@
               width: 180px;
               background: $theme-color;
               bottom: -0.5px;
+              left: 0;
               transition: transform 0.3s;
               i {
                 display: flex;
                 position: absolute;
                 bottom: 1px;
-                width: 0px;
+                width: 0;
                 left: 50%;
                 margin-left: -5.5px;
-                height: 0px;
+                height: 0;
                 border-left: 5.5px solid transparent;
                 border-right: 5.5px solid transparent;
 
@@ -424,8 +423,7 @@
             display: flex;
             justify-content: flex-start;
             flex-wrap: wrap;
-            padding: 20px;
-            padding-bottom: 0;
+            padding: 20px 20px 0;
             li {
               font-size: 14px;
               color: #666666;

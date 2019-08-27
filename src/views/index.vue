@@ -165,12 +165,10 @@
 </template>
 
 <script>
-  import Swiper from "swiper";
   import Header from "../components/header/header.vue";
   import Footer from "../components/footer/footer.vue";
   import sideBar from "../components/sideBar/sideBar.vue";
   import banner from "../components/common/banner.vue";
-
   import { Icon } from "ant-design-vue";
   import caseItem from "../components/common/item/caseItem.vue";
   import articleItem from "../components/common/item/articleItem.vue";
@@ -199,15 +197,7 @@
         // background: ["#F5A623", "#43D480", "#8880FE", "#0283FF"]
       };
     },
-    created() {
-      let obj = { a: "123", b: "456", c: "789" };
-      console.log(Object.keys(obj));
-      console.log(Object.getOwnPropertyNames(obj));
-      for (let [key, value] of Object.entries(obj)) {
-        console.log(key, value);
-      }
-      console.log(new Map([[true, 7], [{ foo: 3 }, ["abc"]]]));
-    },
+
     mounted() {
       //获取推荐数量
       _getData("index/caseCount", {}).then(data => {
@@ -292,7 +282,7 @@
       next();
     },
     methods: {
-      ...mapMutations(["changeCurrentCityIp"]),
+      // ...mapMutations(["changeCurrentCityIp"]),
       tabClick(i) {
         this.recommend_tabs_index = i;
       },
