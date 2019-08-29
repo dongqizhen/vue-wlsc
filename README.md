@@ -27,3 +27,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### 备注
+vuex-along 此插件在转化时不兼容ie，解构赋值有问题
